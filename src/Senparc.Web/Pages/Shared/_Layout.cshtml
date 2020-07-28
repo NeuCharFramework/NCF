@@ -1,0 +1,152 @@
+﻿@model Senparc.Core.Models.VD.BasePageModel
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - 用于构造基础项目的.NET框架</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
+              crossorigin="anonymous"
+              integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" />
+    </environment>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/Index/index.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">SenparcCoreFramework</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        @{
+                            var docReg = Senparc.Ncf.XncfBase.Register.RegisterList.FirstOrDefault(z => z.Uid == "519E8526-A738-465A-9DB8-2762E8441762");
+                            if (docReg != null)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="/Docs">文档</a>
+                                </li>
+                            }
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="https://weixin.senparc.com/QA" target="_blank">社区</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="Admin" asp-page="/Index">管理员登录</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="header-icon">
+                    <a href="https://github.com/SenparcCoreFramework/NCF" target="_blank">
+                        <img src="~/images/Icon/github.svg" />
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <partial name="_CookieConsentPartial" />
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container pt-1 pl-5 pr-5 pb-1">
+            <div class=" pl-5 pr-5">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-6">
+                        <span class="footer-title">社区</span>
+                        <ul>
+                            <li>
+                                <a onclick="unopen()">活动</a>
+                            </li>
+                            <li>
+                                <a onclick="unopen()">贡献</a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/SenparcCoreFramework/NCF" target="_blank">
+                                    GitHub
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-6">
+                        <span class="footer-title">文档</span>
+                        <ul onclick="unopen()">
+                            <li>
+                                <a>安装</a>
+                            </li>
+                            <li>
+                                <a>核心概念</a>
+                            </li>
+                            <li>
+                                <a>API</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 col-md-4  col-6">
+                        <span class="footer-title">联系我们</span>
+                        <div>
+                            <a href="javascript:;" id="qq-code">
+                                <img class="footer-img" src="~/images/Icon/qq.svg" />
+                                <span id="qq-code-img" class="dn" p-id="107">
+                                    <img src="~/images/Index/qq-code-img.jpg" />
+                                </span>
+                            </a>
+                            @*<a href="javascript:;">
+                                    <img class="footer-img" src="~/images/Icon/mail.svg" />
+                                </a>
+                                <a href="javascript:;">
+                                    <img class="footer-img" src="~/images/Icon/wechat.svg" />
+                                </a>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <p class="footer-copyright text-center">
+                        © Senparc 2020
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=">
+        </script>
+    </environment>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/Index/index.js"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

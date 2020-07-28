@@ -1,0 +1,100 @@
+﻿@page
+
+@model Senparc.Areas.Admin.Areas.Admin.Pages.AdminUserInfo_EditModel
+@{
+    ViewData["Title"] = $"{(Model.IsEdit ? "编辑" : "新增")}管理员";
+}
+
+
+@section breadcrumbs{
+    <li>
+        <a asp-Page="/AdminUserInfo">管理员管理</a>
+    </li>
+    <li>
+        @ViewData["Title"]
+    </li>
+}
+<!-- START row-->
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_content">
+                <form class="form-horizontal form-label-left" novalidate method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div style="position:absolute;left:-9999px">
+                        <input name="old-userName" type="text">
+                        <input name="old-pwd" type="password">
+                    </div>
+                    @*<p>
+                            For alternative validation library <code>parsleyJS</code> check out in the <a href="form.html">form page</a>
+                        </p>*@
+                    @*<span class="section">Personal Info</span>*@
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">
+                            用户名 @*<span class="required">*</span>*@
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="AdminUserInfo.UserName" class="form-control col-md-7 col-xs-12" data-validate-length="1,20" placeholder="请输入用户名" required="required" type="text">
+                            不建议修改用户名！
+                            <span asp-validation-for="AdminUserInfo.UserName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label for="password" class="control-label col-md-3">密码</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="AdminUserInfo.Password" type="password" data-validate-length="5,12" class="form-control col-md-7 col-xs-12" placeholder="请输入密码">
+                            <span asp-validation-for="AdminUserInfo.Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label for="password2" class="control-label col-md-3 col-sm-3 col-xs-12">再次确认密码</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="password2" type="password" data-validate-linked="password" class="form-control col-md-7 col-xs-12" placeholder="请再次输入密码">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            真实姓名
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="AdminUserInfo.RealName" type="text" class="form-control col-md-7 col-xs-12" placeholder="请输入真实姓名">
+                            <span asp-validation-for="AdminUserInfo.RealName" class="text-danger"></span>
+
+                            @*<textarea id="textarea" name="textarea" class="form-control col-md-7 col-xs-12"></textarea>*@
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            手机号
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="AdminUserInfo.Phone" type="text" class="form-control col-md-7 col-xs-12" placeholder="请输入手机号">
+                            <span asp-validation-for="AdminUserInfo.Phone" class="text-danger"></span>
+
+                            @*<textarea id="textarea" name="textarea" class="form-control col-md-7 col-xs-12"></textarea>*@
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            备注
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="AdminUserInfo.Note" type="text" class="form-control col-md-7 col-xs-12" placeholder="请输入备注信息" multiple="multiple">
+                            <span asp-validation-for="AdminUserInfo.Note" class="text-danger"></span>
+
+                            @*<textarea id="textarea" name="textarea" class="form-control col-md-7 col-xs-12"></textarea>*@
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-md-offset-3">
+                            <a asp-page="./Index" class="btn btn-primary">取消</a>
+                            <button id="send" type="submit" class="btn btn-success">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

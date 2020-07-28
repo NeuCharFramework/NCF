@@ -1,0 +1,4 @@
+﻿namespace Senparc.Core.Enums
+{
+   
+}

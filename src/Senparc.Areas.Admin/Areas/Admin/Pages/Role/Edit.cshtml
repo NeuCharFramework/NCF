@@ -1,0 +1,89 @@
+﻿@page
+@model Senparc.Areas.Admin.Areas.Admin.Pages.RoleEditModel
+@{
+    ViewData["Title"] = $"{(!string.IsNullOrEmpty(Model.Id) ? "编辑" : "新增")}角色";
+}
+@section breadcrumbs{
+    <li>系统管理</li>
+    <li>
+        <a asp-Page="/Role/Index" asp-area="Admin">角色管理</a>
+    </li>
+    <li>
+        @ViewData["Title"]
+    </li>
+}
+<!-- START row-->
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_content">
+                <form class="form-horizontal form-label-left" novalidate asp-action="Edit" asp-area="Admin" method="post">
+                    <input type="hidden" asp-for="SysRoleDto.Id" />
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            角色名称
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="SysRoleDto.RoleName" type="text" data-validate-length="1,150" required class="form-control" placeholder="请输入菜单名称">
+                            <span asp-validation-for="SysRoleDto.RoleName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            角色代码
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="SysRoleDto.RoleCode" type="text" data-validate-length="0,350" class="form-control" required placeholder="请输入菜单地址">
+                            <span asp-validation-for="SysRoleDto.RoleCode" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            是否启用
+                        </label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" asp-for="SysRoleDto.Enabled" class="flat">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            说明
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="SysRoleDto.Remark" type="text" data-validate-length="1,150" class="form-control" placeholder="请输入说明">
+                            <span asp-validation-for="SysRoleDto.Remark" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            备注
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="SysRoleDto.AdminRemark" type="text" data-validate-length="1,150" class="form-control" placeholder="请输入备注">
+                            <span asp-validation-for="SysRoleDto.AdminRemark" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+
+                    <div class="form-group">
+                        <div class="col-md-6 col-md-offset-3">
+                            <a asp-page="./Index" class="btn btn-primary">取消</a>
+                            <input type="submit" class="btn btn-success" value="提交">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

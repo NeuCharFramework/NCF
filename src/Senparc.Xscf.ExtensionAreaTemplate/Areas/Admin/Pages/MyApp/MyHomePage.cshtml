@@ -1,0 +1,72 @@
+﻿@page
+@model Senparc.Xncf.ExtensionAreaTemplate.Areas.MyApp.Pages.MyHomePage
+@{
+    ViewData["Title"] = "扩展页面测试模块";
+    Layout = "_Layout_Vue";
+}
+@section HeaderContent{
+    <style>
+        .box {
+            margin: 30px auto;
+            text-align: center;
+            padding: 80px;
+        }
+    </style>
+}
+@section breadcrumbs {
+    <el-breadcrumb-item>扩展模块</el-breadcrumb-item>
+    <el-breadcrumb-item>扩展页面测试模块</el-breadcrumb-item>
+}
+
+<div>
+    <el-container>
+        <el-header class="module-header">
+            <span class="start-title"> <i class="fa fa-dot-circle-o"></i>&nbsp;<span class="module-header-v">扩展页面测试模块</span></span>
+        </el-header>
+        <el-main v-if="moduleData">
+            <h4>{{moduleData.xncfModuleDto.description}}</h4>
+            <br />
+            <h4>安装时间：{{formaTableTime(moduleData.colorDto.addTime)}}</h4>
+            <div class="box" :style="{backgroundColor}">
+
+                <el-button @@click="changeColor('Brighten')"><i class="fa fa-tachometer"></i> 变亮</el-button>
+                <el-button @@click="changeColor('Darken')" type="info"><i class="fa fa-moon-o"></i> 变暗</el-button>
+                <el-button @@click="changeColor('Random')" type="success"><i class="fa fa-sun-o"></i> 随机</el-button>
+            </div>
+        </el-main>
+    </el-container>
+</div>
+@section scripts{
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    moduleData: null,
+                    uid: ''
+                };
+            },
+            computed: {
+                backgroundColor() {
+                    let rgba = `rgba(${this.moduleData.colorDto.red},${this.moduleData.colorDto.green},${this.moduleData.colorDto.blue},1)`
+                    return rgba;
+                }
+            },
+            mounted() {
+                this.getDetail();
+            },
+            methods: {
+                async getDetail() {
+                    this.uid = resizeUrl().uid
+                    const res = await service.get('/Admin/MyApp/MyHomePage?handler=Detail&uid=' + this.uid);
+                    this.moduleData = res.data.data;
+                },
+                // 改变颜色
+                async changeColor(param) {
+                    const res = await service.get('/Admin/MyApp/MyHomePage?handler=' + param + '&uid=' + this.uid);
+                    this.moduleData.colorDto = res.data.data;
+                }
+            }
+        });
+    </script>
+}

@@ -1,0 +1,118 @@
+﻿@page "{handler?}"
+@model Senparc.Areas.Admin.Areas.Admin.Pages.AdminUserInfo_IndexModel
+@addTagHelper *, Senparc.Areas.Admin
+@using System.Web.Mvc
+@{
+    ViewData["Title"] = "管理员管理"; Layout = "_Layout_Vue";
+}
+@section Style{
+    <link href="~/css/Admin/AdminUserInfo/AdminUserInfo.css" rel="stylesheet" />
+}
+@section breadcrumbs {
+    <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+    <el-breadcrumb-item>管理员列表</el-breadcrumb-item>
+}
+<div>
+    <div class="admin-user-info">
+        <div class="filter-container">
+            <el-button class="filter-item" v-has="['admin-add']" type="primary" icon="el-icon-plus" @@click="handleEdit">增加</el-button>
+        </div>
+        <el-table :data="tableData"
+                  border
+                  style="width: 100%">
+            <el-table-column align="center"
+                             label="id"
+                             width="80">
+                <template slot-scope="scope">
+                    {{ scope.row.id}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="用户名"
+                             width="180">
+                <template slot-scope="scope">
+                    {{ scope.row.userName}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="备注">
+                <template slot-scope="scope">
+                    {{ scope.row.note}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="添加时间">
+                <template slot-scope="scope">
+                    {{formaTableTime(scope.row.addTime)}}
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                    <el-button size="mini"
+                               type="primary"
+                               v-has="['admin-edit']"
+                               @@click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                    <el-button size="mini"
+                               type="primary"
+                               v-has="['admin-grant']"
+                               @@click="handleSet(scope.$index, scope.row)">设置角色</el-button>
+                    <template v-has="['admin-delete']">
+                        <el-popconfirm placement="top" title="确认删除此角色吗？" @@on-confirm="handleDelete(scope.$index, scope.row)">
+                            <el-button size="mini" type="danger" slot="reference">删除</el-button>
+                        </el-popconfirm>
+                    </template>
+                </template>
+            </el-table-column>
+        </el-table>
+        <pagination :total="paginationQuery.total"
+                    :page.sync="listQuery.pageIndex"
+                    :limit.sync="listQuery.pageSize"
+                    @@pagination="getList"></pagination>
+        <!--编辑、新增 -->
+        <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
+            <el-form ref="dataForm"
+                     :rules="dialog.rules"
+                     :model="dialog.data"
+                     label-position="left"
+                     label-width="100px"
+                     style="max-width: 400px; margin-left:50px;">
+                <p class="username-tip" v-if="dialog.title==='编辑管理员'">不建议修改用户名！</p>
+                <el-form-item label="用户名" prop="userName">
+                    <el-input v-model="dialog.data.userName" clearable placeholder="请输入用户名" />
+                </el-form-item>
+                <el-form-item label="密码" :error="dialog.passwordError" :required="isVerPass">
+                    <el-input v-model="dialog.data.password" show-password clearable placeholder="请输入密码" />
+                </el-form-item>
+                <el-form-item label="再次确认密码" :error="dialog.password2Error" :required="isVerPass">
+                    <el-input v-model="dialog.data.password2" show-password clearable placeholder="请再次输入密码" />
+                </el-form-item>
+                <el-form-item label="真实姓名" prop="realName">
+                    <el-input v-model="dialog.data.realName" clearable placeholder="请输入真实姓名" />
+                </el-form-item>
+                <el-form-item label="手机号" prop="phone">
+                    <el-input v-model="dialog.data.phone" clearable placeholder="请输入手机号" />
+                </el-form-item>
+                <el-form-item label="备注" prop="note">
+                    <el-input v-model="dialog.data.note" clearable placeholder="请输入备注信息" />
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @@click="dialog.visible = false">取 消</el-button>
+                <el-button :loading="dialog.updateLoading" type="primary" @@click="updateData">确 认</el-button>
+            </div>
+        </el-dialog>
+        <!--分配角色-->
+        <el-dialog :title="'设置角色-'+dialog.setTitle" :visible.sync="dialog.visibleSet">
+            <el-checkbox-group v-model="dialog.dialogSetSelected">
+                <el-checkbox v-for="item in dialog.dialogSetData" :label="item.value" border>{{item.text}}</el-checkbox>
+            </el-checkbox-group>
+            <div slot="footer" class="dialog-footer">
+                <el-button @@click="dialog.visibleSet = false">取 消</el-button>
+                <el-button :loading="dialog.updateLoading" type="primary" @@click="updateDataSet">确 认</el-button>
+            </div>
+        </el-dialog>
+    </div>
+</div>
+@section scripts{
+    <script src="~/js/Admin/Pages/AdminUserInfo/Index.js"></script>
+}

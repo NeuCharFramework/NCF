@@ -1,0 +1,105 @@
+﻿@model Senparc.Ncf.AreaBase.Admin.IAdminPageModelBase
+@{
+}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="@ViewData["Title"]" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon">
+    <!-- 引入样式 -->
+    <link href="~/lib/element-ui_2.13.2/element.css" rel="stylesheet" />
+    <link href="~/css/Admin/Shared/layout.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    @RenderSection("HeaderContent", false)
+    @RenderSection("Style", false)
+</head>
+<body>
+    <div id="app" v-cloak>
+        <div class="app-wrapper">
+            <el-container>
+                @*菜单栏*@
+                <el-aside :style="{'width':Store.state.navMenu.isCollapse?'64px':''}" class="el-aside-index">
+                    <div :class="[Store.state.navMenu.isCollapse?'head-log2':'head-log']">
+                        <a href="/Admin/Index">
+                            <img src="~/images/Admin/base/head/logo_230x55.png" alt="Alternate Text" />
+                        </a>
+                    </div>
+                    <el-scrollbar wrap-class="scrollbar-wrapper">
+                        <el-menu :default-active="Store.state.navMenu.activeMenu"
+                                 :collapse="Store.state.navMenu.isCollapse"
+                                 :background-color="Store.state.navMenu.variables.menuBg"
+                                 :text-color="Store.state.navMenu.variables.menuText"
+                                 :active-text-color="Store.state.navMenu.variables.menuActiveText"
+                                 :unique-opened="false"
+                                 :collapse-transition="false"
+                                 @@select="menuSelect"
+                                 mode="vertical">
+                            <sidebar-item v-for="(items,index) in Store.state.navMenu.navMenuList" :key="index" :item="items"></sidebar-item>
+                        </el-menu>
+                    </el-scrollbar>
+                </el-aside>
+                <el-container>
+                    <el-header>
+                        <div class="header-menu">
+                            @*切换菜单栏*@
+                            <i class="fa fa-indent" aria-hidden="true" @@click="toggleSideBar"></i>
+                        </div>
+                        @*面包屑*@
+                        <div class="header-breadcrumb">
+                            <el-breadcrumb separator="/">
+                                <el-breadcrumb-item><a href="/Admin/Index">首页</a></el-breadcrumb-item>
+                                @RenderSection("breadcrumbs", false)
+                            </el-breadcrumb>
+                        </div>
+                        @*退出*@
+                        <div class="header-logout">
+                            <el-tooltip class="item" effect="dark" content="退出登录" placement="left">
+                                <el-popconfirm confirmButtonText='退出'
+                                               cancelButtonText='不用了'
+                                               icon="el-icon-info"
+                                               iconColor="red"
+                                               title="确定退出吗？"
+                                               @@on-Confirm="loginout">
+                                    <i slot="reference" style="cursor:pointer;" class="fa fa-sign-out" aria-hidden="true"></i>
+                                </el-popconfirm>
+                            </el-tooltip>
+                        </div>
+                    </el-header>
+                    <el-main>
+                        <div class="ifram-wrapper">
+                            @*<iframe :src="pageSrc"></iframe>*@
+                            @RenderBody()
+                        </div>
+                    </el-main>
+                    <el-footer class="footer">
+                        © 2020 -  <a href="https://www.senparc.com" target="_blank">苏州盛派网络科技有限公司</a>
+                    </el-footer>
+                </el-container>
+            </el-container>
+        </div>
+    </div>
+    <!--lib-->
+    <script src="~/lib/vue/vue.js"></script>
+    <script src="~/lib/element-ui_2.13.2/element.js"></script>
+    <script src="~/lib/axios/axios.min.js"></script>
+    <script src="~/lib/vuex.js"></script>
+    <!--js-->
+    <script src="~/js/Admin/store.js"></script>
+    <script src="~/js/Admin/axios.js"></script>
+    <script src="~/js/Admin/global.js"></script>
+    <!--菜单栏-->
+    <script src="~/js/Admin/navMenu.js"></script>
+    <script src="~/js/Admin/vuePermission.js"></script>
+    <script src="~/js/Admin/Pages/Components/Components.js"></script>
+    <!--页面js-->
+    @*<script src="~/js/Admin/Pages/Index/Index.js"></script>*@
+    @RenderSection("scripts", false)
+    @Html.AntiForgeryToken()
+</body>
+</html>

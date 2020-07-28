@@ -1,0 +1,121 @@
+﻿@page
+@model Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleIndexModel
+@using Senparc.Ncf.Core.Areas;
+@using Senparc.Ncf.XncfBase;
+@{
+    ViewData["Title"] = "模块管理"; Layout = "_Layout_Vue";
+}
+@section Style{
+    <link href="~/css/Admin/XncfModule/XncfModule.css" rel="stylesheet" />
+}
+@section breadcrumbs {
+    <el-breadcrumb-item>扩展模块</el-breadcrumb-item>
+    <el-breadcrumb-item>模块管理</el-breadcrumb-item>
+}
+<div>
+    <div class="filter-container" style="text-align: right;">
+        <el-popconfirm placement="top" :title="handlerTips" @@on-confirm="handleSwitch">
+            <el-button size="mini" type="danger" slot="reference">{{handlerText}}</el-button>
+        </el-popconfirm>
+    </div>
+    <el-container v-if="newTableData.length>0">
+        <el-header class="module-header">  <span class="start-title">发现新模块！</span></el-header>
+        <el-main>
+            <el-table :data="newTableData"
+                      style="width: 100%;margin-bottom: 20px;">
+                <el-table-column align="left" label="模块名称">
+                    <template slot-scope="scope">
+                        <i class="fa fa-cubes"></i>
+                        {{scope.row.name}}
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="菜单名称（显示名称）">
+                    <template slot-scope="scope">
+                        <i :class="scope.row.icon"></i>
+                        {{scope.row.menuName}}
+
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="版本号">
+                    <template slot-scope="scope">
+                        <i class="fa fa-code-fork"></i>
+                        {{scope.row.version}}
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="唯一编码（全局唯一）" width="350">
+                    <template slot-scope="scope">
+                        <i class="fa fa-shield"></i>
+                        {{scope.row.uid}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button size="mini"
+                                   type="primary"
+                                   icon="el-icon-circle-plus"
+                                   @@click="handleInstall(scope.$index, scope.row)">安装</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-main>
+    </el-container>
+    <el-container v-if="oldTableData.length>0">
+        <el-header class="module-header">  <span class="start-title">已安装模块</span></el-header>
+        <el-main>
+            <el-table :data="oldTableData"
+                      v-if="oldTableData.length>0"
+                      style="width: 100%;margin-bottom: 20px;">
+                <el-table-column align="left" label="菜单名称/版本号">
+                    <template slot-scope="scope">
+                        <div>
+                            <i :class="scope.row.xncfRegister.icon"></i>
+                            {{scope.row.xncfModule.menuName}}
+                        </div>
+                        <div>
+                            <i class="fa fa-code-fork"></i>
+                            v{{scope.row.xncfModule.version}}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="模块名称/唯一编码（全局唯一）" width="350">
+                    <template slot-scope="scope">
+                        <div>
+                            <i class="fa fa-cubes"></i>
+                            {{scope.row.xncfModule.name}}
+                        </div>
+                        <div>
+                            <i class="fa fa-shield"></i>
+                            {{scope.row.xncfModule.uid}}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="状态">
+                    <template slot-scope="scope">
+                        {{oldData.state[scope.row.xncfModule.state]}}
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="添加时间">
+                    <template slot-scope="scope">
+                        {{formaTableTime(scope.row.xncfModule.addTime)}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="250">
+                    <template slot-scope="scope">
+                        <el-button size="mini"
+                                   icon="el-icon-s-tools"
+                                   type="primary"
+                                   @@click="handleHandle(scope.$index, scope.row)">操作</el-button>
+                        <el-button size="mini"
+                                   v-if="scope.row.xncfRegister.homeUrl"
+                                   icon="el-icon-s-home"
+                                   type="primary"
+                                   @@click="handleIndex(scope.$index, scope.row)">主页</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-main>
+    </el-container>
+</div>
+@section scripts{
+    <script src="~/js/Admin/Pages/XncfModule/Index.js"></script>
+}

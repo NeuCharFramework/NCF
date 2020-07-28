@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Provinces>
+  <Province ID="1"  DivisionsCode="110000" ShortName="北京" ProvinceName="北京市">北京市</Province>
+  <Province ID="2"  DivisionsCode="120000" ShortName="天津" ProvinceName="天津市">天津市</Province>
+  <Province ID="3"  DivisionsCode="130000" ShortName="河北" ProvinceName="河北省">河北省</Province>
+  <Province ID="4"  DivisionsCode="140000" ShortName="山西" ProvinceName="山西省">山西省</Province>
+  <Province ID="5"  DivisionsCode="150000" ShortName="内蒙古" ProvinceName="内蒙古自治区">内蒙古自治区</Province>
+  <Province ID="6"  DivisionsCode="210000" ShortName="辽宁" ProvinceName="辽宁省">辽宁省</Province>
+  <Province ID="7"  DivisionsCode="220000" ShortName="吉林" ProvinceName="吉林省">吉林省</Province>
+  <Province ID="8"  DivisionsCode="230000" ShortName="黑龙江" ProvinceName="黑龙江省">黑龙江省</Province>
+  <Province ID="9"  DivisionsCode="310000" ShortName="上海" ProvinceName="上海市">上海市</Province>
+  <Province ID="10" DivisionsCode="320000" ShortName="江苏" ProvinceName="江苏省">江苏省</Province>
+  <Province ID="11" DivisionsCode="330000" ShortName="浙江" ProvinceName="浙江省">浙江省</Province>
+  <Province ID="12" DivisionsCode="340000" ShortName="安徽" ProvinceName="安徽省">安徽省</Province>
+  <Province ID="13" DivisionsCode="350000" ShortName="福建" ProvinceName="福建省">福建省</Province>
+  <Province ID="14" DivisionsCode="360000" ShortName="江西" ProvinceName="江西省">江西省</Province>
+  <Province ID="15" DivisionsCode="370000" ShortName="山东" ProvinceName="山东省">山东省</Province>
+  <Province ID="16" DivisionsCode="410000" ShortName="河南" ProvinceName="河南省">河南省</Province>
+  <Province ID="17" DivisionsCode="420000" ShortName="湖北" ProvinceName="湖北省">湖北省</Province>
+  <Province ID="18" DivisionsCode="430000" ShortName="湖南" ProvinceName="湖南省">湖南省</Province>
+  <Province ID="19" DivisionsCode="440000" ShortName="广东" ProvinceName="广东省">广东省</Province>
+  <Province ID="20" DivisionsCode="450000" ShortName="广西" ProvinceName="广西壮族自治区">广西壮族自治区</Province>
+  <Province ID="21" DivisionsCode="460000" ShortName="海南" ProvinceName="海南省">海南省</Province>
+  <Province ID="22" DivisionsCode="500000" ShortName="重庆" ProvinceName="重庆市">重庆市</Province>
+  <Province ID="23" DivisionsCode="510000" ShortName="四川" ProvinceName="四川省">四川省</Province>
+  <Province ID="24" DivisionsCode="520000" ShortName="贵州" ProvinceName="贵州省">贵州省</Province>
+  <Province ID="25" DivisionsCode="530000" ShortName="云南" ProvinceName="云南省">云南省</Province>
+  <Province ID="26" DivisionsCode="540000" ShortName="西藏" ProvinceName="西藏自治区">西藏自治区</Province>
+  <Province ID="27" DivisionsCode="610000" ShortName="陕西" ProvinceName="陕西省">陕西省</Province>
+  <Province ID="28" DivisionsCode="620000" ShortName="甘肃" ProvinceName="甘肃省">甘肃省</Province>
+  <Province ID="29" DivisionsCode="630000" ShortName="青海" ProvinceName="青海省">青海省</Province>
+  <Province ID="30" DivisionsCode="640000" ShortName="宁夏" ProvinceName="宁夏回族自治区">宁夏回族自治区</Province>
+  <Province ID="31" DivisionsCode="650000" ShortName="新疆" ProvinceName="新疆维吾尔自治区">新疆维吾尔自治区</Province>
+  <Province ID="32" DivisionsCode="710000" ShortName="台湾" ProvinceName="香港特别行政区">香港特别行政区</Province>
+  <Province ID="33" DivisionsCode="810000" ShortName="香港" ProvinceName="澳门特别行政区">澳门特别行政区</Province>
+  <Province ID="34" DivisionsCode="820000" ShortName="澳门" ProvinceName="台湾省">台湾省</Province>
+  <Province ID="35" DivisionsCode="990000" ShortName="海外" ProvinceName="海外">海外</Province>
+</Provinces>

@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Admin\Pages\Database\**" />
+    <Compile Remove="Areas\Admin\Pages\SystemConfig\**" />
+    <Compile Remove="Filters\**" />
+    <Content Remove="Areas\Admin\Pages\Database\**" />
+    <Content Remove="Areas\Admin\Pages\SystemConfig\**" />
+    <Content Remove="Filters\**" />
+    <EmbeddedResource Remove="Areas\Admin\Pages\Database\**" />
+    <EmbeddedResource Remove="Areas\Admin\Pages\SystemConfig\**" />
+    <EmbeddedResource Remove="Filters\**" />
+    <None Remove="Areas\Admin\Pages\Database\**" />
+    <None Remove="Areas\Admin\Pages\SystemConfig\**" />
+    <None Remove="Filters\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="0.3.110" />
+    <PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="3.9.110" />
+    <PackageReference Include="Senparc.Ncf.AreaBase" Version="0.3.401-beta1" />
+    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.3.401-beta1" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.3.401-beta1" />
+    <PackageReference Include="Senparc.Ncf.Log" Version="0.3.401-beta1" />
+    <PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.3.401-beta1" />
+    <PackageReference Include="Senparc.Ncf.Service" Version="0.3.401-beta1" />
+    <PackageReference Include="Senparc.Ncf.Utility" Version="0.3.401-beta1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
+    <ProjectReference Include="..\Senparc.Log\Senparc.Log.csproj" />
+    <ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\Admin\Pages\Shared\_HeaderPartial.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+</Project>

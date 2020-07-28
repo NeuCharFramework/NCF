@@ -1,0 +1,134 @@
+﻿@page
+
+@model Senparc.Areas.Admin.Pages.IndexModel
+@{
+    ViewData["Title"] = "管理员后台首页";
+    Layout = "_Layout_Vue";
+}
+@section style{
+    <style>
+        .wxmanager-item {
+            position: relative;
+            display: block;
+            margin-bottom: 12px;
+            border: 1px solid #E4E4E4;
+            overflow: hidden;
+            padding-bottom: 5px;
+            border-radius: 5px;
+            background-clip: padding-box;
+            background: #FFF;
+            transition: all 300ms ease-in-out;
+            padding-left: 10px;
+        }
+
+            .wxmanager-item .icon {
+                font-size: 60px;
+                color: #BAB8B8;
+                position: absolute;
+                right: 20px;
+                top: -5px;
+            }
+
+            .wxmanager-item .count {
+                font-size: 38px;
+                font-weight: bold;
+                line-height: 1.65857;
+            }
+
+            .wxmanager-item .tit {
+                color: #BAB8B8;
+                font-size: 24px;
+            }
+
+            .wxmanager-item p {
+                margin-bottom: 5px;
+            }
+
+        .chart-title {
+            font-size: 20px;
+        }
+
+        .chart-li {
+            padding-top: 20px;
+        }
+
+            .chart-li li {
+                line-height: 2;
+            }
+
+            .chart-li .fa {
+                margin-right: 5px;
+            }
+
+        .box-card {
+            margin-top:20px
+        }
+    </style>
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+<div>
+    <el-container>
+        <el-header class="module-header">
+            <span class="start-title"><span class="module-header-v">首页</span></span>
+        </el-header>
+        <el-main></el-main>
+    </el-container>
+    <el-row :gutter="20">
+        <el-col :span="6">
+            <div class="grid-content wxmanager-item">
+                <span class="count">179</span>
+                <div class="icon">
+                    <i class="fa fa-caret-square-o-right"></i>
+                </div>
+                <p class="tit">今日新订单数量</p>
+            </div>
+        </el-col>
+        <el-col :span="6">
+            <div class="grid-content bg-purple wxmanager-item">
+                <span class="count">2</span>
+                <div class="icon">
+                    <i class="fa fa-comments-o"></i>
+                </div>
+                <p class="tit">售后订单数量</p>
+            </div>
+        </el-col>
+        <el-col :span="6">
+            <div class="grid-content bg-purple wxmanager-item">
+                <span class="count">17</span>
+                <div class="icon">
+                    <i class="fa fa-sort-amount-desc"></i>
+                </div>
+                <p class="tit">新发表文章数</p>
+            </div>
+        </el-col>
+        <el-col :span="6">
+            <div class="grid-content bg-purple wxmanager-item">
+                <span class="count">￥91975</span>
+                <div class="icon">
+                    <i class="fa fa-check-square-o"></i>
+                </div>
+                <p class="tit">账户余额</p>
+            </div>
+        </el-col>
+    </el-row>
+    <el-row :gutter="10">
+        <el-col :xs="20" :sm="20" :md="20" :lg="12" :xl="12">
+            <el-card class="box-card">
+                <div id="firstChart" style="height:350px;width: 100%">
+                </div>
+            </el-card>
+        </el-col>
+        <el-col :xs="20" :sm="20" :md="20" :lg="12" :xl="12">
+            <el-card class="box-card">
+                <div id="secondChart" style="height:350px;width: 100%">
+                </div>
+            </el-card>
+        </el-col>
+    </el-row>
+
+
+</div>
+@section scripts{
+    <script src="~/lib/echarts/dist/echarts.js"></script>
+    <script src="~/js/Admin/Pages/Index/Index.js"></script>
+}

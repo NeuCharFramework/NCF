@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
+    <ProjectReference Include="..\Senparc.File\Senparc.File.csproj" />
+    <ProjectReference Include="..\Senparc.ImageUtility\Senparc.ImageUtility.csproj" />
+    <ProjectReference Include="..\Senparc.Log\Senparc.Log.csproj" />
+    <ProjectReference Include="..\Senparc.Mvc\Senparc.Mvc.csproj" />
+    <ProjectReference Include="..\Senparc.Office\Senparc.Office.csproj" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.1.0-beta1" />
+    <PackageReference Include="Senparc.Ncf.Log" Version="0.1.0-beta1" />
+    <PackageReference Include="Senparc.Ncf.Service" Version="0.1.0-beta1" />
+    <PackageReference Include="Senparc.Ncf.Utility" Version="0.1.0-beta1" />
+    <ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
+    <ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
+  </ItemGroup>
+
+</Project>

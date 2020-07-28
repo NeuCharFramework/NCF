@@ -1,0 +1,25 @@
+﻿################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+
+.vs/
+bin/
+obj/
+.pdb
+.user
+.vscode/
+/src/Senparc.Web/wwwroot/bower_components
+/src/Senparc.Web/logs/
+/src/Senparc.Database
+*.user
+/src/Senparc.Web.OldMvc
+/src/Senparc.Web/App_Data/SenparcTraceLog/*
+/src/Senparc.Web/wwwroot/lib/*
+/src/Senparc.Web/node_modules/gentelella
+/src/Senparc.Web/node_modules
+/src/ProjectFileManager
+/src/Senparc.Web/App_Data/*.bak
+# /src/Senparc.Web/wwwroot/doc
+/src/Senparc.Web/wwwroot/docs
+/src/Senparc.Web/wwwroot/ScfDocs
+/src/Senparc.Web/.config

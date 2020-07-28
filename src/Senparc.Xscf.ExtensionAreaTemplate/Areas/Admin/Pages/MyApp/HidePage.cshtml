@@ -1,0 +1,40 @@
+﻿@page
+@model Senparc.Xncf.ExtensionAreaTemplate.Areas.MyApp.Pages.HidePage
+
+@{
+    ViewData["Title"] = "主菜单中没有的隐藏页面";
+    Layout = "_Layout_Vue";
+}
+@section breadcrumbs{
+    <el-breadcrumb-item>扩展模块</el-breadcrumb-item>
+    <el-breadcrumb-item>扩展页面测试模块</el-breadcrumb-item>
+    <el-breadcrumb-item>隐藏菜单</el-breadcrumb-item>
+}
+
+<div>
+    <el-container>
+        <el-header class="module-header">
+            <span class="start-title"> <i class="fa fa-dot-circle-o"></i>&nbsp;<span class="module-header-v">隐藏菜单</span></span>
+        </el-header>
+        <el-main>
+            <p>
+                由于当前页面地址没有在 <strong><a href="https://github.com/SenparcCoreFramework/NCF/blob/cf847f9c58b27533aba5d515825d3dbcfd75ae7a/src/Senparc.ExtensionAreaTemplate/Register.cs" target="_blank">Register.AareaPageMenuItems</a></strong> 中注册，因此外部菜单无法看到此页面，
+                可以通过 <strong>ViewData["TempMenuUrl"]</strong> 来设定当前选中菜单。
+            </p>
+        </el-main>
+    </el-container>
+</div>
+@section scripts{
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data() {
+                return {
+                };
+            },
+            mounted() {
+            }
+        });
+    </script>
+}
+

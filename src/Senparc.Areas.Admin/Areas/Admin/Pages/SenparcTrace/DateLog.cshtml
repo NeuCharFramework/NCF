@@ -1,0 +1,176 @@
+﻿@page
+@model Senparc.Areas.Admin.Areas.Admin.Pages.SenparcTrace_DateLogModel
+@{
+    ViewData["Title"] = "日志";
+    //ViewData["TempMenuUrl"] = Model.XncfRegister.GetAreaUrl("/Admin/SenparcTrace/Index");
+    //var exceptionCount = Model.WeixinTraceItemList.Count(z => z.IsException);
+    Layout = "_Layout_Vue";
+}
+
+@section breadcrumbs {
+    <el-breadcrumb-item><a>系统管理</a></el-breadcrumb-item>
+    <el-breadcrumb-item><a asp-area="Admin" asp-page="Index">SenparcTrace 日志</a></el-breadcrumb-item>
+    <el-breadcrumb-item>{{dateTitle}}</el-breadcrumb-item>
+}
+
+@section scripts{
+    @*<script>
+            $(function () {
+                $('[id^=more_]').click(function () {
+                    $(this).hide();
+                    $('#detail_' + $(this).attr('data-i')).slideDown();
+                })
+            })
+
+            function showAllDetails() {
+                $('[id^=detail_').slideDown();
+            }
+
+            var justShowException = false;
+            function showExceptions() {
+                justShowException = !justShowException;
+                if (justShowException) {
+                    $('tr.not_exception').hide();
+                } else {
+                    $('tr.not_exception').show();
+                }
+            }
+        </script>*@
+    <script src="~/js/Admin/Pages/SenparcTrace/detail.js"></script>
+}
+@section HeaderContent {
+    <style>
+        table.el-table__header colgroup col:nth-of-type(1) {
+            /*            display: none;*/
+            width: 0px;
+        }
+
+        /*table.el-table__header thead tr th:nth-of-type(1) {
+            display: none;
+        }*/
+
+        table.el-table__body colgroup col:nth-of-type(1) {
+            /*            display: none;*/
+            width: 0px;
+        }
+
+        table.el-table__body tr.el-table__row div .el-table__expand-icon {
+            display: none;
+        }
+        /*table.el-table__body tbody tr td.el-table__expand-column:nth-of-type(1) {
+            width: 0px;
+        }*/
+
+        /*table.el-table__body tbody tr td:nth-of-type(1) {
+            display: none;
+        }*/
+    </style>
+}
+
+<el-row :gutter="20">
+    <el-row :gutter="20" class="filter-container">
+        <el-col :span="4">
+            <el-button type="primary" @@click="showAll()">显示所有完整结果</el-button>
+        </el-col>
+        <el-col :span="12">
+            <el-button type="danger" @@click="showException()">只显示所有异常信息</el-button>
+            <span>异常信息 <span>{{tableData.filter(_ => _.isException).length}}</span> / {{tableData.length}}</span>
+        </el-col>
+    </el-row>
+
+    <el-col :span="24">
+        <el-table :data="displayData"
+                  :row-key="rowKey"
+                  :expand-row-keys="expandRowKeys"
+                  border
+                  ref="tableInstance"
+                  style="width: 100%">
+            <el-table-column type="expand" width="0px">
+                <template slot-scope="scope">
+                    {{ scope.row.showMessage ? scope.row.resultStr : '---'}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="编号/行号"
+                             width="100">
+                <template slot-scope="scope">
+                    <strong>{{ scope.row.no }}</strong> / {{scope.row.line}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             width="200"
+                             label="时间">
+                <template slot-scope="scope">
+                    {{ scope.row.dateTime }}
+                </template>
+            </el-table-column>
+
+            <el-table-column align="center"
+                             width="80"
+                             label="线程">
+                <template slot-scope="scope">
+                    {{ scope.row.threadId }}
+                </template>
+            </el-table-column>
+
+            <el-table-column align="center"
+                             width="95"
+                             label="类型">
+                <template slot-scope="scope">
+                    {{ weixinTraceTypeDesc[scope.row.weixinTraceType] }}
+                </template>
+            </el-table-column>
+
+            <el-table-column align="center"
+                             width="80"
+                             label="是否异常">
+                <template slot-scope="scope">
+                    {{ scope.row.isException }}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="标题">
+                <template slot-scope="scope">
+                    {{ scope.row.title }}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="内容">
+                <template slot-scope="scope">
+                    <template v-if="!scope.row.result.url_empty">
+                        <p>
+                            <strong>URL：</strong>
+                        </p>
+                        {{scope.row.result.url}}
+                    </template>
+                    <template v-if="!scope.row.result.result_empty">
+                        <p>
+                            <strong>返回结果：：</strong>
+                        </p>
+                        {{scope.row.result.result}}
+                    </template>
+                    <template v-if="!scope.row.result.postData_empty">
+                        <p>
+                            <strong>Post 数据：</strong>
+                        </p>
+                        {{scope.row.result.postData}}
+                    </template>
+                    <template v-if="scope.row.isException">
+                        <p>
+                            <strong>异常信息：</strong>
+                        </p>
+                        {{scope.row.result.exceptionMessage}}
+                    </template>
+                    <template v-if="!scope.row.showMessage">
+                        <!--显示所有结果-->
+                        {{scope.row.resultStr}}
+                    </template>
+                </template>
+            </el-table-column>
+        </el-table>
+        <pagination :total="searchData.total"
+                    :page.sync="searchData.pageIndex"
+                    :limit.sync="searchData.pageSize"
+                    @@pagination="fetchData"></pagination>
+    </el-col>
+</el-row>

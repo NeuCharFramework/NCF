@@ -1,0 +1,539 @@
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+    display: block;
+}
+
+audio,
+canvas,
+video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+    audio:not([controls]) {
+        display: none;
+        /*为防止在主流浏览器中出现“不带控制按钮的音频模块”这一问题。*/
+        height: 0;
+        /*解决iOS5移动端显示多余高度的兼容性问题。 */
+    }
+
+[hidden] {
+    display: none;
+}
+
+address {
+    /* 屏幕阅读器和搜索引擎找到地址或电话号码，默认样式是 display: block */
+    display: block;
+}
+
+html {
+    font-family: "Microsoft YaHei", sans-serif;
+    /* 默认字体 */
+    font-size: 100%;
+    /* 在用户调整窗口大小时，字体大小做相应调整。 */
+    -ms-text-size-adjust: 100%;
+    /* IE浏览器 */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* FireFox浏览器 */
+    overflow-y: auto;
+}
+
+body {
+    margin: 0;
+    /* 外边距 */
+    padding: 0;
+    /* 内边距 */
+    border: 0;
+    /* 边框 */
+}
+
+a {
+    text-decoration: none;
+    /* 去除默认下划线 */
+}
+
+    a:focus {
+        outline: thin dotted;
+        /* 处理“outline”在Chrome浏览器中和其它浏览器之间的不一致 */
+    }
+
+    a:active,
+    a:hover {
+        outline: 0;
+    }
+
+h1 {
+    /* 使h1标签在section标签和article标签的留白和字体样式统一。可同时兼容Firefox 4+、Safari 5和Chrome等不同的浏览器 */
+    font-size: 2em;
+    margin: 0em 0;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+abbr[title] {
+    border-bottom: 1px dotted;
+    /* 解决首字母样式在IE8/9、Safari 5和chrome浏览器中未定义的问题 */
+}
+
+b,
+strong {
+    font-weight: bold;
+    /* 添加加粗样式，应用于Firefox 4+、Safari 5和Chrome */
+}
+
+dfn {
+    font-size: italic;
+    /* 添加斜体样式，应用于Safari 5和chrome */
+}
+
+hr {
+    /* 解决其在Firefox中的兼容性问题 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0;
+}
+
+mark {
+    /* 解决其在IE8/9中样式未定义的问题 */
+    background: #ff0;
+    color: #000;
+}
+
+code,
+kbd,
+pre,
+samp {
+    /* 更正关联字体在Safari 5和Chrome中的老式设置 */
+    font-family: monospace, serif;
+    font-size: 1em;
+}
+
+pre {
+    /* 提高pre标签格式化文本在所有浏览器中的可读性 */
+    white-space: pre-wrap;
+}
+
+q {
+    /* 设置相一致的引号类型 */
+    quotes: "\201C" "\201D" "\2018" "\2019";
+}
+
+    q:before,
+    q:after,
+    blockquote:before,
+    blockquote:after {
+        content: "";
+    }
+
+small {
+    /* 统一所有浏览器中字体大小不一致的兼容性问题 */
+    font-size: 80%;
+}
+
+sub,
+sup {
+    /* 在所有浏览器中，防止“sub”和“sup”标签影响“line-height”属性 */
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+small {
+    font-size: 85%;
+}
+
+strong {
+    font-weight: bold;
+}
+
+em {
+    font-style: italic;
+}
+
+cite {
+    font-style: normal;
+}
+
+ul,
+ol {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+dl {
+    margin-bottom: 20px;
+}
+
+li {
+    line-height: 20px;
+}
+
+dt,
+dd {
+    line-height: 20px;
+}
+
+dt {
+    font-weight: bold;
+}
+
+dd {
+    margin-left: 10px;
+}
+
+img {
+    border: 0;
+    /* 在IE8/9浏览器中，当img标签中包含a标签时，去除img边框属性。 */
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+figure {
+    margin: 0;
+}
+
+fieldset {
+    /* 定义一致的边框、内边距和外边距 */
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+legend {
+    border: 0;
+    /* 更改“color”属性在IE8/9浏览器中没有被继承的问题 */
+    padding: 0;
+    /* 去除外边距，如此即使人们将字段集归零也不会失去样式 */
+}
+
+button,
+input,
+select,
+textarea {
+    border: none;
+    outline: none;
+    font-family: inherit;
+    /* 更改关联字体属性在IE8/9浏览器中没有被继承的问题 */
+    font-size: 100%;
+    /* 更改字体大小属性在IE8/9浏览器中没有被继承的问题 */
+    margin: 0;
+    /* 调整边距设置在Firefox 4+, Safari 5, 和 Chrome浏览器中的兼容性问题 */
+}
+
+button,
+input {
+    line-height: normal;
+    /* 调整Firefox 4+浏览器下，客户端样式表中设置了“!important”的“line-height”属性的input表单 */
+}
+
+button,
+select {
+    text-transform: none;
+    /**
+     * 调整“button”和“select”的“text-transform”继承不一致性的问题
+     * 其他表单控件元素不继承“text-transform”属性
+     * 修正“button”标签在Chrome, Safari 5+, and IE 8+中的样式继承问题
+     * 修正“select”标签在Firefox 4+ 和Opera中的样式继承问题
+     */
+}
+
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button;
+    /* 改正iOS设备中“input”类型表单样式不可用的问题 */
+    cursor: pointer;
+    /* 增强光标样式在input表单和其他表单的可用性和一致性 */
+}
+
+    button[disabled],
+    html input[disabled] {
+        cursor: default;
+        /* 为禁用表单重设定默认光标样式 */
+    }
+
+input[type="checkbox"],
+input[type="radio"] {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    /* 调整IE 8/9中尺寸属性设置为“内容框”的盒子模型 */
+    padding: 0;
+    /* 去除IE 8/9中的多余的外边距留白部分 */
+}
+
+input[type="search"] {
+    -webkit-appearance: textfield;
+    /* 兼容Safari 5 and Chrome上 “searchfield” 上设置 “appearance”属性 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    /* 兼容Safari 5 and Chrome上 “border-box” 上设置 “box-sizing”属性 */
+    box-sizing: content-box;
+}
+
+    input[type="search"]::-webkit-search-cancel-button,
+    input[type="search"]::-webkit-search-decoration {
+        -webkit-appearance: none;
+        /* 去除OS X系统上Safari 5和Chrome中容器内边距和搜索取消按钮属性 */
+    }
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+textarea {
+    overflow: auto;
+    /* IE 8/9中，去除默认垂直滚动条属性 */
+    vertical-align: top;
+    /* 提高所有浏览器中的文本可读性和版式 */
+}
+
+table {
+    /* 删除表格单元格之间的间距。 */
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100% !important;
+}
+
+td {
+    width: inherit !important;
+    padding: 0 !important;
+}
+
+/*td span {
+        word-break: break-all;
+    }*/
+
+.clearfix {
+    *zoom: 1;
+}
+
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        line-height: 0;
+        content: "";
+    }
+
+    .clearfix:after {
+        clear: both;
+    }
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+* html .clearfix {
+    zoom: 1;
+}
+/* IE6 */
+*:first-child + html .clearfix {
+    zoom: 1;
+}
+/*# sourceMappingURL=base.css.map */
+[v-cloak] {
+    display: none;
+}
+
+.tip_msg {
+    position: fixed;
+    bottom: 126px;
+    width: 100%;
+    text-align: center;
+    z-index: 1000;
+}
+
+    .tip_msg span {
+        display: none;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        padding: 6px 10px;
+        font-size: 16px;
+        border-radius: 3px;
+        font-size: 13px;
+        letter-spacing: 1px;
+    }
+
+.swiper-title {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    color: #fff;
+    text-align: center;
+    height: 55px;
+    padding: 10px;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: break-all;
+    background: -webkit-linear-gradient(bottom, rgba(0,0,0,0), rgba(0,0,0,0.5)); /* Safari 5.1 - 6 */
+    background: -o-linear-gradient(bottom, rgba(0,0,0,0), rgba(0,0,0,0.5)); /* Opera 11.1 - 12*/
+    background: -moz-linear-gradient(bottom, rgba(0,0,0,0), rgba(0,0,0,0.5)); /* Firefox 3.6 - 15*/
+    background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.5)); /* 标准的语法 */
+}
+
+.swiper-title-all {
+    z-index: 2;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    padding-bottom: 30px;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-all;
+    background: -webkit-linear-gradient(bottom, rgba(0,0,0,0), rgba(0,0,0,0.5)); /* Safari 5.1 - 6 */
+    background: -o-linear-gradient(bottom, rgba(0,0,0,0), rgba(0,0,0,0.5)); /* Opera 11.1 - 12*/
+    background: -moz-linear-gradient(bottom, rgba(0,0,0,0), rgba(0,0,0,0.5)); /* Firefox 3.6 - 15*/
+    background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.5)); /* 标准的语法 */
+}
+
+.weui-loadmore_line {
+    border-top: 1px solid #bcb7ae;
+}
+
+    .weui-loadmore_line .weui-loadmore__tips {
+        background-color: #fff;
+    }
+
+.weui-loadmore_dot .weui-loadmore__tips:before {
+    background-color: #bcb7ae;
+}
+
+.weui-loadmore {
+    display: none;
+}
+
+.lm_active {
+    display: block;
+}
+
+.empty img {
+    width: 170px;
+    margin: 0 auto;
+    margin-top: 30%;
+    display: block;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.swiper-pagination-fraction, .swiper-pagination-custom, .swiper-container-horizontal > .swiper-pagination-bullets {
+    bottom: 0px !important;
+}
+
+.font12 {
+    font-size: 12px;
+}
+
+.font16 {
+    font-size: 16px;
+}
+
+.font13 {
+    font-size: 13px;
+}
+
+.font14 {
+    font-size: 14px;
+}
+
+.font15 {
+    font-size: 15px;
+}
+
+.color333 {
+    color: #333;
+}
+
+.color666 {
+    color: #666;
+}
+
+.color999 {
+    color: #999;
+}
+
+.nopadding {
+    padding: 0px;
+}
+
+.nomargin {
+    margin: 0px;
+}
+
+.swiper-slide {
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+    background-repeat: no-repeat;
+    background-color: #fff;
+}
+
+.swiper-container img {
+    height: 100%;
+}
+
+.swiper-pagination-white .swiper-pagination-bullet {
+    background: #404040;
+}
+
+.swiper-pagination-bullet-active {
+    opacity: 1;
+    background: #fff;
+}
+
+.validation-summary-valid {
+    color: #f54e4e;
+}
+
+    .validation-summary-valid ul li {
+        padding: 10px 0px;
+    }

@@ -1,0 +1,42 @@
+﻿@page
+@model Senparc.Areas.Admin.Areas.Admin.Pages.AdminUserInfoAuthorizationPageModel
+@{
+    ViewData["Title"] = "角色授予";
+}
+
+
+@section breadcrumbs{
+    <li>系统管理</li>
+    <li>
+        <a asp-Page="/AdminUserInfo">管理员管理</a>
+    </li>
+    <li>
+        @ViewData["Title"]
+    </li>
+}
+
+<div class="row">
+    <div class="x_panel">
+        <div class="x_content">
+            @foreach (var item in Model.RoleAdminUserInfoDtos)
+            {
+                <div class="col-md-3 col-sm-3 col-xs-6">
+                    <div class="checkbox">
+                        <label>
+                            <input value="@item.RoleId" name="" type="checkbox" @(item.HasRole ? "checked" : "") class="flat roleCheckBox"> @item.RoleName
+                        </label>
+                    </div>
+                </div>
+            }
+            <hr />
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <a class="btn btn-default" asp-page="./Index">返回</a>
+                <a class="btn btn-success" id="submit">保存</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/js/Admin/Pages/AdminUserInfo/AuthorizationPage.js"></script>
+}

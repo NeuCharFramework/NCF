@@ -1,0 +1,190 @@
+﻿@page
+@model Senparc.Areas.Admin.Areas.Admin.Pages.MenuEditModel
+@{
+    ViewData["Title"] = $"{(!string.IsNullOrEmpty(Model.Id) ? "编辑" : "新增")}菜单";
+}
+@section Style{
+    <link href="~/node_modules/@@ztree/ztree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+    <link href="~/css/Admin/menuEdit.css" rel="stylesheet" />
+}
+
+
+@section breadcrumbs{
+    <li>系统管理</li>
+    <li>
+        菜单管理
+    </li>
+}
+<!-- START row-->
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <a id="addTopMenu" data-flag="0" class="btn btn-success addTopMenu">
+            <em class="fa fa-plus">
+                新增一级菜单
+            </em>
+        </a>
+
+        <a id="addChildMenu" data-flag="1" class="btn btn-success addTopMenu">
+            <em class="fa fa-plus">
+                添加子菜单
+            </em>
+        </a>
+    </div>
+    <div class="col-md-3 col-sm-3 col-xs-12">
+        <div class="x_panel">
+            <div class="x_content">
+                <div class="treeContainer">
+                    <ul id="tree" class="ztree"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9 col-sm-9 col-xs-12">
+        <div class="x_panel">
+            <div class="x_content">
+                <form id="form" class="form-horizontal form-label-left" novalidate asp-action="Edit" asp-area="Admin" method="post">
+                    <input type="hidden" asp-for="SysMenuDto.Id" />
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            菜单排序
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="SysMenuDto.Sort" type="number" required class="form-control" placeholder="请输入菜单排序">
+                            <span asp-validation-for="SysMenuDto.Sort" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            菜单名称
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="SysMenuDto.MenuName" type="text" data-validate-length="0,150" required class="form-control" placeholder="请输入菜单名称">
+                            <span asp-validation-for="SysMenuDto.MenuName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            菜单地址
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="SysMenuDto.Url" type="text" data-validate-length="0,350" class="form-control" placeholder="请输入菜单地址">
+                            <span asp-validation-for="SysMenuDto.Url" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            菜单图标
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="SysMenuDto.Icon" type="text" data-validate-length="1,150" class="form-control" placeholder="请输入菜单图标">
+                            <span asp-validation-for="SysMenuDto.Icon" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            是否锁定
+                        </label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" asp-for="SysMenuDto.IsLocked" value="True" class="flat">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            是否可见
+                        </label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" asp-for="SysMenuDto.Visible" value="True" class="flat">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            说明
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="SysMenuDto.Remark" type="text" data-validate-length="1,150" class="form-control" placeholder="请输入说明">
+                            <span asp-validation-for="SysMenuDto.Remark" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
+                            备注
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input asp-for="SysMenuDto.AdminRemark" type="text" data-validate-length="1,150" class="form-control" placeholder="请输入备注">
+                            <span asp-validation-for="SysMenuDto.AdminRemark" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+
+                    <div class="item form-group buttonContainer">
+                        <input data-attribute-name="Id" type="hidden" />
+                        <label class="control-label col-md-1 col-sm-1 col-xs-12" for="textarea">
+                            按钮名称
+                        </label>
+                        <div class="col-md-2 col-sm-2 col-xs-12">
+                            <input type="text" data-validate-length="0,150" data-attribute-name="ButtonName" class="form-control" placeholder="按钮名称">
+                        </div>
+
+                        <label class="control-label col-md-1 col-sm-1 col-xs-12" for="textarea">
+                            操作标识
+                        </label>
+                        <div class="col-md-2 col-sm-2 col-xs-12">
+                            <input type="text" data-validate-length="0,150" data-attribute-name="OpearMark" class="form-control" placeholder="操作标识">
+                        </div>
+
+                        <label class="control-label col-md-1 col-sm-1 col-xs-12" for="textarea">
+                            操作地址
+                        </label>
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <input type="text" data-validate-length="0,150" data-attribute-name="Url" class="form-control" placeholder="操作地址">
+                        </div>
+
+                        <div class="col-md-1 col-sm-1 col-xs-12">
+                            <a class="btn btn-danger deleteButton">
+                                <em class="fa fa-trash"></em>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+
+                    <div class="form-group">
+                        <div class="col-md-6 col-md-offset-3">
+                            <a class="btn btn-info addButton">
+                                <em class="fa fa-plus">添加按钮</em>
+                            </a>
+                            <a id="submit" class="btn btn-success">保存</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/node_modules/@@ztree/ztree_v3/js/jquery.ztree.core.min.js"></script>
+    <script src="~/node_modules/@@ztree/ztree_v3/js/jquery.ztree.excheck.min.js"></script>
+    <script src="~/node_modules/@@ztree/ztree_v3/js/jquery.ztree.exedit.min.js"></script>
+    <script src="~/js/Admin/Pages/Menu/Edit.js">
+    </script>
+}
