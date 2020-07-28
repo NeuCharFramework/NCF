@@ -28,7 +28,7 @@ namespace Senparc.Service
     {
         #region IXncfRegister 接口
 
-        public override string Name => "SenparcCoreFramework.Services";
+        public override string Name => "NeuCharFramework.Services";
 
         public override string Uid => SiteConfig.SYSTEM_XNCF_MODULE_SERVICE_UID;// "00000000-0000-0000-0000-000000000001";
 

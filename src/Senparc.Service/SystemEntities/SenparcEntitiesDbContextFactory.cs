@@ -35,7 +35,7 @@ namespace Senparc.Service
             var senparcSetting = new SenparcSetting() { IsDebug = true };
             serviceCollection.AddSenparcGlobalServices(config);
             serviceCollection.AddMemoryCache();//使用内存缓存
-            //修复 https://github.com/SenparcCoreFramework/NCF/issues/13 发现的问题（在非Web环境下无法得到网站根目录路径）
+            //修复 https://github.com/NeuCharFramework/NCF/issues/13 发现的问题（在非Web环境下无法得到网站根目录路径）
             IRegisterService register = RegisterService.Start(senparcSetting);
 
             //如果运行 Add-Migration 命令，并且获取不到正确的网站根目录，此处可能无法自动获取到连接字符串（上述#13问题），

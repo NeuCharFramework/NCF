@@ -300,7 +300,7 @@ namespace Senparc.Web
 
             //如果全局的IsDebug（Senparc.CO2NET.Config.IsDebug）为false，此处可以单独设置true，否则自动为true
             Senparc.CO2NET.Trace.SenparcTrace.SendCustomLog("系统日志",
-                "SenparcCoreFramework 系统启动"); //只在Senparc.Weixin.Config.IsDebug = true的情况下生效
+                "NeuCharFramework 系统启动"); //只在Senparc.Weixin.Config.IsDebug = true的情况下生效
 
             //全局自定义日志记录回调
             Senparc.CO2NET.Trace.SenparcTrace.OnLogFunc = () =>

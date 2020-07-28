@@ -16,7 +16,7 @@ namespace Senparc.Web
     {
         public SenparcEntities CreateDbContext(string[] args)
         {
-            //修复 https://github.com/SenparcCoreFramework/NCF/issues/13 发现的问题（在非Web环境下无法得到网站根目录路径）
+            //修复 https://github.com/NeuCharFramework/NCF/issues/13 发现的问题（在非Web环境下无法得到网站根目录路径）
             IRegisterService register = RegisterService.Start(new SenparcSetting());
 
             SiteConfig.SenparcCoreSetting.DatabaseName = "Local";//指定数据库配置，对应 Appp_Data/Database/SenparcConfig.config 下的配置

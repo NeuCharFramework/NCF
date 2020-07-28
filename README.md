@@ -1,9 +1,9 @@
 <img src="https://weixin.senparc.com/images/NCF/logo.png" width="300" />
 
 
-# NCF - SenparcCoreFramework
+# NCF - NeuCharFramework
 
-SenparcCoreFramework(NCF) 是一整套可用于构建基础项目的框架，包含了基础的缓存、数据库、模型、验证及配套管理后台，模块化，具有高度的可扩展性。
+NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含了基础的缓存、数据库、模型、验证及配套管理后台，模块化，具有高度的可扩展性。
 
 当前版本：`0.1.0-beta4`
 
@@ -14,7 +14,7 @@ SenparcCoreFramework(NCF) 是一整套可用于构建基础项目的框架，包
 
 <center><img src="https://weixin.senparc.com/images/NCF/login.jpg" /></center>
 
-> 当前快速更新分支：[Developer-RazorPage-DDD](https://github.com/SenparcCoreFramework/NCF/tree/Developer-RazorPage-DDD)
+> 当前快速更新分支：[Developer-RazorPage-DDD](https://github.com/NeuCharFramework/NCF/tree/Developer-RazorPage-DDD)
 
 > 我们欢迎第三方开源组件提供自己的解决方案，我们将会测试并集成到 NCF 中。
 
@@ -44,14 +44,14 @@ NCF 除了会为大家提供完善的框架代码，还会：
 
 - .NET Core 3.1+ ，SDK下载地址：https://dotnet.microsoft.com/download/dotnet-core/3.1
 
-- 如需查看或修改基础包源代码，请看此项目：https://github.com/SenparcCoreFramework/NcfPackageSources
+- 如需查看或修改基础包源代码，请看此项目：https://github.com/NeuCharFramework/NcfPackageSources
 
 ## 如何安装
 
 安装过程可以选择极客型命令行安装方式，或全自动一键完成。
 
 ### 第一步：准备数据库
-确保已经安装 SQL Server 2012 及以上版本，系统登录用户具有数据库创建权限（可以不需要使用sa等账号登录），如果必须要使用账号登录，[请看这里](https://github.com/SenparcCoreFramework/NCF/wiki/%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%9F)
+确保已经安装 SQL Server 2012 及以上版本，系统登录用户具有数据库创建权限（可以不需要使用sa等账号登录），如果必须要使用账号登录，[请看这里](https://github.com/NeuCharFramework/NCF/wiki/%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%9F)
 
 ### 第二步：准备命令行工具（可跳过）
 
@@ -66,7 +66,7 @@ NCF 除了会为大家提供完善的框架代码，还会：
 
 
 #### 方法二（要看运气）：
-1. 使用命令行工具或 PowerShell 进入 `src/Senparc.Web` 路径，例如：`E:\SenparcCoreFramework\NCF\src\Senparc.Web`
+1. 使用命令行工具或 PowerShell 进入 `src/Senparc.Web` 路径，例如：`E:\NeuCharFramework\NCF\src\Senparc.Web`
 
 2. 输入命令：`dotnet ef database update` 回车
 
@@ -124,7 +124,7 @@ Done.
 
 如果登录及管理员后台页面样式缺失，则需要进行这一步，否则可以忽略。
 
-[点击查看](https://github.com/SenparcCoreFramework/NCF/wiki/%E5%A6%82%E4%BD%95%E8%BF%98%E5%8E%9F%E7%BC%BA%E5%A4%B1%E7%9A%84%E7%AE%A1%E7%90%86%E5%91%98%E5%90%8E%E5%8F%B0%E9%A1%B5%E9%9D%A2%E6%A0%B7%E5%BC%8F%EF%BC%9F)
+[点击查看](https://github.com/NeuCharFramework/NCF/wiki/%E5%A6%82%E4%BD%95%E8%BF%98%E5%8E%9F%E7%BC%BA%E5%A4%B1%E7%9A%84%E7%AE%A1%E7%90%86%E5%91%98%E5%90%8E%E5%8F%B0%E9%A1%B5%E9%9D%A2%E6%A0%B7%E5%BC%8F%EF%BC%9F)
 
 
 ## 模块化开发
@@ -198,7 +198,7 @@ NCF 的扩展模块代号为 `XNCF`。
 
 ### 如何自己开发模块？
 
-NCF 的扩展模块代号为 `XNCF`，您可以在 [NcfPackageSources](https://github.com/SenparcCoreFramework/NcfPackageSources) 项目中找到我们的模块 [示例项目](https://github.com/SenparcCoreFramework/NcfPackageSources/tree/master/src/Extensions/Senparc.Xncf.ChangeNamespace)，只需要“依葫芦画瓢”即可。后续稳定版发布之后将有完整的配套文档。
+NCF 的扩展模块代号为 `XNCF`，您可以在 [NcfPackageSources](https://github.com/NeuCharFramework/NcfPackageSources) 项目中找到我们的模块 [示例项目](https://github.com/NeuCharFramework/NcfPackageSources/tree/master/src/Extensions/Senparc.Xncf.ChangeNamespace)，只需要“依葫芦画瓢”即可。后续稳定版发布之后将有完整的配套文档。
 
 
 ### 是否可以不使用模块化开发？

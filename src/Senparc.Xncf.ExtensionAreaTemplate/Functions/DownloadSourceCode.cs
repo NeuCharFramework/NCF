@@ -61,10 +61,10 @@ namespace Senparc.Xncf.ExtensionAreaTemplate.Functions
                     switch (siteType)
                     {
                         case DownloadSourceCode_Parameters.Parameters_Site.GitHub:
-                            result.Message = "https://github.com/SenparcCoreFramework/NCF/archive/master.zip";
+                            result.Message = "https://github.com/NeuCharFramework/NCF/archive/master.zip";
                             break;
                         case DownloadSourceCode_Parameters.Parameters_Site.Gitee:
-                            result.Message = "https://gitee.com/SenparcCoreFramework/NCF/repository/archive/master.zip";
+                            result.Message = "https://gitee.com/NeuCharFramework/NCF/repository/archive/master.zip";
                             break;
                         default:
                             result.Message = "未知的下载地址";

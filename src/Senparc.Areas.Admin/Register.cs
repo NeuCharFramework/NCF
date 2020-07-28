@@ -39,7 +39,7 @@ namespace Senparc.Areas.Admin
 
         #region IXncfRegister 接口
 
-        public override string Name => "SenparcCoreFramework.Admin";
+        public override string Name => "NeuCharFramework.Admin";
 
         public override string Uid => SiteConfig.SYSTEM_XNCF_MODULE_AREAS_ADMIN_UID;// "00000000-0000-0000-0000-000000000002";
 
