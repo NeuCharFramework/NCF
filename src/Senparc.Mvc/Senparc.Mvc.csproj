@@ -38,9 +38,9 @@
     <ProjectReference Include="..\Senparc.File\Senparc.File.csproj" />
     <ProjectReference Include="..\Senparc.ImageUtility\Senparc.ImageUtility.csproj" />
     <ProjectReference Include="..\Senparc.Log\Senparc.Log.csproj" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.3.401-beta1" />
-    <PackageReference Include="Senparc.Ncf.Log" Version="0.3.401-beta1" />
-    <PackageReference Include="Senparc.Ncf.Service" Version="0.3.401-beta1" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.3.402-beta1" />
+    <PackageReference Include="Senparc.Ncf.Log" Version="0.3.402-beta1" />
+    <PackageReference Include="Senparc.Ncf.Service" Version="0.3.402-beta1" />
     <ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
     <ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
   </ItemGroup>
