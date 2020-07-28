@@ -47,8 +47,4 @@
     <ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Weixin\MessageHandler\" />
-  </ItemGroup>
-
 </Project>

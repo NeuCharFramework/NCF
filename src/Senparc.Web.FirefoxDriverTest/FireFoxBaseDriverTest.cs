@@ -23,7 +23,7 @@ namespace Senparc.Web.FirefoxDriverTest
         /// <summary>
         /// ½ØÍ¼Â·¾¶
         /// </summary>
-        private string screenShotPath;//"F:\\auto-test\\scf";
+        private string screenShotPath;//"F:\\auto-test\\ncf";
 
         /// <summary>
         /// ²½Öè

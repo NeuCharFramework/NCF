@@ -44,7 +44,7 @@ NCF 除了会为大家提供完善的框架代码，还会：
 
 - .NET Core 3.1+ ，SDK下载地址：https://dotnet.microsoft.com/download/dotnet-core/3.1
 
-- 如需查看或修改基础包源代码，请看此项目：https://github.com/SenparcCoreFramework/ScfPackageSources
+- 如需查看或修改基础包源代码，请看此项目：https://github.com/SenparcCoreFramework/NcfPackageSources
 
 ## 如何安装
 
@@ -198,7 +198,7 @@ NCF 的扩展模块代号为 `XNCF`。
 
 ### 如何自己开发模块？
 
-NCF 的扩展模块代号为 `XNCF`，您可以在 [ScfPackageSources](https://github.com/SenparcCoreFramework/ScfPackageSources) 项目中找到我们的模块 [示例项目](https://github.com/SenparcCoreFramework/ScfPackageSources/tree/master/src/Extensions/Senparc.Xncf.ChangeNamespace)，只需要“依葫芦画瓢”即可。后续稳定版发布之后将有完整的配套文档。
+NCF 的扩展模块代号为 `XNCF`，您可以在 [NcfPackageSources](https://github.com/SenparcCoreFramework/NcfPackageSources) 项目中找到我们的模块 [示例项目](https://github.com/SenparcCoreFramework/NcfPackageSources/tree/master/src/Extensions/Senparc.Xncf.ChangeNamespace)，只需要“依葫芦画瓢”即可。后续稳定版发布之后将有完整的配套文档。
 
 
 ### 是否可以不使用模块化开发？

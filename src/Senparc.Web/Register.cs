@@ -36,7 +36,7 @@ namespace Senparc.Web
     /// </summary>
     public static class Register
     {
-        public static void AddScfServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env, CompatibilityVersion compatibilityVersion)
+        public static void AddNcfServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env, CompatibilityVersion compatibilityVersion)
         {
             //如果运行在IIS中，需要添加IIS配置
             //https://docs.microsoft.com/zh-cn/aspnet/core/host-and-deploy/iis/index?view=aspnetcore-2.1&tabs=aspnetcore2x#supported-operating-systems
@@ -87,7 +87,7 @@ namespace Senparc.Web
                 {
                     //opt.RootDirectory = "/";
                 })
-              .AddScfAreas(env).ConfigureApiBehaviorOptions(options =>
+              .AddNcfAreas(env).ConfigureApiBehaviorOptions(options =>
               {
                   options.InvalidModelStateResponseFactory = actionContext =>
                   {
@@ -185,7 +185,7 @@ namespace Senparc.Web
             services.StartEngine(configuration);
         }
 
-        public static void UseScf(this IApplicationBuilder app, IWebHostEnvironment env,
+        public static void UseNcf(this IApplicationBuilder app, IWebHostEnvironment env,
             IOptions<SenparcCoreSetting> senparcCoreSetting,
             IOptions<SenparcSetting> senparcSetting)
         {

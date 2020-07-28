@@ -5,9 +5,9 @@ using Senparc.Weixin.MP.MessageContexts;
 
 namespace Senparc.Mvc.Weixin
 {
-    public class ScfMessageContext : DefaultMpMessageContext
+    public class NcfMessageContext : DefaultMpMessageContext
     {
-        public ScfMessageContext()
+        public NcfMessageContext()
         {
 
         }

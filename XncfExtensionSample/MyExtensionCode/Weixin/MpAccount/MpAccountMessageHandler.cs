@@ -36,7 +36,7 @@ namespace MyExtensionCode
                     {
                         defaultResponseMessage.Content = @"code";
                         return defaultResponseMessage;
-                    }).Keyword("scf",()=> {
+                    }).Keyword("ncf",()=> {
                         var register = new Register();
                         defaultResponseMessage.Content = register.Description;
                         return defaultResponseMessage;

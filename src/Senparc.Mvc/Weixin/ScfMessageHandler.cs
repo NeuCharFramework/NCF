@@ -10,9 +10,9 @@ namespace Senparc.Mvc.Weixin
     /// <summary>
     /// 
     /// </summary>
-    public partial class ScfMessageHandler : MessageHandler<ScfMessageContext>
+    public partial class NcfMessageHandler : MessageHandler<NcfMessageContext>
     {
-        public ScfMessageHandler(Stream stream, PostModel postModel, int maxRecordCount)
+        public NcfMessageHandler(Stream stream, PostModel postModel, int maxRecordCount)
             : base(stream, postModel, maxRecordCount)
         {
         }

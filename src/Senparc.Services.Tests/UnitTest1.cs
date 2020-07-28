@@ -21,7 +21,7 @@ namespace Senparc.Services.Tests
         public void TestMethod2()
         {
             Regex regex = new Regex("^(http|https)://(\\w+(\\.)?)+");
-            var match = regex.Match("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7988ec84b99e4f7d&redirect_uri=https://scf.senparc.com/Portal/Center/Callback&response_type=code&scope=snsapi_base&state=Center&connect_redirect=1#wechat_redirect");
+            var match = regex.Match("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7988ec84b99e4f7d&redirect_uri=https://ncf.senparc.com/Portal/Center/Callback&response_type=code&scope=snsapi_base&state=Center&connect_redirect=1#wechat_redirect");
             if (match.Success)
             {
                 Console.WriteLine(match.Value);

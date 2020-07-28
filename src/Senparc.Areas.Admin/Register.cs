@@ -152,7 +152,7 @@ namespace Senparc.Areas.Admin
 
         //#region IXncfDatabase 接口
 
-        //public string DatabaseUniquePrefix => "ScfSystemAdmin_";
+        //public string DatabaseUniquePrefix => "NcfSystemAdmin_";
         //public Type XncfDatabaseDbContextType => typeof(SenparcEntities);
 
 

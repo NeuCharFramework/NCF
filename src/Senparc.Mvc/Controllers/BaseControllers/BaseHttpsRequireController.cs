@@ -26,7 +26,7 @@ namespace Senparc.Mvc
                     var isIndex = url == null || url.ToString() == "/";
                     if (isIndex)
                     {
-                        context.Result = Redirect("https://scf.senparc.com/ ");//根据需要修改
+                        context.Result = Redirect("https://ncf.senparc.com/ ");//根据需要修改
                         //Log.LogUtility.WebLogger.Error("BaseHttpsRequire url:{0}  IP:{1},Method:{2},"
                         //    .With(httpContext.Request.Url, httpContext.Request.UserHostAddress,
                         //        httpContext.Request.HttpMethod));

@@ -35,7 +35,7 @@ namespace Senparc.Web
             services.AddScoped<Ncf.AreaBase.Admin.Filters.AuthenticationResultFilterAttribute>();
             //services.AddAutoMapper(typeof(Ncf.Core.AutoMapper.SystemProfile));
             //添加（注册） Ncf 服务（重要，必须！）
-            services.AddScfServices(Configuration, env, CompatibilityVersion.Version_3_0);
+            services.AddNcfServices(Configuration, env, CompatibilityVersion.Version_3_0);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,7 +67,7 @@ namespace Senparc.Web
             });
 
             //Use NCF（必须）
-            app.UseScf(env, senparcCoreSetting, senparcSetting);
+            app.UseNcf(env, senparcCoreSetting, senparcSetting);
         }
     }
 }

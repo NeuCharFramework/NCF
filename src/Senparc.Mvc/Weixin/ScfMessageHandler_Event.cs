@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Senparc.Mvc.Weixin
 {
-    public partial class ScfMessageHandler
+    public partial class NcfMessageHandler
     {
         public override IResponseMessageBase OnEvent_ScanRequest(RequestMessageEvent_Scan requestMessage)
         {

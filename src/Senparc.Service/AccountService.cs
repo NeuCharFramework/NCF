@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using Senparc.CO2NET;
 using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.HttpUtility;
-using Senparc.Core.Cache;
 using Senparc.Core.Models;
 using Senparc.Repository;
 using Senparc.Ncf.Core.Config;

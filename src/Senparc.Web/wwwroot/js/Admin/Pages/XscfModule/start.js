@@ -16,7 +16,7 @@
                 'DateTime': '日期',
                 'String[]': '选项'
             },
-            xScfModules_State: {
+            xNcfModules_State: {
                 0: '关闭',
                 1: '开放',
                 2: '新增待审核',

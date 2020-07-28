@@ -64,7 +64,7 @@
                             </template>
                         </li>
                         <li>
-                            <i class="fa fa-map-marker fa-sliders"></i><span :class="[data.xncfModule.state===1?'start-green':'start-gray']">&nbsp;{{xScfModules_State[data.xncfModule.state]}}</span>
+                            <i class="fa fa-map-marker fa-sliders"></i><span :class="[data.xncfModule.state===1?'start-green':'start-gray']">&nbsp;{{xNcfModules_State[data.xncfModule.state]}}</span>
                             <template v-if="data.xncfModule.state===3||data.xncfModule.state===0||data.xncfModule.state===2">
                                 <el-button size="mini" :type="data.xncfModule.state===0?'success':'warning'" @@click="updataState('1')"> <em class="glyphicon glyphicon-flash"></em> &nbsp;开启</el-button>
                                 <p class="red"><i class="fa fa-exclamation-triangle"></i>&nbsp;未开启的模块无法执行功能</p>
