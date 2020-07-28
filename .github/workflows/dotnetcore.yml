@@ -14,4 +14,4 @@ jobs:
       with:
         dotnet-version: 3.1.100
     - name: Build with dotnet
-      run: dotnet build ./src/SCF.sln --configuration Release
+      run: dotnet build ./src/NCF.sln --configuration Release
