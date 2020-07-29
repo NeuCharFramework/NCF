@@ -10,7 +10,6 @@ obj/
 .vscode/
 /src/Senparc.Web/wwwroot/bower_components
 /src/Senparc.Web/logs/
-/src/Senparc.Database
 *.user
 /src/Senparc.Web.OldMvc
 /src/Senparc.Web/App_Data/SenparcTraceLog/*
