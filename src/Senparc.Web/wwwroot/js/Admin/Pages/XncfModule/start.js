@@ -61,7 +61,7 @@
         openUrl(url, flag) {
             // 关闭状态返回
             flag = flag + '';
-            if (flag === '0') {
+            if (flag !== '1') {
                 this.$notify({
                     title: '提示',
                     message: '请开启后执行',
@@ -75,7 +75,7 @@
         openRun(item, flag) {
             // 关闭状态返回
             flag = flag + '';
-            if (flag === '0') {
+            if (flag !== '1') {
                 this.$notify({
                     title: '提示',
                     message: '请开启后执行',
