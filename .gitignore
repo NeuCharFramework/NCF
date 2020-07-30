@@ -13,7 +13,7 @@ obj/
 *.user
 /src/Senparc.Web.OldMvc
 /src/Senparc.Web/App_Data/SenparcTraceLog/*
-/src/Senparc.Web/wwwroot/lib/*
+# /src/Senparc.Web/wwwroot/lib/*
 /src/Senparc.Web/node_modules/gentelella
 /src/Senparc.Web/node_modules
 /src/ProjectFileManager
