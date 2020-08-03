@@ -26,7 +26,7 @@
 		<PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.1.502" />
 		<PackageReference Include="Senparc.Weixin.MP.MVC" Version="7.5.502" />
 		<PackageReference Include="Senparc.Weixin.Open" Version="4.7.502.2" />
-		<PackageReference Include="Senparc.Weixin.TenPay" Version="1.5.502.3" />
+		<PackageReference Include="Senparc.Weixin.TenPay" Version="1.5.502.4" />
 		<PackageReference Include="Senparc.Weixin.WxOpen" Version="3.8.502.1" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.3.500-beta1" />
 		<PackageReference Include="Senparc.Ncf.Log" Version="0.3.500-beta1" />
