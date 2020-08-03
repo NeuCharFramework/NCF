@@ -156,6 +156,8 @@ NCF 的扩展模块代号为 `XNCF`。
 
 <img src="https://weixin.senparc.com/images/NCF/XncfModules/03.png" />
 
+> 模块默认晚装完毕后，会进入“新增待审核”的状态，点击进行开启即可。
+
 ### 如何使用已安装的模块？
 
 在上一步模块详情页中，列出了当前模块支持的所有功能的列表：
@@ -209,8 +211,8 @@ NCF 的扩展模块代号为 `XNCF`，您可以在 [NcfPackageSources](https://g
 
 
 ## 待办事项：
-~~- [ ] 前端包管理器要从Bower切换为LibMan~~
 - [ ] 完善 DDD 实践
+- [ ] 添加应用商店
 - [x] 定制命名空间
 - [ ] 发布官网及在线 Demo
 - [ ] 发布定制模板生成器（在线）
