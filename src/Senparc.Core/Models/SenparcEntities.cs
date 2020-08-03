@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.Models;
-using Senparc.Ncf.Core.Models.DataBaseModel;
-using Senparc.Ncf.XncfBase.Attributes;
 using System;
-using System.Collections.Concurrent;
-using System.Linq;
 
 namespace Senparc.Core.Models
 {
@@ -21,13 +17,14 @@ namespace Senparc.Core.Models
 
         public virtual DbSet<AdminUserInfo> AdminUserInfos { get; set; }
 
-        public DbSet<FeedBack> FeedBacks { get; set; }
+        public virtual DbSet<FeedBack> FeedBacks { get; set; }
 
         #endregion
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             #region 系统表
 
             //实现 [XncfAutoConfigurationMapping] 特性之后，可以自动执行，无需手动添加

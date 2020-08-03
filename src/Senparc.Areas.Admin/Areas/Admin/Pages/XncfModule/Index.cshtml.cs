@@ -13,6 +13,7 @@ using Senparc.Ncf.XncfBase;
 using Senparc.Service;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.CO2NET.Trace;
+using System.Data;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -122,7 +123,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             await _sysMenuService.GetMenuDtoByCacheAsync(true).ConfigureAwait(false);
             PagedList<XncfModule> xncfModules = await _xncfModuleService.GetObjectListAsync(pageIndex, pageSize, _ => true, _ => _.AddTime, Ncf.Core.Enums.OrderingType.Descending);
             //xncfModules.FirstOrDefault().
-            var xncfRegisterList = XncfRegisterList.Select(_ => new { _.Uid, homeUrl = _.GetAreaHomeUrl(),_.Icon });
+            var xncfRegisterList = XncfRegisterList.Select(_ => new { _.Uid, homeUrl = _.GetAreaHomeUrl(), _.Icon });
             var result = from xncfModule in xncfModules
                          join xncfRegister in xncfRegisterList on xncfModule.Uid equals xncfRegister.Uid
                          into xncfRegister_left
@@ -143,7 +144,19 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         {
             var xncfModules = await _xncfModuleService.GetObjectListAsync(0, 0, _ => true, _ => _.AddTime, Ncf.Core.Enums.OrderingType.Descending);
             var newXncfRegisters = Senparc.Ncf.XncfBase.Register.RegisterList.Where(z => !z.IgnoreInstall && !xncfModules.Exists(m => m.Uid == z.Uid && m.Version == z.Version)).ToList() ?? new List<IXncfRegister>();
-            return Ok(newXncfRegisters.Select(_ => new { _.MenuName, _.Name, _.Uid, _.Version,_.Icon })); ;
+
+            //查看版本号是否一致
+            Func<IXncfRegister, string> getVersion = xncfRegister =>
+            {
+                var installedXncf = xncfModules.FirstOrDefault(z => z.Uid == xncfRegister.Uid);
+                if (installedXncf == null || installedXncf.Version == xncfRegister.Version)
+                {
+                    return xncfRegister.Version;
+                }
+                return $"{installedXncf.Version} -> {xncfRegister.Version}";
+            };
+
+            return Ok(newXncfRegisters.Select(_ => new { _.MenuName, _.Name, _.Uid, Version = getVersion(_), _.Icon })); ;
         }
 
         /// <summary>
