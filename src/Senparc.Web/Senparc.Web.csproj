@@ -526,12 +526,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="wwwroot\css\Admin\adminlogin\logo.png">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\css\Admin\login\index.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
     <Content Update="wwwroot\css\site.css">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

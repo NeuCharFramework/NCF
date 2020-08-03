@@ -7,11 +7,14 @@
 
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Trace;
 using Senparc.Core.Models;
 using Senparc.Ncf.AreaBase.Admin.Filters;
@@ -25,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin
@@ -100,6 +104,16 @@ namespace Senparc.Areas.Admin
             //TODO：应该提供一个 BeforeUninstall 方法，阻止卸载。
 
             return base.UninstallAsync(serviceProvider, unsinstallFunc);
+        }
+
+        public override IApplicationBuilder UseXncfModule(IApplicationBuilder app, IRegisterService registerService)
+        {
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly(), "wwwroot")
+            });
+
+            return base.UseXncfModule(app, registerService);
         }
 
         #endregion

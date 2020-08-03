@@ -28,9 +28,9 @@ namespace Senparc.Web
             //也可通过下面已经注释的的提供默认值方式解决（不推荐）
             var sqlConnection = SenparcDatabaseConfigs.ClientConnectionString; //?? "Server=.\\;Database=NCF;Trusted_Connection=True;integrated security=True;";
 
-            Console.WriteLine("============================");
+            Console.WriteLine("============= 连接字符串 ===============");
             Console.WriteLine(SenparcDatabaseConfigs.ClientConnectionString);
-            Console.WriteLine("============================");
+            Console.WriteLine("========================================");
 
             Service.Register systemServiceRegister = new Service.Register();
 
