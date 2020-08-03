@@ -85,42 +85,42 @@
             }
             this.run.data = item;
             this.runData = {};
-                this.run.data.value.map(res => {
-                    // 动态model绑定生成
-                    // 默认选择赋值
-                    // 多选
-                    if (res.parameterType === 2 && res.selectionList.items) {
-                        this.runData[res.name] = {};
-                        this.runData[res.name].value = [];
-                        this.runData[res.name].item = res;
-                        res.selectionList.items.map(ele => {
-                            if (ele.defaultSelected) {
-                                this.runData[res.name].value.push(ele.value);
-                            }
-                        });
-                    }
-                    // 下拉框value
-                    if (res.parameterType === 1 && res.selectionList.items) {
-                        this.runData[res.name] = {};
-                        this.runData[res.name].value = '';
-                        this.runData[res.name].item = res;
-                        res.selectionList.items.map(ele => {
-                            if (ele.defaultSelected) {
-                                this.runData[res.name].value=ele.value;
-                            }
-                        });
-                        // 如果没有默认给第一个
-                        if (this.runData[res.name].value.length === 0) {
-                            this.runData[res.name].value = res.selectionList.items[0].value;
+            this.run.data.value.map(res => {
+                // 动态model绑定生成
+                // 默认选择赋值
+                // 多选
+                if (res.parameterType === 2 && res.selectionList.items) {
+                    this.runData[res.name] = {};
+                    this.runData[res.name].value = [];
+                    this.runData[res.name].item = res;
+                    res.selectionList.items.map(ele => {
+                        if (ele.defaultSelected) {
+                            this.runData[res.name].value.push(ele.value);
                         }
+                    });
+                }
+                // 下拉框value
+                if (res.parameterType === 1 && res.selectionList.items) {
+                    this.runData[res.name] = {};
+                    this.runData[res.name].value = '';
+                    this.runData[res.name].item = res;
+                    res.selectionList.items.map(ele => {
+                        if (ele.defaultSelected) {
+                            this.runData[res.name].value = ele.value;
+                        }
+                    });
+                    // 如果没有默认给第一个
+                    if (this.runData[res.name].value.length === 0) {
+                        this.runData[res.name].value = res.selectionList.items[0].value;
                     }
-                    // 输入框
-                    if (res.parameterType === 0) {
-                        this.runData[res.name] = {};
-                        this.runData[res.name].item = res;
-                        this.runData[res.name].value = "";
-                    }
-                });
+                }
+                // 输入框
+                if (res.parameterType === 0) {
+                    this.runData[res.name] = {};
+                    this.runData[res.name].item = res;
+                    this.runData[res.name].value = "";
+                }
+            });
             this.runData = Object.assign({}, this.runData);
             //  this.runData数组结构
             //在接口传输时，将下拉单选转成数组
@@ -155,7 +155,7 @@
                 return;
             }
             // 关闭执行弹窗
-            this.run.visible = false;
+            // this.run.visible = false;
             let xncfFunctionParams = {};
             for (var i in this.runData) {
                 // 多选
@@ -218,8 +218,11 @@
         async handleDelete() {
             const id = this.data.xncfModule.id;
             const res = await service.post(`/Admin/XncfModule/Start?handler=Delete&id=${id}`);
-            window.sessionStorage.removeItem('activeMenu');
-            window.location.href ='/Admin/Index';
+            window.sessionStorage.setItem('setNavMenuActive', '模块管理');
+            getNavMenu();
+            setTimeout(function () {
+                window.location.href = '/Admin/XncfModule/Index';
+            }, 100);
         }
     }
 });
