@@ -14,15 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="2.0.0-preview1-final" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="2.0.0-preview1-final" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>    
@@ -30,13 +30,13 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Qiniu.Shared" Version="7.2.15" />
     <PackageReference Include="Senparc.NeuChar" Version="1.2.108" />
-    <PackageReference Include="Senparc.Weixin.MP" Version="16.10.502.1" />
+    <PackageReference Include="Senparc.Weixin.MP" Version="16.10.502.2" />
     <PackageReference Include="Senparc.Weixin.Open" Version="4.7.502.2" />
-    <PackageReference Include="Senparc.Weixin.WxOpen" Version="3.8.502" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.3.402-beta1" />
-    <PackageReference Include="Senparc.Ncf.Log" Version="0.3.402-beta1" />
-    <PackageReference Include="Senparc.Ncf.Repository" Version="0.3.402-beta1" />
-    <PackageReference Include="Senparc.Ncf.Service" Version="0.3.402-beta1" />
+    <PackageReference Include="Senparc.Weixin.WxOpen" Version="3.8.502.1" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.3.500-beta1" />
+    <PackageReference Include="Senparc.Ncf.Log" Version="0.3.500-beta1" />
+    <PackageReference Include="Senparc.Ncf.Repository" Version="0.3.500-beta1" />
+    <PackageReference Include="Senparc.Ncf.Service" Version="0.3.500-beta1" />
   </ItemGroup>
 
   <ItemGroup>
