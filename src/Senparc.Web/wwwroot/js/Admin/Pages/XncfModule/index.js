@@ -45,19 +45,17 @@
         async handleSwitch() {
             await service.post('/Admin/XncfModule/Index?handler=HideManager');
             this.isExtend = !this.isExtend;
-            window.location.href ="/Admin/Index";
+            window.location.href = "/Admin/Index";
         },
         // 安装
         async handleInstall(index, row) {
             await service.get(`/Admin/XncfModule/Index?handler=ScanAjax&uid=${row.uid}`);
-            this.getList();
-            //this.$notify({
-            //    title: "Success",
-            //    message: "安装成功，请在 系统管理-角色管理 页面授权之后再使用！",
-            //    type: "success",
-            //    duration: 5000
-            //});
-            window.location.reload();
+            window.sessionStorage.setItem('setNavMenuActive', row.menuName);
+            getNavMenu();
+            // 跳转到模块详情
+            setTimeout(function () {
+                window.location.href = `/Admin/XncfModule/Start/?uid=${row.uid}`;
+            }, 100);
         },
         // 操作
         handleHandle(index, row) {
