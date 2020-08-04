@@ -14,7 +14,7 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 
 <center><img src="https://weixin.senparc.com/images/NCF/login.jpg" /></center>
 
-> 当前快速更新分支：[Developer-RazorPage-DDD](https://github.com/NeuCharFramework/NCF/tree/Developer-RazorPage-DDD)
+> 当前快速更新分支：[Developer](https://github.com/NeuCharFramework/NCF/tree/Developer)
 
 > 我们欢迎第三方开源组件提供自己的解决方案，我们将会测试并集成到 NCF 中。
 
