@@ -157,24 +157,54 @@
             // 关闭执行弹窗
             // this.run.visible = false;
             let xncfFunctionParams = {};
+            let pass = true;
             for (var i in this.runData) {
                 // 多选
                 if (this.runData[i].item.parameterType === 2) {
-                    xncfFunctionParams[i] = {};
-                    xncfFunctionParams[i].SelectedValues = [];
-                    xncfFunctionParams[i].SelectedValues = this.runData[i].value;
+                    if (this.runData[i].item.isRequired && this.runData[i].value.length === 0) {
+                        this.$notify({
+                            title: '提示',
+                            message: this.runData[i].item.title + '  为必选项',
+                            type: 'warning'
+                        });
+                        return;
+                    } else {
+                        xncfFunctionParams[i] = {};
+                        xncfFunctionParams[i].SelectedValues = [];
+                        xncfFunctionParams[i].SelectedValues = this.runData[i].value;
+
+                    }
                 }
                 // 下拉框value为字符串，但接口要数组
                 if (this.runData[i].item.parameterType === 1) {
-                    xncfFunctionParams[i] = {};
-                    xncfFunctionParams[i].SelectedValues = [];
-                    xncfFunctionParams[i].SelectedValues[0] = this.runData[i].value;
+                    if (this.runData[i].item.isRequired && this.runData[i].value.length === 0) {
+                        this.$notify({
+                            title: '提示',
+                            message: this.runData[i].item.title + '  为必填项',
+                            type: 'warning'
+                        });
+                        return;
+                    } else {
+                        xncfFunctionParams[i] = {};
+                        xncfFunctionParams[i].SelectedValues = [];
+                        xncfFunctionParams[i].SelectedValues[0] = this.runData[i].value;
+                    }
                 }
                 // 输入框
                 if (this.runData[i].item.parameterType === 0) {
-                    xncfFunctionParams[i] = this.runData[i].value;
+                    if (this.runData[i].item.isRequired && this.runData[i].value.length === 0) {
+                        this.$notify({
+                            title: '提示',
+                            message: this.runData[i].item.title + '  为必填项',
+                            type: 'warning'
+                        });
+                        return;
+                    } else {
+                        xncfFunctionParams[i] = this.runData[i].value;
+                    }
                 }
             }
+            if (!pass) return;
             const data = {
                 xncfUid: this.data.xncfModule.uid, xncfFunctionName: this.run.data.key.name, xncfFunctionParams: JSON.stringify(xncfFunctionParams)
             };
