@@ -3,13 +3,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Config;
+using Senparc.Ncf.XncfBase;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
 namespace Senparc.Xncf.ExtensionAreaTemplate
 {
-	public partial class Register : IAreaRegister //注册 XNCF 页面接口（按需选用）
+	public partial class Register : 
+		IAreaRegister, //注册 XNCF 页面接口（按需选用）
+		IXncfRazorRuntimeCompilation  //需要使用 RazorRuntimeCompilation，在开发环境下实时更新 Razor Page
+
 	{
 		#region IAreaRegister 接口
 

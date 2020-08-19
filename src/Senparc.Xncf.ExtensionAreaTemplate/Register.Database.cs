@@ -11,8 +11,7 @@ using System.Text;
 namespace Senparc.Xncf.ExtensionAreaTemplate
 {
 	public partial class Register: 
-        IXncfDatabase,  //注册 XNCF 模块数据库（按需选用）
-        IXncfRazorRuntimeCompilation  //需要使用 RazorRuntimeCompilation，在开发环境下实时更新 Razor Page
+        IXncfDatabase  //注册 XNCF 模块数据库（按需选用）
     {
         #region IXncfDatabase 接口
 
