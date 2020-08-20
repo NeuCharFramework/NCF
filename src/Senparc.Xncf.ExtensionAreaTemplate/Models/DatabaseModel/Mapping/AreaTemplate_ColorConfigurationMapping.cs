@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.XncfBase.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Senparc.Xncf.ExtensionAreaTemplate.Models
 {

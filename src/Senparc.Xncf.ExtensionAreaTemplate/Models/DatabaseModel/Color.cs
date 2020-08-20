@@ -1,8 +1,7 @@
-﻿using Senparc.Xncf.ExtensionAreaTemplate.Models.DatabaseModel.Dto;
-using Senparc.Ncf.Core.Models;
+﻿using Senparc.Ncf.Core.Models;
+using Senparc.Xncf.ExtensionAreaTemplate.Models.DatabaseModel.Dto;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
 namespace Senparc.Xncf.ExtensionAreaTemplate
 {
