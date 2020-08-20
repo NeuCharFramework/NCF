@@ -42,7 +42,7 @@ var app = new Vue({
                 if (valid) {
                     service.post(url, data).then(res => {
                         if (res.data.success) {
-                            const url = this.resizeUrl().url;
+                            const url = this.resizeUrl().ReturnUrl;
                             window.location.href = url ? unescape(url) : '/Admin/index';
                         } else {
                             console.log(res.data);
