@@ -121,8 +121,12 @@
                                                      width="300px"
                                                      active-text-color="#409eff">
                                                 <el-menu-item v-for="(item,index) in data.xncfRegister.areaPageMenuItems" :index="index">
-                                                    <i class="el-icon-location"></i>
-                                                    <span slot="title"><a :href="item.url">{{item.name}}</a></span>
+                                                    <a :href="item.url">
+                                                        <i class="el-icon-location"></i>
+                                                        <span slot="title">
+                                                            {{item.name}}
+                                                        </span>
+                                                    </a>
                                                 </el-menu-item>
                                             </el-menu>
                                         </el-collapse-item>

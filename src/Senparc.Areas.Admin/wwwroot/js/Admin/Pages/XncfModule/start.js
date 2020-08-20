@@ -118,7 +118,7 @@
                 if (res.parameterType === 0) {
                     this.runData[res.name] = {};
                     this.runData[res.name].item = res;
-                    this.runData[res.name].value = "";
+                    this.runData[res.name].value = res.value || '';
                 }
             });
             this.runData = Object.assign({}, this.runData);
@@ -157,7 +157,6 @@
             // 关闭执行弹窗
             // this.run.visible = false;
             let xncfFunctionParams = {};
-            let pass = true;
             for (var i in this.runData) {
                 // 多选
                 if (this.runData[i].item.parameterType === 2) {
@@ -204,7 +203,6 @@
                     }
                 }
             }
-            if (!pass) return;
             const data = {
                 xncfUid: this.data.xncfModule.uid, xncfFunctionName: this.run.data.key.name, xncfFunctionParams: JSON.stringify(xncfFunctionParams)
             };
@@ -231,6 +229,7 @@
             }
             // 打开执行结果弹窗
             this.runResult.visible = true;
+            this.getList();
         },
         // 关闭和开启
         async updataState(state) {

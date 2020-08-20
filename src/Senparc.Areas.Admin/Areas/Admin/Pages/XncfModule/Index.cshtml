@@ -68,7 +68,7 @@
                 <el-table-column align="left" label="菜单名称/版本号">
                     <template slot-scope="scope">
                         <div>
-                            <i :class="scope.row.xncfRegister.icon"></i>
+                            <i :class="scope.row.xncfRegister?scope.row.xncfRegister.icon:'fa fa-chain-broken'"></i>
                             {{scope.row.xncfModule.menuName}}
                         </div>
                         <div>
@@ -103,13 +103,17 @@
                     <template slot-scope="scope">
                         <el-button size="mini"
                                    icon="el-icon-s-tools"
-                                   type="primary"
+                                   type="primary" 
+                                    v-if="scope.row.xncfRegister!==null"
                                    @@click="handleHandle(scope.$index, scope.row)">操作</el-button>
                         <el-button size="mini"
-                                   v-if="scope.row.xncfRegister.homeUrl"
+                                   v-if="scope.row.xncfRegister!==null&&scope.row.xncfRegister.homeUrl"
                                    icon="el-icon-s-home"
                                    type="primary"
                                    @@click="handleIndex(scope.$index, scope.row)">主页</el-button>
+                        <span v-if="scope.row.xncfRegister===null">
+                            此模块已被删除~
+                        </span>
                     </template>
                 </el-table-column>
             </el-table>
