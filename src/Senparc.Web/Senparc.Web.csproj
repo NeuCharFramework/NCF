@@ -542,7 +542,4 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AAA.Xncf.CCCX\AAA.Xncf.CCCX.csproj" />
-  </ItemGroup>
 </Project>
