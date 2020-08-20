@@ -1,10 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.XncfBase;
 using Senparc.Ncf.XncfBase.Database;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Senparc.Xncf.ExtensionAreaTemplate.Models.DatabaseModel
 {

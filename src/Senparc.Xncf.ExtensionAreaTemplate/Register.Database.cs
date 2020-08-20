@@ -5,12 +5,10 @@ using Senparc.Xncf.ExtensionAreaTemplate.Models.DatabaseModel;
 using Senparc.Xncf.ExtensionAreaTemplate.Models.DatabaseModel.Dto;
 using Senparc.Xncf.ExtensionAreaTemplate.Services;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Senparc.Xncf.ExtensionAreaTemplate
 {
-	public partial class Register: 
+    public partial class Register :
         IXncfDatabase  //注册 XNCF 模块数据库（按需选用）
     {
         #region IXncfDatabase 接口
