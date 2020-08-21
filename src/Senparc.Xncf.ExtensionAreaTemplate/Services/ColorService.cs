@@ -1,10 +1,8 @@
-﻿using Senparc.Xncf.ExtensionAreaTemplate.Models.DatabaseModel.Dto;
-using Senparc.Ncf.Core.Enums;
+﻿using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Repository;
 using Senparc.Ncf.Service;
+using Senparc.Xncf.ExtensionAreaTemplate.Models.DatabaseModel.Dto;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Senparc.Xncf.ExtensionAreaTemplate.Services

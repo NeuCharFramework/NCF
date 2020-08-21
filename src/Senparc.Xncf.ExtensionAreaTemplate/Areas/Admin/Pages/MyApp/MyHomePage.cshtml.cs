@@ -1,20 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using Senparc.Xncf.ExtensionAreaTemplate.Services;
-using Senparc.Ncf.Core.Models.DataBaseModel;
-using Senparc.Ncf.Service;
-using Senparc.Ncf.XncfBase;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Senparc.Xncf.ExtensionAreaTemplate.Models.DatabaseModel.Dto;
 using Senparc.Ncf.Core.Enums;
-using Senparc.Xncf.ExtensionAreaTemplate.Models;
+using Senparc.Ncf.Service;
+using Senparc.Xncf.ExtensionAreaTemplate.Models.DatabaseModel.Dto;
+using Senparc.Xncf.ExtensionAreaTemplate.Services;
+using System;
+using System.Threading.Tasks;
 
 namespace Senparc.Xncf.ExtensionAreaTemplate.Areas.MyApp.Pages
 {

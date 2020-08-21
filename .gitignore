@@ -17,3 +17,5 @@ obj/
 /src/ProjectFileManager
 /src/Senparc.Web/App_Data/*.bak
 /src/Senparc.Web/wwwroot/NcfDocs
+/src/Senparc.Xncf.TemplateTest/*
+/src/Senparc.Database/Senparc.Database.dbmdl

@@ -1,36 +1,26 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Senparc.CO2NET.Trace;
-using Senparc.Ncf.Core.Areas;
-using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.ExtensionAreaTemplate.Functions;
-using Senparc.Xncf.ExtensionAreaTemplate.Models;
 using Senparc.Xncf.ExtensionAreaTemplate.Models.DatabaseModel;
 using Senparc.Xncf.ExtensionAreaTemplate.Models.DatabaseModel.Dto;
 using Senparc.Xncf.ExtensionAreaTemplate.Services;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Senparc.Xncf.ExtensionAreaTemplate
 {
-    public class Register : XncfRegisterBase,
-        IXncfRegister, //注册 XNCF 基础模块接口（必须）
-        IAreaRegister, //注册 XNCF 页面接口（按需选用）
-        IXncfDatabase,  //注册 XNCF 模块数据库（按需选用）
-        IXncfRazorRuntimeCompilation  //需要使用 RazorRuntimeCompilation，在开发环境下实时更新 Razor Page
+    public partial class Register : XncfRegisterBase,
+                                    IXncfRegister //注册 XNCF 基础模块接口（必须）
+                                    // 更多注册类型见 Register.xx.cs
     {
         public Register()
         { }
-
 
         #region IXncfRegister 接口
 
@@ -105,65 +95,6 @@ namespace Senparc.Xncf.ExtensionAreaTemplate
             return base.AddXncfModule(services, configuration);
         }
 
-        #endregion
-
-        #region IAreaRegister 接口
-
-        public string HomeUrl => "/Admin/MyApp/MyHomePage";
-
-        public List<AreaPageMenuItem> AareaPageMenuItems => new List<AreaPageMenuItem>() {
-             new AreaPageMenuItem(GetAreaHomeUrl(),"首页","fa fa-laptop"),
-             new AreaPageMenuItem(GetAreaUrl("/Admin/MyApp/About"),"关于","fa fa-bookmark-o"),
-        };
-
-        public IMvcBuilder AuthorizeConfig(IMvcBuilder builder, IWebHostEnvironment env)
-        {
-            builder.AddRazorPagesOptions(options =>
-            {
-                //此处可配置页面权限
-            });
-
-            SenparcTrace.SendCustomLog("系统启动", "完成 Area:MyApp 注册");
-
-            return builder;
-        }
-
-        #endregion
-
-        #region IXncfDatabase 接口
-
-        /// <summary>
-        /// 数据库前缀
-        /// </summary>
-        public const string DATABASE_PREFIX = "AreaTemplate_";
-
-        /// <summary>
-        /// 数据库前缀
-        /// </summary>
-        public string DatabaseUniquePrefix => DATABASE_PREFIX;
-        /// <summary>
-        /// 设置 XncfSenparcEntities 类型
-        /// </summary>
-        public Type XncfDatabaseDbContextType => typeof(MySenparcEntities);
-
-
-        public void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            //实现 [XncfAutoConfigurationMapping] 特性之后，可以自动执行，无需手动添加
-            //modelBuilder.ApplyConfiguration(new AreaTemplate_ColorConfigurationMapping());
-        }
-
-        public void AddXncfDatabaseModule(IServiceCollection services)
-        {
-            services.AddScoped(typeof(Color));
-            services.AddScoped(typeof(ColorDto));
-            services.AddScoped(typeof(ColorService));
-        }
-
-        #endregion
-
-        #region IXncfRazorRuntimeCompilation 接口
-        public string LibraryPath => Path.GetFullPath(Path.Combine(SiteConfig.WebRootPath, "..", "..", "Senparc.Xncf.ExtensionAreaTemplate"));
         #endregion
     }
 }

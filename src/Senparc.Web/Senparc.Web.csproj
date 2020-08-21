@@ -1,5 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
@@ -7,11 +7,9 @@
     <!--<IncludeSymbolsInSingleFile>true</IncludeSymbolsInSingleFile>-->
     <!--<RuntimeIdentifier>win-x64</RuntimeIdentifier>-->
   </PropertyGroup>
-
   <ItemGroup>
     <!--https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-3.1-->
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.6" />
-
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
@@ -25,7 +23,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
     <PackageReference Include="Senparc.CO2NET" Version="1.3.110" />
-
     <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.3.500-beta1" />
@@ -37,11 +34,9 @@
     <PackageReference Include="Senparc.Ncf.Utility" Version="0.3.500-beta1" />
     <!--<PackageReference Include="ML.Xncf.Docs" Version="0.0.2.12-beta1" />-->
   </ItemGroup>
-
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="wwwroot\lib\Chart.js\.codeclimate.yml" />
     <None Include="wwwroot\lib\Chart.js\.editorconfig" />
@@ -511,7 +506,6 @@
     <None Include="wwwroot\lib\echarts\theme\vintage.js" />
     <None Include="wwwroot\lib\echarts\webpack.config.js" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj" />
     <ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
@@ -522,9 +516,7 @@
     <ProjectReference Include="..\Senparc.Threads\Senparc.Threads.csproj" />
     <ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
     <ProjectReference Include="..\Senparc.Web.UI\Senparc.Web.UI.csproj" />
-    <ProjectReference Include="..\Senparc.Xncf.ExtensionAreaTemplate\Senparc.Xncf.ExtensionAreaTemplate.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Update="wwwroot\css\site.css">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -549,5 +541,4 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
-
 </Project>

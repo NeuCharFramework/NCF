@@ -121,6 +121,7 @@
     .item-container .el-menu a {
         color: #bfcbd9;
         text-decoration: none;
+        display:block;
     }
 
 .run-dialog .el-checkbox {

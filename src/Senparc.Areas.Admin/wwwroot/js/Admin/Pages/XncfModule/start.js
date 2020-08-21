@@ -118,7 +118,7 @@
                 if (res.parameterType === 0) {
                     this.runData[res.name] = {};
                     this.runData[res.name].item = res;
-                    this.runData[res.name].value = "";
+                    this.runData[res.name].value = res.value || '';
                 }
             });
             this.runData = Object.assign({}, this.runData);
@@ -160,19 +160,47 @@
             for (var i in this.runData) {
                 // 多选
                 if (this.runData[i].item.parameterType === 2) {
-                    xncfFunctionParams[i] = {};
-                    xncfFunctionParams[i].SelectedValues = [];
-                    xncfFunctionParams[i].SelectedValues = this.runData[i].value;
+                    if (this.runData[i].item.isRequired && this.runData[i].value.length === 0) {
+                        this.$notify({
+                            title: '提示',
+                            message: this.runData[i].item.title + '  为必选项',
+                            type: 'warning'
+                        });
+                        return;
+                    } else {
+                        xncfFunctionParams[i] = {};
+                        xncfFunctionParams[i].SelectedValues = [];
+                        xncfFunctionParams[i].SelectedValues = this.runData[i].value;
+
+                    }
                 }
                 // 下拉框value为字符串，但接口要数组
                 if (this.runData[i].item.parameterType === 1) {
-                    xncfFunctionParams[i] = {};
-                    xncfFunctionParams[i].SelectedValues = [];
-                    xncfFunctionParams[i].SelectedValues[0] = this.runData[i].value;
+                    if (this.runData[i].item.isRequired && this.runData[i].value.length === 0) {
+                        this.$notify({
+                            title: '提示',
+                            message: this.runData[i].item.title + '  为必填项',
+                            type: 'warning'
+                        });
+                        return;
+                    } else {
+                        xncfFunctionParams[i] = {};
+                        xncfFunctionParams[i].SelectedValues = [];
+                        xncfFunctionParams[i].SelectedValues[0] = this.runData[i].value;
+                    }
                 }
                 // 输入框
                 if (this.runData[i].item.parameterType === 0) {
-                    xncfFunctionParams[i] = this.runData[i].value;
+                    if (this.runData[i].item.isRequired && this.runData[i].value.length === 0) {
+                        this.$notify({
+                            title: '提示',
+                            message: this.runData[i].item.title + '  为必填项',
+                            type: 'warning'
+                        });
+                        return;
+                    } else {
+                        xncfFunctionParams[i] = this.runData[i].value;
+                    }
                 }
             }
             const data = {
@@ -201,6 +229,7 @@
             }
             // 打开执行结果弹窗
             this.runResult.visible = true;
+            this.getList();
         },
         // 关闭和开启
         async updataState(state) {
