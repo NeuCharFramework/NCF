@@ -32,10 +32,10 @@
     <PackageReference Include="Senparc.Ncf.Core" Version="0.3.500-beta1" />
     <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.3.500-beta1" />
     <PackageReference Include="Senparc.Ncf.Utility" Version="0.3.500-beta1" />
-    <PackageReference Include="Senparc.Weixin" Version="6.7.502" />
-    <PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.1.502" />
-    <PackageReference Include="Senparc.Weixin.Cache.Memcached" Version="2.6.502" />
-    <PackageReference Include="Senparc.Weixin.MP" Version="16.10.502.2" />
+    <PackageReference Include="Senparc.Weixin" Version="6.7.510" />
+    <PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.1.510" />
+    <PackageReference Include="Senparc.Weixin.Cache.Memcached" Version="2.6.510" />
+    <PackageReference Include="Senparc.Weixin.MP" Version="16.10.510" />
   </ItemGroup>
 
   <ItemGroup>
