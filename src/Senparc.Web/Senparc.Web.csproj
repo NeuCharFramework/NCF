@@ -541,4 +541,7 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Senparc.Xncf.FileServer\Senparc.Xncf.FileServer.csproj" />
+  </ItemGroup>
 </Project>

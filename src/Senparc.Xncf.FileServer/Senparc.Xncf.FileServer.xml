@@ -1,0 +1,659 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Senparc.Xncf.FileServer</name>
+    </assembly>
+    <members>
+        <member name="M:Senparc.Xncf.FileServer.Areas.Admin.Pages.FileServer.AppManagerModel.OnGetAjaxAsync(System.Int32,System.Int32)">
+            <summary>
+            Handler=Ajax
+            </summary>
+            <param name="pageIndex"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Areas.FileServer.Pages.Index.OnGetAjaxAsync(System.Int32,System.Int32)">
+            <summary>
+            Handler=Ajax
+            </summary>
+            <param name="pageIndex"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Areas.FileServer.Pages.Index.OnPostDeleteAsync(System.Int32[])">
+            <summary>
+            
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.Controllers.AppManageController">
+            <summary>
+            App相关
+            </summary>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Controllers.AppManageController.CreateApp(System.String,System.String)">
+            <summary>
+            创建APP
+            </summary>
+            <param name="password">创建密码</param>
+            <param name="appname">创建APP名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Controllers.AppManageController.GetToken(System.String,System.String)">
+            <summary>
+            获取AppId的注册token
+            </summary>
+            <param name="AppId">注册的AppId</param>
+            <param name="AppKey">注册的AppKey</param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Controllers.AppManageController.ValidToken(System.String)">
+            <summary>
+            验证Token有效性
+            </summary>
+            <param name="token">需要验证的token</param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Controllers.AppManageController.GetList(System.Int32,System.Int32)">
+            <summary>
+            获取App列表
+            </summary>
+            <param name="pageIndex"></param>
+            <param name="pageCount"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.Controllers.FileManageController">
+            <summary>
+            文件上传接口
+            </summary>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Controllers.FileManageController.Upload(Microsoft.AspNetCore.Http.IFormFile,System.String,System.String)">
+            <summary>
+            上传文件
+            </summary>
+            <param name="file">文件信息</param>
+            <param name="token">认证token</param>
+            <param name="prefixPath">前置存储路径，将影响文件的实际存放路径</param>
+            <returns></returns>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.Models.AllowFileExtension">
+            <summary>
+            允许扩展名类
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Models.AllowFileExtension.ImageExtension">
+            <summary>
+            图片扩展名
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Models.AllowFileExtension.VideoExtensiong">
+            <summary>
+            音视频扩展名
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Models.AllowFileExtension.FileExtension">
+            <summary>
+            文件扩展名
+            </summary>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.Models.DatabaseModel.Dto.FileRecordDto">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.DatabaseModel.Dto.FileRecordDto.SysKeyId">
+            <summary>
+            所属账号Id
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.DatabaseModel.Dto.FileRecordDto.SysKey">
+            <summary>
+            所属账号
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.DatabaseModel.Dto.FileRecordDto.FileContentType">
+            <summary>
+            文件类型
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.DatabaseModel.Dto.FileRecordDto.FileName">
+            <summary>
+            文件名
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.DatabaseModel.Dto.FileRecordDto.PrefixPath">
+            <summary>
+            前缀路径
+            需要使用下划线“_”代替斜杠“\”
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.DatabaseModel.Dto.FileRecordDto.FilePath">
+            <summary>
+            文件存储路径，不包含设定的RootDir
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.DatabaseModel.Dto.FileRecordDto.FileHash">
+            <summary>
+            文件Hash值
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.DatabaseModel.Dto.FileRecordDto.FileSize">
+            <summary>
+            文件大小，单位B
+            最大支持2GB
+            </summary>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.Models.DatabaseModel.Dto.SysKeyDto">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.DatabaseModel.Dto.SysKeyDto.AppId">
+            <summary>
+            App标识Id
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.DatabaseModel.Dto.SysKeyDto.AppKey">
+            <summary>
+            AppKey    密钥
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.DatabaseModel.Dto.SysKeyDto.Name">
+            <summary>
+            名称、用户
+            </summary>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.Models.VD.ActionResultVD">
+            <summary>
+            通用请求方法返回对象
+            </summary>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.Models.VD.ActionResultVD`1">
+            <summary>
+            通用请求方法返回对象
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.VD.ActionResultVD`1.Code">
+            <summary>
+            错误码，200 表示成功，-1 表示异常，其它自定义建议从 1 开始累加
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.VD.ActionResultVD`1.Msg">
+            <summary>
+            消息
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.VD.ActionResultVD`1.Data">
+            <summary>
+            主体数据
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.VD.ActionResultVD`1.StartTime">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.VD.ActionResultVD`1.UseTime">
+            <summary>
+            用时，毫秒（在endTime上面，否则非序列化返回endTime值为null）
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Models.VD.ActionResultVD`1.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Models.VD.ActionResultVD`1.Set(Senparc.Xncf.FileServer.Models.VD.ARTag)">
+            <summary>
+            设置快捷标签，赋值code、msg
+            </summary>
+            <param name="tag">快捷标签枚举</param>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Models.VD.ActionResultVD`1.Set(System.Boolean)">
+            <summary>
+            设置快捷标签，赋值code、msg
+            </summary>
+            <param name="isyes"></param>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Models.VD.ActionResultVD`1.Set(System.Exception,System.Boolean)">
+            <summary>
+            设置快捷标签，赋值code、msg
+            </summary>
+            <param name="ex"></param>
+            <param name="appendCatch">追加错误消息，默认true</param>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.Models.VD.ARTag">
+            <summary>
+            快捷标签枚举
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Models.VD.ARTag.success">
+            <summary>
+            成功
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Models.VD.ARTag.fail">
+            <summary>
+            失败
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Models.VD.ARTag.error">
+            <summary>
+            错误
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Models.VD.ARTag.unauthorized">
+            <summary>
+            未授权
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Models.VD.ARTag.refuse">
+            <summary>
+            拒绝
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Models.VD.ARTag.exist">
+            <summary>
+            存在
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Models.VD.ARTag.invalid">
+            <summary>
+            无效
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Models.VD.ARTag.lack">
+            <summary>
+            缺省
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Models.VD.ARTag.exception">
+            <summary>
+            异常
+            </summary>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.FileRecord">
+            <summary>
+            FileRecord 实体类
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.FileRecord.SysKeyId">
+            <summary>
+            所属账号Id
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.FileRecord.SysKey">
+            <summary>
+            所属账号
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.FileRecord.FileContentType">
+            <summary>
+            文件类型
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.FileRecord.FileName">
+            <summary>
+            文件名
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.FileRecord.PrefixPath">
+            <summary>
+            前缀路径
+            需要使用下划线“_”代替斜杠“\”
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.FileRecord.FilePath">
+            <summary>
+            文件存储路径，不包含设定的RootDir
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.FileRecord.FileHash">
+            <summary>
+            文件Hash值
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.FileRecord.FileSize">
+            <summary>
+            文件大小，单位B
+            最大支持2GB
+            </summary>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.SenparcDbContextFactory">
+            <summary>
+            设计时 DbContext 创建（仅在开发时创建 Code-First 的数据库 Migration 使用，在生产环境不会执行）
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.SenparcDbContextFactory.RootDictionaryPath">
+            <summary>
+            用于寻找 App_Data 文件夹，从而找到数据库连接字符串配置信息
+            </summary>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.SysKey">
+            <summary>
+            账号信息 实体类
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.SysKey.AppId">
+            <summary>
+            App标识Id
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.SysKey.AppKey">
+            <summary>
+            AppKey    密钥
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.SysKey.Name">
+            <summary>
+            名称、用户
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.SysKey.FileRecords">
+            <summary>
+            包含的文件列表
+            </summary>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.SafeSetting">
+            <summary>
+            安全相关配置
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.SafeSetting.IsDev">
+            <summary>
+            是开发环境，可使用开发环境的接口；警告：正式环境需设为 false
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.SafeSetting.CreateAppPassword">
+            <summary>
+            创建App的密码
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.SafeSetting.TokenExpired">
+            <summary>
+            Token有效期，不能小于Token缓存，单位：分
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.SafeSetting.TokenCache">
+            <summary>
+            Token缓存，不能大于Token有效期，缓存期内保证Token有效，单位：分
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.SafeSetting.Secret">
+            <summary>
+            JWT加密密钥
+            </summary>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.StaticResourceSetting">
+            <summary>
+            静态资源相关配置
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.StaticResourceSetting.RootDir">
+            <summary>
+            上传根目录，可用软链接分离
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.StaticResourceSetting.RequestPath">
+            <summary>
+            请求根目录
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.StaticResourceSetting.MaxSize">
+            <summary>
+            上传文件大小，单位：MB
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.StaticResourceSetting.AllowFile">
+            <summary>
+            允许上传的文件
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Register.DATABASE_PREFIX">
+            <summary>
+            数据库前缀
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Register.DatabaseUniquePrefix">
+            <summary>
+            数据库前缀
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Register.XncfDatabaseDbContextType">
+            <summary>
+            设置 XncfSenparcEntities 类型
+            </summary>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.Services.SysKeyService">
+            <summary>
+            使用这种服务类型扩展时需要使用模块上下文
+            </summary>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Services.SysKeyService.CreateApp(System.String,System.String,System.String)">
+            <summary>
+            创建App
+            </summary>
+            <param name="Password"></param>
+            <param name="AppId"></param>
+            <param name="Name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Services.SysKeyService.GetAppList(System.Int32,System.Int32)">
+            <summary>
+            获取App列表
+            </summary>
+            <param name="pageNumber"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler">
+            <summary>
+            Configuration帮助类
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.Configuration">
+            <summary>
+            全局配置
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.CustomConfiguration">
+            <summary>
+            模块自定义配置文件
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.HostEnvironment">
+            <summary>
+            托管环境信息
+            </summary>
+        </member>
+        <member name="F:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.WebHostEnvironment">
+            <summary>
+            Web托管环境信息
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.ContentRootPath">
+            <summary>
+            内部访问（项目根路径）
+            </summary>
+        </member>
+        <member name="P:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.WebRootPath">
+            <summary>
+            web外部访问（wwwroot）
+            </summary>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.GetValue(System.String)">
+            <summary>
+            获取AppsettingsJson的值
+            </summary>
+            <param name="key">键路径，如：ConnectionStrings:SQLServerConn</param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.GetValue``1(System.String)">
+            <summary>
+            获取AppsettingsJson的值
+            </summary>
+            <typeparam name="T">类型</typeparam>
+            <param name="key">键路径</param>
+            <returns></returns>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.Utility.HashHelper">
+            <summary>
+            Hash辅助类
+            </summary>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.MD5File(System.String)">
+            <summary>
+            计算文件的 MD5 值
+            </summary>
+            <param name="fileName">要计算 MD5 值的文件名和路径</param>
+            <returns>MD5 值16进制字符串</returns>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.SHA1File(System.String)">
+            <summary>
+            计算文件的 sha1 值
+            </summary>
+            <param name="fileName">要计算 sha1 值的文件名和路径</param>
+            <returns>sha1 值16进制字符串</returns>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.HashFile(System.String,System.String)">
+            <summary>
+            计算文件的哈希值
+            </summary>
+            <param name="fileName">要计算哈希值的文件名和路径</param>
+            <param name="algName">算法:sha1,md5</param>
+            <returns>哈希值16进制字符串</returns>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.MD5File(System.IO.Stream)">
+            <summary>
+            计算文件的 MD5 值
+            </summary>
+            <param name="stream">要计算 MD5 值的文件流</param>
+            <returns>MD5 值16进制字符串</returns>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.SHA1File(System.IO.Stream)">
+            <summary>
+            计算文件的 sha1 值
+            </summary>
+            <param name="stream">要计算 sha1 值的文件流</param>
+            <returns>sha1 值16进制字符串</returns>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.HashFile(System.IO.Stream,System.String)">
+            <summary>
+            计算文件的哈希值
+            </summary>
+            <param name="stream">要计算哈希值的文件流</param>
+            <param name="algName">算法:sha1,md5</param>
+            <returns>哈希值16进制字符串</returns>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.HashData(System.IO.Stream,System.String)">
+            <summary>
+            计算哈希值
+            </summary>
+            <param name="stream">要计算哈希值的 Stream</param>
+            <param name="algName">算法:sha1,md5</param>
+            <returns>哈希值字节数组</returns>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.ByteArrayToHexString(System.Byte[])">
+            <summary>
+            字节数组转换为16进制表示的字符串
+            </summary>
+        </member>
+        <member name="T:Senparc.Xncf.FileServer.Utility.UniqueHelper">
+            <summary>
+            生成唯一标识
+            </summary>
+        </member>
+        <member name="M:Senparc.Xncf.FileServer.Utility.UniqueHelper.LongId">
+            <summary>
+            根据Guid获取唯一数字序列，19位
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ServiceDescriptorsFactory.AppService">
+            <summary>
+            Describes an individual service in the app.
+            </summary>
+        </member>
+        <member name="P:ServiceDescriptorsFactory.AppService.FullName">
+            <summary>
+            Full name of the service.
+            </summary>
+        </member>
+        <member name="P:ServiceDescriptorsFactory.AppService.Lifetime">
+            <summary>
+            Lifetime of the service registration.
+            </summary>
+        </member>
+        <member name="P:ServiceDescriptorsFactory.AppService.ImplementationType">
+            <summary>
+            Implementation type of the service.
+            </summary>
+        </member>
+        <member name="T:ServiceDescriptorsFactory.IServiceDescriptorsService">
+            <summary>
+            Service descriptor interface.
+            </summary>
+        </member>
+        <member name="M:ServiceDescriptorsFactory.IServiceDescriptorsService.GetServices">
+            <summary>
+            GetServices method returns an IEnumerable of app services.
+            </summary>
+        </member>
+        <member name="T:ServiceDescriptorsFactory.ServiceDescriptorsService">
+            <summary>
+            A service to describe the app's services.
+            </summary>
+        </member>
+        <member name="M:ServiceDescriptorsFactory.ServiceDescriptorsService.#ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Construct the ServiceDescriptorsService.
+            </summary>
+        </member>
+        <member name="M:ServiceDescriptorsFactory.ServiceDescriptorsService.GetServices">
+            <summary>
+            Return an IEnumerable of app services.
+            </summary>
+        </member>
+        <member name="T:StartupDiagnostics.StartupDiagnosticsHostingStartup">
+            <summary>
+            Class used to configure the app with the hosting startup enhancements.
+            </summary>
+        </member>
+        <member name="M:StartupDiagnostics.StartupDiagnosticsHostingStartup.Configure(Microsoft.AspNetCore.Hosting.IWebHostBuilder)">
+            <summary>
+            Configure the IWebHostBuilder with the hosting startup enhancements.
+            </summary>
+        </member>
+        <member name="T:StartupDiagnostics.DiagnosticMiddlewareStartupFilter">
+            <summary>
+            Startup filter for diagnostic middleware.
+            </summary>
+        </member>
+        <member name="M:StartupDiagnostics.DiagnosticMiddlewareStartupFilter.#ctor(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            Construct diagnostic middleware startup filter.
+            </summary>
+        </member>
+        <member name="M:StartupDiagnostics.DiagnosticMiddlewareStartupFilter.Configure(System.Action{Microsoft.AspNetCore.Builder.IApplicationBuilder})">
+            <summary>
+            Configure diagnostic middleware.
+            </summary>
+        </member>
+        <member name="T:StartupDiagnostics.DiagnosticMiddleware">
+            <summary>
+            A middleware to write out diagnostic information from the app.
+            </summary>
+        </member>
+        <member name="M:StartupDiagnostics.DiagnosticMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Microsoft.Extensions.Logging.ILoggerFactory,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            Construct the diagnostic middleware.
+            </summary>
+        </member>
+        <member name="M:StartupDiagnostics.DiagnosticMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Invoke the diagnostic middleware.
+            </summary>
+        </member>
+    </members>
+</doc>

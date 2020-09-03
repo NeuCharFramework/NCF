@@ -1,0 +1,218 @@
+﻿@page
+@model Senparc.Xncf.FileServer.Areas.FileServer.Pages.Index
+@{
+    ViewData["Title"] = "文件列表";
+    Layout = "_Layout_Vue";
+}
+
+@section breadcrumbs{
+    <el-breadcrumb-item>扩展模块</el-breadcrumb-item>
+    <el-breadcrumb-item>文件服务器</el-breadcrumb-item>
+    <el-breadcrumb-item>文件列表</el-breadcrumb-item>
+}
+
+<div>
+    <div class="fileserver-applist">
+        <div class="filter-container">
+            <el-button size="small" class="filter-item" type="primary" icon="el-icon-plus" @@click="add">上传</el-button>
+            <el-button size="small" class="filter-item" type="danger" icon="el-icon-delete" @@click="del">删除</el-button>
+        </div>
+        <el-table :data="tableData"
+                  border
+                  @@selection-change="handleSelectionChange"
+                  style="width: 100%">
+            <el-table-column type="selection"
+                             align="center"
+                             width="40">
+            </el-table-column>
+            <el-table-column align="center"
+                             width="45"
+                             label="#">
+                <template slot-scope="scope">
+                    {{ scope.row.id}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="所属账号">
+                <template slot-scope="scope">
+                    {{ scope.row.sysKey.name}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="文件名">
+                <template slot-scope="scope">
+                    <a v-bind:href="'@(Model.BaseUrl)/static/'+scope.row.filePath+'?token=@(Model.Token)'" target="_blank">{{scope.row.fileName}}</a>
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="文件大小/单位B">
+                <template slot-scope="scope">
+                    {{ scope.row.fileSize}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="文件Hash">
+                <template slot-scope="scope">
+                    {{ scope.row.fileHash}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             width="145"
+                             label="添加时间">
+                <template slot-scope="scope">
+                    {{formaTableTime(scope.row.addTime)}}
+                </template>
+            </el-table-column>
+        </el-table>
+        <pagination :total="searchData.total"
+                    :page.sync="searchData.pageIndex"
+                    :limit.sync="searchData.pageSize"
+                    @@pagination="fetchData"></pagination>
+    </div>
+    <!--新增 / 编辑 模态框-->
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="40%" :close-on-click-modal="false">
+        <el-form :model="fileRecordForm" :rules="fileRecordRule" ref="ref_fileRecordForm" label-width="100px" class="demo-fileForm">
+            <el-upload class="upload-demo"
+                       drag
+                       action="@Model.UpFileUrl"
+                       :data="{token:'@(Model.Token)'}"
+                       :on-success="handleSuccess"
+                       :file-list="fileList">
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                <div class="el-upload__tip" slot="tip">文件不能超过100MB</div>
+            </el-upload>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @@click="dialog.visible = false">取 消</el-button>
+            <el-button :loading="dialog.loading" type="primary" @@click="saveMpAccount">确 认</el-button>
+        </div>
+    </el-dialog>
+</div>
+@section scripts {
+    <script>
+        Vue.config.devtools = true;
+        var app = new Vue({
+            el: '#app',
+            data: {
+                searchData: {
+                    pageIndex: 1,
+                    pageSize: 20,
+                    total: 0
+                },
+                tableData: [],
+                dialog: {
+                    visible: false,
+                    title: '',
+                    loading: false,
+                    data: {
+                        id: 0
+                    }
+                },
+                fileList: [],
+                fileRecordForm: {
+                },
+                fileRecordRule: {
+                },
+                uid: '',
+                multipleSelection: []
+            },
+            mounted() {
+            },
+            created() {
+                this.fetchData();
+                this.uid = resizeUrl().uid;
+            },
+            methods: {
+                fetchData: function () {
+                    return service.get(`@Url.Page("index")?handler=Ajax&pageIndex=${this.searchData.pageIndex}&pageSize=${this.searchData.pageSize}`).then(res => {
+                        var responseData = res.data.data;
+                        responseData.list.map(ele => {
+                            ele.selected = false;
+                            ele.disabled = true;
+                        })
+                        this.tableData = responseData.list;
+                        this.searchData.total = responseData.count;
+                    });
+                },
+                add: function () {
+                    this.dialog.visible = true;
+                    this.dialog.title = '新增文件';
+                    this.dialog.data.id = 0;
+                    this.fileRecordForm = {
+                    }
+                },
+                saveMpAccount: function () {
+                    //保存
+                    this.$notify({
+                        title: '成功',
+                        message: '上传成功！',
+                        type: 'success',
+                        duration: 2000
+                    });
+                    this.dialog.visible = false;
+                    return this.fetchData();
+                },
+                del: function () {
+                    var delIds = this.multipleSelection;
+                    if (delIds.length === 0) {
+                        this.$notify({
+                            title: '警告',
+                            message: '请勾选文件',
+                            type: 'warning',
+                            duration: 2000
+                        });
+                        return;
+                    }
+
+                    var ids = [];
+                    delIds.forEach(ele => {
+                        ids.push(ele.id);
+                    })
+
+                    app.$confirm('是否删除所都选的项目？', { type: 'warning' }).then(res => {
+                        return service.post('@Url.Page("index")?handler=Delete', ids);
+                    }).then(res => {
+                        this.$notify({
+                            title: '成功',
+                            message: '已成功删除' + ids.length + '条',
+                            type: 'success',
+                            duration: 2000
+                        });
+                        return this.fetchData();
+                    }).catch(e => {
+                        //
+                    })
+                },
+                handleSelectionChange(val) {
+                    this.multipleSelection = val;
+                },
+                fileUpload: function (fileobj) {
+                    let param = new FormData();
+                    // 上传文件对象 名称file与后台控制器参数要一致
+                    param.append('file_data', fileobj.file);
+                    return request({
+                        method: 'post',
+                        // 上传地址
+                        url: '/goods-service/goods/sku/file',
+                        // 定义上传头
+                        headers: { 'Content-Type': 'multipart/form-data' },
+                        data: param
+                    });
+                },
+                handleSuccess: function (res, file, fileList) {
+                    // 上传成功
+                    this.fileList = fileList;
+                    console.log("上传成功" + fileList.length);
+                }
+            }
+        });
+    </script>
+}
+@section Style {
+    <style>
+        .demo-fileForm .el-upload, .demo-fileForm .el-upload .el-upload-dragger {
+            width: 100%;
+        }
+    </style>
+}

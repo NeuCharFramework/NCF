@@ -1,0 +1,238 @@
+﻿@page
+@model Senparc.Xncf.FileServer.Areas.Admin.Pages.FileServer.AppManagerModel
+@{
+    ViewData["Title"] = "App管理";
+    Layout = "_Layout_Vue";
+}
+@section breadcrumbs {
+    <el-breadcrumb-item>扩展模块</el-breadcrumb-item>
+    <el-breadcrumb-item>文件服务器</el-breadcrumb-item>
+    <el-breadcrumb-item>App管理</el-breadcrumb-item>
+}
+<div>
+    <div class="fileserver-applist">
+        <div class="filter-container">
+            <el-button size="small" class="filter-item" type="primary" icon="el-icon-plus" @@click="add">增加</el-button>
+            <el-button size="small" class="filter-item" type="danger" icon="el-icon-delete" @@click="del">删除</el-button>
+        </div>
+        <el-table :data="tableData"
+                  border
+                  @@selection-change="handleSelectionChange"
+                  style="width: 100%">
+            <el-table-column type="selection"
+                             align="center"
+                             width="40"
+                             v-bind:selectable="chkstu">
+            </el-table-column>
+            <el-table-column align="center"
+                             width="45"
+                             label="#">
+                <template slot-scope="scope">
+                    {{ scope.row.id}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="名称">
+                <template slot-scope="scope">
+                    {{ scope.row.name}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="AppId">
+                <template slot-scope="scope">
+                    {{ scope.row.appId}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="AppKey">
+                <template slot-scope="scope">
+                    {{ scope.row.appKey}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="备注">
+                <template slot-scope="scope">
+                    {{ scope.row.adminRemark}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             width="145"
+                             label="添加时间">
+                <template slot-scope="scope">
+                    {{formaTableTime(scope.row.addTime)}}
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center" width="100" fixed="right">
+                <template slot-scope="scope">
+                    <el-button size="mini"
+                               type="primary"
+                               @@click="edit(scope.$index, scope.row)"><i class="fa fa-edit"> 编辑</i></el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <pagination :total="searchData.total"
+                    :page.sync="searchData.pageIndex"
+                    :limit.sync="searchData.pageSize"
+                    @@pagination="fetchData"></pagination>
+    </div>
+    <!--新增 / 编辑 模态框-->
+    <el-dialog :title="dialog.title" :visible.sync="dialog.visible" width="40%" :close-on-click-modal="false">
+        <el-form :model="appManagerForm" :rules="appManagerRule" ref="ref_appManagerForm" label-width="100px" class="demo-ruleForm">
+            <el-form-item label="App名称" prop="name">
+                <el-input v-model="appManagerForm.name"></el-input>
+            </el-form-item>
+            <el-form-item label="备注" prop="adminRemark">
+                <el-input v-model="appManagerForm.adminRemark"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @@click="dialog.visible = false">取 消</el-button>
+            <el-button :loading="dialog.loading" type="primary" @@click="saveMpAccount">确 认</el-button>
+        </div>
+    </el-dialog>
+</div>
+@section scripts {
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                searchData: {
+                    pageIndex: 1,
+                    pageSize: 10,
+                    total: 0
+                },
+                tableData: [],
+                dialog: {
+                    visible: false,
+                    title: '',
+                    loading: false,
+                    data: {
+                        id: 0
+                    }
+                },
+                appManagerForm: {
+                    name: '',
+                    adminRemark: ''
+                },
+                appManagerRule: {
+                    name: [
+                        { required: true, message: '请输入App名称', trigger: 'blur' },
+                        { min: 1, max: 100, message: '长度在 1 至 20 之间', trigger: 'blur' }
+                    ],
+                    adminRemark: [
+                        { min: 0, max: 100, message: '长度在 1 至 100 之间', trigger: 'blur' }
+                    ]
+                },
+                uid: '',
+                multipleSelection: []
+            },
+            mounted() {
+            },
+            created() {
+                this.fetchData();
+                this.uid = resizeUrl().uid;
+            },
+            methods: {
+                fetchData: function () {
+                    return service.get(`@Url.Page("appmanager")?handler=Ajax&pageIndex=${this.searchData.pageIndex}&pageSize=${this.searchData.pageSize}`).then(res => {
+                        var responseData = res.data.data;
+                        responseData.list.map(ele => {
+                            ele.selected = false;
+                            ele.disabled = true;
+                        })
+                        this.tableData = responseData.list;
+                        this.searchData.total = responseData.count;
+                    });
+                },
+                add: function () {
+                    this.dialog.visible = true;
+                    this.dialog.title = '新增App';
+                    this.dialog.data.id = 0;
+                    this.appManagerForm = {
+                        name: '',
+                        adminRemark: ''
+                    }
+                },
+                edit: function (index, row) {
+                    this.appManagerForm = {};
+                    this.dialog.data.id = row.id;
+                    this.dialog.visible = true;
+                    this.dialog.title = '编辑App';
+                    this.appManagerForm = row;
+                    @*//获取远程最新，防止他人更改过?
+                    service.get('@Url.Page("appmanager")?handler=GetModel&id=' + row.id).then(res => {
+                        const responseData = res.data.data;
+                        //debugger
+                        this.appManagerForm = {
+                            name: responseData.name,
+                            adminRemark: responseData.adminRemark
+                        }
+                    });*@
+                },
+                saveMpAccount: function () {
+                    //保存
+                    var obj = JSON.parse(JSON.stringify(this.appManagerForm));
+                    obj.id = this.dialog.data.id;
+                    this.$refs.ref_appManagerForm.validate().then(res => {
+                        return service.post('@Url.Page("appmanager")?handler=Edit',obj);
+                    }).then(res => {
+                        if (res.data.success) {
+                            var message = '新增App成功';
+                            if (this.dialog.data.id > 0) {
+                                message = '编辑App成功';
+                            }
+                            this.$notify({
+                                title: '成功',
+                                message: message,
+                                type: 'success',
+                                duration: 2000
+                            });
+                            this.dialog.visible = false;
+                            this.appManagerForm = {};
+                            return this.fetchData();
+                        }
+                    }).catch(e => {
+                        console.info(e);
+                    });
+                },
+                del: function () {
+                    var delIds = this.multipleSelection;
+                    if (delIds.length === 0) {
+                        this.$notify({
+                            title: '警告',
+                            message: '请勾选App',
+                            type: 'warning',
+                            duration: 2000
+                        });
+                        return;
+                    }
+
+                    var ids = [];
+                    delIds.forEach(ele => {
+                        ids.push(ele.id);
+                    })
+
+                    app.$confirm('是否删除所都选的项目？', { type: 'warning' }).then(res => {
+                        return service.post('@Url.Page("appmanager")?handler=Delete', ids);
+                    }).then(res => {
+                        this.$notify({
+                            title: '成功',
+                            message: '已成功删除' + ids.length + '条',
+                            type: 'success',
+                            duration: 2000
+                        });
+                        return this.fetchData();
+                    }).catch(e => {
+                        //
+                    })
+                },
+                handleSelectionChange(val) {
+                    this.multipleSelection = val;
+                },
+                chkstu: function (row, index) {
+                    return row.name == "默认" ? false : true;
+                }
+            }
+        });
+    </script>
+}

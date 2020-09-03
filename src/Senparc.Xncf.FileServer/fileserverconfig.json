@@ -1,0 +1,32 @@
+{
+    "FileServer": {
+        //安全
+        "Safe": {
+            //是开发环境，可使用开发环境的接口；警告：正式环境需设为 false
+            "IsDev": true,
+            //创建App的密码
+            "CreateAppPassword": "qdq",
+            //Token有效期，不能小于Token缓存，单位：分
+            "TokenExpired": 120,
+            //Token缓存，不能大于Token有效期，缓存期内保证Token有效，单位：分
+            "TokenCache": 100,
+            //JWT加密密钥
+            "Secret": "weilanfile"
+        },
+        //静态资源
+        "StaticResource": {
+            //上传根目录，可用软链接分离
+            "RootDir": "doc",
+            "RequestPath": "/static",
+            //上传文件大小，单位：MB
+            "MaxSize": 100
+        }
+    },
+    "Cors": {
+        "Domain": {
+            "0": "localhost",
+            "1": "oa.weilanliuxue.cn",
+            "2": "192.168.1.104"
+        }
+    }
+}
