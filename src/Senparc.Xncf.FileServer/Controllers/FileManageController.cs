@@ -26,12 +26,12 @@ namespace Senparc.Xncf.FileServer.Controllers
     [ApiVersion("1")]
     public class FileManageController : ControllerBase
     {
-        private readonly IOptions<StaticResourceSetting> staticResourceSetting;
+        private readonly IOptionsMonitor<StaticResourceSetting> staticResourceSetting;
         private readonly SysKeyService _sysKeyService;
         private readonly FileRecordService _fileRecordService;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public FileManageController(IOptions<StaticResourceSetting> staticResourceSetting, SysKeyService sysKeyService, FileRecordService fileRecordService, IWebHostEnvironment webHostEnvironment)
+        public FileManageController(IOptionsMonitor<StaticResourceSetting> staticResourceSetting, SysKeyService sysKeyService, FileRecordService fileRecordService, IWebHostEnvironment webHostEnvironment)
         {
             this.staticResourceSetting = staticResourceSetting;
             this._sysKeyService = sysKeyService;
@@ -94,7 +94,7 @@ namespace Senparc.Xncf.FileServer.Controllers
                     basePath = Path.Combine(basePath, prefixPath);
                 }
                 //物理文件路径
-                var pathMp = Path.Combine(_webHostEnvironment.ContentRootPath, staticResourceSetting.Value.RootDir, basePath);
+                var pathMp = Path.Combine(_webHostEnvironment.ContentRootPath, staticResourceSetting.CurrentValue.RootDir, basePath);
                 if (!Directory.Exists(pathMp)) Directory.CreateDirectory(pathMp);
 
                 var fileRecordModel = new FileRecord()
@@ -120,7 +120,7 @@ namespace Senparc.Xncf.FileServer.Controllers
                 await _fileRecordService.AddAsync(fileRecordModel);
                 vd.Set(true);
                 //更改返回使用的返回路径
-                fileRecordModel.FilePath = Path.Combine(staticResourceSetting.Value.RequestPath, basePath, filename).Replace("\\", "/");//物理文件路径(斜杠)转换为URL路径(反斜杠)
+                fileRecordModel.FilePath = Path.Combine(staticResourceSetting.CurrentValue.RequestPath, basePath, filename).Replace("\\", "/");//物理文件路径(斜杠)转换为URL路径(反斜杠)
                 vd.Data = _fileRecordService.Mapper.Map<FileRecordDto>(fileRecordModel);
             }
             catch (Exception ex)

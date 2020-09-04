@@ -14,14 +14,14 @@ namespace Senparc.Xncf.FileServer
     {
         public IApplicationBuilder UseMiddleware(IApplicationBuilder app)
         {
-            var staticResourceSetting = app.ApplicationServices.GetService<IOptions<StaticResourceSetting>>();
+            var staticResourceSetting = app.ApplicationServices.GetService<IOptionsMonitor<StaticResourceSetting>>();
             //静态资源允许跨域
-            var path = Path.Combine(Directory.GetCurrentDirectory(), staticResourceSetting.Value.RootDir);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), staticResourceSetting.CurrentValue.RootDir);
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             var fileOptions = new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(path),
-                RequestPath = staticResourceSetting.Value.RequestPath,
+                RequestPath = staticResourceSetting.CurrentValue.RequestPath,
                 OnPrepareResponse = (x) =>//验证静态资源授权
                 {
                     var token = x.Context.Request.Query["token"];

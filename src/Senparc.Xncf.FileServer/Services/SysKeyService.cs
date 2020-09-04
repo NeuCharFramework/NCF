@@ -20,10 +20,10 @@ namespace Senparc.Xncf.FileServer.Services
     /// </summary>
     public class SysKeyService : ServiceBase<SysKey>
     {
-        private readonly IOptions<SafeSetting> safeSetting;
+        private readonly IOptionsMonitor<SafeSetting> safeSetting;
         private FileServerSenparcEntities _fileServerSenparcEntities;
         private IMemoryCache _cache;
-        public SysKeyService(IRepositoryBase<SysKey> repo, IServiceProvider serviceProvider, FileServerSenparcEntities fileServerSenparcEntities, IOptions<SafeSetting> safeSetting, IMemoryCache cache)
+        public SysKeyService(IRepositoryBase<SysKey> repo, IServiceProvider serviceProvider, FileServerSenparcEntities fileServerSenparcEntities, IOptionsMonitor<SafeSetting> safeSetting, IMemoryCache cache)
             : base(repo, serviceProvider)
         {
             this.safeSetting = safeSetting;
@@ -40,11 +40,11 @@ namespace Senparc.Xncf.FileServer.Services
         /// <returns></returns>
         public async Task<SysKeyDto> CreateApp(string Password, string AppId, string Name)
         {
-            if (!safeSetting.Value.IsDev)
+            if (!safeSetting.CurrentValue.IsDev)
             {
                 throw new Exception("只有开发环境下才可使用此接口！");
             }
-            if (string.IsNullOrWhiteSpace(Password) || Password != safeSetting.Value.CreateAppPassword)
+            if (string.IsNullOrWhiteSpace(Password) || Password != safeSetting.CurrentValue.CreateAppPassword)
             {
                 throw new Exception("密码错误！");
             }
@@ -90,11 +90,11 @@ namespace Senparc.Xncf.FileServer.Services
             //增加缓存
             var cacheEntry = _cache.GetOrCreate<string>(AppId, cacheEntry =>
             {
-                cacheEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(safeSetting.Value.TokenCache * 60);//单位分
+                cacheEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(safeSetting.CurrentValue.TokenCache * 60);//单位分
                 var token = new JwtBuilder()
                      .WithAlgorithm(new HMACSHA256Algorithm())
-                     .WithSecret(safeSetting.Value.Secret)
-                     .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(safeSetting.Value.TokenExpired).ToUnixTimeSeconds())
+                     .WithSecret(safeSetting.CurrentValue.Secret)
+                     .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(safeSetting.CurrentValue.TokenExpired).ToUnixTimeSeconds())
                      .AddClaim("id", sysKeyModel.Id)
                      //.AddClaim("appkey", AppKey)
                      .Encode();
@@ -109,7 +109,7 @@ namespace Senparc.Xncf.FileServer.Services
             {
                 var payload = new JwtBuilder()
                     .WithAlgorithm(new HMACSHA256Algorithm())
-                    .WithSecret(safeSetting.Value.Secret)
+                    .WithSecret(safeSetting.CurrentValue.Secret)
                     .MustVerifySignature()
                     .Decode<IDictionary<string, int>>(token);
                 var id = payload["id"];
