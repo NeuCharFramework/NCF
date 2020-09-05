@@ -10,7 +10,7 @@ using Senparc.Ncf.Service;
 using Senparc.Xncf.FileServer.Models.DatabaseModel.Dto;
 using Senparc.Xncf.FileServer.Models.VD;
 using Senparc.Xncf.FileServer.Services;
-using Senparc.Xncf.FileServer.Utility;
+using Senparc.Xncf.FileServer.Utils;
 
 namespace Senparc.Xncf.FileServer.Areas.Admin.Pages.FileServer
 {

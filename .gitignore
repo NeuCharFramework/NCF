@@ -20,4 +20,5 @@ obj/
 /src/Senparc.Web/doc/
 /src/Senparc.Xncf.TemplateTest/*
 /src/Senparc.Database/Senparc.Database.dbmdl
-/src/Senparc.Database/*.jfm
+/src/Senparc.Database/Senparc.Database.jfm
+/src/Senparc.Xncf.FileServer/Senparc.Xncf.FileServer.xml

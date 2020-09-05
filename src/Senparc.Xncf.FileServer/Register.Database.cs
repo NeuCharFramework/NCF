@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Ncf.XncfBase;
 using System;
-using Senparc.Xncf.FileServer.Utility;
+using Senparc.Xncf.FileServer.Utils;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http.Features;
@@ -14,6 +14,7 @@ using Senparc.Xncf.FileServer.Models;
 using Senparc.Ncf.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Senparc.Xncf.Swagger.Utils;
 
 namespace Senparc.Xncf.FileServer
 {
@@ -46,13 +47,6 @@ namespace Senparc.Xncf.FileServer
 
         public void AddXncfDatabaseModule(IServiceCollection services)
         {
-            //DOT REMOVE OR MODIFY THIS LINE 请勿移除或修改本行 - Entities Point
-            //ex. services.AddScoped(typeof(Color));
-            ConfigurationHelpler.Configuration = services.BuildServiceProvider().GetService<IConfiguration>();
-            ConfigurationHelpler.CustomConfiguration = new ConfigurationBuilder().AddJsonFile("fileserverconfig.json", optional: true, reloadOnChange: true).Build();
-            ConfigurationHelpler.HostEnvironment = services.BuildServiceProvider().GetService<IWebHostEnvironment>();
-            ConfigurationHelpler.WebHostEnvironment = services.BuildServiceProvider().GetService<IWebHostEnvironment>();
-
             //缓存注册
             services.AddMemoryCache();
 
@@ -75,8 +69,8 @@ namespace Senparc.Xncf.FileServer
             });
 
             //配置映射
-            services.Configure<SafeSetting>(ConfigurationHelpler.CustomConfiguration.GetSection("FileServer:Safe"));
-            services.Configure<StaticResourceSetting>(ConfigurationHelpler.CustomConfiguration.GetSection("FileServer:StaticResource"));
+            services.Configure<SafeSetting>(FileServerConfiguration.GetSection("FileServer:Safe"));
+            services.Configure<StaticResourceSetting>(FileServerConfiguration.GetSection("FileServer:StaticResource"));
             services.AddControllersWithViews()/*.AddRazorRuntimeCompilation()*/;
             //开发时：安装该包可以动态修改视图 cshtml 页面，无需重新运行项目
             //发布时：建议删除该包，会生成一堆“垃圾”
@@ -95,10 +89,10 @@ namespace Senparc.Xncf.FileServer
             //配置上传文件大小限制（详细信息：FormOptions）
             services.Configure<FormOptions>(options =>
             {
-                options.MultipartBodyLengthLimit = ConfigurationHelpler.CustomConfiguration.GetValue<int>("FileServer:StaticResource:MaxSize") * 1024 * 1024;
+                options.MultipartBodyLengthLimit = FileServerConfiguration.GetValue<int>("FileServer:StaticResource:MaxSize") * 1024 * 1024;
             });
             //跨域
-            var domains = ConfigurationHelpler.CustomConfiguration.GetSection("Cors:Domain").Get<string[]>();
+            var domains = FileServerConfiguration.GetSection("Cors:Domain").Get<string[]>();
             var allowedOrigins = new HashSet<string>(domains, StringComparer.OrdinalIgnoreCase);
             services.AddCors(options => options.AddDefaultPolicy(builder =>
             {

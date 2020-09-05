@@ -1,36 +1,41 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Senparc.Xncf.Swagger.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Senparc.Xncf.FileServer.Utility
+namespace Senparc.Xncf.Swagger.Utils
 {
     /// <summary>
     /// Configuration帮助类
     /// </summary>
-    public class ConfigurationHelpler
+    public class ConfigurationHelper
     {
         /// <summary>
         /// 全局配置
         /// </summary>
-        public static IConfiguration Configuration;
+        public static IConfiguration Configuration { get; set; }
 
         /// <summary>
-        /// 模块自定义配置文件
+        /// Swagger模块的配置
         /// </summary>
-        public static IConfiguration CustomConfiguration;
+        public static IConfiguration SwaggerConfiguration { get; set; }
+
+        /// <summary>
+        /// Swagger模块的自定义配置信息
+        /// </summary>
+        public static CustsomSwaggerOptions CustsomSwaggerOptions { get; set; }
 
         /// <summary>
         /// 托管环境信息
         /// </summary>
-        public static IHostEnvironment HostEnvironment;
+        public static IHostEnvironment HostEnvironment { get; set; }
 
         /// <summary>
         /// Web托管环境信息
         /// </summary>
-        public static IWebHostEnvironment WebHostEnvironment;
+        public static IWebHostEnvironment WebHostEnvironment { get; set; }
 
         /// <summary>
         /// 内部访问（项目根路径）
@@ -56,6 +61,12 @@ namespace Senparc.Xncf.FileServer.Utility
                     return System.IO.Path.Combine(ContentRootPath, "wwwroot");
             }
         }
+
+        /// <summary>
+        /// Cookie认证名称
+        /// </summary>
+        public static readonly string SWAGGER_ATUH_COOKIE = nameof(SWAGGER_ATUH_COOKIE);
+
         /// <summary>
         /// 获取AppsettingsJson的值
         /// </summary>

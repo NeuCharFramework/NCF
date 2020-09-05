@@ -11,7 +11,7 @@ using Senparc.Xncf.FileServer.Services;
 using Senparc.Xncf.FileServer.Models.DatabaseModel.Dto;
 using Microsoft.Extensions.Configuration;
 using Senparc.Ncf.Service;
-using Senparc.Xncf.FileServer.Utility;
+using Senparc.Xncf.FileServer.Utils;
 
 namespace Senparc.Xncf.FileServer
 {
@@ -82,8 +82,15 @@ namespace Senparc.Xncf.FileServer
 
             await unsinstallFunc().ConfigureAwait(false);
         }
+
+        /// <summary>
+        /// 模块自定义配置文件
+        /// </summary>
+        public static IConfiguration FileServerConfiguration;
+
         public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration)
         {
+            FileServerConfiguration = new ConfigurationBuilder().AddJsonFile("fileserverconfig.json", optional: true, reloadOnChange: true).Build();
             return base.AddXncfModule(services, configuration);
         }
         #endregion

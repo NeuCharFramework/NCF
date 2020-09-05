@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Senparc.Xncf.FileServer.Utility
+namespace Senparc.Xncf.FileServer.Utils
 {
     /// <summary>
     /// 生成唯一标识

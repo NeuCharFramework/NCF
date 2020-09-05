@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Senparc.Xncf.FileServer.Models.DatabaseModel.Dto;
 using Senparc.Xncf.FileServer.Models.VD;
 using Senparc.Xncf.FileServer.Services;
-using Senparc.Xncf.FileServer.Utility;
+using Senparc.Xncf.FileServer.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -100,6 +100,7 @@ namespace Senparc.Xncf.FileServer.Controllers
         /// <param name="pageIndex"></param>
         /// <param name="pageCount"></param>
         /// <returns></returns>
+        [HttpPost]
         public async Task<ActionResultVD<IEnumerable<SysKeyDto>>> GetList(int pageIndex = 0, int pageCount = 20)
         {
             var vd = new ActionResultVD<IEnumerable<SysKeyDto>>();

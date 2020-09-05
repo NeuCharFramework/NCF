@@ -1,0 +1,16 @@
+﻿{
+    "Swagger": {
+        "ProjectName": "服务接口文档",
+        "CustomAuthList": [
+            {
+                "UserName": "qdq",
+                "UserPwd": "1234"
+            }
+        ],
+        "AppPath": "", //当发布为子程序时，指定子程序名称
+        "RoutePrefix": "senparc-api-docs", //自定义路由，可与常规的默认路径swagger区分开
+        "UseCustomIndex": true, //是否使用自定义主页，样式有细微差别
+        "AllowAnonymous": false, //是否允许匿名访问
+        "UseAdminAuth": true //使用主项目的Admin模块认证登录
+    }
+}

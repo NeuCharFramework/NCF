@@ -7,7 +7,7 @@ using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Repository;
 using Senparc.Ncf.Service;
 using Senparc.Xncf.FileServer.Models.DatabaseModel.Dto;
-using Senparc.Xncf.FileServer.Utility;
+using Senparc.Xncf.FileServer.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

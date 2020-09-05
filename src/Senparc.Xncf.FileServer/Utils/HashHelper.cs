@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Senparc.Xncf.FileServer.Utility
+namespace Senparc.Xncf.FileServer.Utils
 {
     /// <summary>
     /// Hash辅助类

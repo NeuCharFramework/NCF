@@ -5,6 +5,10 @@
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DocumentationFile></DocumentationFile>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<EmbeddedResource Include="wwwroot\**\*" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />

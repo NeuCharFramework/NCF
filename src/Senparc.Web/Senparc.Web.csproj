@@ -544,4 +544,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Senparc.Xncf.FileServer\Senparc.Xncf.FileServer.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Senparc.Xncf.Swagger\Senparc.Xncf.Swagger.csproj" />
+  </ItemGroup>
 </Project>

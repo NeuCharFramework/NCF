@@ -410,6 +410,11 @@
             允许上传的文件
             </summary>
         </member>
+        <member name="F:Senparc.Xncf.FileServer.Register.FileServerConfiguration">
+            <summary>
+            模块自定义配置文件
+            </summary>
+        </member>
         <member name="F:Senparc.Xncf.FileServer.Register.DATABASE_PREFIX">
             <summary>
             数据库前缀
@@ -447,76 +452,26 @@
             <param name="pageSize"></param>
             <returns></returns>
         </member>
-        <member name="T:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler">
-            <summary>
-            Configuration帮助类
-            </summary>
-        </member>
-        <member name="F:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.Configuration">
-            <summary>
-            全局配置
-            </summary>
-        </member>
-        <member name="F:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.CustomConfiguration">
-            <summary>
-            模块自定义配置文件
-            </summary>
-        </member>
-        <member name="F:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.HostEnvironment">
-            <summary>
-            托管环境信息
-            </summary>
-        </member>
-        <member name="F:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.WebHostEnvironment">
-            <summary>
-            Web托管环境信息
-            </summary>
-        </member>
-        <member name="P:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.ContentRootPath">
-            <summary>
-            内部访问（项目根路径）
-            </summary>
-        </member>
-        <member name="P:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.WebRootPath">
-            <summary>
-            web外部访问（wwwroot）
-            </summary>
-        </member>
-        <member name="M:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.GetValue(System.String)">
-            <summary>
-            获取AppsettingsJson的值
-            </summary>
-            <param name="key">键路径，如：ConnectionStrings:SQLServerConn</param>
-            <returns></returns>
-        </member>
-        <member name="M:Senparc.Xncf.FileServer.Utility.ConfigurationHelpler.GetValue``1(System.String)">
-            <summary>
-            获取AppsettingsJson的值
-            </summary>
-            <typeparam name="T">类型</typeparam>
-            <param name="key">键路径</param>
-            <returns></returns>
-        </member>
-        <member name="T:Senparc.Xncf.FileServer.Utility.HashHelper">
+        <member name="T:Senparc.Xncf.FileServer.Utils.HashHelper">
             <summary>
             Hash辅助类
             </summary>
         </member>
-        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.MD5File(System.String)">
+        <member name="M:Senparc.Xncf.FileServer.Utils.HashHelper.MD5File(System.String)">
             <summary>
             计算文件的 MD5 值
             </summary>
             <param name="fileName">要计算 MD5 值的文件名和路径</param>
             <returns>MD5 值16进制字符串</returns>
         </member>
-        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.SHA1File(System.String)">
+        <member name="M:Senparc.Xncf.FileServer.Utils.HashHelper.SHA1File(System.String)">
             <summary>
             计算文件的 sha1 值
             </summary>
             <param name="fileName">要计算 sha1 值的文件名和路径</param>
             <returns>sha1 值16进制字符串</returns>
         </member>
-        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.HashFile(System.String,System.String)">
+        <member name="M:Senparc.Xncf.FileServer.Utils.HashHelper.HashFile(System.String,System.String)">
             <summary>
             计算文件的哈希值
             </summary>
@@ -524,21 +479,21 @@
             <param name="algName">算法:sha1,md5</param>
             <returns>哈希值16进制字符串</returns>
         </member>
-        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.MD5File(System.IO.Stream)">
+        <member name="M:Senparc.Xncf.FileServer.Utils.HashHelper.MD5File(System.IO.Stream)">
             <summary>
             计算文件的 MD5 值
             </summary>
             <param name="stream">要计算 MD5 值的文件流</param>
             <returns>MD5 值16进制字符串</returns>
         </member>
-        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.SHA1File(System.IO.Stream)">
+        <member name="M:Senparc.Xncf.FileServer.Utils.HashHelper.SHA1File(System.IO.Stream)">
             <summary>
             计算文件的 sha1 值
             </summary>
             <param name="stream">要计算 sha1 值的文件流</param>
             <returns>sha1 值16进制字符串</returns>
         </member>
-        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.HashFile(System.IO.Stream,System.String)">
+        <member name="M:Senparc.Xncf.FileServer.Utils.HashHelper.HashFile(System.IO.Stream,System.String)">
             <summary>
             计算文件的哈希值
             </summary>
@@ -546,7 +501,7 @@
             <param name="algName">算法:sha1,md5</param>
             <returns>哈希值16进制字符串</returns>
         </member>
-        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.HashData(System.IO.Stream,System.String)">
+        <member name="M:Senparc.Xncf.FileServer.Utils.HashHelper.HashData(System.IO.Stream,System.String)">
             <summary>
             计算哈希值
             </summary>
@@ -554,17 +509,17 @@
             <param name="algName">算法:sha1,md5</param>
             <returns>哈希值字节数组</returns>
         </member>
-        <member name="M:Senparc.Xncf.FileServer.Utility.HashHelper.ByteArrayToHexString(System.Byte[])">
+        <member name="M:Senparc.Xncf.FileServer.Utils.HashHelper.ByteArrayToHexString(System.Byte[])">
             <summary>
             字节数组转换为16进制表示的字符串
             </summary>
         </member>
-        <member name="T:Senparc.Xncf.FileServer.Utility.UniqueHelper">
+        <member name="T:Senparc.Xncf.FileServer.Utils.UniqueHelper">
             <summary>
             生成唯一标识
             </summary>
         </member>
-        <member name="M:Senparc.Xncf.FileServer.Utility.UniqueHelper.LongId">
+        <member name="M:Senparc.Xncf.FileServer.Utils.UniqueHelper.LongId">
             <summary>
             根据Guid获取唯一数字序列，19位
             </summary>

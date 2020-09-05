@@ -7,7 +7,7 @@ using Senparc.Xncf.FileServer.Models;
 using Senparc.Xncf.FileServer.Models.DatabaseModel.Dto;
 using Senparc.Xncf.FileServer.Models.VD;
 using Senparc.Xncf.FileServer.Services;
-using Senparc.Xncf.FileServer.Utility;
+using Senparc.Xncf.FileServer.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
