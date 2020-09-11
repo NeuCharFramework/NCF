@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Senparc.CO2NET" Version="1.3.110" />
+    <PackageReference Include="Senparc.CO2NET" Version="1.3.200" />
     <PackageReference Include="Senparc.Ncf.Core" Version="0.3.500-beta1" />
   </ItemGroup>
 
