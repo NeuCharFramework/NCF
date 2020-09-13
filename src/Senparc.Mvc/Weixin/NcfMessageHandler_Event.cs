@@ -46,7 +46,6 @@ namespace Senparc.Mvc.Weixin
                                 responseRegMessage.Content = "您的微信已绑定NCF账户，不能重复绑定！";
                             }
                             return responseRegMessage;
-
                         }
                     }
                 }
