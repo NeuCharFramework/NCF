@@ -1,544 +1,544 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Web">
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <TypeScriptToolsVersion>3.8</TypeScriptToolsVersion>
-    <!--<IncludeSymbolsInSingleFile>true</IncludeSymbolsInSingleFile>-->
-    <!--<RuntimeIdentifier>win-x64</RuntimeIdentifier>-->
-  </PropertyGroup>
-  <ItemGroup>
-    <!--https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-3.1-->
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.6" />
-    <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="2.0.0-preview1-final" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.6" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
-    <PackageReference Include="Senparc.CO2NET" Version="1.3.200" />
-    <PackageReference Include="AutoMapper" Version="7.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.3.500-beta1" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.3.500-beta1" />
-    <PackageReference Include="Senparc.Ncf.Log" Version="0.3.500-beta1" />
-    <PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.3.500-beta1" />
-    <PackageReference Include="Senparc.Ncf.Repository" Version="0.3.500-beta1" />
-    <PackageReference Include="Senparc.Ncf.Service" Version="0.3.500-beta1" />
-    <PackageReference Include="Senparc.Ncf.Utility" Version="0.3.500-beta1" />
-    <!--<PackageReference Include="ML.Xncf.Docs" Version="0.0.2.12-beta1" />-->
-  </ItemGroup>
-  <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="wwwroot\lib\Chart.js\.codeclimate.yml" />
-    <None Include="wwwroot\lib\Chart.js\.editorconfig" />
-    <None Include="wwwroot\lib\Chart.js\.eslintignore" />
-    <None Include="wwwroot\lib\Chart.js\.eslintrc" />
-    <None Include="wwwroot\lib\Chart.js\.github\ISSUE_TEMPLATE.md" />
-    <None Include="wwwroot\lib\Chart.js\.github\PULL_REQUEST_TEMPLATE.md" />
-    <None Include="wwwroot\lib\Chart.js\.travis.yml" />
-    <None Include="wwwroot\lib\Chart.js\config.jshintrc" />
-    <None Include="wwwroot\lib\Chart.js\CONTRIBUTING.md" />
-    <None Include="wwwroot\lib\Chart.js\dist\Chart.bundle.js" />
-    <None Include="wwwroot\lib\Chart.js\dist\Chart.bundle.min.js" />
-    <None Include="wwwroot\lib\Chart.js\dist\Chart.js" />
-    <None Include="wwwroot\lib\Chart.js\dist\Chart.min.js" />
-    <None Include="wwwroot\lib\Chart.js\docs\00-Getting-Started.md" />
-    <None Include="wwwroot\lib\Chart.js\docs\01-Chart-Configuration.md" />
-    <None Include="wwwroot\lib\Chart.js\docs\02-Scales.md" />
-    <None Include="wwwroot\lib\Chart.js\docs\03-Line-Chart.md" />
-    <None Include="wwwroot\lib\Chart.js\docs\04-Bar-Chart.md" />
-    <None Include="wwwroot\lib\Chart.js\docs\05-Radar-Chart.md" />
-    <None Include="wwwroot\lib\Chart.js\docs\06-Polar-Area-Chart.md" />
-    <None Include="wwwroot\lib\Chart.js\docs\07-Pie-Doughnut-Chart.md" />
-    <None Include="wwwroot\lib\Chart.js\docs\08-Bubble-Chart.md" />
-    <None Include="wwwroot\lib\Chart.js\docs\09-Advanced.md" />
-    <None Include="wwwroot\lib\Chart.js\docs\10-Notes.md" />
-    <None Include="wwwroot\lib\Chart.js\gulpfile.js" />
-    <None Include="wwwroot\lib\Chart.js\karma.conf.ci.js" />
-    <None Include="wwwroot\lib\Chart.js\karma.conf.js" />
-    <None Include="wwwroot\lib\Chart.js\karma.coverage.conf.js" />
-    <None Include="wwwroot\lib\Chart.js\LICENSE.md" />
-    <None Include="wwwroot\lib\Chart.js\README.md" />
-    <None Include="wwwroot\lib\Chart.js\src\chart.js" />
-    <None Include="wwwroot\lib\Chart.js\src\charts\Chart.Bar.js" />
-    <None Include="wwwroot\lib\Chart.js\src\charts\Chart.Bubble.js" />
-    <None Include="wwwroot\lib\Chart.js\src\charts\Chart.Doughnut.js" />
-    <None Include="wwwroot\lib\Chart.js\src\charts\Chart.Line.js" />
-    <None Include="wwwroot\lib\Chart.js\src\charts\Chart.PolarArea.js" />
-    <None Include="wwwroot\lib\Chart.js\src\charts\Chart.Radar.js" />
-    <None Include="wwwroot\lib\Chart.js\src\charts\Chart.Scatter.js" />
-    <None Include="wwwroot\lib\Chart.js\src\controllers\controller.bar.js" />
-    <None Include="wwwroot\lib\Chart.js\src\controllers\controller.bubble.js" />
-    <None Include="wwwroot\lib\Chart.js\src\controllers\controller.doughnut.js" />
-    <None Include="wwwroot\lib\Chart.js\src\controllers\controller.line.js" />
-    <None Include="wwwroot\lib\Chart.js\src\controllers\controller.polarArea.js" />
-    <None Include="wwwroot\lib\Chart.js\src\controllers\controller.radar.js" />
-    <None Include="wwwroot\lib\Chart.js\src\core\core.animation.js" />
-    <None Include="wwwroot\lib\Chart.js\src\core\core.controller.js" />
-    <None Include="wwwroot\lib\Chart.js\src\core\core.datasetController.js" />
-    <None Include="wwwroot\lib\Chart.js\src\core\core.element.js" />
-    <None Include="wwwroot\lib\Chart.js\src\core\core.helpers.js" />
-    <None Include="wwwroot\lib\Chart.js\src\core\core.js" />
-    <None Include="wwwroot\lib\Chart.js\src\core\core.layoutService.js" />
-    <None Include="wwwroot\lib\Chart.js\src\core\core.legend.js" />
-    <None Include="wwwroot\lib\Chart.js\src\core\core.plugin.js" />
-    <None Include="wwwroot\lib\Chart.js\src\core\core.scale.js" />
-    <None Include="wwwroot\lib\Chart.js\src\core\core.scaleService.js" />
-    <None Include="wwwroot\lib\Chart.js\src\core\core.title.js" />
-    <None Include="wwwroot\lib\Chart.js\src\core\core.tooltip.js" />
-    <None Include="wwwroot\lib\Chart.js\src\elements\element.arc.js" />
-    <None Include="wwwroot\lib\Chart.js\src\elements\element.line.js" />
-    <None Include="wwwroot\lib\Chart.js\src\elements\element.point.js" />
-    <None Include="wwwroot\lib\Chart.js\src\elements\element.rectangle.js" />
-    <None Include="wwwroot\lib\Chart.js\src\scales\scale.category.js" />
-    <None Include="wwwroot\lib\Chart.js\src\scales\scale.linear.js" />
-    <None Include="wwwroot\lib\Chart.js\src\scales\scale.logarithmic.js" />
-    <None Include="wwwroot\lib\Chart.js\src\scales\scale.radialLinear.js" />
-    <None Include="wwwroot\lib\Chart.js\src\scales\scale.time.js" />
-    <None Include="wwwroot\lib\Chart.js\test\controller.bar.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\controller.bubble.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\controller.doughnut.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\controller.line.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\controller.polarArea.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\controller.radar.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\core.element.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\core.helpers.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\core.layoutService.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\core.legend.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\core.plugin.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\core.scaleService.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\core.title.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\defaultConfig.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\element.arc.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\element.line.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\element.point.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\element.rectangle.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\mockContext.js" />
-    <None Include="wwwroot\lib\Chart.js\test\scale.category.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\scale.linear.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\scale.logarithmic.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\scale.radialLinear.tests.js" />
-    <None Include="wwwroot\lib\Chart.js\test\scale.time.tests.js" />
-    <None Include="wwwroot\lib\echarts\.editorconfig" />
-    <None Include="wwwroot\lib\echarts\.github\CONTRIBUTING.md" />
-    <None Include="wwwroot\lib\echarts\.github\ISSUE_TEMPLATE.md" />
-    <None Include="wwwroot\lib\echarts\.jshintrc" />
-    <None Include="wwwroot\lib\echarts\dist\echarts.common.js" />
-    <None Include="wwwroot\lib\echarts\dist\echarts.common.min.js" />
-    <None Include="wwwroot\lib\echarts\dist\echarts.js" />
-    <None Include="wwwroot\lib\echarts\dist\echarts.min.js" />
-    <None Include="wwwroot\lib\echarts\dist\echarts.simple.js" />
-    <None Include="wwwroot\lib\echarts\dist\echarts.simple.min.js" />
-    <None Include="wwwroot\lib\echarts\dist\extension\bmap.js" />
-    <None Include="wwwroot\lib\echarts\dist\extension\bmap.min.js" />
-    <None Include="wwwroot\lib\echarts\dist\extension\dataTool.js" />
-    <None Include="wwwroot\lib\echarts\dist\extension\dataTool.min.js" />
-    <None Include="wwwroot\lib\echarts\extension\bmap\bmap.js" />
-    <None Include="wwwroot\lib\echarts\extension\bmap\BMapCoordSys.js" />
-    <None Include="wwwroot\lib\echarts\extension\bmap\BMapModel.js" />
-    <None Include="wwwroot\lib\echarts\extension\bmap\BMapView.js" />
-    <None Include="wwwroot\lib\echarts\extension\dataTool\gexf.js" />
-    <None Include="wwwroot\lib\echarts\extension\dataTool\index.js" />
-    <None Include="wwwroot\lib\echarts\extension\dataTool\prepareBoxplotData.js" />
-    <None Include="wwwroot\lib\echarts\extension\dataTool\quantile.js" />
-    <None Include="wwwroot\lib\echarts\extension\echarts.js" />
-    <None Include="wwwroot\lib\echarts\extension\webpack.config.js" />
-    <None Include="wwwroot\lib\echarts\index.common.js" />
-    <None Include="wwwroot\lib\echarts\index.js" />
-    <None Include="wwwroot\lib\echarts\index.simple.js" />
-    <None Include="wwwroot\lib\echarts\LICENSE" />
-    <None Include="wwwroot\lib\echarts\map\js\china-contour.js" />
-    <None Include="wwwroot\lib\echarts\map\js\china.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\anhui.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\aomen.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\beijing.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\chongqing.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\fujian.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\gansu.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\guangdong.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\guangxi.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\guizhou.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\hainan.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\hebei.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\heilongjiang.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\henan.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\hubei.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\hunan.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\jiangsu.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\jiangxi.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\jilin.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\liaoning.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\neimenggu.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\ningxia.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\qinghai.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\shandong.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\shanghai.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\shanxi.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\shanxi1.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\sichuan.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\tianjin.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\xianggang.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\xinjiang.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\xizang.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\yunnan.js" />
-    <None Include="wwwroot\lib\echarts\map\js\province\zhejiang.js" />
-    <None Include="wwwroot\lib\echarts\map\js\world.js" />
-    <None Include="wwwroot\lib\echarts\README.md" />
-    <None Include="wwwroot\lib\echarts\src\action\createDataSelectAction.js" />
-    <None Include="wwwroot\lib\echarts\src\action\geoRoam.js" />
-    <None Include="wwwroot\lib\echarts\src\action\roamHelper.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\bar.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\bar\barItemStyle.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\bar\BarSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\bar\BarView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\boxplot.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\boxplot\boxplotLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\boxplot\BoxplotSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\boxplot\BoxplotView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\boxplot\boxplotVisual.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\candlestick.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\candlestick\candlestickLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\candlestick\CandlestickSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\candlestick\CandlestickView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\candlestick\candlestickVisual.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\candlestick\preprocessor.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\chord.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\chord\chordCircularLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\chord\ChordSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\chord\ChordView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\chord\Ribbon.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\effectScatter.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\effectScatter\EffectScatterSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\effectScatter\EffectScatterView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\funnel.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\funnel\funnelLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\funnel\FunnelSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\funnel\FunnelView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\gauge.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\gauge\GaugeSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\gauge\GaugeView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\gauge\PointerPath.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\adjustEdge.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\backwardCompat.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\categoryFilter.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\categoryVisual.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\circularLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\circularLayoutHelper.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\createView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\edgeVisual.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\forceHelper.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\forceLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\GraphSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\GraphView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\roamAction.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\simpleLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\simpleLayoutEdge.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\graph\simpleLayoutHelper.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\heatmap.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\heatmap\HeatmapLayer.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\heatmap\HeatmapSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\heatmap\HeatmapView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\helper\createGraphFromNodeEdge.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\helper\createGraphFromNodeMatrix.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\helper\createListFromArray.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\helper\EffectLine.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\helper\EffectSymbol.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\helper\LargeSymbolDraw.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\helper\Line.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\helper\LineDraw.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\helper\LinePath.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\helper\Symbol.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\helper\SymbolDraw.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\helper\whiskerBoxCommon.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\helper\WhiskerBoxDraw.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\line.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\lines.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\lines\linesLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\lines\LinesSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\lines\LinesView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\line\lineAnimationDiff.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\line\LineSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\line\LineView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\line\poly.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\map.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\map\backwardCompat.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\map\mapDataStatistic.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\map\MapSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\map\mapSymbolLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\map\MapView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\map\mapVisual.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\parallel.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\parallel\ParallelSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\parallel\ParallelView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\parallel\parallelVisual.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\pie.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\pie\labelLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\pie\pieLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\pie\PieSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\pie\PieView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\radar.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\radar\backwardCompat.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\radar\radarLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\radar\RadarSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\radar\RadarView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\sankey.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\sankey\sankeyLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\sankey\SankeySeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\sankey\SankeyView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\sankey\sankeyVisual.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\scatter.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\scatter\ScatterSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\scatter\ScatterView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\themeRiver.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\themeRiver\themeRiverLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\themeRiver\ThemeRiverSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\themeRiver\ThemeRiverView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\themeRiver\themeRiverVisual.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\treemap.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\treemap\Breadcrumb.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\treemap\helper.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\treemap\treemapAction.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\treemap\treemapLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\treemap\TreemapSeries.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\treemap\TreemapView.js" />
-    <None Include="wwwroot\lib\echarts\src\chart\treemap\treemapVisual.js" />
-    <None Include="wwwroot\lib\echarts\src\component\angleAxis.js" />
-    <None Include="wwwroot\lib\echarts\src\component\axis.js" />
-    <None Include="wwwroot\lib\echarts\src\component\axis\AngleAxisView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\axis\AxisBuilder.js" />
-    <None Include="wwwroot\lib\echarts\src\component\axis\AxisView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\axis\parallelAxisAction.js" />
-    <None Include="wwwroot\lib\echarts\src\component\axis\ParallelAxisView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\axis\RadiusAxisView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\axis\SingleAxisView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoom.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoomInside.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoomSelect.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoom\AxisProxy.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoom\dataZoomAction.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoom\DataZoomModel.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoom\dataZoomProcessor.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoom\DataZoomView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoom\history.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoom\InsideZoomModel.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoom\InsideZoomView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoom\roams.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoom\SelectZoomModel.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoom\SelectZoomView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoom\SliderZoomModel.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoom\SliderZoomView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\dataZoom\typeDefaulter.js" />
-    <None Include="wwwroot\lib\echarts\src\component\geo.js" />
-    <None Include="wwwroot\lib\echarts\src\component\geo\GeoView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\grid.js" />
-    <None Include="wwwroot\lib\echarts\src\component\helper\interactionMutex.js" />
-    <None Include="wwwroot\lib\echarts\src\component\helper\listComponent.js" />
-    <None Include="wwwroot\lib\echarts\src\component\helper\MapDraw.js" />
-    <None Include="wwwroot\lib\echarts\src\component\helper\RoamController.js" />
-    <None Include="wwwroot\lib\echarts\src\component\helper\selectableMixin.js" />
-    <None Include="wwwroot\lib\echarts\src\component\helper\SelectController.js" />
-    <None Include="wwwroot\lib\echarts\src\component\helper\sliderMove.js" />
-    <None Include="wwwroot\lib\echarts\src\component\legend.js" />
-    <None Include="wwwroot\lib\echarts\src\component\legend\legendAction.js" />
-    <None Include="wwwroot\lib\echarts\src\component\legend\legendFilter.js" />
-    <None Include="wwwroot\lib\echarts\src\component\legend\LegendModel.js" />
-    <None Include="wwwroot\lib\echarts\src\component\legend\LegendView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\marker\markerHelper.js" />
-    <None Include="wwwroot\lib\echarts\src\component\marker\MarkLineModel.js" />
-    <None Include="wwwroot\lib\echarts\src\component\marker\MarkLineView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\marker\MarkPointModel.js" />
-    <None Include="wwwroot\lib\echarts\src\component\marker\MarkPointView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\markLine.js" />
-    <None Include="wwwroot\lib\echarts\src\component\markPoint.js" />
-    <None Include="wwwroot\lib\echarts\src\component\parallel.js" />
-    <None Include="wwwroot\lib\echarts\src\component\parallelAxis.js" />
-    <None Include="wwwroot\lib\echarts\src\component\polar.js" />
-    <None Include="wwwroot\lib\echarts\src\component\radar.js" />
-    <None Include="wwwroot\lib\echarts\src\component\radar\RadarView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\radiusAxis.js" />
-    <None Include="wwwroot\lib\echarts\src\component\single.js" />
-    <None Include="wwwroot\lib\echarts\src\component\singleAxis.js" />
-    <None Include="wwwroot\lib\echarts\src\component\timeline.js" />
-    <None Include="wwwroot\lib\echarts\src\component\timeline\preprocessor.js" />
-    <None Include="wwwroot\lib\echarts\src\component\timeline\SliderTimelineModel.js" />
-    <None Include="wwwroot\lib\echarts\src\component\timeline\SliderTimelineView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\timeline\timelineAction.js" />
-    <None Include="wwwroot\lib\echarts\src\component\timeline\TimelineAxis.js" />
-    <None Include="wwwroot\lib\echarts\src\component\timeline\TimelineModel.js" />
-    <None Include="wwwroot\lib\echarts\src\component\timeline\TimelineView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\timeline\typeDefaulter.js" />
-    <None Include="wwwroot\lib\echarts\src\component\title.js" />
-    <None Include="wwwroot\lib\echarts\src\component\toolbox.js" />
-    <None Include="wwwroot\lib\echarts\src\component\toolbox\featureManager.js" />
-    <None Include="wwwroot\lib\echarts\src\component\toolbox\feature\DataView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\toolbox\feature\DataZoom.js" />
-    <None Include="wwwroot\lib\echarts\src\component\toolbox\feature\MagicType.js" />
-    <None Include="wwwroot\lib\echarts\src\component\toolbox\feature\Restore.js" />
-    <None Include="wwwroot\lib\echarts\src\component\toolbox\feature\SaveAsImage.js" />
-    <None Include="wwwroot\lib\echarts\src\component\toolbox\ToolboxModel.js" />
-    <None Include="wwwroot\lib\echarts\src\component\toolbox\ToolboxView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\tooltip.js" />
-    <None Include="wwwroot\lib\echarts\src\component\tooltip\TooltipContent.js" />
-    <None Include="wwwroot\lib\echarts\src\component\tooltip\TooltipModel.js" />
-    <None Include="wwwroot\lib\echarts\src\component\tooltip\TooltipView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\visualMap.js" />
-    <None Include="wwwroot\lib\echarts\src\component\visualMapContinuous.js" />
-    <None Include="wwwroot\lib\echarts\src\component\visualMapPiecewise.js" />
-    <None Include="wwwroot\lib\echarts\src\component\visualMap\ContinuousModel.js" />
-    <None Include="wwwroot\lib\echarts\src\component\visualMap\ContinuousView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\visualMap\helper.js" />
-    <None Include="wwwroot\lib\echarts\src\component\visualMap\PiecewiseModel.js" />
-    <None Include="wwwroot\lib\echarts\src\component\visualMap\PiecewiseView.js" />
-    <None Include="wwwroot\lib\echarts\src\component\visualMap\preprocessor.js" />
-    <None Include="wwwroot\lib\echarts\src\component\visualMap\typeDefaulter.js" />
-    <None Include="wwwroot\lib\echarts\src\component\visualMap\visualCoding.js" />
-    <None Include="wwwroot\lib\echarts\src\component\visualMap\visualMapAction.js" />
-    <None Include="wwwroot\lib\echarts\src\component\visualMap\VisualMapModel.js" />
-    <None Include="wwwroot\lib\echarts\src\component\visualMap\VisualMapView.js" />
-    <None Include="wwwroot\lib\echarts\src\CoordinateSystem.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\Axis.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\axisDefault.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\axisHelper.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\axisModelCommonMixin.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\axisModelCreator.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\cartesian\Axis2D.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\cartesian\axisLabelInterval.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\cartesian\AxisModel.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\cartesian\Cartesian.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\cartesian\Cartesian2D.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\cartesian\Grid.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\cartesian\GridModel.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\geo\fix\geoCoord.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\geo\fix\nanhai.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\geo\fix\textCoord.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\geo\Geo.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\geo\geoCreator.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\geo\GeoModel.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\geo\parseGeoJson.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\geo\Region.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\parallel\AxisModel.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\parallel\Parallel.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\parallel\ParallelAxis.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\parallel\parallelCreator.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\parallel\ParallelModel.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\parallel\parallelPreprocessor.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\polar\AngleAxis.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\polar\AxisModel.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\polar\Polar.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\polar\polarCreator.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\polar\PolarModel.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\polar\RadiusAxis.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\radar\IndicatorAxis.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\radar\Radar.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\radar\RadarModel.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\single\AxisModel.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\single\Single.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\single\SingleAxis.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\single\singleCreator.js" />
-    <None Include="wwwroot\lib\echarts\src\coord\View.js" />
-    <None Include="wwwroot\lib\echarts\src\data\DataDiffer.js" />
-    <None Include="wwwroot\lib\echarts\src\data\Graph.js" />
-    <None Include="wwwroot\lib\echarts\src\data\helper\completeDimensions.js" />
-    <None Include="wwwroot\lib\echarts\src\data\helper\linkList.js" />
-    <None Include="wwwroot\lib\echarts\src\data\List.js" />
-    <None Include="wwwroot\lib\echarts\src\data\Tree.js" />
-    <None Include="wwwroot\lib\echarts\src\echarts.js" />
-    <None Include="wwwroot\lib\echarts\src\ExtensionAPI.js" />
-    <None Include="wwwroot\lib\echarts\src\layout\barGrid.js" />
-    <None Include="wwwroot\lib\echarts\src\layout\points.js" />
-    <None Include="wwwroot\lib\echarts\src\loading\default.js" />
-    <None Include="wwwroot\lib\echarts\src\model\Component.js" />
-    <None Include="wwwroot\lib\echarts\src\model\Global.js" />
-    <None Include="wwwroot\lib\echarts\src\model\globalDefault.js" />
-    <None Include="wwwroot\lib\echarts\src\model\mixin\areaStyle.js" />
-    <None Include="wwwroot\lib\echarts\src\model\mixin\boxLayout.js" />
-    <None Include="wwwroot\lib\echarts\src\model\mixin\itemStyle.js" />
-    <None Include="wwwroot\lib\echarts\src\model\mixin\lineStyle.js" />
-    <None Include="wwwroot\lib\echarts\src\model\mixin\makeStyleMapper.js" />
-    <None Include="wwwroot\lib\echarts\src\model\mixin\textStyle.js" />
-    <None Include="wwwroot\lib\echarts\src\model\Model.js" />
-    <None Include="wwwroot\lib\echarts\src\model\OptionManager.js" />
-    <None Include="wwwroot\lib\echarts\src\model\Series.js" />
-    <None Include="wwwroot\lib\echarts\src\preprocessor\backwardCompat.js" />
-    <None Include="wwwroot\lib\echarts\src\preprocessor\helper\compatStyle.js" />
-    <None Include="wwwroot\lib\echarts\src\processor\dataFilter.js" />
-    <None Include="wwwroot\lib\echarts\src\processor\dataSample.js" />
-    <None Include="wwwroot\lib\echarts\src\scale\Interval.js" />
-    <None Include="wwwroot\lib\echarts\src\scale\Log.js" />
-    <None Include="wwwroot\lib\echarts\src\scale\Ordinal.js" />
-    <None Include="wwwroot\lib\echarts\src\scale\Scale.js" />
-    <None Include="wwwroot\lib\echarts\src\scale\Time.js" />
-    <None Include="wwwroot\lib\echarts\src\util\animation.js" />
-    <None Include="wwwroot\lib\echarts\src\util\array\nest.js" />
-    <None Include="wwwroot\lib\echarts\src\util\clazz.js" />
-    <None Include="wwwroot\lib\echarts\src\util\component.js" />
-    <None Include="wwwroot\lib\echarts\src\util\format.js" />
-    <None Include="wwwroot\lib\echarts\src\util\graphic.js" />
-    <None Include="wwwroot\lib\echarts\src\util\KDTree.js" />
-    <None Include="wwwroot\lib\echarts\src\util\layout.js" />
-    <None Include="wwwroot\lib\echarts\src\util\model.js" />
-    <None Include="wwwroot\lib\echarts\src\util\number.js" />
-    <None Include="wwwroot\lib\echarts\src\util\quickSelect.js" />
-    <None Include="wwwroot\lib\echarts\src\util\symbol.js" />
-    <None Include="wwwroot\lib\echarts\src\util\throttle.js" />
-    <None Include="wwwroot\lib\echarts\src\view\Chart.js" />
-    <None Include="wwwroot\lib\echarts\src\view\Component.js" />
-    <None Include="wwwroot\lib\echarts\src\visual\dataColor.js" />
-    <None Include="wwwroot\lib\echarts\src\visual\seriesColor.js" />
-    <None Include="wwwroot\lib\echarts\src\visual\symbol.js" />
-    <None Include="wwwroot\lib\echarts\src\visual\visualDefault.js" />
-    <None Include="wwwroot\lib\echarts\src\visual\VisualMapping.js" />
-    <None Include="wwwroot\lib\echarts\theme\dark.js" />
-    <None Include="wwwroot\lib\echarts\theme\infographic.js" />
-    <None Include="wwwroot\lib\echarts\theme\macarons.js" />
-    <None Include="wwwroot\lib\echarts\theme\roma.js" />
-    <None Include="wwwroot\lib\echarts\theme\shine.js" />
-    <None Include="wwwroot\lib\echarts\theme\vintage.js" />
-    <None Include="wwwroot\lib\echarts\webpack.config.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj" />
-    <ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
-    <ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
-    <ProjectReference Include="..\Senparc.ImageUtility\Senparc.ImageUtility.csproj" />
-    <ProjectReference Include="..\Senparc.Log\Senparc.Log.csproj" />
-    <ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
-    <ProjectReference Include="..\Senparc.Threads\Senparc.Threads.csproj" />
-    <ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
-    <ProjectReference Include="..\Senparc.Web.UI\Senparc.Web.UI.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Update="wwwroot\css\site.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\css\site.min.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\css\User\base\pagecss.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\css\User\styles.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\css\WX\base\base.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\css\WX\styles.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\lib\element-ui_2.13.2\element.css">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+		<TypeScriptToolsVersion>3.9</TypeScriptToolsVersion>
+		<!--<IncludeSymbolsInSingleFile>true</IncludeSymbolsInSingleFile>-->
+		<!--<RuntimeIdentifier>win-x64</RuntimeIdentifier>-->
+	</PropertyGroup>
+	<ItemGroup>
+		<!--https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-3.1-->
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.6" />
+		<PackageReference Include="log4net" Version="2.0.8" />
+		<PackageReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="2.0.0-preview1-final" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.6" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
+		<PackageReference Include="Senparc.CO2NET" Version="1.3.200" />
+		<PackageReference Include="AutoMapper" Version="7.0.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.3.501-beta1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.3.501-beta1" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.3.501-beta1" />
+		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.3.501-beta1" />
+		<PackageReference Include="Senparc.Ncf.Repository" Version="0.3.501-beta1" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.3.501-beta1" />
+		<PackageReference Include="Senparc.Ncf.Utility" Version="0.3.501-beta1" />
+		<PackageReference Include="ML.Xncf.Docs" Version="2.0.51-beta1" />
+	</ItemGroup>
+	<ItemGroup>
+		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="wwwroot\lib\Chart.js\.codeclimate.yml" />
+		<None Include="wwwroot\lib\Chart.js\.editorconfig" />
+		<None Include="wwwroot\lib\Chart.js\.eslintignore" />
+		<None Include="wwwroot\lib\Chart.js\.eslintrc" />
+		<None Include="wwwroot\lib\Chart.js\.github\ISSUE_TEMPLATE.md" />
+		<None Include="wwwroot\lib\Chart.js\.github\PULL_REQUEST_TEMPLATE.md" />
+		<None Include="wwwroot\lib\Chart.js\.travis.yml" />
+		<None Include="wwwroot\lib\Chart.js\config.jshintrc" />
+		<None Include="wwwroot\lib\Chart.js\CONTRIBUTING.md" />
+		<None Include="wwwroot\lib\Chart.js\dist\Chart.bundle.js" />
+		<None Include="wwwroot\lib\Chart.js\dist\Chart.bundle.min.js" />
+		<None Include="wwwroot\lib\Chart.js\dist\Chart.js" />
+		<None Include="wwwroot\lib\Chart.js\dist\Chart.min.js" />
+		<None Include="wwwroot\lib\Chart.js\docs\00-Getting-Started.md" />
+		<None Include="wwwroot\lib\Chart.js\docs\01-Chart-Configuration.md" />
+		<None Include="wwwroot\lib\Chart.js\docs\02-Scales.md" />
+		<None Include="wwwroot\lib\Chart.js\docs\03-Line-Chart.md" />
+		<None Include="wwwroot\lib\Chart.js\docs\04-Bar-Chart.md" />
+		<None Include="wwwroot\lib\Chart.js\docs\05-Radar-Chart.md" />
+		<None Include="wwwroot\lib\Chart.js\docs\06-Polar-Area-Chart.md" />
+		<None Include="wwwroot\lib\Chart.js\docs\07-Pie-Doughnut-Chart.md" />
+		<None Include="wwwroot\lib\Chart.js\docs\08-Bubble-Chart.md" />
+		<None Include="wwwroot\lib\Chart.js\docs\09-Advanced.md" />
+		<None Include="wwwroot\lib\Chart.js\docs\10-Notes.md" />
+		<None Include="wwwroot\lib\Chart.js\gulpfile.js" />
+		<None Include="wwwroot\lib\Chart.js\karma.conf.ci.js" />
+		<None Include="wwwroot\lib\Chart.js\karma.conf.js" />
+		<None Include="wwwroot\lib\Chart.js\karma.coverage.conf.js" />
+		<None Include="wwwroot\lib\Chart.js\LICENSE.md" />
+		<None Include="wwwroot\lib\Chart.js\README.md" />
+		<None Include="wwwroot\lib\Chart.js\src\chart.js" />
+		<None Include="wwwroot\lib\Chart.js\src\charts\Chart.Bar.js" />
+		<None Include="wwwroot\lib\Chart.js\src\charts\Chart.Bubble.js" />
+		<None Include="wwwroot\lib\Chart.js\src\charts\Chart.Doughnut.js" />
+		<None Include="wwwroot\lib\Chart.js\src\charts\Chart.Line.js" />
+		<None Include="wwwroot\lib\Chart.js\src\charts\Chart.PolarArea.js" />
+		<None Include="wwwroot\lib\Chart.js\src\charts\Chart.Radar.js" />
+		<None Include="wwwroot\lib\Chart.js\src\charts\Chart.Scatter.js" />
+		<None Include="wwwroot\lib\Chart.js\src\controllers\controller.bar.js" />
+		<None Include="wwwroot\lib\Chart.js\src\controllers\controller.bubble.js" />
+		<None Include="wwwroot\lib\Chart.js\src\controllers\controller.doughnut.js" />
+		<None Include="wwwroot\lib\Chart.js\src\controllers\controller.line.js" />
+		<None Include="wwwroot\lib\Chart.js\src\controllers\controller.polarArea.js" />
+		<None Include="wwwroot\lib\Chart.js\src\controllers\controller.radar.js" />
+		<None Include="wwwroot\lib\Chart.js\src\core\core.animation.js" />
+		<None Include="wwwroot\lib\Chart.js\src\core\core.controller.js" />
+		<None Include="wwwroot\lib\Chart.js\src\core\core.datasetController.js" />
+		<None Include="wwwroot\lib\Chart.js\src\core\core.element.js" />
+		<None Include="wwwroot\lib\Chart.js\src\core\core.helpers.js" />
+		<None Include="wwwroot\lib\Chart.js\src\core\core.js" />
+		<None Include="wwwroot\lib\Chart.js\src\core\core.layoutService.js" />
+		<None Include="wwwroot\lib\Chart.js\src\core\core.legend.js" />
+		<None Include="wwwroot\lib\Chart.js\src\core\core.plugin.js" />
+		<None Include="wwwroot\lib\Chart.js\src\core\core.scale.js" />
+		<None Include="wwwroot\lib\Chart.js\src\core\core.scaleService.js" />
+		<None Include="wwwroot\lib\Chart.js\src\core\core.title.js" />
+		<None Include="wwwroot\lib\Chart.js\src\core\core.tooltip.js" />
+		<None Include="wwwroot\lib\Chart.js\src\elements\element.arc.js" />
+		<None Include="wwwroot\lib\Chart.js\src\elements\element.line.js" />
+		<None Include="wwwroot\lib\Chart.js\src\elements\element.point.js" />
+		<None Include="wwwroot\lib\Chart.js\src\elements\element.rectangle.js" />
+		<None Include="wwwroot\lib\Chart.js\src\scales\scale.category.js" />
+		<None Include="wwwroot\lib\Chart.js\src\scales\scale.linear.js" />
+		<None Include="wwwroot\lib\Chart.js\src\scales\scale.logarithmic.js" />
+		<None Include="wwwroot\lib\Chart.js\src\scales\scale.radialLinear.js" />
+		<None Include="wwwroot\lib\Chart.js\src\scales\scale.time.js" />
+		<None Include="wwwroot\lib\Chart.js\test\controller.bar.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\controller.bubble.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\controller.doughnut.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\controller.line.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\controller.polarArea.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\controller.radar.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\core.element.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\core.helpers.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\core.layoutService.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\core.legend.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\core.plugin.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\core.scaleService.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\core.title.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\defaultConfig.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\element.arc.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\element.line.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\element.point.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\element.rectangle.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\mockContext.js" />
+		<None Include="wwwroot\lib\Chart.js\test\scale.category.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\scale.linear.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\scale.logarithmic.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\scale.radialLinear.tests.js" />
+		<None Include="wwwroot\lib\Chart.js\test\scale.time.tests.js" />
+		<None Include="wwwroot\lib\echarts\.editorconfig" />
+		<None Include="wwwroot\lib\echarts\.github\CONTRIBUTING.md" />
+		<None Include="wwwroot\lib\echarts\.github\ISSUE_TEMPLATE.md" />
+		<None Include="wwwroot\lib\echarts\.jshintrc" />
+		<None Include="wwwroot\lib\echarts\dist\echarts.common.js" />
+		<None Include="wwwroot\lib\echarts\dist\echarts.common.min.js" />
+		<None Include="wwwroot\lib\echarts\dist\echarts.js" />
+		<None Include="wwwroot\lib\echarts\dist\echarts.min.js" />
+		<None Include="wwwroot\lib\echarts\dist\echarts.simple.js" />
+		<None Include="wwwroot\lib\echarts\dist\echarts.simple.min.js" />
+		<None Include="wwwroot\lib\echarts\dist\extension\bmap.js" />
+		<None Include="wwwroot\lib\echarts\dist\extension\bmap.min.js" />
+		<None Include="wwwroot\lib\echarts\dist\extension\dataTool.js" />
+		<None Include="wwwroot\lib\echarts\dist\extension\dataTool.min.js" />
+		<None Include="wwwroot\lib\echarts\extension\bmap\bmap.js" />
+		<None Include="wwwroot\lib\echarts\extension\bmap\BMapCoordSys.js" />
+		<None Include="wwwroot\lib\echarts\extension\bmap\BMapModel.js" />
+		<None Include="wwwroot\lib\echarts\extension\bmap\BMapView.js" />
+		<None Include="wwwroot\lib\echarts\extension\dataTool\gexf.js" />
+		<None Include="wwwroot\lib\echarts\extension\dataTool\index.js" />
+		<None Include="wwwroot\lib\echarts\extension\dataTool\prepareBoxplotData.js" />
+		<None Include="wwwroot\lib\echarts\extension\dataTool\quantile.js" />
+		<None Include="wwwroot\lib\echarts\extension\echarts.js" />
+		<None Include="wwwroot\lib\echarts\extension\webpack.config.js" />
+		<None Include="wwwroot\lib\echarts\index.common.js" />
+		<None Include="wwwroot\lib\echarts\index.js" />
+		<None Include="wwwroot\lib\echarts\index.simple.js" />
+		<None Include="wwwroot\lib\echarts\LICENSE" />
+		<None Include="wwwroot\lib\echarts\map\js\china-contour.js" />
+		<None Include="wwwroot\lib\echarts\map\js\china.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\anhui.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\aomen.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\beijing.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\chongqing.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\fujian.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\gansu.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\guangdong.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\guangxi.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\guizhou.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\hainan.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\hebei.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\heilongjiang.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\henan.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\hubei.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\hunan.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\jiangsu.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\jiangxi.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\jilin.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\liaoning.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\neimenggu.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\ningxia.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\qinghai.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\shandong.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\shanghai.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\shanxi.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\shanxi1.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\sichuan.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\tianjin.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\xianggang.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\xinjiang.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\xizang.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\yunnan.js" />
+		<None Include="wwwroot\lib\echarts\map\js\province\zhejiang.js" />
+		<None Include="wwwroot\lib\echarts\map\js\world.js" />
+		<None Include="wwwroot\lib\echarts\README.md" />
+		<None Include="wwwroot\lib\echarts\src\action\createDataSelectAction.js" />
+		<None Include="wwwroot\lib\echarts\src\action\geoRoam.js" />
+		<None Include="wwwroot\lib\echarts\src\action\roamHelper.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\bar.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\bar\barItemStyle.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\bar\BarSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\bar\BarView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\boxplot.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\boxplot\boxplotLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\boxplot\BoxplotSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\boxplot\BoxplotView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\boxplot\boxplotVisual.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\candlestick.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\candlestick\candlestickLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\candlestick\CandlestickSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\candlestick\CandlestickView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\candlestick\candlestickVisual.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\candlestick\preprocessor.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\chord.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\chord\chordCircularLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\chord\ChordSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\chord\ChordView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\chord\Ribbon.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\effectScatter.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\effectScatter\EffectScatterSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\effectScatter\EffectScatterView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\funnel.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\funnel\funnelLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\funnel\FunnelSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\funnel\FunnelView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\gauge.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\gauge\GaugeSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\gauge\GaugeView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\gauge\PointerPath.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\adjustEdge.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\backwardCompat.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\categoryFilter.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\categoryVisual.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\circularLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\circularLayoutHelper.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\createView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\edgeVisual.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\forceHelper.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\forceLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\GraphSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\GraphView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\roamAction.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\simpleLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\simpleLayoutEdge.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\graph\simpleLayoutHelper.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\heatmap.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\heatmap\HeatmapLayer.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\heatmap\HeatmapSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\heatmap\HeatmapView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\helper\createGraphFromNodeEdge.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\helper\createGraphFromNodeMatrix.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\helper\createListFromArray.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\helper\EffectLine.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\helper\EffectSymbol.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\helper\LargeSymbolDraw.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\helper\Line.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\helper\LineDraw.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\helper\LinePath.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\helper\Symbol.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\helper\SymbolDraw.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\helper\whiskerBoxCommon.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\helper\WhiskerBoxDraw.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\line.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\lines.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\lines\linesLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\lines\LinesSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\lines\LinesView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\line\lineAnimationDiff.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\line\LineSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\line\LineView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\line\poly.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\map.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\map\backwardCompat.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\map\mapDataStatistic.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\map\MapSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\map\mapSymbolLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\map\MapView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\map\mapVisual.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\parallel.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\parallel\ParallelSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\parallel\ParallelView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\parallel\parallelVisual.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\pie.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\pie\labelLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\pie\pieLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\pie\PieSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\pie\PieView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\radar.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\radar\backwardCompat.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\radar\radarLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\radar\RadarSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\radar\RadarView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\sankey.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\sankey\sankeyLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\sankey\SankeySeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\sankey\SankeyView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\sankey\sankeyVisual.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\scatter.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\scatter\ScatterSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\scatter\ScatterView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\themeRiver.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\themeRiver\themeRiverLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\themeRiver\ThemeRiverSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\themeRiver\ThemeRiverView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\themeRiver\themeRiverVisual.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\treemap.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\treemap\Breadcrumb.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\treemap\helper.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\treemap\treemapAction.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\treemap\treemapLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\treemap\TreemapSeries.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\treemap\TreemapView.js" />
+		<None Include="wwwroot\lib\echarts\src\chart\treemap\treemapVisual.js" />
+		<None Include="wwwroot\lib\echarts\src\component\angleAxis.js" />
+		<None Include="wwwroot\lib\echarts\src\component\axis.js" />
+		<None Include="wwwroot\lib\echarts\src\component\axis\AngleAxisView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\axis\AxisBuilder.js" />
+		<None Include="wwwroot\lib\echarts\src\component\axis\AxisView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\axis\parallelAxisAction.js" />
+		<None Include="wwwroot\lib\echarts\src\component\axis\ParallelAxisView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\axis\RadiusAxisView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\axis\SingleAxisView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoom.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoomInside.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoomSelect.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoom\AxisProxy.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoom\dataZoomAction.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoom\DataZoomModel.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoom\dataZoomProcessor.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoom\DataZoomView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoom\history.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoom\InsideZoomModel.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoom\InsideZoomView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoom\roams.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoom\SelectZoomModel.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoom\SelectZoomView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoom\SliderZoomModel.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoom\SliderZoomView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\dataZoom\typeDefaulter.js" />
+		<None Include="wwwroot\lib\echarts\src\component\geo.js" />
+		<None Include="wwwroot\lib\echarts\src\component\geo\GeoView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\grid.js" />
+		<None Include="wwwroot\lib\echarts\src\component\helper\interactionMutex.js" />
+		<None Include="wwwroot\lib\echarts\src\component\helper\listComponent.js" />
+		<None Include="wwwroot\lib\echarts\src\component\helper\MapDraw.js" />
+		<None Include="wwwroot\lib\echarts\src\component\helper\RoamController.js" />
+		<None Include="wwwroot\lib\echarts\src\component\helper\selectableMixin.js" />
+		<None Include="wwwroot\lib\echarts\src\component\helper\SelectController.js" />
+		<None Include="wwwroot\lib\echarts\src\component\helper\sliderMove.js" />
+		<None Include="wwwroot\lib\echarts\src\component\legend.js" />
+		<None Include="wwwroot\lib\echarts\src\component\legend\legendAction.js" />
+		<None Include="wwwroot\lib\echarts\src\component\legend\legendFilter.js" />
+		<None Include="wwwroot\lib\echarts\src\component\legend\LegendModel.js" />
+		<None Include="wwwroot\lib\echarts\src\component\legend\LegendView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\marker\markerHelper.js" />
+		<None Include="wwwroot\lib\echarts\src\component\marker\MarkLineModel.js" />
+		<None Include="wwwroot\lib\echarts\src\component\marker\MarkLineView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\marker\MarkPointModel.js" />
+		<None Include="wwwroot\lib\echarts\src\component\marker\MarkPointView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\markLine.js" />
+		<None Include="wwwroot\lib\echarts\src\component\markPoint.js" />
+		<None Include="wwwroot\lib\echarts\src\component\parallel.js" />
+		<None Include="wwwroot\lib\echarts\src\component\parallelAxis.js" />
+		<None Include="wwwroot\lib\echarts\src\component\polar.js" />
+		<None Include="wwwroot\lib\echarts\src\component\radar.js" />
+		<None Include="wwwroot\lib\echarts\src\component\radar\RadarView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\radiusAxis.js" />
+		<None Include="wwwroot\lib\echarts\src\component\single.js" />
+		<None Include="wwwroot\lib\echarts\src\component\singleAxis.js" />
+		<None Include="wwwroot\lib\echarts\src\component\timeline.js" />
+		<None Include="wwwroot\lib\echarts\src\component\timeline\preprocessor.js" />
+		<None Include="wwwroot\lib\echarts\src\component\timeline\SliderTimelineModel.js" />
+		<None Include="wwwroot\lib\echarts\src\component\timeline\SliderTimelineView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\timeline\timelineAction.js" />
+		<None Include="wwwroot\lib\echarts\src\component\timeline\TimelineAxis.js" />
+		<None Include="wwwroot\lib\echarts\src\component\timeline\TimelineModel.js" />
+		<None Include="wwwroot\lib\echarts\src\component\timeline\TimelineView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\timeline\typeDefaulter.js" />
+		<None Include="wwwroot\lib\echarts\src\component\title.js" />
+		<None Include="wwwroot\lib\echarts\src\component\toolbox.js" />
+		<None Include="wwwroot\lib\echarts\src\component\toolbox\featureManager.js" />
+		<None Include="wwwroot\lib\echarts\src\component\toolbox\feature\DataView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\toolbox\feature\DataZoom.js" />
+		<None Include="wwwroot\lib\echarts\src\component\toolbox\feature\MagicType.js" />
+		<None Include="wwwroot\lib\echarts\src\component\toolbox\feature\Restore.js" />
+		<None Include="wwwroot\lib\echarts\src\component\toolbox\feature\SaveAsImage.js" />
+		<None Include="wwwroot\lib\echarts\src\component\toolbox\ToolboxModel.js" />
+		<None Include="wwwroot\lib\echarts\src\component\toolbox\ToolboxView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\tooltip.js" />
+		<None Include="wwwroot\lib\echarts\src\component\tooltip\TooltipContent.js" />
+		<None Include="wwwroot\lib\echarts\src\component\tooltip\TooltipModel.js" />
+		<None Include="wwwroot\lib\echarts\src\component\tooltip\TooltipView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\visualMap.js" />
+		<None Include="wwwroot\lib\echarts\src\component\visualMapContinuous.js" />
+		<None Include="wwwroot\lib\echarts\src\component\visualMapPiecewise.js" />
+		<None Include="wwwroot\lib\echarts\src\component\visualMap\ContinuousModel.js" />
+		<None Include="wwwroot\lib\echarts\src\component\visualMap\ContinuousView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\visualMap\helper.js" />
+		<None Include="wwwroot\lib\echarts\src\component\visualMap\PiecewiseModel.js" />
+		<None Include="wwwroot\lib\echarts\src\component\visualMap\PiecewiseView.js" />
+		<None Include="wwwroot\lib\echarts\src\component\visualMap\preprocessor.js" />
+		<None Include="wwwroot\lib\echarts\src\component\visualMap\typeDefaulter.js" />
+		<None Include="wwwroot\lib\echarts\src\component\visualMap\visualCoding.js" />
+		<None Include="wwwroot\lib\echarts\src\component\visualMap\visualMapAction.js" />
+		<None Include="wwwroot\lib\echarts\src\component\visualMap\VisualMapModel.js" />
+		<None Include="wwwroot\lib\echarts\src\component\visualMap\VisualMapView.js" />
+		<None Include="wwwroot\lib\echarts\src\CoordinateSystem.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\Axis.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\axisDefault.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\axisHelper.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\axisModelCommonMixin.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\axisModelCreator.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\cartesian\Axis2D.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\cartesian\axisLabelInterval.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\cartesian\AxisModel.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\cartesian\Cartesian.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\cartesian\Cartesian2D.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\cartesian\Grid.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\cartesian\GridModel.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\geo\fix\geoCoord.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\geo\fix\nanhai.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\geo\fix\textCoord.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\geo\Geo.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\geo\geoCreator.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\geo\GeoModel.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\geo\parseGeoJson.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\geo\Region.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\parallel\AxisModel.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\parallel\Parallel.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\parallel\ParallelAxis.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\parallel\parallelCreator.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\parallel\ParallelModel.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\parallel\parallelPreprocessor.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\polar\AngleAxis.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\polar\AxisModel.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\polar\Polar.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\polar\polarCreator.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\polar\PolarModel.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\polar\RadiusAxis.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\radar\IndicatorAxis.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\radar\Radar.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\radar\RadarModel.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\single\AxisModel.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\single\Single.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\single\SingleAxis.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\single\singleCreator.js" />
+		<None Include="wwwroot\lib\echarts\src\coord\View.js" />
+		<None Include="wwwroot\lib\echarts\src\data\DataDiffer.js" />
+		<None Include="wwwroot\lib\echarts\src\data\Graph.js" />
+		<None Include="wwwroot\lib\echarts\src\data\helper\completeDimensions.js" />
+		<None Include="wwwroot\lib\echarts\src\data\helper\linkList.js" />
+		<None Include="wwwroot\lib\echarts\src\data\List.js" />
+		<None Include="wwwroot\lib\echarts\src\data\Tree.js" />
+		<None Include="wwwroot\lib\echarts\src\echarts.js" />
+		<None Include="wwwroot\lib\echarts\src\ExtensionAPI.js" />
+		<None Include="wwwroot\lib\echarts\src\layout\barGrid.js" />
+		<None Include="wwwroot\lib\echarts\src\layout\points.js" />
+		<None Include="wwwroot\lib\echarts\src\loading\default.js" />
+		<None Include="wwwroot\lib\echarts\src\model\Component.js" />
+		<None Include="wwwroot\lib\echarts\src\model\Global.js" />
+		<None Include="wwwroot\lib\echarts\src\model\globalDefault.js" />
+		<None Include="wwwroot\lib\echarts\src\model\mixin\areaStyle.js" />
+		<None Include="wwwroot\lib\echarts\src\model\mixin\boxLayout.js" />
+		<None Include="wwwroot\lib\echarts\src\model\mixin\itemStyle.js" />
+		<None Include="wwwroot\lib\echarts\src\model\mixin\lineStyle.js" />
+		<None Include="wwwroot\lib\echarts\src\model\mixin\makeStyleMapper.js" />
+		<None Include="wwwroot\lib\echarts\src\model\mixin\textStyle.js" />
+		<None Include="wwwroot\lib\echarts\src\model\Model.js" />
+		<None Include="wwwroot\lib\echarts\src\model\OptionManager.js" />
+		<None Include="wwwroot\lib\echarts\src\model\Series.js" />
+		<None Include="wwwroot\lib\echarts\src\preprocessor\backwardCompat.js" />
+		<None Include="wwwroot\lib\echarts\src\preprocessor\helper\compatStyle.js" />
+		<None Include="wwwroot\lib\echarts\src\processor\dataFilter.js" />
+		<None Include="wwwroot\lib\echarts\src\processor\dataSample.js" />
+		<None Include="wwwroot\lib\echarts\src\scale\Interval.js" />
+		<None Include="wwwroot\lib\echarts\src\scale\Log.js" />
+		<None Include="wwwroot\lib\echarts\src\scale\Ordinal.js" />
+		<None Include="wwwroot\lib\echarts\src\scale\Scale.js" />
+		<None Include="wwwroot\lib\echarts\src\scale\Time.js" />
+		<None Include="wwwroot\lib\echarts\src\util\animation.js" />
+		<None Include="wwwroot\lib\echarts\src\util\array\nest.js" />
+		<None Include="wwwroot\lib\echarts\src\util\clazz.js" />
+		<None Include="wwwroot\lib\echarts\src\util\component.js" />
+		<None Include="wwwroot\lib\echarts\src\util\format.js" />
+		<None Include="wwwroot\lib\echarts\src\util\graphic.js" />
+		<None Include="wwwroot\lib\echarts\src\util\KDTree.js" />
+		<None Include="wwwroot\lib\echarts\src\util\layout.js" />
+		<None Include="wwwroot\lib\echarts\src\util\model.js" />
+		<None Include="wwwroot\lib\echarts\src\util\number.js" />
+		<None Include="wwwroot\lib\echarts\src\util\quickSelect.js" />
+		<None Include="wwwroot\lib\echarts\src\util\symbol.js" />
+		<None Include="wwwroot\lib\echarts\src\util\throttle.js" />
+		<None Include="wwwroot\lib\echarts\src\view\Chart.js" />
+		<None Include="wwwroot\lib\echarts\src\view\Component.js" />
+		<None Include="wwwroot\lib\echarts\src\visual\dataColor.js" />
+		<None Include="wwwroot\lib\echarts\src\visual\seriesColor.js" />
+		<None Include="wwwroot\lib\echarts\src\visual\symbol.js" />
+		<None Include="wwwroot\lib\echarts\src\visual\visualDefault.js" />
+		<None Include="wwwroot\lib\echarts\src\visual\VisualMapping.js" />
+		<None Include="wwwroot\lib\echarts\theme\dark.js" />
+		<None Include="wwwroot\lib\echarts\theme\infographic.js" />
+		<None Include="wwwroot\lib\echarts\theme\macarons.js" />
+		<None Include="wwwroot\lib\echarts\theme\roma.js" />
+		<None Include="wwwroot\lib\echarts\theme\shine.js" />
+		<None Include="wwwroot\lib\echarts\theme\vintage.js" />
+		<None Include="wwwroot\lib\echarts\webpack.config.js" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj" />
+		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
+		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
+		<ProjectReference Include="..\Senparc.ImageUtility\Senparc.ImageUtility.csproj" />
+		<ProjectReference Include="..\Senparc.Log\Senparc.Log.csproj" />
+		<ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
+		<ProjectReference Include="..\Senparc.Threads\Senparc.Threads.csproj" />
+		<ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
+		<ProjectReference Include="..\Senparc.Web.UI\Senparc.Web.UI.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Update="wwwroot\css\site.css">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\css\site.min.css">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\css\User\base\pagecss.css">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\css\User\styles.css">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\css\WX\base\base.css">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\css\WX\styles.css">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\lib\element-ui_2.13.2\element.css">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
 </Project>

@@ -27,6 +27,7 @@ namespace Senparc.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<Ncf.AreaBase.Admin.Filters.AuthenticationResultFilterAttribute>();
+
             //services.AddAutoMapper(typeof(Ncf.Core.AutoMapper.SystemProfile));
             //添加（注册） Ncf 服务（重要，必须！）
             services.AddNcfServices(Configuration, env, CompatibilityVersion.Version_3_0);
