@@ -19,3 +19,4 @@ obj/
 /src/Senparc.Web/wwwroot/NcfDocs
 /src/Senparc.Xncf.TemplateTest/*
 /src/Senparc.Database/Senparc.Database.dbmdl
+/src/Senparc.Database/Senparc.Database.jfm
