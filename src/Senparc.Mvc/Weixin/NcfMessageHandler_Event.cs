@@ -1,12 +1,11 @@
-﻿using Senparc.CO2NET;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Senparc.CO2NET;
 using Senparc.Ncf.Core.Cache;
 using Senparc.Ncf.Log;
 using Senparc.NeuChar.Entities;
 using Senparc.Service;
 using Senparc.Weixin.MP.Entities;
 using System;
-using Senparc.Ncf.Service;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Senparc.Mvc.Weixin
 {
