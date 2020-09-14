@@ -25,13 +25,13 @@
     <PackageReference Include="Senparc.CO2NET" Version="1.3.200" />
     <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.3.500-beta1" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.3.500-beta1" />
-    <PackageReference Include="Senparc.Ncf.Log" Version="0.3.500-beta1" />
-    <PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.3.500-beta1" />
-    <PackageReference Include="Senparc.Ncf.Repository" Version="0.3.500-beta1" />
-    <PackageReference Include="Senparc.Ncf.Service" Version="0.3.500-beta1" />
-    <PackageReference Include="Senparc.Ncf.Utility" Version="0.3.500-beta1" />
+    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.3.501-beta1" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.3.501-beta1" />
+    <PackageReference Include="Senparc.Ncf.Log" Version="0.3.501-beta1" />
+    <PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.3.501-beta1" />
+    <PackageReference Include="Senparc.Ncf.Repository" Version="0.3.501-beta1" />
+    <PackageReference Include="Senparc.Ncf.Service" Version="0.3.501-beta1" />
+    <PackageReference Include="Senparc.Ncf.Utility" Version="0.3.501-beta1" />
     <PackageReference Include="ML.Xncf.Docs" Version="2.0.48-beta1" />
   </ItemGroup>
   <ItemGroup>
