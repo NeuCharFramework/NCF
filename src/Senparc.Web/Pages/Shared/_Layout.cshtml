@@ -31,11 +31,10 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         @{
-                            var docReg = Senparc.Ncf.XncfBase.Register.RegisterList.FirstOrDefault(z => z.Uid == "519E8526-A738-465A-9DB8-2762E8441762");
-                            if (docReg != null)
+                            if (Senparc.Ncf.XncfBase.Register.IsRegistered("ML.Xncf.Docs"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" href="/Docs">文档</a>
+                                    <a class="nav-link text-dark" href="/Docs/Index">文档</a>
                                 </li>
                             }
                         }
