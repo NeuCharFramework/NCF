@@ -188,7 +188,7 @@
         </el-container>
     </el-container>
     @*执行弹窗*@
-    <el-dialog width="60%" v-if="run.data.key" :title="run.data.key.name" :visible.sync="run.visible" class="run-dialog">
+    <el-dialog width="60%" v-if="run.data.key" :title="run.data.key.name" :visible.sync="run.visible" class="run-dialog"  :close-on-click-modal="false">
         <h4><i class="fa fa-newspaper-o"></i>&nbsp;{{run.data.key.description}}</h4>
         <el-form :label-position="'left'" @@submit.native.prevent>
             <el-form-item v-for="item in run.data.value" :label="item.title" label-width="200px" :required="item.isRequired">
@@ -223,6 +223,7 @@
     @*运行结果*@
     <el-dialog :title="runResult.tit"
                :visible.sync="runResult.visible"
+               :close-on-click-modal="false"
                width="30%">
         <p v-html="runResult.tip"></p>
         <p v-html="runResult.msg"></p>
