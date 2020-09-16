@@ -67,7 +67,7 @@
                     :limit.sync="listQuery.pageSize"
                     @@pagination="getList"></pagination>
         <!--编辑、新增 -->
-        <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
+        <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
             <el-form ref="dataForm"
                      :rules="dialog.rules"
                      :model="dialog.data"
@@ -96,7 +96,7 @@
             </div>
         </el-dialog>
         <!--授权 -->
-        <el-dialog :title="'为  '+au.title+'  角色授权'" :visible.sync="au.visible">
+        <el-dialog :title="'为  '+au.title+'  角色授权'" :visible.sync="au.visible" :close-on-click-modal="false">
             <el-tree :data="allMenu" ref="tree" show-checkbox :props="defaultProps" :default-expanded-keys="defaultExpandedKeys" :default-checked-keys="defaultCheckedKeys" node-key="id"></el-tree>
             <div slot="footer" class="dialog-footer">
                 <el-button @@click="au.visible = false">取 消</el-button>

@@ -35,7 +35,7 @@ namespace Senparc.Core.Models
 
             #region 其他动态模块
 
-            foreach (var databaseRegister in Senparc.Ncf.XncfBase.Register.XncfDatabaseList)
+            foreach (var databaseRegister in Senparc.Ncf.XncfBase.XncfRegisterManager.XncfDatabaseList)
             {
                 databaseRegister.OnModelCreating(modelBuilder);
             }

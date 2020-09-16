@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Senparc.CO2NET.Extensions;
-using Senparc.Core.Models;
-using Senparc.Core.Models.VD;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using Senparc.Service;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Senparc.Web.Pages.Install
 {
@@ -91,7 +87,7 @@ namespace Senparc.Web.Pages.Install
                 _systemConfigService.Init();//初始化系统信息
                 _sysMenuService.Init();
 
-                IXncfRegister systemRegister = Senparc.Ncf.XncfBase.Register.RegisterList.First(z => z.GetType() == typeof(Senparc.Areas.Admin.Register));
+                IXncfRegister systemRegister = Senparc.Ncf.XncfBase.XncfRegisterManager.RegisterList.First(z => z.GetType() == typeof(Senparc.Areas.Admin.Register));
                 await _xncfModuleService.InstallMenuAsync(systemRegister, Ncf.Core.Enums.InstallOrUpdate.Install);//安装菜单
 
                 AdminUserName = userName;

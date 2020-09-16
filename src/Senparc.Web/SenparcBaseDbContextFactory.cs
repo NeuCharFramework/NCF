@@ -34,7 +34,7 @@ namespace Senparc.Web
 
             Service.Register systemServiceRegister = new Service.Register();
 
-            Senparc.Ncf.XncfBase.Register.XncfDatabaseList.Add(systemServiceRegister);//添加注册
+            Senparc.Ncf.XncfBase.XncfRegisterManager.XncfDatabaseList.Add(systemServiceRegister);//添加注册
 
             var builder = new DbContextOptionsBuilder<SenparcEntities>();
 

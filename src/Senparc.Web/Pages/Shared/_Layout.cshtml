@@ -1,4 +1,15 @@
 ﻿@model Senparc.Core.Models.VD.BasePageModel
+@using Senparc.Ncf.XncfBase
+@inject IServiceProvider _serviceProvider
+@functions{
+    protected async Task<bool> CheckXncfModuleValiable(string xncfName)
+    {
+        XncfRegisterManager xncfRegisterManager = new XncfRegisterManager(_serviceProvider);
+        return await xncfRegisterManager.CheckXncfValiable(xncfName).ConfigureAwait(false);
+    }
+}
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,11 +42,11 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         @{
-                            if (Senparc.Ncf.XncfBase.Register.IsRegistered("ML.Xncf.Docs"))
+                            if (await CheckXncfModuleValiable("ML.Xncf.Docs"))
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" href="/Docs/Index">文档</a>
-                                </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/Docs/Index">文档</a>
+                            </li>
                             }
                         }
                         <li class="nav-item">

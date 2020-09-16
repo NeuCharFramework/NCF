@@ -133,7 +133,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// <returns></returns>
         public async Task<IActionResult> OnPostRunFunctionAsync([FromBody]ExecuteFuncParamDto executeFuncParamDto)
         {
-            var xncfRegister = Senparc.Ncf.XncfBase.Register.RegisterList.FirstOrDefault(z => z.Uid == executeFuncParamDto.XncfUid);
+            var xncfRegister = Senparc.Ncf.XncfBase.XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == executeFuncParamDto.XncfUid);
 
             if (xncfRegister == null)
             {
@@ -239,7 +239,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
 
             //尝试从已加载的模块中执行删除过程
-            var register = Senparc.Ncf.XncfBase.Register.RegisterList.FirstOrDefault(z => z.Uid == module.Uid);
+            var register = Senparc.Ncf.XncfBase.XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == module.Uid);
             if (register == null)
             {
                 //直接删除，如dll已经不存在，可能引发此问题，只能在当前系统内直接执行删除
@@ -282,10 +282,10 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                     .ToList();
             }
 
-            IXncfRegister xncfRegister = Senparc.Ncf.XncfBase.Register.RegisterList.FirstOrDefault(z => z.Uid == uid);
+            IXncfRegister xncfRegister = Senparc.Ncf.XncfBase.XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == uid);
             if (xncfRegister == null)
             {
-                throw new Exception($"模块丢失或未加载（{Senparc.Ncf.XncfBase.Register.RegisterList.Count}）！");
+                throw new Exception($"模块丢失或未加载（{Senparc.Ncf.XncfBase.XncfRegisterManager.RegisterList.Count}）！");
             }
             IDictionary<IXncfFunction, List<FunctionParameterInfo>> functionParameterInfoCollection = new Dictionary<IXncfFunction, List<FunctionParameterInfo>>();
             try
