@@ -91,7 +91,7 @@ namespace Senparc.Web.Pages.Install
                 _systemConfigService.Init();//初始化系统信息
                 _sysMenuService.Init();
 
-                IXncfRegister systemRegister = Senparc.Ncf.XncfBase.Register.RegisterList.First(z => z.GetType() == typeof(Senparc.Areas.Admin.Register));
+                IXncfRegister systemRegister = Senparc.Ncf.XncfBase.XncfRegisterManager.RegisterList.First(z => z.GetType() == typeof(Senparc.Areas.Admin.Register));
                 await _xncfModuleService.InstallMenuAsync(systemRegister, Ncf.Core.Enums.InstallOrUpdate.Install);//安装菜单
 
                 AdminUserName = userName;

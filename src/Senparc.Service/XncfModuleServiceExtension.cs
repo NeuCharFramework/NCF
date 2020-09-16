@@ -37,7 +37,7 @@ namespace Senparc.Service
                 throw new Exception("模块不存在！");
             }
 
-            var xncfRegister = Senparc.Ncf.XncfBase.Register.RegisterList.FirstOrDefault(z => z.Uid == uid);
+            var xncfRegister = Senparc.Ncf.XncfBase.XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == uid);
             if (xncfRegister == null)
             {
                 throw new Exception("模块不存在！");
@@ -123,7 +123,7 @@ namespace Senparc.Service
                 db.SysPermission.Add(new SysPermission(sysPermissionDto));
                 await db.SaveChangesAsync();
                 var updateMenuDto = new UpdateMenuId_XncfModuleDto(register.Uid, sysMemu.Id);
-                await base.UpdateMenuId(updateMenuDto).ConfigureAwait(false);
+                await base.UpdateMenuIdAsync(updateMenuDto).ConfigureAwait(false);
             }
         }
     }
