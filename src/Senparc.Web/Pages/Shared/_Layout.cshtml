@@ -7,7 +7,6 @@
         XncfRegisterManager xncfRegisterManager = new XncfRegisterManager(_serviceProvider);
         return await xncfRegisterManager.CheckXncfValiable(xncfName).ConfigureAwait(false);
     }
-
 }
 
 
@@ -43,12 +42,11 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         @{
-                            //TODO:判断数据库已安装
                             if (await CheckXncfModuleValiable("ML.Xncf.Docs"))
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" href="/Docs/Index">文档</a>
-                                </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/Docs/Index">文档</a>
+                            </li>
                             }
                         }
                         <li class="nav-item">
