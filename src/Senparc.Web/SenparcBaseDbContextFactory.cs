@@ -4,6 +4,7 @@ using Senparc.CO2NET;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.Core.Models;
 using Senparc.Ncf.Core.Config;
+using Senparc.Ncf.XncfBase;
 using System;
 using System.IO;
 
@@ -34,7 +35,7 @@ namespace Senparc.Web
 
             Service.Register systemServiceRegister = new Service.Register();
 
-            Senparc.Ncf.XncfBase.XncfRegisterManager.XncfDatabaseList.Add(systemServiceRegister);//添加注册
+            XncfRegisterManager.XncfDatabaseList.Add(systemServiceRegister);//添加注册
 
             var builder = new DbContextOptionsBuilder<SenparcEntities>();
 

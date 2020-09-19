@@ -126,7 +126,7 @@ namespace Senparc.Web
                 builder.AddRazorRuntimeCompilation(options =>
                 {
                     //自动索引所有需要使用 RazorRuntimeCompilation 的模块
-                    foreach (var razorRegister in Senparc.Ncf.XncfBase.XncfRegisterManager.RegisterList.Where(z => z is IXncfRazorRuntimeCompilation))
+                    foreach (var razorRegister in XncfRegisterManager.RegisterList.Where(z => z is IXncfRazorRuntimeCompilation))
                     {
                         try
                         {
