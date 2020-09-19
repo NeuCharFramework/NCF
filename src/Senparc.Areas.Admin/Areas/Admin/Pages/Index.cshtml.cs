@@ -121,7 +121,7 @@ namespace Senparc.Areas.Admin.Pages
                     if (xncfMissing)
                     {
                         //XNCF 不可用状态下，给以提示（无论是否在管理模式下）
-                        item.MenuName = $"!! {item.MenuName} !!";
+                        item.MenuName = $"!!!! {item.MenuName} !!!!";
                     }
                     else
                     {
@@ -136,7 +136,7 @@ namespace Senparc.Areas.Admin.Pages
                             else
                             {
                                 //XNCF 不可用状态下，给以提示
-                                item.MenuName = $"** {item.MenuName} **";
+                                item.MenuName = $"~~~~ {item.MenuName} ~~~~";
                             }
                         }
                     }
