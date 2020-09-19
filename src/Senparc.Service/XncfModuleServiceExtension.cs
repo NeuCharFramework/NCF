@@ -37,7 +37,7 @@ namespace Senparc.Service
                 throw new Exception("模块不存在！");
             }
 
-            var xncfRegister = Senparc.Ncf.XncfBase.XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == uid);
+            var xncfRegister = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == uid);
             if (xncfRegister == null)
             {
                 throw new Exception("模块不存在！");
@@ -68,8 +68,11 @@ namespace Senparc.Service
             }, uid).ConfigureAwait(false);
 
             //记录日志
-            var installOrUpdateMsg = installOrUpdateValue.HasValue ? (installOrUpdateValue.Value == InstallOrUpdate.Install ? "安装" : "更新") : "失败";
+            var installOrUpdateMsg = installOrUpdateValue.HasValue 
+                                        ? (installOrUpdateValue.Value == InstallOrUpdate.Install ? "安装" : "更新") 
+                                        : "失败";
             SenparcTrace.SendCustomLog($"安装或更新模块（{installOrUpdateMsg}）", result.ToString());
+
             return new Tuple<PagedList<XncfModule>, string, InstallOrUpdate?>(xncfModules, result, installOrUpdateValue);
         }
 

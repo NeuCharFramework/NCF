@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.XncfBase;
 using System;
 
 namespace Senparc.Core.Models
@@ -35,7 +36,7 @@ namespace Senparc.Core.Models
 
             #region 其他动态模块
 
-            foreach (var databaseRegister in Senparc.Ncf.XncfBase.XncfRegisterManager.XncfDatabaseList)
+            foreach (var databaseRegister in XncfRegisterManager.XncfDatabaseList)
             {
                 databaseRegister.OnModelCreating(modelBuilder);
             }

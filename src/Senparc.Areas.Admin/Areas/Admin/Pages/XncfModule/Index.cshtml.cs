@@ -46,7 +46,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
         private void LoadNewXncfRegisters(PagedList<XncfModule> xncfModules)
         {
-            NewXncfRegisters = Senparc.Ncf.XncfBase.XncfRegisterManager.RegisterList.Where(z => !z.IgnoreInstall && !xncfModules.Exists(m => m.Uid == z.Uid && m.Version == z.Version)).ToList() ?? new List<IXncfRegister>();
+            NewXncfRegisters = XncfRegisterManager.RegisterList.Where(z => !z.IgnoreInstall && !xncfModules.Exists(m => m.Uid == z.Uid && m.Version == z.Version)).ToList() ?? new List<IXncfRegister>();
         }
 
         public async Task OnGetAsync()
@@ -143,7 +143,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         public async Task<IActionResult> OnGetUnMofulesAsync()
         {
             var xncfModules = await _xncfModuleService.GetObjectListAsync(0, 0, _ => true, _ => _.AddTime, Ncf.Core.Enums.OrderingType.Descending);
-            var newXncfRegisters = Senparc.Ncf.XncfBase.XncfRegisterManager.RegisterList.Where(z => !z.IgnoreInstall && !xncfModules.Exists(m => m.Uid == z.Uid && m.Version == z.Version)).ToList() ?? new List<IXncfRegister>();
+            var newXncfRegisters = XncfRegisterManager.RegisterList.Where(z => !z.IgnoreInstall && !xncfModules.Exists(m => m.Uid == z.Uid && m.Version == z.Version)).ToList() ?? new List<IXncfRegister>();
 
             //查看版本号是否一致
             Func<IXncfRegister, string> getVersion = xncfRegister =>

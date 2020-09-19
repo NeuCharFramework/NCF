@@ -54,13 +54,28 @@ namespace Senparc.Web.Pages.Install
             }
             catch (Exception)
             {
-                //开始安装系统模块（Service）
-                Senparc.Service.Register serviceRegister = new Service.Register();
-                await serviceRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
+                {
+                    //开始安装系统模块（Service）
+                    Senparc.Service.Register serviceRegister = new Service.Register();
+                    await serviceRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
+                    //启用系统模块（Service）
+                    var serviceModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == serviceRegister.Uid);
+                    serviceModule.UpdateState(Ncf.Core.Enums.XncfModules_State.开放);
+                }
 
-                //开始安装系统模块（Admin）
-                Senparc.Areas.Admin.Register adminRegister = new Areas.Admin.Register();
-                await adminRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
+                {
+                    //开始安装系统模块（Admin）
+                    Senparc.Areas.Admin.Register adminRegister = new Areas.Admin.Register();
+                    await adminRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
+                    //启用系统模块（Admin）
+                    var adminModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == adminRegister.Uid);
+                    adminModule.UpdateState(Ncf.Core.Enums.XncfModules_State.开放);
+
+                    //一次性保存修改
+                    await _xncfModuleService.SaveObjectAsync(adminModule).ConfigureAwait(false);
+                }
+
+
 
                 //((SenparcEntities)_accountInfoService.BaseData.BaseDB.BaseDataContext).ResetMigrate();//重置合并状态
                 //((SenparcEntities)_accountInfoService.BaseData.BaseDB.BaseDataContext).Migrate();//进行合并
@@ -87,7 +102,7 @@ namespace Senparc.Web.Pages.Install
                 _systemConfigService.Init();//初始化系统信息
                 _sysMenuService.Init();
 
-                IXncfRegister systemRegister = Senparc.Ncf.XncfBase.XncfRegisterManager.RegisterList.First(z => z.GetType() == typeof(Senparc.Areas.Admin.Register));
+                IXncfRegister systemRegister = XncfRegisterManager.RegisterList.First(z => z.GetType() == typeof(Senparc.Areas.Admin.Register));
                 await _xncfModuleService.InstallMenuAsync(systemRegister, Ncf.Core.Enums.InstallOrUpdate.Install);//安装菜单
 
                 AdminUserName = userName;
