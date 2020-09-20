@@ -22,9 +22,10 @@ namespace Senparc.Core.Models
 
         #endregion
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //基类中的系统表处理
+            base.OnModelCreating(modelBuilder);
 
             #region 系统表
 
@@ -49,10 +50,8 @@ namespace Senparc.Core.Models
             var dt1 = SystemTime.Now;
             Senparc.Ncf.XncfBase.Register.ApplyAllAutoConfigurationMapping(modelBuilder);
             SenparcTrace.SendCustomLog("SenparcEntities 数据库实体注入", $"耗时：{SystemTime.DiffTotalMS(dt1)}ms");
-
             #endregion
 
-            base.OnModelCreating(modelBuilder);
         }
     }
 }

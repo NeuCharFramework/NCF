@@ -12,7 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
     <ProjectReference Include="..\Senparc.Log\Senparc.Log.csproj" />
-    <PackageReference Include="Senparc.Ncf.Repository" Version="0.3.506-beta1" />
+    <PackageReference Include="Senparc.Ncf.Repository" Version="0.3.600-beta1" />
     <ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
   </ItemGroup>
 
