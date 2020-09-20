@@ -3,9 +3,11 @@ var app = new Vue({
     el: '#app',
     data() {
         return {
+            xncfStat: {}
         };
     },
     mounted() {
+        this.getXncfStat();
         this.initChart();
     },
     methods: {
@@ -71,6 +73,11 @@ var app = new Vue({
 
             let chartInstance2 = echarts.init(chart2);
             chartInstance2.setOption(chartOption2);
+        },
+       //XNCF 统计状态
+        async getXncfStat() {
+            let xncfStatData = await service.get('/Admin/Index?handler=XncfStat');
+            this.xncfStat = xncfStatData.data.data;
         }
     }
 });

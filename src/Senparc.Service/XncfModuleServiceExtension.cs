@@ -1,4 +1,5 @@
-﻿using Senparc.CO2NET.Extensions;
+﻿
+using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Trace;
 using Senparc.Core.Models;
 using Senparc.Ncf.Core.Config;
@@ -68,8 +69,8 @@ namespace Senparc.Service
             }, uid).ConfigureAwait(false);
 
             //记录日志
-            var installOrUpdateMsg = installOrUpdateValue.HasValue 
-                                        ? (installOrUpdateValue.Value == InstallOrUpdate.Install ? "安装" : "更新") 
+            var installOrUpdateMsg = installOrUpdateValue.HasValue
+                                        ? (installOrUpdateValue.Value == InstallOrUpdate.Install ? "安装" : "更新")
                                         : "失败";
             SenparcTrace.SendCustomLog($"安装或更新模块（{installOrUpdateMsg}）", result.ToString());
 
@@ -118,9 +119,13 @@ namespace Senparc.Service
             if (installOrUpdate == InstallOrUpdate.Install)
             {
                 //更新菜单信息
-                SysPermissionDto sysPermissionDto = new SysPermissionDto() 
+                SysPermissionDto sysPermissionDto = new SysPermissionDto()
                 {
-                     IsMenu = true, ResourceCode = sysMemu.ResourceCode, RoleId = "1", RoleCode = "administrator", PermissionId = sysMemu.Id
+                    IsMenu = true,
+                    ResourceCode = sysMemu.ResourceCode,
+                    RoleId = "1",
+                    RoleCode = "administrator",
+                    PermissionId = sysMemu.Id
                 };
                 SenparcEntities db = _serviceProvider.GetService<SenparcEntities>();
                 db.SysPermission.Add(new SysPermission(sysPermissionDto));
@@ -128,6 +133,33 @@ namespace Senparc.Service
                 var updateMenuDto = new UpdateMenuId_XncfModuleDto(register.Uid, sysMemu.Id);
                 await base.UpdateMenuIdAsync(updateMenuDto).ConfigureAwait(false);
             }
+        }
+
+
+        /// <summary>
+        /// 获取显示的版本号信息（如果有新版本，则显示格式：[旧版本号] -> [新版本号]
+        /// </summary>
+        /// <param name="xncfModules"></param>
+        /// <param name="xncfRegister"></param>
+        /// <returns></returns>
+        public string GetVersionDisplayName(List<XncfModule> xncfModules, IXncfRegister xncfRegister)
+        {
+            var installedXncf = xncfModules.FirstOrDefault(z => z.Uid == xncfRegister.Uid);
+            if (installedXncf == null || installedXncf.Version == xncfRegister.Version)
+            {
+                return xncfRegister.Version;
+            }
+            return $"{installedXncf.Version} -> {xncfRegister.Version}";
+        }
+
+        /// <summary>
+        /// 获取未安装的 Xncf（或版本不同）
+        /// </summary>
+        /// <returns></returns>
+        public List<IXncfRegister> GetUnInstallXncfModule(List<XncfModule> xncfModules)
+        {
+            var newXncfRegisters = XncfRegisterManager.RegisterList.Where(z => !z.IgnoreInstall && !xncfModules.Exists(m => m.Uid == z.Uid && m.Version == z.Version)).ToList() ?? new List<IXncfRegister>();
+            return newXncfRegisters;
         }
     }
 }

@@ -68,22 +68,6 @@
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 
 <div>
-<el-container>
-    <el-header class="module-header">
-        <span class="start-title"><span class="module-header-v">NeuCharFramework 管理员后台</span></span>
-        <el-main></el-main>
-    </el-header>
-</el-container>
-<el-row>
-    <el-col :span="6">
-        
-    </el-col>
-</el-row>
-</div>
-
-
-
-<div>
     <el-container>
         <el-header class="module-header">
             <span class="start-title"><span class="module-header-v">NeuCharFramework 管理员后台</span></span>
@@ -93,38 +77,38 @@
     <el-row :gutter="20">
         <el-col :span="6">
             <div class="grid-content wxmanager-item">
-                <span class="count">179</span>
+                <span class="count">{{xncfStat.installedXncfCount || 0}}</span>
                 <div class="icon">
                     <i class="fa fa-caret-square-o-right"></i>
                 </div>
-                <p class="tit">今日新订单数量</p>
+                <p class="tit">已安装模块</p>
             </div>
         </el-col>
         <el-col :span="6">
             <div class="grid-content bg-purple wxmanager-item">
-                <span class="count">2</span>
+                <span class="count">{{xncfStat.updateVersionXncfCount || 0}}</span>
                 <div class="icon">
                     <i class="fa fa-comments-o"></i>
                 </div>
-                <p class="tit">售后订单数量</p>
+                <p class="tit">待更新模块</p>
             </div>
         </el-col>
         <el-col :span="6">
             <div class="grid-content bg-purple wxmanager-item">
-                <span class="count">17</span>
+                <span class="count">{{xncfStat.newXncfCount || 0}}</span>
                 <div class="icon">
                     <i class="fa fa-sort-amount-desc"></i>
                 </div>
-                <p class="tit">新发表文章数</p>
+                <p class="tit">发现新模块</p>
             </div>
         </el-col>
         <el-col :span="6">
             <div class="grid-content bg-purple wxmanager-item">
-                <span class="count">￥91975</span>
+                <span class="count">{{xncfStat.missingXncfCount || 0}}</span>
                 <div class="icon">
                     <i class="fa fa-check-square-o"></i>
                 </div>
-                <p class="tit">账户余额</p>
+                <p class="tit">模块异常</p>
             </div>
         </el-col>
     </el-row>
@@ -142,8 +126,6 @@
             </el-card>
         </el-col>
     </el-row>
-
-
 </div>
 @section scripts{
     <script src="~/lib/echarts/dist/echarts.js"></script>

@@ -2,6 +2,7 @@
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
+using Senparc.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,12 @@ namespace Senparc.Areas.Admin.Pages
     public class IndexModel : BaseAdminPageModel
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly XncfModuleServiceExtension _xncfModuleServiceEx;
 
-        public IndexModel(IServiceProvider serviceProvider)
+        public IndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleServiceEx)
         {
             this._serviceProvider = serviceProvider;
+            this._xncfModuleServiceEx = xncfModuleServiceEx;
         }
 
         public IActionResult OnGet()
@@ -24,6 +27,43 @@ namespace Senparc.Areas.Admin.Pages
             return null;
             //return RedirectToPage("/Home/Index");
         }
+
+        /// <summary>
+        /// 获取状态
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> OnGetXncfStatAsync()
+        {
+            //所有已安装模块
+            var installedXncfModules = await _xncfModuleServiceEx.GetFullListAsync(z => true);
+            //未安装或待升级模块
+            var updateXncfRegisters = _xncfModuleServiceEx.GetUnInstallXncfModule(installedXncfModules);
+            //未安装货代升级模块的版本
+            var newVersions = updateXncfRegisters.Select(z => _xncfModuleServiceEx.GetVersionDisplayName(installedXncfModules, z));
+            //需要升级的版本号
+            var newXncfCount = newVersions.Count(z => !z.Contains("->"));
+            //全新未安装的版本号
+            var updateVersionXncfCount = newVersions.Count() - newXncfCount;
+            //安装后缺失的模块
+            var xncfRegisterManager = new XncfRegisterManager(_serviceProvider);
+            var missingXncfCount = installedXncfModules.Count(z => !XncfRegisterManager.RegisterList.Exists(r => r.Uid == z.Uid));
+
+            var data = new
+            {
+                success = true,
+                data = new
+                {
+                    installedXncfCount = installedXncfModules.Count,
+                    updateVersionXncfCount,
+                    newXncfCount,
+                    missingXncfCount
+                }
+            };
+            return new JsonResult(data);
+        }
+
+        #region 菜单相关
+
 
         /// <summary>
         /// 获取无状态的菜单信息
@@ -72,7 +112,7 @@ namespace Senparc.Areas.Admin.Pages
                     .FirstOrDefault(z => !string.IsNullOrEmpty(item.Url) &&
                                          item.Url.Contains($"uid={z.Uid}", StringComparison.OrdinalIgnoreCase)); //TODO:判断Xncf条件还可以更细
 
-                var isStoredXncf = !string.IsNullOrEmpty(item.Url) &&  
+                var isStoredXncf = !string.IsNullOrEmpty(item.Url) &&
                                     item.Url.Contains("uid=", StringComparison.OrdinalIgnoreCase);//在数据库里面注册为模块
                 var xncfMissing = isStoredXncf && xncfRegister == null;//程序集未加载
 
@@ -170,7 +210,9 @@ namespace Senparc.Areas.Admin.Pages
                 sysMenuTrees.Add(sysMenu);
                 GetSysMenuTreesRecursive(sysMenuTreeItems, sysMenu.Children, item);
             }
-
         }
+
+        #endregion
+
     }
 }

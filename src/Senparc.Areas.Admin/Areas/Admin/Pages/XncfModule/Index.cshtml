@@ -19,7 +19,7 @@
         </el-popconfirm>
     </div>
     <el-container v-if="newTableData.length>0">
-        <el-header class="module-header">  <span class="start-title">发现新模块！</span></el-header>
+        <el-header class="module-header">  <span class="start-title">发现 {{newTableData.length}} 个新模块！</span></el-header>
         <el-main>
             <el-table :data="newTableData"
                       style="width: 100%;margin-bottom: 20px;">
