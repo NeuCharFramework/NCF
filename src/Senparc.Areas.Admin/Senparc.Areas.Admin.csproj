@@ -51,5 +51,7 @@
 		<Content Update="Areas\Admin\Pages\Shared\_HeaderPartial.cshtml">
 			<Pack>$(IncludeRazorContentInPack)</Pack>
 		</Content>
-	</ItemGroup>
+	</ItemGroup><ItemGroup>
+  <Folder Include="Areas\Pages\Shared\" />
+</ItemGroup>
 </Project>
