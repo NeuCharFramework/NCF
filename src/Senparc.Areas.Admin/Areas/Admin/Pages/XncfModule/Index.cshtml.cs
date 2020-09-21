@@ -1,19 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Senparc.CO2NET.Extensions;
-using Senparc.Core.Models.DataBaseModel;
-using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using Senparc.Service;
-using Microsoft.Extensions.DependencyInjection;
-using Senparc.CO2NET.Trace;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
