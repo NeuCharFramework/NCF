@@ -20,17 +20,17 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
     public class XncfModuleIndexModel : BaseAdminPageModel
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly XncfModuleServiceExtension _xncfModuleService;
+        private readonly XncfModuleServiceExtension _xncfModuleServiceEx;
         private readonly SysMenuService _sysMenuService;
         private readonly Lazy<SystemConfigService> _systemConfigService;
 
-        public XncfModuleIndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleService,
+        public XncfModuleIndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleServiceEx,
             SysMenuService sysMenuService, Lazy<SystemConfigService> systemConfigService)
         {
             CurrentMenu = "XncfModule";
 
             this._serviceProvider = serviceProvider;
-            this._xncfModuleService = xncfModuleService;
+            this._xncfModuleServiceEx = xncfModuleServiceEx;
             this._sysMenuService = sysMenuService;
             this._systemConfigService = systemConfigService;
         }
@@ -53,7 +53,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         {
             //更新菜单缓存
             await _sysMenuService.GetMenuDtoByCacheAsync(true).ConfigureAwait(false);
-            XncfModules = await _xncfModuleService.GetObjectListAsync(PageIndex, 10, _ => true, _ => _.AddTime, Ncf.Core.Enums.OrderingType.Descending);
+            XncfModules = await _xncfModuleServiceEx.GetObjectListAsync(PageIndex, 10, _ => true, _ => _.AddTime, Ncf.Core.Enums.OrderingType.Descending);
             LoadNewXncfRegisters(XncfModules);
         }
 
@@ -63,7 +63,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// <returns></returns>
         public async Task<IActionResult> OnGetScanAsync(string uid)
         {
-            var result = await _xncfModuleService.InstallModuleAsync(uid);
+            var result = await _xncfModuleServiceEx.InstallModuleAsync(uid);
             XncfModules = result.Item1;
             base.SetMessager(Ncf.Core.Enums.MessageType.info, result.Item2, true);
 
@@ -121,7 +121,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         {
             //更新菜单缓存
             await _sysMenuService.GetMenuDtoByCacheAsync(true).ConfigureAwait(false);
-            PagedList<XncfModule> xncfModules = await _xncfModuleService.GetObjectListAsync(pageIndex, pageSize, _ => true, _ => _.AddTime, Ncf.Core.Enums.OrderingType.Descending);
+            PagedList<XncfModule> xncfModules = await _xncfModuleServiceEx.GetObjectListAsync(pageIndex, pageSize, _ => true, _ => _.AddTime, Ncf.Core.Enums.OrderingType.Descending);
             //xncfModules.FirstOrDefault().
             var xncfRegisterList = XncfRegisterList.Select(_ => new { _.Uid, homeUrl = _.GetAreaHomeUrl(), _.Icon });
             var result = from xncfModule in xncfModules
@@ -142,21 +142,19 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// <returns></returns>
         public async Task<IActionResult> OnGetUnMofulesAsync()
         {
-            var xncfModules = await _xncfModuleService.GetObjectListAsync(0, 0, _ => true, _ => _.AddTime, Ncf.Core.Enums.OrderingType.Descending);
-            var newXncfRegisters = XncfRegisterManager.RegisterList.Where(z => !z.IgnoreInstall && !xncfModules.Exists(m => m.Uid == z.Uid && m.Version == z.Version)).ToList() ?? new List<IXncfRegister>();
+            //所有已安装的模块
+            var oldXncfModules = await _xncfModuleServiceEx.GetObjectListAsync(0, 0, z => true, z => z.AddTime, Ncf.Core.Enums.OrderingType.Descending);
+            //未安装或版本已更新（不同）的模块
+            var newXncfRegisters = _xncfModuleServiceEx.GetUnInstallXncfModule(oldXncfModules);
 
-            //查看版本号是否一致
-            Func<IXncfRegister, string> getVersion = xncfRegister =>
+            return Ok(newXncfRegisters.Select(z => new
             {
-                var installedXncf = xncfModules.FirstOrDefault(z => z.Uid == xncfRegister.Uid);
-                if (installedXncf == null || installedXncf.Version == xncfRegister.Version)
-                {
-                    return xncfRegister.Version;
-                }
-                return $"{installedXncf.Version} -> {xncfRegister.Version}";
-            };
-
-            return Ok(newXncfRegisters.Select(_ => new { _.MenuName, _.Name, _.Uid, Version = getVersion(_), _.Icon })); ;
+                z.MenuName,
+                z.Name,
+                z.Uid,
+                Version = _xncfModuleServiceEx.GetVersionDisplayName(oldXncfModules, z),
+                z.Icon
+            })); ;
         }
 
         /// <summary>
@@ -165,7 +163,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// <returns></returns>
         public async Task<IActionResult> OnGetScanAjaxAsync(string uid)
         {
-            var result = await _xncfModuleService.InstallModuleAsync(uid);
+            var result = await _xncfModuleServiceEx.InstallModuleAsync(uid);
             //XncfModules = result.Item1;
             //base.SetMessager(Ncf.Core.Enums.MessageType.info, result.Item2, true);
             return Ok(result.Item1);

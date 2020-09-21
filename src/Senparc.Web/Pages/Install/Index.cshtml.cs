@@ -75,8 +75,6 @@ namespace Senparc.Web.Pages.Install
                     await _xncfModuleService.SaveObjectAsync(adminModule).ConfigureAwait(false);
                 }
 
-
-
                 //((SenparcEntities)_accountInfoService.BaseData.BaseDB.BaseDataContext).ResetMigrate();//重置合并状态
                 //((SenparcEntities)_accountInfoService.BaseData.BaseDB.BaseDataContext).Migrate();//进行合并
                 return Page();
@@ -93,8 +91,6 @@ namespace Senparc.Web.Pages.Install
             if (adminUserInfo == null)
             {
                 return new StatusCodeResult(404);
-                //base.Response.StatusCode = 404;
-                //return;
             }
             else
             {

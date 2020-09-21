@@ -3,9 +3,13 @@ var app = new Vue({
     el: '#app',
     data() {
         return {
+            xncfStat: {},
+            xncfOpeningList: {}
         };
     },
     mounted() {
+        this.getXncfStat();
+        this.getXncfOpening();
         this.initChart();
     },
     methods: {
@@ -71,6 +75,16 @@ var app = new Vue({
 
             let chartInstance2 = echarts.init(chart2);
             chartInstance2.setOption(chartOption2);
+        },
+        //XNCF 统计状态
+        async getXncfStat() {
+            let xncfStatData = await service.get('/Admin/Index?handler=XncfStat');
+            this.xncfStat = xncfStatData.data.data;
+        },
+        //开放模块数据
+        async getXncfOpening() {
+            let xncfOpeningList = await service.get('/Admin/Index?handler=XncfOpening');
+            this.xncfOpeningList = xncfOpeningList.data.data;
         }
     }
 });
