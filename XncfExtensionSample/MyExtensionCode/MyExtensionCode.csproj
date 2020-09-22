@@ -16,7 +16,7 @@
 
 	<ItemGroup>
 		<!--<ProjectReference Include="..\..\..\..\weixin.senparc.com Site\Senparc.Xncf.WeChatSampleBuilder\Senparc.Xncf.WeChatSampleBuilder.csproj" />-->
-		<PackageReference Include="Senparc.Xncf.WeChatSampleBuilder" Version="0.1.0" />
+		<PackageReference Include="Senparc.Xncf.WeChatSampleBuilder" Version="0.1.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.1.610.109-beta1" />
