@@ -296,11 +296,12 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                     functionParameterInfoCollection[function] = await function.GetFunctionParameterInfoAsync(_serviceProvider, true);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                SenparcTrace.SendCustomLog("模块读取失败", @$"模块：{XncfModule.Name} / {XncfModule.MenuName} / {XncfModule.Uid}
-请尝试更新此模块后刷新页面！");
+                SenparcTrace.SendCustomLog("模块读取失败", @$"模块：{XncfModule?.Name} / {XncfModule?.MenuName} / {XncfModule?.Uid}
+请尝试更新此模块后刷新页面！\r\n{ex.Message}\r\n{ex.StackTrace}");
                 mustUpdate = true;
+                //TODO:页面上需要给提示
             }
 
             IEnumerable<KeyValuePair<ThreadInfo, Thread>> registeredThreadInfo = xncfRegister.RegisteredThreadInfo;
