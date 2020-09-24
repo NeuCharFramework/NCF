@@ -70,7 +70,8 @@ namespace Senparc.Areas.Admin.Pages
         {
             //所有已安装模块
             var installedXncfModules = await _xncfModuleServiceEx.GetObjectListAsync(0, 0, z => z.State == Ncf.Core.Enums.XncfModules_State.开放, z => z.Id, Ncf.Core.Enums.OrderingType.Descending);
-            var xncfModuleDtos = installedXncfModules.Select(z => {
+            var xncfModuleDtos = installedXncfModules.Select(z =>
+            {
                 var data = _xncfModuleServiceEx.Mapper.Map<XncfModuleDto>(z);
                 //data.Icon = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == z.Uid)?.Icon;
                 return data;
@@ -233,6 +234,7 @@ namespace Senparc.Areas.Admin.Pages
         }
 
         #endregion
+
 
     }
 }

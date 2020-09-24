@@ -164,5 +164,59 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             return Ok(result.Item1);
             //return RedirectToPage("Index");
         }
+
+        /// <summary>
+        /// 根据名称安装模块
+        /// </summary>
+        /// <param name="xncfName"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> OnGetInstallModuleAsync(string xncfName)
+        {
+            bool success = true;
+            string message = null;
+            if (base.FullSystemConfig.HideModuleManager == true)
+            {
+                success = false;
+                message = "已经启用“发布模式”，无法进行此操作";
+            }
+            else
+            {
+                var docRegister = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Name == xncfName);
+                if (docRegister == null)
+                {
+                    success = false;
+                    message = "文档模块不存在，无法完成安装！";
+                }
+                else
+                {
+                    try
+                    {
+                        //查找并安装模块
+                        var docModule = await _xncfModuleServiceEx.GetObjectAsync(z => z.Uid == docRegister.Uid);
+                        if (docModule == null)
+                        {
+                            await _xncfModuleServiceEx.InstallModuleAsync(docRegister.Uid);
+                            docModule = await _xncfModuleServiceEx.GetObjectAsync(z => z.Uid == docRegister.Uid);
+                        }
+                        //开启模块
+                        if (docModule.State != Ncf.Core.Enums.XncfModules_State.开放)
+                        {
+                            docModule.UpdateState(Ncf.Core.Enums.XncfModules_State.开放);
+                            await _xncfModuleServiceEx.SaveObjectAsync(docModule);
+                        }
+
+                        message = "安装成功！";
+                    }
+                    catch (Exception ex)
+                    {
+                        success = false;
+                        message = "安装失败：" + ex.Message;
+                    }
+                }
+            }
+
+            return new JsonResult(new { success, message });
+
+        }
     }
 }
