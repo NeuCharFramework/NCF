@@ -37,7 +37,7 @@ namespace Senparc.Web
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
             IOptions<SenparcCoreSetting> senparcCoreSetting,
             IOptions<SenparcSetting> senparcSetting,
-            IHubContext<ReloadPageHub> hubContextd)
+            IHubContext<ReloadPageHub> hubContext)
         {
             if (env.IsDevelopment())
             {

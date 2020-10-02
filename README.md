@@ -20,19 +20,20 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 
 
 
-NCF 除了会为大家提供完善的框架代码，还会：
+NCF 除了会为大家提供完善的框架代码，我们还在着手：
 
-1. 提供完善的项目自动生成服务（参考 [WeChatSampleBuilder](http://sdk.weixin.senparc.com/Home/WeChatSampleBuilder)），为开发者提供项目定制生成服务。
 
-1. 提供快捷的模块化开发和安装方法。  
+1. [x] 提供完善的项目自动生成服务（参考 [WeChatSampleBuilder](http://sdk.weixin.senparc.com/Home/WeChatSampleBuilder)），为开发者提供项目定制生成服务。
 
-1. 提供丰富的应用示例，例如[微信](https://github.com/JeffreySu/WeiXinMPSDK)、[跨平台应用平台](https://www.neuchar.com/)对接，等等。
+1. [x] 提供快捷的模块化开发和安装方法。  
 
-1. 提供完善的示例代码和文档。
+1. [ ] 开源 [NeuChar.com](https://www.neuchar.com/) 中的微信功能模块，可使用独立模块集成。
 
-1. 提供博客和视频教程（也欢迎开发者参与或发起）。
+1. [ ]提供完善的示例代码和文档。
 
-1. 提供交流社区，包括但不仅限于[问答网站](https://weixin.senparc.com/QA)、[QQ群](#qq-技术交流群)、微信群、直播群。
+1. [ ]提供博客和视频教程（也欢迎开发者参与或发起）。
+
+1. [ ]提供交流社区，包括但不仅限于[问答网站](https://weixin.senparc.com/QA)、[QQ群](#qq-技术交流群)、微信群、直播群。
 
 ## QQ 技术交流群
 
@@ -46,6 +47,8 @@ NCF 除了会为大家提供完善的框架代码，还会：
 
 - 如需查看或修改基础包源代码，请看此项目：https://github.com/NeuCharFramework/NcfPackageSources
 
+> - 如使用 EFCore，则需要使用 SQL Server 2012 或以上版本数据库
+
 ## 如何安装
 
 安装过程可以选择极客型命令行安装方式，或全自动一键完成。
@@ -53,47 +56,13 @@ NCF 除了会为大家提供完善的框架代码，还会：
 ### 第一步：准备数据库
 确保已经安装 SQL Server 2012 及以上版本，系统登录用户具有数据库创建权限（可以不需要使用sa等账号登录），如果必须要使用账号登录，[请看这里](https://github.com/NeuCharFramework/NCF/wiki/%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%9F)
 
-### 第二步：准备命令行工具（可跳过）
-
-> 这一步是为喜欢体验手敲命令快感的极客准备的，您也可以跳过这一步，直接进入到【第三步】。
-
-#### 方法一（推荐）：
+### 第二步：下载源码
 1. 同步源代码到本地后，使用 Visual Studio 打开 `/src/NCF.sln`
 
-2. 在 VS 菜单中选择【工具】>【Nuget包管理器】>【程序包管理器控制台】，打开命令窗口
-
-3. 在【程序包管理器控制台】中的【默认项目】列表中选中 `Senparc.Web`（默认就是），在 `PM>` 符号后输入命令：`update-database` 回车
-
-
-#### 方法二（要看运气）：
-1. 使用命令行工具或 PowerShell 进入 `src/Senparc.Web` 路径，例如：`E:\NeuCharFramework\NCF\src\Senparc.Web`
-
-2. 输入命令：`dotnet ef database update` 回车
-
-
-#### 等待结果
-
-稍等片刻（会自动编译一次项目，因此请勿修改项目代码），完成后输出如下结果，表示数据库安装成功：
-
-```
-Applying migration '20181130085128_init'.
-Done.
-```
-
-`方法一结果`
-<img src="https://weixin.senparc.com/images/NCF/Installs/02.1.png" />
-
-`方法二结果`
-<img src="https://weixin.senparc.com/images/NCF/Installs/02.2.png" />
-
-
-### 第三步：初始化数据
+### 第三步：自动安装
 
  1. 将 `Senparc.Web` 项目设为启动项目，并运行，地址如：https://localhost:44311/
 
- <!-- <img src="https://weixin.senparc.com/images/NCF/Installs/01.png" /> -->
- 
- <!-- 2. 打开 https://localhost:44311/Install ，将显示安装页面： -->
 
  未初始化之前，访问首页会自动显示安装界面：
  
@@ -120,11 +89,7 @@ Done.
 
 <img src="https://weixin.senparc.com/images/NCF/Installs/05.png" />
 
-### （备用）第四步：还原样式包
 
-如果登录及管理员后台页面样式缺失，则需要进行这一步，否则可以忽略。
-
-[点击查看](https://github.com/NeuCharFramework/NCF/wiki/%E5%A6%82%E4%BD%95%E8%BF%98%E5%8E%9F%E7%BC%BA%E5%A4%B1%E7%9A%84%E7%AE%A1%E7%90%86%E5%91%98%E5%90%8E%E5%8F%B0%E9%A1%B5%E9%9D%A2%E6%A0%B7%E5%BC%8F%EF%BC%9F)
 
 
 ## 模块化开发

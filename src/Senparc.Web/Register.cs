@@ -117,7 +117,6 @@ namespace Senparc.Web
                   //自动注册  防止跨站请求伪造（XSRF/CSRF）攻击
                   options.Conventions.Add(new Core.Conventions.AutoValidateAntiForgeryTokenModelConvention());
               });
-            ;
 
 #if DEBUG
             //Razor启用运行时编译，多个项目不需要手动编译。
@@ -183,6 +182,8 @@ namespace Senparc.Web
 
             //激活 Xncf 扩展引擎（必须）
             services.StartEngine(configuration);
+            //指定数据库类型（可选），默认为 SQLiteMemoryDatabaseConfiguration
+            services.UseDatabase<SQLServerDatabaseConfiguration>();
         }
 
         public static void UseNcf(this IApplicationBuilder app, IWebHostEnvironment env,
@@ -238,6 +239,7 @@ namespace Senparc.Web
 
             //XncfModules（必须）
             Senparc.Ncf.XncfBase.Register.UseXncfModules(app, registerService);
+            //TODO:app.UseXncfModules(registerService);
 
             #region .NET Core默认不支持GB2312
 
