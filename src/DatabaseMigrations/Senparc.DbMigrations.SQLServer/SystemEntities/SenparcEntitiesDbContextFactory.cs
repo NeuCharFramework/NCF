@@ -38,13 +38,12 @@ namespace Senparc.DbMigrations.SQLServer
             : base(Senparc.Core.VersionInfo.VERSION,
                  Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\..\\", "Senparc.Web"))
         {
+            //在 CreateDbContext() 执行之前，指定使用 SQL Server
+            DatabaseConfigurationFactory.Instance.CurrentDatabaseConfiguration = new Senparc.Ncf.Database.SqlServer.SQLServerDatabaseConfiguration();
         }
 
         public override void CreateDbContextAction()
         {
-            //指定 SQL Server
-            DatabaseConfigurationFactory.Instance.CurrentDatabaseConfiguration = new Senparc.Ncf.Database.SqlServer.SQLServerDatabaseConfiguration();
-
             XncfRegisterManager.XncfDatabaseList.Add(_systemServiceRegister);//添加注册
         }
 

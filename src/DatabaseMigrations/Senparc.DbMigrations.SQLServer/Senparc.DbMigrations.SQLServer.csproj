@@ -14,8 +14,4 @@
 		</PackageReference>
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.1.100.10-beta1" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="SenparcEntities\" />
-	</ItemGroup>
 </Project>
