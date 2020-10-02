@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Core.Models;
 using Senparc.Ncf.Core.Config;
+using Senparc.Ncf.Core.Database;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.XncfBase;
@@ -22,9 +23,9 @@ using System.Threading.Tasks;
 
 namespace Senparc.Service
 {
-   public class Register : XncfRegisterBase,
-        IXncfRegister, //注册 XNCF 基础模块接口（必须）
-        IXncfDatabase  //注册 XNCF 模块数据库（按需选用）
+    public class Register : XncfRegisterBase,
+         IXncfRegister, //注册 XNCF 基础模块接口（必须）
+         IXncfDatabase  //注册 XNCF 模块数据库（按需选用）
     {
         #region IXncfRegister 接口
 
@@ -120,22 +121,32 @@ namespace Senparc.Service
              */
             #endregion
 
-            //SenparcEntities 工厂配置
+            var currentDatabasConfiguration = DatabaseConfigurationFactory.Instance.CurrentDatabaseConfiguration;
+
+            /* 
+             *     非常重要！！
+             * SenparcEntities 工厂配置
+             */
             Func<IServiceProvider, SenparcEntities> senparcEntitiesImplementationFactory = s =>
-                new SenparcEntities(new DbContextOptionsBuilder<SenparcEntities>()
-                    .UseSqlServer(Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString,
-                                    b => base.DbContextOptionsAction(b, "Senparc.Service")/*从当前程序集读取*/)
-                    .Options);
+            {
+                var dbContextOptionsBuilder = new DbContextOptionsBuilder<SenparcEntities>();
+                currentDatabasConfiguration.UseDatabase(dbContextOptionsBuilder, Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString, b => base.DbContextOptionsAction(b, "Senparc.Service")/*从当前程序集读取*/);
+                return new SenparcEntities(dbContextOptionsBuilder.Options);
+            };
+          
             services.AddScoped(senparcEntitiesImplementationFactory);
             services.AddScoped<ISenparcEntities>(senparcEntitiesImplementationFactory);
             services.AddScoped<SenparcEntitiesBase>(senparcEntitiesImplementationFactory);
 
             //SystemServiceEntities 工厂配置（实际不会用到）
             Func<IServiceProvider, SystemServiceEntities> systemServiceEntitiesImplementationFactory = s =>
-               new SystemServiceEntities(new DbContextOptionsBuilder<SystemServiceEntities>()
-                   .UseSqlServer(Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString,
-                                   b => base.DbContextOptionsAction(b, "Senparc.Service")/*从当前程序集读取*/)
-                   .Options);
+            {
+                var dbContextOptionsBuilder = new DbContextOptionsBuilder<SystemServiceEntities>();
+                currentDatabasConfiguration.UseDatabase(dbContextOptionsBuilder, Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString, b => base.DbContextOptionsAction(b, "Senparc.Service")/*从当前程序集读取*/);
+                return new SystemServiceEntities(dbContextOptionsBuilder.Options);
+
+            };
+
             services.AddScoped(systemServiceEntitiesImplementationFactory);
 
             services.AddScoped(typeof(ISqlClientFinanceData), typeof(SqlClientFinanceData));

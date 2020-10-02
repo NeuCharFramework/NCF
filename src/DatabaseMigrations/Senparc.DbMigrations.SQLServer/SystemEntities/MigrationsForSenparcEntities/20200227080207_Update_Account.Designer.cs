@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Senparc.Core.Models;
 
-namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
+namespace Senparc.DbMigrations.SQLServer.SystemEntities.MigrationsForSenparcEntities
 {
     [DbContext(typeof(SenparcEntities))]
-    [Migration("20200225161207_Update_Menu_20200226")]
-    partial class Update_Menu_20200226
+    [Migration("20200227080207_Update_Account")]
+    partial class Update_Account
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,7 +29,7 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("AddTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -42,10 +42,12 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
 
                     b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
 
                     b.Property<string>("District")
                         .HasColumnType("nvarchar(max)");
@@ -57,7 +59,9 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasColumnType("bit");
 
                     b.Property<bool>("Flag")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("HeadImgUrl")
                         .HasColumnType("nvarchar(max)");
@@ -69,7 +73,7 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("LastUpdateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("LastWeixinSignInTime")
                         .HasColumnType("datetime2");
@@ -77,8 +81,13 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                     b.Property<decimal>("LockMoney")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<bool?>("Locked")
+                        .HasColumnType("bit");
+
                     b.Property<string>("NickName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
@@ -87,31 +96,39 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("PasswordSalt")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
 
                     b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
 
                     b.Property<bool?>("PhoneChecked")
                         .HasColumnType("bit");
 
                     b.Property<string>("PicUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(300)")
+                        .HasMaxLength(300)
+                        .IsUnicode(false);
 
                     b.Property<decimal>("Points")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Province")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
 
                     b.Property<string>("QQ")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RealName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(300)")
@@ -121,13 +138,18 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasColumnType("tinyint");
 
                     b.Property<string>("ThisLoginIp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("ThisLoginIP")
+                        .HasColumnType("varchar(30)")
+                        .HasMaxLength(30)
+                        .IsUnicode(false);
 
                     b.Property<DateTime>("ThisLoginTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("WeixinOpenId")
                         .HasColumnType("nvarchar(max)");
@@ -154,41 +176,43 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasColumnType("int");
 
                     b.Property<string>("AddIp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("AddTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("AdminRemark")
                         .HasColumnType("nvarchar(300)")
                         .HasMaxLength(300);
 
                     b.Property<DateTime>("CompleteTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(250)");
 
                     b.Property<decimal>("Fee")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("money");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("bit");
 
                     b.Property<decimal>("GetPoints")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("money");
 
                     b.Property<DateTime>("LastUpdateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("OrderNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
 
                     b.Property<int>("OrderType")
                         .HasColumnType("int");
 
                     b.Property<decimal>("PayMoney")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("money");
 
                     b.Property<string>("PayParam")
                         .HasColumnType("nvarchar(max)");
@@ -197,10 +221,10 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasColumnType("int");
 
                     b.Property<string>("PrepayId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("money");
 
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(300)")
@@ -210,16 +234,16 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasColumnType("tinyint");
 
                     b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("money");
 
                     b.Property<string>("TradeNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(150)");
 
                     b.Property<byte?>("Type")
                         .HasColumnType("tinyint");
 
                     b.Property<decimal?>("UsedPoints")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("Id");
 
@@ -236,7 +260,7 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("AddTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("AdminRemark")
                         .HasColumnType("nvarchar(300)")
@@ -246,41 +270,54 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasColumnType("bit");
 
                     b.Property<string>("LastLoginIp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("LastLoginIP")
+                        .HasColumnType("varchar(20)")
+                        .HasMaxLength(20)
+                        .IsUnicode(false);
 
                     b.Property<DateTime>("LastLoginTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<DateTime>("LastUpdateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("PasswordSalt")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
 
                     b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(20)")
+                        .HasMaxLength(20)
+                        .IsUnicode(false);
 
                     b.Property<string>("RealName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(300)")
                         .HasMaxLength(300);
 
                     b.Property<string>("ThisLoginIp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("ThisLoginIP")
+                        .HasColumnType("varchar(20)")
+                        .HasMaxLength(20)
+                        .IsUnicode(false);
 
                     b.Property<DateTime>("ThisLoginTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -523,7 +560,7 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasColumnType("int");
 
                     b.Property<DateTime>("AddTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("AdminRemark")
                         .HasColumnType("nvarchar(300)")
@@ -536,7 +573,7 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LastUpdateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(300)")
@@ -563,17 +600,17 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasColumnType("int");
 
                     b.Property<DateTime>("AddTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("AdminRemark")
                         .HasColumnType("nvarchar(300)")
                         .HasMaxLength(300);
 
                     b.Property<decimal>("AfterPoints")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<decimal>("BeforePoints")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -582,10 +619,10 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LastUpdateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("Points")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(300)")
@@ -712,7 +749,7 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                     b.HasOne("Senparc.Core.Models.Account", "Account")
                         .WithMany("AccountPayLogs")
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -730,12 +767,13 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                     b.HasOne("Senparc.Core.Models.Account", "Account")
                         .WithMany("PointsLogs")
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Senparc.Core.Models.AccountPayLog", "AccountPayLog")
                         .WithMany("PointsLogs")
-                        .HasForeignKey("AccountPayLogId");
+                        .HasForeignKey("AccountPayLogId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

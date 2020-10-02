@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Senparc.Core.Models;
 
-namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
+namespace Senparc.DbMigrations.SQLServer.SystemEntities.MigrationsForSenparcEntities
 {
     [DbContext(typeof(SenparcEntities))]
-    [Migration("20200225131949_Update_XncfModule_20200225")]
-    partial class Update_XncfModule_20200225
+    [Migration("20200216150622_Add_Tables")]
+    partial class Add_Tables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -665,18 +665,11 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                     b.Property<DateTime>("LastUpdateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("MenuId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
                     b.Property<string>("MenuName")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(300)")
@@ -686,18 +679,13 @@ namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
                         .HasColumnType("int");
 
                     b.Property<string>("Uid")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdateLog")
-                        .IsRequired()
-                        .HasColumnType("ntext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Version")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

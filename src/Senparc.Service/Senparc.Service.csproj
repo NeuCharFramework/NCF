@@ -1,50 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="ProjectBiddingService.cs" />
-    <Compile Remove="ProjectDemandService.cs" />
-    <Compile Remove="ProjectKindService.cs" />
-    <Compile Remove="ProjectPayLogService.cs" />
-    <Compile Remove="SystemEntities\MigrationsForSenparcEntities\20200528043720_Update_SystemConfig_HideModuleManager.cs" />
-    <Compile Remove="SystemEntities\MigrationsForSenparcEntities\20200528043720_Update_SystemConfig_HideModuleManager.Designer.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="ProjectBiddingService.cs" />
+		<Compile Remove="ProjectDemandService.cs" />
+		<Compile Remove="ProjectKindService.cs" />
+		<Compile Remove="ProjectPayLogService.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="2.0.0-preview1-final" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="2.0.0-preview1-final" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>    
-    <PackageReference Include="AutoMapper" Version="7.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="Qiniu.Shared" Version="7.2.15" />
-    <PackageReference Include="Senparc.NeuChar" Version="1.2.200.6" />
-    <PackageReference Include="Senparc.Weixin.MP" Version="16.10.510" />
-    <PackageReference Include="Senparc.Weixin.Open" Version="4.7.510" />
-    <PackageReference Include="Senparc.Weixin.WxOpen" Version="3.8.510" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.4.100.10-beta1" />
-    <PackageReference Include="Senparc.Ncf.Log" Version="0.4.100.10-beta1" />
-    <PackageReference Include="Senparc.Ncf.Repository" Version="0.4.100.10-beta1" />
-    <PackageReference Include="Senparc.Ncf.Service" Version="0.4.100.10-beta1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="AutoMapper" Version="7.0.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
+		<PackageReference Include="Qiniu.Shared" Version="7.2.15" />
+		<PackageReference Include="Senparc.NeuChar" Version="1.2.200.6" />
+		<PackageReference Include="Senparc.Weixin.MP" Version="16.10.510" />
+		<PackageReference Include="Senparc.Weixin.Open" Version="4.7.510" />
+		<PackageReference Include="Senparc.Weixin.WxOpen" Version="3.8.510" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.4.100.10-beta1" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.4.100.10-beta1" />
+		<PackageReference Include="Senparc.Ncf.Repository" Version="0.4.100.10-beta1" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.4.100.10-beta1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
-    <ProjectReference Include="..\Senparc.Log\Senparc.Log.csproj" />
-    <ProjectReference Include="..\Senparc.Respository\Senparc.Respository.csproj" />
-    <ProjectReference Include="..\Senparc.SMS\Senparc.SMS.csproj" />
-    <ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
+		<ProjectReference Include="..\Senparc.Log\Senparc.Log.csproj" />
+		<ProjectReference Include="..\Senparc.Respository\Senparc.Respository.csproj" />
+		<ProjectReference Include="..\Senparc.SMS\Senparc.SMS.csproj" />
+		<ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
+	</ItemGroup>
 
 </Project>

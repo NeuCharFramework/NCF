@@ -8,12 +8,13 @@ using Senparc.CO2NET;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.Core.Models;
 using Senparc.Ncf.Core.Config;
+using Senparc.Ncf.Core.Database;
 using Senparc.Ncf.XncfBase;
 using Senparc.Ncf.XncfBase.Database;
 using System;
 using System.IO;
 
-namespace Senparc.Service
+namespace Senparc.DbMigrations.SQLServer
 {
     /// <summary>
     /// 设计时 DbContext 创建
@@ -29,18 +30,21 @@ namespace Senparc.Service
 
         public override Action<IRelationalDbContextOptionsBuilderInfrastructure> DbContextOptionsAction => b =>
         {
+            _systemServiceRegister.DbContextOptionsAction(b, "Senparc.DbMigrations.SQLServer");//自定义配置
             base.DbContextOptionsAction(b);//执行基类中的方法（必须）
-            _systemServiceRegister.DbContextOptionsAction(b, "Senparc.Service");//自定义配置
         };
 
         public SenparcEntitiesDbContextFactory()
             : base(Senparc.Core.VersionInfo.VERSION,
-                 Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\", "..\\Senparc.Web"))
-        { 
+                 Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\..\\", "Senparc.Web"))
+        {
         }
 
         public override void CreateDbContextAction()
         {
+            //指定 SQL Server
+            DatabaseConfigurationFactory.Instance.CurrentDatabaseConfiguration = new Senparc.Ncf.Database.SqlServer.SQLServerDatabaseConfiguration();
+
             XncfRegisterManager.XncfDatabaseList.Add(_systemServiceRegister);//添加注册
         }
 
