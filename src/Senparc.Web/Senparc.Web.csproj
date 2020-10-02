@@ -12,8 +12,6 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.6" />
 		<PackageReference Include="log4net" Version="2.0.8" />
 		<PackageReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="2.0.0-preview1-final" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -508,6 +506,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj" />
+		<ProjectReference Include="..\DatabaseMigrations\Senparc.DbMigrations.SQLServer\Senparc.DbMigrations.SQLServer.csproj" />
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
 		<ProjectReference Include="..\Senparc.ImageUtility\Senparc.ImageUtility.csproj" />
