@@ -27,8 +27,11 @@ namespace Senparc.Service
     {
         Service.Register _systemServiceRegister = new Service.Register();
 
-        public override Action<SqlServerDbContextOptionsBuilder> SqlServerOptionsAction =>
-            b => _systemServiceRegister.DbContextOptionsAction(b, "Senparc.Service");
+        public override Action<IRelationalDbContextOptionsBuilderInfrastructure> DbContextOptionsAction => b =>
+        {
+            base.DbContextOptionsAction(b);//执行基类中的方法（必须）
+            _systemServiceRegister.DbContextOptionsAction(b, "Senparc.Service");//自定义配置
+        };
 
         public SenparcEntitiesDbContextFactory()
             : base(Senparc.Core.VersionInfo.VERSION,

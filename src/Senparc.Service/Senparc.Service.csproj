@@ -33,10 +33,10 @@
     <PackageReference Include="Senparc.Weixin.MP" Version="16.10.510" />
     <PackageReference Include="Senparc.Weixin.Open" Version="4.7.510" />
     <PackageReference Include="Senparc.Weixin.WxOpen" Version="3.8.510" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.4.100-beta1" />
-    <PackageReference Include="Senparc.Ncf.Log" Version="0.4.100-beta1" />
-    <PackageReference Include="Senparc.Ncf.Repository" Version="0.4.100-beta1" />
-    <PackageReference Include="Senparc.Ncf.Service" Version="0.4.100-beta1" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.4.100.10-beta1" />
+    <PackageReference Include="Senparc.Ncf.Log" Version="0.4.100.10-beta1" />
+    <PackageReference Include="Senparc.Ncf.Repository" Version="0.4.100.10-beta1" />
+    <PackageReference Include="Senparc.Ncf.Service" Version="0.4.100.10-beta1" />
   </ItemGroup>
 
   <ItemGroup>
