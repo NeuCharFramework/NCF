@@ -5,7 +5,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.1.100.21-beta1" />
 		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.5.100.20-beta1" />
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.7.100.20-beta1" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.3.100.20-beta1" />

@@ -21,12 +21,6 @@ namespace Senparc.DbMigrations.SQLServer
     {
         Service.Register _systemServiceRegister = new Service.Register();
 
-        public override Action<IRelationalDbContextOptionsBuilderInfrastructure> DbContextOptionsAction => b =>
-        {
-            _systemServiceRegister.DbContextOptionsAction(b, "Senparc.DbMigrations.SQLServer");//自定义配置
-            base.DbContextOptionsAction(b);//执行基类中的方法（必须）
-        };
-
         public SenparcEntitiesDbContextFactory()
             : base(Senparc.Core.VersionInfo.VERSION,
                  Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\..\\", "Senparc.Web"))
@@ -35,10 +29,18 @@ namespace Senparc.DbMigrations.SQLServer
             DatabaseConfigurationFactory.Instance.CurrentDatabaseConfiguration = new Senparc.Ncf.Database.SqlServer.SQLServerDatabaseConfiguration();
         }
 
+
+        public override Action<IRelationalDbContextOptionsBuilderInfrastructure> DbContextOptionsAction => b =>
+        {
+            _systemServiceRegister.DbContextOptionsAction(b, "Senparc.DbMigrations.SQLServer");//自定义配置
+            base.DbContextOptionsAction(b);//执行基类中的方法（必须）
+        };
+
         public override void CreateDbContextAction()
         {
             XncfRegisterManager.XncfDatabaseList.Add(_systemServiceRegister);//添加注册
         }
+
 
         public override SenparcEntities GetDbContextInstance(DbContextOptions<SenparcEntities> dbContextOptions)
         {

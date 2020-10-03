@@ -91,7 +91,7 @@ namespace Senparc.Service
 
         #region IXncfDatabase 接口
 
-        public string DatabaseUniquePrefix => "";//特殊情况：没有前缀
+        public string DatabaseUniquePrefix => "System";//特殊情况：没有前缀
         public Type XncfDatabaseDbContextType => typeof(SystemServiceEntities);
 
 
