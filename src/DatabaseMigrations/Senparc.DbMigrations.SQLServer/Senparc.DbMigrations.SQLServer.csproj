@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
@@ -12,6 +12,6 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.1.100.10-beta1" />
+		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.1.100.21-beta1" />
 	</ItemGroup>
 </Project>

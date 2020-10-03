@@ -29,7 +29,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Senparc.Ncf.Database.SqlServer;
-using Senparc.Ncf.Core.Database.SQLite;
+using Senparc.Ncf.Database;
 
 namespace Senparc.Web
 {

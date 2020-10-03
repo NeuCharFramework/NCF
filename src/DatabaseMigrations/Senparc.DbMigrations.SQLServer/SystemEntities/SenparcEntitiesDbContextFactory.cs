@@ -1,14 +1,7 @@
-using log4net;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Senparc.CO2NET;
-using Senparc.CO2NET.RegisterServices;
 using Senparc.Core.Models;
-using Senparc.Ncf.Core.Config;
-using Senparc.Ncf.Core.Database;
+using Senparc.Ncf.Database;
 using Senparc.Ncf.XncfBase;
 using Senparc.Ncf.XncfBase.Database;
 using System;
