@@ -127,13 +127,15 @@ namespace Senparc.Service
              *     非常重要！！
              * SenparcEntities 工厂配置
              */
+            var xncfDatabaseData = new XncfDatabaseData(this, "Senparc.Service"/*从当前程序集读取*/);
+
             Func<IServiceProvider, SenparcEntities> senparcEntitiesImplementationFactory = s =>
             {
                 var dbContextOptionsBuilder = new DbContextOptionsBuilder<SenparcEntities>();
-                currentDatabasConfiguration.UseDatabase(dbContextOptionsBuilder, Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString, b => base.DbContextOptionsAction(b, "Senparc.Service")/*从当前程序集读取*/);
+                currentDatabasConfiguration.UseDatabase(dbContextOptionsBuilder, Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString, xncfDatabaseData, (b, d) => { });
                 return new SenparcEntities(dbContextOptionsBuilder.Options);
             };
-          
+
             services.AddScoped(senparcEntitiesImplementationFactory);
             services.AddScoped<ISenparcEntities>(senparcEntitiesImplementationFactory);
             services.AddScoped<SenparcEntitiesBase>(senparcEntitiesImplementationFactory);
@@ -142,7 +144,7 @@ namespace Senparc.Service
             Func<IServiceProvider, SystemServiceEntities> systemServiceEntitiesImplementationFactory = s =>
             {
                 var dbContextOptionsBuilder = new DbContextOptionsBuilder<SystemServiceEntities>();
-                currentDatabasConfiguration.UseDatabase(dbContextOptionsBuilder, Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString, b => base.DbContextOptionsAction(b, "Senparc.Service")/*从当前程序集读取*/);
+                currentDatabasConfiguration.UseDatabase(dbContextOptionsBuilder, Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString, xncfDatabaseData, (b, d) => { });
                 return new SystemServiceEntities(dbContextOptionsBuilder.Options);
 
             };

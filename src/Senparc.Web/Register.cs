@@ -184,7 +184,7 @@ namespace Senparc.Web
 
             //指定数据库类型（可选），默认为 SQLiteMemoryDatabaseConfiguration
             //services.UseDatabase<SQLiteMemoryDatabaseConfiguration>();//默认即为 SQLiteMemoryDatabaseConfiguration，可以不写
-            services.UseDatabase<SQLServerDatabaseConfiguration>();
+            services.AddDatabase<SQLServerDatabaseConfiguration>();
 
             //激活 Xncf 扩展引擎（必须）
             services.StartEngine(configuration);

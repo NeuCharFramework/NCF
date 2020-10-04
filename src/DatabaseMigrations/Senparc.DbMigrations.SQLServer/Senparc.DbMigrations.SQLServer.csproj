@@ -13,6 +13,6 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.1.100.30-beta1" />
+		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.1.100.41-beta1" />
 	</ItemGroup>
 </Project>

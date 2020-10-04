@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Senparc.CO2NET.Extensions;
 using Senparc.Core.Models;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.XncfBase;
@@ -29,11 +30,12 @@ namespace Senparc.DbMigrations.SQLServer
             DatabaseConfigurationFactory.Instance.CurrentDatabaseConfiguration = new Senparc.Ncf.Database.SqlServer.SQLServerDatabaseConfiguration();
         }
 
-
-        public override Action<IRelationalDbContextOptionsBuilderInfrastructure> DbContextOptionsAction => b =>
+        public override Action<IRelationalDbContextOptionsBuilderInfrastructure, XncfDatabaseData> DbContextOptionsAction => (b, d) =>
         {
-            _systemServiceRegister.DbContextOptionsAction(b, "Senparc.DbMigrations.SQLServer");//自定义配置
-            base.DbContextOptionsAction(b);//执行基类中的方法（必须）
+            d = d ?? new XncfDatabaseData(_systemServiceRegister, null);
+            d.AssemblyName = "Senparc.DbMigrations.SQLServer";//自定义配置
+            //_systemServiceRegister.DbContextOptionsAction(b, "Senparc.DbMigrations.SQLServer");
+            base.DbContextOptionsAction(b, d);//执行基类中的方法（必须）
         };
 
         public override void CreateDbContextAction()
