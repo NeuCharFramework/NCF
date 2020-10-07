@@ -29,7 +29,7 @@
     </PackageReference>
 
     <PackageReference Include="Senparc.Ncf.Core" Version="0.4.100.50-beta1" />
-    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.4.100.50-beta1" />
+    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.4.100.53-beta1" />
     <PackageReference Include="Senparc.Ncf.Utility" Version="0.4.100.50-beta1" />
     <PackageReference Include="Senparc.Weixin" Version="6.7.510" />
     <PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.1.510" />

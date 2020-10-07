@@ -9,9 +9,10 @@
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.7.100.50-beta1" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.3.100.50-beta1" />
 	</ItemGroup>
-	<ItemGroup>
-		<!--<ProjectReference Include="..\..\..\Senparc.Xncf.WeixinManager\src\Senparc.Xncf.WeixinManager\Senparc.Xncf.WeixinManager.csproj" />-->
-		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.4.600.1-beta1" />
+	<ItemGroup><!--<ProjectReference Include="..\..\..\Senparc.Xncf.WeixinManager\src\Senparc.Xncf.WeixinManager\Senparc.Xncf.WeixinManager.csproj" />-->
+		<!--<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.4.600.1-beta1" />-->
+	
+	  <Compile Remove="Weixin\MpAccount\MpAccountMessageHandler.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -25,6 +26,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\Senparc.Service\Senparc.Service.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Weixin\MpAccount\" />
 	</ItemGroup>
 
 </Project>

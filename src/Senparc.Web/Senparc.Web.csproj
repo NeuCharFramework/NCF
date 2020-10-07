@@ -17,20 +17,34 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.6" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
+
+		<PackageReference Include="Senparc.CO2NET.AspNet" Version="0.3.200" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.1" />
 		<PackageReference Include="Senparc.CO2NET" Version="1.3.200" />
 		<PackageReference Include="AutoMapper" Version="7.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
-		<!--<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.4.100.12-beta1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.4.100.20-beta1" />
-		<PackageReference Include="Senparc.Ncf.Log" Version="0.4.100.20-beta1" />
+		<!--<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.4.100.12-beta1" />-->
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.4.100.50-beta1" />
+		<!--<PackageReference Include="Senparc.Ncf.Log" Version="0.4.100.20-beta1" />
 		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.4.100.20-beta1" />
 		<PackageReference Include="Senparc.Ncf.Repository" Version="0.4.100.20-beta1" />
 		<PackageReference Include="Senparc.Ncf.Service" Version="0.4.100.20-beta1" />
 		<PackageReference Include="Senparc.Ncf.Utility" Version="0.4.100.20-beta1" />-->
-		<PackageReference Include="ML.Xncf.Docs" Version="2.0.65-beta1" />
+
+
+		<!--<PackageReference Include="ML.Xncf.Docs" Version="2.0.65-beta1" />-->
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj" />
+		<ProjectReference Include="..\DatabaseMigrations\Senparc.DbMigrations.SQLServer\Senparc.DbMigrations.SQLServer.csproj" />
+		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
+		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
+		<ProjectReference Include="..\Senparc.ImageUtility\Senparc.ImageUtility.csproj" />
+		<ProjectReference Include="..\Senparc.Log\Senparc.Log.csproj" />
+		<ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
+		<ProjectReference Include="..\Senparc.Threads\Senparc.Threads.csproj" />
+		<ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
+		<ProjectReference Include="..\Senparc.Web.UI\Senparc.Web.UI.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
@@ -504,18 +518,7 @@
 		<None Include="wwwroot\lib\echarts\theme\vintage.js" />
 		<None Include="wwwroot\lib\echarts\webpack.config.js" />
 	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj" />
-		<ProjectReference Include="..\DatabaseMigrations\Senparc.DbMigrations.SQLServer\Senparc.DbMigrations.SQLServer.csproj" />
-		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
-		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
-		<ProjectReference Include="..\Senparc.ImageUtility\Senparc.ImageUtility.csproj" />
-		<ProjectReference Include="..\Senparc.Log\Senparc.Log.csproj" />
-		<ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
-		<ProjectReference Include="..\Senparc.Threads\Senparc.Threads.csproj" />
-		<ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
-		<ProjectReference Include="..\Senparc.Web.UI\Senparc.Web.UI.csproj" />
-	</ItemGroup>
+
 	<ItemGroup>
 		<Content Update="wwwroot\css\site.css">
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

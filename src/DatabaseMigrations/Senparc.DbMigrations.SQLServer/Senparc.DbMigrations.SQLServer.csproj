@@ -5,6 +5,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="SystemEntities\MigrationsForSenparcEntities\**" />
+	  <EmbeddedResource Remove="SystemEntities\MigrationsForSenparcEntities\**" />
+	  <None Remove="SystemEntities\MigrationsForSenparcEntities\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\..\Senparc.Service\Senparc.Service.csproj" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="2.0.0-preview1-final" />
