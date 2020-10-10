@@ -9,6 +9,6 @@ namespace Senparc.Core
         /// <summary>
         /// NCF 当前版本号
         /// </summary>
-        public const string VERSION = "0.1.1-beta6";
+        public const string VERSION = "0.2.100-beta1";
     }
 }
