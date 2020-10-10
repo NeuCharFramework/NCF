@@ -3,7 +3,10 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 	</PropertyGroup>
-
+	<ItemGroup>
+		<!-- 仅在开发环境下引用 -->
+		<PackageReference Condition=" '$(Configuration)' != 'Release' " Include="Senparc.Ncf.DatabasePlant" Version="0.2.200.100-beta1" />
+	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="ProjectBiddingService.cs" />
 		<Compile Remove="ProjectDemandService.cs" />

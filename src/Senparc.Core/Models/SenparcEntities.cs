@@ -1,18 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Database;
+using Senparc.Ncf.Database.MultipleMigrationDbContext;
 using Senparc.Ncf.XncfBase;
 using System;
 
 namespace Senparc.Core.Models
 {
-
     public partial class SenparcEntities : SenparcEntitiesBase, ISenparcEntities
     {
-        public SenparcEntities(DbContextOptions<SenparcEntities> dbContextOptions) : base(dbContextOptions)
+        public SenparcEntities(DbContextOptions/*<SenparcEntities>*/ dbContextOptions) : base(dbContextOptions)
         {
         }
-
 
         #region 系统表
 

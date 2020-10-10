@@ -143,7 +143,7 @@ namespace Senparc.Service
             //SystemServiceEntities 工厂配置（实际不会用到）
             Func<IServiceProvider, SystemServiceEntities> systemServiceEntitiesImplementationFactory = s =>
             {
-                var dbContextOptionsBuilder = new DbContextOptionsBuilder<SystemServiceEntities>();
+                var dbContextOptionsBuilder = new DbContextOptionsBuilder</*SystemServiceEntities 注意：这里要输入SenparcEntities*/SenparcEntities>();
                 currentDatabasConfiguration.UseDatabase(dbContextOptionsBuilder, Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString, xncfDatabaseData, (b, d) => { });
                 return new SystemServiceEntities(dbContextOptionsBuilder.Options);
 
