@@ -32,7 +32,7 @@
 		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="0.3.200" />
 		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="3.9.200" />
 		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.5.100-beta1" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.5.100.111-beta1" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.5.100.113-beta1" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.5.100-beta1" />
 		<PackageReference Include="Senparc.Ncf.Log" Version="0.5.100-beta1" />
 		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.5.100-beta1" />

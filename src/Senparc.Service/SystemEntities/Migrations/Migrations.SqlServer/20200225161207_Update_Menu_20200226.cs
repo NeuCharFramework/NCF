@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
+namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer
 {
     public partial class Update_Menu_20200226 : Migration
     {

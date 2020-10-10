@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
+namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer
 {
     public partial class Add_Tables : Migration
     {
