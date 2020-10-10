@@ -28,8 +28,8 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using Senparc.Ncf.Database.SqlServer;
 using Senparc.Ncf.Database;
+using Senparc.Ncf.Database.SqlServer;
 
 namespace Senparc.Web
 {

@@ -29,25 +29,6 @@ namespace Senparc.Web.Pages
         public string Output { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
-            //Process p = new Process();
-            //p.StartInfo.FileName = "cmd.exe";
-            //p.StartInfo.UseShellExecute = false;
-            //p.StartInfo.RedirectStandardInput = true;
-            //p.StartInfo.RedirectStandardOutput = true;
-            //p.StartInfo.RedirectStandardError = true;
-            //p.StartInfo.CreateNoWindow = true;
-            //p.StandardInput.WriteLine("dotnet --version");
-            //Output = p.StandardOutput.ReadToEnd();
-
-            //var wsh = new PowerShellHelper();
-            //Output = wsh.Execute("dotnet --version");
-
-            var senparcEntities = _serviceProvider.GetService<SenparcEntities>();
-
-
-            var pendingMigrations = senparcEntities.Database.GetPendingMigrations();
-            var oldMigrations = senparcEntities.Database.GetAppliedMigrations();
-
             //判断是否需要自动进入到安装程序
             if (base.FullSystemConfig == null)
             {
