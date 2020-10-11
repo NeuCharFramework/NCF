@@ -26,8 +26,10 @@ namespace Senparc.Service
     /// <summary>
     /// 设计时 DbContext 创建（仅在开发时创建 Code-First 的数据库 Migration 使用，在生产环境不会执行）
     /// <para>1、切换至 Debug 模式</para>
-    /// <para>2、运行：PM> add-migration [更新名称] -C XncfBuilderEntities_SqlServer -o Migrations/Migrations.SqlServer </para>
-    /// </summary>
+    /// <para>2、将当前项目设为启动项</para>
+    /// <para>3、打开【程序包资源管理器控制台】，默认项目设为当前项目</para>
+    /// <para>4、运行：PM> add-migration [更新名称] -Context SystemServiceEntities_MySql -o SystemEntities/Migrations/Migrations.MySql.SystemEntities</para>
+    /// </summary> 
     public class SenparcDbContextFactory_MySql : SenparcDesignTimeDbContextFactoryBase<SystemServiceEntities_MySql, Register>
     {
         protected override Action<IServiceCollection> ServicesAction => services =>
@@ -42,7 +44,7 @@ namespace Senparc.Service
                  /* 用于寻找 App_Data 文件夹，从而找到数据库连接字符串配置信息 */
                  Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\Senparc.Web"))
         {
-
+            Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.DatabaseName = "Local-MySql";
         }
     }
 }

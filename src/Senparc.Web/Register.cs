@@ -30,6 +30,7 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.Database.SqlServer;
+using Senparc.Ncf.Database.MySql;
 
 namespace Senparc.Web
 {
@@ -182,9 +183,10 @@ namespace Senparc.Web
             services.AddScoped(typeof(Ncf.Core.WorkContext.Provider.IAdminWorkContextProvider), typeof(Ncf.Core.WorkContext.Provider.AdminWorkContextProvider));
             services.AddTransient<Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor, Microsoft.AspNetCore.Mvc.Infrastructure.ActionContextAccessor>();
 
-            //指定数据库类型（可选），默认为 SQLiteMemoryDatabaseConfiguration
-            //services.UseDatabase<SQLiteMemoryDatabaseConfiguration>();//默认即为 SQLiteMemoryDatabaseConfiguration，可以不写
-            //services.AddDatabase<SQLServerDatabaseConfiguration>();
+            //指定数据库类型（可选），默认为 SQLiteMemoryDatabaseConfiguration，请在项目初始化前确定数据库类型！
+            //services.AddDatabase<SQLiteMemoryDatabaseConfiguration>();//默认即为 SQLiteMemoryDatabaseConfiguration，可以不写
+            services.AddDatabase<SQLServerDatabaseConfiguration>();
+            //services.AddDatabase<MySqlDatabaseConfiguration>();
 
             //激活 Xncf 扩展引擎（必须）
             services.StartEngine(configuration);
