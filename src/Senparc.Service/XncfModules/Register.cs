@@ -101,7 +101,6 @@ namespace Senparc.Service
         public void OnModelCreating(ModelBuilder modelBuilder)
         {
             //已在 SenparcEntities 中完成
-
         }
 
         public void AddXncfDatabaseModule(IServiceCollection services)
@@ -135,50 +134,6 @@ namespace Senparc.Service
             Func<IServiceProvider, SenparcEntities> senparcEntitiesImplementationFactory = s =>
             {
                 var multipleDatabasePool = MultipleDatabasePool.Instance;
-
-                //获取 DbContext 上下文类型
-                var dbContextType = multipleDatabasePool.GetXncfDbContextType(this.GetType());
-
-                DbContextOptionsBuilder dbOptionBuilder;
-
-                var dbOptionBuilderType = dbContextType.GetConstructors().First()
-                                            .GetParameters().First().ParameterType;
-
-                if (dbOptionBuilderType.GenericTypeArguments.Length > 0)
-                {
-                    //带泛型
-                    //准备创建 DbContextOptionsBuilder 实例，定义类型
-                    dbOptionBuilderType = typeof(DbContextOptionsBuilder<>);
-                    //dbOptionBuilderType = typeof(RelationalDbContextOptionsBuilder<,>);
-                    //获取泛型对象类型，如：DbContextOptionsBuilder<SenparcEntities>
-                    dbOptionBuilderType = dbOptionBuilderType.MakeGenericType(dbContextType);
-
-                    //创建 DbContextOptionsBuilder 实例
-                    dbOptionBuilder = Activator.CreateInstance(dbOptionBuilderType) as DbContextOptionsBuilder;
-                }
-                else
-                {
-                    //不带泛型
-                    dbOptionBuilder = new DbContextOptionsBuilder();
-                }
-
-                //获取当前数据库配置
-                var currentDatabasConfiguration = DatabaseConfigurationFactory.Instance.CurrentDatabaseConfiguration;
-                //指定使用当前数据库
-                currentDatabasConfiguration.UseDatabase(
-                    dbOptionBuilder,
-                    SenparcDatabaseConfigs.ClientConnectionString,
-                    xncfDatabaseData,
-                    null
-                    );
-                //实例化 DbContext
-                var dbContext = Activator.CreateInstance(dbContextType, new object[] { dbOptionBuilder.Options }) as SenparcEntitiesBase;
-                if (dbContext == null)
-                {
-                    var d = 2;
-                }
-
-
                 return multipleDatabasePool.GetDbContext(this.GetType()) as SenparcEntities;
             };
             services.AddScoped<SenparcEntities>(senparcEntitiesImplementationFactory);
