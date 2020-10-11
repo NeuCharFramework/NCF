@@ -133,22 +133,20 @@ namespace Senparc.Service
 
             Func<IServiceProvider, SenparcEntities> senparcEntitiesImplementationFactory = s =>
             {
-                var dbContextOptionsBuilder = new DbContextOptionsBuilder<SenparcEntities>();
-                currentDatabasConfiguration.UseDatabase(dbContextOptionsBuilder, Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString, xncfDatabaseData, (b, d) => { });
-                return new SenparcEntities(dbContextOptionsBuilder.Options);
+                return MultipleDatabasePool.Instance.GetDbContext(this.GetType(),
+                    Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString,
+                    xncfDatabaseData, (b, d) => { }) as SenparcEntities;
             };
-
-            services.AddScoped(senparcEntitiesImplementationFactory);
+            services.AddScoped<SenparcEntities>(senparcEntitiesImplementationFactory);
             services.AddScoped<ISenparcEntities>(senparcEntitiesImplementationFactory);
             services.AddScoped<SenparcEntitiesBase>(senparcEntitiesImplementationFactory);
 
             //SystemServiceEntities 工厂配置（实际不会用到）
             Func<IServiceProvider, SystemServiceEntities> systemServiceEntitiesImplementationFactory = s =>
             {
-                var dbContextOptionsBuilder = new DbContextOptionsBuilder</*SystemServiceEntities 注意：这里要输入SenparcEntities*/SenparcEntities>();
-                currentDatabasConfiguration.UseDatabase(dbContextOptionsBuilder, Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString, xncfDatabaseData, (b, d) => { });
-                return new SystemServiceEntities(dbContextOptionsBuilder.Options);
-
+                return MultipleDatabasePool.Instance.GetDbContext(this.GetType(),
+                   Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString,
+                   xncfDatabaseData, (b, d) => { }) as SystemServiceEntities;
             };
 
             services.AddScoped(systemServiceEntitiesImplementationFactory);
