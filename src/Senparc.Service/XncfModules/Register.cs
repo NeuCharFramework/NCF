@@ -6,6 +6,7 @@
  */
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Core.Models;
@@ -131,11 +132,36 @@ namespace Senparc.Service
              */
             var xncfDatabaseData = new XncfDatabaseData(this, "Senparc.Service"/*从当前程序集读取*/);
 
+            Console.WriteLine("========== Service.Register  AddXncfDatabaseModule ==================");
             Func<IServiceProvider, SenparcEntities> senparcEntitiesImplementationFactory = s =>
             {
-                return MultipleDatabasePool.Instance.GetDbContext(this.GetType(),
-                    Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString,
-                    xncfDatabaseData, (b, d) => { }) as SenparcEntities;
+                var multipleDatabasePool = MultipleDatabasePool.Instance;
+                Console.WriteLine($"注册 senparcEntitiesImplementationFactory {this.GetType()}");
+
+                //var dbContextType = multipleDatabasePool.GetXncfDbContextType(this.GetType());
+                //var ccc = dbContextType.GetConstructors();
+                //var ddd = ccc.FirstOrDefault().GetParameters();
+                //var eee = ddd.FirstOrDefault();
+                //var dbOptionBuilderType = dbContextType.GetConstructors()
+                //                             .First().GetParameters().First().ParameterType;
+
+                //if (dbOptionBuilderType.GenericTypeArguments.Length > 0)
+                //{
+                //    //带泛型
+                //    ////准备创建 DbContextOptionsBuilder 实例，定义类型
+                //    dbOptionBuilderType = typeof(DbContextOptionsBuilder<>); 
+                //    //获取泛型对象类型，如：DbContextOptionsBuilder<SenparcEntity>
+                //    dbOptionBuilderType = dbOptionBuilderType.MakeGenericType(dbContextType);
+
+                //    //创建 DbContextOptionsBuilder 实例
+                //    var dbOptionBuilders = Activator.CreateInstance(dbOptionBuilderType) as DbContextOptionsBuilder;
+                //    var cc = dbOptionBuilders;
+                //}
+
+
+                return multipleDatabasePool.GetDbContext(this.GetType(),
+                Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString,
+                xncfDatabaseData, (b, d) => { }) as SenparcEntities;
             };
             services.AddScoped<SenparcEntities>(senparcEntitiesImplementationFactory);
             services.AddScoped<ISenparcEntities>(senparcEntitiesImplementationFactory);
