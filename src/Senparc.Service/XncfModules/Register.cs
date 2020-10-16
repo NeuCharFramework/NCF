@@ -97,6 +97,7 @@ namespace Senparc.Service
         public string DatabaseUniquePrefix => "SystemService";//特殊情况：没有前缀
         public Type XncfDatabaseDbContextType => typeof(SystemServiceEntities);
 
+        public Type TryGetXncfDatabaseDbContextType => MultipleDatabasePool.Instance.GetXncfDbContextType(this.GetType());
 
         public void OnModelCreating(ModelBuilder modelBuilder)
         {
