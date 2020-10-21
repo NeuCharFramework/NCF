@@ -5,14 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Senparc.Ncf.Log" Version="0.3.402-beta1" />
-    <PackageReference Include="Senparc.Ncf.SMS" Version="0.3.402-beta1" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
-    <PackageReference Include="Senparc.Ncf.Log" Version="0.5.200.100-beta1" />
-    <PackageReference Include="Senparc.Ncf.SMS" Version="0.5.200.100-beta1" />
+    <PackageReference Include="Senparc.Ncf.Log" Version="0.5.300-beta1" />
+    <PackageReference Include="Senparc.Ncf.SMS" Version="0.5.300-beta1" />
   </ItemGroup>
 
 </Project>

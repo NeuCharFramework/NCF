@@ -39,6 +39,7 @@ namespace Senparc.Core.Models
 
             foreach (var databaseRegister in XncfRegisterManager.XncfDatabaseList)
             {
+                Console.WriteLine("SenparcEntities 动态加载："+databaseRegister.GetType().Name+" | DbContextType:"+ databaseRegister.TryGetXncfDatabaseDbContextType.Name);
                 databaseRegister.OnModelCreating(modelBuilder);
             }
 
