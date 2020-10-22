@@ -10,8 +10,6 @@ namespace SenparcLive.Xncf.MyApp.Models.DatabaseModel
     [MultipleMigrationDbContext(MultipleDatabaseType.SQLite, typeof(Register))]
     public class MyAppSenparcEntities : XncfDatabaseDbContext
     {
-        
-
         public MyAppSenparcEntities(DbContextOptions dbContextOptions) : base(dbContextOptions)
         {
         }

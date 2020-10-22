@@ -33,8 +33,8 @@ namespace Senparc.Web
 
             //指定数据库类型
             //services.AddDatabase<SQLiteMemoryDatabaseConfiguration>();
-            //services.AddDatabase<SQLServerDatabaseConfiguration>();
-            services.AddDatabase<MySqlDatabaseConfiguration>();
+            services.AddDatabase<SQLServerDatabaseConfiguration>();
+            //services.AddDatabase<MySqlDatabaseConfiguration>();
 
 
             //添加（注册） Ncf 服务（重要，必须！）

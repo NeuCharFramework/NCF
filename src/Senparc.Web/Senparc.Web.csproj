@@ -540,6 +540,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SenparcLive.Xncf.MyApp\SenparcLive.Xncf.MyApp.csproj" />
+    <!--<ProjectReference Include="..\SenparcLive.Xncf.MyApp\SenparcLive.Xncf.MyApp.csproj" />-->
   </ItemGroup>
 </Project>
