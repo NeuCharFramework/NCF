@@ -8,6 +8,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Database;
+using Senparc.Ncf.Database.MySql;
+using Senparc.Ncf.Database.SQLite;
+using Senparc.Ncf.Database.SqlServer;
 using Senparc.Web.Hubs;
 
 namespace Senparc.Web
@@ -26,9 +30,13 @@ namespace Senparc.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<Ncf.AreaBase.Admin.Filters.AuthenticationResultFilterAttribute>();
 
-            //services.AddAutoMapper(typeof(Ncf.Core.AutoMapper.SystemProfile));
+            //指定数据库类型
+            //services.AddDatabase<SQLiteMemoryDatabaseConfiguration>();
+            services.AddDatabase<SQLServerDatabaseConfiguration>();
+            //services.AddDatabase<MySqlDatabaseConfiguration>();
+
+
             //添加（注册） Ncf 服务（重要，必须！）
             services.AddNcfServices(Configuration, env, CompatibilityVersion.Version_3_0);
         }

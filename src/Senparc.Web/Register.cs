@@ -145,6 +145,9 @@ namespace Senparc.Web
 
 #endif
 
+            //TODO:在模块中注册
+            services.AddScoped<Ncf.AreaBase.Admin.Filters.AuthenticationResultFilterAttribute>();
+
             //支持 Session
             services.AddSession();
             //解决中文进行编码问题
@@ -182,11 +185,6 @@ namespace Senparc.Web
             //Other
             services.AddScoped(typeof(Ncf.Core.WorkContext.Provider.IAdminWorkContextProvider), typeof(Ncf.Core.WorkContext.Provider.AdminWorkContextProvider));
             services.AddTransient<Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor, Microsoft.AspNetCore.Mvc.Infrastructure.ActionContextAccessor>();
-
-            //指定数据库类型
-            //services.AddDatabase<SQLiteMemoryDatabaseConfiguration>();
-            //services.AddDatabase<SQLServerDatabaseConfiguration>();
-            services.AddDatabase<MySqlDatabaseConfiguration>();
 
             //激活 Xncf 扩展引擎（必须）
             services.StartEngine(configuration);
