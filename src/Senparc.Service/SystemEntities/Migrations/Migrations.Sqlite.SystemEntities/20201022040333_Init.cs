@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemEntities
+namespace Senparc.Service.SystemEntities.Migrations.Migrations.Sqlite.SystemEntities
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemE
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Flag = table.Column<bool>(nullable: false, defaultValue: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),
@@ -61,7 +61,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemE
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),
@@ -133,7 +133,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemE
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),
@@ -155,7 +155,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemE
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),
@@ -194,7 +194,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemE
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),
@@ -216,7 +216,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemE
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastUpdateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -243,7 +243,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemE
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),
@@ -251,12 +251,12 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemE
                     Remark = table.Column<string>(maxLength: 300, nullable: true),
                     AccountId = table.Column<int>(nullable: false),
                     OrderNumber = table.Column<string>(type: "varchar(100)", nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "money", nullable: false),
-                    PayMoney = table.Column<decimal>(type: "money", nullable: false),
+                    TotalPrice = table.Column<decimal>(nullable: false),
+                    PayMoney = table.Column<decimal>(nullable: false),
                     UsedPoints = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
                     CompleteTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     AddIp = table.Column<string>(type: "varchar(50)", nullable: true),
-                    GetPoints = table.Column<decimal>(type: "money", nullable: false),
+                    GetPoints = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
                     Status = table.Column<byte>(nullable: false),
                     Description = table.Column<string>(type: "varchar(250)", nullable: false),
                     Type = table.Column<byte>(nullable: true),
@@ -265,8 +265,8 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemE
                     PayType = table.Column<int>(nullable: false),
                     OrderType = table.Column<int>(nullable: false),
                     PayParam = table.Column<string>(nullable: true),
-                    Price = table.Column<decimal>(type: "money", nullable: false),
-                    Fee = table.Column<decimal>(type: "money", nullable: false)
+                    Price = table.Column<decimal>(nullable: false),
+                    Fee = table.Column<decimal>(type: "decimal(18, 2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -284,7 +284,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemE
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),
@@ -309,7 +309,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemE
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),

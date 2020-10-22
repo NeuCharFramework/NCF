@@ -319,7 +319,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemE
                         .HasColumnType("int");
 
                     b.Property<decimal>("PayMoney")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("PayParam")
                         .HasColumnType("nvarchar(max)");
@@ -331,7 +331,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemE
                         .HasColumnType("varchar(100)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(300)")
@@ -341,7 +341,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemE
                         .HasColumnType("tinyint");
 
                     b.Property<decimal>("TotalPrice")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("TradeNumber")
                         .HasColumnType("varchar(150)");

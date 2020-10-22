@@ -45,7 +45,7 @@ namespace Senparc.Service
                  /* 用于寻找 App_Data 文件夹，从而找到数据库连接字符串配置信息 */
                  Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\Senparc.Web"))
         {
-            Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.DatabaseName = "Local-MySql";
+            Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.DatabaseName = "Local";//默认配置
         }
     }
 }

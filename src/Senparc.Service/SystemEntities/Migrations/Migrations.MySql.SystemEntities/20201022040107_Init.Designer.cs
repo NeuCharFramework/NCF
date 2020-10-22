@@ -9,8 +9,8 @@ using Senparc.Service;
 namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntities
 {
     [DbContext(typeof(SystemServiceEntities_MySql))]
-    [Migration("20201010172451_init")]
-    partial class init
+    [Migration("20201022040107_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -296,13 +296,13 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                         .HasColumnType("varchar(250)");
 
                     b.Property<decimal>("Fee")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<decimal>("GetPoints")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<DateTime>("LastUpdateTime")
                         .HasColumnType("datetime(6)");
@@ -315,7 +315,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                         .HasColumnType("int");
 
                     b.Property<decimal>("PayMoney")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("PayParam")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -327,7 +327,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                         .HasColumnType("varchar(100)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Remark")
                         .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
@@ -337,7 +337,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                         .HasColumnType("tinyint unsigned");
 
                     b.Property<decimal>("TotalPrice")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("TradeNumber")
                         .HasColumnType("varchar(150)");
@@ -641,7 +641,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
 
                     b.Property<string>("UpdateLog")
                         .IsRequired()
-                        .HasColumnType("ntext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Version")
                         .IsRequired()

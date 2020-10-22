@@ -293,13 +293,13 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.Sqlite.SystemEnti
                         .HasColumnType("varchar(250)");
 
                     b.Property<decimal>("Fee")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("GetPoints")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<DateTime>("LastUpdateTime")
                         .HasColumnType("TEXT");
@@ -312,7 +312,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.Sqlite.SystemEnti
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("PayMoney")
-                        .HasColumnType("money");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PayParam")
                         .HasColumnType("TEXT");
@@ -324,7 +324,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.Sqlite.SystemEnti
                         .HasColumnType("varchar(100)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("money");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Remark")
                         .HasColumnType("TEXT")
@@ -334,7 +334,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.Sqlite.SystemEnti
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("TotalPrice")
-                        .HasColumnType("money");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("TradeNumber")
                         .HasColumnType("varchar(150)");

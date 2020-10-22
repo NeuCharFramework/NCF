@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using Senparc.Service;
@@ -32,6 +33,8 @@ namespace Senparc.Web.Pages.Install
 
         public int Step { get; set; }
 
+        public MultipleDatabaseType MultipleDatabaseType { get; set; }
+
 
         public IndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleService, AdminUserInfoService accountService, SystemConfigService systemConfigService, SysMenuService sysMenuService)
         {
@@ -46,6 +49,8 @@ namespace Senparc.Web.Pages.Install
         {
             try
             {
+                MultipleDatabaseType = DatabaseConfigurationFactory.Instance.Current.MultipleDatabaseType;
+
                 var adminUserInfo = await _accountInfoService.GetObjectAsync(z => true);//检查是否已初始化
                 if (adminUserInfo == null)
                 {
