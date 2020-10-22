@@ -9,9 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Senparc.CO2NET.Trace;
 using Senparc.Core.Models;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Enums;
+using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.XncfBase;
@@ -66,7 +68,19 @@ namespace Senparc.Service
             if (pendingMigs.Count() > 0)
             {
                 senparcEntities.ResetMigrate();//重置合并状态
-                senparcEntities.Migrate();//进行合并
+
+                try
+                {
+                    var script = senparcEntities.Database.GenerateCreateScript();
+                    SenparcTrace.SendCustomLog("senparcEntities.Database.GenerateCreateScript", script);
+
+                    senparcEntities.Migrate();//进行合并
+                }
+                catch (Exception ex)
+                {
+                    var currentDatabaseConfiguration = DatabaseConfigurationFactory.Instance.Current;
+                    SenparcTrace.BaseExceptionLog(new NcfDatabaseException(ex.Message, currentDatabaseConfiguration.GetType(), senparcEntities.GetType(), ex));
+                }
             }
 
             //更新数据库（目前不使用 SystemServiceEntities 存放数据库模型）
@@ -124,7 +138,7 @@ namespace Senparc.Service
              */
             #endregion
 
-            var currentDatabasConfiguration = DatabaseConfigurationFactory.Instance.CurrentDatabaseConfiguration;
+            var currentDatabasConfiguration = DatabaseConfigurationFactory.Instance.Current;
 
             /* 
              *     非常重要！！

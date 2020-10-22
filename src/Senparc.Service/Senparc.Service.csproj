@@ -5,7 +5,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- 仅在开发环境下引用 -->
-		<PackageReference Condition=" '$(Configuration)' != 'Release' " Include="Senparc.Ncf.DatabasePlant" Version="0.2.300-beta1" />
+		<PackageReference Condition=" '$(Configuration)' != 'Release' " Include="Senparc.Ncf.DatabasePlant" Version="0.2.310-beta1" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="ProjectBiddingService.cs" />
@@ -26,10 +26,10 @@
 		<PackageReference Include="Senparc.Weixin.MP" Version="16.10.601" />
 		<PackageReference Include="Senparc.Weixin.Open" Version="4.7.600" />
 		<PackageReference Include="Senparc.Weixin.WxOpen" Version="3.8.601" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.5.300-beta1" />
-		<PackageReference Include="Senparc.Ncf.Log" Version="0.5.300-beta1" />
-		<PackageReference Include="Senparc.Ncf.Repository" Version="0.5.300-beta1" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.5.300-beta1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.5.310-beta1" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.5.310-beta1" />
+		<PackageReference Include="Senparc.Ncf.Repository" Version="0.5.310-beta1" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.5.310-beta1" />
 	</ItemGroup>
 
 	<ItemGroup>
