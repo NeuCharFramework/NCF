@@ -30,7 +30,7 @@
 		<PackageReference Include="Senparc.Ncf.Repository" Version="0.4.100.20-beta1" />
 		<PackageReference Include="Senparc.Ncf.Service" Version="0.4.100.20-beta1" />
 		<PackageReference Include="Senparc.Ncf.Utility" Version="0.4.100.20-beta1" />-->
-    <!--<PackageReference Include="ML.Xncf.Docs" Version="2.0.65-beta1" />-->
+    <PackageReference Include="ML.Xncf.Docs" Version="2.0.85" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj" />
@@ -538,5 +538,8 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SenparcLive.Xncf.MyApp\SenparcLive.Xncf.MyApp.csproj" />
   </ItemGroup>
 </Project>
