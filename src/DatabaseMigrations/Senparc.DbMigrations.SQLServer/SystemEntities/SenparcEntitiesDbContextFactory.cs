@@ -1,19 +1,16 @@
-using log4net;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Senparc.CO2NET;
-using Senparc.CO2NET.RegisterServices;
+using Senparc.CO2NET.Extensions;
 using Senparc.Core.Models;
-using Senparc.Ncf.Core.Config;
+using Senparc.Ncf.Database;
+using Senparc.Ncf.Database.SqlServer;
 using Senparc.Ncf.XncfBase;
 using Senparc.Ncf.XncfBase.Database;
 using System;
 using System.IO;
 
-namespace Senparc.Service
+namespace Senparc.DbMigrations.SQLServer
 {
     /// <summary>
     /// 设计时 DbContext 创建
@@ -27,19 +24,39 @@ namespace Senparc.Service
     {
         Service.Register _systemServiceRegister = new Service.Register();
 
-        public override Action<SqlServerDbContextOptionsBuilder> SqlServerOptionsAction =>
-            b => _systemServiceRegister.DbContextOptionsAction(b, "Senparc.Service");
+        XncfDatabaseData XncfDatabaseData { get; }
 
         public SenparcEntitiesDbContextFactory()
             : base(Senparc.Core.VersionInfo.VERSION,
-                 Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\", "..\\Senparc.Web"))
-        { 
+                 Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\..\\", "Senparc.Web"))
+        {
+            XncfDatabaseData = new XncfDatabaseData(_systemServiceRegister, null)
+            {
+                AssemblyName = "Senparc.DbMigrations.SQLServer"//强制指定程序集
+            };
+
+            //在 CreateDbContext() 执行之前，指定使用 SQL Server
+            //方法一：
+            //DatabaseConfigurationFactory.Instance.CurrentDatabaseConfiguration = new SQLServerDatabaseConfiguration();
+            //方法二：在 ServicesAction 中指定
         }
+
+        protected override Action<IServiceCollection> ServicesAction => 
+            services => services.AddDatabase<SQLServerDatabaseConfiguration>();//指定其他数据库
+
+
+        public override Action<IRelationalDbContextOptionsBuilderInfrastructure, XncfDatabaseData> DbContextOptionsAction => (b, d) =>
+        {
+            d = XncfDatabaseData;
+            //_systemServiceRegister.DbContextOptionsAction(b, "Senparc.DbMigrations.SQLServer");
+            base.DbContextOptionsAction(b, d);//执行基类中的方法（必须）
+        };
 
         public override void CreateDbContextAction()
         {
             XncfRegisterManager.XncfDatabaseList.Add(_systemServiceRegister);//添加注册
         }
+
 
         public override SenparcEntities GetDbContextInstance(DbContextOptions<SenparcEntities> dbContextOptions)
         {

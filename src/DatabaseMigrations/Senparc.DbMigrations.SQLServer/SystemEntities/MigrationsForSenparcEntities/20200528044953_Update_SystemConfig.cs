@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
+namespace Senparc.DbMigrations.SQLServer.SystemEntities.MigrationsForSenparcEntities
 {
     public partial class Update_SystemConfig : Migration
     {

@@ -1,12 +1,31 @@
 ﻿@page
 @model IndexModel
+@using Senparc.Ncf.XncfBase
+@inject IServiceProvider _serviceProvider
+@functions{
+    protected async Task<bool> CheckXncfModuleValiable(string xncfName)
+    {
+        XncfRegisterManager xncfRegisterManager = new XncfRegisterManager(_serviceProvider);
+        return await xncfRegisterManager.CheckXncfValiable(xncfName).ConfigureAwait(false);
+    }
+
+    protected async Task<string> GetDocsState()
+    {
+        return (await CheckXncfModuleValiable("ML.Xncf.Docs")) ? "true" : "false";
+    }
+}
+
 @{
     ViewData["Title"] = $"NCF";
 }
+
 <div class="">
     <div class="index-logo">
         <img src="~/images/logo-index.png" />
     </div>
+@*    <div>
+        @Model.Output
+    </div>*@
     <h2 class="index-simple-tip text-center">
         简单 灵活 可扩展
         @*一用于构套造基础项目的 .NET 框架*@
@@ -17,7 +36,7 @@
         具有高度的可扩展性和耐操性。
     </h6>
     <div class="row start-now">
-        <a href="http://ncf.senparc.com/Docs" target="_blank" class="start-btn">
+        <a href="/Docs/Index" target="_blank" class="start-btn" id="btnStart" onclick="return start(@(await GetDocsState()),'ML.Xncf.Docs');">
             立即开始
         </a>
     </div>

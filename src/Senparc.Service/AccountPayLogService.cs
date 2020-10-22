@@ -16,6 +16,7 @@ namespace Senparc.Service
         public AccountPayLogService(AccountPayLogRepository accountPayLogRepo, IServiceProvider serviceProvider)
             : base(accountPayLogRepo, serviceProvider)
         {
+            
         }
 
         public AccountPayLog GetByOrderNumber(string orderNumber, params string[] includes)

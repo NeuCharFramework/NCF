@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Senparc.Core.Models;
 
-namespace Senparc.Service.SystemEntities.MigrationsForSenparcEntities
+namespace Senparc.DbMigrations.SQLServer.SystemEntities.MigrationsForSenparcEntities
 {
     [DbContext(typeof(SenparcEntities))]
     [Migration("20200920161711_AddIconForXncfModule")]
