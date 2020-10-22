@@ -13,7 +13,6 @@ using Senparc.CO2NET;
 using Senparc.CO2NET.AspNet;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Trace;
-using Senparc.Respository;
 using Senparc.Ncf.Core;
 using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.AssembleScan;
@@ -21,6 +20,7 @@ using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.SMS;
 using Senparc.Ncf.XncfBase;
+using Senparc.Respository;
 using Senparc.Weixin;
 using System;
 using System.IO;
@@ -28,9 +28,6 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using Senparc.Ncf.Database;
-using Senparc.Ncf.Database.SqlServer;
-using Senparc.Ncf.Database.MySql;
 
 namespace Senparc.Web
 {

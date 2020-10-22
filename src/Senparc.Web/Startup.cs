@@ -30,12 +30,10 @@ namespace Senparc.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             //指定数据库类型
-            //services.AddDatabase<SQLiteMemoryDatabaseConfiguration>();
-            services.AddDatabase<SQLServerDatabaseConfiguration>();
-            //services.AddDatabase<MySqlDatabaseConfiguration>();
-
+            //services.AddDatabase<SQLiteMemoryDatabaseConfiguration>();//使用 SQLite 数据库
+            services.AddDatabase<SQLServerDatabaseConfiguration>();//使用 SQLServer数据库
+            //services.AddDatabase<MySqlDatabaseConfiguration>();//使用 MySQL 数据库
 
             //添加（注册） Ncf 服务（重要，必须！）
             services.AddNcfServices(Configuration, env, CompatibilityVersion.Version_3_0);
