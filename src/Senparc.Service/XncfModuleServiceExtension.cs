@@ -31,7 +31,8 @@ namespace Senparc.Service
         /// </summary>
         /// <param name="uid">模块 Uid</param>
         /// <returns></returns>
-        public async Task<Tuple<PagedList<XncfModule>, string, InstallOrUpdate?>> InstallModuleAsync(string uid)
+        //public async Task<Tuple<PagedList<XncfModule>, string, InstallOrUpdate?>> InstallModuleAsync(string uid)
+        public async Task<(PagedList<XncfModule> XncfModuleList, string scanAndInstallResult, InstallOrUpdate? InstallOrUpdate)> InstallModuleAsync(string uid)
         {
             if (uid.IsNullOrEmpty())
             {
@@ -79,7 +80,7 @@ namespace Senparc.Service
                                         : "失败";
             SenparcTrace.SendCustomLog($"安装或更新模块（{installOrUpdateMsg}）", result.ToString());
 
-            return new Tuple<PagedList<XncfModule>, string, InstallOrUpdate?>(xncfModules, result, installOrUpdateValue);
+            return (xncfModules, result, installOrUpdateValue);
         }
 
         /// <summary>
