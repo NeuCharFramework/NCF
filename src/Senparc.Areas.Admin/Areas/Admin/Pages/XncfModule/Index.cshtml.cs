@@ -161,7 +161,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             var result = await _xncfModuleServiceEx.InstallModuleAsync(uid);
             //XncfModules = result.Item1;
             //base.SetMessager(Ncf.Core.Enums.MessageType.info, result.Item2, true);
-            return Ok(result.Item1);
+            return Ok(result.XncfModuleList);
             //return RedirectToPage("Index");
         }
 
