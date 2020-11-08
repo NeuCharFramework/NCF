@@ -139,7 +139,7 @@
                 </template>
                 <el-card class="box-card" v-for="item in data.functionParameterInfoCollection">
                     <div slot="header" class="clearfix">
-                        <span>>_{{item.key.name}}</span>
+                        <span><i class="fa fa-terminal"></i> {{item.key.name}}</span>
                             <span type="text" :class="[data.xncfModule.state===1?'box-card-action':'box-card-action2']" @@click="openRun(item,data.xncfModule.state)">执行</span>
                         <p class="box-card-des">{{item.key.description}}</p>
                     </div>
