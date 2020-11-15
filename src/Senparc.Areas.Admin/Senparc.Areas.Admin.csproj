@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
-
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<!--<TargetFramework>net5.0</TargetFramework>-->
@@ -39,8 +38,8 @@
 		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.6.100-beta1" />
 		<PackageReference Include="Senparc.Ncf.Service" Version="0.6.100-beta1" />
 		<PackageReference Include="Senparc.Ncf.Utility" Version="0.6.100-beta1" />
-		
-	
+
+
 		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />
 	</ItemGroup>
 

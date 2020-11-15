@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging.Debug;
 using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
 
 namespace Senparc.Service
