@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<!--<TargetFramework>net5.0</TargetFramework>-->
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 	</PropertyGroup>
 
@@ -31,13 +32,16 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
 		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="0.3.200" />
 		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="3.9.200" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.5.341-beta1" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.5.341-beta1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.5.341-beta1" />
-		<PackageReference Include="Senparc.Ncf.Log" Version="0.5.341-beta1" />
-		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.5.341-beta1" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.5.341-beta1" />
-		<PackageReference Include="Senparc.Ncf.Utility" Version="0.5.341-beta1" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.6.100-beta1" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.100-beta1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.100-beta1" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.6.100-beta1" />
+		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.6.100-beta1" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.6.100-beta1" />
+		<PackageReference Include="Senparc.Ncf.Utility" Version="0.6.100-beta1" />
+		
+	
+		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -52,6 +56,6 @@
 			<Pack>$(IncludeRazorContentInPack)</Pack>
 		</Content>
 	</ItemGroup><ItemGroup>
-  <Folder Include="Areas\Pages\Shared\" />
-</ItemGroup>
+		<Folder Include="Areas\Pages\Shared\" />
+	</ItemGroup>
 </Project>

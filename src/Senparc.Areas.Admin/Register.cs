@@ -124,7 +124,7 @@ namespace Senparc.Areas.Admin
             new AreaPageMenuItem(GetAreaUrl("/Admin/SenparcTrace/Index"),"SenparcTrace 日志","fa fa-calendar-o"),
         };//Admin比较特殊，不需要全部输出
 
-        public IMvcBuilder AuthorizeConfig(IMvcBuilder builder, IWebHostEnvironment env)
+        public IMvcBuilder AuthorizeConfig(IMvcBuilder builder/*, IWebHostEnvironment env*/)
         {
             //鉴权配置
             //添加基于Cookie的权限验证：https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-2.1&tabs=aspnetcore2x
