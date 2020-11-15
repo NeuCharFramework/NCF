@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+	  <TargetFramework>netcoreapp3.1</TargetFramework>
+	  <!--<TargetFramework>net5.0</TargetFramework>-->
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <TypeScriptToolsVersion>4.0</TypeScriptToolsVersion>
     <!--<IncludeSymbolsInSingleFile>true</IncludeSymbolsInSingleFile>-->
@@ -31,7 +31,7 @@
 		<PackageReference Include="Senparc.Ncf.Repository" Version="0.4.100.20-beta1" />
 		<PackageReference Include="Senparc.Ncf.Service" Version="0.4.100.20-beta1" />
 		<PackageReference Include="Senparc.Ncf.Utility" Version="0.4.100.20-beta1" />-->
-    <PackageReference Include="ML.Xncf.Docs" Version="2.0.105" />
+    <!--<PackageReference Include="ML.Xncf.Docs" Version="2.0.105" />-->
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj" />
