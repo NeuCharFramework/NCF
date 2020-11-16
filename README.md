@@ -88,9 +88,9 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 - [x] 提供完善的项目自动生成服务（参考 [WeChatSampleBuilder](http://sdk.weixin.senparc.com/Home/WeChatSampleBuilder)），为开发者提供项目定制生成服务。
 - [x] 提供快捷的模块化开发和安装方法。  
 - [ ] 开源 [NeuChar.com](https://www.neuchar.com/) 中的微信功能模块，可使用独立模块集成。
-- [ ]提供完善的示例代码和文档。
-- [ ]提供博客和视频教程（也欢迎开发者参与或发起）。
-- [ ]提供交流社区，包括但不仅限于[问答网站](https://weixin.senparc.com/QA)、[QQ群](#qq-技术交流群)、微信群、直播群。
+- [ ] 提供完善的示例代码和文档。
+- [ ] 提供博客和视频教程（也欢迎开发者参与或发起）。
+- [ ] 提供交流社区，包括但不仅限于[问答网站](https://weixin.senparc.com/QA)、[QQ群](#qq-技术交流群)、微信群、直播群。
 - [ ] 完善 DDD 实践
 - [ ] 添加应用商店
 - [x] 定制命名空间
