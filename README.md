@@ -7,9 +7,9 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 
 当前版本：`0.2.0-beta6`
 
-> 说明：NCF 由盛派（Senparc）团队经过多年优化迭代的自用系统底层框架 SenparcCore 整理而来，经历了 .NET 3.5/4.5 众多系统的实战检验，并最终移植到 .NET Core，目前已在多个 .NET Core 系统中稳定运行，在将其转型为开源项目的过程中，需要进行一系列的重构、注释完善和兼容性升级，目前尚处于雏形阶段，希望大家多提意见，我们会争取在最短的时间内优化并发布第一个试用版（Preview1）。感谢大家一直以来的支持！<br>
-> <br>
-> Preview1 版本中，我们将提供更加完善的模块化架构和辅助工具，当前源码已经可用于学习和测试使用。
+> **Notice**<br>
+> 1. NCF 由盛派（Senparc）团队经过多年优化迭代的自用系统底层框架 SenparcCore 升级而来，经历了 .NET 3.5/4.5 众多系统的实战检验，并最终移植到 .NET Core（同时支持 .NET 5），目前已在众多系统中稳定运行。感谢大家一直以来的支持！<br>
+> 2. 源码中已经附带文档模块，运行 NCF 并安装即可。
 
 
 <center><img src="https://weixin.senparc.com/images/NCF/login.jpg" /></center>
@@ -37,7 +37,6 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 
 
 ## 待办事项：
-
 
 - [ ] 发布官网及在线 Demo（即将发布）
 - [x] 提供完善的项目自动生成服务（参考 [WeChatSampleBuilder](http://sdk.weixin.senparc.com/Home/WeChatSampleBuilder)），为开发者提供项目定制生成服务。
