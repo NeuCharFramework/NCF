@@ -42,14 +42,14 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 
 下载或同步本项目代码到本地后，打开 `/src/NCF.sln` 解决方案文件，即可看到 NCF 完整的模板项目：
 
-<img src="https://gitee.com/NeuCharFramework/NcfDocs/tree/master/cn/docs/doc/start/start-develop/images/run-ncf-01.png" />
+<img src="https://gitee.com/NeuCharFramework/NcfDocs/raw/master/cn/docs/doc/start/start-develop/images/run-ncf-01.png" />
 
 
 ### 第二步：确认 Senparc.Web 为启动项目
 
 `Senparc.Web` 项目是用于启动 Web 站点的项目，确认已经为启动项目（加粗），如果没有，则点击右键，选择【设为启动项目】。
 
-<img src="https://gitee.com/NeuCharFramework/NcfDocs/tree/master/cn/docs/doc/start/start-develop/images/run-ncf-02.png" />
+<img src="https://gitee.com/NeuCharFramework/NcfDocs/raw/master/cn/docs/doc/start/start-develop/images/run-ncf-02.png" />
 
 ### 第三步：运行
 
@@ -67,19 +67,19 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 
 > 注意：默认运行的数据库为 SQL Server，如需更换其他数据库，请查看《使用多数据库》。
 
-<img src="https://gitee.com/NeuCharFramework/NcfDocs/tree/master/cn/docs/doc/start/start-develop/images/install-01.png" />
+<img src="https://gitee.com/NeuCharFramework/NcfDocs/raw/master/cn/docs/doc/start/start-develop/images/install-01.png" />
 
 点击【立即安装】按钮：
-<img src="https://gitee.com/NeuCharFramework/NcfDocs/tree/master/cn/docs/doc/start/start-develop/images/install-02.png" />
+<img src="https://gitee.com/NeuCharFramework/NcfDocs/raw/master/cn/docs/doc/start/start-develop/images/install-02.png" />
 
 
 阅读提示并点击确认，随后，即可看到安装成功的界面：
 
-<img src="https://gitee.com/NeuCharFramework/NcfDocs/tree/master/cn/docs/doc/start/start-develop/images/install-03.png" />
+<img src="https://gitee.com/NeuCharFramework/NcfDocs/raw/master/cn/docs/doc/start/start-develop/images/install-03.png" />
 
 登录后即可进入管理员后台
 
-<img src="https://gitee.com/NeuCharFramework/NcfDocs/tree/master/cn/docs/doc/start/start-develop/images/admin-background-01-homepage.png" />
+<img src="https://gitee.com/NeuCharFramework/NcfDocs/raw/master/cn/docs/doc/start/start-develop/images/admin-background-01-homepage.png" />
 
 
 ## 待办事项：
@@ -88,9 +88,9 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 - [x] 提供完善的项目自动生成服务（参考 [WeChatSampleBuilder](http://sdk.weixin.senparc.com/Home/WeChatSampleBuilder)），为开发者提供项目定制生成服务。
 - [x] 提供快捷的模块化开发和安装方法。  
 - [ ] 开源 [NeuChar.com](https://www.neuchar.com/) 中的微信功能模块，可使用独立模块集成。
-- [ ]提供完善的示例代码和文档。
-- [ ]提供博客和视频教程（也欢迎开发者参与或发起）。
-- [ ]提供交流社区，包括但不仅限于[问答网站](https://weixin.senparc.com/QA)、[QQ群](#qq-技术交流群)、微信群、直播群。
+- [ ] 提供完善的示例代码和文档。
+- [ ] 提供博客和视频教程（也欢迎开发者参与或发起）。
+- [ ] 提供交流社区，包括但不仅限于[问答网站](https://weixin.senparc.com/QA)、[QQ群](#qq-技术交流群)、微信群、直播群。
 - [ ] 完善 DDD 实践
 - [ ] 添加应用商店
 - [x] 定制命名空间
