@@ -36,6 +36,52 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 > - 如使用 EFCore，则需要使用 SQL Server 2012 或以上版本数据库
 
 
+## 如何安装
+
+### 第一步：打开解决方案
+
+下载或同步本项目代码到本地后，打开 `/src/NCF.sln` 解决方案文件，即可看到 NCF 完整的模板项目：
+
+<img src="https://gitee.com/NeuCharFramework/NcfDocs/tree/master/cn/docs/doc/start/start-develop/images/run-ncf-01.png" />
+
+
+### 第二步：确认 Senparc.Web 为启动项目
+
+`Senparc.Web` 项目是用于启动 Web 站点的项目，确认已经为启动项目（加粗），如果没有，则点击右键，选择【设为启动项目】。
+
+<img src="https://gitee.com/NeuCharFramework/NcfDocs/tree/master/cn/docs/doc/start/start-develop/images/run-ncf-02.png" />
+
+### 第三步：运行
+
+点击顶部菜单【编译】>【开始执行（不调试）】，或快捷键 <kbd>Ctrl/Command</kbd> + <kbd>F5</kbd>
+
+> 注意：默认运行的数据库为 SQL Server，如需更换其他数据库，请查看《使用多数据库》。
+
+### 完成启动
+
+稍等数秒后，即可完成 NCF Web 项目的启动。
+
+## 首次运行
+
+首次运行项目时，系统会对数据库等“基础设施”进行自动安装：
+
+> 注意：默认运行的数据库为 SQL Server，如需更换其他数据库，请查看《使用多数据库》。
+
+<img src="https://gitee.com/NeuCharFramework/NcfDocs/tree/master/cn/docs/doc/start/start-develop/images/install-01.png" />
+
+点击【立即安装】按钮：
+<img src="https://gitee.com/NeuCharFramework/NcfDocs/tree/master/cn/docs/doc/start/start-develop/images/install-02.png" />
+
+
+阅读提示并点击确认，随后，即可看到安装成功的界面：
+
+<img src="https://gitee.com/NeuCharFramework/NcfDocs/tree/master/cn/docs/doc/start/start-develop/images/install-03.png" />
+
+登录后即可进入管理员后台
+
+<img src="https://gitee.com/NeuCharFramework/NcfDocs/tree/master/cn/docs/doc/start/start-develop/images/admin-background-01-homepage.png" />
+
+
 ## 待办事项：
 
 - [ ] 发布官网及在线 Demo（即将发布）
