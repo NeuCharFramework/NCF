@@ -15,6 +15,10 @@
 	
 	  <Compile Remove="Weixin\MpAccount\MpAccountMessageHandler.cs" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Content Remove="C:\Users\zsu\.nuget\packages\senparc.xncf.xncfbuilder\0.7.103-beta1\contentFiles\any\netstandard2.1\Templates\RegisterArea.tt" />
+	  <Content Remove="C:\Users\zsu\.nuget\packages\senparc.xncf.xncfbuilder\0.7.103-beta1\contentFiles\any\netstandard2.1\Templates\RegisterDatabase.tt" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<!--<ProjectReference Include="..\..\..\..\weixin.senparc.com Site\Senparc.Xncf.WeChatSampleBuilder\Senparc.Xncf.WeChatSampleBuilder.csproj" />-->
