@@ -15,7 +15,6 @@ using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core;
 using Senparc.Ncf.Core.Areas;
-using Senparc.Ncf.Core.AspNet.Areas;
 using Senparc.Ncf.Core.AssembleScan;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Models;
@@ -88,7 +87,7 @@ namespace Senparc.Web
                 {
                     //opt.RootDirectory = "/";
                 })
-              .AddNcfAreasWithHost(env).ConfigureApiBehaviorOptions(options =>
+              .AddNcfAreas(env).ConfigureApiBehaviorOptions(options =>
               {
                   options.InvalidModelStateResponseFactory = actionContext =>
                   {
