@@ -6,6 +6,7 @@
 		<Version>0.2.0-beta6</Version>
 		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
 		<TypeScriptToolsVersion>4.0</TypeScriptToolsVersion>
+		<UserSecretsId>d2144151-af7a-4d50-896d-4a306e594f7b</UserSecretsId>
 	</PropertyGroup>
 	<ItemGroup>
 		<!--https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-3.1-->
