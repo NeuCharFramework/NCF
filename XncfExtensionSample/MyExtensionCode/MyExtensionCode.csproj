@@ -5,22 +5,22 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.7.101-beta1" />
-		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.9.101-beta1" />
-		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.7.101-beta1" />
+		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.7.102-beta1" />
+		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.9.102-beta1" />
+		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.7.102-beta1" />
 	</ItemGroup>
 	<ItemGroup><!--<ProjectReference Include="..\..\..\Senparc.Xncf.WeixinManager\src\Senparc.Xncf.WeixinManager\Senparc.Xncf.WeixinManager.csproj" />-->
-		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.6.100.2-beta1" />
+		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.6.102-beta1" />
 	
 	  <Compile Remove="Weixin\MpAccount\MpAccountMessageHandler.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<!--<ProjectReference Include="..\..\..\..\weixin.senparc.com Site\Senparc.Xncf.WeChatSampleBuilder\Senparc.Xncf.WeChatSampleBuilder.csproj" />-->
-		<PackageReference Include="Senparc.Xncf.WeChatSampleBuilder" Version="0.3.1" />
+		<PackageReference Include="Senparc.Xncf.WeChatSampleBuilder" Version="0.3.2" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.7.101-beta1" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.7.102.1-beta1" />
 		<!--<ProjectReference Include="..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.XncfBuilder\Senparc.Xncf.XncfBuilder\Senparc.Xncf.XncfBuilder.csproj" />-->
 	</ItemGroup>
 
