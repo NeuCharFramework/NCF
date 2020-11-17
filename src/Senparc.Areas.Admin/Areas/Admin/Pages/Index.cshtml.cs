@@ -160,8 +160,8 @@ namespace Senparc.Areas.Admin.Pages
                         MenuName = _.Name,
                         Url = _.Url,
                         Icon = _.Icon,
-                        Id = (index++).ToString(),
-                        ParentId = item.Id
+                        Id = string.IsNullOrEmpty(_.Id) ? (index++).ToString() : _.Id,
+                        ParentId = string.IsNullOrEmpty(_.ParentId) ? item.Id : _.ParentId
                     }));
                     item.Url = string.Empty;
                 }
