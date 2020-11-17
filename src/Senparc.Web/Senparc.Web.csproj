@@ -24,7 +24,7 @@
 		<PackageReference Include="Senparc.Ncf.Core.AspNet" Version="0.1.101-beta1" />
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.6.103-beta1" />
 		<PackageReference Include="Senparc.CO2NET" Version="1.3.200" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.103-beta1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.104-beta1" />
 		<PackageReference Include="ML.Xncf.Docs" Version="2.0.110" />
 	</ItemGroup>
 	<ItemGroup>
