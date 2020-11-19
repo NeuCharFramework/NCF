@@ -13,12 +13,20 @@ header .header-icon img {
     }
 
 main {
-    padding-top: 60px;
+    padding-top: 40px;
 }
 
 .index-logo {
     width: 404px;
     margin: 0 auto;
+}
+
+.index-simple-notice {
+    padding: 20px;
+    margin-bottom: 100px;
+    text-align: center;
+    display: flex;
+    justify-content: center; /* 水平居中 */
 }
 
 .index-simple-tip {
@@ -131,6 +139,7 @@ footer ul {
 
 footer .footer-title {
     font-size: 14px;
+    font-weight: bold;
 }
 
 footer .footer-copyright {
@@ -173,19 +182,22 @@ footer .footer-img:hover {
     transform: translateY(0);
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.16);
 }
+
 .place-hover:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 20px 0 rgba(108,135,135,.2)
 }
 
-    .index-module:hover .caption-tit {
-        color: #6d17e1
-    }
-    .caption {
-        height: 220px;
-        overflow-y: hidden;
-        padding: 7px;
-    }
+.index-module:hover .caption-tit {
+    color: #6d17e1
+}
+
+.caption {
+    height: 220px;
+    overflow-y: hidden;
+    padding: 7px;
+}
+
 .caption-tit {
     margin-top: 1rem;
     font-size: 24px;
