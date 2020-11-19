@@ -22,11 +22,19 @@ main {
 }
 
 .index-simple-notice {
-    padding: 20px;
+    margin: 0px auto;
+    width: 600px;
+    padding: 10px;
     margin-bottom: 100px;
     text-align: center;
     display: flex;
-    justify-content: center; /* 水平居中 */
+    justify-content: center;
+    border-radius: 4px;
+    border-width: 1px;
+    border-color: rgb(106, 90, 205);
+    background-color: rgb(170 96 255);
+    color: #fff;
+    box-shadow: 0 0 15px #d788fc;
 }
 
 .index-simple-tip {
