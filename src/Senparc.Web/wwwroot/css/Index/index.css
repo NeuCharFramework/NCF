@@ -13,7 +13,7 @@ header .header-icon img {
     }
 
 main {
-    padding-top: 40px;
+    padding-top: 100px;
 }
 
 .index-logo {
@@ -22,23 +22,41 @@ main {
 }
 
 .index-simple-notice {
-    margin: 0px auto;
-    width: 600px;
+    margin: 30px auto 10px auto;
+    width: 580px;
     padding: 10px;
-    margin-bottom: 100px;
     text-align: center;
-    display: flex;
-    justify-content: center;
-    border-radius: 4px;
-    border-width: 1px;
+    border: 2px solid;
+    border-radius: 12px;
     border-color: rgb(106, 90, 205);
+    border-left: 10px rgb(106, 90, 205) solid;
+    border-right: 10px rgb(106, 90, 205) solid;
+    /* border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px; */
+
     background-color: rgb(170 96 255);
     color: #fff;
     box-shadow: 0 0 15px #d788fc;
+    clear: both;
 }
 
 .index-simple-tip {
-    margin-top: 100px;
+    margin-top: 55px;
+}
+
+.intro{
+    margin: 30px auto 0px auto;
+    width: 686px;
+    padding: 18px;
+    text-align: center;
+    background-color: rgb(106, 90, 205);
+    color:#fff;
+    border: 6px solid rgb(170 96 255);
+    border-radius: 2px;
+    /* border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px; */
+    border-left: 20px solid;
+    border-right: 20px solid;
 }
 
 .index-special-point {
@@ -74,7 +92,7 @@ main {
 .start-now {
     align-items: center;
     justify-content: center;
-    margin: 5rem;
+    margin: 3rem;
 }
 
 .index-show-row .img-fluid {
