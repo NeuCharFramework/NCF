@@ -1,6 +1,18 @@
-﻿$('#qq-code').hover(function () {
-    $('#qq-code-img').toggle();
-});
+﻿
+$(function(){
+    $('#qq-code').hover(function () {
+        $('#qq-code-img').toggle();
+    });
+
+    $('.index-simple-notice').hover(function(){
+        $(this).addClass("noticeHover");
+    },function(){
+        $(this).removeClass("noticeHover");
+    });
+
+    $('.start-btn').addClass('normal');
+})
+
 function unopen() {
     alert('版块暂未开放，敬请期待~');
 }
