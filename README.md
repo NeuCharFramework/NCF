@@ -19,6 +19,15 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 > 我们欢迎第三方开源组件提供自己的解决方案，我们将会测试并集成到 NCF 中。
 
 
+## 在线文档
+
+[https://www.ncf.pub/docs](https://www.ncf.pub/docs)
+
+## 当前项目在线 Demo
+
+[https://www.ncf.pub](https://www.ncf.pub)
+
+
 ## QQ 技术交流群
 
 <img src="https://sdk.weixin.senparc.com/images/QQ_Group_Avatar/NCF/QQ-Group.jpg" width="380" />
@@ -84,9 +93,6 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 
 ## 待办事项：
 
-- [ ] 发布官网及在线 Demo（即将发布）
-- [x] 提供完善的项目自动生成服务（参考 [WeChatSampleBuilder](http://sdk.weixin.senparc.com/Home/WeChatSampleBuilder)），为开发者提供项目定制生成服务。
-- [x] 提供快捷的模块化开发和安装方法。  
 - [ ] 开源 [NeuChar.com](https://www.neuchar.com/) 中的微信功能模块，可使用独立模块集成。
 - [ ] 提供完善的示例代码和文档。
 - [ ] 提供博客和视频教程（也欢迎开发者参与或发起）。
@@ -94,6 +100,4 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 - [ ] 完善 DDD 实践
 - [ ] 添加应用商店
 - [x] 定制命名空间
-- [x] 发布定制模板生成器（在线）
-  - [x] 可定制默认加载模块
 
