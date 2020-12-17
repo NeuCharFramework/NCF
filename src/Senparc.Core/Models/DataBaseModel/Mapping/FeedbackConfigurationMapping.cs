@@ -10,7 +10,7 @@ namespace Senparc.Core.Models
     {
         public override void Configure(EntityTypeBuilder<FeedBack> builder)
         {
-            builder.HasQueryFilter(z => !z.Flag);
+            //builder.HasQueryFilter(z => !z.Flag);
         }
     }
 }

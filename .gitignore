@@ -21,5 +21,4 @@ obj/
 /src/Senparc.Xncf.TemplateTest/*
 /src/Senparc.Database/Senparc.Database.dbmdl
 /src/Senparc.Database/Senparc.Database.jfm
-/src/Senparc.Xncf.FileServer/Senparc.Xncf.FileServer.xml
-src/Senparc.Database/Senparc.Database.jfm
+/src/Senparc.Web/App_Data/logs/*

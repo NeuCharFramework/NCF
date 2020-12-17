@@ -5,97 +5,21 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Senparc.Core.Models;
+using Senparc.Service;
 
-namespace Senparc.Web.Migrations
+namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemEntities
 {
-    [DbContext(typeof(SenparcEntities))]
-    [Migration("20200622051315_update-migration")]
-    partial class updatemigration
+    [DbContext(typeof(SystemServiceEntities_SqlServer))]
+    [Migration("20201022040300_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.2")
+                .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("ML.Xncf.Docs.Article", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("AddTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("AdminRemark")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.Property<int>("CatalogId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CatalogMark")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Flag")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Remark")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Docs_Article");
-                });
-
-            modelBuilder.Entity("ML.Xncf.Docs.Catalog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("AddTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("AdminRemark")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.Property<bool>("Flag")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ParentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Remark")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Docs_Catalog");
-                });
 
             modelBuilder.Entity("Senparc.Core.Models.AdminUserInfo", b =>
                 {
@@ -397,7 +321,7 @@ namespace Senparc.Web.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("PayMoney")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("PayParam")
                         .HasColumnType("nvarchar(max)");
@@ -409,7 +333,7 @@ namespace Senparc.Web.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(300)")
@@ -419,7 +343,7 @@ namespace Senparc.Web.Migrations
                         .HasColumnType("tinyint");
 
                     b.Property<decimal>("TotalPrice")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("TradeNumber")
                         .HasColumnType("varchar(150)");
@@ -692,6 +616,10 @@ namespace Senparc.Web.Migrations
                     b.Property<bool>("Flag")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
                     b.Property<DateTime>("LastUpdateTime")
                         .HasColumnType("datetime");
 
@@ -830,291 +758,6 @@ namespace Senparc.Web.Migrations
                     b.ToTable("SystemConfigs");
                 });
 
-            modelBuilder.Entity("Senparc.Xncf.DatabaseToolkit.DbConfig", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("AddTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("AdminRemark")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.Property<int>("BackupCycleMinutes")
-                        .HasColumnType("int");
-
-                    b.Property<string>("BackupPath")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.Property<bool>("Flag")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastBackupTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastUpdateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Remark")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DatabaseToolkitDbConfig");
-                });
-
-            modelBuilder.Entity("Senparc.Xncf.ExtensionAreaTemplate.Color", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("AddTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("AdditionNote")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AdminRemark")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.Property<int>("Blue")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Flag")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Green")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("LastUpdateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Red")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Remark")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AreaTemplate_Color");
-                });
-
-            modelBuilder.Entity("Senparc.Xncf.WeixinManager.Models.MpAccount", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("AddTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("AdminRemark")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.Property<string>("AppId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("AppSecret")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("EncodingAESKey")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
-                    b.Property<bool>("Flag")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Logo")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Remark")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("WeixinManager_MpAccount");
-                });
-
-            modelBuilder.Entity("Senparc.Xncf.WeixinManager.Models.UserTag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("AddTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("AdminRemark")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Flag")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("MpAccountId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Remark")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MpAccountId");
-
-                    b.ToTable("WeixinManager_UserTag");
-                });
-
-            modelBuilder.Entity("Senparc.Xncf.WeixinManager.Models.UserTag_WeixinUser", b =>
-                {
-                    b.Property<int>("UserTagId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WeixinUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("AddTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<bool>("Flag")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdateTime")
-                        .HasColumnType("datetime");
-
-                    b.HasKey("UserTagId", "WeixinUserId");
-
-                    b.HasIndex("WeixinUserId");
-
-                    b.ToTable("WeixinManager_UserTag_WeixinUser");
-                });
-
-            modelBuilder.Entity("Senparc.Xncf.WeixinManager.Models.WeixinUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("AddTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("AdminRemark")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Flag")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Groupid")
-                        .HasColumnType("int");
-
-                    b.Property<string>("HeadImgUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Language")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastUpdateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("MpAccountId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NickName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OpenId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Province")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("Qr_Scene")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Qr_Scene_Str")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Remark")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Sex")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Subscribe")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Subscribe_Scene")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("Subscribe_Time")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("UnionId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MpAccountId");
-
-                    b.ToTable("WeixinManager_WeixinUser");
-                });
-
             modelBuilder.Entity("Senparc.Core.Models.FeedBack", b =>
                 {
                     b.HasOne("Senparc.Ncf.Core.Models.Account", "Account")
@@ -1145,41 +788,6 @@ namespace Senparc.Web.Migrations
                         .WithMany("PointsLogs")
                         .HasForeignKey("AccountPayLogId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Senparc.Xncf.WeixinManager.Models.UserTag", b =>
-                {
-                    b.HasOne("Senparc.Xncf.WeixinManager.Models.MpAccount", "MpAccount")
-                        .WithMany("UserTags")
-                        .HasForeignKey("MpAccountId")
-                        .HasConstraintName("FK__UserTag__MpAccountId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Senparc.Xncf.WeixinManager.Models.UserTag_WeixinUser", b =>
-                {
-                    b.HasOne("Senparc.Xncf.WeixinManager.Models.UserTag", "UserTag")
-                        .WithMany("UserTags_WeixinUsers")
-                        .HasForeignKey("UserTagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Senparc.Xncf.WeixinManager.Models.WeixinUser", "WeixinUser")
-                        .WithMany("UserTags_WeixinUsers")
-                        .HasForeignKey("WeixinUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Senparc.Xncf.WeixinManager.Models.WeixinUser", b =>
-                {
-                    b.HasOne("Senparc.Xncf.WeixinManager.Models.MpAccount", "MpAccount")
-                        .WithMany("WeixinUsers")
-                        .HasForeignKey("MpAccountId")
-                        .HasConstraintName("FK__WeixinUser__MpAccountId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

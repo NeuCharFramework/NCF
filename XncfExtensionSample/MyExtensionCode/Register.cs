@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
 using Senparc.CO2NET.RegisterServices;
-using Senparc.CO2NET.Trace;
 using Senparc.Ncf.XncfBase;
 using Senparc.Weixin;
 using Senparc.Weixin.Cache.CsRedis;
@@ -12,7 +11,6 @@ using Senparc.Weixin.Entities;
 using Senparc.Weixin.RegisterServices;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace MyExtensionCode
 {

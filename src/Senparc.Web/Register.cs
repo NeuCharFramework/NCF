@@ -13,7 +13,6 @@ using Senparc.CO2NET;
 using Senparc.CO2NET.AspNet;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Trace;
-using Senparc.Respository;
 using Senparc.Ncf.Core;
 using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.AssembleScan;
@@ -21,6 +20,7 @@ using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.SMS;
 using Senparc.Ncf.XncfBase;
+using Senparc.Respository;
 using Senparc.Weixin;
 using System;
 using System.IO;
@@ -117,7 +117,6 @@ namespace Senparc.Web
                   //自动注册  防止跨站请求伪造（XSRF/CSRF）攻击
                   options.Conventions.Add(new Core.Conventions.AutoValidateAntiForgeryTokenModelConvention());
               });
-            ;
 
 #if DEBUG
             //Razor启用运行时编译，多个项目不需要手动编译。
@@ -126,7 +125,7 @@ namespace Senparc.Web
                 builder.AddRazorRuntimeCompilation(options =>
                 {
                     //自动索引所有需要使用 RazorRuntimeCompilation 的模块
-                    foreach (var razorRegister in Senparc.Ncf.XncfBase.Register.RegisterList.Where(z => z is IXncfRazorRuntimeCompilation))
+                    foreach (var razorRegister in XncfRegisterManager.RegisterList.Where(z => z is IXncfRazorRuntimeCompilation))
                     {
                         try
                         {
@@ -142,6 +141,9 @@ namespace Senparc.Web
             }
 
 #endif
+
+            //TODO:在模块中注册
+            services.AddScoped<Ncf.AreaBase.Admin.Filters.AuthenticationResultFilterAttribute>();
 
             //支持 Session
             services.AddSession();
@@ -238,6 +240,7 @@ namespace Senparc.Web
 
             //XncfModules（必须）
             Senparc.Ncf.XncfBase.Register.UseXncfModules(app, registerService);
+            //TODO:app.UseXncfModules(registerService);
 
             #region .NET Core默认不支持GB2312
 

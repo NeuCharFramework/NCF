@@ -56,7 +56,7 @@
             </el-table-column>
         </el-table>
         <!--编辑、新增 -->
-        <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
+        <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
             <el-form ref="dataForm"
                      :rules="dialog.rules"
                      :model="dialog.data"

@@ -1,4 +1,15 @@
 ﻿@model Senparc.Core.Models.VD.BasePageModel
+@using Senparc.Ncf.XncfBase
+@inject IServiceProvider _serviceProvider
+@functions{
+    protected async Task<bool> CheckXncfModuleValiable(string xncfName)
+    {
+        XncfRegisterManager xncfRegisterManager = new XncfRegisterManager(_serviceProvider);
+        return await xncfRegisterManager.CheckXncfValiable(xncfName).ConfigureAwait(false);
+    }
+}
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,9 +32,9 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 ncf-navbar">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">NeuCharFramework</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index">NeuCharFramework 示例</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -31,12 +42,11 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         @{
-                            var docReg = Senparc.Ncf.XncfBase.Register.RegisterList.FirstOrDefault(z => z.Uid == "519E8526-A738-465A-9DB8-2762E8441762");
-                            if (docReg != null)
+                            if (await CheckXncfModuleValiable("ML.Xncf.Docs"))
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" href="/Docs">文档</a>
-                                </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/Docs/Index" target="_blank">文档</a>
+                            </li>
                             }
                         }
                         <li class="nav-item">
@@ -56,7 +66,7 @@
         </nav>
     </header>
     <div class="container">
-        <partial name="_CookieConsentPartial" />
+        @*<partial name="_CookieConsentPartial" />*@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -69,31 +79,34 @@
                     <div class="col-lg-4 col-md-4 col-6">
                         <span class="footer-title">社区</span>
                         <ul>
+                          <li>
+                                <a href="https://github.com/NeuCharFramework/NCF" target="_blank">
+                                    GitHub
+                                </a>
+                            </li>
                             <li>
                                 <a onclick="unopen()">活动</a>
                             </li>
                             <li>
                                 <a onclick="unopen()">贡献</a>
                             </li>
-                            <li>
-                                <a href="https://github.com/NeuCharFramework/NCF" target="_blank">
-                                    GitHub
-                                </a>
-                            </li>
                         </ul>
                     </div>
                     <div class="col-lg-4 col-md-4 col-6">
                         <span class="footer-title">文档</span>
-                        <ul onclick="unopen()">
+                        <ul>
                             <li>
-                                <a>安装</a>
+                                <a href="https://www.ncf.pub/Docs/Index#sort=/NcfDocs/cn/docs/doc/start&doc=start-develop/get-ncf-template.md" target="_blank">开始开发</a>
                             </li>
+                            <!-- <li>
+                                <a href="https://www.ncf.pub/Docs/Index#sort=/NcfDocs/cn/docs/doc/start&doc=qa/explanation_of_terms.md" target="_blank">名词解释</a>
+                            </li>    -->
                             <li>
-                                <a>核心概念</a>
-                            </li>
+                                <a href="https://www.ncf.pub/Docs/Index#sort=/NcfDocs/cn/docs/doc/start&doc=qa/common_problem.md" target="_blank">常见问题</a>
+                            </li>   
                             <li>
-                                <a>API</a>
-                            </li>
+                                <a href="https://www.ncf.pub/Docs/Index#sort=/NcfDocs/cn/docs/doc/start&doc=release/log.md" target="_blank">更新日志</a>
+                            </li>   
                         </ul>
                     </div>
                     <div class="col-lg-4 col-md-4  col-6">

@@ -5,15 +5,14 @@
  * 如果需要学习扩展模块，请参考 【Senparc.ExtensionAreaTemplate】 项目的 Register.cs 文件！
  */
 
-using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Trace;
 using Senparc.Core.Models;
@@ -26,8 +25,6 @@ using Senparc.Ncf.XncfBase;
 using Senparc.Service;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -37,8 +34,8 @@ namespace Senparc.Areas.Admin
     public class Register : XncfRegisterBase,
         IXncfRegister, //注册 XNCF 基础模块接口（必须）
         IAreaRegister //注册 XNCF 页面接口（按需选用）
-        //IXncfDatabase,  //注册 XNCF 模块数据库（按需选用）
-        //IXncfRazorRuntimeCompilation  //需要使用 RazorRuntimeCompilation，在开发环境下实时更新 Razor Page
+                      //IXncfDatabase,  //注册 XNCF 模块数据库（按需选用）
+                      //IXncfRazorRuntimeCompilation  //需要使用 RazorRuntimeCompilation，在开发环境下实时更新 Razor Page
     {
 
         #region IXncfRegister 接口
@@ -128,7 +125,7 @@ namespace Senparc.Areas.Admin
             new AreaPageMenuItem(GetAreaUrl("/Admin/SenparcTrace/Index"),"SenparcTrace 日志","fa fa-calendar-o"),
         };//Admin比较特殊，不需要全部输出
 
-        public IMvcBuilder AuthorizeConfig(IMvcBuilder builder, IWebHostEnvironment env)
+        public IMvcBuilder AuthorizeConfig(IMvcBuilder builder, IHostEnvironment env)
         {
             //鉴权配置
             //添加基于Cookie的权限验证：https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-2.1&tabs=aspnetcore2x

@@ -6,12 +6,16 @@
  */
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Senparc.CO2NET.Trace;
 using Senparc.Core.Models;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Enums;
+using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Database;
 using Senparc.Ncf.XncfBase;
 using System;
 using System.Collections.Generic;
@@ -22,9 +26,9 @@ using System.Threading.Tasks;
 
 namespace Senparc.Service
 {
-   public class Register : XncfRegisterBase,
-        IXncfRegister, //注册 XNCF 基础模块接口（必须）
-        IXncfDatabase  //注册 XNCF 模块数据库（按需选用）
+    public class Register : XncfRegisterBase,
+         IXncfRegister, //注册 XNCF 基础模块接口（必须）
+         IXncfDatabase  //注册 XNCF 模块数据库（按需选用）
     {
         #region IXncfRegister 接口
 
@@ -53,6 +57,8 @@ namespace Senparc.Service
 
         public override async Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
         {
+            //TODO：DI注入注册时候，根据指定数据库进行绑定
+
             XncfModuleServiceExtension xncfModuleServiceExtension = serviceProvider.GetService<XncfModuleServiceExtension>();
             //SenparcEntities senparcEntities = (SenparcEntities)xncfModuleServiceExtension.BaseData.BaseDB.BaseDataContext;
             SenparcEntities senparcEntities = (SenparcEntities)xncfModuleServiceExtension.BaseData.BaseDB.BaseDataContext;
@@ -62,7 +68,19 @@ namespace Senparc.Service
             if (pendingMigs.Count() > 0)
             {
                 senparcEntities.ResetMigrate();//重置合并状态
-                senparcEntities.Migrate();//进行合并
+
+                try
+                {
+                    var script = senparcEntities.Database.GenerateCreateScript();
+                    SenparcTrace.SendCustomLog("senparcEntities.Database.GenerateCreateScript", script);
+
+                    senparcEntities.Migrate();//进行合并
+                }
+                catch (Exception ex)
+                {
+                    var currentDatabaseConfiguration = DatabaseConfigurationFactory.Instance.Current;
+                    SenparcTrace.BaseExceptionLog(new NcfDatabaseException(ex.Message, currentDatabaseConfiguration.GetType(), senparcEntities.GetType(), ex));
+                }
             }
 
             //更新数据库（目前不使用 SystemServiceEntities 存放数据库模型）
@@ -90,14 +108,14 @@ namespace Senparc.Service
 
         #region IXncfDatabase 接口
 
-        public string DatabaseUniquePrefix => "";//特殊情况：没有前缀
+        public string DatabaseUniquePrefix => "SystemService";//特殊情况：没有前缀
         public Type XncfDatabaseDbContextType => typeof(SystemServiceEntities);
 
+        public Type TryGetXncfDatabaseDbContextType => MultipleDatabasePool.Instance.GetXncfDbContextType(this.GetType());
 
         public void OnModelCreating(ModelBuilder modelBuilder)
         {
             //已在 SenparcEntities 中完成
-
         }
 
         public void AddXncfDatabaseModule(IServiceCollection services)
@@ -120,23 +138,30 @@ namespace Senparc.Service
              */
             #endregion
 
-            //SenparcEntities 工厂配置
+            var currentDatabasConfiguration = DatabaseConfigurationFactory.Instance.Current;
+
+            /* 
+             *     非常重要！！
+             * SenparcEntities 工厂配置
+             */
+            var xncfDatabaseData = new XncfDatabaseData(this, "Senparc.Service"/*从当前程序集读取*/);
+
             Func<IServiceProvider, SenparcEntities> senparcEntitiesImplementationFactory = s =>
-                new SenparcEntities(new DbContextOptionsBuilder<SenparcEntities>()
-                    .UseSqlServer(Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString,
-                                    b => base.DbContextOptionsAction(b, "Senparc.Service")/*从当前程序集读取*/)
-                    .Options);
-            services.AddScoped(senparcEntitiesImplementationFactory);
+            {
+                var multipleDatabasePool = MultipleDatabasePool.Instance;
+                return multipleDatabasePool.GetDbContext(this.GetType()) as SenparcEntities;
+            };
+            services.AddScoped<SenparcEntities>(senparcEntitiesImplementationFactory);
             services.AddScoped<ISenparcEntities>(senparcEntitiesImplementationFactory);
             services.AddScoped<SenparcEntitiesBase>(senparcEntitiesImplementationFactory);
 
             //SystemServiceEntities 工厂配置（实际不会用到）
             Func<IServiceProvider, SystemServiceEntities> systemServiceEntitiesImplementationFactory = s =>
-               new SystemServiceEntities(new DbContextOptionsBuilder<SystemServiceEntities>()
-                   .UseSqlServer(Ncf.Core.Config.SenparcDatabaseConfigs.ClientConnectionString,
-                                   b => base.DbContextOptionsAction(b, "Senparc.Service")/*从当前程序集读取*/)
-                   .Options);
-            services.AddScoped(systemServiceEntitiesImplementationFactory);
+            {
+                var multipleDatabasePool = MultipleDatabasePool.Instance;
+                return multipleDatabasePool.GetDbContext(this.GetType()) as SystemServiceEntities;
+            };
+            services.AddScoped<SystemServiceEntities>(systemServiceEntitiesImplementationFactory);
 
             services.AddScoped(typeof(ISqlClientFinanceData), typeof(SqlClientFinanceData));
             services.AddScoped(typeof(ISqlBaseFinanceData), typeof(SqlClientFinanceData));
