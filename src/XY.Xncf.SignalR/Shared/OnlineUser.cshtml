@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon">
+    <title>在线用户</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+    <div id="app">
+        <el-row :gutter="10" class="user_sch">
+            <el-input v-model="listQuery.userName" placeholder="请输入检索的昵称">
+                <el-button slot="append" v-on:click="getList()">检索</el-button>
+            </el-input>
+        </el-row>
+        <el-row :gutter="10">
+            <el-col v-for="item in thisData" :xs="12" :sm="8" :md="4" :lg="2" :xl="1">
+                <el-badge :value="item.Value">
+                    <el-button type="success" plain>{{item.Key}}</el-button>
+                </el-badge>
+            </el-col>
+        </el-row>
+        <pagination :total="paginationQuery.total"
+                    :page.sync="listQuery.pageIndex"
+                    :limit.sync="listQuery.pageSize"
+                    @@pagination="getList"></pagination>
+    </div>
+    <style>
+        #app { padding: 15px; }
+        .user_sch { margin-bottom: 25px; }
+        .el-col { border-radius: 4px; margin-bottom: 15px; text-align: center; }
+    </style>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        Vue.component('pagination', {
+            template: `
+          <!-- 分页组件 -->
+          <div :class="{'hidden':hidden}" class="pagination-container">
+            <el-pagination
+              :background="background"
+              :current-page.sync="currentPage"
+              :page-size.sync="pageSize"
+              :layout="layout"
+              :page-sizes="pageSizes"
+              :total="total"
+              v-bind="$attrs"
+              @@size-change="handleSizeChange"
+              @@current-change="handleCurrentChange"
+            />
+          </div>`,
+            name: 'pagination',
+            props: {
+                total: {
+                    required: true,
+                    type: Number
+                },
+                page: {
+                    type: Number,
+                    default: 1
+                },
+                limit: {
+                    type: Number,
+                    default: 20
+                },
+                pageSizes: {
+                    type: Array,
+                    default() {
+                        return [10, 20, 30, 50, 100, 200];
+                    }
+                },
+                layout: {
+                    type: String,
+                    default: "total, sizes, prev, pager, next, jumper"
+                },
+                background: {
+                    type: Boolean,
+                    default: true
+                },
+                autoScroll: {
+                    type: Boolean,
+                    default: true
+                },
+                hidden: {
+                    type: Boolean,
+                    default: false
+                }
+            },
+            computed: {
+                //监听传进来的当前页和大小，有变化时更新 :page.sync="listQuery.page"和:limit.sync="listQuery.limit"
+                currentPage: {
+                    get() {
+                        return this.page;
+                    },
+                    set(val) {
+                        this.$emit("update:page", val);
+                    }
+                },
+                pageSize: {
+                    get() {
+                        return this.limit;
+                    },
+                    set(val) {
+                        this.$emit("update:limit", val);
+                    }
+                }
+            },
+            methods: {
+                handleSizeChange(val) {
+                    this.$emit("pagination", { page: this.currentPage, limit: val });
+                    if (this.autoScroll) {
+                        scrollTo(0, 800);
+                    }
+                },
+                handleCurrentChange(val) {
+                    this.$emit("pagination", { page: val, limit: this.pageSize });
+                    if (this.autoScroll) {
+                        scrollTo(0, 800);
+                    }
+                }
+            }
+        });
+    </script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    //分页参数
+                    paginationQuery: {
+                        total: 5
+                    },
+                    //分页接口传参
+                    listQuery: {
+                        pageIndex: 1,
+                        pageSize: 100,
+                        userName: ''
+                    },
+                    thisData: []
+                };
+            },
+            created: function () {
+                this.getList();
+            },
+            methods: {
+                // 初始化获取数据
+                async getList() {
+                    let { pageIndex, pageSize, userName } = this.listQuery;
+                    axios.post(`/getonlineuser?pageIndex=${pageIndex}&pageSize=${pageSize}&userName=${userName}`).then(res => {
+                        this.paginationQuery.total = res.data.total;
+                        this.thisData = res.data.list;
+                    });
+                }
+            }
+        })
+    </script>
+</body>
+</html>

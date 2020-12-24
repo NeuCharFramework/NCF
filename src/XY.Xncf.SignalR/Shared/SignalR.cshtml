@@ -1,0 +1,35 @@
+﻿<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.7/signalr.min.js"></script>
+<script type="text/javascript">
+    var connection = new signalR.HubConnectionBuilder()
+        .withUrl("/loginHub", {
+            accessTokenFactory: () => {
+                var signalr_clientId;
+                if (localStorage.getItem("signalr_clientId") != undefined) {
+                    signalr_clientId = localStorage.getItem("signalr_clientId");
+                } else {
+                    function S4() {
+                        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                    }
+                    signalr_clientId = S4() + S4() + S4() + S4();
+                    localStorage.setItem("signalr_clientId", signalr_clientId);
+                }
+                return signalr_clientId;
+            }
+        })
+        .withAutomaticReconnect({
+            nextRetryDelayInMilliseconds: retryContext => {
+                if (retryContext.elapsedMilliseconds < 60000) {
+                    return retryContext.previousRetryCount * 10000;
+                } else if (retryContext.elapsedMilliseconds < 10 * 60000) {
+                    return 60000;
+                } else {
+                    return null;
+                }
+            }
+        })
+        .build();
+    connection.onreconnecting(error => {//处理连接断开
+        console.assert(connection.state === signalR.HubConnectionState.Reconnecting);
+    });
+    connection.start();
+</script>
