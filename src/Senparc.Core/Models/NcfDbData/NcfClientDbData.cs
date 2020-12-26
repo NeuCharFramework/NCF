@@ -6,17 +6,17 @@ using Senparc.Ncf.Utility;
 
 namespace Senparc.Core.Models
 {
-    public interface ISqlClientFinanceData : INcfDbData
+    public interface INcfClientDbData : INcfDbData
     {
         SenparcEntities DataContext { get; }
     }
 
     //[Pluggable("ClientDatabase")]
-    public class SqlClientFinanceData : NcfDbData, INcfDbData, ISqlClientFinanceData
+    public class NcfClientDbData : NcfDbData, INcfDbData, INcfClientDbData
     {
         private SenparcEntities dataContext;
 
-        public SqlClientFinanceData(SenparcEntities senparcEntities)
+        public NcfClientDbData(SenparcEntities senparcEntities)
         {
             dataContext = senparcEntities;
         }

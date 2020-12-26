@@ -10,7 +10,7 @@ namespace Senparc.Repository
 
     public class PointsLogRepository : ClientRepositoryBase<PointsLog>, IPointsLogRepository
     {
-        public PointsLogRepository(ISqlClientFinanceData sqlClientFinanceData) : base(sqlClientFinanceData)
+        public PointsLogRepository(INcfClientDbData NcfClientDbData) : base(NcfClientDbData)
         {
 
         }

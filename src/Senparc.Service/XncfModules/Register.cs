@@ -163,8 +163,8 @@ namespace Senparc.Service
             };
             services.AddScoped<SystemServiceEntities>(systemServiceEntitiesImplementationFactory);
 
-            services.AddScoped(typeof(ISqlClientFinanceData), typeof(SqlClientFinanceData));
-            services.AddScoped(typeof(INcfDbData), typeof(SqlClientFinanceData));
+            services.AddScoped(typeof(INcfClientDbData), typeof(NcfClientDbData));
+            services.AddScoped(typeof(INcfDbData), typeof(NcfClientDbData));
 
             //预加载 EntitySetKey
             EntitySetKeys.TryLoadSetInfo(typeof(SenparcEntities));
