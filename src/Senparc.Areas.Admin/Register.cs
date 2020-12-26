@@ -204,7 +204,7 @@ namespace Senparc.Areas.Admin
         //    services.AddScoped<SenparcEntitiesBase>(implementationFactory);
 
         //    services.AddScoped(typeof(ISqlClientFinanceData), typeof(SqlClientFinanceData));
-        //    services.AddScoped(typeof(ISqlBaseFinanceData), typeof(SqlClientFinanceData));
+        //    services.AddScoped(typeof(INcfDbData), typeof(SqlClientFinanceData));
 
         //    //Attributes
         //    services.AddScoped(typeof(AuthenticationResultFilterAttribute));
