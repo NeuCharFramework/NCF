@@ -1,8 +1,7 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntities
+namespace Senparc.Service.Migrations.Migrations.SqlServer
 {
     public partial class Init : Migration
     {
@@ -13,7 +12,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Flag = table.Column<bool>(nullable: false, defaultValue: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),
@@ -62,7 +61,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),
@@ -134,7 +133,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),
@@ -156,7 +155,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),
@@ -195,7 +194,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),
@@ -217,7 +216,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastUpdateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -228,7 +227,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                     MenuName = table.Column<string>(maxLength: 100, nullable: true),
                     Version = table.Column<string>(maxLength: 100, nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    UpdateLog = table.Column<string>(type: "text", nullable: false),
+                    UpdateLog = table.Column<string>(type: "ntext", nullable: false),
                     AllowRemove = table.Column<bool>(nullable: false),
                     MenuId = table.Column<string>(maxLength: 100, nullable: true),
                     Icon = table.Column<string>(maxLength: 100, nullable: true),
@@ -244,7 +243,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),
@@ -257,7 +256,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                     UsedPoints = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
                     CompleteTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     AddIp = table.Column<string>(type: "varchar(50)", nullable: true),
-                    GetPoints = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
+                    GetPoints = table.Column<decimal>(type: "money", nullable: false),
                     Status = table.Column<byte>(nullable: false),
                     Description = table.Column<string>(type: "varchar(250)", nullable: false),
                     Type = table.Column<byte>(nullable: true),
@@ -267,7 +266,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                     OrderType = table.Column<int>(nullable: false),
                     PayParam = table.Column<string>(nullable: true),
                     Price = table.Column<decimal>(nullable: false),
-                    Fee = table.Column<decimal>(type: "decimal(18, 2)", nullable: false)
+                    Fee = table.Column<decimal>(type: "money", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -285,7 +284,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),
@@ -310,7 +309,7 @@ namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntit
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Flag = table.Column<bool>(nullable: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),

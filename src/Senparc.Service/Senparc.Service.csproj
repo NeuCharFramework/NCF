@@ -40,8 +40,4 @@
 		<ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="SystemEntities\Migrations\" />
-	</ItemGroup>
-
 </Project>
