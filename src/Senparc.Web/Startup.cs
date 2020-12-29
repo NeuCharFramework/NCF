@@ -30,12 +30,12 @@ namespace Senparc.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //Ö¸¶¨Êı¾İ¿âÀàĞÍ
-            //services.AddDatabase<SQLiteMemoryDatabaseConfiguration>();//Ê¹ÓÃ SQLite Êı¾İ¿â
-            services.AddDatabase<SQLServerDatabaseConfiguration>();//Ê¹ÓÃ SQLServerÊı¾İ¿â
-            //services.AddDatabase<MySqlDatabaseConfiguration>();//Ê¹ÓÃ MySQL Êı¾İ¿â
+            //æŒ‡å®šæ•°æ®åº“ç±»å‹
+            //services.AddDatabase<SQLiteMemoryDatabaseConfiguration>();//ä½¿ç”¨ SQLite æ•°æ®åº“
+            services.AddDatabase<SQLServerDatabaseConfiguration>();//ä½¿ç”¨ SQLServeræ•°æ®åº“
+            //services.AddDatabase<MySqlDatabaseConfiguration>();//ä½¿ç”¨ MySQL æ•°æ®åº“
 
-            //Ìí¼Ó£¨×¢²á£© Ncf ·şÎñ£¨ÖØÒª£¬±ØĞë£¡£©
+            //æ·»åŠ ï¼ˆæ³¨å†Œï¼‰ Ncf æœåŠ¡ï¼ˆé‡è¦ï¼Œå¿…é¡»ï¼ï¼‰
             services.AddNcfServices(Configuration, env, CompatibilityVersion.Version_3_0);
         }
 
@@ -60,15 +60,15 @@ namespace Senparc.Web
 
             app.UseCookiePolicy();
 
+            //Use NCFï¼ˆå¿…é¡»ï¼‰
+            app.UseNcf(env, senparcCoreSetting, senparcSetting);
+            
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
             });
-
-            //Use NCF£¨±ØĞë£©
-            app.UseNcf(env, senparcCoreSetting, senparcSetting);
         }
     }
 }
