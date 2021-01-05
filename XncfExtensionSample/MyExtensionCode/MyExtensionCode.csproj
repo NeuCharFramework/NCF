@@ -15,17 +15,13 @@
 	
 	  <Compile Remove="Weixin\MpAccount\MpAccountMessageHandler.cs" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Content Remove="C:\Users\zsu\.nuget\packages\senparc.xncf.xncfbuilder\0.7.103-beta1\contentFiles\any\netstandard2.1\Templates\RegisterArea.tt" />
-	  <Content Remove="C:\Users\zsu\.nuget\packages\senparc.xncf.xncfbuilder\0.7.103-beta1\contentFiles\any\netstandard2.1\Templates\RegisterDatabase.tt" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<!--<ProjectReference Include="..\..\..\..\weixin.senparc.com Site\Senparc.Xncf.WeChatSampleBuilder\Senparc.Xncf.WeChatSampleBuilder.csproj" />-->
 		<PackageReference Include="Senparc.Xncf.WeChatSampleBuilder" Version="0.3.3" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.7.105-beta1" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.7.105.2-beta1" />
 		<!--<ProjectReference Include="..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.XncfBuilder\Senparc.Xncf.XncfBuilder\Senparc.Xncf.XncfBuilder.csproj" />-->
 	</ItemGroup>
 
