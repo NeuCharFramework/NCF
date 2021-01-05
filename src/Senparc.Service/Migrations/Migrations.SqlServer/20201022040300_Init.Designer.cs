@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Senparc.Service;
 
-namespace Senparc.Service.SystemEntities.Migrations.Migrations.SqlServer.SystemEntities
+namespace Senparc.Service.Migrations.Migrations.SqlServer
 {
     [DbContext(typeof(SystemServiceEntities_SqlServer))]
     [Migration("20201022040300_Init")]

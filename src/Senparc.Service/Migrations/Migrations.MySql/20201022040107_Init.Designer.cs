@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Senparc.Service;
 
-namespace Senparc.Service.SystemEntities.Migrations.Migrations.MySql.SystemEntities
+namespace Senparc.Service.Migrations.Migrations.MySql
 {
     [DbContext(typeof(SystemServiceEntities_MySql))]
     [Migration("20201022040107_Init")]
