@@ -69,6 +69,9 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasMaxLength(300);
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ThisLoginIp")
                         .HasColumnName("ThisLoginIP")
                         .HasColumnType("TEXT")
@@ -115,6 +118,9 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                     b.Property<string>("Remark")
                         .HasColumnType("TEXT")
                         .HasMaxLength(300);
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -238,6 +244,9 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                     b.Property<byte>("Sex")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ThisLoginIp")
                         .HasColumnName("ThisLoginIP")
                         .HasColumnType("TEXT")
@@ -333,6 +342,9 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                     b.Property<byte>("Status")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("TEXT");
 
@@ -386,6 +398,9 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                     b.Property<string>("Remark")
                         .HasColumnType("TEXT")
                         .HasMaxLength(300);
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Url")
                         .HasColumnType("TEXT")
@@ -445,6 +460,9 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                     b.Property<int>("Sort")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Url")
                         .HasColumnType("TEXT")
                         .HasMaxLength(350);
@@ -499,6 +517,9 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.ToTable("SysPermission");
@@ -538,6 +559,9 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.ToTable("SysRoles");
@@ -576,6 +600,9 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                     b.Property<string>("RoleId")
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -629,6 +656,9 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasMaxLength(300);
 
                     b.Property<int>("State")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TenantId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Uid")
@@ -691,6 +721,9 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasMaxLength(300);
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
@@ -738,6 +771,9 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
 
                     b.Property<string>("TenPayAppId")
                         .HasColumnType("varchar(100)");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

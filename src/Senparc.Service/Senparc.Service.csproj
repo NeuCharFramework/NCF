@@ -2,6 +2,9 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
+
+		<!--使用XncfBuilder更新数据库迁移文件时可使用-->
+		<!--<TargetFramework>netcoreapp3.1</TargetFramework>-->
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- 仅在开发环境下引用 -->

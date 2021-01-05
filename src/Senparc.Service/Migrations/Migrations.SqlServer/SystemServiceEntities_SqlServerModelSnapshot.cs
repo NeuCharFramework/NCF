@@ -73,6 +73,9 @@ namespace Senparc.Service.Migrations.Migrations.SqlServer
                         .HasColumnType("nvarchar(300)")
                         .HasMaxLength(300);
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ThisLoginIp")
                         .HasColumnName("ThisLoginIP")
                         .HasColumnType("varchar(20)")
@@ -120,6 +123,9 @@ namespace Senparc.Service.Migrations.Migrations.SqlServer
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(300)")
                         .HasMaxLength(300);
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -244,6 +250,9 @@ namespace Senparc.Service.Migrations.Migrations.SqlServer
                     b.Property<byte>("Sex")
                         .HasColumnType("tinyint");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ThisLoginIp")
                         .HasColumnName("ThisLoginIP")
                         .HasColumnType("varchar(30)")
@@ -340,6 +349,9 @@ namespace Senparc.Service.Migrations.Migrations.SqlServer
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
 
@@ -393,6 +405,9 @@ namespace Senparc.Service.Migrations.Migrations.SqlServer
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(300)")
                         .HasMaxLength(300);
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(350)")
@@ -452,6 +467,9 @@ namespace Senparc.Service.Migrations.Migrations.SqlServer
                     b.Property<int>("Sort")
                         .HasColumnType("int");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(350)")
                         .HasMaxLength(350);
@@ -507,6 +525,9 @@ namespace Senparc.Service.Migrations.Migrations.SqlServer
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("SysPermission");
@@ -545,6 +566,9 @@ namespace Senparc.Service.Migrations.Migrations.SqlServer
                     b.Property<string>("RoleName")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -585,6 +609,9 @@ namespace Senparc.Service.Migrations.Migrations.SqlServer
                     b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -639,6 +666,9 @@ namespace Senparc.Service.Migrations.Migrations.SqlServer
                         .HasMaxLength(300);
 
                     b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("Uid")
@@ -702,6 +732,9 @@ namespace Senparc.Service.Migrations.Migrations.SqlServer
                         .HasColumnType("nvarchar(300)")
                         .HasMaxLength(300);
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
@@ -750,6 +783,9 @@ namespace Senparc.Service.Migrations.Migrations.SqlServer
 
                     b.Property<string>("TenPayAppId")
                         .HasColumnType("varchar(100)");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
