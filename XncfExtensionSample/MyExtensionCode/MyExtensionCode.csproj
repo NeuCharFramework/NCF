@@ -21,7 +21,7 @@
 		<PackageReference Include="Senparc.Xncf.WeChatSampleBuilder" Version="0.3.3" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.8.108.2-beta1" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.8.108.7-beta1" />
 		<!--<ProjectReference Include="..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.XncfBuilder\Senparc.Xncf.XncfBuilder\Senparc.Xncf.XncfBuilder.csproj" />-->
 	</ItemGroup>
 
