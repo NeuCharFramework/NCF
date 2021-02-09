@@ -87,7 +87,8 @@ namespace Senparc.Web
                 {
                     //opt.RootDirectory = "/";
                 })
-              .AddNcfAreas(env).ConfigureApiBehaviorOptions(options =>
+              .AddNcfAreas(env)//注册所有 Ncf 的 Area 模块（必须）
+              .ConfigureApiBehaviorOptions(options =>
               {
                   options.InvalidModelStateResponseFactory = actionContext =>
                   {
@@ -98,7 +99,7 @@ namespace Senparc.Web
                       //commonReturnModel.StatusCode = Core.App.CommonReturnStatusCode.参数校验不通过;
                       return new BadRequestObjectResult(commonReturnModel);
                   };
-              })//注册所有 Ncf 的 Area 模块（必须）
+              })
               .AddXmlSerializerFormatters()
               .AddJsonOptions(options =>
               {
@@ -216,7 +217,7 @@ namespace Senparc.Web
 
                         //以下会立即将全局缓存设置为 Redis
                         Senparc.CO2NET.Cache.CsRedis.Register.UseKeyValueRedisNow(); //键值对缓存策略（推荐）
-                                                                                     //Senparc.CO2NET.Cache.Redis.Register.UseHashRedisNow();//HashSet储存格式的缓存策略
+                        /*Senparc.CO2NET.Cache.CsRedis.Register.UseHashRedisNow();*/ //HashSet储存格式的缓存策略 
 
                         //也可以通过以下方式自定义当前需要启用的缓存策略
                         //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//键值对
