@@ -5,16 +5,16 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Senparc.Service;
 
-namespace Senparc.Service.Migrations.Migrations.Sqlite
+namespace Senparc.Service.Migrations.Migrations.SQLite
 {
-    [DbContext(typeof(SystemServiceEntities))]
-    partial class SystemServiceEntitiesModelSnapshot : ModelSnapshot
+    [DbContext(typeof(SystemServiceEntities_Sqliteq))]
+    partial class SystemServiceEntities_SqliteModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.6");
+                .HasAnnotation("ProductVersion", "5.0.1");
 
             modelBuilder.Entity("Senparc.Core.Models.AdminUserInfo", b =>
                 {
@@ -26,17 +26,17 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LastLoginIp")
-                        .HasColumnName("LastLoginIP")
-                        .HasColumnType("TEXT")
                         .HasMaxLength(20)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("LastLoginIP");
 
                     b.Property<DateTime>("LastLoginTime")
                         .HasColumnType("datetime");
@@ -48,42 +48,42 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordSalt")
-                        .HasColumnType("TEXT")
                         .HasMaxLength(100)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("TEXT")
                         .HasMaxLength(20)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RealName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ThisLoginIp")
-                        .HasColumnName("ThisLoginIP")
-                        .HasColumnType("TEXT")
                         .HasMaxLength(20)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ThisLoginIP");
 
                     b.Property<DateTime>("ThisLoginTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -103,8 +103,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Content")
                         .HasColumnType("TEXT");
@@ -116,8 +116,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("INTEGER");
@@ -142,19 +142,19 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("Balance")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("City")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Country")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("District")
                         .HasColumnType("TEXT");
@@ -193,8 +193,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
 
                     b.Property<string>("NickName")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Note")
                         .HasColumnType("TEXT");
@@ -203,43 +203,43 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordSalt")
-                        .HasColumnType("TEXT")
                         .HasMaxLength(100)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool?>("PhoneChecked")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PicUrl")
-                        .HasColumnType("TEXT")
                         .HasMaxLength(300)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("Points")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Province")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("QQ")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RealName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<byte>("Sex")
                         .HasColumnType("INTEGER");
@@ -248,18 +248,18 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ThisLoginIp")
-                        .HasColumnName("ThisLoginIP")
-                        .HasColumnType("TEXT")
                         .HasMaxLength(30)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ThisLoginIP");
 
                     b.Property<DateTime>("ThisLoginTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("WeixinOpenId")
                         .HasColumnType("TEXT");
@@ -291,8 +291,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CompleteTime")
                         .HasColumnType("datetime");
@@ -336,8 +336,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<byte>("Status")
                         .HasColumnType("INTEGER");
@@ -373,13 +373,13 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ButtonName")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("INTEGER");
@@ -388,23 +388,23 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("MenuId")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("OpearMark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Url")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(350);
+                        .HasMaxLength(350)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -414,22 +414,22 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
             modelBuilder.Entity("Senparc.Ncf.Core.Models.DataBaseModel.SysMenu", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("AddTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsLocked")
                         .HasColumnType("INTEGER");
@@ -439,23 +439,23 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
 
                     b.Property<string>("MenuName")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(150);
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("MenuType")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ParentId")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ResourceCode")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Sort")
                         .HasColumnType("INTEGER");
@@ -464,8 +464,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Url")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(350);
+                        .HasMaxLength(350)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Visible")
                         .HasColumnType("INTEGER");
@@ -485,8 +485,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("INTEGER");
@@ -498,24 +498,24 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PermissionId")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ResourceCode")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RoleCode")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("INTEGER");
@@ -528,15 +528,15 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
             modelBuilder.Entity("Senparc.Ncf.Core.Models.DataBaseModel.SysRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("AddTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("INTEGER");
@@ -548,16 +548,16 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RoleCode")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RoleName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("INTEGER");
@@ -580,8 +580,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("INTEGER");
@@ -590,16 +590,16 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RoleCode")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("INTEGER");
@@ -607,6 +607,50 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                     b.HasKey("Id");
 
                     b.ToTable("SysRoleAdminUserInfos");
+                });
+
+            modelBuilder.Entity("Senparc.Ncf.Core.Models.DataBaseModel.TenantInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("AddTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AdminRemark")
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Enable")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Flag")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastUpdateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Remark")
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("TenantKey")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TenantInfos");
                 });
 
             modelBuilder.Entity("Senparc.Ncf.Core.Models.DataBaseModel.XncfModule", b =>
@@ -619,8 +663,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("datetime");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("AllowRemove")
                         .HasColumnType("INTEGER");
@@ -632,28 +676,28 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastUpdateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("MenuId")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("MenuName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("State")
                         .HasColumnType("INTEGER");
@@ -663,8 +707,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
 
                     b.Property<string>("Uid")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UpdateLog")
                         .IsRequired()
@@ -672,8 +716,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
 
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -696,8 +740,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("AfterPoints")
                         .HasColumnType("decimal(18, 2)");
@@ -718,8 +762,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("INTEGER");
@@ -743,8 +787,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("INTEGER");
@@ -762,8 +806,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasColumnType("varchar(300)");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SystemName")
                         .IsRequired()
@@ -787,6 +831,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("Senparc.Ncf.Core.Models.AccountPayLog", b =>
@@ -796,6 +842,8 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("Senparc.Ncf.Core.Models.PointsLog", b =>
@@ -810,6 +858,22 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .WithMany("PointsLogs")
                         .HasForeignKey("AccountPayLogId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Account");
+
+                    b.Navigation("AccountPayLog");
+                });
+
+            modelBuilder.Entity("Senparc.Ncf.Core.Models.Account", b =>
+                {
+                    b.Navigation("AccountPayLogs");
+
+                    b.Navigation("PointsLogs");
+                });
+
+            modelBuilder.Entity("Senparc.Ncf.Core.Models.AccountPayLog", b =>
+                {
+                    b.Navigation("PointsLogs");
                 });
 #pragma warning restore 612, 618
         }

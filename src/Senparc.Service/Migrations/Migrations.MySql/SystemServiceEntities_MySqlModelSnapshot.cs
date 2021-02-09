@@ -14,8 +14,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.6")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64)
+                .HasAnnotation("ProductVersion", "5.0.1");
 
             modelBuilder.Entity("Senparc.Core.Models.AdminUserInfo", b =>
                 {
@@ -27,17 +27,17 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("LastLoginIp")
-                        .HasColumnName("LastLoginIP")
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
                         .HasMaxLength(20)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
+                        .HasColumnName("LastLoginIP");
 
                     b.Property<DateTime>("LastLoginTime")
                         .HasColumnType("datetime");
@@ -49,42 +49,42 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Password")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.Property<string>("PasswordSalt")
-                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
                         .HasMaxLength(100)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
                         .HasMaxLength(20)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4");
 
                     b.Property<string>("RealName")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ThisLoginIp")
-                        .HasColumnName("ThisLoginIP")
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
                         .HasMaxLength(20)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
+                        .HasColumnName("ThisLoginIP");
 
                     b.Property<DateTime>("ThisLoginTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -104,8 +104,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Content")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -117,8 +117,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
@@ -143,19 +143,19 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<decimal>("Balance")
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("City")
-                        .HasColumnType("varchar(30) CHARACTER SET utf8mb4")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Country")
-                        .HasColumnType("varchar(30) CHARACTER SET utf8mb4")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30) CHARACTER SET utf8mb4");
 
                     b.Property<string>("District")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -194,8 +194,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
 
                     b.Property<string>("NickName")
                         .IsRequired()
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Note")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -204,43 +204,43 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4");
 
                     b.Property<string>("PasswordSalt")
-                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
                         .HasMaxLength(100)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4");
 
                     b.Property<bool?>("PhoneChecked")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("PicUrl")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
                         .HasMaxLength(300)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<decimal>("Points")
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Province")
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4");
 
                     b.Property<string>("QQ")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("RealName")
-                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<byte>("Sex")
                         .HasColumnType("tinyint unsigned");
@@ -249,18 +249,18 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("int");
 
                     b.Property<string>("ThisLoginIp")
-                        .HasColumnName("ThisLoginIP")
-                        .HasColumnType("varchar(30) CHARACTER SET utf8mb4")
                         .HasMaxLength(30)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(30) CHARACTER SET utf8mb4")
+                        .HasColumnName("ThisLoginIP");
 
                     b.Property<DateTime>("ThisLoginTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.Property<string>("WeixinOpenId")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -292,8 +292,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("CompleteTime")
                         .HasColumnType("datetime");
@@ -303,13 +303,13 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("varchar(250)");
 
                     b.Property<decimal>("Fee")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<decimal>("GetPoints")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("LastUpdateTime")
                         .HasColumnType("datetime(6)");
@@ -337,8 +337,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint unsigned");
@@ -356,7 +356,7 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("tinyint unsigned");
 
                     b.Property<decimal?>("UsedPoints")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -374,13 +374,13 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<string>("ButtonName")
                         .IsRequired()
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("tinyint(1)");
@@ -389,23 +389,23 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("MenuId")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.Property<string>("OpearMark")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("Url")
-                        .HasColumnType("varchar(350) CHARACTER SET utf8mb4")
-                        .HasMaxLength(350);
+                        .HasMaxLength(350)
+                        .HasColumnType("varchar(350) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -415,22 +415,22 @@ namespace Senparc.Service.Migrations.Migrations.MySql
             modelBuilder.Entity("Senparc.Ncf.Core.Models.DataBaseModel.SysMenu", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("AddTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.Property<bool>("IsLocked")
                         .HasColumnType("tinyint(1)");
@@ -440,23 +440,23 @@ namespace Senparc.Service.Migrations.Migrations.MySql
 
                     b.Property<string>("MenuName")
                         .IsRequired()
-                        .HasColumnType("varchar(150) CHARACTER SET utf8mb4")
-                        .HasMaxLength(150);
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150) CHARACTER SET utf8mb4");
 
                     b.Property<int>("MenuType")
                         .HasColumnType("int");
 
                     b.Property<string>("ParentId")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<string>("ResourceCode")
-                        .HasColumnType("varchar(30) CHARACTER SET utf8mb4")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30) CHARACTER SET utf8mb4");
 
                     b.Property<int>("Sort")
                         .HasColumnType("int");
@@ -465,8 +465,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("int");
 
                     b.Property<string>("Url")
-                        .HasColumnType("varchar(350) CHARACTER SET utf8mb4")
-                        .HasMaxLength(350);
+                        .HasMaxLength(350)
+                        .HasColumnType("varchar(350) CHARACTER SET utf8mb4");
 
                     b.Property<bool>("Visible")
                         .HasColumnType("tinyint(1)");
@@ -486,8 +486,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("tinyint(1)");
@@ -499,24 +499,24 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("PermissionId")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<string>("ResourceCode")
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4");
 
                     b.Property<string>("RoleCode")
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
@@ -529,15 +529,15 @@ namespace Senparc.Service.Migrations.Migrations.MySql
             modelBuilder.Entity("Senparc.Ncf.Core.Models.DataBaseModel.SysRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("AddTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("tinyint(1)");
@@ -549,16 +549,16 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<string>("RoleCode")
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4");
 
                     b.Property<string>("RoleName")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
@@ -581,8 +581,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("tinyint(1)");
@@ -591,16 +591,16 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<string>("RoleCode")
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
@@ -608,6 +608,50 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                     b.HasKey("Id");
 
                     b.ToTable("SysRoleAdminUserInfos");
+                });
+
+            modelBuilder.Entity("Senparc.Ncf.Core.Models.DataBaseModel.TenantInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("AddTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("AdminRemark")
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("Enable")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("Flag")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("LastUpdateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Remark")
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenantKey")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TenantInfos");
                 });
 
             modelBuilder.Entity("Senparc.Ncf.Core.Models.DataBaseModel.XncfModule", b =>
@@ -620,8 +664,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("datetime");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<bool>("AllowRemove")
                         .HasColumnType("tinyint(1)");
@@ -633,28 +677,28 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("LastUpdateTime")
                         .HasColumnType("datetime");
 
                     b.Property<string>("MenuId")
-                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4");
 
                     b.Property<string>("MenuName")
-                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<int>("State")
                         .HasColumnType("int");
@@ -664,8 +708,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
 
                     b.Property<string>("Uid")
                         .IsRequired()
-                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4");
 
                     b.Property<string>("UpdateLog")
                         .IsRequired()
@@ -673,8 +717,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
 
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -697,14 +741,14 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<decimal>("AfterPoints")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("BeforePoints")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Description")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -716,11 +760,11 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("datetime(6)");
 
                     b.Property<decimal>("Points")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
@@ -744,8 +788,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("AdminRemark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<bool>("Flag")
                         .HasColumnType("tinyint(1)");
@@ -763,8 +807,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("varchar(300)");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4");
 
                     b.Property<string>("SystemName")
                         .IsRequired()
@@ -788,6 +832,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("Senparc.Ncf.Core.Models.AccountPayLog", b =>
@@ -797,6 +843,8 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("Senparc.Ncf.Core.Models.PointsLog", b =>
@@ -811,6 +859,22 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .WithMany("PointsLogs")
                         .HasForeignKey("AccountPayLogId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Account");
+
+                    b.Navigation("AccountPayLog");
+                });
+
+            modelBuilder.Entity("Senparc.Ncf.Core.Models.Account", b =>
+                {
+                    b.Navigation("AccountPayLogs");
+
+                    b.Navigation("PointsLogs");
+                });
+
+            modelBuilder.Entity("Senparc.Ncf.Core.Models.AccountPayLog", b =>
+                {
+                    b.Navigation("PointsLogs");
                 });
 #pragma warning restore 612, 618
         }
