@@ -7,8 +7,8 @@ using Senparc.Service;
 
 namespace Senparc.Service.Migrations.Migrations.SQLite
 {
-    [DbContext(typeof(SystemServiceEntities_Sqliteq))]
-    partial class SystemServiceEntities_SqliteModelSnapshot : ModelSnapshot
+    [DbContext(typeof(SystemServiceEntities_Sqlite))]
+    partial class SystemServiceEntities_SqliteModelSnapshot1 : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

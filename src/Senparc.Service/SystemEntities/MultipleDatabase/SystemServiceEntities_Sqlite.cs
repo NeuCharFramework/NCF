@@ -12,9 +12,9 @@ namespace Senparc.Service
     /// 当前 Entities 只为帮助 SenparcEntities 生成 Migration 信息而存在，没有特别的操作意义。
     /// </summary>
     [MultipleMigrationDbContext(MultipleDatabaseType.Sqlite, typeof(Senparc.Service.Register))]
-    public class SystemServiceEntities_Sqliteq : SystemServiceEntities
+    public class SystemServiceEntities_Sqlite : SystemServiceEntities
     {
-        public SystemServiceEntities_Sqliteq(DbContextOptions<SystemServiceEntities_Sqliteq> dbContextOptions) : base(dbContextOptions)
+        public SystemServiceEntities_Sqlite(DbContextOptions<SystemServiceEntities_Sqlite> dbContextOptions) : base(dbContextOptions)
         {
         }
     }
@@ -26,7 +26,7 @@ namespace Senparc.Service
     /// <para>3、打开【程序包资源管理器控制台】，默认项目设为当前项目</para>
     /// <para>4、运行：PM> add-migration [更新名称] -Context SystemServiceEntities_SQLite -o SystemEntities/Migrations/Migrations.SQLite.SystemEntities</para>
     /// </summary> 
-    public class SenparcDbContextFactory_SQLite : SenparcDesignTimeDbContextFactoryBase<SystemServiceEntities_Sqliteq, Register>
+    public class SenparcDbContextFactory_SQLite : SenparcDesignTimeDbContextFactoryBase<SystemServiceEntities_Sqlite, Register>
     {
         protected override Action<IServiceCollection> ServicesAction => services =>
         {

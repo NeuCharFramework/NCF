@@ -8,7 +8,7 @@ using Senparc.Service;
 
 namespace Senparc.Service.Migrations.Migrations.SQLite
 {
-    [DbContext(typeof(SystemServiceEntities_Sqliteq))]
+    [DbContext(typeof(SystemServiceEntities_Sqlite))]
     [Migration("20210209180949_Add_TenantInfo")]
     partial class Add_TenantInfo
     {
