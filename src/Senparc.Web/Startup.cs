@@ -10,7 +10,7 @@ using Senparc.CO2NET;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.Database.MySql;
-using Senparc.Ncf.Database.SQLite;
+using Senparc.Ncf.Database.Sqlite;
 using Senparc.Ncf.Database.SqlServer;
 using Senparc.Web.Hubs;
 
