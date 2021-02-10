@@ -31,7 +31,7 @@ namespace Senparc.Web
         public void ConfigureServices(IServiceCollection services)
         {
             //指定数据库类型
-            //services.AddDatabase<SQLiteMemoryDatabaseConfiguration>();//使用 SQLite 数据库
+            //services.AddDatabase<SqliteMemoryDatabaseConfiguration>();//使用 SQLite 数据库
             services.AddDatabase<SQLServerDatabaseConfiguration>();//使用 SQLServer数据库
             //services.AddDatabase<MySqlDatabaseConfiguration>();//使用 MySQL 数据库
 
