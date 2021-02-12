@@ -53,10 +53,10 @@
 		<ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
 	</ItemGroup>
 
-	 
+	<!-- 
 	<ItemGroup>
 		<Content Update="Areas\Admin\Pages\Shared\_HeaderPartial.cshtml">
 			<Pack>$(IncludeRazorContentInPack)</Pack>
 		</Content>
-	</ItemGroup>
+	</ItemGroup>-->
 </Project>
