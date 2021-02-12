@@ -60,6 +60,10 @@ namespace Senparc.Web.Pages.Install
             catch (Exception)
             {
                 {
+                    //添加多租户信息
+
+
+
                     //开始安装系统模块（Service）
                     Senparc.Service.Register serviceRegister = new Service.Register();
                     await serviceRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
