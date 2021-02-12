@@ -656,6 +656,7 @@ namespace Senparc.Service.Migrations.Migrations.SqlServer
                         .HasColumnType("int");
 
                     b.Property<string>("TenantKey")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

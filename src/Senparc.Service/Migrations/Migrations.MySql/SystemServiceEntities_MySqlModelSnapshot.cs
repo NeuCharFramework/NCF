@@ -647,6 +647,7 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                         .HasColumnType("int");
 
                     b.Property<string>("TenantKey")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
