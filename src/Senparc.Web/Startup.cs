@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.Database.MySql;//根据需要添加
 using Senparc.Ncf.Database.Sqlite;//根据需要添加
@@ -55,6 +56,12 @@ namespace Senparc.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+
+            #region 多租户
+            app.UseMiddleware<TenantMiddleware>();
+            #endregion
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

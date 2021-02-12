@@ -167,6 +167,9 @@ namespace Senparc.Web
             AssembleScanHelper.RunScan();
             //services.AddSingleton<Core.Cache.RedisProvider.IRedisProvider, Core.Cache.RedisProvider.StackExchangeRedisProvider>();
 
+            //多租户
+            services.AddMultiTenant();
+
             //注册 User 登录策略
             services.AddAuthorization(options =>
             {
@@ -279,6 +282,7 @@ namespace Senparc.Web
             //更多 XNCF 模块线程已经集成到 Senparc.Ncf.XncfBase.Register.ThreadCollection 中
 
             #endregion
+
         }
 
 
