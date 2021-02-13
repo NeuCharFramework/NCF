@@ -141,6 +141,27 @@ namespace Senparc.Web.Pages.Install
             else
             {
                 Step = 1;
+
+                //添加初始化多租户信息
+                if (SiteConfig.SenparcCoreSetting.EnableMultiTenant)
+                {
+                    var httpContext = _httpContextAccessor.Value.HttpContext;
+                    try
+                    {
+                        //var tenantInfo = await _tenantInfoService.CreateInitTenantInfoAsync(httpContext);
+
+                        CreatedRequestTenantInfo = await _tenantInfoService.SetScopedRequestTenantInfoAsync(httpContext);
+                        TenantInfoDto = _tenantInfoService.Mapper.Map<TenantInfoDto>(await _tenantInfoService.GetObjectAsync(z => z.Id == CreatedRequestTenantInfo.Id));
+
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    finally
+                    {
+                    }
+                }
+
                 _systemConfigService.Init();//初始化系统信息
                 _sysMenuService.Init();
 
