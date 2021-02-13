@@ -167,7 +167,7 @@ namespace Senparc.Web
             AssembleScanHelper.RunScan();
             //services.AddSingleton<Core.Cache.RedisProvider.IRedisProvider, Core.Cache.RedisProvider.StackExchangeRedisProvider>();
 
-            //多租户
+            //添加多租户
             services.AddMultiTenant();
 
             //注册 User 登录策略

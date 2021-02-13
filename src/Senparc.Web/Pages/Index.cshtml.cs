@@ -31,8 +31,6 @@ namespace Senparc.Web.Pages
             RequestTenantInfo = requestTenantInfo;
         }
 
-    
-
         public async Task<IActionResult> OnGetAsync()
         {
             //判断是否需要自动进入到安装程序
