@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
@@ -16,6 +18,8 @@ namespace Senparc.Web.Pages.Install
         private readonly AdminUserInfoService _accountInfoService;
         private readonly SystemConfigService _systemConfigService;
         private readonly SysMenuService _sysMenuService;
+        private readonly TenantInfoService _tenantInfoService;
+        private readonly Lazy<IHttpContextAccessor> _httpContextAccessor;
         private readonly IServiceProvider _serviceProvider;
 
         /// <summary>
@@ -36,11 +40,14 @@ namespace Senparc.Web.Pages.Install
         public MultipleDatabaseType MultipleDatabaseType { get; set; }
 
 
-        public IndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleService, AdminUserInfoService accountService, SystemConfigService systemConfigService, SysMenuService sysMenuService)
+        public IndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleService, AdminUserInfoService accountService,
+            SystemConfigService systemConfigService, SysMenuService sysMenuService, TenantInfoService tenantInfoService, Lazy<IHttpContextAccessor> httpContextAccessor)
         {
             _xncfModuleService = xncfModuleService;
             _accountInfoService = accountService;
             _sysMenuService = sysMenuService;
+            _tenantInfoService = tenantInfoService;
+            this._httpContextAccessor = httpContextAccessor;
             _systemConfigService = systemConfigService;
             _serviceProvider = serviceProvider;
         }
@@ -60,9 +67,13 @@ namespace Senparc.Web.Pages.Install
             catch (Exception)
             {
                 {
-                    //添加多租户信息
-
-
+                    //添加初始化多租户信息
+                    if (SiteConfig.SenparcCoreSetting.EnableMultiTenant)
+                    {
+                        var httpContext = _httpContextAccessor.Value.HttpContext;
+                        var tenantInfo = await _tenantInfoService.CreateInitTenantInfoAsync(httpContext);
+                        var requestTenantInfo = await _tenantInfoService.SetScopedRequestTenantInfoAsync(httpContext);
+                    }
 
                     //开始安装系统模块（Service）
                     Senparc.Service.Register serviceRegister = new Service.Register();

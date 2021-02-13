@@ -13,6 +13,7 @@ using Senparc.Ncf.Database;
 using Senparc.Ncf.Database.MySql;//根据需要添加
 using Senparc.Ncf.Database.Sqlite;//根据需要添加
 using Senparc.Ncf.Database.SqlServer;//根据需要添加
+using Senparc.Ncf.Service.MultiTenant;
 using Senparc.Web.Hubs;
 
 namespace Senparc.Web
@@ -59,7 +60,9 @@ namespace Senparc.Web
 
 
             #region 多租户
-            app.UseMiddleware<TenantMiddleware>();
+
+            app.UseMiddleware<TenantMiddleware>();//如果不启用多租户功能，可以删除此配置
+
             #endregion
 
             app.UseHttpsRedirection();
