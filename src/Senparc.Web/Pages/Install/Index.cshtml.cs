@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Core.Models.DataBaseModel;
+using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using Senparc.Service;
@@ -39,6 +41,15 @@ namespace Senparc.Web.Pages.Install
 
         public MultipleDatabaseType MultipleDatabaseType { get; set; }
 
+        /// <summary>
+        /// 新创建的 RequestTenantInfo
+        /// </summary>
+        public RequestTenantInfo CreatedRequestTenantInfo { get; set; }
+        public TenantInfoDto TenantInfoDto { get; private set; }
+        public TenantRule TenantRule { get; set; }
+
+        public bool MultiTenantEnable { get; set; }
+
 
         public IndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleService, AdminUserInfoService accountService,
             SystemConfigService systemConfigService, SysMenuService sysMenuService, TenantInfoService tenantInfoService, Lazy<IHttpContextAccessor> httpContextAccessor)
@@ -50,6 +61,9 @@ namespace Senparc.Web.Pages.Install
             this._httpContextAccessor = httpContextAccessor;
             _systemConfigService = systemConfigService;
             _serviceProvider = serviceProvider;
+
+            MultiTenantEnable = SiteConfig.SenparcCoreSetting.EnableMultiTenant;
+            TenantRule = SiteConfig.SenparcCoreSetting.TenantRule;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -71,8 +85,20 @@ namespace Senparc.Web.Pages.Install
                     if (SiteConfig.SenparcCoreSetting.EnableMultiTenant)
                     {
                         var httpContext = _httpContextAccessor.Value.HttpContext;
-                        var tenantInfo = await _tenantInfoService.CreateInitTenantInfoAsync(httpContext);
-                        var requestTenantInfo = await _tenantInfoService.SetScopedRequestTenantInfoAsync(httpContext);
+                        try
+                        {
+                            var tenantInfo = await _tenantInfoService.CreateInitTenantInfoAsync(httpContext);
+                        }
+                        catch (Exception)
+                        {
+                            //如果已经安装过，则不处理
+                            //TODO:特定的Exception
+                        }
+                        finally
+                        {
+                            CreatedRequestTenantInfo = await _tenantInfoService.SetScopedRequestTenantInfoAsync(httpContext);
+                            TenantInfoDto = _tenantInfoService.Mapper.Map<TenantInfoDto>(await _tenantInfoService.GetObjectAsync(z => z.Id == CreatedRequestTenantInfo.Id));
+                        }
                     }
 
                     //开始安装系统模块（Service）
