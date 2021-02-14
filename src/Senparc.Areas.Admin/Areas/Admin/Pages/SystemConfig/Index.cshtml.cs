@@ -10,6 +10,7 @@ using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Validator;
 using Senparc.Ncf.Service;
+using Senparc.Ncf.Utility;
 using Senparc.Service;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
@@ -37,7 +38,20 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             return Page();
         }
 
-        [HttpPost]
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="adminUserInfoName"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        //[Ncf.AreaBase.Admin.Filters.CustomerResource("admin-get-systemconfig")]
+        public async Task<IActionResult> OnGetListAsync(int pageIndex, int pageSize)
+        {
+            var systemConfig = await _systemConfigService.GetObjectListAsync(pageIndex, pageSize, z => true, z => z.Id, OrderingType.Ascending);
+            return Ok(new {  List = systemConfig.AsEnumerable() });
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
             this.Validator(FullSystemConfig.SystemName, "ÏµÍ³Ãû³Æ", "SystemName", false);
