@@ -28,6 +28,7 @@
 
 
 	<ItemGroup>
+	  <Content Remove="wwwroot\css\Admin\SystemConfig\Index.css" />
 	  <Content Remove="wwwroot\js\Admin\Pages\SystemConfig\Index.js" />
 	</ItemGroup>
 

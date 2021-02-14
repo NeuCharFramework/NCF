@@ -6,18 +6,23 @@
     Layout = "_Layout_Vue";
 }
 
+@section Style{
+    <link href="~/css/Admin/SystemConfig/Index.css" rel="stylesheet" />
+}
+
 @section breadcrumbs {
     <el-breadcrumb-item>系统管理</el-breadcrumb-item>
     <el-breadcrumb-item>系统信息</el-breadcrumb-item>
 }
 <div>
     <div class="admin-systemconfig-info">
+        <h2 class="system-info">基础信息</h2>
+
         <el-table :data="tableData"
                   border
                   style="width: 100%">
             <el-table-column align="center"
-                             label="系统名称"
-                             width="180">
+                             label="系统名称">
                 <template slot-scope="scope">
                     {{ scope.row.systemName}}
                 </template>
@@ -60,6 +65,7 @@
             </div>
         </el-dialog>
     </div>
+
 </div>
 @section scripts{
     <script src="~/js/Admin/Pages/SystemConfig/Index.js"></script>

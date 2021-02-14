@@ -12,17 +12,13 @@
                 pageSize: 20,
             },
             tableData: [],
+            tenantData: {},
             dialog: {
                 title: '编辑系统信息',
                 visible: false,
                 data: {
                     id: 0,
-                    userName: '',
-                    password: '',
-                    password2: '',
-                    realName: '',
-                    phone: '',
-                    note: ''
+                    systemName: '',
                 },
                 rules: {
                     systemName: [
@@ -81,19 +77,26 @@
                     this.dialog.updateLoading = true;
                     let data = {
                         Id: this.dialog.data.id,
-                        SystemConfig: this.dialog.data.systemConfig,
+                        SystemName: this.dialog.data.systemName,
                     };
                     service.post("/Admin/SystemConfig/Edit?handler=Save", data).then(res => {
                         if (res.data.success) {
                             this.getList();
                             this.$notify({
                                 title: "Success",
-                                message: "成功",
+                                message: "更新成功！",
                                 type: "success",
                                 duration: 2000
                             });
                             this.dialog.visible = false;
                             this.dialog.updateLoading = false;
+                        } else {
+                            this.$notify({
+                                title: "Faild",
+                                message: "更新失败：" + res.data.msg,
+                                type: "success",
+                                duration: 2000
+                            });
                         }
                     }).catch(error => {
                         this.dialog.updateLoading = false;

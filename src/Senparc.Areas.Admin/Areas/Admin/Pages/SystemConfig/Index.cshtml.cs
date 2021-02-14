@@ -21,7 +21,8 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         private readonly TenantInfoService _tenantInfoService;
         private readonly FullSystemConfigCache _fullSystemConfigCache;
 
-        private FullSystemConfig FullSystemConfig { get; set; }
+        //[BindProperty]
+        //private FullSystemConfig FullSystemConfig { get; set; }
 
 
         public SystemConfig_IndexModel(SystemConfigService systemConfigService, TenantInfoService tenantInfoService, FullSystemConfigCache fullSystemConfigCache)
@@ -30,7 +31,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             this._tenantInfoService = tenantInfoService;
             this._fullSystemConfigCache = fullSystemConfigCache;
 
-            FullSystemConfig = _fullSystemConfigCache.Data;
+            //FullSystemConfig = _fullSystemConfigCache.Data;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -49,24 +50,29 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         public async Task<IActionResult> OnGetListAsync(int pageIndex, int pageSize)
         {
             var systemConfig = await _systemConfigService.GetObjectListAsync(pageIndex, pageSize, z => true, z => z.Id, OrderingType.Ascending);
-            return Ok(new {  List = systemConfig.AsEnumerable() });
+            return Ok(new { List = systemConfig.AsEnumerable() });
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        /// <summary>
+        /// 编辑 SystemConfig 信息
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> OnPostEditAsync([FromBody]FullSystemConfig  fullSystemConfig)
         {
-            this.Validator(FullSystemConfig.SystemName, "系统名称", "SystemName", false);
+            var val = this.Validator(fullSystemConfig.SystemName, "系统名称", "SystemName", false);
 
             if (!ModelState.IsValid)
             {
-                return Page();
+                return Ok(false, string.Join(",", val.ModelState.Values));
             }
 
             var systemConfig = await _systemConfigService.GetObjectAsync(z => true);
-            systemConfig.Update(FullSystemConfig.SystemName, FullSystemConfig.MchId, FullSystemConfig.MchKey, FullSystemConfig.TenPayAppId, FullSystemConfig.HideModuleManager);
+            //暂时只允许修改 SystemName
+            systemConfig.Update(fullSystemConfig.SystemName, systemConfig.MchId, systemConfig.MchKey, systemConfig.TenPayAppId, systemConfig.HideModuleManager);
             await _systemConfigService.SaveObjectAsync(systemConfig);
 
             base.SetMessager(MessageType.success, $"修改成功！");
-            return RedirectToPage("./Index");
+            return Ok(new { systemName = systemConfig.SystemName });
         }
     }
 }
