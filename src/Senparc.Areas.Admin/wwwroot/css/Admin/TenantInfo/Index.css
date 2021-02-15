@@ -1,0 +1,11 @@
+﻿.admin-tenant-info h2 {
+    margin-bottom: 22px;
+}
+
+h2.current-tenant-info {
+    margin-top: 10px;
+}
+
+h2.tenant-list {
+    margin-top: 30px;
+}
