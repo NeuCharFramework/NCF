@@ -65,7 +65,7 @@
     methods: {
         // 获取数据
         getList() {
-            let { adminUserInfoName, pageIndex, pageSize } = this.listQuery;
+            let { pageIndex, pageSize } = this.listQuery;
             service.get(`/Admin/TenantInfo/index?handler=List&pageIndex=${pageIndex}&pageSize=${pageSize}`).then(res => {
                 this.tableData = res.data.data.list;
                 this.paginationQuery.total = res.data.data.totalCount;
@@ -76,9 +76,9 @@
             this.dialog.visible = true;
             if (row) {
                 // 编辑
-                let { name, tenantKey, adminRemark, enable } = row;
+                let { id, name, tenantKey, adminRemark, enable } = row;
                 this.dialog.data = {
-                    name, tenantKey, adminRemark, enable
+                    id, name, tenantKey, adminRemark, enable
                 };
                 this.dialog.title = '编辑租户信息';
                 this.dialog = Object.assign({}, this.dialog);
@@ -100,7 +100,7 @@
                         AdminRemark: this.dialog.data.adminRemark,
                         Enable: this.dialog.data.enable
                     };
-                    service.post("/Admin/TenantInfo/Edit?handler=Save", data).then(res => {
+                    service.post("/Admin/TenantInfo/Index?handler=Save", data).then(res => {
                         if (res.data.success) {
                             this.getList();
                             this.$notify({
