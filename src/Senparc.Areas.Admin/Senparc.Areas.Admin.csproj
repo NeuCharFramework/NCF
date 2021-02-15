@@ -39,13 +39,13 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
 		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="0.3.200" />
 		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="3.9.200" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.6.123-beta1" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.123-beta1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.123-beta1" />
-		<PackageReference Include="Senparc.Ncf.Log" Version="0.6.123-beta1" />
-		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.6.123-beta1" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.6.123-beta1" />
-		<PackageReference Include="Senparc.Ncf.Utility" Version="0.6.123-beta1" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.6.124-beta1" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.124-beta1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.124-beta1" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.6.124-beta1" />
+		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.6.124-beta1" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.6.124.1-beta1" />
+		<PackageReference Include="Senparc.Ncf.Utility" Version="0.6.124-beta1" />
 
 		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
 		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />

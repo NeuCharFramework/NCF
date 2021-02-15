@@ -60,27 +60,34 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// <param name="dto"></param>
         /// <returns></returns>
         [CustomerResource("admin-add", "admin-edit")]
-        public IActionResult OnPostSave([FromBody]CreateOrUpdate_TenantInfoDto dto)
+        public async Task<IActionResult> OnPostSaveAsync([FromBody] CreateOrUpdate_TenantInfoDto dto)
         {
             if (!ModelState.IsValid)
             {
                 return Ok(false);
             }
-            bool isExists = this._tenantInfoService.CheckUserNameExisted(dto.Id, dto.UserName);
-            if (isExists)
+            bool isNameExists = await this._tenantInfoService.CheckNameExisted(dto.Id, dto.Name);
+            if (isNameExists)
             {
-                return Ok(false);
+                return Ok(false, $"{dto.Name} 名称已存在");
             }
-            if (dto.Id > 0)
+
+            bool isTenantKeyExists = await this._tenantInfoService.CheckTenantKeyExisted(dto.Id, dto.TenantKey);
+            if (isTenantKeyExists)
             {
-                //dto.Id = Id;
-                _tenantInfoService.UpdateAdminUserInfo(dto);
+                return Ok(false, $"{dto.TenantKey} 匹配规则已存在");
             }
-            else
+
+            try
             {
-                _tenantInfoService.CreateAdminUserInfo(dto);
+                await _tenantInfoService.CreateOrUpdateTenantInfoAsync(dto);
+                return Ok(true, $"{(dto.Id > 0 ? "编辑" : "新增")}租户成功！");
             }
-            return Ok(true);
+            catch (Exception ex)
+            {
+                return Ok(false, ex.Message);
+            }
+
         }
     }
 }
