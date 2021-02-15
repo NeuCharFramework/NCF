@@ -76,9 +76,9 @@
             this.dialog.visible = true;
             if (row) {
                 // 编辑
-                let { userName, password, realName, phone, note, id } = row;
+                let { name, tenantKey, adminRemark, enable } = row;
                 this.dialog.data = {
-                    userName, realName, phone, note, id, password: '', password2: ''
+                    name, tenantKey, adminRemark, enable
                 };
                 this.dialog.title = '编辑租户信息';
                 this.dialog = Object.assign({}, this.dialog);
