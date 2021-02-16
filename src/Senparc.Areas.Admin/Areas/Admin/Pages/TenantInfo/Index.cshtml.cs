@@ -52,7 +52,12 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             var requestTenantInfo = _serviceProvider.GetRequiredService<RequestTenantInfo>();
             return Ok(new
             {
-                requestTenantInfo = requestTenantInfo,
+                requestTenantInfo = new {
+                    requestTenantInfo.Id,
+                    requestTenantInfo.Name,
+                    requestTenantInfo.TenantKey,
+                    BeginTime = requestTenantInfo.BeginTime.ToString("g"),
+                },
                 tenantRule = SiteConfig.SenparcCoreSetting.TenantRule.ToString()
             });
         }

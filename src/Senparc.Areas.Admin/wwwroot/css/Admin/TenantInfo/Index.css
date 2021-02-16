@@ -11,8 +11,12 @@ h2.tenant-list {
 }
 
 .grid-content {
-    background: #4800ff;
+    background: #654ba7;
     color: #ffffff;
     border-radius: 4px;
-    padding:10px;
+    padding: 10px;
+}
+
+.admin-tenant-info .float-right {
+    float:right;
 }

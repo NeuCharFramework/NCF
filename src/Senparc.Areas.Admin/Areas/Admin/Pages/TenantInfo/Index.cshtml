@@ -19,10 +19,10 @@
          <div>
             <h2 class="tenant-list">当前租户信息</h2>
             <el-row :gutter="20">
-                <el-col :span="6"><div class="grid-content bg-purple">名称：<span>{{requestTenantInfo.name}}</span></div></el-col>
+                <el-col :span="6"><div class="grid-content bg-purple">当前系统匹配规则：<span>{{tenantRule}}</span></div></el-col>
+                <el-col :span="6"><div class="grid-content bg-purple">名称：<span>{{requestTenantInfo.name}} <span class="float-right">(ID:{{requestTenantInfo.id}})</span></span></div></el-col>
                 <el-col :span="6"><div class="grid-content bg-purple">匹配关键字：<span>{{requestTenantInfo.tenantKey}}</span></div></el-col>
                 <el-col :span="6"><div class="grid-content bg-purple">匹配时间：<span>{{requestTenantInfo.beginTime}}</span></div></el-col>
-                <el-col :span="6"><div class="grid-content bg-purple">当前系统匹配规则：<span>{{tenantRule}}</span></div></el-col>
             </el-row>
 
             @*Id：<span>{{requestTenantInfo.id}}</span>*@
