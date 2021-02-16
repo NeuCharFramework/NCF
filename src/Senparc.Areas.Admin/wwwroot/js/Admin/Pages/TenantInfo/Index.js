@@ -15,6 +15,7 @@
             tableData: [],
             requestTenantInfo: {},
             tenantRule: '',
+            enableMultiTenant: true,
             dialog: {
                 title: '新增租户信息',
                 visible: false,
@@ -141,6 +142,7 @@
                 if (res.data.success) {
                     this.requestTenantInfo = res.data.data.requestTenantInfo;
                     this.tenantRule = res.data.data.tenantRule;
+                    this.enableMultiTenant = res.data.data.enableMultiTenant;
                 }
             });
         }

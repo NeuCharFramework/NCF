@@ -58,8 +58,9 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                     requestTenantInfo.TenantKey,
                     BeginTime = requestTenantInfo.BeginTime.ToString("G"),
                 },
-                tenantRule = SiteConfig.SenparcCoreSetting.TenantRule.ToString()
-            });
+                tenantRule = SiteConfig.SenparcCoreSetting.TenantRule.ToString(),
+                SiteConfig.SenparcCoreSetting.EnableMultiTenant
+            });;
         }
 
         /// <summary>

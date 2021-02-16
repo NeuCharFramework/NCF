@@ -16,9 +16,12 @@
 }
 <div>
     <div class="admin-tenant-info">
-         <div>
+        <div>
             <h2 class="tenant-list">当前租户信息</h2>
-            <el-row :gutter="20">
+            <el-row :gutter="20" v-show="!enableMultiTenant">
+                <el-col :span="6"><div class="grid-content bg-purple">当前系统已关闭多租户</div></el-col>
+            </el-row>
+            <el-row :gutter="20" v-show="enableMultiTenant">
                 <el-col :span="6"><div class="grid-content bg-purple">当前系统匹配规则：<span>{{tenantRule}}</span></div></el-col>
                 <el-col :span="6"><div class="grid-content bg-purple">名称：<span>{{requestTenantInfo.name}} <span class="float-right">(ID:{{requestTenantInfo.id}})</span></span></div></el-col>
                 <el-col :span="6"><div class="grid-content bg-purple">匹配关键字：<span>{{requestTenantInfo.tenantKey}}</span></div></el-col>
