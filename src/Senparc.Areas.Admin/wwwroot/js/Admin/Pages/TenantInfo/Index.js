@@ -13,6 +13,8 @@
                 adminUserInfoName: ''
             },
             tableData: [],
+            requestTenantInfo: {},
+            tenantRule: '',
             dialog: {
                 title: '新增租户信息',
                 visible: false,
@@ -40,6 +42,7 @@
     },
     created: function () {
         this.getList();
+        this.getRequestTenantInfo();
     },
     computed: {
 
@@ -130,6 +133,14 @@
                         type: "success",
                         duration: 2000
                     });
+                }
+            });
+        },
+        getRequestTenantInfo() {
+            service.get("/Admin/TenantInfo/Index?handler=RequestTenantInfo").then(res => {
+                if (res.data.success) {
+                    this.requestTenantInfo = res.data.data.requestTenantInfo;
+                    this.tenantRule = res.data.data.tenantRule;
                 }
             });
         }

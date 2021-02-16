@@ -16,6 +16,19 @@
 }
 <div>
     <div class="admin-tenant-info">
+         <div>
+            <h2 class="tenant-list">当前租户信息</h2>
+            <el-row :gutter="20">
+                <el-col :span="6"><div class="grid-content bg-purple">名称：<span>{{requestTenantInfo.name}}</span></div></el-col>
+                <el-col :span="6"><div class="grid-content bg-purple">匹配关键字：<span>{{requestTenantInfo.tenantKey}}</span></div></el-col>
+                <el-col :span="6"><div class="grid-content bg-purple">匹配时间：<span>{{requestTenantInfo.beginTime}}</span></div></el-col>
+                <el-col :span="6"><div class="grid-content bg-purple">当前系统匹配规则：<span>{{tenantRule}}</span></div></el-col>
+            </el-row>
+
+            @*Id：<span>{{requestTenantInfo.id}}</span>*@
+
+        </div>
+
         <h2 class="current-tenant-info">多租户信息</h2>
 
         <el-table :data="tableData"
@@ -79,11 +92,11 @@
                      label-width="100px"
                      style="max-width: 400px; margin-left:50px;">
                 @*<p class="username-tip" v-if="dialog.title==='编辑管理员'">不建议修改用户名！</p>*@
-                <el-form-item label="租户名称"  :error="dialog.nameError" prop="name">
+                <el-form-item label="租户名称" :error="dialog.nameError" prop="name">
                     <el-input v-model="dialog.data.name" clearable placeholder="请输入租户名称" />
                 </el-form-item>
-                <el-form-item label="租户匹配规则" :error="dialog.tenantKeyError" prop="tenantKey">
-                    <el-input v-model="dialog.data.tenantKey" clearable placeholder="请输入租户匹配规则" />
+                <el-form-item label="租户匹配关键字" :error="dialog.tenantKeyError" prop="tenantKey">
+                    <el-input v-model="dialog.data.tenantKey" clearable placeholder="请输入租户匹配关键字" />
                 </el-form-item>
                 <el-form-item label="管理员备注" prop="adminRemark">
                     <el-input v-model="dialog.data.adminRemark" clearable placeholder="请输入管理员备注" />
@@ -97,10 +110,7 @@
                 <el-button :loading="dialog.updateLoading" type="primary" @@click="updateData">确 认</el-button>
             </div>
         </el-dialog>
-
-        <div>
-            <h2 class="tenant-list">当前租户信息</h2>
-        </div>
+       
     </div>
 
 </div>

@@ -9,3 +9,10 @@ h2.current-tenant-info {
 h2.tenant-list {
     margin-top: 30px;
 }
+
+.grid-content {
+    background: #4800ff;
+    color: #ffffff;
+    border-radius: 4px;
+    padding:10px;
+}
