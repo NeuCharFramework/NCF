@@ -56,7 +56,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                     requestTenantInfo.Id,
                     requestTenantInfo.Name,
                     requestTenantInfo.TenantKey,
-                    BeginTime = requestTenantInfo.BeginTime.ToString("g"),
+                    BeginTime = requestTenantInfo.BeginTime.ToString("G"),
                 },
                 tenantRule = SiteConfig.SenparcCoreSetting.TenantRule.ToString()
             });
