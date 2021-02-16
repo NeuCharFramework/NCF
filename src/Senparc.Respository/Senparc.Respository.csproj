@@ -8,7 +8,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
 		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
 		<ProjectReference Include="..\Senparc.Log\Senparc.Log.csproj" />
-		<PackageReference Include="Senparc.Ncf.Repository" Version="0.6.124-beta1" />
+		<PackageReference Include="Senparc.Ncf.Repository" Version="0.6.125-beta1" />
 		<ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
 	</ItemGroup>
 
