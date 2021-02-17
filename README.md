@@ -21,7 +21,7 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 
 ## 在线文档
 
-[https://www.ncf.pub/docs](https://www.ncf.pub/docs)
+[https://www.ncf.pub/Docs](https://www.ncf.pub/Docs)
 
 ## 当前项目在线 Demo
 
