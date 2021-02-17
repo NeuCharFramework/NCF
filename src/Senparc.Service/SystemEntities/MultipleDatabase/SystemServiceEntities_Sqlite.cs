@@ -14,7 +14,7 @@ namespace Senparc.Service
     [MultipleMigrationDbContext(MultipleDatabaseType.Sqlite, typeof(Senparc.Service.Register))]
     public class SystemServiceEntities_Sqlite : SystemServiceEntities
     {
-        public SystemServiceEntities_Sqlite(DbContextOptions<SystemServiceEntities_Sqlite> dbContextOptions) : base(dbContextOptions)
+        public SystemServiceEntities_Sqlite(DbContextOptions<SystemServiceEntities_Sqlite> dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
         {
         }
     }

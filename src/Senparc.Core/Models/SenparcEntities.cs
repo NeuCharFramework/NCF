@@ -14,7 +14,7 @@ namespace Senparc.Core.Models
 {
     public partial class SenparcEntities : SenparcEntitiesBase, ISenparcEntities
     {
-        public SenparcEntities(DbContextOptions/*<SenparcEntities>*/ dbContextOptions) : base(dbContextOptions)
+        public SenparcEntities(DbContextOptions/*<SenparcEntities>*/ dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
         {
         }
 

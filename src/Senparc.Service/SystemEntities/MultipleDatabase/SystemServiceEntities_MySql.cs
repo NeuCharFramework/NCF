@@ -19,7 +19,7 @@ namespace Senparc.Service
     [MultipleMigrationDbContext(MultipleDatabaseType.MySql, typeof(Senparc.Service.Register))]
     public class SystemServiceEntities_MySql : SystemServiceEntities
     {
-        public SystemServiceEntities_MySql(DbContextOptions<SystemServiceEntities_MySql> dbContextOptions) : base(dbContextOptions)
+        public SystemServiceEntities_MySql(DbContextOptions<SystemServiceEntities_MySql> dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
         {
         }
     }

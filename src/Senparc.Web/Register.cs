@@ -81,9 +81,10 @@ namespace Senparc.Web
             //    //options.AllowMappingHeadRequestsToGetHandler = false;//https://www.learnrazorpages.com/razor-pages/handler-methods
             //})
 
-            services.AddSenparcGlobalServices(configuration);//注册 CO2NET 基础引擎所需服务
 
             services.AddMultiTenant();//注册多租户
+
+            services.AddSenparcGlobalServices(configuration);//注册 CO2NET 基础引擎所需服务
 
             var builder = services.AddRazorPages(opt =>
                 {

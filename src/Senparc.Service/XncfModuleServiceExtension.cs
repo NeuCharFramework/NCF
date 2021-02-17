@@ -55,15 +55,12 @@ namespace Senparc.Service
 
             var xncfModuleDtos = xncfModules.Select(z => base.Mapper.Map<CreateOrUpdate_XncfModuleDto>(z)).ToList();
 
-            var se = _serviceProvider.GetService(typeof(SystemServiceEntities_SqlServer));
-
+            //var se = _serviceProvider.GetService(typeof(SystemServiceEntities_SqlServer));
 
             //进行模块扫描
             InstallOrUpdate? installOrUpdateValue = null;
             var result = await Senparc.Ncf.XncfBase.Register.ScanAndInstall(xncfModuleDtos, _serviceProvider, async (register, installOrUpdate) =>
             {
-
-
                 installOrUpdateValue = installOrUpdate;
                 //底层系统模块此时还没有设置好初始化的菜单信息，不能设置菜单
                 if (register.Uid != Senparc.Ncf.Core.Config.SiteConfig.SYSTEM_XNCF_MODULE_SERVICE_UID &&

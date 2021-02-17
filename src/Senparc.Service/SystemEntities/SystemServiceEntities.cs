@@ -20,7 +20,7 @@ namespace Senparc.Service
     /// </summary>
     public class SystemServiceEntities : SenparcEntities
     {
-        public SystemServiceEntities(DbContextOptions/*<SystemServiceEntities>*/ dbContextOptions) : base(dbContextOptions)
+        public SystemServiceEntities(DbContextOptions/*<SystemServiceEntities>*/ dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
         {
         }
 

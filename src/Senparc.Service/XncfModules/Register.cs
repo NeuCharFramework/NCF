@@ -149,7 +149,7 @@ namespace Senparc.Service
             Func<IServiceProvider, SenparcEntities> senparcEntitiesImplementationFactory = s =>
             {
                 var multipleDatabasePool = MultipleDatabasePool.Instance;
-                return multipleDatabasePool.GetDbContext(this.GetType()) as SenparcEntities;
+                return multipleDatabasePool.GetDbContext(this.GetType(), serviceProvider: s) as SenparcEntities;
             };
             services.AddScoped<SenparcEntities>(senparcEntitiesImplementationFactory);
             services.AddScoped<ISenparcEntities>(senparcEntitiesImplementationFactory);
@@ -159,7 +159,7 @@ namespace Senparc.Service
             Func<IServiceProvider, SystemServiceEntities> systemServiceEntitiesImplementationFactory = s =>
             {
                 var multipleDatabasePool = MultipleDatabasePool.Instance;
-                return multipleDatabasePool.GetDbContext(this.GetType()) as SystemServiceEntities;
+                return multipleDatabasePool.GetDbContext(this.GetType(), serviceProvider: s) as SystemServiceEntities;
             };
             services.AddScoped<SystemServiceEntities>(systemServiceEntitiesImplementationFactory);
 
