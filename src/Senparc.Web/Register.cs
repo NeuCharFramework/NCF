@@ -81,7 +81,9 @@ namespace Senparc.Web
             //    //options.AllowMappingHeadRequestsToGetHandler = false;//https://www.learnrazorpages.com/razor-pages/handler-methods
             //})
 
-            services.AddSenparcGlobalServices(configuration);
+            services.AddSenparcGlobalServices(configuration);//注册 CO2NET 基础引擎所需服务
+
+            services.AddMultiTenant();//注册多租户
 
             var builder = services.AddRazorPages(opt =>
                 {
@@ -167,8 +169,8 @@ namespace Senparc.Web
             AssembleScanHelper.RunScan();
             //services.AddSingleton<Core.Cache.RedisProvider.IRedisProvider, Core.Cache.RedisProvider.StackExchangeRedisProvider>();
 
-            //添加多租户
-            services.AddMultiTenant();
+            ////添加多租户
+            //services.AddMultiTenant();
 
             //注册 User 登录策略
             services.AddAuthorization(options =>

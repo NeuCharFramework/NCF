@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using Senparc.CO2NET;
 using Senparc.Core.Models;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.Database.MultipleMigrationDbContext;
 using Senparc.Ncf.XncfBase;
@@ -18,6 +22,11 @@ namespace Senparc.Service
     {
         public SystemServiceEntities(DbContextOptions/*<SystemServiceEntities>*/ dbContextOptions) : base(dbContextOptions)
         {
+        }
+
+        public void Tests()
+        {
+
         }
     }
 }
