@@ -642,9 +642,6 @@ namespace Senparc.Service.Migrations.Migrations.Sqlite
                         .HasMaxLength(300)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("TenantId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("TenantKey")
                         .IsRequired()
                         .HasColumnType("TEXT");

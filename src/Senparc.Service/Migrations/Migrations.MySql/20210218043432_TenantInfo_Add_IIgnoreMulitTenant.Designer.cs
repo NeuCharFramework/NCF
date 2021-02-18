@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Senparc.Service;
 
 namespace Senparc.Service.Migrations.Migrations.MySql
 {
     [DbContext(typeof(SystemServiceEntities_MySql))]
-    partial class SystemServiceEntities_MySqlModelSnapshot : ModelSnapshot
+    [Migration("20210218043432_TenantInfo_Add_IIgnoreMulitTenant")]
+    partial class TenantInfo_Add_IIgnoreMulitTenant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
