@@ -23,10 +23,5 @@ namespace Senparc.Service
         public SystemServiceEntities(DbContextOptions/*<SystemServiceEntities>*/ dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
         {
         }
-
-        public void Tests()
-        {
-
-        }
     }
 }
