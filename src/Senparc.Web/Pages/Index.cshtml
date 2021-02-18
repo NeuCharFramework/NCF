@@ -42,7 +42,15 @@
         </div>
 
         <div class=" text-center">
-            当前租户：@Model.RequestTenantInfo.Name
+            <span>当前租户：</span>
+            @if (Model.RequestTenantInfo.MatchSuccess)
+            {
+                <strong>@Model.RequestTenantInfo.Name</strong>
+            }
+            else
+            {
+                <span>未启用或未匹配成功</span>
+            }
         </div>
 
         <div class="row start-now">
