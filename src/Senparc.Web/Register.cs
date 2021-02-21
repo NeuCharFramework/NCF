@@ -82,7 +82,8 @@ namespace Senparc.Web
             //})
 
 
-            services.AddMultiTenant();//注册多租户
+            services.AddMultiTenant();//注册多租户（按需）
+            EntitySetKeys.TryLoadSetInfo(typeof(SenparcEntitiesMultiTenant));//注册多租户数据库的对象（按需）
 
             services.AddSenparcGlobalServices(configuration);//注册 CO2NET 基础引擎所需服务
 

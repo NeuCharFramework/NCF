@@ -28,9 +28,6 @@ namespace Senparc.Core.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //基类中的系统表处理
-            base.OnModelCreating(modelBuilder);
-
             #region 系统表
 
             //实现 [XncfAutoConfigurationMapping] 特性之后，可以自动执行，无需手动添加
@@ -57,6 +54,8 @@ namespace Senparc.Core.Models
             SenparcTrace.SendCustomLog("SenparcEntities 数据库实体注入", $"耗时：{SystemTime.DiffTotalMS(dt1)}ms");
             #endregion
 
+            //基类中的系统表处理
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
