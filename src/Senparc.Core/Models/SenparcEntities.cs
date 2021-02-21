@@ -12,7 +12,7 @@ using System;
 
 namespace Senparc.Core.Models
 {
-    public partial class SenparcEntities : SenparcEntitiesBase, ISenparcEntities
+    public partial class SenparcEntities : SenparcEntitiesBase, ISenparcEntitiesDbContext
     {
         public SenparcEntities(DbContextOptions/*<SenparcEntities>*/ dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
         {

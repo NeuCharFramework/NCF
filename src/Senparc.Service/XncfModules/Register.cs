@@ -146,20 +146,35 @@ namespace Senparc.Service
              */
             var xncfDatabaseData = new XncfDatabaseData(this, "Senparc.Service"/*从当前程序集读取*/);
 
+            #region 不属于任何模块
+
+            //这个配置面相基类，不属于任何模块
+            Func<IServiceProvider, SenparcEntitiesMultiTenantBase> multiTenantImplementationFactory = s =>
+            {
+                var multipleDatabasePool = MultipleDatabasePool.Instance;
+                return multipleDatabasePool.GetDbContext<SenparcEntitiesMultiTenantBase>(serviceProvider: s);
+            };
+            services.AddScoped<SenparcEntitiesMultiTenantBase>(multiTenantImplementationFactory);//继承自 SenparcEntitiesMultiTenantBase
+
             Func<IServiceProvider, SenparcEntities> senparcEntitiesImplementationFactory = s =>
             {
                 var multipleDatabasePool = MultipleDatabasePool.Instance;
-                return multipleDatabasePool.GetDbContext(this.GetType(), serviceProvider: s) as SenparcEntities;
+
+                return multipleDatabasePool.GetXncfDbContext(this.GetType(), serviceProvider: s) as SenparcEntities;
             };
+
+            services.AddScoped<SenparcEntitiesDbContextBase>(senparcEntitiesImplementationFactory);// 继承自 DbContext
+            services.AddScoped<ISenparcEntitiesDbContext>(senparcEntitiesImplementationFactory);
+            services.AddScoped<SenparcEntitiesBase>(senparcEntitiesImplementationFactory);//继承自 SenparcEntitiesMultiTenantBase
             services.AddScoped<SenparcEntities>(senparcEntitiesImplementationFactory);
-            services.AddScoped<ISenparcEntities>(senparcEntitiesImplementationFactory);
-            services.AddScoped<SenparcEntitiesBase>(senparcEntitiesImplementationFactory);
+
+            #endregion
 
             //SystemServiceEntities 工厂配置（实际不会用到）
             Func<IServiceProvider, SystemServiceEntities> systemServiceEntitiesImplementationFactory = s =>
             {
                 var multipleDatabasePool = MultipleDatabasePool.Instance;
-                return multipleDatabasePool.GetDbContext(this.GetType(), serviceProvider: s) as SystemServiceEntities;
+                return multipleDatabasePool.GetXncfDbContext(this.GetType(), serviceProvider: s) as SystemServiceEntities;
             };
             services.AddScoped<SystemServiceEntities>(systemServiceEntitiesImplementationFactory);
 
