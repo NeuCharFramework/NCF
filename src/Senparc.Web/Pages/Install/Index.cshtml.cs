@@ -94,13 +94,15 @@ namespace Senparc.Web.Pages.Install
                         {
 
                             //初始化数据库
-                            var (initDbSuccess, initDbMsg) = await serviceRegister.InitDatabase(_serviceProvider,_tenantInfoService);
+                            var (initDbSuccess, initDbMsg) = await serviceRegister.InitDatabase(_serviceProvider, _tenantInfoService, _httpContextAccessor.Value.HttpContext);
                             if (!initDbSuccess)
                             {
                                 throw new NcfDatabaseException($"ServiceRegister.InitDatabase 失败：{initDbMsg}", DatabaseConfigurationFactory.Instance.Current.GetType());
                             }
 
                             var tenantInfo = await _tenantInfoService.CreateInitTenantInfoAsync(httpContext);
+
+                            //重置租户状态
                             CreatedRequestTenantInfo = await _tenantInfoService.SetScopedRequestTenantInfoAsync(httpContext);
                             TenantInfoDto = _tenantInfoService.Mapper.Map<TenantInfoDto>(await _tenantInfoService.GetObjectAsync(z => z.Id == CreatedRequestTenantInfo.Id));
                         }
@@ -115,7 +117,7 @@ namespace Senparc.Web.Pages.Install
                         }
                         finally
                         {
-                           
+
                         }
                     }
 

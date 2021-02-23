@@ -5,10 +5,12 @@
  * 如果需要学习扩展模块，请参考 【Senparc.ExtensionAreaTemplate】 项目的 Register.cs 文件！
  */
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Trace;
 using Senparc.Core.Models;
 using Senparc.Ncf.Core.Config;
@@ -191,54 +193,47 @@ namespace Senparc.Service
 
         #region 扩展
 
-        public async Task<(bool success, string msg)> InitDatabase(IServiceProvider serviceProvider, TenantInfoService tenantInfoService)
+        public async Task<(bool success, string msg)> InitDatabase(IServiceProvider serviceProvider, TenantInfoService tenantInfoService, HttpContext httpContext)
         {
             var success = true;
             string msg = null;
-            Console.WriteLine("000000000000000000000000000");
 
-            //SenparcEntitiesMultiTenant senparcEntitiesMultiTenant = (SenparcEntitiesMultiTenant)tenantInfoService.BaseData.BaseDB.BaseDataContext;
-            //if ((await senparcEntitiesMultiTenant.Database.GetPendingMigrationsAsync()).Count() > 0)
-            //{
-            //    senparcEntitiesMultiTenant.ResetMigrate();//重置合并状态
-            //    var script = senparcEntitiesMultiTenant.Database.GenerateCreateScript();
-            //    SenparcTrace.SendCustomLog("senparcEntitiesMultiTenant.Database.GenerateCreateScript", script);
-            //    senparcEntitiesMultiTenant.Migrate();//进行合并
-            //}
-
-            //重置租户状态
-
-            XncfModuleServiceExtension xncfModuleServiceExtension = serviceProvider.GetService<XncfModuleServiceExtension>();
-            Console.WriteLine("11111111111111111111111111111111");
             //SenparcEntities senparcEntities = (SenparcEntities)xncfModuleServiceExtension.BaseData.BaseDB.BaseDataContext;
-            SenparcEntities senparcEntities = (SenparcEntities)xncfModuleServiceExtension.BaseData.BaseDB.BaseDataContext;
-
-            //更新数据库
-            var pendingMigs = await senparcEntities.Database.GetPendingMigrationsAsync();
-            Console.WriteLine("22222222222222222222222222222222");
-            Console.WriteLine("\r\n\r\n\t\t\r\n\t\npendingMigs.Count:" + pendingMigs.Count());
-            if (pendingMigs.Count() > 0)
+            using (var scope = serviceProvider.CreateScope())
             {
-                senparcEntities.ResetMigrate();//重置合并状态
-                Console.WriteLine("3333333333333333333333333333");
+                //暂时关闭多租户状态
+                SiteConfig.SenparcCoreSetting.EnableMultiTenant = false;
 
-                try
+                SenparcEntities senparcEntities = scope.ServiceProvider.GetRequiredService<SenparcEntities>();
+                //更新数据库
+                var pendingMigs = await senparcEntities.Database.GetPendingMigrationsAsync();
+                Console.WriteLine("22222222222222222222222222222222");
+                Console.WriteLine("\r\n\r\n\t\t\r\n\t\npendingMigs.Count:" + pendingMigs.Count());
+                if (pendingMigs.Count() > 0)
                 {
+                    senparcEntities.ResetMigrate();//重置合并状态
+                    Console.WriteLine("3333333333333333333333333333");
 
-                    var script = senparcEntities.Database.GenerateCreateScript();
-                    SenparcTrace.SendCustomLog("senparcEntities.Database.GenerateCreateScript", script);
+                    try
+                    {
 
-                    senparcEntities.Migrate();//进行合并
+                        var script = senparcEntities.Database.GenerateCreateScript();
+                        SenparcTrace.SendCustomLog("senparcEntities.Database.GenerateCreateScript", script);
 
+                        senparcEntities.Migrate();//进行合并
+
+                    }
+                    catch (Exception ex)
+                    {
+                        success = false;
+                        msg = ex.Message;
+
+                        var currentDatabaseConfiguration = DatabaseConfigurationFactory.Instance.Current;
+                        SenparcTrace.BaseExceptionLog(new NcfDatabaseException(ex.Message, currentDatabaseConfiguration.GetType(), senparcEntities.GetType(), ex));
+                    }
                 }
-                catch (Exception ex)
-                {
-                    success = false;
-                    msg = ex.Message;
 
-                    var currentDatabaseConfiguration = DatabaseConfigurationFactory.Instance.Current;
-                    SenparcTrace.BaseExceptionLog(new NcfDatabaseException(ex.Message, currentDatabaseConfiguration.GetType(), senparcEntities.GetType(), ex));
-                }
+                SiteConfig.SenparcCoreSetting.EnableMultiTenant = true;
             }
 
             return (success: success, msg: msg);
