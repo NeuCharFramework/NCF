@@ -18,6 +18,8 @@ using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.AssembleScan;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Core.Models.DataBaseModel;
+using Senparc.Ncf.Repository;
 using Senparc.Ncf.SMS;
 using Senparc.Ncf.XncfBase;
 using Senparc.Respository;
@@ -84,6 +86,9 @@ namespace Senparc.Web
 
             services.AddMultiTenant();//注册多租户（按需）
             EntitySetKeys.TryLoadSetInfo(typeof(SenparcEntitiesMultiTenant));//注册多租户数据库的对象（按需）
+            services.AddScoped(typeof(ITenantInfoDbData), typeof(TenantInfoDbData));
+            services.AddScoped<TenantInfoRepository>();
+            services.AddScoped(typeof(IClientRepositoryBase<TenantInfo>), typeof(TenantInfoRepository));
 
             services.AddSenparcGlobalServices(configuration);//注册 CO2NET 基础引擎所需服务
 

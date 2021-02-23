@@ -16,6 +16,7 @@ using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
+using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using System;
 using System.Collections.Generic;
@@ -185,6 +186,63 @@ namespace Senparc.Service
             EntitySetKeys.TryLoadSetInfo(typeof(SenparcEntities));
         }
 
+
+        #endregion
+
+        #region 扩展
+
+        public async Task<(bool success, string msg)> InitDatabase(IServiceProvider serviceProvider, TenantInfoService tenantInfoService)
+        {
+            var success = true;
+            string msg = null;
+            Console.WriteLine("000000000000000000000000000");
+
+            //SenparcEntitiesMultiTenant senparcEntitiesMultiTenant = (SenparcEntitiesMultiTenant)tenantInfoService.BaseData.BaseDB.BaseDataContext;
+            //if ((await senparcEntitiesMultiTenant.Database.GetPendingMigrationsAsync()).Count() > 0)
+            //{
+            //    senparcEntitiesMultiTenant.ResetMigrate();//重置合并状态
+            //    var script = senparcEntitiesMultiTenant.Database.GenerateCreateScript();
+            //    SenparcTrace.SendCustomLog("senparcEntitiesMultiTenant.Database.GenerateCreateScript", script);
+            //    senparcEntitiesMultiTenant.Migrate();//进行合并
+            //}
+
+            //重置租户状态
+
+            XncfModuleServiceExtension xncfModuleServiceExtension = serviceProvider.GetService<XncfModuleServiceExtension>();
+            Console.WriteLine("11111111111111111111111111111111");
+            //SenparcEntities senparcEntities = (SenparcEntities)xncfModuleServiceExtension.BaseData.BaseDB.BaseDataContext;
+            SenparcEntities senparcEntities = (SenparcEntities)xncfModuleServiceExtension.BaseData.BaseDB.BaseDataContext;
+
+            //更新数据库
+            var pendingMigs = await senparcEntities.Database.GetPendingMigrationsAsync();
+            Console.WriteLine("22222222222222222222222222222222");
+            Console.WriteLine("\r\n\r\n\t\t\r\n\t\npendingMigs.Count:" + pendingMigs.Count());
+            if (pendingMigs.Count() > 0)
+            {
+                senparcEntities.ResetMigrate();//重置合并状态
+                Console.WriteLine("3333333333333333333333333333");
+
+                try
+                {
+
+                    var script = senparcEntities.Database.GenerateCreateScript();
+                    SenparcTrace.SendCustomLog("senparcEntities.Database.GenerateCreateScript", script);
+
+                    senparcEntities.Migrate();//进行合并
+
+                }
+                catch (Exception ex)
+                {
+                    success = false;
+                    msg = ex.Message;
+
+                    var currentDatabaseConfiguration = DatabaseConfigurationFactory.Instance.Current;
+                    SenparcTrace.BaseExceptionLog(new NcfDatabaseException(ex.Message, currentDatabaseConfiguration.GetType(), senparcEntities.GetType(), ex));
+                }
+            }
+
+            return (success: success, msg: msg);
+        }
 
         #endregion
     }

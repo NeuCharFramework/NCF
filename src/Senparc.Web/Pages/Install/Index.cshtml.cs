@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.Config;
+using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Core.MultiTenant;
@@ -70,8 +72,9 @@ namespace Senparc.Web.Pages.Install
         {
             try
             {
-                MultipleDatabaseType = DatabaseConfigurationFactory.Instance.Current.MultipleDatabaseType;
+                Console.WriteLine("进入安装程序，检测是否需要初始化");
 
+                MultipleDatabaseType = DatabaseConfigurationFactory.Instance.Current.MultipleDatabaseType;
                 var adminUserInfo = await _accountInfoService.GetObjectAsync(z => true);//检查是否已初始化
                 if (adminUserInfo == null)
                 {
@@ -81,28 +84,42 @@ namespace Senparc.Web.Pages.Install
             catch (Exception)
             {
                 {
+                    Senparc.Service.Register serviceRegister = new Service.Register();
+
                     //添加初始化多租户信息
                     if (SiteConfig.SenparcCoreSetting.EnableMultiTenant)
                     {
                         var httpContext = _httpContextAccessor.Value.HttpContext;
                         try
                         {
+
+                            //初始化数据库
+                            var (initDbSuccess, initDbMsg) = await serviceRegister.InitDatabase(_serviceProvider,_tenantInfoService);
+                            if (!initDbSuccess)
+                            {
+                                throw new NcfDatabaseException($"ServiceRegister.InitDatabase 失败：{initDbMsg}", DatabaseConfigurationFactory.Instance.Current.GetType());
+                            }
+
                             var tenantInfo = await _tenantInfoService.CreateInitTenantInfoAsync(httpContext);
+                            CreatedRequestTenantInfo = await _tenantInfoService.SetScopedRequestTenantInfoAsync(httpContext);
+                            TenantInfoDto = _tenantInfoService.Mapper.Map<TenantInfoDto>(await _tenantInfoService.GetObjectAsync(z => z.Id == CreatedRequestTenantInfo.Id));
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
+                            Console.WriteLine("CCCCCCCCCCCCCCCCCCCCCCCCC");
+
                             //如果已经安装过，则不处理
                             //TODO:特定的Exception
+                            Console.WriteLine(ex.Message);
+                            throw;
                         }
                         finally
                         {
-                            CreatedRequestTenantInfo = await _tenantInfoService.SetScopedRequestTenantInfoAsync(httpContext);
-                            TenantInfoDto = _tenantInfoService.Mapper.Map<TenantInfoDto>(await _tenantInfoService.GetObjectAsync(z => z.Id == CreatedRequestTenantInfo.Id));
+                           
                         }
                     }
 
                     //开始安装系统模块（Service）
-                    Senparc.Service.Register serviceRegister = new Service.Register();
                     await serviceRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
                     //启用系统模块（Service）
                     var serviceModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == serviceRegister.Uid);
