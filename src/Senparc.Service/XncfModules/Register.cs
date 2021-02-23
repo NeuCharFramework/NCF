@@ -207,12 +207,9 @@ namespace Senparc.Service
                 SenparcEntities senparcEntities = scope.ServiceProvider.GetRequiredService<SenparcEntities>();
                 //更新数据库
                 var pendingMigs = await senparcEntities.Database.GetPendingMigrationsAsync();
-                Console.WriteLine("22222222222222222222222222222222");
-                Console.WriteLine("\r\n\r\n\t\t\r\n\t\npendingMigs.Count:" + pendingMigs.Count());
                 if (pendingMigs.Count() > 0)
                 {
                     senparcEntities.ResetMigrate();//重置合并状态
-                    Console.WriteLine("3333333333333333333333333333");
 
                     try
                     {

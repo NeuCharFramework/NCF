@@ -108,8 +108,6 @@ namespace Senparc.Web.Pages.Install
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine("CCCCCCCCCCCCCCCCCCCCCCCCC");
-
                             //如果已经安装过，则不处理
                             //TODO:特定的Exception
                             Console.WriteLine(ex.Message);
