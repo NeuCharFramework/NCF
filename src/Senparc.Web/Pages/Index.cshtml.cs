@@ -25,7 +25,7 @@ namespace Senparc.Web.Pages
         public string Output { get; set; }
         public RequestTenantInfo RequestTenantInfo { get; }
 
-        public IndexModel(IServiceProvider serviceProvider,RequestTenantInfo requestTenantInfo)
+        public IndexModel(IServiceProvider serviceProvider, RequestTenantInfo requestTenantInfo)
         {
             _serviceProvider = serviceProvider;
             RequestTenantInfo = requestTenantInfo;
