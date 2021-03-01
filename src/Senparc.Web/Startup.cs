@@ -10,9 +10,9 @@ using Senparc.CO2NET;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.Database;
-using Senparc.Ncf.Database.MySql;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½
-using Senparc.Ncf.Database.Sqlite;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½
-using Senparc.Ncf.Database.SqlServer;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½
+using Senparc.Ncf.Database.MySql;//¸ù¾ÝÐèÒªÌí¼Ó
+using Senparc.Ncf.Database.Sqlite;//¸ù¾ÝÐèÒªÌí¼Ó
+using Senparc.Ncf.Database.SqlServer;//¸ù¾ÝÐèÒªÌí¼Ó
 using Senparc.Ncf.Service.MultiTenant;
 using Senparc.Web.Hubs;
 
@@ -32,12 +32,12 @@ namespace Senparc.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½
-            //services.AddDatabase<SqliteMemoryDatabaseConfiguration>();//Ê¹ï¿½ï¿½ SQLite ï¿½ï¿½ï¿½Ý¿ï¿½
-            services.AddDatabase<SQLServerDatabaseConfiguration>();//Ê¹ï¿½ï¿½ SQLServerï¿½ï¿½ï¿½Ý¿ï¿½
-            //services.AddDatabase<MySqlDatabaseConfiguration>();//Ê¹ï¿½ï¿½ MySQL ï¿½ï¿½ï¿½Ý¿ï¿½
+            //Ö¸¶¨Êý¾Ý¿âÀàÐÍ
+            //services.AddDatabase<SqliteMemoryDatabaseConfiguration>();//Ê¹ÓÃ SQLite Êý¾Ý¿â
+            services.AddDatabase<SQLServerDatabaseConfiguration>();//Ê¹ÓÃ SQLServerÊý¾Ý¿â
+            //services.AddDatabase<MySqlDatabaseConfiguration>();//Ê¹ÓÃ MySQL Êý¾Ý¿â
 
-            //ï¿½ï¿½Ó£ï¿½×¢ï¿½á£© Ncf ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ë£¡ï¿½ï¿½
+            //Ìí¼Ó£¨×¢²á£© Ncf ·þÎñ£¨ÖØÒª£¬±ØÐë£¡£©
             services.AddNcfServices(Configuration, env, CompatibilityVersion.Version_3_0);
         }
 
@@ -59,9 +59,9 @@ namespace Senparc.Web
             }
 
 
-            #region ï¿½ï¿½ï¿½â»§
+            #region ¶à×â»§
 
-            app.UseMiddleware<TenantMiddleware>();//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½â»§ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            app.UseMiddleware<TenantMiddleware>();//Èç¹û²»ÆôÓÃ¶à×â»§¹¦ÄÜ£¬¿ÉÒÔÉ¾³ý´ËÅäÖÃ
 
             #endregion
 
@@ -70,15 +70,15 @@ namespace Senparc.Web
 
             app.UseCookiePolicy();
 
-            //Use NCFï¿½ï¿½ï¿½ï¿½ï¿½ë£©
-            app.UseNcf(env, senparcCoreSetting, senparcSetting);
-            
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
             });
+
+            //Use NCF£¨±ØÐë£©
+            app.UseNcf(env, senparcCoreSetting, senparcSetting);
         }
     }
 }
