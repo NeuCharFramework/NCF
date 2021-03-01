@@ -146,15 +146,19 @@ namespace Senparc.Areas.Admin.Pages
                         item.ParentId = null;
                         item.Id = (index++).ToString();
                     }
-
-                    dest.Add(new SysMenuDto()
+                    else
                     {
-                        MenuName = "设置/执行",
-                        Url = item.Url,
-                        Id = (index++).ToString(),
-                        ParentId = item.Id,
-                        Icon = "fa fa-play"
-                    });
+                        dest.Add(new SysMenuDto()
+                        {
+                            MenuName = "设置/执行",
+                            Url = item.Url,
+                            Id = (index++).ToString(),
+                            ParentId = item.Id,
+                            Icon = "fa fa-play"
+                        });
+                    }
+
+                    
                     dest.AddRange(xncfAreapage.AareaPageMenuItems.Select(_ => new SysMenuDto()
                     {
                         MenuName = _.Name,

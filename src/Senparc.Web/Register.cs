@@ -18,6 +18,8 @@ using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.AssembleScan;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Core.Models.DataBaseModel;
+using Senparc.Ncf.Repository;
 using Senparc.Ncf.SMS;
 using Senparc.Ncf.XncfBase;
 using Senparc.Respository;
@@ -81,13 +83,21 @@ namespace Senparc.Web
             //    //options.AllowMappingHeadRequestsToGetHandler = false;//https://www.learnrazorpages.com/razor-pages/handler-methods
             //})
 
-            services.AddSenparcGlobalServices(configuration);
+
+            services.AddMultiTenant();//注册多租户（按需）
+            EntitySetKeys.TryLoadSetInfo(typeof(SenparcEntitiesMultiTenant));//注册多租户数据库的对象（按需）
+            services.AddScoped(typeof(ITenantInfoDbData), typeof(TenantInfoDbData));
+            services.AddScoped<TenantInfoRepository>();
+            services.AddScoped(typeof(IClientRepositoryBase<TenantInfo>), typeof(TenantInfoRepository));
+
+            services.AddSenparcGlobalServices(configuration);//注册 CO2NET 基础引擎所需服务
 
             var builder = services.AddRazorPages(opt =>
                 {
                     //opt.RootDirectory = "/";
                 })
-              .AddNcfAreas(env).ConfigureApiBehaviorOptions(options =>
+              .AddNcfAreas(env)//注册所有 Ncf 的 Area 模块（必须）
+              .ConfigureApiBehaviorOptions(options =>
               {
                   options.InvalidModelStateResponseFactory = actionContext =>
                   {
@@ -98,7 +108,7 @@ namespace Senparc.Web
                       //commonReturnModel.StatusCode = Core.App.CommonReturnStatusCode.参数校验不通过;
                       return new BadRequestObjectResult(commonReturnModel);
                   };
-              })//注册所有 Ncf 的 Area 模块（必须）
+              })
               .AddXmlSerializerFormatters()
               .AddJsonOptions(options =>
               {
@@ -166,6 +176,9 @@ namespace Senparc.Web
             AssembleScanHelper.RunScan();
             //services.AddSingleton<Core.Cache.RedisProvider.IRedisProvider, Core.Cache.RedisProvider.StackExchangeRedisProvider>();
 
+            ////添加多租户
+            //services.AddMultiTenant();
+
             //注册 User 登录策略
             services.AddAuthorization(options =>
             {
@@ -216,7 +229,7 @@ namespace Senparc.Web
 
                         //以下会立即将全局缓存设置为 Redis
                         Senparc.CO2NET.Cache.CsRedis.Register.UseKeyValueRedisNow(); //键值对缓存策略（推荐）
-                                                                                     //Senparc.CO2NET.Cache.Redis.Register.UseHashRedisNow();//HashSet储存格式的缓存策略
+                        /*Senparc.CO2NET.Cache.CsRedis.Register.UseHashRedisNow();*/ //HashSet储存格式的缓存策略 
 
                         //也可以通过以下方式自定义当前需要启用的缓存策略
                         //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//键值对
@@ -278,6 +291,7 @@ namespace Senparc.Web
             //更多 XNCF 模块线程已经集成到 Senparc.Ncf.XncfBase.Register.ThreadCollection 中
 
             #endregion
+
         }
 
 

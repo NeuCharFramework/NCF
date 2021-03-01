@@ -5,10 +5,12 @@
  * 如果需要学习扩展模块，请参考 【Senparc.ExtensionAreaTemplate】 项目的 Register.cs 文件！
  */
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Trace;
 using Senparc.Core.Models;
 using Senparc.Ncf.Core.Config;
@@ -16,6 +18,7 @@ using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
+using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using System;
 using System.Collections.Generic;
@@ -36,7 +39,7 @@ namespace Senparc.Service
 
         public override string Uid => SiteConfig.SYSTEM_XNCF_MODULE_SERVICE_UID;// "00000000-0000-0000-0000-000000000001";
 
-        public override string Version => "0.1.0-beta4";
+        public override string Version => "0.3.2-beta4";
 
         public override string MenuName => "NCF 系统服务运行核心";
 
@@ -146,30 +149,92 @@ namespace Senparc.Service
              */
             var xncfDatabaseData = new XncfDatabaseData(this, "Senparc.Service"/*从当前程序集读取*/);
 
+            #region 不属于任何模块
+
+            //这个配置面相基类，不属于任何模块
+            Func<IServiceProvider, SenparcEntitiesMultiTenant> multiTenantImplementationFactory = s =>
+            {
+                var multipleDatabasePool = MultipleDatabasePool.Instance;
+                return multipleDatabasePool.GetDbContext<SenparcEntitiesMultiTenant>(serviceProvider: s);
+            };
+            services.AddScoped<SenparcEntitiesMultiTenant>(multiTenantImplementationFactory);//继承自 SenparcEntitiesMultiTenantBase
+
             Func<IServiceProvider, SenparcEntities> senparcEntitiesImplementationFactory = s =>
             {
                 var multipleDatabasePool = MultipleDatabasePool.Instance;
-                return multipleDatabasePool.GetDbContext(this.GetType()) as SenparcEntities;
+
+                return multipleDatabasePool.GetXncfDbContext(this.GetType(), serviceProvider: s) as SenparcEntities;
             };
+
+            services.AddScoped<SenparcEntitiesDbContextBase>(senparcEntitiesImplementationFactory);// 继承自 DbContext
+            services.AddScoped<ISenparcEntitiesDbContext>(senparcEntitiesImplementationFactory);
+            services.AddScoped<SenparcEntitiesBase>(senparcEntitiesImplementationFactory);//继承自 SenparcEntitiesMultiTenantBase
             services.AddScoped<SenparcEntities>(senparcEntitiesImplementationFactory);
-            services.AddScoped<ISenparcEntities>(senparcEntitiesImplementationFactory);
-            services.AddScoped<SenparcEntitiesBase>(senparcEntitiesImplementationFactory);
+
+            #endregion
 
             //SystemServiceEntities 工厂配置（实际不会用到）
             Func<IServiceProvider, SystemServiceEntities> systemServiceEntitiesImplementationFactory = s =>
             {
                 var multipleDatabasePool = MultipleDatabasePool.Instance;
-                return multipleDatabasePool.GetDbContext(this.GetType()) as SystemServiceEntities;
+                return multipleDatabasePool.GetXncfDbContext(this.GetType(), serviceProvider: s) as SystemServiceEntities;
             };
             services.AddScoped<SystemServiceEntities>(systemServiceEntitiesImplementationFactory);
 
-            services.AddScoped(typeof(ISqlClientFinanceData), typeof(SqlClientFinanceData));
-            services.AddScoped(typeof(ISqlBaseFinanceData), typeof(SqlClientFinanceData));
+            services.AddScoped(typeof(INcfClientDbData), typeof(NcfClientDbData));
+            services.AddScoped(typeof(INcfDbData), typeof(NcfClientDbData));
 
             //预加载 EntitySetKey
             EntitySetKeys.TryLoadSetInfo(typeof(SenparcEntities));
         }
 
+
+        #endregion
+
+        #region 扩展
+
+        public async Task<(bool success, string msg)> InitDatabase(IServiceProvider serviceProvider, TenantInfoService tenantInfoService, HttpContext httpContext)
+        {
+            var success = true;
+            string msg = null;
+
+            //SenparcEntities senparcEntities = (SenparcEntities)xncfModuleServiceExtension.BaseData.BaseDB.BaseDataContext;
+            using (var scope = serviceProvider.CreateScope())
+            {
+                //暂时关闭多租户状态
+                SiteConfig.SenparcCoreSetting.EnableMultiTenant = false;
+
+                SenparcEntities senparcEntities = scope.ServiceProvider.GetRequiredService<SenparcEntities>();
+                //更新数据库
+                var pendingMigs = await senparcEntities.Database.GetPendingMigrationsAsync();
+                if (pendingMigs.Count() > 0)
+                {
+                    senparcEntities.ResetMigrate();//重置合并状态
+
+                    try
+                    {
+
+                        var script = senparcEntities.Database.GenerateCreateScript();
+                        SenparcTrace.SendCustomLog("senparcEntities.Database.GenerateCreateScript", script);
+
+                        senparcEntities.Migrate();//进行合并
+
+                    }
+                    catch (Exception ex)
+                    {
+                        success = false;
+                        msg = ex.Message;
+
+                        var currentDatabaseConfiguration = DatabaseConfigurationFactory.Instance.Current;
+                        SenparcTrace.BaseExceptionLog(new NcfDatabaseException(ex.Message, currentDatabaseConfiguration.GetType(), senparcEntities.GetType(), ex));
+                    }
+                }
+
+                SiteConfig.SenparcCoreSetting.EnableMultiTenant = true;
+            }
+
+            return (success: success, msg: msg);
+        }
 
         #endregion
     }
