@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using Senparc.CO2NET;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.Database.MultipleMigrationDbContext;
 using Senparc.Ncf.XncfBase;
@@ -8,9 +12,9 @@ using System;
 
 namespace Senparc.Core.Models
 {
-    public partial class SenparcEntities : SenparcEntitiesBase, ISenparcEntities
+    public partial class SenparcEntities : SenparcEntitiesBase, ISenparcEntitiesDbContext
     {
-        public SenparcEntities(DbContextOptions/*<SenparcEntities>*/ dbContextOptions) : base(dbContextOptions)
+        public SenparcEntities(DbContextOptions/*<SenparcEntities>*/ dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
         {
         }
 
@@ -24,9 +28,6 @@ namespace Senparc.Core.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //基类中的系统表处理
-            base.OnModelCreating(modelBuilder);
-
             #region 系统表
 
             //实现 [XncfAutoConfigurationMapping] 特性之后，可以自动执行，无需手动添加
@@ -53,6 +54,8 @@ namespace Senparc.Core.Models
             SenparcTrace.SendCustomLog("SenparcEntities 数据库实体注入", $"耗时：{SystemTime.DiffTotalMS(dt1)}ms");
             #endregion
 
+            //基类中的系统表处理
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

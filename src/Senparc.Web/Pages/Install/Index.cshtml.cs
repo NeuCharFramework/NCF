@@ -1,6 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Senparc.CO2NET.Trace;
+using Senparc.Ncf.Core.Config;
+using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Core.Models.DataBaseModel;
+using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using Senparc.Service;
@@ -16,6 +22,8 @@ namespace Senparc.Web.Pages.Install
         private readonly AdminUserInfoService _accountInfoService;
         private readonly SystemConfigService _systemConfigService;
         private readonly SysMenuService _sysMenuService;
+        private readonly TenantInfoService _tenantInfoService;
+        private readonly Lazy<IHttpContextAccessor> _httpContextAccessor;
         private readonly IServiceProvider _serviceProvider;
 
         /// <summary>
@@ -35,22 +43,38 @@ namespace Senparc.Web.Pages.Install
 
         public MultipleDatabaseType MultipleDatabaseType { get; set; }
 
+        /// <summary>
+        /// 新创建的 RequestTenantInfo
+        /// </summary>
+        public RequestTenantInfo CreatedRequestTenantInfo { get; set; }
+        public TenantInfoDto TenantInfoDto { get; private set; }
+        public TenantRule TenantRule { get; set; }
 
-        public IndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleService, AdminUserInfoService accountService, SystemConfigService systemConfigService, SysMenuService sysMenuService)
+        public bool MultiTenantEnable { get; set; }
+
+
+        public IndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleService, AdminUserInfoService accountService,
+            SystemConfigService systemConfigService, SysMenuService sysMenuService, TenantInfoService tenantInfoService, Lazy<IHttpContextAccessor> httpContextAccessor)
         {
             _xncfModuleService = xncfModuleService;
             _accountInfoService = accountService;
             _sysMenuService = sysMenuService;
+            _tenantInfoService = tenantInfoService;
+            this._httpContextAccessor = httpContextAccessor;
             _systemConfigService = systemConfigService;
             _serviceProvider = serviceProvider;
+
+            MultiTenantEnable = SiteConfig.SenparcCoreSetting.EnableMultiTenant;
+            TenantRule = SiteConfig.SenparcCoreSetting.TenantRule;
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
             try
             {
-                MultipleDatabaseType = DatabaseConfigurationFactory.Instance.Current.MultipleDatabaseType;
+                Console.WriteLine("进入安装程序，检测是否需要初始化");
 
+                MultipleDatabaseType = DatabaseConfigurationFactory.Instance.Current.MultipleDatabaseType;
                 var adminUserInfo = await _accountInfoService.GetObjectAsync(z => true);//检查是否已初始化
                 if (adminUserInfo == null)
                 {
@@ -60,8 +84,42 @@ namespace Senparc.Web.Pages.Install
             catch (Exception)
             {
                 {
-                    //开始安装系统模块（Service）
                     Senparc.Service.Register serviceRegister = new Service.Register();
+
+                    //添加初始化多租户信息
+                    if (SiteConfig.SenparcCoreSetting.EnableMultiTenant)
+                    {
+                        var httpContext = _httpContextAccessor.Value.HttpContext;
+                        try
+                        {
+
+                            //初始化数据库
+                            var (initDbSuccess, initDbMsg) = await serviceRegister.InitDatabase(_serviceProvider, _tenantInfoService, _httpContextAccessor.Value.HttpContext);
+                            if (!initDbSuccess)
+                            {
+                                throw new NcfDatabaseException($"ServiceRegister.InitDatabase 失败：{initDbMsg}", DatabaseConfigurationFactory.Instance.Current.GetType());
+                            }
+
+                            var tenantInfo = await _tenantInfoService.CreateInitTenantInfoAsync(httpContext);
+
+                            //重置租户状态
+                            CreatedRequestTenantInfo = await _tenantInfoService.SetScopedRequestTenantInfoAsync(httpContext);
+                            TenantInfoDto = _tenantInfoService.Mapper.Map<TenantInfoDto>(await _tenantInfoService.GetObjectAsync(z => z.Id == CreatedRequestTenantInfo.Id));
+                        }
+                        catch (Exception ex)
+                        {
+                            //如果已经安装过，则不处理
+                            //TODO:特定的Exception
+                            Console.WriteLine(ex.Message);
+                            throw;
+                        }
+                        finally
+                        {
+
+                        }
+                    }
+
+                    //开始安装系统模块（Service）
                     await serviceRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
                     //启用系统模块（Service）
                     var serviceModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == serviceRegister.Uid);
@@ -100,6 +158,27 @@ namespace Senparc.Web.Pages.Install
             else
             {
                 Step = 1;
+
+                //添加初始化多租户信息
+                if (SiteConfig.SenparcCoreSetting.EnableMultiTenant)
+                {
+                    var httpContext = _httpContextAccessor.Value.HttpContext;
+                    try
+                    {
+                        //var tenantInfo = await _tenantInfoService.CreateInitTenantInfoAsync(httpContext);
+
+                        CreatedRequestTenantInfo = await _tenantInfoService.SetScopedRequestTenantInfoAsync(httpContext);
+                        TenantInfoDto = _tenantInfoService.Mapper.Map<TenantInfoDto>(await _tenantInfoService.GetObjectAsync(z => z.Id == CreatedRequestTenantInfo.Id));
+
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    finally
+                    {
+                    }
+                }
+
                 _systemConfigService.Init();//初始化系统信息
                 _sysMenuService.Init();
 

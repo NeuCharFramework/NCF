@@ -14,6 +14,7 @@ using Senparc.Core.Models;
 using Senparc.Core.Models.VD;
 using Senparc.Ncf.Core.Cache;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Core.MultiTenant;
 
 namespace Senparc.Web.Pages
 {
@@ -21,12 +22,15 @@ namespace Senparc.Web.Pages
     {
         IServiceProvider _serviceProvider;
 
-        public IndexModel(IServiceProvider serviceProvider)
+        public string Output { get; set; }
+        public RequestTenantInfo RequestTenantInfo { get; }
+
+        public IndexModel(IServiceProvider serviceProvider, RequestTenantInfo requestTenantInfo)
         {
             _serviceProvider = serviceProvider;
+            RequestTenantInfo = requestTenantInfo;
         }
 
-        public string Output { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
             //判断是否需要自动进入到安装程序

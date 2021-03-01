@@ -1,0 +1,129 @@
+﻿@page "{handler?}"
+@addTagHelper *, Senparc.Areas.Admin
+@model Senparc.Areas.Admin.Areas.Admin.Pages.TenantInfo_IndexModel
+@{
+    ViewData["Title"] = "多租户信息";
+    Layout = "_Layout_Vue";
+}
+
+@section Style{
+    <link href="~/css/Admin/TenantInfo/Index.css" rel="stylesheet" />
+}
+
+@section breadcrumbs {
+    <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+    <el-breadcrumb-item>多租户信息</el-breadcrumb-item>
+}
+<div>
+    <div class="admin-tenant-info">
+        <div>
+            <h2 class="tenant-list">当前租户信息</h2>
+            <el-row :gutter="20" v-show="!enableMultiTenant">
+                <el-col :span="6"><div class="grid-content bg-purple">当前系统已关闭多租户</div></el-col>
+            </el-row>
+            <el-row :gutter="20" v-show="enableMultiTenant">
+                <el-col :span="6"><div class="grid-content bg-purple">当前系统匹配规则：<span>{{tenantRule}}</span></div></el-col>
+                <el-col :span="6"><div class="grid-content bg-purple">名称：<span>{{requestTenantInfo.name}} <span class="float-right">(ID:{{requestTenantInfo.id}})</span></span></div></el-col>
+                <el-col :span="6"><div class="grid-content bg-purple">匹配关键字：<span>{{requestTenantInfo.tenantKey}}</span></div></el-col>
+                <el-col :span="6"><div class="grid-content bg-purple">匹配时间：<span>{{requestTenantInfo.beginTime}}</span></div></el-col>
+            </el-row>
+
+            @*Id：<span>{{requestTenantInfo.id}}</span>*@
+
+        </div>
+
+        <h2 class="current-tenant-info">多租户信息</h2>
+
+        <el-table :data="tableData"
+                  border
+                  style="width: 100%">
+            <el-table-column align="center"
+                             label="id(TentanId)"
+                             width="120">
+                <template slot-scope="scope">
+                    {{ scope.row.id }}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="租户名称">
+                <template slot-scope="scope">
+                    {{ scope.row.name }}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="匹配规则">
+                <template slot-scope="scope">
+                    {{ scope.row.tenantKey }}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="添加时间">
+                <template slot-scope="scope">
+                    {{formaTableTime(scope.row.addTime) }}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="管理员备注">
+                <template slot-scope="scope">
+                    {{ scope.row.adminRemark }}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="启用"
+                             width="60">
+                <template slot-scope="scope">
+                    {{ scope.row.enable }}
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                    <el-button size="mini"
+                               type="primary"
+                               v-has="['admin-edit']"
+                               @@click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                </template>
+                <template v-has="['admin-delete']">
+                    <el-popconfirm placement="top" title="确认删除此租户吗？删除后所有租户信息将处于游离状态，请谨慎操作！" @@on-confirm="handleDelete(scope.$index, scope.row)">
+                        <el-button size="mini" type="danger" slot="reference">删除</el-button>
+                    </el-popconfirm>
+                </template>
+            </el-table-column>
+        </el-table>
+        @*<pagination :total="paginationQuery.total"
+            :page.sync="listQuery.pageIndex"
+            :limit.sync="listQuery.pageSize"
+            @@pagination="getList"></pagination>*@
+        <!--编辑、新增 -->
+        <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
+            <el-form ref="dataForm"
+                     :rules="dialog.rules"
+                     :model="dialog.data"
+                     label-position="left"
+                     label-width="100px"
+                     style="max-width: 400px; margin-left:50px;">
+                @*<p class="username-tip" v-if="dialog.title==='编辑管理员'">不建议修改用户名！</p>*@
+                <el-form-item label="租户名称" :error="dialog.nameError" prop="name">
+                    <el-input v-model="dialog.data.name" clearable placeholder="请输入租户名称" />
+                </el-form-item>
+                <el-form-item label="租户匹配关键字" :error="dialog.tenantKeyError" prop="tenantKey">
+                    <el-input v-model="dialog.data.tenantKey" clearable placeholder="请输入租户匹配关键字" />
+                </el-form-item>
+                <el-form-item label="管理员备注" prop="adminRemark">
+                    <el-input v-model="dialog.data.adminRemark" clearable placeholder="请输入管理员备注" />
+                </el-form-item>
+                <el-form-item label="是否启用">
+                    <el-switch v-model="dialog.data.enable"></el-switch>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @@click="dialog.visible = false">取 消</el-button>
+                <el-button :loading="dialog.updateLoading" type="primary" @@click="updateData">确 认</el-button>
+            </div>
+        </el-dialog>
+       
+    </div>
+
+</div>
+@section scripts{
+    <script src="~/js/Admin/Pages/TenantInfo/Index.js"></script>
+}
