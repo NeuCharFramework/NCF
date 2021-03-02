@@ -29,7 +29,7 @@
 		<PackageReference Include="Senparc.Weixin.MP" Version="16.10.601" />
 		<PackageReference Include="Senparc.Weixin.Open" Version="4.7.600" />
 		<PackageReference Include="Senparc.Weixin.WxOpen" Version="3.8.601" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.34-beta1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.35-beta1" />
 		<PackageReference Include="Senparc.Ncf.Log" Version="0.6.127-beta1" />
 		<PackageReference Include="Senparc.Ncf.Repository" Version="0.6.127.1-beta1" />
 		<PackageReference Include="Senparc.Ncf.Service" Version="0.6.127.12-beta1" />
