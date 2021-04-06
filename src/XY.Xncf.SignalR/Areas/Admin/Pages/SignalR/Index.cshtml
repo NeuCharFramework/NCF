@@ -1,56 +1,63 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon">
-    <title>在线用户</title>
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-</head>
-<body>
-    <div id="app">
-        <el-row :gutter="10" class="user_sch">
-            <el-input v-model="listQuery.userName" placeholder="请输入检索的昵称">
-                <el-button slot="append" v-on:click="getList()">检索</el-button>
-            </el-input>
-        </el-row>
-        <el-row :gutter="10">
-            <el-col v-for="item in thisData" :xs="12" :sm="8" :md="4" :lg="2" :xl="1">
-                <el-badge :value="item.Value">
-                    <el-button type="success" plain>{{item.Key}}</el-button>
-                </el-badge>
-            </el-col>
-        </el-row>
-        <pagination :total="paginationQuery.total"
-                    :page.sync="listQuery.pageIndex"
-                    :limit.sync="listQuery.pageSize"
-                    @@pagination="getList"></pagination>
-    </div>
+﻿@page
+@model XY.Xncf.SignalR.Areas.Admin.Pages.SignalR.IndexModel
+@{
+    ViewData["Title"] = "在线用户";
+    Layout = "_Layout_Vue";
+}
+
+@section Style{
+    @*<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">*@
     <style>
         #app { padding: 15px; }
         .user_sch { margin-bottom: 25px; }
         .el-col { border-radius: 4px; margin-bottom: 15px; text-align: center; }
     </style>
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+}
+@section breadcrumbs{
+    <el-breadcrumb-item>扩展模块</el-breadcrumb-item>
+    <el-breadcrumb-item>SignalR在线用户</el-breadcrumb-item>
+    <el-breadcrumb-item>首页</el-breadcrumb-item>
+}
+<div id="app">
+    <el-row :gutter="10" class="user_sch">
+        <el-input v-model="listQuery.userName" placeholder="请输入检索的昵称">
+            <el-button slot="append" v-on:click="getList()">检索</el-button>
+        </el-input>
+    </el-row>
+    <el-row :gutter="10">
+        <el-col v-for="item in thisData" :xs="12" :sm="8" :md="4" :lg="2" :xl="1">
+            <el-badge :value="item.Value">
+                <el-button type="success" plain>{{item.Key}}</el-button>
+            </el-badge>
+        </el-col>
+    </el-row>
+    <pagination :total="paginationQuery.total"
+                :page.sync="listQuery.pageIndex"
+                :limit.sync="listQuery.pageSize"
+                @@pagination="getList"></pagination>
+</div>
+@section scripts{
+    @*嵌入后台后不用单独引用了*@
+    @*<script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>*@
+    @*<script>
         Vue.component('pagination', {
             template: `
-          <!-- 分页组件 -->
-          <div :class="{'hidden':hidden}" class="pagination-container">
-            <el-pagination
-              :background="background"
-              :current-page.sync="currentPage"
-              :page-size.sync="pageSize"
-              :layout="layout"
-              :page-sizes="pageSizes"
-              :total="total"
-              v-bind="$attrs"
-              @@size-change="handleSizeChange"
-              @@current-change="handleCurrentChange"
-            />
-          </div>`,
+              <!-- 分页组件 -->
+              <div :class="{'hidden':hidden}" class="pagination-container">
+                <el-pagination
+                  :background="background"
+                  :current-page.sync="currentPage"
+                  :page-size.sync="pageSize"
+                  :layout="layout"
+                  :page-sizes="pageSizes"
+                  :total="total"
+                  v-bind="$attrs"
+                  @@size-change="handleSizeChange"
+                  @@current-change="handleCurrentChange"
+                />
+              </div>`,
             name: 'pagination',
             props: {
                 total: {
@@ -122,8 +129,9 @@
                 }
             }
         });
-    </script>
+    </script>*@
     <script>
+        Vue.config.devtools = true
         var app = new Vue({
             el: '#app',
             data() {
@@ -148,13 +156,13 @@
                 // 初始化获取数据
                 async getList() {
                     let { pageIndex, pageSize, userName } = this.listQuery;
-                    axios.post(`/getonlineuser?pageIndex=${pageIndex}&pageSize=${pageSize}&userName=${userName}`).then(res => {
-                        this.paginationQuery.total = res.data.total;
-                        this.thisData = res.data.list;
+                    axios.get(`@Url.Page("Index")?handler=Ajax&pageIndex=${pageIndex}&pageSize=${pageSize}&userName=${userName}`).then(res => {
+                        console.info(res);
+                        this.paginationQuery.total = res.data.data.total;
+                        this.thisData = res.data.data.list;
                     });
                 }
             }
-        })
+        });
     </script>
-</body>
-</html>
+}

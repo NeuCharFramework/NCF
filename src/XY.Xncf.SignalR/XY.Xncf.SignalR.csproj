@@ -1,26 +1,28 @@
 ﻿
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>0.1.0</Version>
+    <Version>0.6.104-beta1</Version>
     <AssemblyName>XY.Xncf.SignalR</AssemblyName>
     <RootNamespace>XY.Xncf.SignalR</RootNamespace>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-    <Description>基于SignalR打通服务端与客户端，可基于此基础之上根据业务扩展。</Description>
+    <Description>基于SignalR打通服务端与客户端，可基于此基础之上根据业务扩展。使用详细请参阅https://github.com/sdxinyisoft/XY.Xncf.SignalR/blob/main/README.md</Description>
     <Copyright>山东新意软件科技有限公司</Copyright>
     <PackageTags>XY,NeuCharFramework,NCF,XY.Xncf.SignalR,SignalR</PackageTags>
     <Authors>山东新意软件科技有限公司</Authors>
-    <Owners>XY</Owners>
-    <!-- <PackageLicenseUrl>https://github.com/NeuCharFramework/NcfPackageSources/blob/master/LICENSE</PackageLicenseUrl> -->
+    <Owners>山东新意软件科技有限公司</Owners>
+    <PackageLicense>https://github.com/sdxinyisoft/XY.Xncf.SignalR/blob/main/LICENSE</PackageLicense>
     <Title>SignalR终端用户</Title>
-    <!--<ProjectUrl> https://github.com/NeuCharFramework/NCF</ProjectUrl>
-    <PackageProjectUrl>https://github.com/NeuCharFramework/NcfPackageSources</PackageProjectUrl>
-    <PackageIconUrl>https://sdk.weixin.senparc.com/Images/logo-square-ncf.jpg</PackageIconUrl>-->
+    <ProjectUrl>https://github.com/sdxinyisoft/XY.Xncf.SignalR</ProjectUrl>
+    <PackageProjectUrl>https://github.com/sdxinyisoft/XY.Xncf.SignalR</PackageProjectUrl>
+    <!--<PackageIconUrl>https://avatars2.githubusercontent.com/u/55430222</PackageIconUrl>-->
+    <PackageIconUrl>https://sdk.weixin.senparc.com/Images/logo-square-ncf.jpg</PackageIconUrl>
     <PackageReleaseNotes>v0.1.0 创世</PackageReleaseNotes>
-    <RepositoryUrl> https://github.com/NeuCharFramework/NcfPackageSources</RepositoryUrl>
+    <RepositoryUrl>https://github.com/sdxinyisoft/XY.Xncf.SignalR</RepositoryUrl>
     <Configurations>Debug;Release;Test</Configurations>
     <Company>山东新意软件科技有限公司</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyVersion>0.6.104.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\..\..\BuildOutPut</OutputPath>
@@ -32,32 +34,19 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Pages\OnlineUserManage.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Shared\OnlineUser.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    <EmbeddedResource Include="Pages\Shared\SignalR.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
+    <PackageReference Include="Senparc.Ncf.AreaBase" Version="0.6.104-beta1" />
     <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.104-beta1" />
-    <ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
-    <ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pages\" />
-    <Folder Include="Views\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Shared\SignalR.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  
-  
 </Project> 

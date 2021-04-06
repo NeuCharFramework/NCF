@@ -42,7 +42,7 @@ namespace XY.Xncf.SignalR
             //        var appendStr = "";
             //        if (str.Contains("<!DOCTYPE"))
             //        {
-            //            appendStr = File.ReadAllText($"{Senparc.CO2NET.Utilities.ServerUtility.AppDomainAppPath}/Shared/SignalR.cshtml");
+            //            appendStr = Template.SignalRClientTemplate;
             //        }
             //        var doubleStr = str + appendStr;
             //        var buffer = Encoding.UTF8.GetBytes(doubleStr);
@@ -55,38 +55,38 @@ namespace XY.Xncf.SignalR
             //        await ms2.CopyToAsync(originalBody);
             //    }
             //});
-            //app.Map("/onlineuser", app =>
-            //{
-            //    app.Run(async context =>
-            //    {
-            //        var online = File.ReadAllText($"{Senparc.CO2NET.Utilities.ServerUtility.AppDomainAppPath}/Shared/OnlineUser.cshtml");
-            //        await context.Response.WriteAsync(online);
-            //    });
-            //});
-            //app.Map("/getonlineuser", app =>
-            //{
-            //    app.Run(async context =>
-            //    {
-            //        int pageIndex = 1;
-            //        int.TryParse(context.Request.Query["pageIndex"], out pageIndex);
-            //        int pageSize = 100;
-            //        int.TryParse(context.Request.Query["pageSize"], out pageSize);
-            //        string userName = context.Request.Query["userName"];
-            //        var allList = GlobleConnectionManage.ClientList
-            //           .Where(w => userName == null || userName == "" || w.Value.Any(c => c.UserName != null && c.UserName.Contains(userName)));
-            //        var _list = allList
-            //                .Skip((pageIndex - 1) * pageSize)
-            //                .Take(pageSize)
-            //                .ToList();
-            //        var userList = new List<KeyValuePair<string, int>>();
-            //        foreach (var user in _list)
-            //        {
-            //            var _userName = string.IsNullOrWhiteSpace(user.Value.First().UserName) ? "匿名" : user.Value.First().UserName;
-            //            userList.Add(new KeyValuePair<string, int>(_userName, user.Value.Count));
-            //        }
-            //        await context.Response.WriteAsync(Newtonsoft.Json.JsonConvert.SerializeObject(new { total = allList.Count(), list = userList }));
-            //    });
-            //});
+            app.Map("/onlineuser", app =>
+            {
+                app.Run(async context =>
+                {
+                    var online = Template.OnlineUserTemplate;
+                    await context.Response.WriteAsync(online);
+                });
+            });
+            app.Map("/getonlineuser", app =>
+            {
+                app.Run(async context =>
+                {
+                    int pageIndex = 1;
+                    int.TryParse(context.Request.Query["pageIndex"], out pageIndex);
+                    int pageSize = 100;
+                    int.TryParse(context.Request.Query["pageSize"], out pageSize);
+                    string userName = context.Request.Query["userName"];
+                    var allList = GlobleConnectionManage.ClientList
+                       .Where(w => userName == null || userName == "" || (w.Value != null && w.Value.Any(c => c.UserName != null && c.UserName.Contains(userName))));
+                    var _list = allList
+                            .Skip((pageIndex - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToList();
+                    var userList = new List<KeyValuePair<string, int>>();
+                    foreach (var user in _list)
+                    {
+                        var _userName = string.IsNullOrWhiteSpace(user.Value.First().UserName) ? ("匿名" + user.Key.Substring(0, 4)) : user.Value.First().UserName;
+                        userList.Add(new KeyValuePair<string, int>(_userName, user.Value.Count));
+                    }
+                    await context.Response.WriteAsync(Newtonsoft.Json.JsonConvert.SerializeObject(new { total = allList.Count(), list = userList }));
+                });
+            });
             return app;
         }
         #endregion
