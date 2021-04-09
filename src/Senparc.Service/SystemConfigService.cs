@@ -25,11 +25,7 @@ namespace Senparc.Service
                 return null;
             }
 
-            systemConfig = new SystemConfig()
-            {
-                SystemName = systemName ?? "NCF - Template Project"
-            };
-
+            systemConfig = new SystemConfig(systemName ?? "NCF - Template Project", null, null, null, false);
             SaveObject(systemConfig);
 
             return systemConfig;

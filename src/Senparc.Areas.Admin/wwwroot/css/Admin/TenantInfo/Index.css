@@ -1,0 +1,22 @@
+﻿.admin-tenant-info h2 {
+    margin-bottom: 22px;
+}
+
+h2.current-tenant-info {
+    margin-top: 10px;
+}
+
+h2.tenant-list {
+    margin-top: 30px;
+}
+
+.grid-content {
+    background: #654ba7;
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.admin-tenant-info .float-right {
+    float:right;
+}

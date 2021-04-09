@@ -8,10 +8,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.Database;
-using Senparc.Ncf.Database.MySql;
-using Senparc.Ncf.Database.SQLite;
-using Senparc.Ncf.Database.SqlServer;
+using Senparc.Ncf.Database.MySql;//¸ù¾İĞèÒªÌí¼Ó
+using Senparc.Ncf.Database.Sqlite;//¸ù¾İĞèÒªÌí¼Ó
+using Senparc.Ncf.Database.SqlServer;//¸ù¾İĞèÒªÌí¼Ó
+using Senparc.Ncf.Service.MultiTenant;
 using Senparc.Web.Hubs;
 
 namespace Senparc.Web
@@ -30,12 +32,12 @@ namespace Senparc.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //æŒ‡å®šæ•°æ®åº“ç±»å‹
-            //services.AddDatabase<SQLiteMemoryDatabaseConfiguration>();//ä½¿ç”¨ SQLite æ•°æ®åº“
-            services.AddDatabase<SQLServerDatabaseConfiguration>();//ä½¿ç”¨ SQLServeræ•°æ®åº“
-            //services.AddDatabase<MySqlDatabaseConfiguration>();//ä½¿ç”¨ MySQL æ•°æ®åº“
+            //Ö¸¶¨Êı¾İ¿âÀàĞÍ
+            //services.AddDatabase<SqliteMemoryDatabaseConfiguration>();//Ê¹ÓÃ SQLite Êı¾İ¿â
+            services.AddDatabase<SQLServerDatabaseConfiguration>();//Ê¹ÓÃ SQLServerÊı¾İ¿â
+            //services.AddDatabase<MySqlDatabaseConfiguration>();//Ê¹ÓÃ MySQL Êı¾İ¿â
 
-            //æ·»åŠ ï¼ˆæ³¨å†Œï¼‰ Ncf æœåŠ¡ï¼ˆé‡è¦ï¼Œå¿…é¡»ï¼ï¼‰
+            //Ìí¼Ó£¨×¢²á£© Ncf ·şÎñ£¨ÖØÒª£¬±ØĞë£¡£©
             services.AddNcfServices(Configuration, env, CompatibilityVersion.Version_3_0);
         }
 
@@ -55,20 +57,28 @@ namespace Senparc.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+
+            #region ¶à×â»§
+
+            app.UseMiddleware<TenantMiddleware>();//Èç¹û²»ÆôÓÃ¶à×â»§¹¦ÄÜ£¬¿ÉÒÔÉ¾³ı´ËÅäÖÃ
+
+            #endregion
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseCookiePolicy();
 
-            //Use NCFï¼ˆå¿…é¡»ï¼‰
-            app.UseNcf(env, senparcCoreSetting, senparcSetting);
-            
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
             });
+
+            //Use NCF£¨±ØĞë£©
+            app.UseNcf(env, senparcCoreSetting, senparcSetting);
         }
     }
 }

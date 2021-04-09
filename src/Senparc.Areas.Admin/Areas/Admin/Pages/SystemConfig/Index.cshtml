@@ -1,0 +1,72 @@
+﻿@page "{handler?}"
+@addTagHelper *, Senparc.Areas.Admin
+@model Senparc.Areas.Admin.Areas.Admin.Pages.SystemConfig_IndexModel
+@{
+    ViewData["Title"] = "系统信息";
+    Layout = "_Layout_Vue";
+}
+
+@section Style{
+    <link href="~/css/Admin/SystemConfig/Index.css" rel="stylesheet" />
+}
+
+@section breadcrumbs {
+    <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+    <el-breadcrumb-item>系统信息</el-breadcrumb-item>
+}
+<div>
+    <div class="admin-systemconfig-info">
+        <h2 class="system-info">基础信息</h2>
+
+        <el-table :data="tableData"
+                  border
+                  style="width: 100%">
+            <el-table-column align="center"
+                             label="系统名称">
+                <template slot-scope="scope">
+                    {{ scope.row.systemName}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="模块发布模式">
+                <template slot-scope="scope">
+                    {{ scope.row.hideModuleManager }}
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                    <el-button size="mini"
+                               type="primary"
+                               v-has="['admin-edit']"
+                               @@click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        @*<pagination :total="paginationQuery.total"
+            :page.sync="listQuery.pageIndex"
+            :limit.sync="listQuery.pageSize"
+            @@pagination="getList"></pagination>*@
+        <!--编辑、新增 -->
+        <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
+            <el-form ref="dataForm"
+                     :rules="dialog.rules"
+                     :model="dialog.data"
+                     label-position="left"
+                     label-width="100px"
+                     style="max-width: 400px; margin-left:50px;">
+                @*<p class="username-tip" v-if="dialog.title==='编辑管理员'">不建议修改用户名！</p>*@
+                <el-form-item label="系统名称" prop="systemName">
+                    <el-input v-model="dialog.data.systemName" clearable placeholder="请输入系统名称" />
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @@click="dialog.visible = false">取 消</el-button>
+                <el-button :loading="dialog.updateLoading" type="primary" @@click="updateData">确 认</el-button>
+            </div>
+        </el-dialog>
+    </div>
+
+</div>
+@section scripts{
+    <script src="~/js/Admin/Pages/SystemConfig/Index.js"></script>
+}

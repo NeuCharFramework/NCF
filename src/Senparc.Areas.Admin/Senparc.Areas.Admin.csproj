@@ -13,21 +13,25 @@
 
 	<ItemGroup>
 		<Compile Remove="Areas\Admin\Pages\Database\**" />
-		<Compile Remove="Areas\Admin\Pages\SystemConfig\**" />
 		<Compile Remove="Areas\Pages\**" />
 		<Compile Remove="Filters\**" />
 		<Content Remove="Areas\Admin\Pages\Database\**" />
-		<Content Remove="Areas\Admin\Pages\SystemConfig\**" />
 		<Content Remove="Areas\Pages\**" />
 		<Content Remove="Filters\**" />
 		<EmbeddedResource Remove="Areas\Admin\Pages\Database\**" />
-		<EmbeddedResource Remove="Areas\Admin\Pages\SystemConfig\**" />
 		<EmbeddedResource Remove="Areas\Pages\**" />
 		<EmbeddedResource Remove="Filters\**" />
 		<None Remove="Areas\Admin\Pages\Database\**" />
-		<None Remove="Areas\Admin\Pages\SystemConfig\**" />
 		<None Remove="Areas\Pages\**" />
 		<None Remove="Filters\**" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Content Remove="wwwroot\css\Admin\TenantInfo\Index.css" />
+	  <Content Remove="wwwroot\css\Admin\SystemConfig\Index.css" />
+	  <Content Remove="wwwroot\js\Admin\Pages\SystemConfig\Index.js" />
+	  <Content Remove="wwwroot\js\Admin\Pages\TenantInfo\Index.js" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -35,13 +39,13 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
 		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="0.3.200" />
 		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="3.9.200" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.6.104-beta1" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.104-beta1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.104-beta1" />
-		<PackageReference Include="Senparc.Ncf.Log" Version="0.6.103-beta1" />
-		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.6.103-beta1" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.6.103.1-beta1" />
-		<PackageReference Include="Senparc.Ncf.Utility" Version="0.6.103-beta1" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.6.127-beta1" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.127.8-beta1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.36-beta1" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.6.127-beta1" />
+		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.6.127-beta1" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.6.127.12-beta1" />
+		<PackageReference Include="Senparc.Ncf.Utility" Version="0.6.127-beta1" />
 
 		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
 		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />
@@ -53,10 +57,10 @@
 		<ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
 	</ItemGroup>
 
-	 
+	<!-- 
 	<ItemGroup>
 		<Content Update="Areas\Admin\Pages\Shared\_HeaderPartial.cshtml">
 			<Pack>$(IncludeRazorContentInPack)</Pack>
 		</Content>
-	</ItemGroup>
+	</ItemGroup>-->
 </Project>

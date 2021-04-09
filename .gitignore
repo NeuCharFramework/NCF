@@ -21,3 +21,6 @@ obj/
 /src/Senparc.Database/Senparc.Database.dbmdl
 /src/Senparc.Database/Senparc.Database.jfm
 /src/Senparc.Web/App_Data/logs/*
+/src/NCF.sln-backup-*.sln
+/src/netstandard2.1
+/src/Senparc.Xncf.XncfBuilder.Template.*

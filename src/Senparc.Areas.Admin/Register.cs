@@ -44,7 +44,7 @@ namespace Senparc.Areas.Admin
 
         public override string Uid => SiteConfig.SYSTEM_XNCF_MODULE_AREAS_ADMIN_UID;// "00000000-0000-0000-0000-000000000002";
 
-        public override string Version => "0.1.0-beta4";
+        public override string Version => "0.2.0-beta4";
 
         public override string MenuName => "NCF 系统后台";
 
@@ -203,8 +203,8 @@ namespace Senparc.Areas.Admin
         //    services.AddScoped<ISenparcEntities>(implementationFactory);
         //    services.AddScoped<SenparcEntitiesBase>(implementationFactory);
 
-        //    services.AddScoped(typeof(ISqlClientFinanceData), typeof(SqlClientFinanceData));
-        //    services.AddScoped(typeof(ISqlBaseFinanceData), typeof(SqlClientFinanceData));
+        //    services.AddScoped(typeof(INcfClientDbData), typeof(NcfClientDbData));
+        //    services.AddScoped(typeof(INcfDbData), typeof(NcfClientDbData));
 
         //    //Attributes
         //    services.AddScoped(typeof(AuthenticationResultFilterAttribute));

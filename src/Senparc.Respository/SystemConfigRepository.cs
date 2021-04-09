@@ -10,7 +10,7 @@ namespace Senparc.Repository
 
     public class SystemConfigRepository : ClientRepositoryBase<SystemConfig>, ISystemConfigRepository
     {
-        public SystemConfigRepository(ISqlClientFinanceData sqlClientFinanceData) : base(sqlClientFinanceData)
+        public SystemConfigRepository(INcfClientDbData NcfClientDbData) : base(NcfClientDbData)
         {
 
         }

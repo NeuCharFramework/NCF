@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <!--<TargetFramework>net5.0</TargetFramework>-->
@@ -13,19 +12,19 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.6" />
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
     <PackageReference Include="Senparc.CO2NET.AspNet" Version="0.3.200" />
-    <PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.6.103-beta1" />
+    <PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.6.127.1-beta1" />
     <PackageReference Include="Senparc.CO2NET" Version="1.3.200" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.6.104-beta1" />
-    <PackageReference Include="ML.Xncf.Docs" Version="2.0.116" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.36-beta1" />
+    <PackageReference Include="ML.Xncf.Docs" Version="2.1.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj" />
@@ -533,11 +532,5 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Senparc.Xncf.Teacher\Senparc.Xncf.Teacher.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Senparc.Xncf.Student\Senparc.Xncf.Student.csproj" />
   </ItemGroup>
 </Project>

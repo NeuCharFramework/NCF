@@ -2,20 +2,18 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
+
+		<!--使用XncfBuilder更新数据库迁移文件时可使用-->
+		<!--<TargetFramework>netcoreapp3.1</TargetFramework>-->
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- 仅在开发环境下引用 -->
-		<PackageReference Condition=" '$(Configuration)' != 'Release' " Include="Senparc.Ncf.DatabasePlant" Version="0.6.103-beta1" />
-	</ItemGroup>
-	<ItemGroup>
-		<Compile Remove="ProjectBiddingService.cs" />
-		<Compile Remove="ProjectDemandService.cs" />
-		<Compile Remove="ProjectKindService.cs" />
-		<Compile Remove="ProjectPayLogService.cs" />
+		<PackageReference Condition=" '$(Configuration)' != 'Release' " Include="Senparc.Ncf.DatabasePlant" Version="0.6.127.7-beta1" />
 	</ItemGroup>
 
+
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
@@ -26,10 +24,10 @@
 		<PackageReference Include="Senparc.Weixin.MP" Version="16.10.601" />
 		<PackageReference Include="Senparc.Weixin.Open" Version="4.7.600" />
 		<PackageReference Include="Senparc.Weixin.WxOpen" Version="3.8.601" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.104-beta1" />
-		<PackageReference Include="Senparc.Ncf.Log" Version="0.6.103-beta1" />
-		<PackageReference Include="Senparc.Ncf.Repository" Version="0.6.103-beta1" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.6.103.1-beta1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.36-beta1" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.6.127-beta1" />
+		<PackageReference Include="Senparc.Ncf.Repository" Version="0.6.127.1-beta1" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.6.127.12-beta1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -38,10 +36,6 @@
 		<ProjectReference Include="..\Senparc.Respository\Senparc.Respository.csproj" />
 		<ProjectReference Include="..\Senparc.SMS\Senparc.SMS.csproj" />
 		<ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="SystemEntities\Migrations\" />
 	</ItemGroup>
 
 </Project>

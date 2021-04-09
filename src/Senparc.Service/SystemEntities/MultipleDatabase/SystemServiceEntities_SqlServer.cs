@@ -19,7 +19,7 @@ namespace Senparc.Service
     [MultipleMigrationDbContext(MultipleDatabaseType.SqlServer, typeof(Senparc.Service.Register))]
     public class SystemServiceEntities_SqlServer : SystemServiceEntities
     {
-        public SystemServiceEntities_SqlServer(DbContextOptions<SystemServiceEntities_SqlServer> dbContextOptions) : base(dbContextOptions)
+        public SystemServiceEntities_SqlServer(DbContextOptions<SystemServiceEntities_SqlServer> dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
         {
         }
     }
