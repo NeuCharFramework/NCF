@@ -96,7 +96,7 @@ namespace Senparc.Web
                 {
                     //opt.RootDirectory = "/";
                 })
-              //.AddNcfAreas(env)//注册所有 Ncf 的 Area 模块（必须）
+              .AddNcfAreas(env)//注册所有 Ncf 的 Area 模块（必须）
               .ConfigureApiBehaviorOptions(options =>
               {
                   options.InvalidModelStateResponseFactory = actionContext =>

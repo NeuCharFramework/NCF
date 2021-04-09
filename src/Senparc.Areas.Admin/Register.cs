@@ -32,8 +32,8 @@ namespace Senparc.Areas.Admin
 {
     [XncfOrder(5996)]
     public class Register : XncfRegisterBase,
-        IXncfRegister //注册 XNCF 基础模块接口（必须）
-        //IAreaRegister //注册 XNCF 页面接口（按需选用）
+        IXncfRegister, //注册 XNCF 基础模块接口（必须）
+        IAreaRegister //注册 XNCF 页面接口（按需选用）
                       //IXncfDatabase,  //注册 XNCF 模块数据库（按需选用）
                       //IXncfRazorRuntimeCompilation  //需要使用 RazorRuntimeCompilation，在开发环境下实时更新 Razor Page
     {
