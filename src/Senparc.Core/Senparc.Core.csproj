@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-   <TargetFramework>netstandard2.1</TargetFramework>
+   <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
@@ -17,20 +17,20 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0-preview.3.21201.2" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="2.2.8" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Xml" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />   
 
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.1">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0-preview.3.21201.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
 
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.36-beta1" />
-    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.127.8-beta1" />
-    <PackageReference Include="Senparc.Ncf.Utility" Version="0.6.127-beta1" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.37-beta1" />
+    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.127.37-beta1" />
+    <PackageReference Include="Senparc.Ncf.Utility" Version="0.6.127.37-beta1" />
     <PackageReference Include="Senparc.Weixin" Version="6.7.600" />
     <PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.1.600" />
     <PackageReference Include="Senparc.Weixin.Cache.Memcached" Version="2.6.600" />
