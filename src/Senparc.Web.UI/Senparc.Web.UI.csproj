@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-   <TargetFramework>net5.0</TargetFramework>
+   <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Senparc.CO2NET" Version="1.3.200" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.37-beta1" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.40-beta1" />
   </ItemGroup>
 
   <ItemGroup>

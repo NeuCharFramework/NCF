@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>netstandard2.1</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.7.127.37-beta1" />
-		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.10.127.37-beta1" />
-		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.7.127.37-beta1" />
+		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.7.127.40-beta1" />
+		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.10.127.40-beta1" />
+		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.7.127.40-beta1" />
 	</ItemGroup>
 	<ItemGroup>
 		<!--<ProjectReference Include="..\..\..\Senparc.Xncf.WeixinManager\src\Senparc.Xncf.WeixinManager\Senparc.Xncf.WeixinManager.csproj" />-->
@@ -22,7 +22,7 @@
 		<PackageReference Include="Senparc.Xncf.WeChatSampleBuilder" Version="0.3.3" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.8.127.37-beta1" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.8.127.40-beta1" />
 		<!--<ProjectReference Include="..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.XncfBuilder\Senparc.Xncf.XncfBuilder\Senparc.Xncf.XncfBuilder.csproj" />-->
 	</ItemGroup>
 

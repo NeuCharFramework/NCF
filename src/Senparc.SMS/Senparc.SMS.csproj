@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-   <TargetFramework>net5.0</TargetFramework>
+   <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
-    <PackageReference Include="Senparc.Ncf.Log" Version="0.6.127.37-beta1" />
-    <PackageReference Include="Senparc.Ncf.SMS" Version="0.6.127.37-beta1" />
+    <PackageReference Include="Senparc.Ncf.Log" Version="0.6.127.40-beta1" />
+    <PackageReference Include="Senparc.Ncf.SMS" Version="0.6.127.40-beta1" />
   </ItemGroup>
 
 </Project>
