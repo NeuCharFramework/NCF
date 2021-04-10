@@ -24,3 +24,4 @@ obj/
 /src/NCF.sln-backup-*.sln
 /src/netstandard2.1
 /src/Senparc.Xncf.XncfBuilder.Template.*
+/src/Senparc.Web.DatabasePlant/App_Data/SenparcTraceLog
