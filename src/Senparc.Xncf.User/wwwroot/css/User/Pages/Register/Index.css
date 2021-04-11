@@ -1,0 +1,211 @@
+.img-checkcode {
+    width: 100px;
+    height: 40px;
+    margin-left: 15px;
+    border-radius: 3px;
+}
+[v-cloak] {
+    display: none;
+}
+html {
+}
+
+body {
+    font-family: "Microsoft YaHei";
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+    body:before {
+        background-image: url('/images/admin/base/adminlogin/admin_login.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+.content {
+}
+
+.contentdiv {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: no-display !important;
+}
+
+.loginLogo {
+    text-align: center;
+    padding: 125px 0 50px;
+}
+/*logo样式*/
+.logoBox .logoImg {
+    display: block;
+    text-align: center;
+    /*width: 240px;*/
+    height: 116px;
+    margin: 0px auto;
+    padding-top: -109px;
+    padding-bottom: 35px;
+    /*border: 4px solid #fff;*/
+    /*border-radius: 100%;*/
+}
+
+    .logoBox .logoImg img {
+        /*width: 100%;*/
+        border-radius: 4px;
+    }
+
+.logoBox .logoBg {
+    margin-top: 30px;
+}
+
+.contentdiv img {
+    width: 100%;
+    height: 100%;
+}
+
+.banner {
+    float: left;
+    height: 660px;
+    width: 700px;
+    margin-left: -100px;
+}
+
+.pagination {
+    display: none;
+}
+
+.login-container .loginbox {
+    padding: 0 0 40px 0;
+    border-radius: 5px;
+    width: 350px !important;
+}
+
+.login-container {
+    max-width: 350px;
+    margin: 0% auto;
+    display: table;
+    height: 100%;
+}
+
+    .login-container .loginbox .loginbox-title {
+        color: #1382f0;
+        padding: 40px 0 30px;
+        font-size: 26px;
+        text-align: center;
+    }
+
+
+
+    .login-container .loginbox .loginbox-textbox {
+        padding: 6px 30px;
+    }
+
+        .login-container .loginbox .loginbox-textbox .form-control {
+            height: 40px;
+        }
+
+    .login-container .loginbox .loginbox-submit {
+        padding: 10px 30px;
+    }
+
+.btn-primary, .btn-primary:focus {
+    /*background-color: #31d1de !important;
+    border: #31d1de;*/
+    height: 40px;
+    font-size: 16px;
+}
+
+    .btn-primary, .btn-primary:hover {
+        background-color: #1382f0 !important;
+        border: #1382f0;
+        height: 40px;
+        font-size: 16px;
+    }
+
+.login-header {
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.login-header-info {
+    float: right;
+}
+
+    .login-header-info a {
+        margin-right: 10px;
+        color: #fff;
+        line-height: 40px;
+        text-decoration: none;
+    }
+
+.login-footer {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    zoom: 1;
+    padding: 20px;
+    color: #fff;
+}
+
+    .login-footer a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.login-inner-box {
+    display: table-cell;
+    vertical-align: middle
+}
+
+.login-ICP {
+    text-align: center;
+    bottom: 22px;
+    color: #FFF;
+    width: 100%;
+    margin-top: 20px;
+    font-size:13px;
+}
+
+    .login-ICP a {
+        color: #1382f0;
+        text-decoration: none;
+    }
+
+        .login-ICP a:hover {
+            text-decoration: none;
+            color: #332e67;
+        }
+
+.bg-white {
+    background-color: #fff !important;
+}
+
+.login-container .loginbox .loginbox-social {
+    padding: 0 10px 10px;
+    text-align: center;
+}

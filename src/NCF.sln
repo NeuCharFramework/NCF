@@ -54,6 +54,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevelopmentTools", "Develop
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Web.DatabasePlant", "Senparc.Web.DatabasePlant\Senparc.Web.DatabasePlant.csproj", "{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Xncf.User", "Senparc.Xncf.User\Senparc.Xncf.User.csproj", "{AF14A95B-7EA0-4B2E-A392-A6E1C1D49244}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -168,6 +170,12 @@ Global
 		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{AF14A95B-7EA0-4B2E-A392-A6E1C1D49244}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF14A95B-7EA0-4B2E-A392-A6E1C1D49244}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF14A95B-7EA0-4B2E-A392-A6E1C1D49244}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF14A95B-7EA0-4B2E-A392-A6E1C1D49244}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF14A95B-7EA0-4B2E-A392-A6E1C1D49244}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{AF14A95B-7EA0-4B2E-A392-A6E1C1D49244}.Test|Any CPU.Build.0 = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -187,6 +195,7 @@ Global
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7} = {76FC86E0-991D-47B7-8AAB-42B27DAB10C1}
 		{22B88A11-137D-42FB-9ED0-AC15A3FF651F} = {4D53646F-67EE-430A-8B50-9600CFACF434}
 		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E} = {65AE49F1-A695-4473-A78D-BD673A4B032F}
+		{AF14A95B-7EA0-4B2E-A392-A6E1C1D49244} = {76FC86E0-991D-47B7-8AAB-42B27DAB10C1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7427A6C9-D522-4B10-B0AC-607D69736B50}

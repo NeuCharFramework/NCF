@@ -1,0 +1,274 @@
+﻿@page
+@model Senparc.Xncf.User.Areas.User.Pages.XncfModuleStartModel
+@{
+    ViewData["Title"] = ""; Layout = "_Layout_Vue";
+}
+@section breadcrumbs {
+    <el-breadcrumb-item>扩展模块</el-breadcrumb-item>
+    <el-breadcrumb-item>模块管理</el-breadcrumb-item>
+    <el-breadcrumb-item v-if="data.xncfModule">{{data.xncfModule.menuName}}</el-breadcrumb-item>
+}
+@section Style{
+    <link href="~/css/Admin/XncfModule/XncfModule.css" rel="stylesheet" />
+}
+<div>
+    <el-container v-if="data.xncfModule">
+        <el-header class="module-header">
+            <span class="start-title"> <i :class="data.xncfRegister.icon"></i>&nbsp;{{data.xncfModule.menuName}} <span class="module-header-v">模块 {{data.xncfModule.version}}</span></span>
+            <span class="start-delete">
+                <el-popconfirm placement="top" title="确认删除此模块吗？" @@on-confirm="handleDelete()">
+                    <el-button size="mini" type="danger" slot="reference">删除</el-button>
+                </el-popconfirm>
+            </span>
+        </el-header>
+        <el-container>
+            <el-aside class="module-aside">
+                <div class="start-des">
+                    <ul>
+                        @*模块信息 xncfModule*@
+                        <li><span class="start-green"><i class="fa fa-map-marker fa-cubes"></i>&nbsp;{{data.xncfModule.name}}</span></li>
+                        <li><i class="fa fa-map-marker fa-code-fork"></i>&nbsp;v{{data.xncfModule.version}}</li>
+                        <li v-if="data.xncfModule.version!==data.xncfRegister.version">发现新版本:v{{data.xncfRegister.version}} <el-button size="mini" @@click="updataVersion"> <em class="fa fa-gift"></em>&nbsp;立即更新</el-button></li>
+                        <li>
+                            <el-tooltip class="item" effect="dark" :content="data.xncfModule.uid" placement="top-start">
+                                <span>
+                                    <i class="fa fa-map-marker fa-shield"></i>
+                                    唯一编号
+                                </span>
+                            </el-tooltip>
+                        </li>
+                        <li>
+                            <i class="fa fa-map-marker puzzle-piece"></i>&nbsp;特性：
+                            <el-tooltip v-for="item in data.xncfRegister.interfaces" class="item" effect="dark" placement="top">
+                                <div slot="content">
+                                    {{tooltip[item]}}
+                                    <span v-if="item === 'IXncfRazorRuntimeCompilation'" @@click="thread.visible=true">
+                                        <el-button size="mini">
+                                            查看
+                                        </el-button>
+                                    </span>
+                                </div>
+                                @*网页*@
+                                <i v-if="item === 'IAreaRegister'" class="fa fa-map-marker fa-external-link"></i>
+                                @*数据库*@
+                                <i v-if="item === 'IXncfDatabase'" class="fa fa-map-marker fa-database"></i>
+                                @*中间件*@
+                                <i v-if="item === 'IXncfMiddleware'" class="fa fa-map-marker fa-plug"></i>
+                                @*线程 *@
+                                <i v-if="item === 'IXncfRazorRuntimeCompilation'" class="fa fa-map-marker fa-retweet"></i>
+                            </el-tooltip>
+                            <template v-if="data.xncfRegister.functionCount>0">
+                                <el-tooltip class="item" effect="dark" content="执行方法" placement="top-start">
+                                    <i class="fa fa-map-marker fa-rocket">({{data.xncfRegister.functionCount}})</i>
+                                </el-tooltip>
+                            </template>
+                        </li>
+                        <li>
+                            <i class="fa fa-map-marker fa-sliders"></i><span :class="[data.xncfModule.state===1?'start-green':'start-gray']">&nbsp;{{xNcfModules_State[data.xncfModule.state]}}</span>
+                            <template v-if="data.xncfModule.state===3||data.xncfModule.state===0||data.xncfModule.state===2">
+                                <el-button size="mini" :type="data.xncfModule.state===0?'success':'warning'" @@click="updataState('1')"> <em class="glyphicon glyphicon-flash"></em> &nbsp;开启</el-button>
+                                <p class="red"><i class="fa fa-exclamation-triangle"></i>&nbsp;未开启的模块无法执行功能</p>
+                            </template>
+                            <template v-if="data.xncfModule.state===1">
+                                <el-button size="mini" c type="danger" @@click="updataState('0')"> <em class="glyphicon glyphicon-off"></em> &nbsp;关闭</el-button>
+                            </template>
+                        </li>
+                        <li>
+                            <i class="fa fa-map-marker fa-newspaper-o"></i>&nbsp;介绍：
+                            <p>{{data.xncfModule.description}}</p>
+                        </li>
+                    </ul>
+                </div>
+                @*更新记录*@
+                <div class="start-log">
+                    <el-collapse>
+                        <el-collapse-item title="更新记录" name="1">
+                            <el-table :data="data.xncfModuleUpdateLog"
+                                      stripe
+                                      style="width: 100%">
+                                <el-table-column label="#" width="30">
+                                    <template slot-scope="scope">
+                                        {{scope.$index+1}}
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="更新记录">
+                                    <template slot-scope="scope">
+                                        {{scope.row}}
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-collapse-item>
+                    </el-collapse>
+                </div>
+            </el-aside>
+            <el-main>
+                <template v-if="!data.mustUpdate">
+                    <template v-if="data.xncfRegister.interfaces.includes('IAreaRegister')&&data.xncfRegister.areaHomeUrl!==null">
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <span>进入 {{data.xncfRegister.menuName}} 的首页</span>
+                                <a @@click="openUrl(data.xncfRegister.areaHomeUrl,data.xncfModule.state)" :class="[data.xncfModule.state===1?'box-card-action':'box-card-action2','box-card-action']">进入首页</a>
+                                <p class="box-card-des">地址：<a :href="data.xncfRegister.areaHomeUrl">{{data.xncfRegister.areaHomeUrl}}</a></p>
+                            </div>
+                            <template>
+                                <div class="item-container">
+                                    <el-collapse>
+                                        <el-collapse-item title="页面透视" name="2">
+                                            <el-menu default-active="2"
+                                                     class="el-menu-vertical-demo"
+                                                     background-color="#304156"
+                                                     text-color="#bfcbd9"
+                                                     width="300px"
+                                                     active-text-color="#409eff">
+                                                <el-menu-item v-for="(item,index) in data.xncfRegister.areaPageMenuItems" :index="index">
+                                                    <a :href="item.url">
+                                                        <i class="el-icon-location"></i>
+                                                        <span slot="title">
+                                                            {{item.name}}
+                                                        </span>
+                                                    </a>
+                                                </el-menu-item>
+                                            </el-menu>
+                                        </el-collapse-item>
+                                    </el-collapse>
+                                </div>
+                                <p class="box-card-tip">说明：当前模块配备了可互动操作的UI界面，因此您可以看到这个入口。</p>
+                            </template>
+                        </el-card>
+                    </template>
+                </template>
+                <el-card class="box-card" v-for="item in data.functionParameterInfoCollection">
+                    <div slot="header" class="clearfix">
+                        <span><i class="fa fa-terminal"></i> {{item.key.name}}</span>
+                            <span type="text" :class="[data.xncfModule.state===1?'box-card-action':'box-card-action2']" @@click="openRun(item,data.xncfModule.state)">执行</span>
+                        <p class="box-card-des">{{item.key.description}}</p>
+                    </div>
+                    <template>
+                        <div class="item-container">
+                            <el-collapse>
+                                <el-collapse-item title="参数透视" name="2">
+                                    <el-table v-if="item.value.length>0"
+                                              :data="item.value"
+                                              style="width: 100%">
+                                        <el-table-column label="#" width="30">
+                                            <template slot-scope="scope">
+                                                {{scope.$index+1}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column label="名称" width="200">
+                                            <template slot-scope="scope">
+                                                {{scope.row.title}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column label="说明">
+                                            <template slot-scope="scope">
+                                                {{scope.row.description}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column label="类型" width="150">
+                                            <template slot-scope="scope">
+                                                {{state[scope.row.systemType] || scope.row.systemType}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column label="必须" width="150">
+                                            <template slot-scope="scope">
+                                                {{scope.row.isRequired?"是":"否"}}
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
+                                    <div v-else class="no-content">
+                                        无需填写数据
+                                    </div>
+                                </el-collapse-item>
+                            </el-collapse>
+                        </div>
+                    </template>
+                </el-card>
+            </el-main>
+        </el-container>
+    </el-container>
+    @*执行弹窗*@
+    <el-dialog width="60%" v-if="run.data.key" :title="run.data.key.name" :visible.sync="run.visible" class="run-dialog"  :close-on-click-modal="false">
+        <h4><i class="fa fa-newspaper-o"></i>&nbsp;{{run.data.key.description}}</h4>
+        <el-form :label-position="'left'" @@submit.native.prevent>
+            <el-form-item v-for="item in run.data.value" :label="item.title" label-width="200px" :required="item.isRequired">
+                <el-input v-if="item.parameterType===0" v-model="runData[item.name].value" maxlength="500"></el-input>
+                <el-select v-if="item.parameterType===1" v-model="runData[item.name].value">
+                    <template v-if="item.selectionList.items" v-for="selectionItem in item.selectionList.items">
+                        <el-option :label="selectionItem.text" :value="selectionItem.value"></el-option>
+                    </template>
+                </el-select>
+                <template v-if="item.parameterType===2 && item.selectionList.items">
+                    <el-checkbox-group v-model="runData[item.name].value">
+                        <template v-for="selectionItem in item.selectionList.items">
+                            <el-checkbox :label="selectionItem.value">
+                                {{selectionItem.text}}
+                                <template v-if="selectionItem.note!==null">
+                                    <span class="icon-note">&nbsp; &nbsp;<i class="fa fa-info-circle"></i>&nbsp; &nbsp;{{selectionItem.note}}</span>
+                                </template>
+                            </el-checkbox>
+                        </template>
+                    </el-checkbox-group>
+                </template>
+                <template v-if="item.description!==null">
+                    <p><i class="fa fa-info-circle"></i>&nbsp; &nbsp;{{item.description}}</p>
+                </template>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @@click="run.visible = false">取 消</el-button>
+            <el-button type="primary" @@click="handleRun">执 行</el-button>
+        </div>
+    </el-dialog>
+    @*运行结果*@
+    <el-dialog :title="runResult.tit"
+               :visible.sync="runResult.visible"
+               :close-on-click-modal="false"
+               width="30%">
+        <p v-html="runResult.tip"></p>
+        <p v-html="runResult.msg"></p>
+        <span slot="footer" class="dialog-footer">
+            <a :href="'?handler=Log&tempId='+ runResult.tempId" v-if="runResult.hasLog" style="display:block"><i class="fa fa-cloud-download"></i> 下载日志（5分钟内1次有效）</a>
+            <el-button type="primary" @@click="runResult.visible = false">关 闭</el-button>
+        </span>
+    </el-dialog>
+    @*查看线程*@
+    <el-dialog title="查看线程"
+               :visible.sync="thread.visible"
+               width="60%">
+        <div class="thread-contenet">
+            <el-table :data="data.registeredThreadInfo"
+                      style="width: 100%">
+                <el-table-column label="名称" width="180">
+                    <template slot-scope="scope">
+                        {{scope.row.key.name}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="活动状态/后台" width="180">
+                    <template slot-scope="scope">
+                        {{scope.row.value.isAlive}}/
+                        {{scope.row.value.isAlive ? value.isBackground : false}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="线程状态" width="180">
+                    <template slot-scope="scope">
+                        {{scope.row.value.isAlive ? formaTableTime(scope.row.value.threadState): "-"}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="最近故事">
+                    <template slot-scope="scope">
+                        <span v-html="scope.row.key.storyHtml"></span>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @@click="thread.visible = false">关 闭</el-button>
+        </span>
+    </el-dialog>
+</div>
+
+@section scripts{
+
+    <script src="~/js/Admin/Pages/XncfModule/Start.js"></script>
+}
