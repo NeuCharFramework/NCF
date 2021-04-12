@@ -21,10 +21,10 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
     <PackageReference Include="Senparc.CO2NET.AspNet" Version="0.3.200" />
-    <PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.6.127.1-beta1" />
+    <PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.6.127.40-beta1" />
     <PackageReference Include="Senparc.CO2NET" Version="1.3.200" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.36-beta1" />
-    <PackageReference Include="ML.Xncf.Docs" Version="2.0.116" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.39-beta1" />
+    <PackageReference Include="ML.Xncf.Docs" Version="2.1.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj" />
