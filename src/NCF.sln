@@ -44,7 +44,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Web", "Senparc.Web\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Areas.Admin", "Senparc.Areas.Admin\Senparc.Areas.Admin.csproj", "{346475E8-6E39-4AA9-896F-893DC47AD3D7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyExtensionCode", "..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj", "{F843D239-088B-420C-9559-2D334CDAB279}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyExtensionCode", "XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj", "{F843D239-088B-420C-9559-2D334CDAB279}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Web.FirefoxDriverTest", "Senparc.Web.FirefoxDriverTest\Senparc.Web.FirefoxDriverTest.csproj", "{22B88A11-137D-42FB-9ED0-AC15A3FF651F}"
 EndProject

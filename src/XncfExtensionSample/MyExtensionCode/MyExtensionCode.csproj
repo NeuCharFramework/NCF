@@ -27,7 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\Senparc.Service\Senparc.Service.csproj" />
+		<ProjectReference Include="..\..\Senparc.Service\Senparc.Service.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
