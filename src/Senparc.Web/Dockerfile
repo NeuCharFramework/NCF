@@ -1,10 +1,7 @@
-FROM microsoft/aspnetcore:2.0 AS base
-WORKDIR /app
-EXPOSE 80
-
-FROM microsoft/aspnetcore-build:2.0 AS build
+# https://hub.docker.com/_/microsoft-dotnet-sdk/
+FROM  mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
-COPY Senparc.Core.sln ./
+COPY NCF.sln ./
 COPY Senparc.Web/Senparc.Web.csproj Senparc.Web/
 RUN dotnet restore -nowarn:msb3202,nu1503
 COPY . .
@@ -12,9 +9,11 @@ WORKDIR /src/Senparc.Web
 RUN dotnet build -c Release -o /app
 
 FROM build AS publish
-RUN dotnet publish -c Release -o /app
+RUN dotnet publish -c Release -o /app --no-restore
 
-FROM base AS final
+
+# https://hub.docker.com/_/microsoft-dotnet
+FROM mcr.microsoft.com/dotnet/aspnet:3.1  AS final
 WORKDIR /app
 COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "Senparc.Web.dll"]
