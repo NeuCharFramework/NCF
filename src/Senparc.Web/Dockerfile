@@ -1,9 +1,9 @@
 # https://hub.docker.com/_/microsoft-dotnet-sdk/
 FROM  mcr.microsoft.com/dotnet/sdk:3.1 AS build
-WORKDIR /app
+WORKDIR /source
 
 COPY NCF.sln .
-COPY Senparc.Web/Senparc.Web.csproj											./Senparc.Web/
+COPY Senparc.Web/Senparc.Web.csproj											./Senparc.Web/Senparc.Web.csproj
 COPY Senparc.Core/Senparc.Core.csproj 										./Senparc.Core/Senparc.Core.csproj 
 COPY Senparc.Utility/Senparc.Utility.csproj 								./Senparc.Utility/Senparc.Utility.csproj 
 COPY Senparc.Log/Senparc.Log.csproj 										./Senparc.Log/Senparc.Log.csproj 
@@ -31,13 +31,14 @@ COPY Senparc.Web/. ./Senparc.Web
 #RUN dotnet clean
 #RUN dotnet build -c Release -o /app
 #
-FROM build AS publish
-WORKDIR /app/Senparc.Web
+#FROM build AS publish
+WORKDIR /source/Senparc.Web
 RUN dotnet publish -c Release -o /app --no-restore
 
 
 # https://hub.docker.com/_/microsoft-dotnet
 FROM mcr.microsoft.com/dotnet/aspnet:3.1  AS final
+
 WORKDIR /app
 COPY --from=build /app .
 ENTRYPOINT ["dotnet", "Senparc.Web.dll"]
