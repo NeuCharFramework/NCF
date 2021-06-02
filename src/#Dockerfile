@@ -1,9 +1,11 @@
 # https://hub.docker.com/_/microsoft-dotnet-sdk/
 FROM  mcr.microsoft.com/dotnet/sdk:3.1 AS build
-WORKDIR /source
+WORKDIR /app
+
+RUN dotnet --info
 
 COPY NCF.sln .
-COPY Senparc.Web/Senparc.Web.csproj											./Senparc.Web/Senparc.Web.csproj
+COPY Senparc.Web/Senparc.Web.csproj											./Senparc.Web/
 COPY Senparc.Core/Senparc.Core.csproj 										./Senparc.Core/Senparc.Core.csproj 
 COPY Senparc.Utility/Senparc.Utility.csproj 								./Senparc.Utility/Senparc.Utility.csproj 
 COPY Senparc.Log/Senparc.Log.csproj 										./Senparc.Log/Senparc.Log.csproj 
@@ -31,8 +33,8 @@ COPY Senparc.Web/. ./Senparc.Web
 #RUN dotnet clean
 #RUN dotnet build -c Release -o /app
 #
-#FROM build AS publish
-WORKDIR /source/Senparc.Web
+FROM build AS publish
+WORKDIR /app/Senparc.Web
 RUN dotnet publish -c Release -o /app --no-restore
 
 

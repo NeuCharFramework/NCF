@@ -44,7 +44,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Web", "Senparc.Web\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Areas.Admin", "Senparc.Areas.Admin\Senparc.Areas.Admin.csproj", "{346475E8-6E39-4AA9-896F-893DC47AD3D7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyExtensionCode", "..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj", "{F843D239-088B-420C-9559-2D334CDAB279}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyExtensionCode", "XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj", "{F843D239-088B-420C-9559-2D334CDAB279}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Web.FirefoxDriverTest", "Senparc.Web.FirefoxDriverTest\Senparc.Web.FirefoxDriverTest.csproj", "{22B88A11-137D-42FB-9ED0-AC15A3FF651F}"
 EndProject
@@ -130,13 +130,11 @@ Global
 		{7EEB1B5C-2025-4191-8639-01AA2808171B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7EEB1B5C-2025-4191-8639-01AA2808171B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EEB1B5C-2025-4191-8639-01AA2808171B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7EEB1B5C-2025-4191-8639-01AA2808171B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7EEB1B5C-2025-4191-8639-01AA2808171B}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{7EEB1B5C-2025-4191-8639-01AA2808171B}.Test|Any CPU.Build.0 = Release|Any CPU
 		{DFF2FDD1-7520-4122-95EF-FE16D8B355D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DFF2FDD1-7520-4122-95EF-FE16D8B355D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFF2FDD1-7520-4122-95EF-FE16D8B355D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DFF2FDD1-7520-4122-95EF-FE16D8B355D9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DFF2FDD1-7520-4122-95EF-FE16D8B355D9}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{DFF2FDD1-7520-4122-95EF-FE16D8B355D9}.Test|Any CPU.Build.0 = Release|Any CPU
 		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -165,7 +163,6 @@ Global
 		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
