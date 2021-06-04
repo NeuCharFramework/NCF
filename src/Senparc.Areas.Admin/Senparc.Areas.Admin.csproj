@@ -4,13 +4,14 @@
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<!--<TargetFramework>net5.0</TargetFramework>-->
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+		<!--<RazorLangVersion>2.0</RazorLangVersion>-->
 	</PropertyGroup>
 
 	<ItemGroup>
 		<EmbeddedResource Include="wwwroot\**\*" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
 	</ItemGroup>
-
+	
 
 	<ItemGroup>
 		<Compile Remove="Areas\Admin\Pages\Database\**" />
