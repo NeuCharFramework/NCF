@@ -29,8 +29,8 @@ RUN dotnet publish "Senparc.Web.csproj" -c Release -o /app --no-restore
 
 # https://hub.docker.com/_/microsoft-dotnet
 FROM mcr.microsoft.com/dotnet/aspnet:3.1  AS final
-EXPOSE 80
-EXPOSE 443
+EXPOSE 8012
+EXPOSE 1443
 
 WORKDIR /app
 COPY --from=build /app .
