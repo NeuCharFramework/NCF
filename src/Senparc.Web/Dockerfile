@@ -23,14 +23,18 @@ COPY Senparc.Web.DatabasePlant/Senparc.Web.DatabasePlant.csproj 			./Senparc.Web
 RUN dotnet restore Senparc.Web/Senparc.Web.csproj
 
 COPY . .
-
 WORKDIR "/source/Senparc.Web"
 RUN dotnet publish "Senparc.Web.csproj" -c Release -o /app --no-restore
 
-FROM build AS final
+
+# https://hub.docker.com/_/microsoft-dotnet
+FROM mcr.microsoft.com/dotnet/aspnet:3.1  AS final
+EXPOSE 8012
+EXPOSE 1443
+EXPOSE 80
 
 WORKDIR /app
-COPY --from=build /app ./
+COPY --from=build /app .
 ENTRYPOINT ["dotnet", "Senparc.Web.dll"]
 
 
