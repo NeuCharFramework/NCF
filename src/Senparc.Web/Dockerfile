@@ -20,28 +20,20 @@ COPY Senparc.Areas.Admin/Senparc.Areas.Admin.csproj 						./Senparc.Areas.Admin/
 COPY XncfExtensionSample/MyExtensionCode/MyExtensionCode.csproj 			./XncfExtensionSample/MyExtensionCode/ 
 COPY Senparc.Web.FirefoxDriverTest/Senparc.Web.FirefoxDriverTest.csproj 	./Senparc.Web.FirefoxDriverTest/ 
 COPY Senparc.Web.DatabasePlant/Senparc.Web.DatabasePlant.csproj 			./Senparc.Web.DatabasePlant/ 
-RUN dotnet restore --no-cache
-
-#RUN dotnet restore -nowarn:msb3202,nu1503
+RUN dotnet restore Senparc.Web/Senparc.Web.csproj
 
 COPY . .
-#WORKDIR ./Senparc.Web
-
-#RUN dotnet clean
-#RUN dotnet build -c Release -o /app
-#
-#FROM build AS publish
 WORKDIR "/source/Senparc.Web"
-#WORKDIR /Senparc.Web
 RUN dotnet publish "Senparc.Web.csproj" -c Release -o /app --no-restore
 
 
 # https://hub.docker.com/_/microsoft-dotnet
-#FROM mcr.microsoft.com/dotnet/aspnet:3.1  AS final
-FROM build AS final
+FROM mcr.microsoft.com/dotnet/aspnet:3.1  AS final
+EXPOSE 80
+EXPOSE 443
 
 WORKDIR /app
-COPY --from=build /app ./
+COPY --from=build /app .
 ENTRYPOINT ["dotnet", "Senparc.Web.dll"]
 
 
