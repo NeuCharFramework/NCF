@@ -51,6 +51,8 @@ namespace WorkShop.Xncf.WebApiDemo01.Services
 
         //TODO: 更多业务方法可以写到这里
 
+
+        #region 接口要请求的方法
         public async Task<ColorDto> ApiSetColorAsync(int type)
         {
             ColorDto dto;
@@ -80,5 +82,7 @@ namespace WorkShop.Xncf.WebApiDemo01.Services
             var obj = this.GetObject(z => true, z => z.Id, OrderingType.Descending);
             return obj;
         }
+        #endregion
+
     }
 }
