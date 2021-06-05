@@ -1,0 +1,159 @@
+﻿
+[v-cloak] {
+    display: none;
+}
+
+.el-pagination {
+    text-align: center;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    color: #5A738E;
+    text-decoration: none;
+}
+
+body {
+    margin: 0;
+}
+
+img {
+    width: 100%;
+}
+
+li {
+    list-style-position: initial;
+    list-style-image: initial;
+    list-style-type: none;
+}
+
+#app {
+    height: 100%;
+}
+
+.app-wrapper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.footer {
+    text-align: right;
+    color: #5A738E
+}
+    .footer a:hover {
+        color: #23527c;
+    }
+
+.el-main {
+    background-color: #e3e3e3;
+}
+
+/*侧边栏*/
+.el-aside-index {
+    min-height: 100vh;
+    transition: width 0.28s;
+    width: 240px;
+    background-color: #304156;
+}
+
+.el-aside .head-log {
+    padding: 10px 15px;
+}
+
+.el-aside .head-log2 {
+    padding: 10px 0;
+}
+
+.el-aside .el-submenu__title i {
+    color: inherit;
+}
+
+.el-aside .el-menu-item i {
+    color: inherit;
+}
+
+.el-menu {
+    border: none;
+}
+/*顶部*/
+.el-header {
+    overflow: hidden;
+    position: relative;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,21,41,0.08);
+}
+
+.header-breadcrumb {
+    height: 100%;
+    float: left;
+}
+
+.el-breadcrumb {
+    line-height: 60px;
+}
+
+.el-breadcrumb__inner, .el-breadcrumb__inner a {
+    font-weight: 400 !important;
+    color: #303133;
+}
+
+.el-breadcrumb__inner {
+    color: #97a8be !important;
+}
+
+.header-menu {
+    height: 100%;
+    float: left;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+}
+
+    .header-menu i {
+        font-size: 25px;
+        cursor: pointer;
+    }
+
+.header-logout {
+    height: 100%;
+    float: right;
+    line-height: 60px;
+}
+
+
+
+/*分页*/
+.pagination-container {
+    background: #fff;
+    padding: 32px 16px;
+}
+
+    .pagination-container.hidden {
+        display: none;
+    }
+
+/*顶部筛选组*/
+.filter-container {
+    padding-bottom: 10px;
+}
+
+    .filter-container .filter-item {
+        display: inline-block;
+        vertical-align: middle;
+        margin-bottom: 10px;
+    }
+
+.el-breadcrumb .el-breadcrumb__item:last-of-type {
+    cursor: none;
+    pointer-events: none;
+}
+/*模块管理*/
+.module-header {
+    line-height: 60px;
+    font-size: 20px;
+}

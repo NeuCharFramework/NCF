@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
-		<Version>1.0-beta1</Version>
+		<TargetFramework>netcoreapp5.0</TargetFramework>
+		<Version>1.0</Version>
 		<AssemblyName>Senparc.Xncf.User</AssemblyName>
 		<RootNamespace>Senparc.Xncf.User</RootNamespace>
 		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-		<Description>用户管理模块</Description>
+		<Description>用户管理</Description>
 		<Copyright>Senparc</Copyright>
 		<PackageTags>Senparc,NeuCharFramework,NCF,Senparc.Xncf.User</PackageTags>
 		<Authors>Senparc</Authors>
@@ -16,7 +16,7 @@
     <PackageProjectUrl>https://github.com/NeuCharFramework/NcfPackageSources</PackageProjectUrl>
     <PackageIconUrl>https://sdk.weixin.senparc.com/Images/logo-square-ncf.jpg</PackageIconUrl>-->
 		<PackageReleaseNotes>
-			v1.0-beta1 创世
+			v1.0 创世
 		</PackageReleaseNotes>
 		<RepositoryUrl> https://github.com/NeuCharFramework/NcfPackageSources</RepositoryUrl>
 		<Configurations>Debug;Release;Test</Configurations>
@@ -33,36 +33,80 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
 		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.127.9-beta1" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.6.127-beta1" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.6.114-beta1" />
 		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
 		<ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
 		<None Include="App_Data\SenparcTraceLog\*" />
 	</ItemGroup>
 
-
-	<!--<ItemGroup>
-	  <Content Remove="templates\template1\App_Data\Database\SenparcConfig.config" />
-	  <Content Remove="templates\template1\Areas\Admin\Pages\Shared\_SideMenu.cshtml" />
-	  <Content Remove="templates\template1\Areas\Admin\Pages\Shared\_ViewImports.cshtml" />
-	  <Content Remove="templates\template1\Areas\Admin\Pages\Shared\_ViewStart.cshtml" />
-	  <Content Remove="templates\template1\Areas\Admin\Pages\User\DatabaseSample.cshtml" />
-	  <Content Remove="templates\template1\Areas\Admin\Pages\User\Index.cshtml" />
+	<ItemGroup>
+	  <Content Remove="Areas\User\Pages\Register.cshtml" />
+	  <Content Remove="wwwroot\css\Admin\adminlogin\logo.png" />
+	  <Content Remove="wwwroot\css\Admin\AdminUserInfo\AdminUserInfo.css" />
+	  <Content Remove="wwwroot\css\Admin\Index\index.css" />
+	  <Content Remove="wwwroot\css\Admin\login\index.css" />
+	  <Content Remove="wwwroot\css\Admin\Menu\Menu.css" />
+	  <Content Remove="wwwroot\css\Admin\Shared\layout.css" />
+	  <Content Remove="wwwroot\css\Admin\XncfModule\XncfModule.css" />
+	  <Content Remove="wwwroot\js\Admin\axios.js" />
+	  <Content Remove="wwwroot\js\Admin\global.js" />
+	  <Content Remove="wwwroot\js\Admin\navMenu.js" />
+	  <Content Remove="wwwroot\js\Admin\Pages\AdminUserInfo\Index.js" />
+	  <Content Remove="wwwroot\js\Admin\Pages\Components\components.js" />
+	  <Content Remove="wwwroot\js\Admin\Pages\Index\Index.js" />
+	  <Content Remove="wwwroot\js\Admin\Pages\LogIn\Index.js" />
+	  <Content Remove="wwwroot\js\Admin\Pages\Menu\Index.js" />
+	  <Content Remove="wwwroot\js\Admin\Pages\Role\Index.js" />
+	  <Content Remove="wwwroot\js\Admin\Pages\SenparcTrace\detail.js" />
+	  <Content Remove="wwwroot\js\Admin\Pages\SenparcTrace\Index.js" />
+	  <Content Remove="wwwroot\js\Admin\Pages\XncfModule\index.js" />
+	  <Content Remove="wwwroot\js\Admin\Pages\XncfModule\start.js" />
+	  <Content Remove="wwwroot\js\Admin\store.js" />
+	  <Content Remove="wwwroot\js\Admin\vuePermission.js" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="templates\template1\App_Data\Database\SenparcConfig.config" />
-	  <None Include="templates\template1\Areas\Admin\Pages\Shared\_SideMenu.cshtml" />
-	  <None Include="templates\template1\Areas\Admin\Pages\Shared\_ViewImports.cshtml" />
-	  <None Include="templates\template1\Areas\Admin\Pages\Shared\_ViewStart.cshtml" />
-	  <None Include="templates\template1\Areas\Admin\Pages\User\DatabaseSample.cshtml" />
-	  <None Include="templates\template1\Areas\Admin\Pages\User\Index.cshtml" />
-	</ItemGroup>-->
+	  <None Remove="Areas.zip" />
+	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\adminlogin\logo.png" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\AdminUserInfo\AdminUserInfo.css" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\Index\index.css" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\login\index.css" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\Menu\Menu.css" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\Shared\layout.css" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\XncfModule\XncfModule.css" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\axios.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\global.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\navMenu.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\AdminUserInfo\Index.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\Components\components.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\Index\Index.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\LogIn\Index.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\Menu\Index.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\Role\Index.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\SenparcTrace\detail.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\SenparcTrace\Index.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\XncfModule\index.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\XncfModule\start.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\store.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\vuePermission.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Areas\User\Pages\Register.cshtml" />
+	  <None Include="Areas\User\Pages\Shared\_SideMenu.cshtml" />
+	  <None Include="Areas\User\Pages\Shared\_ViewImports.cshtml" />
+	  <None Include="Areas\User\Pages\Shared\_ViewStart.cshtml" />
+	  <None Include="Areas\User\Pages\User\DatabaseSample.cshtml" />
+	  <None Include="Areas\User\Pages\User\Index.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.1" />
 		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
 		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />
 	</ItemGroup>

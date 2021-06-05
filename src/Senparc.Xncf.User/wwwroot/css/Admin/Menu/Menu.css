@@ -1,0 +1,25 @@
+﻿.menu-icons-grid{
+    position:relative;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+    height:600px;
+    overflow-y:scroll;
+}
+.menu-icon-item {
+    height: 85px;
+    text-align: center;
+    width: 100px;
+    float: left;
+    font-size: 30px;
+    color: rgb(36, 41, 46);
+    cursor: pointer;
+    margin: 20px;
+}
+    .menu-icon-item:hover {
+        color: #409EFF
+    }
+    .menu-icon-item span {
+        display: block;
+        font-size: 16px;
+        margin-top: 10px;
+    }

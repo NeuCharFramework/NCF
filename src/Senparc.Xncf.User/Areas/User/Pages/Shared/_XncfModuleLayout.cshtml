@@ -1,0 +1,78 @@
+﻿@* XNCF 模块页面的模板页 *@
+@model Senparc.Ncf.AreaBase.Admin.AdminXncfModulePageModelBase
+@using Senparc.Ncf.Core.Areas;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor _httpContextAccessor
+@{
+    Layout = "_Layout";
+}
+@{
+    var subTitle = ViewData["Title"];
+    ViewData["Title"] = Model.XncfModuleDto?.MenuName + " - " + subTitle;
+}
+@section HeaderContent{
+    @RenderSection("HeaderContent", false)
+}
+@section Style{
+    @RenderSection("Style", false)
+}
+@section modal{
+    @RenderSection("modal", false)
+}
+@section explanations{
+    @RenderSection("explanations", false)
+}
+@section breadcrumbs{
+    <li>扩展模块</li>
+    <li>模块管理</li>
+    <li>@Model.XncfModuleDto.MenuName</li>
+    @RenderSection("breadcrumbs", false)
+    @if (!IsSectionDefined("breadcrumbs"))
+    {
+        <li>@subTitle</li>
+    }
+}
+@section filter{
+    @RenderSection("filter", false)
+}
+@section scripts{
+    @RenderSection("scripts", false)
+}
+
+<div class="div">
+    @*左侧*@
+    <div class="col-md-2 col-sm-2" style="background:#586e83;">
+        <div class="x_content">
+            <div id="sidebar-sub-menu" class="main_menu_side hidden-print main_menu">
+                <div class="menu_section active">
+                    <ul class="nav side-menu" style="">
+                        <li><a asp-page="../XncfModule/Start" asp-route-uid="@Model.XncfRegister.Uid"><i class="fa fa-chevron-left"></i> 返回</a></li>
+                    </ul>
+                    @await Html.PartialAsync("_XncfModuleLayout_Menu", Model.XncfRegister)
+
+                    @if (IsSectionDefined("subMenu"))
+                    {
+                        <ul class="nav side-menu" style="">
+                            @RenderSection("subMenu", false)
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*右侧*@
+    <div class="col-md-10">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="@Model.XncfRegister.Icon"></i> &nbsp;  @subTitle</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="clearfix"></div>
