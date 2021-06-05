@@ -1,0 +1,130 @@
+@page "{handler?}"
+@model Senparc.Areas.Admin.Areas.Admin.Pages.UserBuilderLog_IndexModel
+@addTagHelper *, Senparc.Areas.Admin
+@using System.Web.Mvc
+@{
+    ViewData["Title"] = "生成记录管理"; Layout = "_Layout_Vue";
+}
+@section Style{
+<link href="~/css/Admin/Pages/UserBuilderLog/Index.css" rel="stylesheet" />
+}
+@section breadcrumbs {
+<el-breadcrumb-item>系统管理</el-breadcrumb-item>
+<el-breadcrumb-item>生成记录列表</el-breadcrumb-item>
+}
+<div>
+    <div class="userbuilderlog-info">
+        <div class="filter-container">
+            <el-input @@keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'搜索关键字'" v-model="listQuery.key">
+            </el-input>
+            <el-button class="filter-item" v-waves icon="el-icon-search" @@click="handleFilter">搜索</el-button>
+            <el-button class="filter-item" v-has="['userbuilderlog-add']" type="primary" icon="el-icon-plus" @@click="handleEdit">增加</el-button>
+        </div>
+        <el-table :data="tableData"
+                  border
+                  style="width: 100%">
+            <el-table-column type="selection" align="center" width="55"></el-table-column>
+            <template v-for="(headerItem,index) in headerList">
+                <el-table-column :label="headerItem.description" min-width="120px" :key="index">
+                    <template slot-scope="scope">
+                        <span>{{scope.row[headerItem.key]}}</span>
+                    </template>
+                </el-table-column>
+            </template>
+            <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                    <el-button size="mini"
+                               type="primary"
+                               v-has="['userbuilderlog-edit']"
+                               @@click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                    <template v-has="['userbuilderlog-delete']">
+                        <el-popconfirm placement="top" title="确认删除此条数据吗？" @@on-confirm="handleDelete(scope.$index, scope.row)">
+                            <el-button size="mini" type="danger" slot="reference">删除</el-button>
+                        </el-popconfirm>
+                    </template>
+                </template>
+            </el-table-column>
+        </el-table>
+        <pagination :total="paginationQuery.total"
+                    :page.sync="listQuery.pageIndex"
+                    :limit.sync="listQuery.pageSize"
+                    @@pagination="getList"></pagination>
+        <!--编辑、新增 -->
+        <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
+            <el-form ref="dataForm"
+                     :rules="dialog.rules"
+                     :model="dialog.data"
+                     label-position="left"
+                     label-width="100px"
+                     style="max-width: 400px; margin-left:50px;">
+                                   <el-form-item size="small" :label="''" prop="id" v-if="Object.keys(dialog.data).indexOf('id')>=0">
+                     <el-input v-model="dialog.data.id"></el-input>
+                   </el-form-item>
+
+                   <el-form-item size="small" :label="'是否删除'" prop="flag" v-if="Object.keys(dialog.data).indexOf('flag')>=0">
+                     <el-input v-model="dialog.data.flag"></el-input>
+                   </el-form-item>
+
+                   <el-form-item size="small" :label="''" prop="addTime" v-if="Object.keys(dialog.data).indexOf('addTime')>=0">
+                     <el-input v-model="dialog.data.addTime"></el-input>
+                   </el-form-item>
+
+                   <el-form-item size="small" :label="'最后更新时间'" prop="lastUpdateTime" v-if="Object.keys(dialog.data).indexOf('lastUpdateTime')>=0">
+                     <el-input v-model="dialog.data.lastUpdateTime"></el-input>
+                   </el-form-item>
+
+                   <el-form-item size="small" :label="''" prop="adminRemark" v-if="Object.keys(dialog.data).indexOf('adminRemark')>=0">
+                     <el-input v-model="dialog.data.adminRemark"></el-input>
+                   </el-form-item>
+
+                   <el-form-item size="small" :label="'备注'" prop="remark" v-if="Object.keys(dialog.data).indexOf('remark')>=0">
+                     <el-input v-model="dialog.data.remark"></el-input>
+                   </el-form-item>
+
+                   <el-form-item size="small" :label="''" prop="additionNote" v-if="Object.keys(dialog.data).indexOf('additionNote')>=0">
+                     <el-input v-model="dialog.data.additionNote"></el-input>
+                   </el-form-item>
+
+                   <el-form-item size="small" :label="'租户Id'" prop="tenantId" v-if="Object.keys(dialog.data).indexOf('tenantId')>=0">
+                     <el-input v-model="dialog.data.tenantId"></el-input>
+                   </el-form-item>
+
+                   <el-form-item size="small" :label="'用户Id'" prop="userId" v-if="Object.keys(dialog.data).indexOf('userId')>=0">
+                     <el-input v-model="dialog.data.userId"></el-input>
+                   </el-form-item>
+
+                   <el-form-item size="small" :label="'表名'" prop="tableName" v-if="Object.keys(dialog.data).indexOf('tableName')>=0">
+                     <el-input v-model="dialog.data.tableName"></el-input>
+                   </el-form-item>
+
+                   <el-form-item size="small" :label="'模块名称'" prop="moduleName" v-if="Object.keys(dialog.data).indexOf('moduleName')>=0">
+                     <el-input v-model="dialog.data.moduleName"></el-input>
+                   </el-form-item>
+
+                   <el-form-item size="small" :label="'存放路径'" prop="path" v-if="Object.keys(dialog.data).indexOf('path')>=0">
+                     <el-input v-model="dialog.data.path"></el-input>
+                   </el-form-item>
+
+                   <el-form-item size="small" :label="'发送次数'" prop="count" v-if="Object.keys(dialog.data).indexOf('count')>=0">
+                     <el-input v-model="dialog.data.count"></el-input>
+                   </el-form-item>
+
+
+                <el-form-item label="备注" prop="note">
+                    <el-input v-model="dialog.data.note" clearable placeholder="请输入备注信息" />
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @@click="dialog.visible = false">取 消</el-button>
+                <el-button :loading="dialog.updateLoading" type="primary" @@click="updateData">确 认</el-button>
+                @*<el-button size="mini" v-if="dialogStatus=='create'" type="primary" @@click="createData">确认</el-button>*@
+                @*<el-button size="mini" v-else type="primary" @@click="updateData">确认</el-button>*@
+            </div>
+        </el-dialog>
+    </div>
+</div>
+
+@section scripts{
+<script src="~/js/Admin/Pages/UserBuilderLog/Index.js"></script>
+}
+

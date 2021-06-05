@@ -573,7 +573,7 @@
 		<ProjectReference Include="..\Senparc.Threads\Senparc.Threads.csproj" />
 		<ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
 		<ProjectReference Include="..\Senparc.Web.UI\Senparc.Web.UI.csproj" />
-		<ProjectReference Include="..\Senparc.Xncf.UserTest\Senparc.Xncf.UserTest.csproj" />
+		<ProjectReference Include="..\Senparc.Xncf.CodeBuilder\Senparc.Xncf.CodeBuilder.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.User\Senparc.Xncf.User.csproj" />
 	</ItemGroup>
 	<ItemGroup>

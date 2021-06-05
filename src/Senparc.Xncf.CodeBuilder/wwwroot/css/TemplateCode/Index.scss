@@ -1,0 +1,39 @@
+﻿.nomal-form label {
+    font-weight: 500 !important;
+}
+
+.demo-card .el-card__header {
+    padding: 10px !important;
+    line-height: 1;
+    position: relative;
+}
+
+.el-card__body {
+    padding: 10px 10px 0 10px !important;
+    height: 100%;
+}
+
+.form-card .el-card__body {
+    padding-right: 0 !important;
+}
+
+.form-card .el-form {
+    padding-right: 5px;
+}
+
+.dialog-small .el-dialog__header {
+    padding: 10px;
+    border-bottom: 1px solid #efefef;
+}
+
+.dialog-small .el-dialog__headerbtn {
+    top: 15px;
+}
+
+.dialog-small .el-dialog__body {
+    padding: 10px;
+}
+
+.el-form-item__error {
+    padding-top: 0;
+}
