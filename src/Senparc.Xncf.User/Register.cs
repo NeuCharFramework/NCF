@@ -5,20 +5,15 @@
  * 如果需要学习扩展模块，请参考 【Senparc.ExtensionAreaTemplate】 项目的 Register.cs 文件！
  */
 
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Hosting;
 using Senparc.CO2NET.RegisterServices;
-using Senparc.CO2NET.Trace;
 using Senparc.Core.Models;
 using Senparc.Ncf.AreaBase.Admin.Filters;
 using Senparc.Ncf.Core.Areas;
-using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.XncfBase;
@@ -30,7 +25,7 @@ using System.Threading.Tasks;
 
 namespace Senparc.Xncf.User
 {
-    [XncfOrder(5996)]
+    [XncfRegister]
     public partial class Register : XncfRegisterBase,
         IXncfRegister, //注册 XNCF 基础模块接口（必须）
         IAreaRegister //注册 XNCF 页面接口（按需选用）
@@ -40,9 +35,9 @@ namespace Senparc.Xncf.User
 
         #region IXncfRegister 接口
 
-        public override string Name => "NeuCharFramework.User";
+        public override string Name => "Senparc.Xncf.User";
 
-        public override string Uid => "00000000-0000-0000-0000-000000000003";// "00000000-0000-0000-0000-000000000002";
+        public override string Uid => "CEDD99B6-7114-44CA-B682-400C07F130CB";// "00000000-0000-0000-0000-000000000002";
 
         public override string Version => "0.2.0-beta4";
 

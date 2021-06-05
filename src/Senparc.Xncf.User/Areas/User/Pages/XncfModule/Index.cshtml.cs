@@ -4,13 +4,14 @@ using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using Senparc.Service;
+using Senparc.Xncf.User;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Senparc.Xncf.User.Areas.User.Pages
+namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
     public class XncfModuleIndexModel : BaseAdminPageModel
     {
@@ -34,7 +35,7 @@ namespace Senparc.Xncf.User.Areas.User.Pages
         public int PageIndex { get; set; } = 1;
 
         /// <summary>
-        /// Êı¾İ¿âÒÑ´æµÄXncfModules
+        /// æ•°æ®åº“å·²å­˜çš„XncfModules
         /// </summary>
         public PagedList<XncfModule> XncfModules { get; set; }
         public List<IXncfRegister> NewXncfRegisters { get; set; }
@@ -46,14 +47,14 @@ namespace Senparc.Xncf.User.Areas.User.Pages
 
         public async Task OnGetAsync()
         {
-            //¸üĞÂ²Ëµ¥»º´æ
+            //æ›´æ–°èœå•ç¼“å­˜
             await _sysMenuService.GetMenuDtoByCacheAsync(true).ConfigureAwait(false);
             XncfModules = await _xncfModuleServiceEx.GetObjectListAsync(PageIndex, 10, _ => true, _ => _.AddTime, Ncf.Core.Enums.OrderingType.Descending);
             LoadNewXncfRegisters(XncfModules);
         }
 
         /// <summary>
-        /// É¨ÃèĞÂÄ£¿é
+        /// æ‰«ææ–°æ¨¡å—
         /// </summary>
         /// <returns></returns>
         public async Task<IActionResult> OnGetScanAsync(string uid)
@@ -63,19 +64,20 @@ namespace Senparc.Xncf.User.Areas.User.Pages
             base.SetMessager(Ncf.Core.Enums.MessageType.info, result.Item2, true);
 
             //if (backpage=="Start")
-            return RedirectToPage("Start", new { uid = uid });//Ê¼ÖÕµ½ÏêÇéÒ³
+            return RedirectToPage("Start", new { uid = uid });//å§‹ç»ˆåˆ°è¯¦æƒ…é¡µ
             //return RedirectToPage("Index");
         }
 
         /// <summary>
-        /// Òş²Ø¡°Ä£¿é¹ÜÀí¡±¹¦ÄÜ
+        /// éšè—â€œæ¨¡å—ç®¡ç†â€åŠŸèƒ½
         /// </summary>
         /// <returns></returns>
         public async Task<IActionResult> OnPostHideManagerAsync()
         {
-            //TODO:Ê¹ÓÃDTO²Ù×÷
+            //TODO:ä½¿ç”¨DTOæ“ä½œ
             var systemConfig = _systemConfigService.Value.GetObject(z => true);
-            systemConfig.HideModuleManager = systemConfig.HideModuleManager.HasValue && systemConfig.HideModuleManager.Value == true ? false : true;
+            systemConfig.Update(systemConfig.SystemName, systemConfig.MchId, systemConfig.MchKey, systemConfig.TenPayAppId,
+                systemConfig.HideModuleManager.HasValue && systemConfig.HideModuleManager.Value == true ? false : true);
             await _systemConfigService.Value.SaveObjectAsync(systemConfig);
             if (systemConfig.HideModuleManager == true)
             {
@@ -88,15 +90,15 @@ namespace Senparc.Xncf.User.Areas.User.Pages
         }
 
         /// <summary>
-        /// Òş²Ø¡°Ä£¿é¹ÜÀí¡±¹¦ÄÜ handler=HideManagerAjax
+        /// éšè—â€œæ¨¡å—ç®¡ç†â€åŠŸèƒ½ handler=HideManagerAjax
         /// </summary>
         /// <returns></returns>
         public async Task<IActionResult> OnPostHideManagerAjaxAsync()
         {
-            //TODO:Ê¹ÓÃDTO²Ù×÷
+            //TODO:ä½¿ç”¨DTOæ“ä½œ
             var systemConfig = _systemConfigService.Value.GetObject(z => true);
-            systemConfig.HideModuleManager = systemConfig.HideModuleManager.HasValue && systemConfig.HideModuleManager.Value == true ? false : true;
-            await _systemConfigService.Value.SaveObjectAsync(systemConfig);
+            systemConfig.Update(systemConfig.SystemName, systemConfig.MchId, systemConfig.MchKey, systemConfig.TenPayAppId,
+                            systemConfig.HideModuleManager.HasValue && systemConfig.HideModuleManager.Value == true ? false : true); await _systemConfigService.Value.SaveObjectAsync(systemConfig);
             //if (systemConfig.HideModuleManager == true)
             //{
             //    return RedirectToPage("../Index");
@@ -109,12 +111,12 @@ namespace Senparc.Xncf.User.Areas.User.Pages
         }
 
         /// <summary>
-        /// »ñÈ¡ÒÑ°²×°Ä£¿éÄ£¿é handler=Mofules
+        /// è·å–å·²å®‰è£…æ¨¡å—æ¨¡å— handler=Mofules
         /// </summary>
         /// <returns></returns>
         public async Task<IActionResult> OnGetMofulesAsync(int pageIndex = 0, int pageSize = 0)
         {
-            //¸üĞÂ²Ëµ¥»º´æ
+            //æ›´æ–°èœå•ç¼“å­˜
             await _sysMenuService.GetMenuDtoByCacheAsync(true).ConfigureAwait(false);
             PagedList<XncfModule> xncfModules = await _xncfModuleServiceEx.GetObjectListAsync(pageIndex, pageSize, _ => true, _ => _.AddTime, Ncf.Core.Enums.OrderingType.Descending);
             //xncfModules.FirstOrDefault().
@@ -132,14 +134,14 @@ namespace Senparc.Xncf.User.Areas.User.Pages
         }
 
         /// <summary>
-        /// »ñÈ¡Î´°²×°Ä£¿éÄ£¿é handler=UnMofules
+        /// è·å–æœªå®‰è£…æ¨¡å—æ¨¡å— handler=UnMofules
         /// </summary>
         /// <returns></returns>
         public async Task<IActionResult> OnGetUnMofulesAsync()
         {
-            //ËùÓĞÒÑ°²×°µÄÄ£¿é
+            //æ‰€æœ‰å·²å®‰è£…çš„æ¨¡å—
             var oldXncfModules = await _xncfModuleServiceEx.GetObjectListAsync(0, 0, z => true, z => z.AddTime, Ncf.Core.Enums.OrderingType.Descending);
-            //Î´°²×°»ò°æ±¾ÒÑ¸üĞÂ£¨²»Í¬£©µÄÄ£¿é
+            //æœªå®‰è£…æˆ–ç‰ˆæœ¬å·²æ›´æ–°ï¼ˆä¸åŒï¼‰çš„æ¨¡å—
             var newXncfRegisters = _xncfModuleServiceEx.GetUnInstallXncfModule(oldXncfModules);
 
             return Ok(newXncfRegisters.Select(z => new
@@ -153,7 +155,7 @@ namespace Senparc.Xncf.User.Areas.User.Pages
         }
 
         /// <summary>
-        /// É¨ÃèĞÂÄ£¿é handler=ScanAjax
+        /// æ‰«ææ–°æ¨¡å— handler=ScanAjax
         /// </summary>
         /// <returns></returns>
         public async Task<IActionResult> OnGetScanAjaxAsync(string uid)
@@ -166,7 +168,7 @@ namespace Senparc.Xncf.User.Areas.User.Pages
         }
 
         /// <summary>
-        /// ¸ù¾İÃû³Æ°²×°Ä£¿é
+        /// æ ¹æ®åç§°å®‰è£…æ¨¡å—
         /// </summary>
         /// <param name="xncfName"></param>
         /// <returns></returns>
@@ -177,7 +179,7 @@ namespace Senparc.Xncf.User.Areas.User.Pages
             if (base.FullSystemConfig.HideModuleManager == true)
             {
                 success = false;
-                message = "ÒÑ¾­ÆôÓÃ¡°·¢²¼Ä£Ê½¡±£¬ÎŞ·¨½øĞĞ´Ë²Ù×÷";
+                message = "å·²ç»å¯ç”¨â€œå‘å¸ƒæ¨¡å¼â€ï¼Œæ— æ³•è¿›è¡Œæ­¤æ“ä½œ";
             }
             else
             {
@@ -185,32 +187,32 @@ namespace Senparc.Xncf.User.Areas.User.Pages
                 if (docRegister == null)
                 {
                     success = false;
-                    message = "ÎÄµµÄ£¿é²»´æÔÚ£¬ÎŞ·¨Íê³É°²×°£¡";
+                    message = "æ–‡æ¡£æ¨¡å—ä¸å­˜åœ¨ï¼Œæ— æ³•å®Œæˆå®‰è£…ï¼";
                 }
                 else
                 {
                     try
                     {
-                        //²éÕÒ²¢°²×°Ä£¿é
+                        //æŸ¥æ‰¾å¹¶å®‰è£…æ¨¡å—
                         var docModule = await _xncfModuleServiceEx.GetObjectAsync(z => z.Uid == docRegister.Uid);
                         if (docModule == null)
                         {
                             await _xncfModuleServiceEx.InstallModuleAsync(docRegister.Uid);
                             docModule = await _xncfModuleServiceEx.GetObjectAsync(z => z.Uid == docRegister.Uid);
                         }
-                        //¿ªÆôÄ£¿é
-                        if (docModule.State != Ncf.Core.Enums.XncfModules_State.¿ª·Å)
+                        //å¼€å¯æ¨¡å—
+                        if (docModule.State != Ncf.Core.Enums.XncfModules_State.å¼€æ”¾)
                         {
-                            docModule.UpdateState(Ncf.Core.Enums.XncfModules_State.¿ª·Å);
+                            docModule.UpdateState(Ncf.Core.Enums.XncfModules_State.å¼€æ”¾);
                             await _xncfModuleServiceEx.SaveObjectAsync(docModule);
                         }
 
-                        message = "°²×°³É¹¦£¡";
+                        message = "å®‰è£…æˆåŠŸï¼";
                     }
                     catch (Exception ex)
                     {
                         success = false;
-                        message = "°²×°Ê§°Ü£º" + ex.Message;
+                        message = "å®‰è£…å¤±è´¥ï¼š" + ex.Message;
                     }
                 }
             }

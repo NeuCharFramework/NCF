@@ -54,7 +54,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevelopmentTools", "Develop
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Web.DatabasePlant", "Senparc.Web.DatabasePlant\Senparc.Web.DatabasePlant.csproj", "{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Senparc.Xncf.User", "Senparc.Xncf.User\Senparc.Xncf.User.csproj", "{B8808DA0-6BF7-404D-9C09-3212171CD898}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Xncf.User", "Senparc.Xncf.User\Senparc.Xncf.User.csproj", "{B8808DA0-6BF7-404D-9C09-3212171CD898}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
