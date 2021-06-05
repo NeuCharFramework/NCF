@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<Version>1.0-beta1</Version>
+		<AssemblyName>Senparc.Xncf.User</AssemblyName>
+		<RootNamespace>Senparc.Xncf.User</RootNamespace>
+		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+		<Description>用户管理模块</Description>
+		<Copyright>Senparc</Copyright>
+		<PackageTags>Senparc,NeuCharFramework,NCF,Senparc.Xncf.User</PackageTags>
+		<Authors>Senparc</Authors>
+		<Owners>Senparc</Owners>
+		<!-- <PackageLicenseUrl>https://github.com/NeuCharFramework/NcfPackageSources/blob/master/LICENSE</PackageLicenseUrl> -->
+		<Title>用户管理</Title>
+		<!--<ProjectUrl> https://github.com/NeuCharFramework/NCF</ProjectUrl>
+    <PackageProjectUrl>https://github.com/NeuCharFramework/NcfPackageSources</PackageProjectUrl>
+    <PackageIconUrl>https://sdk.weixin.senparc.com/Images/logo-square-ncf.jpg</PackageIconUrl>-->
+		<PackageReleaseNotes>
+			v1.0-beta1 创世
+		</PackageReleaseNotes>
+		<RepositoryUrl> https://github.com/NeuCharFramework/NcfPackageSources</RepositoryUrl>
+		<Configurations>Debug;Release;Test</Configurations>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<OutputPath>..\..\..\BuildOutPut</OutputPath>
+		<!--<DocumentationFile>..\..\..\BuildOutPut\Senparc.Xncf.User.XML</DocumentationFile>
+		<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<ErrorReport>prompt</ErrorReport>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>-->
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.127.9-beta1" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.6.127-beta1" />
+		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
+		<ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
+		<None Include="App_Data\SenparcTraceLog\*" />
+	</ItemGroup>
+
+
+	<!--<ItemGroup>
+	  <Content Remove="templates\template1\App_Data\Database\SenparcConfig.config" />
+	  <Content Remove="templates\template1\Areas\Admin\Pages\Shared\_SideMenu.cshtml" />
+	  <Content Remove="templates\template1\Areas\Admin\Pages\Shared\_ViewImports.cshtml" />
+	  <Content Remove="templates\template1\Areas\Admin\Pages\Shared\_ViewStart.cshtml" />
+	  <Content Remove="templates\template1\Areas\Admin\Pages\User\DatabaseSample.cshtml" />
+	  <Content Remove="templates\template1\Areas\Admin\Pages\User\Index.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="templates\template1\App_Data\Database\SenparcConfig.config" />
+	  <None Include="templates\template1\Areas\Admin\Pages\Shared\_SideMenu.cshtml" />
+	  <None Include="templates\template1\Areas\Admin\Pages\Shared\_ViewImports.cshtml" />
+	  <None Include="templates\template1\Areas\Admin\Pages\Shared\_ViewStart.cshtml" />
+	  <None Include="templates\template1\Areas\Admin\Pages\User\DatabaseSample.cshtml" />
+	  <None Include="templates\template1\Areas\Admin\Pages\User\Index.cshtml" />
+	</ItemGroup>-->
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.1" />
+		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
+		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />
+	</ItemGroup>
+</Project>
