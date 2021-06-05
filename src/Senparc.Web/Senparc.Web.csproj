@@ -19,6 +19,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.8.127.20-beta1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
     <PackageReference Include="Senparc.CO2NET.AspNet" Version="0.3.200" />
     <PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.6.127.1-beta1" />
