@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+	<!--<Project Sdk="Microsoft.NET.Sdk.Razor">-->
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<!--<TargetFramework>net5.0</TargetFramework>-->
@@ -28,10 +29,10 @@
 
 
 	<ItemGroup>
-	  <Content Remove="wwwroot\css\Admin\TenantInfo\Index.css" />
-	  <Content Remove="wwwroot\css\Admin\SystemConfig\Index.css" />
-	  <Content Remove="wwwroot\js\Admin\Pages\SystemConfig\Index.js" />
-	  <Content Remove="wwwroot\js\Admin\Pages\TenantInfo\Index.js" />
+		<Content Remove="wwwroot\css\Admin\TenantInfo\Index.css" />
+		<Content Remove="wwwroot\css\Admin\SystemConfig\Index.css" />
+		<Content Remove="wwwroot\js\Admin\Pages\SystemConfig\Index.js" />
+		<Content Remove="wwwroot\js\Admin\Pages\TenantInfo\Index.js" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -40,8 +41,8 @@
 		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="0.3.200" />
 		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="3.9.200" />
 		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.6.127-beta1" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.127.8-beta1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.36-beta1" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.127.9-beta1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.40-beta1" />
 		<PackageReference Include="Senparc.Ncf.Log" Version="0.6.127-beta1" />
 		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.6.127-beta1" />
 		<PackageReference Include="Senparc.Ncf.Service" Version="0.6.127.12-beta1" />

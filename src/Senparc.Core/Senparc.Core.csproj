@@ -17,7 +17,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="2.2.8" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Xml" Version="2.2.0" />
@@ -28,8 +28,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
 
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.36-beta1" />
-    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.127.8-beta1" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.40-beta1" />
+    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.127.9-beta1" />
     <PackageReference Include="Senparc.Ncf.Utility" Version="0.6.127-beta1" />
     <PackageReference Include="Senparc.Weixin" Version="6.7.600" />
     <PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.1.600" />
