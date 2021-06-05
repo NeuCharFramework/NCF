@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+      <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Version>1.0</Version>
+    <AssemblyName>Senparc.Xncf.Swagger</AssemblyName>
+    <RootNamespace>Senparc.Xncf.Swagger</RootNamespace>
+    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+    <Description>接口说明文档</Description>
+    <Copyright>Senparc</Copyright>
+    <PackageTags>Senparc,NeuCharFramework,NCF,Senparc.Xncf.Swagger</PackageTags>
+    <Authors>Senparc</Authors>
+    <Owners>Senparc</Owners>
+    <!-- <PackageLicenseUrl>https://github.com/NeuCharFramework/NcfPackageSources/blob/master/LICENSE</PackageLicenseUrl> -->
+    <Title>.接口说明文档</Title>
+    <!--<ProjectUrl> https://github.com/NeuCharFramework/NCF</ProjectUrl>
+    <PackageProjectUrl>https://github.com/NeuCharFramework/NcfPackageSources</PackageProjectUrl>
+    <PackageIconUrl>http://sdk.weixin.senparc.com/Images/logo-square-ncf.jpg</PackageIconUrl>-->
+    <PackageReleaseNotes>
+      v1.0 创世
+    </PackageReleaseNotes>
+    <RepositoryUrl> https://github.com/NeuCharFramework/NcfPackageSources</RepositoryUrl>
+    <Configurations>Debug;Release;Test</Configurations>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\..\..\BuildOutPut</OutputPath>
+    <DocumentationFile>..\..\..\BuildOutPut\Senparc.Xncf.Swagger.XML</DocumentationFile>
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="index.html" />
+    <None Remove="login.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <!--<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.1.1" />-->
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
+    <!--<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.6" />-->
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0-preview.3.21201.4" />
+      <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.127.9-beta1" />
+    <!--<PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />-->
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.3" />
+    <ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
+    <ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Senparc.Ncf.AreaBase" Version="0.6.127-beta1" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="index.html" />
+    <EmbeddedResource Include="login.html" />
+  </ItemGroup>
+
+
+</Project>

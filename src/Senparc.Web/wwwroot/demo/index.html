@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>颜色变化</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+    </script>
+    <script>
+        $(document).ready(function () {
+            //取颜色
+            $("#btnGetColor").click(function () {
+                $.ajax({
+                    url: "https://localhost:44311/api/v1/color/getcolor",
+                    type: 'GET',
+                    complete: function (e) {
+                        console.log(112);
+                        console.log(e);
+                        console.log(e.responseText);
+                        let aa = eval('(' + e.responseText + ')');
+                        console.log(aa);
+                        let c_red = aa.data.red;
+                        let c_green = aa.data.green;
+                        let c_blue = aa.data.blue;
+                        console.log(c_red + ',' + c_green + ',' + c_blue);
+                        console.log("rgb(" + c_red + ',' + c_green + ',' + c_blue + ")");
+                        $('#divColor').css("background-color", "rgb(" + c_red + ',' + c_green + ',' + c_blue + ")")
+                    }
+                });
+            });
+
+            //设置颜色
+            $("#btnSetColorBrighten").click(function () {
+                let requestUrl = "https://localhost:44311/api/v1/color/setcolor";
+                let requestParam = "type=1";
+                apiPost(requestUrl,requestParam);
+            });
+
+            $("#btnSetColorDarken").click(function () {
+                let requestUrl = "https://localhost:44311/api/v1/color/setcolor";
+                let requestParam = "type=2";
+                apiPost(requestUrl,requestParam);
+            });
+
+            $("#btnSetColorRandom").click(function () {
+                let requestUrl = "https://localhost:44311/api/v1/color/setcolor";
+                let requestParam = "type=3";
+                apiPost(requestUrl,requestParam);
+            });
+        });
+
+        function apiPost(url,param) {
+            //循环(遍历param里面的key=>value)
+            let urlRes = url + '?' + param;
+            console.log(urlRes);
+            $.ajax({
+                url: urlRes,
+                type: 'POST',
+                complete: function (e) {
+                    console.log(114);
+                    // console.log(e);
+                    // console.log(e.responseText);
+                    let aa = eval('(' + e.responseText + ')');
+                    // console.log(aa);
+                    let c_red = aa.data.red;
+                    let c_green = aa.data.green;
+                    let c_blue = aa.data.blue;
+                    console.log(c_red + ',' + c_green + ',' + c_blue);
+                    console.log("rgb(" + c_red + ',' + c_green + ',' + c_blue + ")");
+                    $('#divColor').css("background-color", "rgb(" + c_red + ',' + c_green + ',' + c_blue + ")")
+                }
+            });
+        }
+    </script>
+    <style>
+        #divColor {
+            width: 100%;
+            height: 200px;
+            background-color: black;
+        }
+        .btnColorGroup{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+        button{
+            width: auto;
+            height: 50px;
+            padding: 10px 20px;
+            margin: 5px 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="div1">
+        <h2>修改画布颜色</h2>
+    </div>
+
+    <div id="divColor">
+
+    </div>
+    <div class="btnColorGroup">
+        <button id="btnGetColor">获取初始颜色</button>
+        <button id="btnSetColorBrighten">变亮</button>
+        <button id="btnSetColorDarken">变暗</button>
+        <button id="btnSetColorRandom">随机</button>
+    </div>
+    
+
+</body>
+
+</html>
