@@ -1,0 +1,76 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Infrastructure;
+using Microsoft.AspNetCore.Mvc;
+using Senparc.Ncf.Service;
+using Senparc.Ncf.Utility;
+using {Namespace};
+using {Namespace}.Request;
+
+namespace Senparc.Areas.Admin.Areas.Admin.Pages
+{
+    /// <summary>
+    /// {ModuleName}
+    ///</summary>
+    public class {ClassName}_IndexModel : Senparc.Ncf.AreaBase.Admin.AdminXncfModulePageModelBase
+    {
+        private readonly IServiceProvider _serviceProvider;
+        private readonly {ClassName}Service _{CamelCaseClassName}Service;
+        public {ClassName}_IndexModel(IServiceProvider serviceProvider, {ClassName}Service {CamelCaseClassName}Service, Lazy<XncfModuleService>
+         xncfModuleService) : base(xncfModuleService)
+        {
+            _serviceProvider = serviceProvider;
+            _{CamelCaseClassName}Service = {CamelCaseClassName}Service;
+        }
+        /// <summary>
+        /// 列表
+        /// </summary>
+        /// <param name="pageIndex">页码</param>
+        /// <param name="pageSize">每页显示数量</param>
+        /// <returns></returns>
+        [Ncf.AreaBase.Admin.Filters.CustomerResource("{LowerModuleCode}-search")]
+        //public async Task<IActionResult> OnGetListAsync(int pageIndex, int pageSize)
+        public async Task<IActionResult> OnGetListAsync([FromQuery] Query{ClassName}ListReq req)
+        {
+            var seh = new SenparcExpressionHelper<{ClassName}>();
+            seh.ValueCompare.AndAlso(!string.IsNullOrEmpty(req.key), _ => _.Remark.Contains(req.key));
+            var where = seh.BuildWhereExpression();
+            var ObjectList = await _{CamelCaseClassName}Service.GetObjectListAsync(req.pageIndex, req.pageSize, where, req.orderField);
+
+            List<KeyDescription> properties = new List<KeyDescription>();
+            {KeyDescriptionList}
+            //properties.Add(new KeyDescription {  Key= "sort", Description="排序", Browsable=true, Type ="int" });
+            var propertyStr = string.Join(',', properties.Select(u => u.Key));
+
+            return Ok(new { ObjectList.TotalCount, ObjectList.PageIndex, List = ObjectList.AsEnumerable(), columnHeaders = properties });
+        }
+        /// <summary>
+        /// 新增/编辑
+		/// Handler=Save
+        /// </summary>
+        /// <returns></returns>
+        [Ncf.AreaBase.Admin.Filters.CustomerResource("{LowerModuleCode}-add", "{LowerModuleCode}-edit")]
+        public async Task<IActionResult> OnPostSaveAsync([FromBody] AddOrUpdate{ClassName}Req req)
+        {
+            await _{CamelCaseClassName}Service.CreateOrUpdateAsync(req);
+            return Ok(true);
+        }
+        /// <summary>
+        /// 删除
+		/// Handler=Delete
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        [Ncf.AreaBase.Admin.Filters.CustomerResource("{LowerModuleCode}-delete")]
+        public IActionResult OnPostDelete([FromBody] int[] ids)
+        {
+            foreach (var id in ids)
+            {
+                _{CamelCaseClassName}Service.DeleteObject(id);
+            }
+            return Ok(ids.Length);
+        }
+    }
+}
