@@ -1,0 +1,113 @@
+@page "{handler?}"
+@model Senparc.Areas.Admin.Areas.Admin.Pages.CourseCategory_IndexModel
+@addTagHelper *, Senparc.Areas.Admin
+@using System.Web.Mvc
+@{
+    ViewData["Title"] = "课程分类管理"; Layout = "_Layout_Vue";
+}
+@section Style{
+    <link href="~/css/Admin/Pages/CourseCategory/Index.css" rel="stylesheet" />
+}
+@section breadcrumbs {
+    <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+    <el-breadcrumb-item>课程分类列表</el-breadcrumb-item>
+}
+<div>
+    <div class="coursecategory-info">
+        <div class="filter-container">
+            <el-input @@keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'搜索关键字'" v-model="listQuery.key">
+            </el-input>
+            <el-button class="filter-item" v-waves icon="el-icon-search" @@click="handleFilter">搜索</el-button>
+            <el-button class="filter-item" v-has="['admin-add']" type="primary" icon="el-icon-plus" @@click="handleEdit">增加</el-button>
+        </div>
+
+        <el-table :data="tableData"
+                  style="width: 100%;margin-bottom: 20px;"
+                  row-key="id"
+                  border
+                  default-expand-all
+                  :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+            <el-table-column type="selection" align="center" width="55"></el-table-column>
+            <template v-for="(headerItem,index) in headerList">
+                <el-table-column :label="headerItem.description" v-if="headerItem.browsable" min-width="120px" :key="index">
+                    <template slot-scope="scope">
+                        <span v-if="headerItem.type=='DateTime'">
+                            {{formaTableTime(scope.row[headerItem.key])}}
+                        </span>
+                        <span v-else-if="headerItem.type=='byte'">
+                            {{scope.row[headerItem.key]==1?"是":"否"}}
+                        </span>
+                        <span  v-else-if="headerItem.type=='bool'">
+                            {{scope.row[headerItem.key]==true?"是":"否"}}
+                        </span>
+                        <span v-else>
+                            {{scope.row[headerItem.key]}}
+                        </span>
+                    </template>
+                </el-table-column>
+            </template>
+            <el-table-column label="操作" align="center" min-width="200px" max-width="400px">
+                <template slot-scope="scope">
+                    <el-button size="mini"
+                               type="primary"
+                               @@click="handleEdit(scope.$index, scope.row,'edit')">编辑</el-button>
+                    <el-button size="mini"
+                               type="primary"
+                               v-if="scope.row.children"
+                               @@click="handleEdit(scope.$index, scope.row,'addNext')">增加下一级</el-button>
+                    <template v-has="['courseuserrecord-delete']">
+                        <el-popconfirm placement="top" title="确认删除此条数据吗？" @@on-confirm="handleDelete(scope.$index, scope.row)">
+                            <el-button size="mini" type="danger" slot="reference">删除</el-button>
+                        </el-popconfirm>
+                    </template>
+                </template>
+            </el-table-column>
+        </el-table>
+        <!--编辑、新增 -->
+        <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
+            <el-form ref="dataForm"
+                     :rules="dialog.rules"
+                     :model="dialog.data"
+                     label-position="left"
+                     label-width="100px"
+                     style="max-width: 400px; margin-left:50px;">
+
+                <el-form-item size="small" :label="'分类名'" prop="name" v-if="Object.keys(dialog.data).indexOf('name')>=0">
+                    <el-input v-model="dialog.data.name"></el-input>
+                </el-form-item>
+                <el-form-item label="父级菜单">
+                    <el-cascader v-model="dialog.data.parent_id"
+                                 :options="tableData"
+                                 clearable
+                                 :props="{ checkStrictly: dialog.checkStrictly,label: 'name',value:'id'}">
+                    </el-cascader>
+                </el-form-item>
+
+                <el-form-item size="small" label="是否显示" prop="is_show" v-if="Object.keys(dialog.data).indexOf('is_show')>=0">
+                    <el-switch v-model="dialog.data.is_show"></el-switch>
+                </el-form-item>
+
+                <el-form-item size="small" :label="'升序'" prop="sort" v-if="Object.keys(dialog.data).indexOf('sort')>=0">
+                    <el-input v-model="dialog.data.sort"></el-input>
+                </el-form-item>
+
+                <el-form-item size="small" :label="'备注'" prop="adminRemark" v-if="Object.keys(dialog.data).indexOf('adminRemark')>=0">
+                    <el-input v-model="dialog.data.adminRemark"></el-input>
+                </el-form-item>
+
+                <el-form-item size="small" :label="'说明'" prop="remark" v-if="Object.keys(dialog.data).indexOf('remark')>=0">
+                    <el-input v-model="dialog.data.remark"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @@click="dialog.visible = false">取 消</el-button>
+                <el-button :loading="dialog.updateLoading" type="primary" @@click="updateData">确 认</el-button>
+            </div>
+        </el-dialog>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/js/Admin/Pages/CourseCategory/Index.js"></script>
+}
+

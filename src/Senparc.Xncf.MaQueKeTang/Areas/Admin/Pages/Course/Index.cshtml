@@ -1,0 +1,219 @@
+@page "{handler?}"
+@model Senparc.Areas.Admin.Areas.Admin.Pages.Course_IndexModel
+@addTagHelper *, Senparc.Areas.Admin
+@using System.Web.Mvc
+@{
+    ViewData["Title"] = "课程管理"; Layout = "_Layout_Vue";
+}
+@section Style{
+    <link href="~/css/Admin/Pages/Course/Index.css" rel="stylesheet" />
+    <style type="text/css">
+        .tox-silver-sink {
+            z-index: 30000000;
+        }
+    </style>
+}
+@section breadcrumbs {
+    <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+    <el-breadcrumb-item>课程列表</el-breadcrumb-item>
+}
+<div>
+    <div class="course-info">
+        <div class="filter-container">
+            <el-input @@keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'搜索关键字'" v-model="listQuery.key">
+            </el-input>
+            <el-button class="filter-item" v-waves icon="el-icon-search" @@click="handleFilter">搜索</el-button>
+            <el-button class="filter-item" v-has="['course-add']" type="primary" icon="el-icon-plus" @@click="handleEdit">增加</el-button>
+        </div>
+        <el-table :data="tableData"
+                  border
+                  style="width: 100%">
+            <el-table-column type="selection" align="center" width="55"></el-table-column>
+            <template v-for="(headerItem,index) in headerList">
+                <el-table-column :label="headerItem.description" v-if="headerItem.browsable" min-width="120px" :key="index">
+                    <template slot-scope="scope">
+                        <span>{{headerItem.type=="DateTime"?formaTableTime(scope.row[headerItem.key]):scope.row[headerItem.key]}}</span>
+                    </template>
+                </el-table-column>
+            </template>
+            <el-table-column label="操作" align="center" min-width="200px" max-width="400px">
+                <template slot-scope="scope">
+                    <el-button size="mini"
+                               type="primary"
+                               v-has="['course-edit']"
+                               @@click="handleChapter(scope.$index, scope.row)">章节</el-button>
+                    <el-button size="mini"
+                               type="primary"
+                               v-has="['course-edit']"
+                               @@click="handleAttachment(scope.$index, scope.row)">附件</el-button>
+                    <el-button size="mini"
+                               type="primary"
+                               v-has="['course-edit']"
+                               @@click="handleUserRecord(scope.$index, scope.row)">用户观看</el-button>
+                    <el-button size="mini"
+                               type="primary"
+                               v-has="['course-edit']"
+                               @@click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                    <template v-has="['course-delete']">
+                        <el-popconfirm placement="top" title="确认删除此条数据吗？" @@on-confirm="handleDelete(scope.$index, scope.row)">
+                            <el-button size="mini" type="danger" slot="reference">删除</el-button>
+                        </el-popconfirm>
+                    </template>
+                </template>
+            </el-table-column>
+        </el-table>
+        <pagination :total="paginationQuery.total"
+                    :page.sync="listQuery.pageIndex"
+                    :limit.sync="listQuery.pageSize"
+                    @@pagination="getList"></pagination>
+        <!--编辑、新增 -->
+        <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false" @@opened="initTinymce">
+            <el-form ref="dataForm"
+                     :rules="dialog.rules"
+                     :model="dialog.data"
+                     label-position="top"
+                     label-width="100px"
+                     style="max-width: 800px; margin-left:50px;">
+                <el-form-item size="small" :label="'用户Id'" prop="accountId" v-if="Object.keys(dialog.data).indexOf('accountId')>=0">
+                    <el-input v-model="dialog.data.accountId"></el-input>
+                </el-form-item>
+
+                <el-row type="flex" class="row-bg">
+                    <el-col :span="6">
+                        <el-form-item size="small" :label="'课程分类'" prop="category_id" v-if="Object.keys(dialog.data).indexOf('category_id')>=0">
+                            <el-cascader v-model="dialog.data.category_id"
+                                         :options="tableDataCategory"
+                                         clearable
+                                         :props="{ checkStrictly: dialog.checkStrictly,label: 'name',value:'id'}">
+                            </el-cascader>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item size="small" :label="'收费'" prop="charge" v-if="Object.keys(dialog.data).indexOf('charge')>=0">
+                            <el-input-number v-model="dialog.data.charge" :precision="2" :step="0.1"></el-input-number>
+                        </el-form-item>
+
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item size="small" :label="'上线时间'" prop="published_at" v-if="Object.keys(dialog.data).indexOf('published_at')>=0">
+                            <el-date-picker v-model="dialog.data.published_at"
+                                            type="datetime"
+                                            placeholder="选择上线时间"
+                                            align="left">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="2">
+                        <el-form-item size="small" :label="'显示'" prop="is_show" v-if="Object.keys(dialog.data).indexOf('is_show')>=0">
+                            <el-switch v-model="dialog.data.is_show"></el-switch>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="2">
+                        <el-form-item size="small" :label="'推荐'" prop="is_rec" v-if="Object.keys(dialog.data).indexOf('is_rec')>=0">
+                            <el-switch v-model="dialog.data.is_rec"></el-switch>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex" class="row-bg">
+                    <el-col :span="18">
+                        <el-form-item size="small" :label="'课程名'" prop="title" v-if="Object.keys(dialog.data).indexOf('title')>=0">
+                            <el-input v-model="dialog.data.title"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item size="small" :label="'评论开关'" prop="comment_status" v-if="Object.keys(dialog.data).indexOf('comment_status')>=0">
+                            <el-select v-model="dialog.data.comment_status" placeholder="请选择">
+                                <el-option v-for="item in options"
+                                           :key="item.value"
+                                           :label="item.label"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex" class="row-bg">
+                    <el-col :span="24">
+                        <el-form-item size="small" :label="'slug'" prop="slug" v-if="Object.keys(dialog.data).indexOf('slug')>=0">
+                            <el-input v-model="dialog.data.slug"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex" class="row-bg">
+                    <el-col :span="24">
+                        <el-form-item size="small" :label="'封面'" prop="thumb" v-if="Object.keys(dialog.data).indexOf('thumb')>=0">
+                            <el-upload class="avatar-uploader"
+                                       action="https://jsonplaceholder.typicode.com/posts/"
+                                       :show-file-list="false"
+                                       :on-success="handleAvatarSuccess"
+                                       :before-upload="beforeAvatarUpload">
+                                <img v-if="Object.keys(dialog.data).indexOf('thumb')>=0" :src="dialog.data.thumb" class="avatar">
+                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            </el-upload>
+                        </el-form-item>
+
+                    </el-col>
+                </el-row>
+                <el-row type="flex" class="row-bg">
+                    <el-col :span="24">
+                        <el-form-item size="small" :label="'简短介绍'" prop="short_description" v-if="Object.keys(dialog.data).indexOf('short_description')>=0">
+                            <el-input type="textarea" :rows="2" v-model="dialog.data.short_description"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex" class="row-bg">
+                    <el-col :span="24">
+                        <el-form-item size="small" :label="'简介原始内容'" prop="original_desc" v-if="Object.keys(dialog.data).indexOf('original_desc')>=0">
+                            <textarea v-model="dialog.data.original_desc" id="mytextarea"></textarea>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg">
+                    <el-col :span="24">
+                        <el-form-item size="small" :label="'SEO描述'" prop="seo_description" v-if="Object.keys(dialog.data).indexOf('seo_description')>=0">
+                            <el-input type="textarea" :rows="2" v-model="dialog.data.seo_description"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex" class="row-bg">
+                    <el-col :span="24">
+                        <el-form-item size="small" :label="'SEO关键字'" prop="seo_keywords" v-if="Object.keys(dialog.data).indexOf('seo_keywords')>=0">
+                            <el-input type="textarea" :rows="2" v-model="dialog.data.seo_keywords"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                @*<el-form-item size="small" :label="'简介渲染后的内容'" prop="render_desc" v-if="Object.keys(dialog.data).indexOf('render_desc')>=0">
+                        <el-input type="textarea" :rows="2" v-model="dialog.data.render_desc"></el-input>
+                    </el-form-item>
+
+                    <el-form-item size="small" :label="'免费,0否,1是'" prop="is_free" v-if="Object.keys(dialog.data).indexOf('is_free')>=0">
+                        <el-input v-model="dialog.data.is_free"></el-input>
+                    </el-form-item>
+
+                    <el-form-item size="small" :label="'备注'" prop="adminRemark" v-if="Object.keys(dialog.data).indexOf('adminRemark')>=0">
+                        <el-input v-model="dialog.data.adminRemark"></el-input>
+                    </el-form-item>
+
+                    <el-form-item size="small" :label="'说明'" prop="remark" v-if="Object.keys(dialog.data).indexOf('remark')>=0">
+                        <el-input v-model="dialog.data.remark"></el-input>
+                    </el-form-item>*@
+
+                <el-form-item size="small" :label="'Id'" prop="id" v-if="Object.keys(dialog.data).indexOf('id')>=0">
+                    <el-input v-model="dialog.data.id"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @@click="dialog.visible = false">取 消</el-button>
+                <el-button :loading="dialog.updateLoading" type="primary" @@click="updateData">确 认</el-button>
+                @*<el-button size="mini" v-if="dialogStatus=='create'" type="primary" @@click="createData">确认</el-button>*@
+                @*<el-button size="mini" v-else type="primary" @@click="updateData">确认</el-button>*@
+            </div>
+        </el-dialog>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/js/Admin/Pages/Course/Index.js"></script>
+}
+

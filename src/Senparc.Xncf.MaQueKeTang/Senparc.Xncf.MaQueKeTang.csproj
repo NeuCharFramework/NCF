@@ -1,0 +1,187 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+		<Version>1.0</Version>
+		<AssemblyName>Senparc.Xncf.MaQueKeTang</AssemblyName>
+		<RootNamespace>Senparc.Xncf.MaQueKeTang</RootNamespace>
+		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+		<Description>模块的说明</Description>
+		<Copyright>Senparc</Copyright>
+		<PackageTags>Senparc,NeuCharFramework,NCF,Senparc.Xncf.MaQueKeTang</PackageTags>
+		<Authors>Senparc</Authors>
+		<Owners>Senparc</Owners>
+		<!-- <PackageLicenseUrl>https://github.com/NeuCharFramework/NcfPackageSources/blob/master/LICENSE</PackageLicenseUrl> -->
+		<Title>麻雀课堂</Title>
+		<!--<ProjectUrl> https://github.com/NeuCharFramework/NCF</ProjectUrl>
+    <PackageProjectUrl>https://github.com/NeuCharFramework/NcfPackageSources</PackageProjectUrl>
+    <PackageIconUrl>https://sdk.weixin.senparc.com/Images/logo-square-ncf.jpg</PackageIconUrl>-->
+		<PackageReleaseNotes>
+			v1.0 创世
+		</PackageReleaseNotes>
+		<RepositoryUrl> https://github.com/NeuCharFramework/NcfPackageSources</RepositoryUrl>
+		<Configurations>Debug;Release;Test</Configurations>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<OutputPath>..\..\..\BuildOutPut</OutputPath>
+		<!--<DocumentationFile>..\..\..\BuildOutPut\Senparc.Xncf.MaQueKeTang.XML</DocumentationFile>
+		<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<ErrorReport>prompt</ErrorReport>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>-->
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.117-beta1" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.6.114-beta1" />
+		<ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
+		<ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
+		<None Include="App_Data\SenparcTraceLog\*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="Filters\**" />
+		<Content Remove="Filters\**" />
+		<EmbeddedResource Remove="Filters\**" />
+		<None Remove="Filters\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Remove="wwwroot\css\Admin\Pages\VideoUserComment\Index.css" />
+	  <Content Remove="wwwroot\css\Admin\Pages\VideoUserWatchRecord\Index.css" />
+	  <Content Remove="wwwroot\css\Admin\Pages\VideoUser\Index.css" />
+	  <Content Remove="wwwroot\css\Admin\Pages\Video\Index.css" />
+	  <Content Remove="wwwroot\js\Admin\Pages\VideoUserComment\Index.js" />
+	  <Content Remove="wwwroot\js\Admin\Pages\VideoUserWatchRecord\Index.js" />
+	  <Content Remove="wwwroot\js\Admin\Pages\VideoUser\Index.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Areas\Admin\Pages\CourseAttach\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\CourseCategory\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\CourseChapter\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\CourseComment\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\CourseUserLike\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\CourseUserRecord\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\CourseUser\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\Course\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\MaQueKeTang\DatabaseSample.cshtml" />
+	  <None Include="Areas\Admin\Pages\MaQueKeTang\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\Shared\_SideMenu.cshtml" />
+	  <None Include="Areas\Admin\Pages\Shared\_ViewImports.cshtml" />
+	  <None Include="Areas\Admin\Pages\Shared\_ViewStart.cshtml" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\Pages\Video\Index.css" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\Video\Index.js" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\Pages\VideoUserComment\Index.css" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\Pages\VideoUserWatchRecord\Index.css" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\Pages\VideoUser\Index.css" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\CourseAttach\Index.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\CourseComment\Index.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\CourseUserLike\Index.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\CourseUserRecord\Index.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\CourseUser\Index.js" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\Pages\CourseAttach\Index.css" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\Pages\CourseCategory\Index.css" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\Pages\CourseComment\Index.css" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\Pages\CourseUserLike\Index.css" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\Pages\CourseUserRecord\Index.css" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\Pages\CourseUser\Index.css" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\Course\Index.js" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\Pages\CourseChapter\Index.css" />
+	  <EmbeddedResource Include="wwwroot\css\Admin\Pages\Course\Index.css" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\CourseCategory\Index.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\CourseChapter\Index.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\VideoUserComment\Index.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\VideoUserWatchRecord\Index.js" />
+	  <EmbeddedResource Include="wwwroot\js\Admin\Pages\VideoUser\Index.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\icons\default\icons.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\jquery.tinymce.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\langs\readme.md" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\license.txt" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\advlist\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\anchor\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\autolink\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\autoresize\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\autosave\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\bbcode\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\charmap\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\codesample\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\code\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\colorpicker\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\contextmenu\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\directionality\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\emoticons\js\emojiimages.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\emoticons\js\emojiimages.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\emoticons\js\emojis.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\emoticons\js\emojis.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\emoticons\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\fullpage\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\fullscreen\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\help\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\hr\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\imagetools\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\image\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\importcss\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\insertdatetime\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\legacyoutput\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\link\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\lists\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\media\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\nonbreaking\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\noneditable\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\pagebreak\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\paste\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\preview\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\print\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\quickbars\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\save\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\searchreplace\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\spellchecker\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\tabfocus\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\table\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\template\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\textcolor\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\textpattern\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\toc\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\visualblocks\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\visualchars\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\plugins\wordcount\plugin.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\content\dark\content.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\content\default\content.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\content\document\content.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\content\writer\content.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\ui\oxide-dark\content.inline.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\ui\oxide-dark\content.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\ui\oxide-dark\content.mobile.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\ui\oxide-dark\fonts\tinymce-mobile.woff" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\ui\oxide-dark\skin.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\ui\oxide-dark\skin.mobile.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\ui\oxide-dark\skin.shadowdom.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\ui\oxide\content.inline.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\ui\oxide\content.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\ui\oxide\content.mobile.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\ui\oxide\fonts\tinymce-mobile.woff" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\ui\oxide\skin.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\ui\oxide\skin.mobile.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\skins\ui\oxide\skin.shadowdom.min.css" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\themes\mobile\theme.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\themes\silver\theme.min.js" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\tinymce.d.ts" />
+	  <EmbeddedResource Include="wwwroot\js\tinymce\tinymce.min.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.1" />
+		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
+		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />
+	</ItemGroup>
+</Project>
