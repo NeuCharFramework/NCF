@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Infrastructure;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Repository;
 using Senparc.Ncf.Service;
@@ -20,7 +21,8 @@ namespace Senparc.Xncf.CodeBuilder
             UserBuilderLog entity;
             if (req.Id == 0)
             {
-                entity = new UserBuilderLog(req);
+                //entity = new UserBuilderLog(req);
+                entity= req.MapTo<UserBuilderLog>();
                 entity.AddTime = DateTime.Now;
             }
             else

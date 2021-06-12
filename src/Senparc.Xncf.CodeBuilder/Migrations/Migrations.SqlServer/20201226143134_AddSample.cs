@@ -94,6 +94,7 @@ namespace Senparc.Xncf.CodeBuilder.Migrations.Migrations.SqlServer
                  name: "Senparc_CodeBuilder_UserBuilderLog",
                  columns: table => new
                  {
+                     Id = table.Column<int>(nullable: false, comment: "Id").Annotation("SqlServer: Identity", "1, 1"),
                      Flag = table.Column<bool>(nullable: false, comment: "是否删除"),
                      AddTime = table.Column<DateTime>(nullable: false, comment: ""),
                      LastUpdateTime = table.Column<DateTime>(nullable: false, comment: "最后更新时间"),
@@ -105,8 +106,7 @@ namespace Senparc.Xncf.CodeBuilder.Migrations.Migrations.SqlServer
                      TableName = table.Column<string>(nullable: true, comment: "表名"),
                      ModuleName = table.Column<string>(nullable: true, comment: "模块名称"),
                      Path = table.Column<string>(nullable: true, comment: "存放路径"),
-                     Count = table.Column<int>(nullable: true, comment: "发送次数"),
-                     Id = table.Column<int>(nullable: false, comment: "Id").Annotation("SqlServer: Identity", "1, 1")
+                     Count = table.Column<int>(nullable: true, comment: "发送次数")
                  },
                  constraints: table =>
                  {
@@ -120,6 +120,8 @@ namespace Senparc.Xncf.CodeBuilder.Migrations.Migrations.SqlServer
                 name: "Senparc_CodeBuilder_BuilderTable");
             migrationBuilder.DropTable(
                 name: "Senparc_CodeBuilder_BuilderTableColumn");
+            migrationBuilder.DropTable(
+                name: "Senparc_CodeBuilder_UserBuilderLog");
         }
     }
 }

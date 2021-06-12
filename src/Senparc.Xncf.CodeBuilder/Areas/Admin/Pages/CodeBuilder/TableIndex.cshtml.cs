@@ -44,12 +44,12 @@ namespace Senparc.Xncf.CodeBuilder.Areas.Admin.Pages.Template
             return Ok(true);
         }
 
-        #region Êý¾Ý±íÉú³ÉBegin
+        #region ï¿½ï¿½ï¿½Ý±ï¿½ï¿½ï¿½ï¿½ï¿½Begin
 
         /// <summary>
-        /// ´´½¨Ò»¸ö´úÂëÉú³ÉµÄÄ£°æ
-        /// <para>»á×Ô¶¯´´½¨×Ö¶ÎÃ÷Ï¸ÐÅÏ¢£¬Ìí¼Ó³É¹¦ºóÊ¹ÓÃBuilderTableColumnsController.Load¼ÓÔØ×Ö¶ÎÃ÷Ï¸</para>
-        /// <returns>·µ»ØÌí¼ÓµÄÄ£°æID</returns>
+        /// ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éµï¿½Ä£ï¿½ï¿½
+        /// <para>ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½Ó³É¹ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½BuilderTableColumnsController.Loadï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½Ï¸</para>
+        /// <returns>ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½Ä£ï¿½ï¿½ID</returns>
         /// </summary>
         public async Task<IActionResult> OnPostAddAsync([FromBody] AddOrUpdateBuilderTableReq builderTableDto)
         {
@@ -68,7 +68,7 @@ namespace Senparc.Xncf.CodeBuilder.Areas.Admin.Pages.Template
         }
 
         /// <summary>
-        /// Ö»ÐÞ¸Ä±íÐÅÏ¢£¬²»»á¸üÐÂÃ÷Ï¸
+        /// Ö»ï¿½Þ¸Ä±ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -111,7 +111,7 @@ namespace Senparc.Xncf.CodeBuilder.Areas.Admin.Pages.Template
             });
         }
         /// <summary>
-        /// ÅúÁ¿É¾³ý´úÂëÉú³ÉÄ£°æºÍ¶ÔÓ¦µÄ×Ö¶ÎÐÅÏ¢
+        /// ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½Í¶ï¿½Ó¦ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½Ï¢
         /// </summary>
         public async Task<IActionResult> OnPostDeleteAsync([FromBody] int[] ids)
         {
@@ -132,7 +132,7 @@ namespace Senparc.Xncf.CodeBuilder.Areas.Admin.Pages.Template
 
 
         /// <summary>
-        /// Ò»¼üÉú³ÉËùÓÐ´úÂë
+        /// Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -162,13 +162,13 @@ namespace Senparc.Xncf.CodeBuilder.Areas.Admin.Pages.Template
                 addOrUpdateUserBuilderLogReq.Id = 0;
                 addOrUpdateUserBuilderLogReq.TableName = entity.TableName;
                 addOrUpdateUserBuilderLogReq.ModuleName = entity.ModuleName;
-                await _userBuilderLogService.CreateOrUpdateAsync(addOrUpdateUserBuilderLogReq);
+                //await _userBuilderLogService.CreateOrUpdateAsync(addOrUpdateUserBuilderLogReq);
             }
             return Ok(result);
         }
 
         /// <summary>
-        /// ´´½¨ÊµÌå
+        /// ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -188,7 +188,7 @@ namespace Senparc.Xncf.CodeBuilder.Areas.Admin.Pages.Template
         }
 
         /// <summary>
-        /// ´´½¨ÒµÎñÂß¼­²ã
+        /// ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ß¼ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -208,7 +208,7 @@ namespace Senparc.Xncf.CodeBuilder.Areas.Admin.Pages.Template
         }
 
         /// <summary>
-        /// ´´½¨vue½çÃæ
+        /// ï¿½ï¿½ï¿½ï¿½vueï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -230,6 +230,6 @@ namespace Senparc.Xncf.CodeBuilder.Areas.Admin.Pages.Template
             return Ok(result);
         }
 
-        #endregion Êý¾Ý±íÉú³ÉEnd
+        #endregion ï¿½ï¿½ï¿½Ý±ï¿½ï¿½ï¿½ï¿½ï¿½End
     }
 }

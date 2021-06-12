@@ -186,6 +186,45 @@ namespace Senparc.Xncf.CodeBuilder.Migrations.Migrations.SqlServer
                 b.HasKey("Id");
                 b.ToTable("Senparc_CodeBuilder_BuilderTable");
             });
+            modelBuilder.Entity("Senparc.Xncf.CodeBuilder.UserBuilderLog", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int")
+                    .UseIdentityColumn();
+                b.Property<bool>("Flag")
+                   .HasColumnType("bit");
+                b.Property<DateTime>("AddTime")
+                    .HasColumnType("datetime2");
+                b.Property<DateTime>("LastUpdateTime")
+                   .HasColumnType("datetime2");
+                b.Property<string>("AdminRemark")
+                   .HasMaxLength(300)
+                   .HasColumnType("nvarchar(300)");
+                b.Property<string>("Remark")
+                   .HasMaxLength(300)
+                   .HasColumnType("nvarchar(300)");
+                b.Property<string>("AdditionNote")
+                    .HasColumnType("nvarchar(max)");
+                b.Property<int>("TenantId")
+                  .HasColumnType("int");
+                b.Property<string>("UserId")
+                   .HasMaxLength(300)
+                   .HasColumnType("nvarchar(300)");
+                b.Property<string>("TableName")
+                   .HasMaxLength(300)
+                   .HasColumnType("nvarchar(300)");
+                b.Property<string>("ModuleName")
+                   .HasMaxLength(300)
+                   .HasColumnType("nvarchar(300)");
+                b.Property<string>("Path")
+                   .HasMaxLength(300)
+                   .HasColumnType("nvarchar(300)");
+                b.Property<int>("Count")
+                  .HasColumnType("int");
+                b.HasKey("Id");
+                b.ToTable("Senparc_CodeBuilder_UserBuilderLog");
+            });
             #endregion end 自定义数据库表
 
 
