@@ -1,0 +1,86 @@
+﻿@page "{handler?}"
+@model Senparc.Areas.Admin.Areas.Admin.Pages.{ClassName}_IndexModel
+@addTagHelper *, Senparc.Areas.Admin
+@using System.Web.Mvc
+@{
+    ViewData["Title"] = "{ModuleName}管理"; Layout = "_Layout_Vue";
+}
+@section Style{
+<link href="~/css/Admin/Pages/{ModuleCode}/Index.css" rel="stylesheet" />
+}
+@section breadcrumbs {
+<el-breadcrumb-item>系统管理</el-breadcrumb-item>
+<el-breadcrumb-item>{ModuleName}列表</el-breadcrumb-item>
+}
+<div>
+    <div class="{LowerModuleCode}-info">
+        <div class="filter-container">
+            <el-input @@keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'搜索关键字'" v-model="listQuery.key">
+            </el-input>
+            <el-button class="filter-item" v-waves icon="el-icon-search" @@click="handleFilter">搜索</el-button>
+            <el-button class="filter-item" v-has="['{LowerModuleCode}-add']" type="primary" icon="el-icon-plus" @@click="handleEdit">增加</el-button>
+        </div>
+        <el-table :data="tableData"
+                  border
+                  style="width: 100%">
+            <el-table-column type="selection" align="center" width="55"></el-table-column>
+            <template v-for="(headerItem,index) in headerList">
+                <el-table-column :label="headerItem.description" v-if="headerItem.browsable" min-width="120px" :key="index">
+                    <template slot-scope="scope">
+                        <span v-if="headerItem.type=='DateTime'">
+                            {{formaTableTime(scope.row[headerItem.key])}}
+                        </span>
+                        <span v-else-if="headerItem.type=='byte'">
+                            {{scope.row[headerItem.key]==1?"是":"否"}}
+                        </span>
+                        <span v-else-if="headerItem.type=='bool'">
+                            {{scope.row[headerItem.key]==true?"是":"否"}}
+                        </span>
+                        <span v-else>
+                            {{scope.row[headerItem.key]}}
+                        </span>
+                    </template>
+                </el-table-column>
+            </template>
+            <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                    <el-button size="mini"
+                               type="primary"
+                               v-has="['{LowerModuleCode}-edit']"
+                               @@click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                    <template v-has="['{LowerModuleCode}-delete']">
+                        <el-popconfirm placement="top" title="确认删除此条数据吗？" @@on-confirm="handleDelete(scope.$index, scope.row)">
+                            <el-button size="mini" type="danger" slot="reference">删除</el-button>
+                        </el-popconfirm>
+                    </template>
+                </template>
+            </el-table-column>
+        </el-table>
+        <pagination :total="paginationQuery.total"
+                    :page.sync="listQuery.pageIndex"
+                    :limit.sync="listQuery.pageSize"
+                    @@pagination="getList"></pagination>
+        <!--编辑、新增 -->
+        <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
+            <el-form ref="dataForm"
+                     :rules="dialog.rules"
+                     :model="dialog.data"
+                     label-position="left"
+                     label-width="100px"
+                     style="max-width: 400px; margin-left:50px;">
+                {DialogFormItem}
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @@click="dialog.visible = false">取 消</el-button>
+                <el-button :loading="dialog.updateLoading" type="primary" @@click="updateData">确 认</el-button>
+                @*<el-button size="mini" v-if="dialogStatus=='create'" type="primary" @@click="createData">确认</el-button>*@
+                @*<el-button size="mini" v-else type="primary" @@click="updateData">确认</el-button>*@
+            </div>
+        </el-dialog>
+    </div>
+</div>
+
+@section scripts{
+<script src="~/js/Admin/Pages/{ModuleCode}/Index.js"></script>
+}
+

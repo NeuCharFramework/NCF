@@ -1,0 +1,1683 @@
+﻿@page
+@model Senparc.Xncf.CodeBuilder.Areas.Admin.Pages.Template.TableIndexModel
+@{
+    ViewData["Title"] = "代码生成器"; Layout = "_Layout_Vue";
+}
+@section HeaderContent{
+    <style type="text/css">
+        .app-container {
+            padding: 20px;
+        }
+
+        .app-container {
+            background-color: #efefef;
+            padding: 10px;
+            height: 100%;
+        }
+
+        // flex布局
+
+        .flex-column {
+            height: 100%;
+            flex-direction: column;
+            overflow: hidden;
+            flex-basis: 0%;
+            display: flex;
+        }
+
+        .flex-row {
+            flex-direction: row;
+            flex-basis: 0%;
+            display: flex;
+        }
+
+        .flex-item {
+            flex: 1 !important;
+            flex-basis: 0% !important;
+            overflow: auto;
+        }
+
+        .fh {
+            height: 100%;
+        }
+
+        .pagination-container {
+            background: #fff;
+            padding: 10px !important;
+            border-left: 1px solid #efefef;
+            border-right: 1px solid #efefef;
+        }
+
+        table thead th {
+            text-align: center !important;
+        }
+
+        .el-table td {
+            padding: 3px 0 !important;
+        }
+
+        .components-container {
+            margin: 30px 50px;
+            position: relative;
+        }
+
+        .el-table th {
+            padding: 5px 0 !important;
+        }
+
+        .is-in-pagination {
+            margin-left: 5px;
+        }
+
+        .body-small .el-card__body {
+            padding: 10px 5px;
+        }
+
+        .ls-border {
+            border: 1px solid #EBEEF5;
+        }
+
+        .card-body-none .el-card__body {
+            padding: 0 !important;
+            margin: -1px !important;
+            padding-bottom: 10px !important;
+        }
+
+        .el-card__header {
+            height: 34px;
+            line-height: 34px;
+            width: 100%;
+            color: #666;
+            padding: 0 !important;
+            font-weight: bold;
+            padding-left: 9px !important;
+            font-size: 12px;
+        }
+
+        .el-dialog__header {
+            height: 35px;
+            line-height: 35px;
+            border-radius: 4px 4px 0 0;
+            border-bottom: 1px solid #eee;
+            overflow: hidden;
+            background-color: #f8f8f8;
+            padding: 0 20px !important;
+        }
+
+        .el-dialog__title {
+            line-height: 34px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .el-dialog__headerbtn {
+            color: #333;
+            top: 11.5px;
+            right: 11.5px;
+        }
+
+        .el-dialog__footer {
+            height: 50px;
+            width: 100%;
+            text-align: right;
+            padding: 0px 10px !important;
+            border-top: 1px solid #eee;
+            border-radius: 0 0 4px 4px;
+            background-color: #f8f8f8;
+            line-height: 50px;
+        }
+
+        .el-form {
+            padding-right: 20px;
+            padding-top: 10px;
+        }
+
+        .el-dialog__body {
+            padding: 10px !important;
+        }
+
+        .el-form-item__label {
+            font-size: 12px !important;
+            font-weight: normal !important;
+        }
+
+        .el-form-item.el-form-item--small {
+            margin-bottom: 8px;
+        }
+
+        .el-form-item.is-error.is-required.el-form-item--small {
+            margin-bottom: 18px;
+        }
+    </style>
+}
+
+@section breadcrumbs {
+    <el-breadcrumb-item>扩展模块</el-breadcrumb-item>
+    <el-breadcrumb-item>代码生成器</el-breadcrumb-item>
+    <el-breadcrumb-item>代码生成</el-breadcrumb-item>
+}
+
+<div>
+    <div class="flex-column">
+        <sticky :className="'sub-navbar'">
+            <div class="filter-container">
+                <el-input style="width: 200px;" class="filter-item" placeholder="名称">
+                </el-input>
+                <el-button class="filter-item" v-waves icon="el-icon-search">搜索</el-button>
+                <el-button class="filter-item edit-button" v-waves icon="el-icon-plus" @@click="handleEdit('','','add')">添加</el-button>
+                <el-button class="filter-item edit-button delete-button" v-waves icon="el-icon-delete" @@click="handleEdit('','','edit')">编辑</el-button>
+                <el-button class="filter-item edit-button delete-button" v-waves icon="el-icon-delete" @@click="handleEdit('','','btnDel')">删除</el-button>
+                <el-button class="filter-item edit-button delete-button" v-waves icon="el-icon-delete" @@click="handleEdit('','','btnCreateCode')">一键生成</el-button>
+                @*<el-button class="filter-item edit-button delete-button" v-waves icon="el-icon-delete" @@click="handleEdit('','','btnCreateEntity')">生成实体</el-button>*@
+                @*<el-button class="filter-item edit-button delete-button" v-waves icon="el-icon-delete" @@click="handleEdit('','','btnCreateBusiness')">生成业务代码</el-button>*@
+                @*<el-button class="filter-item edit-button delete-button" v-waves icon="el-icon-delete" @@click="handleEdit('','','btnCreateVue')">生成VUE页面</el-button>*@
+            </div>
+        </sticky>
+        <div class="app-container flex-item flex-column">
+            <div class="flex-item">
+                <el-card shadow="nerver" class="demo-card fh">
+                    <el-table ref="multipleTable" id="firstCard" :key='tableKey' :data="mainList" v-loading="listLoading" border
+                              tooltip-effect="dark" style="width: 100%;" height="300px" @@row-click="rowClickFirstTable">
+                        <el-table-column width="55" align="center">
+                            <template slot-scope="scope">
+                                <el-radio :label="scope.row.id" v-model="radio">{{''}}</el-radio>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="tableName" label="表名" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="comment" label="描述" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="detailTableName" label="子表名称" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="detailComment" label="子表描述" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="className" label="实体类名称" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="namespace" label="命名空间" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="moduleCode" label="模块标识" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="moduleName" label="模块名称" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="folder" label="vue根目录" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="options" label="其它选项" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="typeName" label="分类名称" show-overflow-tooltip></el-table-column>
+                    </el-table>
+                    <pagination v-show="firstTotal>0" :total="firstTotal" :page.sync="firstQuery.page"
+                                :limit.sync="firstQuery.limit" @@pagination="handleCurrentChange" />
+                </el-card>
+            </div>
+            <el-row class="flex-item">
+                <el-col :span="showTitleDialog ? 12 : 0" class="fh form-card">
+                    <el-card shadow="nerver" class="demo-card fh">
+                        <div slot="header">
+                            <span v-if="radio == ''">表信息</span>
+                            <span v-else>{{tableName}}表信息</span>
+                        </div>
+                        <el-form :rules="mainRules" ref="dataForm" :model="firstTemp" label-position="right" label-width="140px"
+                                 style="height:calc(100% - 34px);overflow: auto;">
+                            <el-row>
+                                <el-col :span="12" class="hide">
+                                    <el-form-item size="mini" :label="'id'" prop="id">
+                                        <el-input v-model="firstTemp.id" :disabled="!editModel"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item size="mini" :label="'表名'" prop="tableName">
+                                        <el-input v-model="firstTemp.tableName" :disabled="!editModel"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item size="mini" :label="'命名空间'" prop="namespace">
+                                        <el-input v-model="firstTemp.namespace" :disabled="!editModel"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item size="mini" :label="'模块标识'" prop="moduleCode">
+                                        <el-input v-model="firstTemp.moduleCode" :disabled="!editModel"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item size="mini" :label="'模块名称'" prop="moduleName">
+                                        <el-input v-model="firstTemp.moduleName" :disabled="!editModel"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item size="mini" :label="'实体类名称'" prop="className">
+                                        <el-input v-model="firstTemp.className" :disabled="!editModel"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item size="mini" :label="'描述'" prop="comment">
+                                        <el-input v-model="firstTemp.comment" :disabled="!editModel"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item size="mini" :label="'子表名称'" prop="detailTableName">
+                                        <el-input v-model="firstTemp.detailTableName" :disabled="!editModel"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item size="mini" :label="'子表描述'" prop="detailComment">
+                                        <el-input v-model="firstTemp.detailComment" :disabled="!editModel"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item size="mini" :label="'vue根目录'" prop="folder">
+                                        <el-input v-model="firstTemp.folder" :disabled="!editModel"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item size="mini" :label="'其它选项'" prop="options">
+                                        <el-input v-model="firstTemp.options" :disabled="!editModel"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item size="mini" :label="'分类名称'" prop="typeName">
+                                        <el-input v-model="firstTemp.typeName" :disabled="!editModel"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-form>
+                    </el-card>
+                </el-col>
+
+                <!-- 第二部分多选 -->
+                <el-col :span="!showTitleDialog ? 24 : 12" class="fh detail-card">
+                    <el-card shadow="nerver" class="demo-card fh" id="secondCard">
+                        <div slot="header">
+                            <i class="show-title-button" :class="showTitleDialog ? 'el-icon-d-arrow-left' : 'el-icon-d-arrow-right'"
+                               :title="showTitleDialog ? '展开' : '收缩'" @@click="showTitleDialog=!showTitleDialog"></i>
+                            <span v-if="radio == ''">表字段信息（修改后，编辑框内回车生效）</span>
+                            <span v-else>{{tableName}}表字段信息（修改后，编辑框内回车生效）</span>
+                            <el-button v-if="editModel" type="danger" class="filter-item edit-button delete-button" size="mini" v-waves icon="el-icon-delete" @@click="handleEdit('','','btnDelDetail')">删除</el-button>
+                        </div>
+
+                        <el-table ref="secondTable" border :data="secondList" tooltip-effect="dark" height="240px" @@row-click="rowClickSecondTable" @@selection-change="selChangeSecondTable">
+                            <el-table-column width="55" type="selection" align="center" prop="custid" fixed> </el-table-column>
+                            <el-table-column prop="tableName" label="表名称" show-overflow-tooltip fixed></el-table-column>
+                            <el-table-column prop="columnName" label="列名称" show-overflow-tooltip fixed></el-table-column>
+                            <el-table-column prop="comment" label="列描述" show-overflow-tooltip></el-table-column>
+                            <el-table-column prop="columnType" label="列类型" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-input  @@keyup.enter.native="handleUpdateDetail(scope.row)" v-if="editModel" size="mini"
+                                               v-model="scope.row.columnType"></el-input>
+                                    <span v-else>{{scope.row.columnType}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="entityType" label="实体类型" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-input @@keyup.enter.native="handleUpdateDetail(scope.row)" v-if="editModel" size="mini"
+                                              v-model="scope.row.entityType"></el-input>
+                                    <span v-else>{{scope.row.entityType}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="entityName" label="实体名称" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-input @@keyup.enter.native="handleUpdateDetail(scope.row)" v-if="editModel" size="mini"
+                                              v-model="scope.row.entityName"></el-input>
+                                    <span v-else>{{scope.row.entityName}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="isKey" label="主键" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-switch @@change="handleUpdateDetail(scope.row)" v-if="editModel" v-model="scope.row.isKey"
+                                               :active-value="true" :disabled="!editModel" :inactive-value="false">
+                                    </el-switch>
+                                    <span v-else>{{scope.row.isKey ? '是' : '否'}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="isIncrement" label="自增" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-switch @@change="handleUpdateDetail(scope.row)" v-if="editModel" v-model="scope.row.isIncrement"
+                                               :active-value="true" :disabled="!editModel" :inactive-value="false">
+                                    </el-switch>
+                                    <span v-else>{{scope.row.isIncrement ? '是' : '否'}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="isRequired" label="必填" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-switch @@change="handleUpdateDetail(scope.row)" v-if="editModel" v-model="scope.row.isRequired"
+                                               :active-value="true" :disabled="!editModel" :inactive-value="false">
+                                    </el-switch>
+                                    <span v-else>{{scope.row.isRequired ? '是' : '否'}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="isInsert" label="可插入" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-switch @@change="handleUpdateDetail(scope.row)" v-if="editModel" v-model="scope.row.isInsert"
+                                               :active-value="true" :inactive-value="false">
+                                    </el-switch>
+                                    <span v-else>{{scope.row.isInsert ? '是' : '否'}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="isEdit" label="可编辑" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-switch @@change="handleUpdateDetail(scope.row)" v-if="editModel" v-model="scope.row.isEdit"
+                                               :active-value="true" :inactive-value="false">
+                                    </el-switch>
+                                    <span v-else>{{scope.row.isEdit ? '是' : '否'}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="isList" label="可展示" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-switch @@change="handleUpdateDetail(scope.row)" v-if="editModel" v-model="scope.row.isList"
+                                               :active-value="true" :inactive-value="false">
+                                    </el-switch>
+                                    <span v-else>{{scope.row.isList ? '是' : '否'}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="isQuery" label="可查询" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-switch @@change="handleUpdateDetail(scope.row)" v-if="editModel" v-model="scope.row.isQuery"
+                                               :active-value="true" :inactive-value="false">
+                                    </el-switch>
+                                    <span v-else>{{scope.row.isQuery ? '是' : '否'}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="queryType" label="查询方式" width="120" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-select @@change="handleUpdateDetail(scope.row)" v-if="editModel" class="filter-item"
+                                               style="width:100%;" size="mini" v-model="scope.row.queryType" placeholder="Please select">
+                                        <el-option v-for="item in queryTypes" :key="item.value" :label="item.key" :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                    <span v-else>{{handleType(scope.row.queryType, 'queryTypes')}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="htmlType" label="显示类型" width="120" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-select @@change="handleUpdateDetail(scope.row)" v-if="editModel" class="filter-item"
+                                               style="width:100%;" size="mini" v-model="scope.row.htmlType" placeholder="Please select">
+                                        <el-option v-for="item in typeLists" :key="item.value" :label="item.key" :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                    <span v-else>{{handleType(scope.row.htmlType, 'typeLists')}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="editType" label="编辑类型" width="120" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-select @@change="handleUpdateDetail(scope.row)" v-if="editModel" class="filter-item"
+                                               style="width:100%;" size="mini" :disabled="!editModel" v-model="scope.row.editType"
+                                               placeholder="Please select">
+                                        <el-option v-for="item in typeLists" :key="item.value" :label="item.key" :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                    <span v-else>{{handleType(scope.row.editType, 'typeLists')}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="dataSource" label="数据源" width="120" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-select @@change="handleUpdateDetail(scope.row)" v-if="editModel" class="filter-item"
+                                               style="width:100%;" size="mini" :disabled="!editModel" v-model="scope.row.dataSource"
+                                               placeholder="Please select">
+                                        <el-option v-for="item in sourceList" :key="item.id" :label="item.name" :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                    <span v-else>{{handleSource(scope.row.dataSource)}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="maxLength" label="最大长度" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-input @@keyup.enter.native="handleUpdateDetail(scope.row)" v-if="editModel" size="mini"
+                                              v-model="scope.row.maxLength"></el-input>
+                                    <span v-else>{{scope.row.maxLength}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="sort" label="排序" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <el-input @@keyup.enter.native="handleUpdateDetail(scope.row)" v-if="editModel" size="mini"
+                                              v-model="scope.row.sort"></el-input>
+                                    <span v-else>{{scope.row.sort}}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="updateUserName" label="修改人姓名" show-overflow-tooltip>
+                            </el-table-column>
+                        </el-table>
+                        <!-- 分页 -->
+                        <pagination v-show="secondTotal>0" :total="secondTotal" :page.sync="secondQuery.page"
+                                    :limit.sync="secondQuery.limit" @@pagination="handleSecondPage" />
+                    </el-card>
+                </el-col>
+            </el-row>
+            <el-card shadow="nerver" v-if="editModel" style="text-align: right;padding-bottom: 10px;">
+                <el-row>
+                    <el-col :span="24">
+                        <el-button size="mini" @@click="editModel = false">取消</el-button>
+                        <el-button size="mini" v-if="dialogStatus=='create'" type="primary" @@click="createData">确认</el-button>
+                        <el-button size="mini" v-else type="primary" @@click="updateData">确认</el-button>
+                    </el-col>
+                </el-row>
+            </el-card>
+            <el-dialog class="dialog-mini" width="500px" v-el-drag-dialog :title="'添加'" :visible.sync="dialogFormVisible">
+                <el-form ref="dataForm" :rules="mainRules" :model="firstTemp" label-position="right" label-width="120px">
+                    <el-form-item size="mini" :label="'表名'" prop="tableName">
+                        <el-input v-model="firstTemp.tableName"></el-input>
+                    </el-form-item>
+                    <el-form-item size="mini" :label="'命名空间'" prop="namespace">
+                        <el-input v-model="firstTemp.namespace"></el-input>
+                    </el-form-item>
+                    <el-form-item size="mini" :label="'模块标识'" prop="moduleCode">
+                        <el-input v-model="firstTemp.moduleCode"></el-input>
+                    </el-form-item>
+                    <el-form-item size="mini" :label="'模块名称'" prop="moduleName">
+                        <el-input v-model="firstTemp.moduleName"></el-input>
+                    </el-form-item>
+                    <el-form-item size="mini" :label="'实体类名称'" prop="className">
+                        <el-input v-model="firstTemp.className"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer">
+                    <el-button size="mini" @@click="dialogFormVisible = false">取消</el-button>
+                    <el-button size="mini" type="primary" @@click="createData">确认</el-button>
+                </div>
+            </el-dialog>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <!--js-->
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data() {
+                var validateCode = (rule, value, callback) => {
+                    if (this.dialog.data.menuType === 3) {
+                        if (!value) {
+                            callback(new Error('当类型是按钮类型时此项必填'));
+                        } else {
+                            callback();
+                        }
+                    } else {
+                        callback();
+                    }
+                };
+                return {
+                    uid: '',
+                    // ------------------------主列表数据（头）-----------------------------
+                    // firstHeaderList: [], // 主列表列定义
+                    radio: '', // 主列表选中项
+                    firstQuery: { // 主列表查询条件
+                        page: 1,
+                        limit: 20,
+                        key: undefined,
+                        appId: undefined
+                    },
+                    mainList: [], // 主列表值
+                    firstTotal: 0, // 主列表总条数
+                    listLoading: true, // 主列表记录总数
+                    tableKey: 0,
+                    showTitleDialog: true,
+
+                    editModel: false, // 是否为编辑模式
+                    editType: 'edit', // 编辑类型
+                    dialogStatus: '', // 主修改对话框状态create/update
+                    selectRow: {},
+                    firstTempDefaultVal: { // 头信息默认值
+                        id: '', // 入库通知单号
+                        tableName: '', // 表名
+                        comment: '', // 表描述、中文名称
+                        detailTableName: '', // 子表名称
+                        detailComment: '', // 子表描述、中文名称
+                        className: '', // 实体类名称
+                        namespace: 'Senparc.Areas.Admin', // 命名空间
+                        moduleCode: '', // 模块标识
+                        moduleName: '', // 模块名称
+                        folder: '', // vue根目录
+                        options: '', // 其它选项
+                        typeId: '', // 分类ID
+                        typeName: '', // 分类名称
+                    },
+                    dialogFormVisible: false,
+                    firstTemp: {}, // 当前选中的头信息
+                    mainRules: {
+                        tableName: [{
+                            required: true,
+                            message: '请输入表名',
+                            trigger: 'change'
+                        }],
+                        namespace: [{
+                            required: true
+                        }],
+                        moduleCode: [{
+                            required: true,
+                            message: '请输入模块标识',
+                            trigger: 'change'
+                        }],
+                        moduleName: [{
+                            required: true,
+                            message: '请输入模块名称',
+                            trigger: 'change'
+                        }]
+                    },
+                    // ------------------------明细列表数据-------------------------------------
+                    secondHeaderList: [], // 明细列表列定义
+                    secondList: [], // 明细列表值
+                    secondQuery: {}, // 明细列表的过滤条件，如页码、每页条数，搜索关键字等
+                    secondTotal: 0, // 明细列表总条数
+                    multipleSelection: [], // 明细列表checkbox选中的值,
+                    // ------------------------通用数据项-------------------------------------
+                    statusOptions: [{
+                        key: 1,
+                        display_name: '停用'
+                    },
+                    {
+                        key: 0,
+                        display_name: '正常'
+                    }
+                    ],
+                    queryTypes: [{
+                        key: '=',
+                        value: '='
+                    }, {
+                        key: '!=',
+                        value: '!='
+                    }, {
+                        key: '>',
+                        value: '>'
+                    }, {
+                        key: '<',
+                        value: '<'
+                    }, {
+                        key: 'between',
+                        value: 'between'
+                    }, {
+                        key: 'include',
+                        value: 'include'
+                    }, {
+                        key: 'in',
+                        value: 'in'
+                    }],
+                    typeLists: [{
+                        "key": "text",
+                        "value": "text"
+                    },
+                    {
+                        "key": "textarea",
+                        "value": "textarea"
+                    },
+                    {
+                        "key": "switch",
+                        "value": "switch"
+                    },
+                    // { "key": "dropList", "value": "dropList" },
+                    {
+                        "key": "select",
+                        "value": "select"
+                    },
+                    {
+                        "key": "selectList",
+                        "value": "selectList"
+                    },
+                    {
+                        "key": "date",
+                        "value": "date"
+                    },
+                    {
+                        "key": "datetime",
+                        "value": "datetime"
+                    },
+                    {
+                        "key": "checkbox",
+                        "value": "checkbox"
+                    },
+                    {
+                        "key": "mail",
+                        "value": "mail"
+                    },
+                    {
+                        "key": "number",
+                        "value": "number"
+                    },
+                    {
+                        "key": "decimal",
+                        "value": "decimal"
+                    },
+                    {
+                        "key": "phone",
+                        "value": "phone"
+                    },
+                    {
+                        "key": "img",
+                        "value": "img"
+                    },
+                    {
+                        "key": "excel",
+                        "value": "excel"
+                    },
+                    {
+                        "key": "file",
+                        "value": "file"
+                    }
+                    ],
+
+                    textMap: {
+                        update: '编辑',
+                        create: '添加'
+                    },
+                    //excelName: `订单${parseTime(new Date())}`,
+                    sourceList: [], //数据源
+                    // 表格数据
+                    tableData: [],
+                    dialog: {
+                        title: '新增菜单',
+                        visible: false,
+                        data: {
+                            id: '', menuName: '', parentId: [], url: '', icon: '', sort: '', visible: true,
+                            resourceCode: '', isLocked: false, menuType: ''
+                        },
+                        rules: {
+                            menuName: [
+                                { required: true, message: "菜单名称为必填项", trigger: "blur" }
+                            ],
+                            menuType: [{ required: true, message: "类型为必选项", trigger: "blur" }],
+                            resourceCode: [{ validator: validateCode, trigger: "blur" }]
+                        },
+                        updateLoading: false,
+                        disabled: false,
+                        checkStrictly: true // 是否严格的遵守父子节点不互相关联
+                    },
+                    dialogIcon: {
+                        visible: false,
+                        elementIcons: [
+                            'fa-adjust',
+                            'fa-anchor',
+                            'fa-archive',
+                            'fa-area-chart',
+                            'fa-arrows',
+                            'fa-arrows-h',
+                            'fa-arrows-v',
+                            'fa-asterisk',
+                            'fa-at',
+                            'fa-automobile',
+                            'fa-ban',
+                            'fa-bank',
+                            'fa-bar-chart',
+                            'fa-bar-chart-o',
+                            'fa-barcode',
+                            'fa-bars',
+                            'fa-beer',
+                            'fa-bell',
+                            'fa-bell-o',
+                            'fa-bell-slash',
+                            'fa-bell-slash-o',
+                            'fa-bicycle',
+                            'fa-binoculars',
+                            'fa-birthday-cake',
+                            'fa-bolt',
+                            'fa-bomb',
+                            'fa-book',
+                            'fa-bookmark',
+                            'fa-bookmark-o',
+                            'fa-briefcase',
+                            'fa-bug',
+                            'fa-building',
+                            'fa-building-o',
+                            'fa-bullhorn',
+                            'fa-bullseye',
+                            'fa-bus',
+                            'fa-cab',
+                            'fa-calculator',
+                            'fa-calendar',
+                            'fa-calendar-o',
+                            'fa-camera',
+                            'fa-camera-retro',
+                            'fa-car',
+                            'fa-caret-square-o-down',
+                            'fa-caret-square-o-left',
+                            'fa-caret-square-o-right',
+                            'fa-caret-square-o-up',
+                            'fa-cc',
+                            'fa-certificate',
+                            'fa-check',
+                            'fa-check-circle',
+                            'fa-check-circle-o',
+                            'fa-check-square',
+                            'fa-check-square-o',
+                            'fa-child',
+                            'fa-circle',
+                            'fa-circle-o',
+                            'fa-circle-o-notch',
+                            'fa-circle-thin',
+                            'fa-clock-o',
+                            'fa-close',
+                            'fa-cloud',
+                            'fa-cloud-download',
+                            'fa-cloud-upload',
+                            'fa-code',
+                            'fa-code-fork',
+                            'fa-coffee',
+                            'fa-cog',
+                            'fa-cogs',
+                            'fa-comment',
+                            'fa-comment-o',
+                            'fa-comments',
+                            'fa-comments-o',
+                            'fa-compass',
+                            'fa-copyright',
+                            'fa-credit-card',
+                            'fa-crop',
+                            'fa-crosshairs',
+                            'fa-cube',
+                            'fa-cubes',
+                            'fa-cutlery',
+                            'fa-dashboard',
+                            'fa-database',
+                            'fa-desktop',
+                            'fa-dot-circle-o',
+                            'fa-download',
+                            'fa-edit',
+                            'fa-ellipsis-h',
+                            'fa-ellipsis-v',
+                            'fa-envelope',
+                            'fa-envelope-o',
+                            'fa-envelope-square',
+                            'fa-eraser',
+                            'fa-exchange',
+                            'fa-exclamation',
+                            'fa-exclamation-circle',
+                            'fa-exclamation-triangle',
+                            'fa-external-link',
+                            'fa-external-link-square',
+                            'fa-eye',
+                            'fa-eye-slash',
+                            'fa-eyedropper',
+                            'fa-fax',
+                            'fa-female',
+                            'fa-fighter-jet',
+                            'fa-file-archive-o',
+                            'fa-file-audio-o',
+                            'fa-file-code-o',
+                            'fa-file-excel-o',
+                            'fa-file-image-o',
+                            'fa-file-movie-o',
+                            'fa-file-pdf-o',
+                            'fa-file-photo-o',
+                            'fa-file-picture-o',
+                            'fa-file-powerpoint-o',
+                            'fa-file-sound-o',
+                            'fa-file-video-o',
+                            'fa-file-word-o',
+                            'fa-file-zip-o',
+                            'fa-film',
+                            'fa-filter',
+                            'fa-fire',
+                            'fa-fire-extinguisher',
+                            'fa-flag',
+                            'fa-flag-checkered',
+                            'fa-flag-o',
+                            'fa-flash',
+                            'fa-flask',
+                            'fa-folder',
+                            'fa-folder-o',
+                            'fa-folder-open',
+                            'fa-folder-open-o',
+                            'fa-frown-o',
+                            'fa-futbol-o',
+                            'fa-gamepad',
+                            'fa-gavel',
+                            'fa-gear',
+                            'fa-gears',
+                            'fa-gift',
+                            'fa-glass',
+                            'fa-globe',
+                            'fa-graduation-cap',
+                            'fa-group',
+                            'fa-hdd-o',
+                            'fa-headphones',
+                            'fa-heart',
+                            'fa-heart-o',
+                            'fa-history',
+                            'fa-home',
+                            'fa-image',
+                            'fa-inbox',
+                            'fa-info',
+                            'fa-info-circle',
+                            'fa-institution',
+                            'fa-key',
+                            'fa-keyboard-o',
+                            'fa-language',
+                            'fa-laptop',
+                            'fa-leaf',
+                            'fa-legal',
+                            'fa-lemon-o',
+                            'fa-level-down',
+                            'fa-level-up',
+                            'fa-life-bouy',
+                            'fa-life-buoy',
+                            'fa-life-ring',
+                            'fa-life-saver',
+                            'fa-lightbulb-o',
+                            'fa-line-chart',
+                            'fa-location-arrow',
+                            'fa-lock',
+                            'fa-magic',
+                            'fa-magnet',
+                            'fa-mail-forward',
+                            'fa-mail-reply',
+                            'fa-mail-reply-all',
+                            'fa-male',
+                            'fa-map-marker',
+                            'fa-meh-o',
+                            'fa-microphone',
+                            'fa-microphone-slash',
+                            'fa-minus',
+                            'fa-minus-circle',
+                            'fa-minus-square',
+                            'fa-minus-square-o',
+                            'fa-mobile',
+                            'fa-mobile-phone',
+                            'fa-money',
+                            'fa-moon-o',
+                            'fa-mortar-board',
+                            'fa-music',
+                            'fa-navicon',
+                            'fa-newspaper-o',
+                            'fa-paint-brush',
+                            'fa-paper-plane',
+                            'fa-paper-plane-o',
+                            'fa-paw',
+                            'fa-pencil',
+                            'fa-pencil-square',
+                            'fa-pencil-square-o',
+                            'fa-phone',
+                            'fa-phone-square',
+                            'fa-photo',
+                            'fa-picture-o',
+                            'fa-pie-chart',
+                            'fa-plane',
+                            'fa-plug',
+                            'fa-plus',
+                            'fa-plus-circle',
+                            'fa-plus-square',
+                            'fa-plus-square-o',
+                            'fa-power-off',
+                            'fa-print',
+                            'fa-puzzle-piece',
+                            'fa-qrcode',
+                            'fa-question',
+                            'fa-question-circle',
+                            'fa-quote-left',
+                            'fa-quote-right',
+                            'fa-random',
+                            'fa-recycle',
+                            'fa-refresh',
+                            'fa-remove',
+                            'fa-reorder',
+                            'fa-reply',
+                            'fa-reply-all',
+                            'fa-retweet',
+                            'fa-road',
+                            'fa-rocket',
+                            'fa-rss',
+                            'fa-rss-square',
+                            'fa-search',
+                            'fa-search-minus',
+                            'fa-search-plus',
+                            'fa-send',
+                            'fa-send-o',
+                            'fa-share',
+                            'fa-share-alt',
+                            'fa-share-alt-square',
+                            'fa-share-square',
+                            'fa-share-square-o',
+                            'fa-shield',
+                            'fa-shopping-cart',
+                            'fa-sign-in',
+                            'fa-sign-out',
+                            'fa-signal',
+                            'fa-sitemap',
+                            'fa-sliders',
+                            'fa-smile-o',
+                            'fa-soccer-ball-o',
+                            'fa-sort',
+                            'fa-sort-alpha-asc',
+                            'fa-sort-alpha-desc',
+                            'fa-sort-amount-asc',
+                            'fa-sort-amount-desc',
+                            'fa-sort-asc',
+                            'fa-sort-desc',
+                            'fa-sort-down',
+                            'fa-sort-numeric-asc',
+                            'fa-sort-numeric-desc',
+                            'fa-sort-up',
+                            'fa-space-shuttle',
+                            'fa-spinner',
+                            'fa-spoon',
+                            'fa-square',
+                            'fa-square-o',
+                            'fa-star',
+                            'fa-star-half',
+                            'fa-star-half-empty',
+                            'fa-star-half-full',
+                            'fa-star-half-o',
+                            'fa-star-o',
+                            'fa-suitcase',
+                            'fa-sun-o',
+                            'fa-support',
+                            'fa-tablet',
+                            'fa-tachometer',
+                            'fa-tag',
+                            'fa-tags',
+                            'fa-tasks',
+                            'fa-taxi',
+                            'fa-terminal',
+                            'fa-thumb-tack',
+                            'fa-thumbs-down',
+                            'fa-thumbs-o-down',
+                            'fa-thumbs-o-up',
+                            'fa-thumbs-up',
+                            'fa-ticket',
+                            'fa-times',
+                            'fa-times-circle',
+                            'fa-times-circle-o',
+                            'fa-tint',
+                            'fa-toggle-down',
+                            'fa-toggle-left',
+                            'fa-toggle-off',
+                            'fa-toggle-on',
+                            'fa-toggle-right',
+                            'fa-toggle-up',
+                            'fa-trash',
+                            'fa-trash-o',
+                            'fa-tree',
+                            'fa-trophy',
+                            'fa-truck',
+                            'fa-tty',
+                            'fa-umbrella',
+                            'fa-university',
+                            'fa-unlock',
+                            'fa-unlock-alt',
+                            'fa-unsorted',
+                            'fa-upload',
+                            'fa-user',
+                            'fa-users',
+                            'fa-video-camera',
+                            'fa-volume-down',
+                            'fa-volume-off',
+                            'fa-volume-up',
+                            'fa-warning',
+                            'fa-wheelchair',
+                            'fa-wifi',
+                            'fa-wrench',
+                            'fa-file',
+                            'fa-file-archive-o',
+                            'fa-file-audio-o',
+                            'fa-file-code-o',
+                            'fa-file-excel-o',
+                            'fa-file-image-o',
+                            'fa-file-movie-o',
+                            'fa-file-o',
+                            'fa-file-pdf-o',
+                            'fa-file-photo-o',
+                            'fa-file-picture-o',
+                            'fa-file-powerpoint-o',
+                            'fa-file-sound-o',
+                            'fa-file-text',
+                            'fa-file-text-o',
+                            'fa-file-video-o',
+                            'fa-file-word-o',
+                            'fa-file-zip-o',
+                            'fa-circle-o-notch',
+                            'fa-cog',
+                            'fa-gear',
+                            'fa-refresh',
+                            'fa-spinner',
+                            'fa-check-square',
+                            'fa-check-square-o',
+                            'fa-circle',
+                            'fa-circle-o',
+                            'fa-dot-circle-o',
+                            'fa-minus-square',
+                            'fa-minus-square-o',
+                            'fa-plus-square',
+                            'fa-plus-square-o',
+                            'fa-square',
+                            'fa-square-o',
+                            'fa-cc-amex',
+                            'fa-cc-discover',
+                            'fa-cc-mastercard',
+                            'fa-cc-paypal',
+                            'fa-cc-stripe',
+                            'fa-cc-visa',
+                            'fa-credit-card',
+                            'fa-google-wallet',
+                            'fa-paypal',
+                            'fa-area-chart',
+                            'fa-bar-chart',
+                            'fa-bar-chart-o',
+                            'fa-line-chart',
+                            'fa-pie-chart',
+                            'fa-bitcoin',
+                            'fa-btc',
+                            'fa-cny',
+                            'fa-dollar',
+                            'fa-eur',
+                            'fa-euro',
+                            'fa-gbp',
+                            'fa-ils',
+                            'fa-inr',
+                            'fa-jpy',
+                            'fa-krw',
+                            'fa-money',
+                            'fa-rmb',
+                            'fa-rouble',
+                            'fa-rub',
+                            'fa-ruble',
+                            'fa-rupee',
+                            'fa-shekel',
+                            'fa-sheqel',
+                            'fa-try',
+                            'fa-turkish-lira',
+                            'fa-usd',
+                            'fa-won',
+                            'fa-yen',
+                            'fa-align-center',
+                            'fa-align-justify',
+                            'fa-align-left',
+                            'fa-align-right',
+                            'fa-bold',
+                            'fa-chain',
+                            'fa-chain-broken',
+                            'fa-clipboard',
+                            'fa-columns',
+                            'fa-copy',
+                            'fa-cut',
+                            'fa-dedent',
+                            'fa-eraser',
+                            'fa-file',
+                            'fa-file-o',
+                            'fa-file-text',
+                            'fa-file-text-o',
+                            'fa-files-o',
+                            'fa-floppy-o',
+                            'fa-font',
+                            'fa-header',
+                            'fa-indent',
+                            'fa-italic',
+                            'fa-link',
+                            'fa-list',
+                            'fa-list-alt',
+                            'fa-list-ol',
+                            'fa-list-ul',
+                            'fa-outdent',
+                            'fa-paperclip',
+                            'fa-paragraph',
+                            'fa-paste',
+                            'fa-repeat',
+                            'fa-rotate-left',
+                            'fa-rotate-right',
+                            'fa-save',
+                            'fa-scissors',
+                            'fa-strikethrough',
+                            'fa-subscript',
+                            'fa-superscript',
+                            'fa-table',
+                            'fa-text-height',
+                            'fa-text-width',
+                            'fa-th',
+                            'fa-th-large',
+                            'fa-th-list',
+                            'fa-underline',
+                            'fa-undo',
+                            'fa-unlink',
+                            'fa-angle-double-down',
+                            'fa-angle-double-left',
+                            'fa-angle-double-right',
+                            'fa-angle-double-up',
+                            'fa-angle-down',
+                            'fa-angle-left',
+                            'fa-angle-right',
+                            'fa-angle-up',
+                            'fa-arrow-circle-down',
+                            'fa-arrow-circle-left',
+                            'fa-arrow-circle-o-down',
+                            'fa-arrow-circle-o-left',
+                            'fa-arrow-circle-o-right',
+                            'fa-arrow-circle-o-up',
+                            'fa-arrow-circle-right',
+                            'fa-arrow-circle-up',
+                            'fa-arrow-down',
+                            'fa-arrow-left',
+                            'fa-arrow-right',
+                            'fa-arrow-up',
+                            'fa-arrows',
+                            'fa-arrows-alt',
+                            'fa-arrows-h',
+                            'fa-arrows-v',
+                            'fa-caret-down',
+                            'fa-caret-left',
+                            'fa-caret-right',
+                            'fa-caret-square-o-down',
+                            'fa-caret-square-o-left',
+                            'fa-caret-square-o-right',
+                            'fa-caret-square-o-up',
+                            'fa-caret-up',
+                            'fa-chevron-circle-down',
+                            'fa-chevron-circle-left',
+                            'fa-chevron-circle-right',
+                            'fa-chevron-circle-up',
+                            'fa-chevron-down',
+                            'fa-chevron-left',
+                            'fa-chevron-right',
+                            'fa-chevron-up',
+                            'fa-hand-o-down',
+                            'fa-hand-o-left',
+                            'fa-hand-o-right',
+                            'fa-hand-o-up',
+                            'fa-long-arrow-down',
+                            'fa-long-arrow-left',
+                            'fa-long-arrow-right',
+                            'fa-long-arrow-up',
+                            'fa-toggle-down',
+                            'fa-toggle-left',
+                            'fa-toggle-right',
+                            'fa-toggle-up',
+                            'fa-arrows-alt',
+                            'fa-backward',
+                            'fa-compress',
+                            'fa-eject',
+                            'fa-expand',
+                            'fa-fast-backward',
+                            'fa-fast-forward',
+                            'fa-forward',
+                            'fa-pause',
+                            'fa-play',
+                            'fa-play-circle',
+                            'fa-play-circle-o',
+                            'fa-step-backward',
+                            'fa-step-forward',
+                            'fa-stop',
+                            'fa-youtube-play',
+                            'fa-adn',
+                            'fa-android',
+                            'fa-angellist',
+                            'fa-apple',
+                            'fa-behance',
+                            'fa-behance-square',
+                            'fa-bitbucket',
+                            'fa-bitbucket-square',
+                            'fa-bitcoin',
+                            'fa-btc',
+                            'fa-cc-amex',
+                            'fa-cc-discover',
+                            'fa-cc-mastercard',
+                            'fa-cc-paypal',
+                            'fa-cc-stripe',
+                            'fa-cc-visa',
+                            'fa-codepen',
+                            'fa-css3',
+                            'fa-delicious',
+                            'fa-deviantart',
+                            'fa-digg',
+                            'fa-dribbble',
+                            'fa-dropbox',
+                            'fa-drupal',
+                            'fa-empire',
+                            'fa-facebook',
+                            'fa-facebook-square',
+                            'fa-flickr',
+                            'fa-foursquare',
+                            'fa-ge',
+                            'fa-git',
+                            'fa-git-square',
+                            'fa-github',
+                            'fa-github-alt',
+                            'fa-github-square',
+                            'fa-gittip',
+                            'fa-google',
+                            'fa-google-plus',
+                            'fa-google-plus-square',
+                            'fa-google-wallet',
+                            'fa-hacker-news',
+                            'fa-html5',
+                            'fa-instagram',
+                            'fa-ioxhost',
+                            'fa-joomla',
+                            'fa-jsfiddle',
+                            'fa-lastfm',
+                            'fa-lastfm-square',
+                            'fa-linkedin',
+                            'fa-linkedin-square',
+                            'fa-linux',
+                            'fa-maxcdn',
+                            'fa-meanpath',
+                            'fa-openid',
+                            'fa-pagelines',
+                            'fa-paypal',
+                            'fa-pied-piper',
+                            'fa-pied-piper-alt',
+                            'fa-pinterest',
+                            'fa-pinterest-square',
+                            'fa-qq',
+                            'fa-ra',
+                            'fa-rebel',
+                            'fa-reddit',
+                            'fa-reddit-square',
+                            'fa-renren',
+                            'fa-share-alt',
+                            'fa-share-alt-square',
+                            'fa-skype',
+                            'fa-slack',
+                            'fa-slideshare',
+                            'fa-soundcloud',
+                            'fa-spotify',
+                            'fa-stack-exchange',
+                            'fa-stack-overflow',
+                            'fa-steam',
+                            'fa-steam-square',
+                            'fa-stumbleupon',
+                            'fa-stumbleupon-circle',
+                            'fa-tencent-weibo',
+                            'fa-trello',
+                            'fa-tumblr',
+                            'fa-tumblr-square',
+                            'fa-twitch',
+                            'fa-twitter',
+                            'fa-twitter-square',
+                            'fa-vimeo-square',
+                            'fa-vine',
+                            'fa-vk',
+                            'fa-wechat',
+                            'fa-weibo',
+                            'fa-weixin',
+                            'fa-windows',
+                            'fa-wordpress',
+                            'fa-xing',
+                            'fa-xing-square',
+                            'fa-yahoo',
+                            'fa-yelp',
+                            'fa-youtube',
+                            'fa-youtube-play',
+                            'fa-youtube-square',
+                            'fa-ambulance',
+                            'fa-h-square',
+                            'fa-hospital-o',
+                            'fa-medkit',
+                            'fa-plus-square',
+                            'fa-stethoscope',
+                            'fa-user-md',
+                            'fa-wheelchair'
+                        ]
+                    }
+                };
+            },
+            created: function () {
+                this.getBuilderTables();
+            },
+            watch: {
+                'dialog.visible': function (val, old) {
+                    // 关闭dialog，清空
+                    if (!val) {
+                        this.dialog.data = {
+                            id: '', menuName: '', parentId: [], url: '', icon: '', sort: '', visible: false,
+                            resourceCode: '', isLocked: false, menuType: ''
+                        };
+                        this.dialog.updateLoading = false;
+                        this.dialog.disabled = false;
+                    }
+                }
+            },
+            methods: {
+                // 选取图标
+                pickIcon(item) {
+                    this.dialogIcon.visible = false;
+                    this.dialog.data.icon = item;
+                },
+                // 获取数据源
+                getDataSource() {
+                    categorys.loadType(this.typesListQuery).then(res => {
+                        this.sourceList = [...res.data]
+                    })
+                },
+                handleChangeTableName(val) {
+                    this.firstTemp.moduleCode = this.firstTemp.className = val
+                },
+                handleFilterStatus(val, key) {
+                    const status = [{
+                        key: false,
+                        display_name: '否'
+                    }, {
+                        key: true,
+                        display_name: '是'
+                    }]
+                    const arr = key === 'status' ? this.statusOptions : status
+                    return key === 'asnStatus' ? val === 0 ? '否' : '是' : arr.find(item => item.key === val).display_name
+                },
+                handleType(val, name) {
+                    const obj = this[name].find(item => item.value === val)
+                    return obj && obj.key
+                },
+                handleSource(val) {
+                    const obj = this.sourceList.find(item => item.id === val)
+                    return obj && obj.name
+                },
+                isEdit(key) {
+                    switch (key) {
+                        case 'updateUserName':
+                        case 'updateTime':
+                        case 'createUserName':
+                        case 'createTime':
+                            return false
+                        default:
+                            return true
+                    }
+                },
+                // 获取表信息
+                async getBuilderTables() {
+                    this.uid = resizeUrl().uid
+                    const res = await service.get('/Admin/CodeBuilder/TableIndex?handler=List&uid=' + this.uid);
+                    this.mainList = res.data.data.list || [];
+                    this.firstQuery.limit = res.data.data.totalCount;
+                    this.firstTotal = res.data.data.totalCount;
+
+                    if (this.firstQuery.limit > 0) {
+                        this.rowClickFirstTable(this.mainList[0])
+                    }
+                    this.listLoading = false
+                },
+                rowClickFirstTable(row) { // 点击行
+                    this.radio = row.id
+                    this.tableName = row.tableName
+                    this.secondQuery.page = 1
+                    this.secondQuery.limit = 99999
+                    this.querySecondList(row.id)
+                    this.showTitleDetail(row)
+                },
+
+                // 数据处理
+                ddd(source, parentId, dest) {
+                    var array = source.filter(_ => _.parentId === parentId);
+                    for (var i in array) {
+                        var ele = array[i];
+                        ele.children = [];
+                        dest.unshift(ele);
+                        this.ddd(source, ele.id, ele.children);
+                    }
+                },
+                // 编辑 // 新增菜单 // 增加下一级
+                handleEdit(index, row, flag) {
+                    switch (flag) {
+                        case 'add': // 添加新记录
+                            this.resetFirstTemp()
+                            this.secondList = []
+                            this.dialogStatus = 'create'
+                            this.dialogFormVisible = true
+                            this.editModel = false
+                            this.editType = 'add'
+                            this.$nextTick(() => {
+                                this.$refs['dataForm'].clearValidate()
+                            })
+                            break
+                        case 'edit': // 编辑头
+                            this.firstTemp = Object.assign({}, this.selectRow)
+                            if (this.firstTemp.id === '') {
+                                this.editModel = false
+                                this.$message({
+                                    message: '请选择要修改的项',
+                                    type: 'error'
+                                })
+                                return
+                            }
+                            this.dialogStatus = 'update'
+                            this.editModel = true
+                            this.editType = 'edit'
+                            this.$nextTick(() => {
+                                this.$refs['dataForm'].clearValidate()
+                            })
+                            break
+                        case 'btnDel': // 删除主表
+                            if (this.firstTemp.id === '') {
+                                this.$message({
+                                    message: '请选择要删除的项',
+                                    type: 'error'
+                                })
+                                return
+                            }
+                            this.handleFirstDel(this.firstTemp)
+                            break
+
+                        case 'btnCreateCode': // 创建实体
+                            this.handleCreateCode()
+                            break
+                        case 'btnCreateEntity': // 创建实体
+                            this.handleCreateEntity()
+                            break
+                        case 'btnCreateBusiness': // 创建业务逻辑
+                            this.handleCreateBusiness()
+                            break
+                        case 'btnCreateVue': // 创建vue界面
+                            this.handleCreateVue()
+                            break
+                        case 'btnUpdateDetail': // 同步表数据结构
+                            this.handleUpdateDetail()
+                            break
+                        case 'btnDelDetail': // 删除明细行
+                            if (this.multipleSelection.length < 1) {
+                                this.$message({
+                                    message: '至少删除一个',
+                                    type: 'error'
+                                })
+                                return
+                            }
+                            this.handleSecondDel(this.multipleSelection)
+                            break
+                        default:
+                            break
+                    }
+
+                },
+                // 创建实体
+                handleCreateCode() {
+                    //const res = await service.get('/Admin/Template/TableIndex?handler=List&uid=' + this.uid);
+                    service.post("/Admin/CodeBuilder/TableIndex?handler=CreateCode", this.firstTemp).then(res => {
+                        if (res.data.success) {
+                            if (res.data.data.code == 200) {
+                                this.$message.success('代码生成成功，请前往生成记录中查看')
+                            } else {
+                                this.$message.success(res.data.data.message)
+                            }
+                        }
+                    });
+                },
+                // 创建实体
+                handleCreateEntity() {
+                    //const res = await service.get('/Admin/Template/TableIndex?handler=List&uid=' + this.uid);
+                    service.post("/Admin/CodeBuilder/TableIndex?handler=CreateEntity", this.firstTemp).then(res => {
+                        if (res.data.success) {
+                            this.$message.success('创建成功，请在OpenAuthDBContext中添加相应的DbSet')
+                        }
+                    });
+                },
+                // 创建业务逻辑
+                handleCreateBusiness() {
+                    service.post("/Admin/CodeBuilder/TableIndex?handler=CreateBusiness", this.firstTemp).then(res => {
+                        if (res.data.success) {
+                            this.$message.success('创建成功')
+                        }
+                    });
+                },
+                // 创建vue界面
+                handleCreateVue() {
+                    //if (this.firstTemp.folder == undefined || this.firstTemp.folder == "") {
+                    //    this.$message.error('Vue根目录不能为空')
+                    //    return;
+                    //}
+                    this.firstTemp.VueProjRootPath = this.firstTemp.folder;
+                    service.post("/Admin/CodeBuilder/TableIndex?handler=CreateVue", this.firstTemp).then(res => {
+                        if (res.data.success) {
+                            this.$message.success('创建成功')
+                        }
+                    });
+                },
+                handleFilter() {
+                    this.firstQuery.page = 1
+                    this.getList()
+                },
+                handleSizeChange(val) {
+                    this.firstQuery.limit = val
+                    this.getList()
+                },
+                handleCurrentChange(val) {
+                    this.firstQuery.page = val.page
+                    this.firstQuery.limit = val.limit
+                    this.getList()
+                },
+                resetFirstTemp() {
+                    this.firstTemp = Object.assign({}, this.firstTempDefaultVal)
+                },
+                createData() { // 保存提交
+                    this.$refs['dataForm'].validate((valid) => {
+                        if (valid) {
+                            let tempData = Object.assign({}, this.firstTemp)
+                            tempData = this.setDetails(tempData)
+                            tempData.OrgId = this.defaultorgid
+                            tempData.id = 0
+                            service.post("/Admin/CodeBuilder/TableIndex?handler=Add&uid=" + this.uid, tempData).then(res => {
+                                if (res.data.success) {
+                                    this.firstTemp.id = res.result
+                                    this.mainList.unshift(this.firstTemp)
+                                    this.dialogFormVisible = false
+                                    this.rowClickFirstTable(this.firstTemp)
+                                    this.$notify({
+                                        title: '成功',
+                                        message: '创建成功',
+                                        type: 'success',
+                                        duration: 2000
+                                    })
+                                }
+                            });
+                        }
+                    })
+                },
+                showTitleDetail(row) { // 弹出编辑框
+                    this.selectRow = Object.assign({}, row) // 新增订单时保存当前选中行
+                    this.firstTemp = Object.assign({}, row) // copy obj
+                    this.$nextTick(() => {
+                        this.$refs['dataForm'].clearValidate()
+                    })
+                },
+                setDetails(tempData) { // 处理明细
+                    tempData.wmsInboundOrderDtblReqs = []
+                    tempData.scheduledInboundTime = tempData.scheduledInboundTime && parseTime(tempData.scheduledInboundTime,
+                        '{y}-{m}-{d} {h}:{i}:{s}')
+                    tempData.returnBoxNum = tempData.returnBoxNum && parseInt(tempData.returnBoxNum) || 0
+                    return tempData
+                },
+                updateData() { // 更新提交
+                    this.$refs['dataForm'].validate((valid) => {
+                        if (valid) {
+                            let tempData = Object.assign({}, this.firstTemp)
+                            tempData = this.setDetails(tempData)
+                            service.post("/Admin/CodeBuilder/TableIndex?handler=Update&uid=" + this.uid, tempData).then(res => {
+                                if (res.data.success) {
+                                    for (const v of this.mainList) {
+                                        if (v.id === this.firstTemp.id) {
+                                            const index = this.mainList.indexOf(v)
+                                            this.mainList.splice(index, 1, this.firstTemp)
+                                            break
+                                        }
+                                    }
+
+                                    this.editModel = false
+                                    this.querySecondList(this.firstTemp.id)
+                                    this.$notify({
+                                        title: '成功',
+                                        message: '更新成功',
+                                        type: 'success',
+                                        duration: 2000
+                                    })
+                                }
+                            });
+                        }
+                    })
+                },
+                handleFirstDel(row) { // 删除头
+                    let ids = [row.id];
+                    service.post("/Admin/CodeBuilder/TableIndex?handler=Delete&uid=" + this.uid, ids).then(res => {
+                        if (res.data.success) {
+                            this.$notify({
+                                title: '成功',
+                                message: '删除成功',
+                                type: 'success',
+                                duration: 2000
+                            })
+                            this.mainList = this.mainList.filter(item => item.id !== row.id)
+                            if (this.mainList.length > 0) {
+                                this.$nextTick(() => {
+                                    this.rowClickFirstTable(this.mainList[0])
+                                })
+                                return
+                            }
+                            this.secondList = []
+                            this.showTitleDetail({})
+                        }
+                    });
+                },
+
+                // ------------------------明细列表处理-------------------------------------
+                handleSecondPage(e) {
+                    this.secondQuery = e
+                    this.querySecondList(this.radio)
+                },
+                //async getBuilderTableColumns() {
+                //},
+                // 获取表字段信息
+                async querySecondList(id) {
+                    this.uid = resizeUrl().uid
+                    const res = await service.get('/Admin/CodeBuilder/TableColumnIndex?handler=List&uid=' + this.uid + "&BuilderTableId=" + id + "&page=" + this.secondQuery.page + id + "&page=" + this.secondQuery.page + "&limit=" + this.secondQuery.limit + "&key=" + this.secondQuery.customerKey);
+                    //res.columnHeaders.forEach((item) => { // 首字母小写
+                    //    item.key = item.key.substring(0, 1).toLowerCase() + item.key.substring(1)
+                    //})
+                    //this.secondHeaderList = res.columnHeaders.filter(u => u.browsable)
+                    //this.secondHeaderListC = res.columnHeaders || []
+                    this.secondTotal = res.data.data.totalCount
+                    this.secondList = res.data.data.list
+                },
+                rowClickSecondTable(row) { // 行点击事件
+                    this.$refs.secondTable.clearSelection()
+                    this.$refs.secondTable.toggleRowSelection(row)
+                },
+                handleSecondDel(rows) { // 删除明细时,只删除前端
+                    let ids = rows.map(item => item.id);
+                    service.post("/Admin/CodeBuilder/TableColumnIndex?handler=Delete&uid=" + this.uid, ids).then(res => {
+                        if (res.data.success) {
+                            rows.forEach(row => {
+                                this.secondList = this.secondList.filter(item => item.id !== row.id)
+                            })
+                            this.$notify({
+                                title: '成功',
+                                message: '删除成功',
+                                type: 'success',
+                                duration: 2000
+                            })
+                        }
+                    });
+                },
+                selChangeSecondTable(val) { // 明细选中事件
+                    this.multipleSelection = val
+                },
+                handleUpdateDetail(item) { // 同步表数据结构
+                    service.post("/Admin/CodeBuilder/TableColumnIndex?handler=Update&uid=" + this.uid, item).then(res => {
+                        if (res.data.success) {
+                            this.$notify({
+                                title: '成功',
+                                message: '创建成功',
+                                type: 'success',
+                                duration: 2000
+                            })
+                        }
+                    });
+                },
+                // 设置父级菜单默认显示 递归
+                recursionFunc(row, source, dest) {
+                    if (row.parentId === null) {
+                        return;
+                    }
+                    for (let i in source) {
+                        let ele = source[i];
+                        if (row.parentId === ele.id) {
+                            this.recursionFunc(ele, this.tableData, dest);
+                            dest.push(ele.id);
+                        } else {
+                            this.recursionFunc(row, ele.children, dest);
+                        }
+                    }
+                }
+            }
+
+        });
+    </script>
+}

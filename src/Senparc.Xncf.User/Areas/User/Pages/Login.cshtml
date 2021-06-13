@@ -1,0 +1,62 @@
+﻿@page
+@model Senparc.Xncf.User.Areas.User.Pages.LoginModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>登录 NCF 管理后台</title>
+    <meta name="description" content="@ViewBag.Description" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <!-- Element -->
+    <link href="~/lib/element-ui_2.13.2/element.css" rel="stylesheet" />
+    <link href="~/css/Admin/login/index.css" rel="stylesheet" />
+    <style>
+        body {
+            background: #94a1ae;
+        }
+    </style>
+</head>
+<body>
+    <div class="content" id="app">
+        <div class="login-container animated fadeIn logoBox ">
+            <div class="login-inner-box">
+                <span class="logoImg">
+                    <img src="~/images/logo-login-ncf.png" width="173" />
+                </span>
+                <div class="loginbox bg-white logoBg">
+                    <div class="loginbox-title">用户登录</div>
+                    <div class="loginbox-textbox">
+                        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" class="demo-ruleForm">
+                            <el-form-item prop="user">
+                                <el-input v-model.number="ruleForm.user" placeholder="请输入用户名"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="pass">
+                                <el-input type="password" v-model="ruleForm.pass" placeholder="请输入密码" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-button :loading="loading" style="width: 100%;" type="primary" @@click="submitForm('ruleForm')">登录</el-button>
+                        </el-form>
+                    </div>
+                </div>
+                @*技术支持*@
+                <div class="login-ICP">
+                    技术支持：<a href="https://www.senparc.com/" target="_blank" title="点击进入官网">苏州盛派网络科技有限公司</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--lib-->
+    <script src="~/lib/vue/vue.js"></script>
+    <script src="~/lib/element-ui_2.13.2/element.js"></script>
+    <script src="~/lib/axios/axios.min.js"></script>
+    <!--js-->
+    <script src="~/js/Admin/axios.js"></script>
+    <script src="~/js/Admin/Pages/LogIn/index.js" asp-append-version="true"></script>
+    @Html.AntiForgeryToken()
+</body>
+</html>

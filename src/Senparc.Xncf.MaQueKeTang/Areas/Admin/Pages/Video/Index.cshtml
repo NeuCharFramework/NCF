@@ -1,0 +1,252 @@
+@page "{handler?}"
+@model Senparc.Areas.Admin.Areas.Admin.Pages.Video_IndexModel
+@addTagHelper *, Senparc.Areas.Admin
+@using System.Web.Mvc
+@{
+    ViewData["Title"] = "视频管理"; Layout = "_Layout_Vue";
+}
+@section Style{
+    <link href="~/css/Admin/Pages/Video/Index.css" rel="stylesheet" />
+}
+@section breadcrumbs {
+    <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+    <el-breadcrumb-item>视频列表</el-breadcrumb-item>
+}
+<div>
+    <div class="video-info">
+        <div class="filter-container">
+            <el-input @@keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'搜索关键字'" v-model="listQuery.key">
+            </el-input>
+            <el-button class="filter-item" v-waves icon="el-icon-search" @@click="handleFilter">搜索</el-button>
+            <el-button class="filter-item" v-has="['video-add']" type="primary" icon="el-icon-plus" @@click="handleEdit">增加</el-button>
+        </div>
+        <el-table :data="tableData"
+                  border
+                  style="width: 100%">
+            <el-table-column type="selection" align="center" width="55"></el-table-column>
+            <template v-for="(headerItem,index) in headerList">
+                <el-table-column :label="headerItem.description" v-if="headerItem.browsable" min-width="120px" :key="index">
+                    <template slot-scope="scope">
+                        <span>{{headerItem.type=="DateTime"?formaTableTime(scope.row[headerItem.key]):scope.row[headerItem.key]}}</span>
+                    </template>
+                </el-table-column>
+            </template>
+            <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                    <el-button size="mini"
+                               type="primary"
+                               v-has="['video-edit']"
+                               @@click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                    <template v-has="['video-delete']">
+                        <el-popconfirm placement="top" title="确认删除此条数据吗？" @@on-confirm="handleDelete(scope.$index, scope.row)">
+                            <el-button size="mini" type="danger" slot="reference">删除</el-button>
+                        </el-popconfirm>
+                    </template>
+                </template>
+            </el-table-column>
+        </el-table>
+        <pagination :total="paginationQuery.total"
+                    :page.sync="listQuery.pageIndex"
+                    :limit.sync="listQuery.pageSize"
+                    @@pagination="getList"></pagination>
+        <!--编辑、新增 -->
+        <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
+            <el-form ref="dataForm"
+                     :rules="dialog.rules"
+                     :model="dialog.data"
+                     label-position="top"
+                     label-width="100px"
+                     style="max-width: 800px; margin-left:50px;">
+
+                <el-row type="flex" class="row-bg">
+                    <el-col :span="6">
+                        <el-form-item size="small" :label="'所属课程'" prop="courseId" v-if="Object.keys(dialog.data).indexOf('courseId')>=0">
+                            <el-select v-model="dialog.data.courseId" @@change="courseOptionChange" placeholder="请选择">
+                                <el-option v-for="item in courseOptions"
+                                           :key="item.id"
+                                           :label="item.title"
+                                           :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item size="small" :label="'章节'" prop="chapterId" v-if="Object.keys(dialog.data).indexOf('chapterId')>=0">
+                            <el-cascader v-model="dialog.data.chapterId"
+                                         :options="courseChapterOptions"
+                                         clearable
+                                         :props="{ checkStrictly: dialog.checkStrictly,label: 'title',value:'id'}">
+                            </el-cascader>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item size="small" :label="'价格'" prop="charge" v-if="Object.keys(dialog.data).indexOf('charge')>=0">
+                            <el-input-number v-model="dialog.data.charge" :min="1" :max="100"></el-input-number>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="2">
+                        <el-form-item size="small" :label="'禁止购买'" prop="isBanSell" v-if="Object.keys(dialog.data).indexOf('isBanSell')>=0">
+                            <el-switch v-model="dialog.data.isBanSell"
+                                       active-value="1"
+                                       inactive-value="0"></el-switch>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="2">
+                        <el-form-item size="small" :label="'显示'" prop="isShow" v-if="Object.keys(dialog.data).indexOf('isShow')>=0">
+                            <el-switch v-model="dialog.data.isShow"
+                                       active-value="1"
+                                       inactive-value="0"></el-switch>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="2">
+                        <el-form-item size="small" :label="'禁止快进'" prop="banDrag" v-if="Object.keys(dialog.data).indexOf('banDrag')>=0">
+                            <el-switch v-model="dialog.data.banDrag"
+                                       active-value="1"
+                                       inactive-value="0"></el-switch>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg">
+                    <el-col :span="18">
+                        <el-form-item size="small" :label="'视频名'" prop="title" v-if="Object.keys(dialog.data).indexOf('title')>=0">
+                            <el-input v-model="dialog.data.title"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item size="small" :label="'上线时间'" prop="publishedAt" v-if="Object.keys(dialog.data).indexOf('publishedAt')>=0">
+                            <el-date-picker v-model="dialog.data.publishedAt" type="date" placeholder="选择日期"> </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                @*<el-row type="flex" class="row-bg">
+                        <el-col :span="24">
+                            <el-tabs>
+                                <el-tab-pane label="阿里云点播" name="first">
+                                    <el-input placeholder="请点击右侧的上传按钮或者直接输入视频文件fileId" v-model="dialog.data.aliyunVideoId" class="input-with-select">
+                                        <el-button slot="append" icon="el-icon-search"></el-button>
+                                    </el-input>
+                                </el-tab-pane>
+                                <el-tab-pane label="腾讯云点播" name="second">
+                                    <el-input placeholder="请点击右侧的上传按钮或者直接输入视频文件fileId" v-model="dialog.data.tencentVideoId" class="input-with-select">
+                                        <el-button slot="append" icon="el-icon-search"></el-button>
+                                    </el-input>
+                                </el-tab-pane>
+                                <el-tab-pane label="URL地址" name="third">
+                                    <el-input placeholder="视频URL地址（以mp4,m3u8等格式结尾的链接）" v-model="dialog.data.url" class="input-with-select">
+                                    </el-input>
+                                </el-tab-pane>
+                            </el-tabs>
+                        </el-col>
+                    </el-row>*@
+
+                <el-row type="flex" class="row-bg">
+                    <el-col :span="24">
+                        <el-form-item size="small" :label="'上传视频'" prop="aliyunVideoId">
+                            <el-radio-group v-model="videoType" style="margin-bottom: 30px;">
+                                <el-radio-button label="aliyun">阿里云点播</el-radio-button>
+                                <el-radio-button label="tencent">腾讯云点播</el-radio-button>
+                                <el-radio-button label="url">URL地址</el-radio-button>
+                            </el-radio-group>
+                            <el-input placeholder="请点击右侧的上传按钮或者直接输入视频文件fileId" v-if="videoType.indexOf('aliyun')>=0" v-model="dialog.data.aliyunVideoId" class="input-with-select">
+                                <el-button slot="append" icon="el-icon-search"></el-button>
+                            </el-input>
+                            <el-input placeholder="请点击右侧的上传按钮或者直接输入视频文件fileId" v-if="videoType.indexOf('tencent')>=0" v-model="dialog.data.tencentVideoId" class="input-with-select">
+                                <el-button slot="append" icon="el-icon-search"></el-button>
+                            </el-input>
+                            <el-input placeholder="视频URL地址（以mp4,m3u8等格式结尾的链接）" v-if="videoType.indexOf('url')>=0" v-model="dialog.data.url" class="input-with-select">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row type="flex" class="row-bg">
+                    <el-col :span="12">
+                        <el-form-item size="small" :label="'视频时长'" prop="duration" v-if="Object.keys(dialog.data).indexOf('duration')>=0">
+                            <el-input-number v-model="dialog.data.duration" :min="1" :max="100"></el-input-number>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item size="small" :label="'试看时长'" prop="freeSeconds" v-if="Object.keys(dialog.data).indexOf('freeSeconds')>=0">
+                            <el-input v-model="dialog.data.freeSeconds"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex" class="row-bg">
+                    <el-col :span="8">
+                        <el-form-item size="small" :label="'Web播放器'" prop="playerPC" v-if="Object.keys(dialog.data).indexOf('playerPC')>=0">
+                            <el-select v-model="dialog.data.playerPC" placeholder="请选择">
+                                <el-option v-for="item in players"
+                                           :key="item.value"
+                                           :label="item.label"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item size="small" :label="'手机播放器'" prop="playerH5" v-if="Object.keys(dialog.data).indexOf('playerH5')>=0">
+                            <el-select v-model="dialog.data.playerH5" placeholder="请选择">
+                                <el-option v-for="item in players"
+                                           :key="item.value"
+                                           :label="item.label"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item size="small" :label="'评论开关'" prop="commentStatus" v-if="Object.keys(dialog.data).indexOf('commentStatus')>=0">
+                            <el-select v-model="dialog.data.commentStatus" placeholder="请选择">
+                                <el-option v-for="item in options"
+                                           :key="item.value"
+                                           :label="item.label"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex" class="row-bg">
+                    <el-col :span="12">
+                        <el-form-item size="small" :label="'SEO描述'" prop="seoDescription" v-if="Object.keys(dialog.data).indexOf('seoDescription')>=0">
+                            <el-input type="textarea" :rows="2" v-model="dialog.data.seoDescription"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item size="small" :label="'SEO关键字'" prop="seoKeywords" v-if="Object.keys(dialog.data).indexOf('seoKeywords')>=0">
+                            <el-input type="textarea" :rows="2" v-model="dialog.data.seoKeywords"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex" class="row-bg">
+                    <el-col :span="24">
+                        <el-form-item size="small" :label="'slug'" prop="slug" v-if="Object.keys(dialog.data).indexOf('slug')>=0">
+                            <el-input v-model="dialog.data.slug"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                @*
+                    <el-form-item size="small" :label="'简短介绍'" prop="shortDescription" v-if="Object.keys(dialog.data).indexOf('shortDescription')>=0">
+                        <el-input v-model="dialog.data.shortDescription"></el-input>
+                    </el-form-item>
+                    <el-form-item size="small" :label="'简介原始内容'" prop="originalDesc" v-if="Object.keys(dialog.data).indexOf('originalDesc')>=0">
+                        <el-input v-model="dialog.data.originalDesc"></el-input>
+                    </el-form-item>
+                    <el-form-item size="small" :label="'简介渲染后的内容'" prop="renderDesc" v-if="Object.keys(dialog.data).indexOf('renderDesc')>=0">
+                        <el-input v-model="dialog.data.renderDesc"></el-input>
+                    </el-form-item>*@
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @@click="dialog.visible = false">取 消</el-button>
+                <el-button :loading="dialog.updateLoading" type="primary" @@click="updateData">确 认</el-button>
+            </div>
+        </el-dialog>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/js/Admin/Pages/Video/Index.js"></script>
+}
+

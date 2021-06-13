@@ -1,0 +1,87 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+	<PropertyGroup>
+		<TargetFramework>netcoreapp5.0</TargetFramework>
+		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+		<Version>1.0</Version>
+		<AssemblyName>Senparc.Xncf.CodeBuilder</AssemblyName>
+		<RootNamespace>Senparc.Xncf.CodeBuilder</RootNamespace>
+		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+		<Description>代码生成器</Description>
+		<Copyright>Senparc</Copyright>
+		<PackageTags>Senparc,NeuCharFramework,NCF,Senparc.Xncf.CodeBuilder</PackageTags>
+		<Authors>Senparc</Authors>
+		<Owners>Senparc</Owners>
+		<!-- <PackageLicenseUrl>https://github.com/NeuCharFramework/NcfPackageSources/blob/master/LICENSE</PackageLicenseUrl> -->
+		<Title>代码生成器</Title>
+		<!--<ProjectUrl> https://github.com/NeuCharFramework/NCF</ProjectUrl>
+    <PackageProjectUrl>https://github.com/NeuCharFramework/NcfPackageSources</PackageProjectUrl>
+    <PackageIconUrl>https://sdk.weixin.senparc.com/Images/logo-square-ncf.jpg</PackageIconUrl>-->
+		<PackageReleaseNotes>
+			v1.0 创世
+		</PackageReleaseNotes>
+		<RepositoryUrl> https://github.com/NeuCharFramework/NcfPackageSources</RepositoryUrl>
+		<Configurations>Debug;Release;Test</Configurations>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<OutputPath>..\..\..\BuildOutPut</OutputPath>
+		<!--<DocumentationFile>..\..\..\BuildOutPut\Senparc.Xncf.CodeBuilder.XML</DocumentationFile>
+		<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<ErrorReport>prompt</ErrorReport>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>-->
+	</PropertyGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="wwwroot\**\*" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.127.9-beta1" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.6.114-beta1" />
+		<ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
+		<ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
+		<None Include="App_Data\SenparcTraceLog\*" />
+	</ItemGroup>
+
+	<!--<ItemGroup>
+	  <Content Remove="templates\template1\App_Data\Database\SenparcConfig.config" />
+	  <Content Remove="templates\template1\Areas\Admin\Pages\Shared\_SideMenu.cshtml" />
+	  <Content Remove="templates\template1\Areas\Admin\Pages\Shared\_ViewImports.cshtml" />
+	  <Content Remove="templates\template1\Areas\Admin\Pages\Shared\_ViewStart.cshtml" />
+	  <Content Remove="templates\template1\Areas\Admin\Pages\CodeBuilder\DatabaseSample.cshtml" />
+	  <Content Remove="templates\template1\Areas\Admin\Pages\CodeBuilder\Index.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="templates\template1\App_Data\Database\SenparcConfig.config" />
+	  <None Include="templates\template1\Areas\Admin\Pages\Shared\_SideMenu.cshtml" />
+	  <None Include="templates\template1\Areas\Admin\Pages\Shared\_ViewImports.cshtml" />
+	  <None Include="templates\template1\Areas\Admin\Pages\Shared\_ViewStart.cshtml" />
+	  <None Include="templates\template1\Areas\Admin\Pages\CodeBuilder\DatabaseSample.cshtml" />
+	  <None Include="templates\template1\Areas\Admin\Pages\CodeBuilder\Index.cshtml" />
+	</ItemGroup>-->
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.1" />
+		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
+		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Models\DatabaseModel\Mapping\" />
+	  <Folder Include="wwwroot\js\Admin\Pages\Template\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Areas\Admin\Pages\CodeBuilder\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\CodeBuilder\TableColumnIndex.cshtml" />
+	  <None Include="Areas\Admin\Pages\CodeBuilder\TableIndex.cshtml" />
+	  <None Include="Areas\Admin\Pages\Shared\_SideMenu.cshtml" />
+	  <None Include="Areas\Admin\Pages\Shared\_ViewImports.cshtml" />
+	  <None Include="Areas\Admin\Pages\Shared\_ViewStart.cshtml" />
+	</ItemGroup>
+</Project>

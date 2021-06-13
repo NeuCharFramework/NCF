@@ -1,12 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <!--<TargetFramework>net5.0</TargetFramework>-->
+    <!--<TargetFramework>netcoreapp3.1</TargetFramework>-->
+    <TargetFramework>net5.0</TargetFramework>
     <Version>0.2.0-beta6</Version>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <TypeScriptToolsVersion>4.0</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>4.1</TypeScriptToolsVersion>
     <UserSecretsId>d2144151-af7a-4d50-896d-4a306e594f7b</UserSecretsId>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="App_Data\TemplateCode\**" />
+    <Content Remove="App_Data\TemplateCode\**" />
+    <EmbeddedResource Remove="App_Data\TemplateCode\**" />
+    <None Remove="App_Data\TemplateCode\**" />
+  </ItemGroup>
   <ItemGroup>
     <!--https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-3.1-->
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.6" />
@@ -19,15 +25,15 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.8.127.20-beta1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
-    <PackageReference Include="Senparc.CO2NET.AspNet" Version="0.3.200" />
-    <PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.6.127.40-beta1" />
-    <PackageReference Include="Senparc.CO2NET" Version="1.3.200" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.39-beta1" />
+    <PackageReference Include="Senparc.CO2NET.AspNet" Version="0.4.400" />
+    <PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.6.127.41-beta1" />
+    <PackageReference Include="Senparc.CO2NET" Version="1.4.400" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.40-beta1" />
     <PackageReference Include="ML.Xncf.Docs" Version="2.1.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj" />
     <ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
     <ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
     <ProjectReference Include="..\Senparc.ImageUtility\Senparc.ImageUtility.csproj" />
@@ -533,4 +539,78 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<!--<TargetFramework>net5.0</TargetFramework>-->
+		<Version>0.2.0-beta6</Version>
+		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+		<TypeScriptToolsVersion>4.0</TypeScriptToolsVersion>
+		<UserSecretsId>d2144151-af7a-4d50-896d-4a306e594f7b</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<!--<RestoreFallbackFolders>clear</RestoreFallbackFolders>-->
+
+	</PropertyGroup>
+	<ItemGroup>
+		<!--https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-3.1-->
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.6" />
+		<PackageReference Include="log4net" Version="2.0.8" />
+		<PackageReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+		<PackageReference Include="AutoMapper" Version="7.0.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
+		<PackageReference Include="Senparc.CO2NET.AspNet" Version="0.3.200" />
+		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.6.127.41-beta1" />
+		<PackageReference Include="Senparc.CO2NET" Version="1.3.200" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.127.40-beta1" />
+		<PackageReference Include="ML.Xncf.Docs" Version="2.1.1" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
+		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
+		<ProjectReference Include="..\Senparc.ImageUtility\Senparc.ImageUtility.csproj" />
+		<ProjectReference Include="..\Senparc.Log\Senparc.Log.csproj" />
+		<ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
+		<ProjectReference Include="..\Senparc.Threads\Senparc.Threads.csproj" />
+		<ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
+		<ProjectReference Include="..\Senparc.Web.UI\Senparc.Web.UI.csproj" />
+		<ProjectReference Include="..\Senparc.Xncf.CodeBuilder\Senparc.Xncf.CodeBuilder.csproj" />
+		<ProjectReference Include="..\Senparc.Xncf.User\Senparc.Xncf.User.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="wwwroot\lib\Chart.js" />
+		<None Include="wwwroot\lib\echarts" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Update="wwwroot\css\site.css">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\css\site.min.css">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\css\User\base\pagecss.css">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\css\User\styles.css">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\css\WX\base\base.css">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\css\WX\styles.css">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\lib\element-ui_2.13.2\element.css">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
 </Project>
