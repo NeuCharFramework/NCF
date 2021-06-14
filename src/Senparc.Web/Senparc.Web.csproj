@@ -24,7 +24,7 @@
 		<PackageReference Include="AutoMapper" Version="7.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.0.7-beta1" />
+		<!--<PackageReference Include="Senparc.Xncf.Swagger" Version="0.0.7-beta1" />-->
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="0.3.200" />
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.6.127.41-beta1" />
