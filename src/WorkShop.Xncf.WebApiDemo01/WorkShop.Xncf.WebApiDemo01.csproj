@@ -15,9 +15,9 @@
         <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
     </ItemGroup>
 	<ItemGroup>
-        <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.127.9-beta1" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.6.127-beta1" />
-        <PackageReference Include="Senparc.Xncf.Swagger" Version="0.0.7-beta1" />
+        <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.128-beta1" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.6.128-beta1" />
+        <PackageReference Include="Senparc.Xncf.Swagger" Version="0.0.9-beta1" />
 		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
 		<ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
 		<None Include="App_Data\SenparcTraceLog\*" />
