@@ -6,23 +6,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
 using Senparc.CO2NET;
 using Senparc.Ncf.Core.Models;
-using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.Database;
 //using Senparc.Ncf.Database.MySql;//根据需要添加或删除，使用需要引用 Senparc.Ncf.Database.MySql
 //using Senparc.Ncf.Database.Sqlite;//根据需要添加或删除，使用需要引用 Senparc.Ncf.Database.Sqlite
 using Senparc.Ncf.Database.SqlServer;//根据需要添加或删除，使用需要引用 Senparc.Ncf.Database.SqlServer
 using Senparc.Ncf.Service.MultiTenant;
-using Senparc.NeuChar;
 using Senparc.Web.Hubs;
-using Senparc.Xncf.WeixinManager.Services;
-using Swashbuckle.AspNetCore.Annotations;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
-using System.Linq;
-using System.Reflection;
 
 namespace Senparc.Web
 {
