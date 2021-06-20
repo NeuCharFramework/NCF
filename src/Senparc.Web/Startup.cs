@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
 using Senparc.Ncf.Core.Models;
-using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.Database;
 //using Senparc.Ncf.Database.MySql;//根据需要添加或删除，使用需要引用 Senparc.Ncf.Database.MySql
 //using Senparc.Ncf.Database.Sqlite;//根据需要添加或删除，使用需要引用 Senparc.Ncf.Database.Sqlite
@@ -65,6 +64,7 @@ namespace Senparc.Web
 
             #endregion
 
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -75,6 +75,7 @@ namespace Senparc.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
 
             //Use NCF（必须）

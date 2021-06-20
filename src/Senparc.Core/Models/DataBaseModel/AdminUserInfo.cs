@@ -57,7 +57,7 @@ namespace Senparc.Core.Models
         /// <returns></returns>
         public string GeneratePassword()
         {
-            return Guid.NewGuid().ToString("n").Substring(0, 8);
+            return Guid.NewGuid().ToString("n").Substring(0, 8);//TODO:更强的代码策略，或自定义的代码策略
         }
 
         /// <summary>

@@ -26,3 +26,4 @@ obj/
 /src/Senparc.Xncf.XncfBuilder.Template.*
 /src/Senparc.Web.DatabasePlant/App_Data/SenparcTraceLog
 /src/published
+/src/Senparc.Web/App_Data/ApiDocXml

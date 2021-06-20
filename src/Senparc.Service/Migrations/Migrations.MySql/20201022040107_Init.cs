@@ -13,7 +13,7 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", /*MySqlValueGenerationStrategy.IdentityColumn*/1),
+                        .Annotation("MySql:ValueGenerationStrategy", 1/*MySqlValueGenerationStrategy.IdentityColumn*/),
                     Flag = table.Column<bool>(nullable: false, defaultValue: false),
                     AddTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),

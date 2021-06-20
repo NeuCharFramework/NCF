@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Senparc.Ncf.Core.Models;
 
 namespace Senparc.Service.Migrations.Migrations.MySql
 {
     public partial class Add_TenantInfo : Migration
     {
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
