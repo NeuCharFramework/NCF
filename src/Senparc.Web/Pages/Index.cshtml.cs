@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-//using System.Management.Automation;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Senparc.CO2NET.Extensions;
-using Senparc.Core.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Senparc.Core.Models.VD;
-using Senparc.Ncf.Core.Cache;
-using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.MultiTenant;
+using System;
+//using System.Management.Automation;
+using System.Threading.Tasks;
 
 namespace Senparc.Web.Pages
 {
