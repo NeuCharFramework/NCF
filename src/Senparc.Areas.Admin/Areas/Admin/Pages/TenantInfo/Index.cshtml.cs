@@ -44,9 +44,6 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             return Page();
         }
 
-
-
-
         public async Task<IActionResult> OnGetRequestTenantInfoAsync()
         {
             var requestTenantInfo = _serviceProvider.GetRequiredService<RequestTenantInfo>();
