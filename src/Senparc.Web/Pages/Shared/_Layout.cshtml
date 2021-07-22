@@ -49,11 +49,20 @@
                                 </li>
                             }
                         }
-                         @{
+                @*         @{
                             if (await CheckXncfModuleValiable("Senparc.Xncf.WeixinManager"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" href="/swagger" target="_blank">微信 API Swagger</a>
+                                </li>
+                            }
+                        }*@
+
+                        @{
+                            if (await CheckXncfModuleValiable("Senparc.Xncf.Swagger"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="/swagger" target="_blank">API Swagger</a>
                                 </li>
                             }
                         }

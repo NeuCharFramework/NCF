@@ -72,6 +72,7 @@ namespace Senparc.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+
             //services.AddMvc(options =>
             //{
             //    //options.Filters.Add<HttpGlobalExceptionFilter>();
@@ -195,6 +196,9 @@ namespace Senparc.Web
             //Other
             services.AddScoped(typeof(Ncf.Core.WorkContext.Provider.IAdminWorkContextProvider), typeof(Ncf.Core.WorkContext.Provider.AdminWorkContextProvider));
             services.AddTransient<Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor, Microsoft.AspNetCore.Mvc.Infrastructure.ActionContextAccessor>();
+
+            services.AddMvcCore().AddApiExplorer();
+
 
             //激活 Xncf 扩展引擎（必须）
             services.StartEngine(configuration);
