@@ -81,4 +81,7 @@
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="App_Data\ApiDocXml\" />
+	</ItemGroup>
 </Project>
