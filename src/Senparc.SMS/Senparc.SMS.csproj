@@ -6,8 +6,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
-    <PackageReference Include="Senparc.Ncf.Log" Version="0.6.128-beta1" />
-    <PackageReference Include="Senparc.Ncf.SMS" Version="0.6.128-beta1" />
+    <PackageReference Include="Senparc.Ncf.Log" Version="0.6.128-beta3" />
+    <PackageReference Include="Senparc.Ncf.SMS" Version="0.6.128-beta3" />
   </ItemGroup>
 
 </Project>

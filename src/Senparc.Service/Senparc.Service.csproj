@@ -20,14 +20,14 @@
 		<PackageReference Include="AutoMapper" Version="7.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
 		<PackageReference Include="Qiniu.Shared" Version="7.2.15" />
-		<PackageReference Include="Senparc.NeuChar" Version="1.5.0-preview1.2" />
-		<PackageReference Include="Senparc.Weixin.MP" Version="16.13.1-preview1" />
-		<PackageReference Include="Senparc.Weixin.Open" Version="4.10.3-preview1" />
-		<PackageReference Include="Senparc.Weixin.WxOpen" Version="3.12.2-preview1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.128-beta1" />
-		<PackageReference Include="Senparc.Ncf.Log" Version="0.6.128-beta1" />
-		<PackageReference Include="Senparc.Ncf.Repository" Version="0.6.128-beta1" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.6.128-beta1" />
+		<PackageReference Include="Senparc.NeuChar" Version="1.5.0-preview3" />
+		<PackageReference Include="Senparc.Weixin.MP" Version="16.14.0-preview3" />
+		<PackageReference Include="Senparc.Weixin.Open" Version="4.11.0-preview3" />
+		<PackageReference Include="Senparc.Weixin.WxOpen" Version="3.13.0-preview3" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.128-beta3" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.6.128-beta3" />
+		<PackageReference Include="Senparc.Ncf.Repository" Version="0.6.128-beta3" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.6.128-beta3" />
 	</ItemGroup>
 
 	<ItemGroup>
