@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<!--<TargetFramework>net5.0</TargetFramework>-->
-		<Version>0.2.0-beta6</Version>
+		<Version>0.3.0-beta3</Version>
 		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
 		<TypeScriptToolsVersion>4.0</TypeScriptToolsVersion>
 		<UserSecretsId>d2144151-af7a-4d50-896d-4a306e594f7b</UserSecretsId>
@@ -33,10 +33,10 @@
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
-		<PackageReference Include="Senparc.CO2NET.AspNet" Version="0.4.400" />
-		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.6.128-beta1" />
-		<PackageReference Include="Senparc.CO2NET" Version="1.4.400" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.128-beta1" />
+		<PackageReference Include="Senparc.CO2NET.AspNet" Version="0.6.0-preview3" />
+		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.6.128-beta3" />
+		<PackageReference Include="Senparc.CO2NET" Version="1.5.0-preview3" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.128-beta3" />
 		<PackageReference Include="ML.Xncf.Docs" Version="2.1.1" />
 	</ItemGroup>
 	<ItemGroup>
