@@ -30,9 +30,4 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Senparc.Service\Senparc.Service.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Weixin\MpAccount\" />
-	</ItemGroup>
-
 </Project>
