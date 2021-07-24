@@ -7,7 +7,7 @@
 	<ItemGroup>
 		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.7.128-beta3" />
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.10.128-beta3" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.1.2.1-beta3" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.1.2.2-beta3" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.7.128-beta3" />
 	</ItemGroup>
 	<ItemGroup>
