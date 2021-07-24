@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
+using Senparc.CO2NET.WebApi;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
 //using Senparc.Ncf.Database.MySql;//根据需要添加或删除，使用需要引用 Senparc.Ncf.Database.MySql
@@ -37,7 +38,6 @@ namespace Senparc.Web
             //services.AddDatabase<SqliteMemoryDatabaseConfiguration>();//使用 SQLite 数据库
             services.AddDatabase<SQLServerDatabaseConfiguration>();//使用 SQLServer数据库
                                                                    //services.AddDatabase<MySqlDatabaseConfiguration>();//使用 MySQL 数据库
-
 
             //添加（注册） Ncf 服务（重要，必须！）
             services.AddNcfServices(Configuration, env, CompatibilityVersion.Version_3_0);
