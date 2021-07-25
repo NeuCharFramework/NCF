@@ -32,9 +32,12 @@ namespace Senparc.Web
         public void ConfigureServices(IServiceCollection services)
         {
             //指定数据库类型
-            //services.AddDatabase<SqliteMemoryDatabaseConfiguration>();//使用 SQLite 数据库
-            services.AddDatabase<SQLServerDatabaseConfiguration>();//使用 SQLServer数据库
-                                                                   //services.AddDatabase<MySqlDatabaseConfiguration>();//使用 MySQL 数据库
+            /* AddDatabase<TDatabaseConfiguration>() 泛型类型说明：
+             *  SQLServerDatabaseConfiguration：     使用 SQLServer数据库
+             *  SqliteMemoryDatabaseConfiguration：  使用 SQLite 数据库
+             *  MySqlDatabaseConfiguration：         使用 MySQL 数据库
+             */
+            services.AddDatabase<SQLServerDatabaseConfiguration>();//默认使用 SQLServer数据库，根据需要改写
 
             //添加（注册） Ncf 服务（重要，必须！）
             services.AddNcfServices(Configuration, env, CompatibilityVersion.Version_3_0);
