@@ -74,7 +74,6 @@ namespace Senparc.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
             //services.AddMvc(options =>
             //{
             //    //options.Filters.Add<HttpGlobalExceptionFilter>();

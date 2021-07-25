@@ -13,7 +13,7 @@
 	<ItemGroup>
 		<!--<ProjectReference Include="..\..\..\Senparc.Xncf.WeixinManager\src\Senparc.Xncf.WeixinManager\Senparc.Xncf.WeixinManager.csproj" />-->
 		<!--<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.6.103-beta1" />-->
-		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.6.380-beta3" />
+		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.6.396-beta3" />
 
 		<Compile Remove="Weixin\MpAccount\MpAccountMessageHandler.cs" />
 	</ItemGroup>
