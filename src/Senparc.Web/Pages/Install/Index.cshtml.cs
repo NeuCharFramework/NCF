@@ -94,7 +94,7 @@ namespace Senparc.Web.Pages.Install
                         {
 
                             //初始化数据库
-                            var (initDbSuccess, initDbMsg) = await serviceRegister.InitDatabase(_serviceProvider, _tenantInfoService, _httpContextAccessor.Value.HttpContext);
+                            var (initDbSuccess, initDbMsg) = await serviceRegister.InitDatabase(_serviceProvider/*, _tenantInfoService, *//*_httpContextAccessor.Value.HttpContext*/);
                             if (!initDbSuccess)
                             {
                                 throw new NcfDatabaseException($"ServiceRegister.InitDatabase 失败：{initDbMsg}", DatabaseConfigurationFactory.Instance.Current.GetType());

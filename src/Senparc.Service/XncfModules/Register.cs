@@ -5,12 +5,10 @@
  * 如果需要学习扩展模块，请参考 【Senparc.ExtensionAreaTemplate】 项目的 Register.cs 文件！
  */
 
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Trace;
 using Senparc.Core.Models;
 using Senparc.Ncf.Core.Config;
@@ -18,13 +16,10 @@ using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
-using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Senparc.Service
@@ -39,7 +34,7 @@ namespace Senparc.Service
 
         public override string Uid => SiteConfig.SYSTEM_XNCF_MODULE_SERVICE_UID;// "00000000-0000-0000-0000-000000000001";
 
-        public override string Version => "0.3.2-beta4";
+        public override string Version => "0.3.4-beta4";
 
         public override string MenuName => "NCF 系统服务运行核心";
 
@@ -111,7 +106,7 @@ namespace Senparc.Service
 
         #region IXncfDatabase 接口
 
-        public string DatabaseUniquePrefix => "SystemService";//特殊情况：没有前缀
+        public string DatabaseUniquePrefix => Senparc.Ncf.Core.Models.NcfDatabaseHelper.SYSTEM_UNIQUE_PREFIX;//特殊情况：没有前缀
         public Type XncfDatabaseDbContextType => typeof(SystemServiceEntities);
 
         public Type TryGetXncfDatabaseDbContextType => MultipleDatabasePool.Instance.GetXncfDbContextType(this.GetType());
@@ -146,8 +141,10 @@ namespace Senparc.Service
             /* 
              *     非常重要！！
              * SenparcEntities 工厂配置
-             */
-            var xncfDatabaseData = new XncfDatabaseData(this, "Senparc.Service"/*从当前程序集读取*/);
+             * 
+             * SYSTEM 为特定标记，将直接定位到 __EFMigrationsHistory 
+            */
+            var xncfDatabaseData = new XncfDatabaseData(this, Senparc.Ncf.Core.Models.NcfDatabaseHelper.SYSTEM_UNIQUE_PREFIX);
 
             #region 不属于任何模块
 
@@ -193,7 +190,42 @@ namespace Senparc.Service
 
         #region 扩展
 
-        public async Task<(bool success, string msg)> InitDatabase(IServiceProvider serviceProvider, TenantInfoService tenantInfoService, HttpContext httpContext)
+        public async Task<(bool success, string msg)> GenerateCreateScript(IServiceProvider serviceProvider)
+        {
+            var success = true;
+            string msg = null;
+
+            XncfModuleServiceExtension xncfModuleServiceExtension = serviceProvider.GetService<XncfModuleServiceExtension>();
+            SenparcEntities senparcEntities = (SenparcEntities)xncfModuleServiceExtension.BaseData.BaseDB.BaseDataContext;
+
+            //更新数据库
+            var pendingMigs = await senparcEntities.Database.GetPendingMigrationsAsync();
+            if (pendingMigs.Count() > 0)
+            {
+                senparcEntities.ResetMigrate();//重置合并状态
+
+                try
+                {
+                    var script = senparcEntities.Database.GenerateCreateScript();
+                    SenparcTrace.SendCustomLog("senparcEntities.Database.GenerateCreateScript", script);
+
+                    senparcEntities.Migrate();//进行合并
+
+                    msg = "已成功合并";
+                }
+                catch (Exception ex)
+                {
+                    success = false;
+                    var currentDatabaseConfiguration = DatabaseConfigurationFactory.Instance.Current;
+                    SenparcTrace.BaseExceptionLog(new NcfDatabaseException(ex.Message, currentDatabaseConfiguration.GetType(), senparcEntities.GetType(), ex));
+                }
+            }
+
+            return (success, msg);
+        }
+
+        public async Task<(bool success, string msg)> InitDatabase(IServiceProvider serviceProvider/*, TenantInfoService tenantInfoService*/
+            /*HttpContext httpContext,*/)
         {
             var success = true;
             string msg = null;
@@ -201,36 +233,13 @@ namespace Senparc.Service
             //SenparcEntities senparcEntities = (SenparcEntities)xncfModuleServiceExtension.BaseData.BaseDB.BaseDataContext;
             using (var scope = serviceProvider.CreateScope())
             {
+                var oldMultiTenant = SiteConfig.SenparcCoreSetting.EnableMultiTenant;
                 //暂时关闭多租户状态
                 SiteConfig.SenparcCoreSetting.EnableMultiTenant = false;
 
-                SenparcEntities senparcEntities = scope.ServiceProvider.GetRequiredService<SenparcEntities>();
-                //更新数据库
-                var pendingMigs = await senparcEntities.Database.GetPendingMigrationsAsync();
-                if (pendingMigs.Count() > 0)
-                {
-                    senparcEntities.ResetMigrate();//重置合并状态
+                await GenerateCreateScript(serviceProvider);//尝试执行更新
 
-                    try
-                    {
-
-                        var script = senparcEntities.Database.GenerateCreateScript();
-                        SenparcTrace.SendCustomLog("senparcEntities.Database.GenerateCreateScript", script);
-
-                        senparcEntities.Migrate();//进行合并
-
-                    }
-                    catch (Exception ex)
-                    {
-                        success = false;
-                        msg = ex.Message;
-
-                        var currentDatabaseConfiguration = DatabaseConfigurationFactory.Instance.Current;
-                        SenparcTrace.BaseExceptionLog(new NcfDatabaseException(ex.Message, currentDatabaseConfiguration.GetType(), senparcEntities.GetType(), ex));
-                    }
-                }
-
-                SiteConfig.SenparcCoreSetting.EnableMultiTenant = true;
+                SiteConfig.SenparcCoreSetting.EnableMultiTenant = oldMultiTenant;
             }
 
             return (success: success, msg: msg);
