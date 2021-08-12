@@ -9,6 +9,7 @@
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.10.128-beta3" />
 		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.1.2.5-beta3" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.7.128-beta3" />
+		<PackageReference Include="ML.Xncf.Docs" Version="2.1.6" />
 	</ItemGroup>
 	<ItemGroup>
 		<!--<ProjectReference Include="..\..\..\Senparc.Xncf.WeixinManager\src\Senparc.Xncf.WeixinManager\Senparc.Xncf.WeixinManager.csproj" />-->
