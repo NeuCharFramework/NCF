@@ -198,27 +198,36 @@ namespace Senparc.Service
             XncfModuleServiceExtension xncfModuleServiceExtension = serviceProvider.GetService<XncfModuleServiceExtension>();
             SenparcEntities senparcEntities = (SenparcEntities)xncfModuleServiceExtension.BaseData.BaseDB.BaseDataContext;
 
-            //更新数据库
-            var pendingMigs = await senparcEntities.Database.GetPendingMigrationsAsync();
-            if (pendingMigs.Count() > 0)
+            try
             {
-                senparcEntities.ResetMigrate();//重置合并状态
+                SiteConfig.IsInstalling = true;
 
-                try
+                //更新数据库
+                var pendingMigs = await senparcEntities.Database.GetPendingMigrationsAsync();
+                if (pendingMigs.Count() > 0)
                 {
-                    var script = senparcEntities.Database.GenerateCreateScript();
-                    SenparcTrace.SendCustomLog("senparcEntities.Database.GenerateCreateScript", script);
+                    senparcEntities.ResetMigrate();//重置合并状态
 
-                    senparcEntities.Migrate();//进行合并
+                    try
+                    {
+                        var script = senparcEntities.Database.GenerateCreateScript();
+                        SenparcTrace.SendCustomLog("senparcEntities.Database.GenerateCreateScript", script);
 
-                    msg = "已成功合并";
+                        senparcEntities.Migrate();//进行合并
+
+                        msg = "已成功合并";
+                    }
+                    catch (Exception ex)
+                    {
+                        success = false;
+                        var currentDatabaseConfiguration = DatabaseConfigurationFactory.Instance.Current;
+                        SenparcTrace.BaseExceptionLog(new NcfDatabaseException(ex.Message, currentDatabaseConfiguration.GetType(), senparcEntities.GetType(), ex));
+                    }
                 }
-                catch (Exception ex)
-                {
-                    success = false;
-                    var currentDatabaseConfiguration = DatabaseConfigurationFactory.Instance.Current;
-                    SenparcTrace.BaseExceptionLog(new NcfDatabaseException(ex.Message, currentDatabaseConfiguration.GetType(), senparcEntities.GetType(), ex));
-                }
+            }
+            finally
+            {
+                SiteConfig.IsInstalling = false;
             }
 
             return (success, msg);
