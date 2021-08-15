@@ -28,7 +28,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
 
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.6.128.1-beta3" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.6.128.2-beta3" />
     <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.129-beta3" />
     <PackageReference Include="Senparc.Ncf.Utility" Version="0.6.128-beta3" />
     <PackageReference Include="Senparc.Weixin" Version="6.11.0-preview3" />
