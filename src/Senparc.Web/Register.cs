@@ -88,9 +88,9 @@ namespace Senparc.Web
 
             services.AddMultiTenant();//注册多租户（按需）
             EntitySetKeys.TryLoadSetInfo(typeof(SenparcEntitiesMultiTenant));//注册多租户数据库的对象（按需）
-            services.AddScoped<ITenantInfoDbData,TenantInfoDbData>();
+            services.AddScoped<ITenantInfoDbData, TenantInfoDbData>();
             services.AddScoped<TenantInfoRepository>();
-            services.AddScoped<IClientRepositoryBase<TenantInfo>,TenantInfoRepository>();
+            services.AddScoped<IClientRepositoryBase<TenantInfo>, TenantInfoRepository>();
 
             services.AddSenparcGlobalServices(configuration);//注册 CO2NET 基础引擎所需服务
 
@@ -192,10 +192,10 @@ namespace Senparc.Web
             services.AddHttpContextAccessor();
 
             //Repository & Service
-            services.AddScoped<ISysButtonRespository,SysButtonRespository>();
+            services.AddScoped<ISysButtonRespository, SysButtonRespository>();
 
             //Other
-            services.AddScoped<IAdminWorkContextProvider,AdminWorkContextProvider>();
+            services.AddScoped<IAdminWorkContextProvider, AdminWorkContextProvider>();
             services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
 
             //忽略某些 API
