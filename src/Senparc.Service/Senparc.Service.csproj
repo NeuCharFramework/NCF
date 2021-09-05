@@ -8,7 +8,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- 仅在开发环境下引用 -->
-		<PackageReference Condition=" '$(Configuration)' != 'Release' " Include="Senparc.Ncf.DatabasePlant" Version="0.6.128-beta3" />
+		<PackageReference Condition=" '$(Configuration)' != 'Release' " Include="Senparc.Ncf.DatabasePlant" Version="0.6.129-beta3" />
 	</ItemGroup>
 
 
@@ -24,10 +24,10 @@
 		<PackageReference Include="Senparc.Weixin.MP" Version="16.14.0-preview3" />
 		<PackageReference Include="Senparc.Weixin.Open" Version="4.11.0-preview3" />
 		<PackageReference Include="Senparc.Weixin.WxOpen" Version="3.13.0-preview3" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.128.2-beta3" />
-		<PackageReference Include="Senparc.Ncf.Log" Version="0.6.128-beta3" />
-		<PackageReference Include="Senparc.Ncf.Repository" Version="0.6.128-beta3" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.6.128-beta3" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.129.2-beta3" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.6.129-beta3" />
+		<PackageReference Include="Senparc.Ncf.Repository" Version="0.6.129-beta3" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.6.129-beta3" />
 	</ItemGroup>
 
 	<ItemGroup>

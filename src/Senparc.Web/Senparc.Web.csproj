@@ -32,9 +32,9 @@
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="0.6.0-preview3" />
-		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.6.128-beta3" />
-		<PackageReference Include="Senparc.CO2NET" Version="1.5.0-preview3" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.128.2-beta3" />
+		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.6.129-beta3" />
+		<PackageReference Include="Senparc.CO2NET" Version="1.5.2-preview3" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.129.2-beta3" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
