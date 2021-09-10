@@ -69,6 +69,7 @@ namespace Senparc.Web
             }
 
 
+
             #region 多租户
 
             app.UseMiddleware<TenantMiddleware>();//如果不启用多租户功能，可以删除此配置
@@ -94,7 +95,3 @@ namespace Senparc.Web
         }
     }
 }
-
-
-
-
