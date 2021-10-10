@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -19,6 +20,7 @@ using Senparc.Ncf.Core.AssembleScan;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
+using Senparc.Ncf.Core.WorkContext.Provider;
 using Senparc.Ncf.Repository;
 using Senparc.Ncf.SMS;
 using Senparc.Ncf.XncfBase;
@@ -86,9 +88,9 @@ namespace Senparc.Web
 
             services.AddMultiTenant();//注册多租户（按需）
             EntitySetKeys.TryLoadSetInfo(typeof(SenparcEntitiesMultiTenant));//注册多租户数据库的对象（按需）
-            services.AddScoped(typeof(ITenantInfoDbData), typeof(TenantInfoDbData));
+            services.AddScoped<ITenantInfoDbData, TenantInfoDbData>();
             services.AddScoped<TenantInfoRepository>();
-            services.AddScoped(typeof(IClientRepositoryBase<TenantInfo>), typeof(TenantInfoRepository));
+            services.AddScoped<IClientRepositoryBase<TenantInfo>, TenantInfoRepository>();
 
             services.AddSenparcGlobalServices(configuration);//注册 CO2NET 基础引擎所需服务
 
@@ -190,11 +192,17 @@ namespace Senparc.Web
             services.AddHttpContextAccessor();
 
             //Repository & Service
-            services.AddScoped(typeof(ISysButtonRespository), typeof(SysButtonRespository));
+            services.AddScoped<ISysButtonRespository, SysButtonRespository>();
 
             //Other
-            services.AddScoped(typeof(Ncf.Core.WorkContext.Provider.IAdminWorkContextProvider), typeof(Ncf.Core.WorkContext.Provider.AdminWorkContextProvider));
-            services.AddTransient<Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor, Microsoft.AspNetCore.Mvc.Infrastructure.ActionContextAccessor>();
+            services.AddScoped<IAdminWorkContextProvider, AdminWorkContextProvider>();
+            services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
+
+            //忽略某些 API
+            //Senparc.CO2NET.WebApi.Register.OmitCategoryList.Add(Senparc.NeuChar.PlatformType.WeChat_Work.ToString());
+            //Senparc.CO2NET.WebApi.Register.OmitCategoryList.Add(Senparc.NeuChar.PlatformType.WeChat_MiniProgram.ToString());
+            //Senparc.CO2NET.WebApi.Register.OmitCategoryList.Add(Senparc.NeuChar.PlatformType.WeChat_Open.ToString());
+            //Senparc.CO2NET.WebApi.Register.OmitCategoryList.Add(Senparc.NeuChar.PlatformType.WeChat_OfficialAccount.ToString());
 
             //激活 Xncf 扩展引擎（必须）
             services.StartEngine(configuration);

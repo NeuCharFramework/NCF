@@ -24,8 +24,8 @@ namespace Senparc.Core.Models
 
         public AdminUserInfo(ref string userName, ref string password, string realName, string phone, string note)
         {
-            userName = userName ?? GenerateUserName();//记录用户名
-            password = password ?? GeneratePassword();//记录明文密码
+            userName ??= GenerateUserName();//记录用户名
+            password ??= GeneratePassword();//记录明文密码
 
             UserName = userName;
             PasswordSalt = GeneratePasswordSalt();//生成密码盐
@@ -57,7 +57,7 @@ namespace Senparc.Core.Models
         /// <returns></returns>
         public string GeneratePassword()
         {
-            return Guid.NewGuid().ToString("n").Substring(0, 8);
+            return Guid.NewGuid().ToString("n").Substring(0, 8);//TODO:更强的代码策略，或自定义的代码策略
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Helpers;
@@ -8,7 +9,6 @@ using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using Senparc.Ncf.XncfBase.Threads;
-using Senparc.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,7 +16,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -131,7 +130,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// <param name="xncfFunctionName"></param>
         /// <param name="xncfFunctionParams"></param>
         /// <returns></returns>
-        public async Task<IActionResult> OnPostRunFunctionAsync([FromBody]ExecuteFuncParamDto executeFuncParamDto)
+        public async Task<IActionResult> OnPostRunFunctionAsync([FromBody] ExecuteFuncParamDto executeFuncParamDto)
         {
             var xncfRegister = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == executeFuncParamDto.XncfUid);
 

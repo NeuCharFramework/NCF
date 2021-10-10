@@ -1,15 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Senparc.Core.Models;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
-using Senparc.Ncf.Database.MultipleMigrationDbContext;
-using Senparc.Ncf.XncfBase;
 using Senparc.Ncf.XncfBase.Database;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace Senparc.Service
 {

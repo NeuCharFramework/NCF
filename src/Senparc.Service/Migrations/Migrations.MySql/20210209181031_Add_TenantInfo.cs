@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Senparc.Ncf.Core.Models;
 
 namespace Senparc.Service.Migrations.Migrations.MySql
 {
     public partial class Add_TenantInfo : Migration
     {
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -13,7 +16,7 @@ namespace Senparc.Service.Migrations.Migrations.MySql
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", 1/*MySqlValueGenerationStrategy.IdentityColumn*/),
                     Guid = table.Column<Guid>(type: "char(36)", nullable: false),
                     Name = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: false),
                     Enable = table.Column<bool>(type: "tinyint(1)", nullable: false),
