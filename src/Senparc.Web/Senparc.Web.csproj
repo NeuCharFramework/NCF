@@ -20,7 +20,7 @@
 
 		<!--https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-3.1-->
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.6" />
-		<PackageReference Include="log4net" Version="2.0.8" />
+		<PackageReference Include="log4net" Version="2.0.12" />
 		<PackageReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.1">
 			<PrivateAssets>all</PrivateAssets>
@@ -31,9 +31,9 @@
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
-		<PackageReference Include="Senparc.CO2NET.AspNet" Version="0.6.0-preview3" />
+		<PackageReference Include="Senparc.CO2NET.AspNet" Version="0.6.0-preview4" />
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.6.129-beta3" />
-		<PackageReference Include="Senparc.CO2NET" Version="1.5.2-preview3" />
+		<PackageReference Include="Senparc.CO2NET" Version="1.5.2-preview4" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.6.129.2-beta3" />
 	</ItemGroup>
 	<ItemGroup>
