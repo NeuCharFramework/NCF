@@ -37,6 +37,7 @@
 		<Content Remove="wwwroot\css\Admin\SystemConfig\Index.css" />
 		<Content Remove="wwwroot\js\Admin\Pages\SystemConfig\Index.js" />
 		<Content Remove="wwwroot\js\Admin\Pages\TenantInfo\Index.js" />
+		<Content Remove="wwwroot\js\Admin\Pages\XncfModule\start2.js" />
 	</ItemGroup>
 
 	<ItemGroup>

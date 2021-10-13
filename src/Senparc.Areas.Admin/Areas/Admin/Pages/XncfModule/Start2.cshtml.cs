@@ -8,11 +8,15 @@ using Senparc.Ncf.AreaBase.Admin.Filters;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
+using Senparc.Ncf.XncfBase.FunctionRenders;
+using Senparc.Ncf.XncfBase.Functions;
 using Senparc.Ncf.XncfBase.Threads;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,7 +28,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
     {
         private readonly SysMenuService _sysMenuService;
         public Senparc.Ncf.Core.Models.DataBaseModel.XncfModule XncfModule { get; set; }
-        public Dictionary<IXncfFunction, List<FunctionParameterInfo>> FunctionParameterInfoCollection { get; set; } = new Dictionary<IXncfFunction, List<FunctionParameterInfo>>();
+        //public Dictionary<IXncfFunction, List<FunctionParameterInfo>> FunctionParameterInfoCollection { get; set; } = new Dictionary<IXncfFunction, List<FunctionParameterInfo>>();
 
         XncfModuleService _xncfModuleService;
         IServiceProvider _serviceProvider;
@@ -286,13 +290,97 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             {
                 throw new Exception($"模块丢失或未加载（{XncfRegisterManager.RegisterList.Count}）！");
             }
-            IDictionary<IXncfFunction, List<FunctionParameterInfo>> functionParameterInfoCollection = new Dictionary<IXncfFunction, List<FunctionParameterInfo>>();
+
+
+            IDictionary<(string key,string name, string description), List<FunctionParameterInfo>> functionParameterInfoCollection = new Dictionary<(string key, string name, string description), List<FunctionParameterInfo>>();
+
+
             try
             {
-                foreach (var functionType in xncfRegister.Functions)
+                if (Senparc.Ncf.XncfBase.Register.FunctionRenderCollection.TryGetValue(typeof(Register), out var functionGroup))
                 {
-                    var function = _serviceProvider.GetService(functionType) as FunctionBase;//如：Senparc.Xncf.ChangeNamespace.Functions.ChangeNamespace
-                    functionParameterInfoCollection[function] = await function.GetFunctionParameterInfoAsync(_serviceProvider, true);
+                    foreach (var funtionBag in functionGroup.Values)
+                    {
+                        //var obj = GenerateParameterInstance();
+
+
+                        ////预载入参数
+                        //if (tryLoadData && obj is IFunctionParameterLoadDataBase loadDataParam)
+                        //{
+                        //    await loadDataParam.LoadData(serviceProvider);//载入参数
+                        //}
+
+                        var functionParameterType = funtionBag.MethodInfo.GetParameters().FirstOrDefault()?.ParameterType;
+                        if (functionParameterType == null)
+                        {
+                            functionParameterType = typeof(FunctionAppRequestBase);
+                        }
+
+                        var obj = functionParameterType.Assembly.CreateInstance(functionParameterType.FullName) as FunctionAppRequestBase;
+
+
+                        var props = functionParameterType.GetProperties();
+                        ParameterType parameterType = ParameterType.Text;
+                        List<FunctionParameterInfo> result = new List<FunctionParameterInfo>();
+                        foreach (var prop in props)
+                        {
+                            SelectionList selectionList = null;
+                            parameterType = ParameterType.Text;//默认为文本内容
+                                                               //判断是否存在选项
+                            if (prop.PropertyType == typeof(SelectionList))
+                            {
+                                var selections = prop.GetValue(obj, null) as SelectionList;
+                                switch (selections.SelectionType)
+                                {
+                                    case SelectionType.DropDownList:
+                                        parameterType = ParameterType.DropDownList;
+                                        break;
+                                    case SelectionType.CheckBoxList:
+                                        parameterType = ParameterType.CheckBoxList;
+                                        break;
+                                    default:
+                                        //TODO: throw
+                                        break;
+                                }
+                                selectionList = selections;
+                            }
+
+                            var name = prop.Name;
+                            string title = null;
+                            string description = null;
+                            var isRequired = prop.GetCustomAttribute<RequiredAttribute>() != null;
+                            var descriptionAttr = prop.GetCustomAttribute<DescriptionAttribute>();
+                            if (descriptionAttr != null && descriptionAttr.Description != null)
+                            {
+                                //分割：名称||说明
+                                var descriptionAttrArr = descriptionAttr.Description.Split(new[] { "||" }, StringSplitOptions.RemoveEmptyEntries);
+                                title = descriptionAttrArr[0];
+                                if (descriptionAttrArr.Length > 1)
+                                {
+                                    description = descriptionAttrArr[1];
+                                }
+                            }
+                            var systemType = prop.PropertyType.Name;
+
+                            object value = null;
+                            try
+                            {
+                                value = prop.GetValue(obj);
+                            }
+                            catch (Exception ex)
+                            {
+                                SenparcTrace.BaseExceptionLog(ex);
+                            }
+
+                            var functionParamInfo = new FunctionParameterInfo(name, title, description, isRequired, systemType, parameterType,
+                                                        selectionList ?? new SelectionList(SelectionType.Unknown), value);
+                            result.Add(functionParamInfo);
+                        }
+
+                        //TODO: 以上方法需要集成到基础库
+                        var functionKey = funtionBag.Key;
+                        functionParameterInfoCollection[(functionKey, funtionBag.FunctionRenderAttribute.Name, funtionBag.FunctionRenderAttribute.Description)] = result;
+                    }
                 }
             }
             catch (Exception ex)
@@ -317,47 +405,47 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                     xncfRegister.Version,
                     xncfRegister.Uid,
                     areaPageMenuItems = (xncfRegister as Ncf.Core.Areas.IAreaRegister)?.AareaPageMenuItems ?? new List<Ncf.Core.Areas.AreaPageMenuItem>(),
-                    Interfaces = xncfRegister.GetType().GetInterfaces().Select(_ => _.Name),
+                    Interfaces = xncfRegister.GetType().GetInterfaces().Select(z => z.Name),
                     FunctionCount = xncfRegister.Functions.Count,
-                    registeredThreadInfo = xncfRegister.RegisteredThreadInfo.Select(_ => new
+                    registeredThreadInfo = xncfRegister.RegisteredThreadInfo.Select(z => new
                     {
                         Key = new
                         {
-                            _.Key.Name,
-                            _.Key.StoryHtml
+                            z.Key.Name,
+                            z.Key.StoryHtml
                         },
                         Value = new
                         {
-                            _.Value.IsAlive,
-                            IsBackground = _.Value.IsAlive ? new bool?(_.Value.IsBackground) : null,
-                            ThreadState = _.Value.IsAlive ? new ThreadState?(_.Value.ThreadState) : null,
-                            ThreadStateStr = _.Value.IsAlive ? _.Value.ThreadState.ToString() : null
+                            z.Value.IsAlive,
+                            IsBackground = z.Value.IsAlive ? new bool?(z.Value.IsBackground) : null,
+                            ThreadState = z.Value.IsAlive ? new ThreadState?(z.Value.ThreadState) : null,
+                            ThreadStateStr = z.Value.IsAlive ? z.Value.ThreadState.ToString() : null
                         }
                     })
                 },
                 functionParameterInfoCollection = functionParameterInfoCollection
-                .Select(_ => new
+                .Select(z => new
                 {
                     Key = new
                     {
-                        _.Key.Name,
-                        _.Key.Description
+                        z.Key.name,
+                        z.Key.description
                     },
-                    _.Value
+                    z.Value
                 }),
-                registeredThreadInfo = registeredThreadInfo.Select(_ => new
+                registeredThreadInfo = registeredThreadInfo.Select(z => new
                 {
                     Key = new
                     {
-                        _.Key.Name,
-                        _.Key.StoryHtml
+                        z.Key.Name,
+                        z.Key.StoryHtml
                     },
                     Value = new
                     {
-                        _.Value.IsAlive,
-                        IsBackground = _.Value.IsAlive ? new bool?(_.Value.IsBackground) : null,
-                        ThreadState = _.Value.IsAlive ? new ThreadState?(_.Value.ThreadState) : null,
-                        ThreadStateStr = _.Value.IsAlive ? _.Value.ThreadState.ToString() : null
+                        z.Value.IsAlive,
+                        IsBackground = z.Value.IsAlive ? new bool?(z.Value.IsBackground) : null,
+                        ThreadState = z.Value.IsAlive ? new ThreadState?(z.Value.ThreadState) : null,
+                        ThreadStateStr = z.Value.IsAlive ? z.Value.ThreadState.ToString() : null
                     }
                 })
             });
