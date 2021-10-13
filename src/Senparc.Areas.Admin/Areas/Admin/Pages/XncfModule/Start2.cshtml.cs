@@ -297,7 +297,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
             try
             {
-                if (Senparc.Ncf.XncfBase.Register.FunctionRenderCollection.TryGetValue(typeof(Register), out var functionGroup))
+                if (Senparc.Ncf.XncfBase.Register.FunctionRenderCollection.TryGetValue(xncfRegister.GetType(), out var functionGroup))
                 {
                     foreach (var funtionBag in functionGroup.Values)
                     {
