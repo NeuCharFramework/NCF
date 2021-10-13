@@ -5,6 +5,7 @@ using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.AreaBase.Admin.Filters;
+using Senparc.Ncf.Core.AppServices;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
@@ -154,38 +155,49 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 return new JsonResult(new { success = false, msg = $"当前模块状态为【{xncfModule.State}】,必须为【开放】状态的模块才可执行！\r\n此外，如果您强制执行此方法，也将按照未通过验证的程序集执行，因为您之前安装的版本可能已经被新的程序所覆盖。" });
             }
 
-            FunctionBase function = null;
 
-            foreach (var functionType in xncfRegister.Functions)
+            FunctionRenderBag? rightFunctionBag = null;
+            if (Senparc.Ncf.XncfBase.Register.FunctionRenderCollection.TryGetValue(xncfRegister.GetType(), out var functionGroup))
             {
-                var fun = _serviceProvider.GetService(functionType) as FunctionBase;//如：Senparc.Xncf.ChangeNamespace.Functions.ChangeNamespace
-                //var functionParameters = await function.GetFunctionParameterInfoAsync(_serviceProvider, false);
-                if (fun.Name == executeFuncParamDto2.XncfFunctionName)
+                foreach (var funtionBag in functionGroup.Values)
                 {
-                    function = fun;
-                    break;
+                    var funClass = _serviceProvider.GetService(funtionBag.MethodInfo.DeclaringType) as IAppServiceBase;
+                    //var funMethod = funClass.GetType().GetMethod()
+
+                    if (funtionBag.FunctionRenderAttribute.Name == executeFuncParamDto2.XncfFunctionName)
+                    {
+                        rightFunctionBag = funtionBag;
+                        break;
+                    }
                 }
             }
 
-            if (function == null)
+            if (rightFunctionBag == null)
             {
                 return new JsonResult(new { success = false, msg = "方法未匹配上！" });
             }
 
-            var paras = SerializerHelper.GetObject(executeFuncParamDto2.XncfFunctionParams, function.FunctionParameterType) as IFunctionParameter;
+            var functionParameterType = rightFunctionBag.Value.MethodInfo.GetParameters().FirstOrDefault()?.ParameterType;
+            if (functionParameterType == null)
+            {
+                functionParameterType = typeof(FunctionAppRequestBase);
+            }
+
+            var paras = SerializerHelper.GetObject(executeFuncParamDto2.XncfFunctionParams, functionParameterType) as FunctionAppRequestBase;
             //var paras = function.GenerateParameterInstance();
 
-            var result = function.Run(paras);
+            var functionClass = _serviceProvider.GetService(rightFunctionBag.Value.MethodInfo.DeclaringType);
+            var result = rightFunctionBag.Value.MethodInfo.Invoke(functionClass, new[] { paras }) as IAppResponse;
 
             var tempId = "Xncf-FunctionRun-" + Guid.NewGuid().ToString("n");
             //记录日志缓存
-            if (!result.Log.IsNullOrEmpty())
+            if (result.Data!=null)
             {
                 var cache = _serviceProvider.GetObjectCacheStrategyInstance();
-                await cache.SetAsync(tempId, result.Log, TimeSpan.FromMinutes(5));//TODO：可设置
+                await cache.SetAsync(tempId, result.Data.ToJson(), TimeSpan.FromMinutes(5));//TODO：可设置
             }
 
-            var data = new { success = result.Success, msg = result.Message.HtmlEncode(), log = result.Log, exception = result.Exception?.Message, tempId = tempId };
+            var data = new { success = result.Success, msg = result.Data?.ToJson().HtmlEncode(), log = result.Data?.ToJson().HtmlEncode(), exception = result.ErrorMessage, tempId = tempId };
             return new JsonResult(data);
         }
 
@@ -292,7 +304,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             }
 
 
-            IDictionary<(string key,string name, string description), List<FunctionParameterInfo>> functionParameterInfoCollection = new Dictionary<(string key, string name, string description), List<FunctionParameterInfo>>();
+            IDictionary<(string key, string name, string description), List<FunctionParameterInfo>> functionParameterInfoCollection = new Dictionary<(string key, string name, string description), List<FunctionParameterInfo>>();
 
 
             try
