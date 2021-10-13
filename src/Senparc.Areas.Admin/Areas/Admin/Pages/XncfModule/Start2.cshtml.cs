@@ -183,15 +183,28 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 functionParameterType = typeof(FunctionAppRequestBase);
             }
 
-            var paras = SerializerHelper.GetObject(executeFuncParamDto2.XncfFunctionParams, functionParameterType) as FunctionAppRequestBase;
-            //var paras = function.GenerateParameterInstance();
+            var paramCount = rightFunctionBag.Value.MethodInfo.GetParameters().Length;
+            object[] paras = null;
+            switch (paramCount)
+            {
+                case 1:
+                    paras = new[] { SerializerHelper.GetObject(executeFuncParamDto2.XncfFunctionParams, functionParameterType) as FunctionAppRequestBase };
+                    break;
+                case 0:
+                    //不处理
+                    break;
+                default:
+                    return new JsonResult(new { success = false, msg = "FunctionRender 只允许方法具有一个传入参数！" });
+
+            }
 
             var functionClass = _serviceProvider.GetService(rightFunctionBag.Value.MethodInfo.DeclaringType);
-            var result = rightFunctionBag.Value.MethodInfo.Invoke(functionClass, new[] { paras }) as IAppResponse;
+
+            var result = rightFunctionBag.Value.MethodInfo.Invoke(functionClass, paras) as IAppResponse;
 
             var tempId = "Xncf-FunctionRun-" + Guid.NewGuid().ToString("n");
             //记录日志缓存
-            if (result.Data!=null)
+            if (result.Data != null)
             {
                 var cache = _serviceProvider.GetObjectCacheStrategyInstance();
                 await cache.SetAsync(tempId, result.Data.ToJson(), TimeSpan.FromMinutes(5));//TODO：可设置
