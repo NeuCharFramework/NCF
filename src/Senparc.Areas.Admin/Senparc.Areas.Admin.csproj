@@ -52,12 +52,12 @@
 		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.7.0-beta4" />
 		<PackageReference Include="Senparc.Ncf.Service" Version="0.7.0-beta4" />
 		<PackageReference Include="Senparc.Ncf.Utility" Version="0.7.0-beta4" />
-		
-		
-		    <PackageReference Include="Senparc.Weixin" Version="6.11.0-preview3" />
-    <PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.5.0-preview3" />
-    <PackageReference Include="Senparc.Weixin.Cache.Memcached" Version="2.10.0-preview3" />
-    <PackageReference Include="Senparc.Weixin.MP" Version="16.14.0-preview3" />
+
+
+		<PackageReference Include="Senparc.Weixin" Version="6.12.500-preview4.1" />
+		<PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.5.500-preview4" />
+		<PackageReference Include="Senparc.Weixin.Cache.Memcached" Version="2.10.0-preview3" />
+		<PackageReference Include="Senparc.Weixin.MP" Version="16.14.0-preview3" />
 
 		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
 		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />
