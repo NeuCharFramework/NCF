@@ -161,7 +161,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             {
                 foreach (var funtionBag in functionGroup.Values)
                 {
-                    var funClass = _serviceProvider.GetService(funtionBag.MethodInfo.DeclaringType) as IAppServiceBase;
+                    var funClass = _serviceProvider.GetService(funtionBag.MethodInfo.DeclaringType) as IAppService;
                     //var funMethod = funClass.GetType().GetMethod()
 
                     if (funtionBag.FunctionRenderAttribute.Name == executeFuncParamDto2.XncfFunctionName)
