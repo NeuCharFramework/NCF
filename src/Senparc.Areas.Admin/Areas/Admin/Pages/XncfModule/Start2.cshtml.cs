@@ -188,7 +188,8 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             switch (paramCount)
             {
                 case 1:
-                    paras = new[] { SerializerHelper.GetObject(executeFuncParamDto2.XncfFunctionParams, functionParameterType) as FunctionAppRequestBase };
+                    var requestPara = SerializerHelper.GetObject(executeFuncParamDto2.XncfFunctionParams, functionParameterType) as IAppRequest;
+                    paras = new[] { requestPara };
                     break;
                 case 0:
                     //不处理
@@ -316,93 +317,17 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 throw new Exception($"模块丢失或未加载（{XncfRegisterManager.RegisterList.Count}）！");
             }
 
-
             IDictionary<(string key, string name, string description), List<FunctionParameterInfo>> functionParameterInfoCollection = new Dictionary<(string key, string name, string description), List<FunctionParameterInfo>>();
-
 
             try
             {
                 if (Senparc.Ncf.XncfBase.Register.FunctionRenderCollection.TryGetValue(xncfRegister.GetType(), out var functionGroup))
                 {
+                    //遍历某个 Register 下所有的方法      TODO：未来可添加分组
                     foreach (var funtionBag in functionGroup.Values)
                     {
-                        //var obj = GenerateParameterInstance();
+                        var result = await FunctionHelper.GetFunctionParameterInfoAsync(this._serviceProvider, funtionBag, true);
 
-
-                        ////预载入参数
-                        //if (tryLoadData && obj is IFunctionParameterLoadDataBase loadDataParam)
-                        //{
-                        //    await loadDataParam.LoadData(serviceProvider);//载入参数
-                        //}
-
-                        var functionParameterType = funtionBag.MethodInfo.GetParameters().FirstOrDefault()?.ParameterType;
-                        if (functionParameterType == null)
-                        {
-                            functionParameterType = typeof(FunctionAppRequestBase);
-                        }
-
-                        var obj = functionParameterType.Assembly.CreateInstance(functionParameterType.FullName) as FunctionAppRequestBase;
-
-
-                        var props = functionParameterType.GetProperties();
-                        ParameterType parameterType = ParameterType.Text;
-                        List<FunctionParameterInfo> result = new List<FunctionParameterInfo>();
-                        foreach (var prop in props)
-                        {
-                            SelectionList selectionList = null;
-                            parameterType = ParameterType.Text;//默认为文本内容
-                                                               //判断是否存在选项
-                            if (prop.PropertyType == typeof(SelectionList))
-                            {
-                                var selections = prop.GetValue(obj, null) as SelectionList;
-                                switch (selections.SelectionType)
-                                {
-                                    case SelectionType.DropDownList:
-                                        parameterType = ParameterType.DropDownList;
-                                        break;
-                                    case SelectionType.CheckBoxList:
-                                        parameterType = ParameterType.CheckBoxList;
-                                        break;
-                                    default:
-                                        //TODO: throw
-                                        break;
-                                }
-                                selectionList = selections;
-                            }
-
-                            var name = prop.Name;
-                            string title = null;
-                            string description = null;
-                            var isRequired = prop.GetCustomAttribute<RequiredAttribute>() != null;
-                            var descriptionAttr = prop.GetCustomAttribute<DescriptionAttribute>();
-                            if (descriptionAttr != null && descriptionAttr.Description != null)
-                            {
-                                //分割：名称||说明
-                                var descriptionAttrArr = descriptionAttr.Description.Split(new[] { "||" }, StringSplitOptions.RemoveEmptyEntries);
-                                title = descriptionAttrArr[0];
-                                if (descriptionAttrArr.Length > 1)
-                                {
-                                    description = descriptionAttrArr[1];
-                                }
-                            }
-                            var systemType = prop.PropertyType.Name;
-
-                            object value = null;
-                            try
-                            {
-                                value = prop.GetValue(obj);
-                            }
-                            catch (Exception ex)
-                            {
-                                SenparcTrace.BaseExceptionLog(ex);
-                            }
-
-                            var functionParamInfo = new FunctionParameterInfo(name, title, description, isRequired, systemType, parameterType,
-                                                        selectionList ?? new SelectionList(SelectionType.Unknown), value);
-                            result.Add(functionParamInfo);
-                        }
-
-                        //TODO: 以上方法需要集成到基础库
                         var functionKey = funtionBag.Key;
                         functionParameterInfoCollection[(functionKey, funtionBag.FunctionRenderAttribute.Name, funtionBag.FunctionRenderAttribute.Description)] = result;
                     }
