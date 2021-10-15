@@ -34,7 +34,7 @@
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="0.6.0-preview4" />
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.7.0-beta4" />
 		<PackageReference Include="Senparc.CO2NET" Version="1.5.2-preview4" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.7.0.2-beta4.7" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.7.0.2-beta4.8" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
