@@ -44,7 +44,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         public string Msg { get; set; }
         public object Obj { get; set; }
 
-        public XncfModuleStartModel(IServiceProvider serviceProvider, XncfModuleService xncfModuleService, SysMenuService sysMenuService)
+        public XncfModuleStartOldModel(IServiceProvider serviceProvider, XncfModuleService xncfModuleService, SysMenuService sysMenuService)
         {
             _serviceProvider = serviceProvider;
             _xncfModuleService = xncfModuleService;

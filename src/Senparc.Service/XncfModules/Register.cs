@@ -42,9 +42,6 @@ namespace Senparc.Service
 
         public override string Description => "这是系统服务核心模块，主管基础数据结构和网站核心运行数据，请勿删除此模块。如果你实在忍不住，请务必做好数据备份。";
 
-        public override IList<Type> Functions => new Type[] { };
-
-
         public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<XncfModuleServiceExtension>();

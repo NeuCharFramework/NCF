@@ -34,7 +34,6 @@ namespace MyExtensionCode
             @"此项目为扩展代码示例项目，不会因为 NCF 框架更新而受影响。
               如果您需要扩展代码，请参考此项目新建项目。本项目请在发布到生产环境之前移除！";
 
-        public override IList<Type> Functions => new Type[] { };
 
         public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration)
         {

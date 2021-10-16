@@ -49,7 +49,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         public string Msg { get; set; }
         public object Obj { get; set; }
 
-        public XncfModuleStartModel2(IServiceProvider serviceProvider, XncfModuleService xncfModuleService, SysMenuService sysMenuService)
+        public XncfModuleStartModel(IServiceProvider serviceProvider, XncfModuleService xncfModuleService, SysMenuService sysMenuService)
         {
             _serviceProvider = serviceProvider;
             _xncfModuleService = xncfModuleService;
@@ -356,7 +356,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                     xncfRegister.Uid,
                     areaPageMenuItems = (xncfRegister as Ncf.Core.Areas.IAreaRegister)?.AareaPageMenuItems ?? new List<Ncf.Core.Areas.AreaPageMenuItem>(),
                     Interfaces = xncfRegister.GetType().GetInterfaces().Select(z => z.Name),
-                    FunctionCount = xncfRegister.Functions.Count,
+                    FunctionCount = functionParameterInfoCollection.Count,
                     registeredThreadInfo = xncfRegister.RegisteredThreadInfo.Select(z => new
                     {
                         Key = new
