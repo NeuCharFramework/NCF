@@ -33,6 +33,12 @@
 
 
 	<ItemGroup>
+	  <Compile Remove="Areas\Admin\Pages\XncfModule\StartOld.cshtml.cs" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<Content Remove="Areas\Admin\Pages\XncfModule\StartOld.cshtml" />
 		<Content Remove="wwwroot\css\Admin\TenantInfo\Index.css" />
 		<Content Remove="wwwroot\css\Admin\SystemConfig\Index.css" />
 		<Content Remove="wwwroot\js\Admin\Pages\SystemConfig\Index.js" />
