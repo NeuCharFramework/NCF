@@ -5,14 +5,19 @@ using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.AreaBase.Admin.Filters;
+using Senparc.Ncf.Core.AppServices;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
+using Senparc.Ncf.XncfBase.FunctionRenders;
+using Senparc.Ncf.XncfBase.Functions;
 using Senparc.Ncf.XncfBase.Threads;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,7 +29,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
     {
         private readonly SysMenuService _sysMenuService;
         public Senparc.Ncf.Core.Models.DataBaseModel.XncfModule XncfModule { get; set; }
-        public Dictionary<IXncfFunction, List<FunctionParameterInfo>> FunctionParameterInfoCollection { get; set; } = new Dictionary<IXncfFunction, List<FunctionParameterInfo>>();
+        //public Dictionary<IXncfFunction, List<FunctionParameterInfo>> FunctionParameterInfoCollection { get; set; } = new Dictionary<IXncfFunction, List<FunctionParameterInfo>>();
 
         XncfModuleService _xncfModuleService;
         IServiceProvider _serviceProvider;
@@ -44,7 +49,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         public string Msg { get; set; }
         public object Obj { get; set; }
 
-        public XncfModuleStartModel(IServiceProvider serviceProvider, XncfModuleService xncfModuleService, SysMenuService sysMenuService)
+        public XncfModuleStartModel2(IServiceProvider serviceProvider, XncfModuleService xncfModuleService, SysMenuService sysMenuService)
         {
             _serviceProvider = serviceProvider;
             _xncfModuleService = xncfModuleService;
@@ -130,9 +135,9 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// <param name="xncfFunctionName"></param>
         /// <param name="xncfFunctionParams"></param>
         /// <returns></returns>
-        public async Task<IActionResult> OnPostRunFunctionAsync([FromBody] ExecuteFuncParamDto executeFuncParamDto)
+        public async Task<IActionResult> OnPostRunFunctionAsync([FromBody] ExecuteFuncParamDto2 executeFuncParamDto2)
         {
-            var xncfRegister = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == executeFuncParamDto.XncfUid);
+            var xncfRegister = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == executeFuncParamDto2.XncfUid);
 
             if (xncfRegister == null)
             {
@@ -150,38 +155,63 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 return new JsonResult(new { success = false, msg = $"当前模块状态为【{xncfModule.State}】,必须为【开放】状态的模块才可执行！\r\n此外，如果您强制执行此方法，也将按照未通过验证的程序集执行，因为您之前安装的版本可能已经被新的程序所覆盖。" });
             }
 
-            FunctionBase function = null;
 
-            foreach (var functionType in xncfRegister.Functions)
+            FunctionRenderBag? rightFunctionBag = null;
+            if (Senparc.Ncf.XncfBase.Register.FunctionRenderCollection.TryGetValue(xncfRegister.GetType(), out var functionGroup))
             {
-                var fun = _serviceProvider.GetService(functionType) as FunctionBase;//如：Senparc.Xncf.ChangeNamespace.Functions.ChangeNamespace
-                //var functionParameters = await function.GetFunctionParameterInfoAsync(_serviceProvider, false);
-                if (fun.Name == executeFuncParamDto.XncfFunctionName)
+                foreach (var funtionBag in functionGroup.Values)
                 {
-                    function = fun;
-                    break;
+                    var funClass = _serviceProvider.GetService(funtionBag.MethodInfo.DeclaringType) as IAppService;
+                    //var funMethod = funClass.GetType().GetMethod()
+
+                    if (funtionBag.FunctionRenderAttribute.Name == executeFuncParamDto2.XncfFunctionName)
+                    {
+                        rightFunctionBag = funtionBag;
+                        break;
+                    }
                 }
             }
 
-            if (function == null)
+            if (rightFunctionBag == null)
             {
                 return new JsonResult(new { success = false, msg = "方法未匹配上！" });
             }
 
-            var paras = SerializerHelper.GetObject(executeFuncParamDto.XncfFunctionParams, function.FunctionParameterType) as IFunctionParameter;
-            //var paras = function.GenerateParameterInstance();
+            var functionParameterType = rightFunctionBag.Value.MethodInfo.GetParameters().FirstOrDefault()?.ParameterType;
+            if (functionParameterType == null)
+            {
+                functionParameterType = typeof(FunctionAppRequestBase);
+            }
 
-            var result = function.Run(paras);
+            var paramCount = rightFunctionBag.Value.MethodInfo.GetParameters().Length;
+            object[] paras = null;
+            switch (paramCount)
+            {
+                case 1:
+                    var requestPara = SerializerHelper.GetObject(executeFuncParamDto2.XncfFunctionParams, functionParameterType) as IAppRequest;
+                    paras = new[] { requestPara };
+                    break;
+                case 0:
+                    //不处理
+                    break;
+                default:
+                    return new JsonResult(new { success = false, msg = "FunctionRender 只允许方法具有一个传入参数！" });
+
+            }
+
+            var functionClass = _serviceProvider.GetService(rightFunctionBag.Value.MethodInfo.DeclaringType);
+
+            var result = rightFunctionBag.Value.MethodInfo.Invoke(functionClass, paras) as IAppResponse;
 
             var tempId = "Xncf-FunctionRun-" + Guid.NewGuid().ToString("n");
             //记录日志缓存
-            if (!result.Log.IsNullOrEmpty())
+            if (result.Data != null)
             {
                 var cache = _serviceProvider.GetObjectCacheStrategyInstance();
-                await cache.SetAsync(tempId, result.Log, TimeSpan.FromMinutes(5));//TODO：可设置
+                await cache.SetAsync(tempId, result.Data.ToJson(), TimeSpan.FromMinutes(5));//TODO：可设置
             }
 
-            var data = new { success = result.Success, msg = result.Message.HtmlEncode(), log = result.Log, exception = result.Exception?.Message, tempId = tempId };
+            var data = new { success = result.Success, msg = result.Data?.ToJson().HtmlEncode(), log = result.Data?.ToJson().HtmlEncode(), exception = result.ErrorMessage, tempId = tempId };
             return new JsonResult(data);
         }
 
@@ -286,13 +316,21 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             {
                 throw new Exception($"模块丢失或未加载（{XncfRegisterManager.RegisterList.Count}）！");
             }
-            IDictionary<IXncfFunction, List<FunctionParameterInfo>> functionParameterInfoCollection = new Dictionary<IXncfFunction, List<FunctionParameterInfo>>();
+
+            IDictionary<(string key, string name, string description), List<FunctionParameterInfo>> functionParameterInfoCollection = new Dictionary<(string key, string name, string description), List<FunctionParameterInfo>>();
+
             try
             {
-                foreach (var functionType in xncfRegister.Functions)
+                if (Senparc.Ncf.XncfBase.Register.FunctionRenderCollection.TryGetValue(xncfRegister.GetType(), out var functionGroup))
                 {
-                    var function = _serviceProvider.GetService(functionType) as FunctionBase;//如：Senparc.Xncf.ChangeNamespace.Functions.ChangeNamespace
-                    functionParameterInfoCollection[function] = await function.GetFunctionParameterInfoAsync(_serviceProvider, true);
+                    //遍历某个 Register 下所有的方法      TODO：未来可添加分组
+                    foreach (var funtionBag in functionGroup.Values)
+                    {
+                        var result = await FunctionHelper.GetFunctionParameterInfoAsync(this._serviceProvider, funtionBag, true);
+
+                        var functionKey = funtionBag.Key;
+                        functionParameterInfoCollection[(functionKey, funtionBag.FunctionRenderAttribute.Name, funtionBag.FunctionRenderAttribute.Description)] = result;
+                    }
                 }
             }
             catch (Exception ex)
@@ -317,47 +355,47 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                     xncfRegister.Version,
                     xncfRegister.Uid,
                     areaPageMenuItems = (xncfRegister as Ncf.Core.Areas.IAreaRegister)?.AareaPageMenuItems ?? new List<Ncf.Core.Areas.AreaPageMenuItem>(),
-                    Interfaces = xncfRegister.GetType().GetInterfaces().Select(_ => _.Name),
+                    Interfaces = xncfRegister.GetType().GetInterfaces().Select(z => z.Name),
                     FunctionCount = xncfRegister.Functions.Count,
-                    registeredThreadInfo = xncfRegister.RegisteredThreadInfo.Select(_ => new
+                    registeredThreadInfo = xncfRegister.RegisteredThreadInfo.Select(z => new
                     {
                         Key = new
                         {
-                            _.Key.Name,
-                            _.Key.StoryHtml
+                            z.Key.Name,
+                            z.Key.StoryHtml
                         },
                         Value = new
                         {
-                            _.Value.IsAlive,
-                            IsBackground = _.Value.IsAlive ? new bool?(_.Value.IsBackground) : null,
-                            ThreadState = _.Value.IsAlive ? new ThreadState?(_.Value.ThreadState) : null,
-                            ThreadStateStr = _.Value.IsAlive ? _.Value.ThreadState.ToString() : null
+                            z.Value.IsAlive,
+                            IsBackground = z.Value.IsAlive ? new bool?(z.Value.IsBackground) : null,
+                            ThreadState = z.Value.IsAlive ? new ThreadState?(z.Value.ThreadState) : null,
+                            ThreadStateStr = z.Value.IsAlive ? z.Value.ThreadState.ToString() : null
                         }
                     })
                 },
                 functionParameterInfoCollection = functionParameterInfoCollection
-                .Select(_ => new
+                .Select(z => new
                 {
                     Key = new
                     {
-                        _.Key.Name,
-                        _.Key.Description
+                        z.Key.name,
+                        z.Key.description
                     },
-                    _.Value
+                    z.Value
                 }),
-                registeredThreadInfo = registeredThreadInfo.Select(_ => new
+                registeredThreadInfo = registeredThreadInfo.Select(z => new
                 {
                     Key = new
                     {
-                        _.Key.Name,
-                        _.Key.StoryHtml
+                        z.Key.Name,
+                        z.Key.StoryHtml
                     },
                     Value = new
                     {
-                        _.Value.IsAlive,
-                        IsBackground = _.Value.IsAlive ? new bool?(_.Value.IsBackground) : null,
-                        ThreadState = _.Value.IsAlive ? new ThreadState?(_.Value.ThreadState) : null,
-                        ThreadStateStr = _.Value.IsAlive ? _.Value.ThreadState.ToString() : null
+                        z.Value.IsAlive,
+                        IsBackground = z.Value.IsAlive ? new bool?(z.Value.IsBackground) : null,
+                        ThreadState = z.Value.IsAlive ? new ThreadState?(z.Value.ThreadState) : null,
+                        ThreadStateStr = z.Value.IsAlive ? z.Value.ThreadState.ToString() : null
                     }
                 })
             });
@@ -384,7 +422,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         }
     }
 
-    public class ExecuteFuncParamDto
+    public class ExecuteFuncParamDto2
     {
         [Required]
         public string XncfUid { get; set; }

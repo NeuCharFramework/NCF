@@ -50,7 +50,7 @@
     methods: {
         async  getList() {
             const uid = resizeUrl().uid;
-            const res = await service.get(`/Admin/XncfModule/Start2?handler=Detail&uid=${uid}`);
+            const res = await service.get(`/Admin/XncfModule/Start?handler=Detail&uid=${uid}`);
             this.data = res.data.data;
             this.data.xncfRegister.interfaces = this.data.xncfRegister.interfaces.splice(1);
             window.document.title = this.data.xncfModule.menuName;
@@ -206,7 +206,7 @@
             const data = {
                 xncfUid: this.data.xncfModule.uid, xncfFunctionName: this.run.data.key.name, xncfFunctionParams: JSON.stringify(xncfFunctionParams)
             };
-            const res = await service.post(`/Admin/XncfModule/Start2?handler=RunFunction`, data);
+            const res = await service.post(`/Admin/XncfModule/Start?handler=RunFunction`, data);
             this.runResult.tempId = res.data.tempId;
             if ((res.data.log || '').length > 0 && (res.data.tempId || '').length > 0) {
                 this.runResult.hasLog = true;
@@ -234,7 +234,7 @@
         // 关闭和开启
         async updataState(state) {
             const id = this.data.xncfModule.id;
-            const res = await service.get(`/Admin/XncfModule/Start2?handler=ChangeState&id=${id}&tostate=${state}`);
+            const res = await service.get(`/Admin/XncfModule/Start?handler=ChangeState&id=${id}&tostate=${state}`);
             window.location.reload();
         },
         // 更新版本
@@ -246,7 +246,7 @@
         // 删除
         async handleDelete() {
             const id = this.data.xncfModule.id;
-            const res = await service.post(`/Admin/XncfModule/Start2?handler=Delete&id=${id}`);
+            const res = await service.post(`/Admin/XncfModule/Start?handler=Delete&id=${id}`);
             window.sessionStorage.setItem('setNavMenuActive', '模块管理');
             getNavMenu();
             setTimeout(function () {

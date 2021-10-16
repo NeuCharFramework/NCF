@@ -52,8 +52,6 @@ namespace Senparc.Areas.Admin
 
         public override string Description => "这是管理员后台模块，用于 NCF 系统后台的自我管理，请勿删除此模块。如果你实在忍不住，请务必做好数据备份。";
 
-        public override IList<Type> Functions => new Type[] { };
-
 
         public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration)
         {
