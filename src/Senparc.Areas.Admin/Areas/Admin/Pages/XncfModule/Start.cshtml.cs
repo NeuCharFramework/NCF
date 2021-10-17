@@ -200,8 +200,22 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             }
 
             var functionClass = _serviceProvider.GetService(rightFunctionBag.Value.MethodInfo.DeclaringType);
+            var taskFunc = rightFunctionBag.Value.MethodInfo.Invoke(functionClass, paras) as Task; // Task<StringAppResponse>  as IAppResponse;
+            await taskFunc.ConfigureAwait(false);
 
-            var result = rightFunctionBag.Value.MethodInfo.Invoke(functionClass, paras) as IAppResponse;
+
+            //方案一：
+            //参考：https://stackoverflow.com/questions/48033760/cast-taskt-to-taskobject-in-c-sharp-without-having-t/48033780
+            var taskResult = (object)(((dynamic)taskFunc).Result);
+            var result = taskResult as IAppResponse;
+
+
+            /* 方案二：
+            var obj0 = rightFunctionBag.Value.MethodInfo.Invoke(functionClass, paras);
+            var obj1 = taskFunc.GetType().GetMethod("GetAwaiter").Invoke(taskFunc, null);
+            var obj2= obj1.GetType().GetMethod("GetResult").Invoke(obj1, null);
+            var realResult = obj2 as IAppResponse;
+            */
 
             var tempId = "Xncf-FunctionRun-" + Guid.NewGuid().ToString("n");
             //记录日志缓存
