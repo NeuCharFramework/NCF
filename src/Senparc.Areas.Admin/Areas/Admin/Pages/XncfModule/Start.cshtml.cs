@@ -206,15 +206,16 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
             //方案一：
             //参考：https://stackoverflow.com/questions/48033760/cast-taskt-to-taskobject-in-c-sharp-without-having-t/48033780
-            var taskResult = (object)(((dynamic)taskFunc).Result);
+            var taskResult = (object)((dynamic)taskFunc).Result;
             var result = taskResult as IAppResponse;
-
 
             /* 方案二：
             var obj0 = rightFunctionBag.Value.MethodInfo.Invoke(functionClass, paras);
             var obj1 = taskFunc.GetType().GetMethod("GetAwaiter").Invoke(taskFunc, null);
             var obj2= obj1.GetType().GetMethod("GetResult").Invoke(obj1, null);
             var realResult = obj2 as IAppResponse;
+
+            方案效率对比见：https://www.cnblogs.com/szw/p/dynamic-vs-reflect.html
             */
 
             var tempId = "Xncf-FunctionRun-" + Guid.NewGuid().ToString("n");
