@@ -397,7 +397,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                         z.Key.description
                     },
                     z.Value
-                }),
+                }).OrderBy(z => z.Key.name),
                 registeredThreadInfo = registeredThreadInfo.Select(z => new
                 {
                     Key = new
