@@ -34,8 +34,8 @@ namespace Senparc.Areas.Admin
     public class Register : XncfRegisterBase,
         IXncfRegister, //注册 XNCF 基础模块接口（必须）
         IAreaRegister //注册 XNCF 页面接口（按需选用）
-        //IXncfDatabase,  //注册 XNCF 模块数据库（按需选用）
-        //IXncfRazorRuntimeCompilation  //需要使用 RazorRuntimeCompilation，在开发环境下实时更新 Razor Page
+                      //IXncfDatabase,  //注册 XNCF 模块数据库（按需选用）
+                      //IXncfRazorRuntimeCompilation  //需要使用 RazorRuntimeCompilation，在开发环境下实时更新 Razor Page
     {
 
         #region IXncfRegister 接口
@@ -51,8 +51,6 @@ namespace Senparc.Areas.Admin
         public override string Icon => "fa fa-university";
 
         public override string Description => "这是管理员后台模块，用于 NCF 系统后台的自我管理，请勿删除此模块。如果你实在忍不住，请务必做好数据备份。";
-
-        public override IList<Type> Functions => new Type[] { };
 
 
         public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration)
@@ -127,6 +125,8 @@ namespace Senparc.Areas.Admin
 
         public IMvcBuilder AuthorizeConfig(IMvcBuilder builder, IHostEnvironment env)
         {
+            Console.WriteLine("areaRegisterTypes: AuthorizeConfig - AdminArea");
+
             //鉴权配置
             //添加基于Cookie的权限验证：https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-2.1&tabs=aspnetcore2x
             builder.Services
@@ -137,6 +137,7 @@ namespace Senparc.Areas.Admin
                     options.LoginPath = "/Admin/Login/";
                     options.Cookie.HttpOnly = false;
                 });
+
             builder.Services
                 .AddAuthorization(options =>
                 {
@@ -150,7 +151,8 @@ namespace Senparc.Areas.Admin
             {
                 options.Conventions.AuthorizePage("/", "AdminOnly");//必须登录
                 options.Conventions.AllowAnonymousToPage("/Login");//允许匿名
-                                                                   //更多：https://docs.microsoft.com/en-us/aspnet/core/security/authorization/razor-pages-authorization?view=aspnetcore-2.2
+
+                //更多：https://docs.microsoft.com/en-us/aspnet/core/security/authorization/razor-pages-authorization?view=aspnetcore-2.2
             });
 
             SenparcTrace.SendCustomLog("系统启动", "完成 Area:Admin 注册");

@@ -28,13 +28,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
 
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.6.129.2-beta3" />
-    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.6.130-beta3" />
-    <PackageReference Include="Senparc.Ncf.Utility" Version="0.6.129-beta3" />
-    <PackageReference Include="Senparc.Weixin" Version="6.11.0-preview3" />
-    <PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.5.0-preview3" />
-    <PackageReference Include="Senparc.Weixin.Cache.Memcached" Version="2.10.0-preview3" />
-    <PackageReference Include="Senparc.Weixin.MP" Version="16.14.0-preview3" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.7.2-beta6" />
+    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.7.8-beta6" />
+    <PackageReference Include="Senparc.Ncf.Utility" Version="0.7.2-beta6" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,19 +5,14 @@ using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Helpers;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.AreaBase.Admin.Filters;
-using Senparc.Ncf.Core.AppServices;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
-using Senparc.Ncf.XncfBase.FunctionRenders;
-using Senparc.Ncf.XncfBase.Functions;
 using Senparc.Ncf.XncfBase.Threads;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,11 +20,11 @@ using System.Threading.Tasks;
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
     [IgnoreAuth]
-    public class XncfModuleStartModel : BaseAdminPageModel
+    public class XncfModuleStartOldModel : BaseAdminPageModel
     {
         private readonly SysMenuService _sysMenuService;
         public Senparc.Ncf.Core.Models.DataBaseModel.XncfModule XncfModule { get; set; }
-        //public Dictionary<IXncfFunction, List<FunctionParameterInfo>> FunctionParameterInfoCollection { get; set; } = new Dictionary<IXncfFunction, List<FunctionParameterInfo>>();
+        public Dictionary<IXncfFunction, List<FunctionParameterInfo>> FunctionParameterInfoCollection { get; set; } = new Dictionary<IXncfFunction, List<FunctionParameterInfo>>();
 
         XncfModuleService _xncfModuleService;
         IServiceProvider _serviceProvider;
@@ -49,7 +44,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         public string Msg { get; set; }
         public object Obj { get; set; }
 
-        public XncfModuleStartModel(IServiceProvider serviceProvider, XncfModuleService xncfModuleService, SysMenuService sysMenuService)
+        public XncfModuleStartOldModel(IServiceProvider serviceProvider, XncfModuleService xncfModuleService, SysMenuService sysMenuService)
         {
             _serviceProvider = serviceProvider;
             _xncfModuleService = xncfModuleService;
@@ -135,9 +130,9 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// <param name="xncfFunctionName"></param>
         /// <param name="xncfFunctionParams"></param>
         /// <returns></returns>
-        public async Task<IActionResult> OnPostRunFunctionAsync([FromBody] ExecuteFuncParamDto2 executeFuncParamDto2)
+        public async Task<IActionResult> OnPostRunFunctionAsync([FromBody] ExecuteFuncParamDto executeFuncParamDto)
         {
-            var xncfRegister = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == executeFuncParamDto2.XncfUid);
+            var xncfRegister = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == executeFuncParamDto.XncfUid);
 
             if (xncfRegister == null)
             {
@@ -155,78 +150,38 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 return new JsonResult(new { success = false, msg = $"当前模块状态为【{xncfModule.State}】,必须为【开放】状态的模块才可执行！\r\n此外，如果您强制执行此方法，也将按照未通过验证的程序集执行，因为您之前安装的版本可能已经被新的程序所覆盖。" });
             }
 
+            FunctionBase function = null;
 
-            FunctionRenderBag? rightFunctionBag = null;
-            if (Senparc.Ncf.XncfBase.Register.FunctionRenderCollection.TryGetValue(xncfRegister.GetType(), out var functionGroup))
+            foreach (var functionType in xncfRegister.Functions)
             {
-                foreach (var funtionBag in functionGroup.Values)
+                var fun = _serviceProvider.GetService(functionType) as FunctionBase;//如：Senparc.Xncf.ChangeNamespace.Functions.ChangeNamespace
+                //var functionParameters = await function.GetFunctionParameterInfoAsync(_serviceProvider, false);
+                if (fun.Name == executeFuncParamDto.XncfFunctionName)
                 {
-                    var funClass = _serviceProvider.GetService(funtionBag.MethodInfo.DeclaringType) as IAppService;
-                    //var funMethod = funClass.GetType().GetMethod()
-
-                    if (funtionBag.FunctionRenderAttribute.Name == executeFuncParamDto2.XncfFunctionName)
-                    {
-                        rightFunctionBag = funtionBag;
-                        break;
-                    }
+                    function = fun;
+                    break;
                 }
             }
 
-            if (rightFunctionBag == null)
+            if (function == null)
             {
                 return new JsonResult(new { success = false, msg = "方法未匹配上！" });
             }
 
-            var functionParameterType = rightFunctionBag.Value.MethodInfo.GetParameters().FirstOrDefault()?.ParameterType;
-            if (functionParameterType == null)
-            {
-                functionParameterType = typeof(FunctionAppRequestBase);
-            }
+            var paras = SerializerHelper.GetObject(executeFuncParamDto.XncfFunctionParams, function.FunctionParameterType) as IFunctionParameter;
+            //var paras = function.GenerateParameterInstance();
 
-            var paramCount = rightFunctionBag.Value.MethodInfo.GetParameters().Length;
-            object[] paras = null;
-            switch (paramCount)
-            {
-                case 1:
-                    var requestPara = SerializerHelper.GetObject(executeFuncParamDto2.XncfFunctionParams, functionParameterType) as IAppRequest;
-                    paras = new[] { requestPara };
-                    break;
-                case 0:
-                    //不处理
-                    break;
-                default:
-                    return new JsonResult(new { success = false, msg = "FunctionRender 只允许方法具有一个传入参数！" });
-
-            }
-
-            var functionClass = _serviceProvider.GetService(rightFunctionBag.Value.MethodInfo.DeclaringType);
-            var taskFunc = rightFunctionBag.Value.MethodInfo.Invoke(functionClass, paras) as Task; // Task<StringAppResponse>  as IAppResponse;
-            await taskFunc.ConfigureAwait(false);
-
-
-            //方案一：
-            //参考：https://stackoverflow.com/questions/48033760/cast-taskt-to-taskobject-in-c-sharp-without-having-t/48033780
-            var taskResult = (object)((dynamic)taskFunc).Result;
-            var result = taskResult as IAppResponse;
-
-            /* 方案二：
-            var obj0 = rightFunctionBag.Value.MethodInfo.Invoke(functionClass, paras);
-            var obj1 = taskFunc.GetType().GetMethod("GetAwaiter").Invoke(taskFunc, null);
-            var obj2= obj1.GetType().GetMethod("GetResult").Invoke(obj1, null);
-            var realResult = obj2 as IAppResponse;
-
-            方案效率对比见：https://www.cnblogs.com/szw/p/dynamic-vs-reflect.html
-            */
+            var result = function.Run(paras);
 
             var tempId = "Xncf-FunctionRun-" + Guid.NewGuid().ToString("n");
             //记录日志缓存
-            if (result.Data != null)
+            if (!result.Log.IsNullOrEmpty())
             {
                 var cache = _serviceProvider.GetObjectCacheStrategyInstance();
-                await cache.SetAsync(tempId, result.Data.ToJson(), TimeSpan.FromMinutes(5));//TODO：可设置
+                await cache.SetAsync(tempId, result.Log, TimeSpan.FromMinutes(5));//TODO：可设置
             }
 
-            var data = new { success = result.Success, msg = result.Data?.ToJson().HtmlEncode(), log = result.Data?.ToJson().HtmlEncode(), exception = result.ErrorMessage, tempId = tempId };
+            var data = new { success = result.Success, msg = result.Message.HtmlEncode(), log = result.Log, exception = result.Exception?.Message, tempId = tempId };
             return new JsonResult(data);
         }
 
@@ -331,21 +286,13 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             {
                 throw new Exception($"模块丢失或未加载（{XncfRegisterManager.RegisterList.Count}）！");
             }
-
-            IDictionary<(string key, string name, string description), List<FunctionParameterInfo>> functionParameterInfoCollection = new Dictionary<(string key, string name, string description), List<FunctionParameterInfo>>();
-
+            IDictionary<IXncfFunction, List<FunctionParameterInfo>> functionParameterInfoCollection = new Dictionary<IXncfFunction, List<FunctionParameterInfo>>();
             try
             {
-                if (Senparc.Ncf.XncfBase.Register.FunctionRenderCollection.TryGetValue(xncfRegister.GetType(), out var functionGroup))
+                foreach (var functionType in xncfRegister.Functions)
                 {
-                    //遍历某个 Register 下所有的方法      TODO：未来可添加分组
-                    foreach (var funtionBag in functionGroup.Values)
-                    {
-                        var result = await FunctionHelper.GetFunctionParameterInfoAsync(this._serviceProvider, funtionBag, true);
-
-                        var functionKey = funtionBag.Key;
-                        functionParameterInfoCollection[(functionKey, funtionBag.FunctionRenderAttribute.Name, funtionBag.FunctionRenderAttribute.Description)] = result;
-                    }
+                    var function = _serviceProvider.GetService(functionType) as FunctionBase;//如：Senparc.Xncf.ChangeNamespace.Functions.ChangeNamespace
+                    functionParameterInfoCollection[function] = await function.GetFunctionParameterInfoAsync(_serviceProvider, true);
                 }
             }
             catch (Exception ex)
@@ -370,47 +317,47 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                     xncfRegister.Version,
                     xncfRegister.Uid,
                     areaPageMenuItems = (xncfRegister as Ncf.Core.Areas.IAreaRegister)?.AareaPageMenuItems ?? new List<Ncf.Core.Areas.AreaPageMenuItem>(),
-                    Interfaces = xncfRegister.GetType().GetInterfaces().Select(z => z.Name),
-                    FunctionCount = functionParameterInfoCollection.Count,
-                    registeredThreadInfo = xncfRegister.RegisteredThreadInfo.Select(z => new
+                    Interfaces = xncfRegister.GetType().GetInterfaces().Select(_ => _.Name),
+                    FunctionCount = xncfRegister.Functions.Count,
+                    registeredThreadInfo = xncfRegister.RegisteredThreadInfo.Select(_ => new
                     {
                         Key = new
                         {
-                            z.Key.Name,
-                            z.Key.StoryHtml
+                            _.Key.Name,
+                            _.Key.StoryHtml
                         },
                         Value = new
                         {
-                            z.Value.IsAlive,
-                            IsBackground = z.Value.IsAlive ? new bool?(z.Value.IsBackground) : null,
-                            ThreadState = z.Value.IsAlive ? new ThreadState?(z.Value.ThreadState) : null,
-                            ThreadStateStr = z.Value.IsAlive ? z.Value.ThreadState.ToString() : null
+                            _.Value.IsAlive,
+                            IsBackground = _.Value.IsAlive ? new bool?(_.Value.IsBackground) : null,
+                            ThreadState = _.Value.IsAlive ? new ThreadState?(_.Value.ThreadState) : null,
+                            ThreadStateStr = _.Value.IsAlive ? _.Value.ThreadState.ToString() : null
                         }
                     })
                 },
                 functionParameterInfoCollection = functionParameterInfoCollection
-                .Select(z => new
+                .Select(_ => new
                 {
                     Key = new
                     {
-                        z.Key.name,
-                        z.Key.description
+                        _.Key.Name,
+                        _.Key.Description
                     },
-                    z.Value
-                }).OrderBy(z => z.Key.name),
-                registeredThreadInfo = registeredThreadInfo.Select(z => new
+                    _.Value
+                }),
+                registeredThreadInfo = registeredThreadInfo.Select(_ => new
                 {
                     Key = new
                     {
-                        z.Key.Name,
-                        z.Key.StoryHtml
+                        _.Key.Name,
+                        _.Key.StoryHtml
                     },
                     Value = new
                     {
-                        z.Value.IsAlive,
-                        IsBackground = z.Value.IsAlive ? new bool?(z.Value.IsBackground) : null,
-                        ThreadState = z.Value.IsAlive ? new ThreadState?(z.Value.ThreadState) : null,
-                        ThreadStateStr = z.Value.IsAlive ? z.Value.ThreadState.ToString() : null
+                        _.Value.IsAlive,
+                        IsBackground = _.Value.IsAlive ? new bool?(_.Value.IsBackground) : null,
+                        ThreadState = _.Value.IsAlive ? new ThreadState?(_.Value.ThreadState) : null,
+                        ThreadStateStr = _.Value.IsAlive ? _.Value.ThreadState.ToString() : null
                     }
                 })
             });
@@ -437,7 +384,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         }
     }
 
-    public class ExecuteFuncParamDto2
+    public class ExecuteFuncParamDto
     {
         [Required]
         public string XncfUid { get; set; }

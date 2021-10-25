@@ -10,7 +10,7 @@ namespace Senparc.Areas.Admin.SenparcTraceManager
 {
     public static class SenparcTraceHelper
     {
-        public static string DefaultLogPath { get; set; } =  Path.Combine(Senparc.Weixin.Config.RootDictionaryPath, "App_Data", "SenparcTraceLog");
+        public static string DefaultLogPath { get; set; } = Path.Combine(Senparc.Weixin.Config.RootDictionaryPath, "App_Data", "SenparcTraceLog");// Path.Combine(Senparc.CO2NET.Config.RootDictionaryPath, "App_Data", "SenparcTraceLog");
 
         /// <summary>
         /// 获取所有日期列表

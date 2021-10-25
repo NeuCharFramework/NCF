@@ -15,8 +15,6 @@ using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Extensions;
 using Senparc.Ncf.Core.Utility;
 using Senparc.Ncf.Log;
-using Senparc.Weixin.MP.AdvancedAPIs.OAuth;
-using Senparc.Weixin.MP.AdvancedAPIs.User;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -318,6 +316,8 @@ namespace Senparc.Service
             return account.Password == codedPassword ? account : null;
         }
 
+        /* 微信方法，分离到 XNCF
+
         /// <summary>
         /// 从weixin.senparc.com获取到的用户信息，对应添加Account
         /// </summary>
@@ -340,9 +340,9 @@ namespace Senparc.Service
                 LogUtility.Account.Error($"userInfo.P2PData 中的 P2PData可能为Null,userInfo：{userInfo?.ToJson()}");
             }
 
-            if (fullAccount.UserName == "zhensherlock")//TODO：这种情况只会存在于老用户，UnionId未同步过来，如accountId=31，name=zhensherlock
+            if (fullAccount.UserName == "JeffreySu")//TODO：这种情况只会存在于老用户，UnionId未同步过来，如accountId=31，name=zhensherlock
             {
-                account = GetObject(z => z.UserName == "zhensherlock");
+                account = GetObject(z => z.UserName == "JeffreySu");
 
                 account.WeixinUnionId = userInfo.unionid;//更新UnionId
                 account.WeixinOpenId = userInfo.openid;//更新OpenId
@@ -469,6 +469,8 @@ namespace Senparc.Service
             account.NickName = userInfo.nickname;
             SaveObject(account);
         }
+
+        */
 
         public override void SaveObject(Account obj)
         {

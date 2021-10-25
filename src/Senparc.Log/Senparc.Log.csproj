@@ -9,11 +9,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="log4net" Version="2.0.12" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Senparc.Ncf.Log" Version="0.6.129-beta3" />
+    <PackageReference Include="Senparc.Ncf.Log" Version="0.7.2-beta6" />
   </ItemGroup>
 
 </Project>

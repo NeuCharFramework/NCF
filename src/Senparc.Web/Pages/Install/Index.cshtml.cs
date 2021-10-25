@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.DependencyInjection;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Exceptions;
@@ -80,6 +81,20 @@ namespace Senparc.Web.Pages.Install
                 {
                     throw new Exception("需要初始化");
                 }
+
+                try
+                {
+                    if (Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.EnableMultiTenant)
+                    {
+                        //判断是不是从新的域名进入
+                        RequestTenantInfo currentRequestTenantInfo = MultiTenantHelper.TryGetAndCheckRequestTenantInfo(_serviceProvider, null);
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
             }
             catch (Exception)
             {

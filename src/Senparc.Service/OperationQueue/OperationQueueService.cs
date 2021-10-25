@@ -8,7 +8,6 @@ using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Utility;
 using Senparc.Ncf.Log;
 using Senparc.Ncf.Utility;
-using Senparc.Weixin.HttpUtility;
 using Senparc.Ncf.Service;
 using Microsoft.Extensions.DependencyInjection;
 
