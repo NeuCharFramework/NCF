@@ -8,7 +8,7 @@
 		<PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.5.500-preview4" />
 		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.8.1-beta6" />
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.12.11-beta6" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.2.2-beta6" />
+		<!--<PackageReference Include="Senparc.Xncf.Swagger" Version="0.2.2-beta6" />-->
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.8.2-beta6" />
 		<PackageReference Include="ML.Xncf.Docs" Version="2.1.7.22" />
 	</ItemGroup>
