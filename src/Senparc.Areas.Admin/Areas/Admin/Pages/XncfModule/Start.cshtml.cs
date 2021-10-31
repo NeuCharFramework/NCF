@@ -218,15 +218,16 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             方案效率对比见：https://www.cnblogs.com/szw/p/dynamic-vs-reflect.html
             */
 
-            var tempId = "Xncf-FunctionRun-" + Guid.NewGuid().ToString("n");
-            //记录日志缓存
-            if (result.Data != null)
-            {
-                var cache = _serviceProvider.GetObjectCacheStrategyInstance();
-                await cache.SetAsync(tempId, result.Data.ToJson(), TimeSpan.FromMinutes(5));//TODO：可设置
-            }
+            //已经在 AppService 中记录
+            //var tempId = "Xncf-FunctionRun-" + Guid.NewGuid().ToString("n");
+            ////记录日志缓存
+            //if (result.Data != null)
+            //{
+            //    var cache = _serviceProvider.GetObjectCacheStrategyInstance();
+            //    await cache.SetAsync(tempId, result.Data.ToJson(), TimeSpan.FromMinutes(5));//TODO：可设置
+            //}
 
-            var data = new { success = result.Success, msg = result.Data?.ToJson().HtmlEncode(), log = result.Data?.ToJson().HtmlEncode(), exception = result.ErrorMessage, tempId = tempId };
+            var data = new { success = result.Success, msg = result.Data?.ToJson().HtmlEncode(), log = result.Data?.ToJson().HtmlEncode(), exception = result.ErrorMessage, tempId = result.RequestTempId };
             return new JsonResult(data);
         }
 
