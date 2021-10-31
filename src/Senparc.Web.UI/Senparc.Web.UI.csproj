@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Senparc.CO2NET" Version="1.5.2-preview4" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.7.2-beta6" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.7.3-beta6" />
   </ItemGroup>
 
   <ItemGroup>
