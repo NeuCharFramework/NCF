@@ -196,7 +196,6 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                     break;
                 default:
                     return new JsonResult(new { success = false, msg = "FunctionRender 只允许方法具有一个传入参数！" });
-
             }
 
             var functionClass = _serviceProvider.GetService(rightFunctionBag.Value.MethodInfo.DeclaringType);
@@ -227,7 +226,13 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             //    await cache.SetAsync(tempId, result.Data.ToJson(), TimeSpan.FromMinutes(5));//TODO：可设置
             //}
 
-            var data = new { success = result.Success, msg = result.Data?.ToJson().HtmlEncode(), log = result.Data?.ToJson().HtmlEncode(), exception = result.ErrorMessage, tempId = result.RequestTempId };
+            var data = new { 
+                success = result.Success, 
+                msg = result.Data?.ToJson().HtmlEncode(), 
+                log = result.Data?.ToJson().HtmlEncode(),
+                exception = result.ErrorMessage, 
+                tempId = result.RequestTempId 
+            };
             return new JsonResult(data);
         }
 

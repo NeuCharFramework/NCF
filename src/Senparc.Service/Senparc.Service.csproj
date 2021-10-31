@@ -20,7 +20,7 @@
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
 		<PackageReference Include="Qiniu.Shared" Version="7.2.15" />
 		<PackageReference Include="Senparc.NeuChar" Version="1.5.0-preview3" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.7.3-beta6" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.7.3.1-beta6" />
 		<PackageReference Include="Senparc.Ncf.Log" Version="0.7.3-beta6" />
 		<PackageReference Include="Senparc.Ncf.Repository" Version="0.7.3-beta6" />
 		<PackageReference Include="Senparc.Ncf.Service" Version="0.7.3-beta6" />
