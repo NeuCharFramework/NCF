@@ -48,7 +48,7 @@ namespace Senparc.Web
             services.AddDatabase<SQLServerDatabaseConfiguration>();//默认使用 SQLServer数据库，根据需要改写
 
             //添加（注册） Ncf 服务（重要，必须！）
-            services.AddNcfServices(Configuration, env, CompatibilityVersion.Version_3_0);
+            services.AddNcfServices(Configuration, env);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
