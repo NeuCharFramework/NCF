@@ -1,15 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.5.500-preview4" />
-		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.8.2-beta6" />
-		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.12.12-beta6" />
+		<PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.6.0" />
+		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.9.0-beta6" />
+		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.13.0-beta6" />
 		<!--<PackageReference Include="Senparc.Xncf.Swagger" Version="0.2.2-beta6" />-->
-		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.8.3.1-beta6" />
+		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.9.0-beta6" />
 		<!--<PackageReference Include="ML.Xncf.Docs" Version="2.1.7.22" />-->
 	</ItemGroup>
 	<ItemGroup>
@@ -24,7 +24,7 @@
 		<!--<PackageReference Include="Senparc.Xncf.WeChatSampleBuilder" Version="0.3.5.3" />-->
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.9.3-beta6" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.10.0-beta6" />
 		<!--<ProjectReference Include="..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.XncfBuilder\Senparc.Xncf.XncfBuilder\Senparc.Xncf.XncfBuilder.csproj" />-->
 	</ItemGroup>
 

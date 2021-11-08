@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<!--<Project Sdk="Microsoft.NET.Sdk.Razor">-->
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<!--<TargetFramework>net5.0</TargetFramework>-->
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 		<!--<RazorLangVersion>2.0</RazorLangVersion>-->
@@ -49,21 +49,21 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="0.5.2-preview4" />
-		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="3.11.2-preview4" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.7.3-beta6" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.7.3.1-beta6" />
-		<PackageReference Include="Senparc.Ncf.Log" Version="0.7.3-beta6" />
-		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.7.3-beta6" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.7.3-beta6" />
-		<PackageReference Include="Senparc.Ncf.Utility" Version="0.7.3-beta6" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.7.9-beta6" />
+		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="0.6.0" />
+		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="3.12.0" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.8.0-beta6" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.8.0-beta6" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.8.0-beta6" />
+		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.8.0-beta6" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.8.0-beta6" />
+		<PackageReference Include="Senparc.Ncf.Utility" Version="0.8.0-beta6" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.8.0-beta6" />
 
 
-		<PackageReference Include="Senparc.Weixin" Version="6.12.500-preview4.1" />
-		<PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.5.500-preview4" />
-		<PackageReference Include="Senparc.Weixin.Cache.Memcached" Version="2.10.0-preview3" />
-		<PackageReference Include="Senparc.Weixin.MP" Version="16.14.0-preview3" />
+		<PackageReference Include="Senparc.Weixin" Version="6.13.0" />
+		<PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.6.0" />
+		<PackageReference Include="Senparc.Weixin.Cache.Memcached" Version="2.11.0" />
+		<PackageReference Include="Senparc.Weixin.MP" Version="16.16.0" />
 
 		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
 		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />
