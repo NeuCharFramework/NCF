@@ -39,7 +39,7 @@ namespace Senparc.Web
              * 
              *                  方法                            |         说明
              * -------------------------------------------------|-------------------------
-             *  AddDatabase<SQLServerDatabaseConfiguration>()   |  使用 SQLServer数据库
+             *  AddDatabase<SQLServerDatabaseConfiguration>()   |  使用 SQLServer 数据库
              *  AddDatabase<SqliteMemoryDatabaseConfiguration>()|  使用 SQLite 数据库
              *  AddDatabase<MySqlDatabaseConfiguration>()       |  使用 MySQL 数据库
              *  更多数据库可扩展，依次类推……
