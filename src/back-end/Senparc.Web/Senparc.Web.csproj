@@ -25,13 +25,13 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
-		<PackageReference Include="AutoMapper" Version="7.0.1" />
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+		<PackageReference Include="AutoMapper" Version="10.1.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
-		<PackageReference Include="Senparc.CO2NET.AspNet" Version="0.7.0" />
-		<PackageReference Include="Senparc.CO2NET" Version="1.6.0" />
+		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.0.0" />
+		<PackageReference Include="Senparc.CO2NET" Version="2.0.0" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.8.1-beta6" />
 	</ItemGroup>
 	<ItemGroup>
