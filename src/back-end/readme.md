@@ -1,3 +1,9 @@
+## 文件夹说明
+
+NeuCharFramework 前端代码源码文件夹
+
+## 分支说明
+
 当前最新代码请见分支：[Developer](https://github.com/NeuCharFramework/NCF/tree/Developer)。
 
 > NCF.sln 为常规 NCF 项目模板解决方案<br>
