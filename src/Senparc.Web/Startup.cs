@@ -17,6 +17,7 @@ using Senparc.Ncf.Service.MultiTenant;
 using Senparc.Web.Hubs;
 using System.Collections.Generic;
 using System;
+using Senparc.Ncf.Database.PostgreSQL;
 
 namespace Senparc.Web
 {
@@ -42,10 +43,11 @@ namespace Senparc.Web
              *  AddDatabase<SQLServerDatabaseConfiguration>()   |  使用 SQLServer 数据库
              *  AddDatabase<SqliteMemoryDatabaseConfiguration>()|  使用 SQLite 数据库
              *  AddDatabase<MySqlDatabaseConfiguration>()       |  使用 MySQL 数据库
+             *  AddDatabase<PostgreSQLDatabaseConfiguration>()  |  使用 PostgreSQL 数据库
              *  更多数据库可扩展，依次类推……
              *  
              */
-            services.AddDatabase<SQLServerDatabaseConfiguration>();//默认使用 SQLServer数据库，根据需要改写
+            services.AddDatabase<PostgreSQLDatabaseConfiguration>();//默认使用 SQLServer数据库，根据需要改写
 
             //添加（注册） Ncf 服务（重要，必须！）
             services.AddNcfServices(Configuration, env);
