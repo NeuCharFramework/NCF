@@ -8,7 +8,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- 仅在开发环境下引用 -->
-		<PackageReference Condition=" '$(Configuration)' != 'Release' " Include="Senparc.Ncf.DatabasePlant" Version="0.8.1-beta6" />
+		<PackageReference Condition=" '$(Configuration)' != 'Release' " Include="Senparc.Ncf.DatabasePlant" Version="0.9.0-beta6" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -20,10 +20,10 @@
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
 		<PackageReference Include="Qiniu.Shared" Version="7.2.15" />
 		<PackageReference Include="Senparc.NeuChar" Version="2.0.0" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.8.1-beta6" />
-		<PackageReference Include="Senparc.Ncf.Log" Version="0.8.1-beta6" />
-		<PackageReference Include="Senparc.Ncf.Repository" Version="0.8.1-beta6" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.8.1-beta6" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.9.0-beta6" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.9.0-beta6" />
+		<PackageReference Include="Senparc.Ncf.Repository" Version="0.9.0-beta6" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.9.0-beta6" />
 	</ItemGroup>
 
 	<ItemGroup>
