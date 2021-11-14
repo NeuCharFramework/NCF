@@ -15,7 +15,7 @@ namespace Senparc.Core.Models
                 .HasMaxLength(20)
                 .IsUnicode(false);
 
-            builder.Property(e => e.LastLoginTime).HasColumnType("datetime");
+            //builder.Property(e => e.LastLoginTime).HasColumnType("datetime");
 
             builder.Property(e => e.Password).HasMaxLength(50);
 
@@ -34,7 +34,7 @@ namespace Senparc.Core.Models
                 .HasMaxLength(20)
                 .IsUnicode(false);
 
-            builder.Property(e => e.ThisLoginTime).HasColumnType("datetime");
+            //builder.Property(e => e.ThisLoginTime).HasColumnType("datetime");
 
             builder.Property(e => e.UserName).HasMaxLength(50);
         }

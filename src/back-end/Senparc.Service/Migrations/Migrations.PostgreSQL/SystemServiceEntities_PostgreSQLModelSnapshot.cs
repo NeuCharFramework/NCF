@@ -47,7 +47,7 @@ namespace Senparc.Service.Migrations.Migrations.PostgreSQL
                         .HasColumnName("LastLoginIP");
 
                     b.Property<DateTime>("LastLoginTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("LastUpdateTime")
                         .HasColumnType("timestamp with time zone");
@@ -87,7 +87,7 @@ namespace Senparc.Service.Migrations.Migrations.PostgreSQL
                         .HasColumnName("ThisLoginIP");
 
                     b.Property<DateTime>("ThisLoginTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(50)
@@ -266,7 +266,7 @@ namespace Senparc.Service.Migrations.Migrations.PostgreSQL
                         .HasColumnName("ThisLoginIP");
 
                     b.Property<DateTime>("ThisLoginTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -309,7 +309,7 @@ namespace Senparc.Service.Migrations.Migrations.PostgreSQL
                         .HasColumnType("character varying(300)");
 
                     b.Property<DateTime>("CompleteTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -680,7 +680,7 @@ namespace Senparc.Service.Migrations.Migrations.PostgreSQL
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("AddTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("AdminRemark")
                         .HasMaxLength(300)
@@ -700,7 +700,7 @@ namespace Senparc.Service.Migrations.Migrations.PostgreSQL
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("LastUpdateTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("MenuId")
                         .HasMaxLength(100)
@@ -732,7 +732,7 @@ namespace Senparc.Service.Migrations.Migrations.PostgreSQL
 
                     b.Property<string>("UpdateLog")
                         .IsRequired()
-                        .HasColumnType("ntext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Version")
                         .IsRequired()
@@ -835,7 +835,7 @@ namespace Senparc.Service.Migrations.Migrations.PostgreSQL
 
                     b.Property<string>("SystemName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("TenPayAppId")
                         .HasColumnType("varchar(100)");
