@@ -16,8 +16,6 @@ export function getAdminUserList(params) {
   })
 }
 
-
-
 // export function getInfo(token) {
 //   return request({
 //     url: '/vue-element-admin/user/info',
