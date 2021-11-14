@@ -79,6 +79,7 @@ namespace Senparc.Web.Pages.Install
                 var adminUserInfo = await _accountInfoService.GetObjectAsync(z => true);//检查是否已初始化
                 if (adminUserInfo == null)
                 {
+                    Console.WriteLine("需要初始化");
                     throw new Exception("需要初始化");
                 }
 
@@ -98,6 +99,7 @@ namespace Senparc.Web.Pages.Install
             }
             catch (Exception)
             {
+                Console.WriteLine("开始初始化");
                 {
                     Senparc.Service.Register serviceRegister = new Service.Register();
 
@@ -110,6 +112,9 @@ namespace Senparc.Web.Pages.Install
 
                             //初始化数据库
                             var (initDbSuccess, initDbMsg) = await serviceRegister.InitDatabase(_serviceProvider/*, _tenantInfoService, *//*_httpContextAccessor.Value.HttpContext*/);
+
+                            Console.WriteLine($"完成 serviceRegister.InitDatabase，是否成功：{initDbSuccess}。数据库信息：{initDbMsg}");
+
                             if (!initDbSuccess)
                             {
                                 throw new NcfDatabaseException($"ServiceRegister.InitDatabase 失败：{initDbMsg}", DatabaseConfigurationFactory.Instance.Current.GetType());

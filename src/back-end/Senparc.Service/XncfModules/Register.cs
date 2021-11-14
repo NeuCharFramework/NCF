@@ -217,6 +217,7 @@ namespace Senparc.Service
                     catch (Exception ex)
                     {
                         success = false;
+                        msg = ex.Message + "\r\n" + ex.StackTrace;
                         var currentDatabaseConfiguration = DatabaseConfigurationFactory.Instance.Current;
                         SenparcTrace.BaseExceptionLog(new NcfDatabaseException(ex.Message, currentDatabaseConfiguration.GetType(), senparcEntities.GetType(), ex));
                     }
@@ -233,7 +234,7 @@ namespace Senparc.Service
         public async Task<(bool success, string msg)> InitDatabase(IServiceProvider serviceProvider/*, TenantInfoService tenantInfoService*/
             /*HttpContext httpContext,*/)
         {
-            var success = true;
+            var success = false;
             string msg = null;
 
             //SenparcEntities senparcEntities = (SenparcEntities)xncfModuleServiceExtension.BaseData.BaseDB.BaseDataContext;
@@ -243,7 +244,9 @@ namespace Senparc.Service
                 //暂时关闭多租户状态
                 SiteConfig.SenparcCoreSetting.EnableMultiTenant = false;
 
-                await GenerateCreateScript(serviceProvider);//尝试执行更新
+                var result = await GenerateCreateScript(serviceProvider);//尝试执行更新
+                success = result.success;
+                msg = result.msg;
 
                 SiteConfig.SenparcCoreSetting.EnableMultiTenant = oldMultiTenant;
             }
