@@ -47,7 +47,7 @@ namespace Senparc.Web
              *  更多数据库可扩展，依次类推……
              *  
              */
-            services.AddDatabase<PostgreSQLDatabaseConfiguration>();//默认使用 SQLServer数据库，根据需要改写
+            services.AddDatabase<SQLServerDatabaseConfiguration>();//默认使用 SQLServer数据库，根据需要改写
 
             //添加（注册） Ncf 服务（重要，必须！）
             services.AddNcfServices(Configuration, env);
