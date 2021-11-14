@@ -103,7 +103,7 @@ namespace Senparc.Service
 
         #region IXncfDatabase 接口
 
-        public string DatabaseUniquePrefix => Senparc.Ncf.Core.Models.NcfDatabaseHelper.SYSTEM_UNIQUE_PREFIX;//特殊情况：没有前缀
+        public string DatabaseUniquePrefix => Senparc.Ncf.Core.Models.NcfDatabaseMigrationHelper.SYSTEM_UNIQUE_PREFIX;//特殊情况：没有前缀
         public Type XncfDatabaseDbContextType => typeof(SystemServiceEntities);
 
         public Type TryGetXncfDatabaseDbContextType => MultipleDatabasePool.Instance.GetXncfDbContextType(this.GetType());
@@ -141,7 +141,7 @@ namespace Senparc.Service
              * 
              * SYSTEM 为特定标记，将直接定位到 __EFMigrationsHistory 
             */
-            var xncfDatabaseData = new XncfDatabaseData(this, Senparc.Ncf.Core.Models.NcfDatabaseHelper.SYSTEM_UNIQUE_PREFIX);
+            var xncfDatabaseData = new XncfDatabaseData(this, Senparc.Ncf.Core.Models.NcfDatabaseMigrationHelper.SYSTEM_UNIQUE_PREFIX);
 
             #region 不属于任何模块
 
