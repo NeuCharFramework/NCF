@@ -252,6 +252,8 @@ export default {
         pageSize: 20
       }).then(res => {
         console.log(1233, res)
+        this.tableData = res.data.list
+        this.paginationQuery.total = res.data.totalCount
       })
       // service.get(`/Admin/AdminUserInfo/index?handler=List&adminUserInfoName=${adminUserInfoName}&pageIndex=${pageIndex}&pageSize=${pageSize}`).then(res => {
       //   this.tableData = res.data.data.list
