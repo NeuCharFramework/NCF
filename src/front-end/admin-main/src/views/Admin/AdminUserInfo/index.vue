@@ -3,7 +3,7 @@
     <div>
       <div class="admin-user-info">
         <div class="filter-container">
-          <el-button v-has="['admin-add']" class="filter-item" type="primary" icon="el-icon-plus" @@click="handleEdit">增加</el-button>
+          <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleEdit">增加</el-button>
         </div>
         <el-table
           :data="tableData"
@@ -41,37 +41,37 @@
             label="添加时间"
           >
             <template slot-scope="scope">
-              {{ formaTableTime(scope.row.addTime) }}
+              {{ scope.row.addTime }}
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
-              <el-button
-                v-has="['admin-edit']"
-                size="mini"
-                type="primary"
-                @@click="handleEdit(scope.$index, scope.row)"
-              >编辑</el-button>
-              <el-button
-                v-has="['admin-grant']"
-                size="mini"
-                type="primary"
-                @@click="handleSet(scope.$index, scope.row)"
-              >设置角色</el-button>
-              <template v-has="['admin-delete']">
-                <el-popconfirm placement="top" title="确认删除此角色吗？" @@on-confirm="handleDelete(scope.$index, scope.row)">
-                  <el-button slot="reference" size="mini" type="danger">删除</el-button>
-                </el-popconfirm>
-              </template>
+<!--              <el-button-->
+<!--                v-has="['admin-edit']"-->
+<!--                size="mini"-->
+<!--                type="primary"-->
+<!--                @click="handleEdit(scope.$index, scope.row)"-->
+<!--              >编辑</el-button>-->
+<!--              <el-button-->
+<!--                v-has="['admin-grant']"-->
+<!--                size="mini"-->
+<!--                type="primary"-->
+<!--                @click="handleSet(scope.$index, scope.row)"-->
+<!--              >设置角色</el-button>-->
+<!--              <template v-has="['admin-delete']">-->
+<!--                <el-popconfirm placement="top" title="确认删除此角色吗？" @on-confirm="handleDelete(scope.$index, scope.row)">-->
+<!--                  <el-button slot="reference" size="mini" type="danger">删除</el-button>-->
+<!--                </el-popconfirm>-->
+<!--              </template>-->
             </template>
           </el-table-column>
         </el-table>
-        <pagination
-          :total="paginationQuery.total"
-          :page.sync="listQuery.pageIndex"
-          :limit.sync="listQuery.pageSize"
-          @@pagination="getList"
-        />
+<!--        <pagination-->
+<!--          :total="paginationQuery.total"-->
+<!--          :page.sync="listQuery.pageIndex"-->
+<!--          :limit.sync="listQuery.pageSize"-->
+<!--          @pagination="getList"-->
+<!--        />-->
         <!--编辑、新增 -->
         <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
           <el-form
@@ -103,8 +103,8 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @@click="dialog.visible = false">取 消</el-button>
-            <el-button :loading="dialog.updateLoading" type="primary" @@click="updateData">确 认</el-button>
+            <el-button @click="dialog.visible = false">取 消</el-button>
+            <el-button :loading="dialog.updateLoading" type="primary" @click="updateData">确 认</el-button>
           </div>
         </el-dialog>
         <!--分配角色-->
@@ -113,8 +113,8 @@
             <el-checkbox v-for="item in dialog.dialogSetData" :label="item.value" border>{{ item.text }}</el-checkbox>
           </el-checkbox-group>
           <div slot="footer" class="dialog-footer">
-            <el-button @@click="dialog.visibleSet = false">取 消</el-button>
-            <el-button :loading="dialog.updateLoading" type="primary" @@click="updateDataSet">确 认</el-button>
+            <el-button @click="dialog.visibleSet = false">取 消</el-button>
+            <el-button :loading="dialog.updateLoading" type="primary" @click="updateDataSet">确 认</el-button>
           </div>
         </el-dialog>
       </div>
@@ -243,20 +243,41 @@ export default {
       }
     },
     // 获取数据
-    getList() {
+    async getList() {
       const { adminUserInfoName, pageIndex, pageSize } = this.listQuery
-      getAdminUserList({
-        handler: 'list',
-        adminUserInfoName: '',
-        pageIndex: 1,
-        pageSize: 20
-      }).then(res => {
-        console.log(1233, res)
-      })
-      // service.get(`/Admin/AdminUserInfo/index?handler=List&adminUserInfoName=${adminUserInfoName}&pageIndex=${pageIndex}&pageSize=${pageSize}`).then(res => {
-      //   this.tableData = res.data.data.list
-      //   this.paginationQuery.total = res.data.data.totalCount
+      // let res =  getAdminUserList({
+      //   pageIndex: 1,
+      //   pageSize: 20
       // })
+      let res = {
+        "data": {
+          "list": [
+            {
+              "id": 1,
+              "userName": "SenparcCoreAdmin25",
+              "password": "68B950596ECAFE09B3EA5E567CCE8A63",
+              "note": "初始化数据",
+              "realName": null,
+              "phone": null,
+              "flag": false,
+              "adminRemark": null,
+              "remark": null,
+              "addTime": "2021-10-31T21:02:13.0675889",
+              "lastUpdateTime": "2021-10-31T21:02:13.0675889",
+              "tenantId": 1
+            }
+          ],
+          "totalCount": 1
+        },
+        "stateCode": 0,
+        "success": true,
+        "errorMessage": null,
+        "requestTempId": "RequestTempId-637726981640150424-4a587c6a"
+      }
+      this.tableData = res.data.list
+      this.paginationQuery.total = res.data.totalCount
+
+      console.log(777,this.tableData)
     },
     // 编辑
     handleEdit(index, row) {
@@ -296,21 +317,21 @@ export default {
             RealName: this.dialog.data.realName,
             Phone: this.dialog.data.phone
           }
-          service.post('/Admin/AdminUserInfo/Edit?handler=Save', data).then(res => {
-            if (res.data.success) {
-              this.getList()
-              this.$notify({
-                title: 'Success',
-                message: '成功',
-                type: 'success',
-                duration: 2000
-              })
-              this.dialog.visible = false
-              this.dialog.updateLoading = false
-            }
-          }).catch(error => {
-            this.dialog.updateLoading = false
-          })
+          // service.post('/Admin/AdminUserInfo/Edit?handler=Save', data).then(res => {
+          //   if (res.data.success) {
+          //     this.getList()
+          //     this.$notify({
+          //       title: 'Success',
+          //       message: '成功',
+          //       type: 'success',
+          //       duration: 2000
+          //     })
+          //     this.dialog.visible = false
+          //     this.dialog.updateLoading = false
+          //   }
+          // }).catch(error => {
+          //   this.dialog.updateLoading = false
+          // })
         }
       })
     },
@@ -318,53 +339,53 @@ export default {
     updateDataSet() {
       this.dialog.updateLoadingSet = true
       const data = { RoleIds: this.dialog.dialogSetSelected, AccountId: this.setId }
-      service.post('/Admin/AdminUserInfo/AuthorizationPage', data).then(res => {
-        if (res.data.success) {
-          this.getList()
-          this.$notify({
-            title: 'Success',
-            message: '成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.dialog.visibleSet = false
-          this.dialog.updateLoadingSet = false
-        }
-      })
+      // service.post('/Admin/AdminUserInfo/AuthorizationPage', data).then(res => {
+      //   if (res.data.success) {
+      //     this.getList()
+      //     this.$notify({
+      //       title: 'Success',
+      //       message: '成功',
+      //       type: 'success',
+      //       duration: 2000
+      //     })
+      //     this.dialog.visibleSet = false
+      //     this.dialog.updateLoadingSet = false
+      //   }
+      // })
     },
     // 设置角色
-    async    handleSet(index, row) {
+    handleSet(index, row) {
       this.dialog.dialogSetSelected = []
       this.dialog.visibleSet = true
       this.setId = row.id
       this.dialog.setTitle = row.userName
-      // 所有角色
-      const a = await service.get('/Admin/Role/edit?Handler=SelectItems')
-      if (a.data.success) {
-        this.dialog.dialogSetData = a.data.data
-      }
-      // 已有角色
-      const b = await service.get(`/Admin/AdminUserInfo/AuthorizationPage?Handler=Detail&accountId=${this.setId}`)
-      if (b.data.success) {
-        b.data.data.map(res => {
-          this.dialog.dialogSetSelected.push(res.roleId)
-        })
-      }
+      // // 所有角色
+      // const a = await service.get('/Admin/Role/edit?Handler=SelectItems')
+      // if (a.data.success) {
+      //   this.dialog.dialogSetData = a.data.data
+      // }
+      // // 已有角色
+      // const b = await service.get(`/Admin/AdminUserInfo/AuthorizationPage?Handler=Detail&accountId=${this.setId}`)
+      // if (b.data.success) {
+      //   b.data.data.map(res => {
+      //     this.dialog.dialogSetSelected.push(res.roleId)
+      //   })
+      // }
     },
     // 删除
     handleDelete(index, row) {
       const ids = [row.id]
-      service.post('/Admin/AdminUserInfo/Index?handler=Delete', ids).then(res => {
-        if (res.data.success) {
-          this.getList()
-          this.$notify({
-            title: 'Success',
-            message: '删除成功',
-            type: 'success',
-            duration: 2000
-          })
-        }
-      })
+      // service.post('/Admin/AdminUserInfo/Index?handler=Delete', ids).then(res => {
+      //   if (res.data.success) {
+      //     this.getList()
+      //     this.$notify({
+      //       title: 'Success',
+      //       message: '删除成功',
+      //       type: 'success',
+      //       duration: 2000
+      //     })
+      //   }
+      // })
     }
   }
 }

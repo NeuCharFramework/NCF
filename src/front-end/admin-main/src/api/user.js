@@ -10,7 +10,8 @@ export function login(data) {
 
 export function getAdminUserList(params) {
   return request({
-    url: '/Admin/AdminUserInfo/index',
+    // url: '/Admin/AdminUserInfo/index',
+    url: '/api/Senparc.Areas.Admin/AdminUserInfoService/Areas.Admin_AdminUserInfoService.GetList',
     method: 'get',
     params
   })
