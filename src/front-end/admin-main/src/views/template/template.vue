@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import { createTemplate,fetchTemplate,updateTemplate,deleteTemplate }  from '@/api/template'
+import { createTemplate, fetchTemplate, updateTemplate, deleteTemplate } from '@/api/template'
 import elDragDialog from '@/directive/el-drag-dialog' // 自定义指令,可拖拽的dialog
 import waves from '@/directive/waves'
 import { parseTime } from '@/utils'

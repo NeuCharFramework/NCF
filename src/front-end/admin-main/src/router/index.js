@@ -188,7 +188,7 @@ export const asyncRoutes = [
         component: () => import('@/views/template/template'),
         name: '模板页',
         meta: { title: '模板页' }
-      },
+      }
     ]
   },
   // chartsRouter,

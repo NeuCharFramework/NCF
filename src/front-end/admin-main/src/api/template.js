@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 const url = '/api/template/index'
 
-//查
+// 查
 export function fetchTemplate(params) {
   return request({
     url: `${url}`,
@@ -10,7 +10,7 @@ export function fetchTemplate(params) {
   })
 }
 
-//增
+// 增
 export function createTemplate(data) {
   return request({
     url: `${url}/create`,
@@ -19,7 +19,7 @@ export function createTemplate(data) {
   })
 }
 
-//改
+// 改
 export function updateTemplate(data) {
   return request({
     url: `${url}/update`,
@@ -28,7 +28,7 @@ export function updateTemplate(data) {
   })
 }
 
-//删
+// 删
 export function deleteTemplate(data) {
   return request({
     url: `${url}/delete`,

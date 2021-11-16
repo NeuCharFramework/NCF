@@ -46,32 +46,32 @@
           </el-table-column>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
-<!--              <el-button-->
-<!--                v-has="['admin-edit']"-->
-<!--                size="mini"-->
-<!--                type="primary"-->
-<!--                @click="handleEdit(scope.$index, scope.row)"-->
-<!--              >编辑</el-button>-->
-<!--              <el-button-->
-<!--                v-has="['admin-grant']"-->
-<!--                size="mini"-->
-<!--                type="primary"-->
-<!--                @click="handleSet(scope.$index, scope.row)"-->
-<!--              >设置角色</el-button>-->
-<!--              <template v-has="['admin-delete']">-->
-<!--                <el-popconfirm placement="top" title="确认删除此角色吗？" @on-confirm="handleDelete(scope.$index, scope.row)">-->
-<!--                  <el-button slot="reference" size="mini" type="danger">删除</el-button>-->
-<!--                </el-popconfirm>-->
-<!--              </template>-->
+              <!--              <el-button-->
+              <!--                v-has="['admin-edit']"-->
+              <!--                size="mini"-->
+              <!--                type="primary"-->
+              <!--                @click="handleEdit(scope.$index, scope.row)"-->
+              <!--              >编辑</el-button>-->
+              <!--              <el-button-->
+              <!--                v-has="['admin-grant']"-->
+              <!--                size="mini"-->
+              <!--                type="primary"-->
+              <!--                @click="handleSet(scope.$index, scope.row)"-->
+              <!--              >设置角色</el-button>-->
+              <!--              <template v-has="['admin-delete']">-->
+              <!--                <el-popconfirm placement="top" title="确认删除此角色吗？" @on-confirm="handleDelete(scope.$index, scope.row)">-->
+              <!--                  <el-button slot="reference" size="mini" type="danger">删除</el-button>-->
+              <!--                </el-popconfirm>-->
+              <!--              </template>-->
             </template>
           </el-table-column>
         </el-table>
-<!--        <pagination-->
-<!--          :total="paginationQuery.total"-->
-<!--          :page.sync="listQuery.pageIndex"-->
-<!--          :limit.sync="listQuery.pageSize"-->
-<!--          @pagination="getList"-->
-<!--        />-->
+        <!--        <pagination-->
+        <!--          :total="paginationQuery.total"-->
+        <!--          :page.sync="listQuery.pageIndex"-->
+        <!--          :limit.sync="listQuery.pageSize"-->
+        <!--          @pagination="getList"-->
+        <!--        />-->
         <!--编辑、新增 -->
         <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
           <el-form
@@ -249,35 +249,35 @@ export default {
       //   pageIndex: 1,
       //   pageSize: 20
       // })
-      let res = {
-        "data": {
-          "list": [
+      const res = {
+        'data': {
+          'list': [
             {
-              "id": 1,
-              "userName": "SenparcCoreAdmin25",
-              "password": "68B950596ECAFE09B3EA5E567CCE8A63",
-              "note": "初始化数据",
-              "realName": null,
-              "phone": null,
-              "flag": false,
-              "adminRemark": null,
-              "remark": null,
-              "addTime": "2021-10-31T21:02:13.0675889",
-              "lastUpdateTime": "2021-10-31T21:02:13.0675889",
-              "tenantId": 1
+              'id': 1,
+              'userName': 'SenparcCoreAdmin25',
+              'password': '68B950596ECAFE09B3EA5E567CCE8A63',
+              'note': '初始化数据',
+              'realName': null,
+              'phone': null,
+              'flag': false,
+              'adminRemark': null,
+              'remark': null,
+              'addTime': '2021-10-31T21:02:13.0675889',
+              'lastUpdateTime': '2021-10-31T21:02:13.0675889',
+              'tenantId': 1
             }
           ],
-          "totalCount": 1
+          'totalCount': 1
         },
-        "stateCode": 0,
-        "success": true,
-        "errorMessage": null,
-        "requestTempId": "RequestTempId-637726981640150424-4a587c6a"
+        'stateCode': 0,
+        'success': true,
+        'errorMessage': null,
+        'requestTempId': 'RequestTempId-637726981640150424-4a587c6a'
       }
       this.tableData = res.data.list
       this.paginationQuery.total = res.data.totalCount
 
-      console.log(777,this.tableData)
+      console.log(777, this.tableData)
     },
     // 编辑
     handleEdit(index, row) {

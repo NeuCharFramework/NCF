@@ -42,8 +42,8 @@ const actions = {
         resolve()
       }).catch(error => {
         reject(error)
-      }).finally(res=>{
-        //绕过登录
+      }).finally(res => {
+        // 绕过登录
         commit('SET_TOKEN', 'jam_token')
         setToken('jam_token')
         // 这里的角色暂时写死
