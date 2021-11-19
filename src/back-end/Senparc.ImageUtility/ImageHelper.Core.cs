@@ -271,7 +271,7 @@ namespace Senparc.ImageUtility
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private static bool isFilePath(string path)
+        private static bool IsFilePath(string path)
         {
             if (System.IO.Path.HasExtension(path))
             {

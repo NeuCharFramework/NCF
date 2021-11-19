@@ -19,7 +19,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
-		<ProjectReference Include="..\Senparc.SMS\Senparc.SMS.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -6,6 +6,16 @@
 		<!--使用XncfBuilder更新数据库迁移文件时可使用-->
 		<!--<TargetFramework>net6.0</TargetFramework>-->
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Migrations\**" />
+	  <EmbeddedResource Remove="Migrations\**" />
+	  <None Remove="Migrations\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Remove="C:\Users\苏震巍\.nuget\packages\senparc.ncf.databaseplant\0.9.2-beta6\contentFiles\any\netstandard2.1\readme.md" />
+	</ItemGroup>
 	<ItemGroup>
 		<!-- 仅在开发环境下引用 -->
 		<PackageReference Condition=" '$(Configuration)' != 'Release' " Include="Senparc.Ncf.DatabasePlant" Version="0.9.2-beta6" />
@@ -20,7 +30,7 @@
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
 		<PackageReference Include="Qiniu.Shared" Version="7.2.15" />
 		<PackageReference Include="Senparc.NeuChar" Version="2.0.0" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.9.2-beta6" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.9.3-beta6" />
 		<PackageReference Include="Senparc.Ncf.Log" Version="0.9.0-beta6" />
 		<PackageReference Include="Senparc.Ncf.Repository" Version="0.9.0-beta6" />
 		<PackageReference Include="Senparc.Ncf.Service" Version="0.9.0-beta6" />
@@ -28,10 +38,11 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
-		<ProjectReference Include="..\Senparc.Log\Senparc.Log.csproj" />
 		<ProjectReference Include="..\Senparc.Respository\Senparc.Respository.csproj" />
-		<ProjectReference Include="..\Senparc.SMS\Senparc.SMS.csproj" />
-		<ProjectReference Include="..\Senparc.Utility\Senparc.Utility.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="OHS\" />
 	</ItemGroup>
 
 </Project>
