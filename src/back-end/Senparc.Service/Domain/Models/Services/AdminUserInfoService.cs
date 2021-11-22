@@ -14,6 +14,14 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
+using Senparc.Core;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
+using Senparc.CO2NET;
+using Microsoft.EntityFrameworkCore;
 
 namespace Senparc.Service
 {
@@ -42,6 +50,8 @@ namespace Senparc.Service
                 z => z.Id != id && z.UserName.ToUpper() == userName /*z.UserName.Equals(userName, StringComparison.CurrentCultureIgnoreCase)*/) != null;
         }
 
+        [ApiBind]
+        [Core.BackendJwtAuthorize]
         public async Task<AdminUserInfo> GetUserInfo(string userName)
         {
             await Task.CompletedTask;
@@ -213,6 +223,62 @@ namespace Senparc.Service
         {
             base.DeleteObject(obj);
             LogUtility.WebLogger.InfoFormat("AdminUserInfo被删除：{0}（ID：{1}）", obj.UserName, obj.Id);
+        }
+
+        /// <summary>
+        /// 登录
+        /// <paramref name="loginDto">登录dto</paramref>
+        /// </summary>
+        /// <returns></returns>
+        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
+        public async Task<Core.Models.DataBaseModel.Dto.AccountLoginResultDto> LoginAsync(Core.Models.DataBaseModel.Dto.AccountLoginDto loginDto)
+        {
+            Core.Models.DataBaseModel.Dto.AccountLoginResultDto result = new Core.Models.DataBaseModel.Dto.AccountLoginResultDto();
+            string token;
+            var userInfo = await GetObjectAsync(_ => _.UserName == loginDto.UserName);
+            if (userInfo == null)
+            {
+                throw new Ncf.Core.Exceptions.NcfExceptionBase("用户名不存在或密码不正确.");
+            }
+            var adminUserInfo = TryLogin(loginDto.UserName, loginDto.Password, false);
+            if (adminUserInfo == null)
+            {
+                throw new Ncf.Core.Exceptions.NcfExceptionBase("用户名不存在或密码不正确.");
+            }
+            else
+            {
+                token = generateToken(adminUserInfo.Id);
+            }
+            var roleCodes = await BaseData.BaseDB.BaseDataContext.Set<Ncf.Core.Models.DataBaseModel.SysRoleAdminUserInfo>().Where(o => o.AccountId == adminUserInfo.Id)
+                .Select(o => o.RoleCode).Distinct()
+                .ToListAsync();
+            result.Token = token;
+            result.UserName = adminUserInfo.UserName;
+            result.RoleCodes = roleCodes;
+            return result;
+        }
+
+        private string generateToken(int memberId)
+        {
+            var options = _serviceProvider.GetService<IOptionsSnapshot<JwtSettings>>();
+            var _jwtSettings = options.Get(JwtSettings.Position_Backend);
+            byte[] keyBytes = System.Text.Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            SecurityTokenDescriptor securityToken = new SecurityTokenDescriptor()
+            {
+                Subject = new System.Security.Claims.ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, memberId.ToString(), ClaimValueTypes.Integer),
+
+                }),
+                Audience = _jwtSettings.Audience,
+                Issuer = _jwtSettings.Issuer,
+                Expires = DateTime.UtcNow.AddHours(_jwtSettings.Expires),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
+            };
+            SecurityToken token = tokenHandler.CreateToken(securityToken);
+            string tokenStr = tokenHandler.WriteToken(token);
+            return tokenStr;
         }
     }
 }

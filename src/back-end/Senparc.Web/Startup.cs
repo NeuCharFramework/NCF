@@ -17,6 +17,7 @@ using Senparc.Ncf.Service.MultiTenant;
 using Senparc.Web.Hubs;
 using System.Collections.Generic;
 using System;
+using Senparc.Core;
 using Senparc.Ncf.Database.PostgreSQL;
 
 namespace Senparc.Web
@@ -51,6 +52,52 @@ namespace Senparc.Web
 
             //添加（注册） Ncf 服务（重要，必须！）
             services.AddNcfServices(Configuration, env);
+            services.Configure<Core.JwtSettings>(Core.JwtSettings.Position_Backend, Configuration.GetSection(Core.JwtSettings.Position_Backend));// 配置管理后台jwt
+            services.Configure<Core.JwtSettings>(Core.JwtSettings.Position_MiniPro, Configuration.GetSection(Core.JwtSettings.Position_MiniPro));// 配置前台jwt
+            addJwtAuthentication(services);
+        }
+
+        /// <summary>
+        /// 添加前后端认证
+        /// </summary>
+        /// <param name="services"></param>
+        private void addJwtAuthentication(IServiceCollection services)
+        {
+            JwtSettings backend = new JwtSettings();
+            JwtSettings miniPro = new JwtSettings();
+            Configuration.Bind(JwtSettings.Position_Backend, backend);
+            Configuration.Bind(JwtSettings.Position_MiniPro, miniPro);
+            services.AddAuthentication()
+                .AddJwtBearer(BackendJwtAuthorizeAttribute.AuthenticationScheme, options =>
+                {
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                    {
+                        ValidIssuer = backend.Issuer,
+                        ValidAudience = backend.Audience,
+                        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(backend.SecretKey)),
+                        ValidateIssuer = true, //whether or not valid Issuer
+                        ValidateAudience = true, //whether or not valid Audience
+                        ValidateLifetime = true, //whether or not valid out-of-service time
+                        ValidateIssuerSigningKey = true, //whether or not valid SecurityKey　　　　　　　　　　　
+                        ClockSkew = System.TimeSpan.Zero//Allowed server time offset
+                    };
+                })
+            //.AddJwtBearer(Core.ApiAttributes.JwtAuthorizeAttribute.AuthenticationScheme, options =>
+            //{
+            //    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+            //    {
+            //        ValidIssuer = miniPro.Issuer,
+            //        ValidAudience = miniPro.Audience,
+            //        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(miniPro.SecretKey)),
+            //        ValidateIssuer = true, //whether or not valid Issuer
+            //        ValidateAudience = true, //whether or not valid Audience
+            //        ValidateLifetime = true, //whether or not valid out-of-service time
+            //        ValidateIssuerSigningKey = true, //whether or not valid SecurityKey　　　　　　　　　　　
+            //        ClockSkew = System.TimeSpan.Zero//Allowed server time offset
+            //    };
+            //})
+            ;
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
