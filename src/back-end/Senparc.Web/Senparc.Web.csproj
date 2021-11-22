@@ -14,12 +14,12 @@
 	<ItemGroup>
 		
 		<!--<PackageReference Include="Senparc.Ncf.Database.MySql" Version="0.6.128-beta1" />-->
-		<PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.4.4">
+		<PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.5.2">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.2.2-beta6" />
-		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.9.0-beta6" />
+		<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.2.3-beta6" />
+		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.9.1-beta6" />
 
 		<!--https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-3.1-->
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.6" />
@@ -38,7 +38,7 @@
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.0.0" />
 		<PackageReference Include="Senparc.CO2NET" Version="2.0.0" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.9.3-beta6" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.9.4-beta6" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
