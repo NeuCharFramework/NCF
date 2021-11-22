@@ -4,7 +4,7 @@
 		<!--<TargetFramework>net5.0</TargetFramework>-->
 		<Version>0.3.0-beta3</Version>
 		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-		<TypeScriptToolsVersion>4.0</TypeScriptToolsVersion>
+		<TypeScriptToolsVersion>4.1</TypeScriptToolsVersion>
 		<UserSecretsId>d2144151-af7a-4d50-896d-4a306e594f7b</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		
@@ -12,6 +12,7 @@
 
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.4" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.4" />
