@@ -1,7 +1,7 @@
 ﻿using Senparc.Core.Models;
 using Senparc.Ncf.Repository;
 
-namespace Senparc.Repository
+namespace Senparc.Service.ACL
 {
     public interface IFeedBackRepository : IClientRepositoryBase<FeedBack>
     {

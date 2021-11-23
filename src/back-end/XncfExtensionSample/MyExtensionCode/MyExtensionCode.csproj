@@ -4,14 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.6.0" />
-		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.10.1-beta6" />
-		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.14.2-beta6" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.4.2-beta6" />
-		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.10.1-beta6" />
-		<PackageReference Include="ML.Xncf.Docs" Version="2.1.7.25" />
-	</ItemGroup>
+
 	<ItemGroup>
 		<!--<ProjectReference Include="..\..\..\Senparc.Xncf.WeixinManager\src\Senparc.Xncf.WeixinManager\Senparc.Xncf.WeixinManager.csproj" />-->
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.7.0-beta1" />
@@ -24,7 +17,6 @@
 		<!--<PackageReference Include="Senparc.Xncf.WeChatSampleBuilder" Version="0.3.5.3" />-->
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.11.4-beta6" />
 		<!--<ProjectReference Include="..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.XncfBuilder\Senparc.Xncf.XncfBuilder\Senparc.Xncf.XncfBuilder.csproj" />-->
 	</ItemGroup>
 

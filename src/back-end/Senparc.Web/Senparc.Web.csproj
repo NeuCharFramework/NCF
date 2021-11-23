@@ -11,6 +11,16 @@
 		<!--<RestoreFallbackFolders>clear</RestoreFallbackFolders>-->
 
 	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.10.1-beta6" />
+		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.14.2-beta6" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.4.2-beta6" />
+		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.10.1-beta6" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.11.4-beta6" />
+		<PackageReference Include="ML.Xncf.Docs" Version="2.1.7.25" />
+	</ItemGroup>
+	
 	<ItemGroup>
 
 		<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.2.8-beta6" />
@@ -46,11 +56,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
-		<ProjectReference Include="..\Senparc.ImageUtility\Senparc.ImageUtility.csproj" />
 		<ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
-		<ProjectReference Include="..\Senparc.Threads\Senparc.Threads.csproj" />
-		<ProjectReference Include="..\Senparc.Web.UI\Senparc.Web.UI.csproj" />
-		<ProjectReference Include="..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />

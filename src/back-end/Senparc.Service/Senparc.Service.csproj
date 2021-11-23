@@ -38,11 +38,9 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
-		<ProjectReference Include="..\Senparc.Respository\Senparc.Respository.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="ACL\" />
 	  <Folder Include="OHS\Remote\" />
 	</ItemGroup>
 

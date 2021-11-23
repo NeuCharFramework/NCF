@@ -2,7 +2,7 @@
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Repository;
 
-namespace Senparc.Repository
+namespace Senparc.Service.ACL
 {
     public interface IAccountRepository : IClientRepositoryBase<Account>
     {
