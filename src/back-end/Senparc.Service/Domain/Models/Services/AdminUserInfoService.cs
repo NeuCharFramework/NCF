@@ -69,7 +69,7 @@ namespace Senparc.Service
             }
             var codedPassword = GetPassword(password, userInfo.PasswordSalt, false);
             return userInfo.Password == codedPassword ? userInfo : null;
-        }
+        } 
 
         public string GetPassword(string password, string salt, bool isMD5Password)
         {
