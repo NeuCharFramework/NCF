@@ -51,7 +51,6 @@
 		<ProjectReference Include="..\Senparc.Threads\Senparc.Threads.csproj" />
 		<ProjectReference Include="..\Senparc.Web.UI\Senparc.Web.UI.csproj" />
 		<ProjectReference Include="..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj" />
-		<ProjectReference Include="..\SenparcTest.Xncf.PostgreSQLTest\SenparcTest.Xncf.PostgreSQLTest.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
