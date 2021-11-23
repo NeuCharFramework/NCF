@@ -13,7 +13,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 
-		<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.2.3-beta6" />
+		<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.2.8-beta6" />
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.9.1-beta6" />
 		<!--<PackageReference Include="Senparc.Ncf.Database.MySql" Version="0.6.128-beta1" />-->
 
@@ -51,6 +51,7 @@
 		<ProjectReference Include="..\Senparc.Threads\Senparc.Threads.csproj" />
 		<ProjectReference Include="..\Senparc.Web.UI\Senparc.Web.UI.csproj" />
 		<ProjectReference Include="..\XncfExtensionSample\MyExtensionCode\MyExtensionCode.csproj" />
+		<ProjectReference Include="..\SenparcTest.Xncf.PostgreSQLTest\SenparcTest.Xncf.PostgreSQLTest.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />

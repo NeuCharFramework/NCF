@@ -1,24 +1,21 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
+using Senparc.Core;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
-//using Senparc.Ncf.Database.MySql;//根据需要添加或删除，使用需要引用包： Senparc.Ncf.Database.MySql
-//using Senparc.Ncf.Database.Sqlite;//根据需要添加或删除，使用需要引用包： Senparc.Ncf.Database.Sqlite
-using Senparc.Ncf.Database.SqlServer;//根据需要添加或删除，使用需要引用包： Senparc.Ncf.Database.SqlServer
 using Senparc.Ncf.Service.MultiTenant;
 using Senparc.Web.Hubs;
-using System.Collections.Generic;
-using System;
-using Senparc.Core;
-using Senparc.Ncf.Database.PostgreSQL;
+
+//using Senparc.Ncf.Database.MySql;//根据需要添加或删除，使用需要引用包： Senparc.Ncf.Database.MySql
+//using Senparc.Ncf.Database.Sqlite;//根据需要添加或删除，使用需要引用包： Senparc.Ncf.Database.Sqlite
+//using Senparc.Ncf.Database.PostgreSQL;//根据需要添加或删除，使用需要引用包： Senparc.Ncf.Database.PostgreSQL
+using Senparc.Ncf.Database.SqlServer;//根据需要添加或删除，使用需要引用包： Senparc.Ncf.Database.SqlServer
 
 namespace Senparc.Web
 {
@@ -54,14 +51,14 @@ namespace Senparc.Web
             services.AddNcfServices(Configuration, env);
             services.Configure<Core.JwtSettings>(Core.JwtSettings.Position_Backend, Configuration.GetSection(Core.JwtSettings.Position_Backend));// 配置管理后台jwt
             services.Configure<Core.JwtSettings>(Core.JwtSettings.Position_MiniPro, Configuration.GetSection(Core.JwtSettings.Position_MiniPro));// 配置前台jwt
-            addJwtAuthentication(services);
+            AddJwtAuthentication(services);
         }
 
         /// <summary>
         /// 添加前后端认证
         /// </summary>
         /// <param name="services"></param>
-        private void addJwtAuthentication(IServiceCollection services)
+        private void AddJwtAuthentication(IServiceCollection services)
         {
             JwtSettings backend = new JwtSettings();
             JwtSettings miniPro = new JwtSettings();

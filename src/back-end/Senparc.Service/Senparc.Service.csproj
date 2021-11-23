@@ -18,7 +18,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<!-- 仅在开发环境下引用 -->
-		<PackageReference Condition=" '$(Configuration)' != 'Release' " Include="Senparc.Ncf.DatabasePlant" Version="0.9.3-beta6" />
+		<PackageReference Condition=" '$(Configuration)' != 'Release' " Include="Senparc.Ncf.DatabasePlant" Version="0.9.8-beta6" />
 	</ItemGroup>
 
 	<ItemGroup>
