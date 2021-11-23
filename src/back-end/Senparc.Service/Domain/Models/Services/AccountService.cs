@@ -10,7 +10,7 @@ using Senparc.CO2NET;
 using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.HttpUtility;
 using Senparc.Core.Models;
-using Senparc.Repository;
+using Senparc.Service.ACL;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Extensions;
 using Senparc.Ncf.Core.Utility;
@@ -32,6 +32,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Senparc.Service.ACL;
 
 namespace Senparc.Service
 {

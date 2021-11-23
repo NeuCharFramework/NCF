@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Senparc.Core.Models;
-using Senparc.Repository;
+using Senparc.Service.ACL;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Extensions;
 using Senparc.Ncf.Core.Models;

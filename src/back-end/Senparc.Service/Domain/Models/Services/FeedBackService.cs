@@ -1,6 +1,6 @@
 using System;
 using Senparc.Core.Models;
-using Senparc.Repository;
+using Senparc.Service.ACL;
 using Senparc.Ncf.Log;
 
 namespace Senparc.Service
