@@ -42,7 +42,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="OHS\" />
+	  <Folder Include="ACL\" />
+	  <Folder Include="OHS\Remote\" />
 	</ItemGroup>
 
 </Project>

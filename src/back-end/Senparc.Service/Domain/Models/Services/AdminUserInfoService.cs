@@ -22,6 +22,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using Senparc.CO2NET;
 using Microsoft.EntityFrameworkCore;
+using Senparc.Ncf.Service;
 
 namespace Senparc.Service
 {
@@ -230,25 +231,26 @@ namespace Senparc.Service
         /// <paramref name="loginDto">登录dto</paramref>
         /// </summary>
         /// <returns></returns>
-        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
+        //[ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
         public async Task<Core.Models.DataBaseModel.Dto.AccountLoginResultDto> LoginAsync(Core.Models.DataBaseModel.Dto.AccountLoginDto loginDto)
         {
             Core.Models.DataBaseModel.Dto.AccountLoginResultDto result = new Core.Models.DataBaseModel.Dto.AccountLoginResultDto();
             string token;
-            var userInfo = await GetObjectAsync(_ => _.UserName == loginDto.UserName);
+            var userInfo = await GetObjectAsync(z => z.UserName == loginDto.UserName);
             if (userInfo == null)
             {
-                throw new Ncf.Core.Exceptions.NcfExceptionBase("用户名不存在或密码不正确.");
+                throw new Ncf.Core.Exceptions.NcfExceptionBase($"用户名不存在或密码不正确：{loginDto.UserName}（101）！");
             }
             var adminUserInfo = TryLogin(loginDto.UserName, loginDto.Password, false);
             if (adminUserInfo == null)
             {
-                throw new Ncf.Core.Exceptions.NcfExceptionBase("用户名不存在或密码不正确.");
+                throw new Ncf.Core.Exceptions.NcfExceptionBase("用户名不存在或密码不正确（102）！");
             }
             else
             {
-                token = generateToken(adminUserInfo.Id);
+                token = GenerateToken(adminUserInfo.Id);
             }
+
             var roleCodes = await BaseData.BaseDB.BaseDataContext.Set<Ncf.Core.Models.DataBaseModel.SysRoleAdminUserInfo>().Where(o => o.AccountId == adminUserInfo.Id)
                 .Select(o => o.RoleCode).Distinct()
                 .ToListAsync();
@@ -258,22 +260,27 @@ namespace Senparc.Service
             return result;
         }
 
-        private string generateToken(int memberId)
+
+        /// <summary>
+        /// GenerateToken
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <returns></returns>
+        private string GenerateToken(int memberId)
         {
             var options = _serviceProvider.GetService<IOptionsSnapshot<JwtSettings>>();
-            var _jwtSettings = options.Get(JwtSettings.Position_Backend);
-            byte[] keyBytes = System.Text.Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
+            var jwtSettings = options.Get(JwtSettings.Position_Backend);
+            byte[] keyBytes = System.Text.Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             SecurityTokenDescriptor securityToken = new SecurityTokenDescriptor()
             {
                 Subject = new System.Security.Claims.ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, memberId.ToString(), ClaimValueTypes.Integer),
-
+                    new Claim(ClaimTypes.NameIdentifier, memberId.ToString(), ClaimValueTypes.Integer)
                 }),
-                Audience = _jwtSettings.Audience,
-                Issuer = _jwtSettings.Issuer,
-                Expires = DateTime.UtcNow.AddHours(_jwtSettings.Expires),
+                Audience = jwtSettings.Audience,
+                Issuer = jwtSettings.Issuer,
+                Expires = DateTime.UtcNow.AddHours(jwtSettings.Expires),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
             };
             SecurityToken token = tokenHandler.CreateToken(securityToken);

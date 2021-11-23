@@ -74,6 +74,11 @@
 		<ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Domain\" />
+	  <Folder Include="ACL\" />
+	</ItemGroup>
+
 	<!-- 
 	<ItemGroup>
 		<Content Update="Areas\Admin\Pages\Shared\_HeaderPartial.cshtml">
