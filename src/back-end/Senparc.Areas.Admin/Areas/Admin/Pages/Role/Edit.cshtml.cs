@@ -56,7 +56,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// </summary>
         /// <param name="senparcEntities"></param>
         /// <returns></returns>
-        public async Task<IActionResult> OnGetSelectItemsAsync([FromServices] SenparcEntities senparcEntities)
+        public async Task<IActionResult> OnGetSelectItemsAsync([FromServices] /*SenparcEntities*/ SystemServiceEntities senparcEntities)
         {
             var list = await senparcEntities.SysRoles.Where(_ => _.Enabled)
                 .Select(_ => new SelectListItem() { Value = _.Id, Text = _.RoleName })
@@ -69,7 +69,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// </summary>
         /// <returns></returns>
         [Ncf.AreaBase.Admin.Filters.CustomerResource("role-add", "role-edit")]
-        public async Task<IActionResult> OnPostSaveAsync([FromBody]SysRoleDto sysRoleDto)
+        public async Task<IActionResult> OnPostSaveAsync([FromBody] SysRoleDto sysRoleDto)
         {
             await _sysRoleService.CreateOrUpdateAsync(sysRoleDto);
             return Ok(true);

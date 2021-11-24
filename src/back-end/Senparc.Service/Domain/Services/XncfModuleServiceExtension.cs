@@ -131,7 +131,7 @@ namespace Senparc.Service
                     PermissionId = sysMemu.Id
                 };
                 SenparcEntities db = _serviceProvider.GetService<SenparcEntities>();
-                db.SysPermission.Add(new SysPermission(sysPermissionDto));
+                db.Set<SysPermission>().Add(new SysPermission(sysPermissionDto));
                 await db.SaveChangesAsync();
                 var updateMenuDto = new UpdateMenuId_XncfModuleDto(register.Uid, sysMemu.Id);
                 await base.UpdateMenuIdAsync(updateMenuDto).ConfigureAwait(false);
