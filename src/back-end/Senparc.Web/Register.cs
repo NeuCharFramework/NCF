@@ -205,7 +205,10 @@ namespace Senparc.Web
             //Senparc.CO2NET.WebApi.Register.OmitCategoryList.Add(Senparc.NeuChar.PlatformType.WeChat_OfficialAccount.ToString());
 
             //激活 Xncf 扩展引擎（必须）
-            services.StartEngine(configuration);
+            var logMsg = services.StartEngine(configuration);
+            Console.WriteLine("============ logMsg =============");
+            Console.WriteLine(logMsg);
+            Console.WriteLine("============ logMsg END =============");
         }
 
         public static void UseNcf(this IApplicationBuilder app, IWebHostEnvironment env,
@@ -331,16 +334,6 @@ namespace Senparc.Web
             Senparc.CO2NET.Trace.SenparcTrace.OnLogFunc = () =>
             {
                 //加入每次触发Log后需要执行的代码
-            };
-
-            //当发生基于WeixinException的异常时触发
-            WeixinTrace.OnWeixinExceptionFunc = ex =>
-            {
-                //加入每次触发WeixinExceptionLog后需要执行的代码
-
-                //发送模板消息给管理员
-                //var eventService = new Senparc.Weixin.MP.Sample.CommonService.EventService();
-                //eventService.ConfigOnWeixinExceptionFunc(ex);
             };
         }
 
