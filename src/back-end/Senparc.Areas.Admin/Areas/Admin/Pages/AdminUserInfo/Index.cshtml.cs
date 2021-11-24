@@ -11,6 +11,7 @@ using Senparc.Ncf.Utility;
 using Senparc.Service;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Ncf.Core;
+using Senparc.Areas.Admin.Domain.Models;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {

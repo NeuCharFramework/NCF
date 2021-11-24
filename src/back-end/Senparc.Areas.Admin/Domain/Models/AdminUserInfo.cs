@@ -4,7 +4,7 @@ using Senparc.Ncf.Core.Utility;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Senparc.Core.Models
+namespace Senparc.Areas.Admin.Domain.Models
 {
     [Serializable]
     public partial class AdminUserInfo : EntityBase<int>

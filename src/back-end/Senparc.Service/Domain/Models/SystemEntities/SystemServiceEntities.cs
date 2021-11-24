@@ -1,17 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
-using Senparc.CO2NET;
 using Senparc.Core.Models;
 using Senparc.Ncf.Core.Models;
-using Senparc.Ncf.Core.MultiTenant;
-using Senparc.Ncf.Database;
-using Senparc.Ncf.Database.MultipleMigrationDbContext;
-using Senparc.Ncf.XncfBase;
-using Senparc.Ncf.XncfBase.Database;
+using Senparc.Ncf.Core.Models.DataBaseModel;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Senparc.Service
 {
@@ -23,5 +14,44 @@ namespace Senparc.Service
         public SystemServiceEntities(DbContextOptions/*<SystemServiceEntities>*/ dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
         {
         }
+
+        #region 系统表（无特殊情况不要修改）
+
+        /// <summary>
+        /// 系统设置
+        /// </summary>
+        public DbSet<SystemConfig> SystemConfigs { get; set; }
+
+        /// <summary>
+        /// 菜单
+        /// </summary>
+        public DbSet<SysMenu> SysMenus { get; set; }
+
+        /// <summary>
+        /// 菜单下面的按钮
+        /// </summary>
+        public DbSet<SysButton> SysButtons { get; set; }
+
+        /// <summary>
+        /// 系统角色
+        /// </summary>
+        public DbSet<SysRole> SysRoles { get; set; }
+
+        /// <summary>
+        /// 角色菜单表
+        /// </summary>
+        public DbSet<SysPermission> SysPermission { get; set; }
+
+        /// <summary>
+        /// 角色人员表
+        /// </summary>
+        public DbSet<SysRoleAdminUserInfo> SysRoleAdminUserInfos { get; set; }
+
+        /// <summary>
+        /// 扩展模块
+        /// </summary>
+        public DbSet<XncfModule> XncfModules { get; set; }
+
+        #endregion
     }
 }

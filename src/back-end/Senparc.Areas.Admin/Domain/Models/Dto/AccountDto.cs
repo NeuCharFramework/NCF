@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace Senparc.Core.Models.DataBaseModel.Dto
+namespace Senparc.Areas.Admin.Domain.Models.Dto
 {
     public class AccountDto
     {
     }
+
     public class AccountLoginDto
     {
         [Required]

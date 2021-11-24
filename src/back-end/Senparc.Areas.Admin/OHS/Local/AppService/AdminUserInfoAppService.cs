@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Senparc.Areas.Admin.Domain.Models.Dto;
 using Senparc.Areas.Admin.OHS.Local.PL;
 using Senparc.Areas.Admin.OHS.PL;
 using Senparc.CO2NET;
@@ -48,7 +49,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         {
             return await this.GetResponseAsync<AppResponseBase<AccountLoginResultDto>, AccountLoginResultDto>(async (response, logger) =>
             {
-                var result = await _adminUserInfoService.LoginAsync(new Core.Models.DataBaseModel.Dto.AccountLoginDto()
+                var result = await _adminUserInfoService.LoginAsync(new AccountLoginDto()
                 {
                     UserName = request.UserName,
                     Password = request.Password

@@ -6,8 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-//using WURFL;
-
 namespace Senparc.Core.Models
 {
 

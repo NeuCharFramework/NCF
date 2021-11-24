@@ -1,4 +1,5 @@
-﻿using Senparc.Core.Models;
+﻿using Senparc.Areas.Admin.Domain.Models;
+using Senparc.Core.Models;
 using Senparc.Ncf.Repository;
 
 namespace Senparc.Areas.Admin.ACL

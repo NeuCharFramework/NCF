@@ -25,6 +25,8 @@ using Microsoft.EntityFrameworkCore;
 using Senparc.Ncf.Service;
 using Senparc.Areas.Admin.ACL;
 using Senparc.Service;
+using Senparc.Areas.Admin.Domain.Models;
+using Senparc.Areas.Admin.Domain.Models.Dto;
 
 namespace Senparc.Areas.Admin
 {
@@ -234,9 +236,9 @@ namespace Senparc.Areas.Admin
         /// </summary>
         /// <returns></returns>
         //[ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
-        public async Task<Core.Models.DataBaseModel.Dto.AccountLoginResultDto> LoginAsync(Core.Models.DataBaseModel.Dto.AccountLoginDto loginDto)
+        public async Task<AccountLoginResultDto> LoginAsync(AccountLoginDto loginDto)
         {
-            Core.Models.DataBaseModel.Dto.AccountLoginResultDto result = new Core.Models.DataBaseModel.Dto.AccountLoginResultDto();
+            AccountLoginResultDto result = new AccountLoginResultDto();
             string token;
             var userInfo = await GetObjectAsync(z => z.UserName == loginDto.UserName);
             if (userInfo == null)
