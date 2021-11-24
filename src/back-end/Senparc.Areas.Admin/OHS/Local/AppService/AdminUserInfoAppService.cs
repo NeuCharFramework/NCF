@@ -3,15 +3,11 @@ using Senparc.Areas.Admin.OHS.Local.PL;
 using Senparc.Areas.Admin.OHS.PL;
 using Senparc.CO2NET;
 using Senparc.CO2NET.Extensions;
-using Senparc.Core.Models;
 using Senparc.Core.Models.DataBaseModel.Dto;
 using Senparc.Ncf.Core.AppServices;
 using Senparc.Ncf.Core.Models;
-using Senparc.Ncf.Service;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin.OHS.Local.AppService
