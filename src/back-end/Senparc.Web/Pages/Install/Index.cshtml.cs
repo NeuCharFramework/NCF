@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
+using Senparc.Areas.Admin;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Exceptions;

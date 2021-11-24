@@ -1,7 +1,7 @@
 ﻿using Senparc.Core.Models;
 using Senparc.Ncf.Repository;
 
-namespace Senparc.Service.ACL
+namespace Senparc.Areas.Admin.ACL
 {
     public interface IAdminUserInfoRepository : IClientRepositoryBase<AdminUserInfo>
     {

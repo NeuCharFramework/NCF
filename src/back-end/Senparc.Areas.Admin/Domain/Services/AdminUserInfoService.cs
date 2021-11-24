@@ -23,8 +23,10 @@ using System.Linq;
 using Senparc.CO2NET;
 using Microsoft.EntityFrameworkCore;
 using Senparc.Ncf.Service;
+using Senparc.Areas.Admin.ACL;
+using Senparc.Service;
 
-namespace Senparc.Service
+namespace Senparc.Areas.Admin
 {
     public class AdminUserInfoService : BaseClientService<AdminUserInfo>
     {

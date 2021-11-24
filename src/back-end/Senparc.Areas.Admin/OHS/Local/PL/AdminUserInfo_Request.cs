@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Senparc.Service.OHS.PL
+namespace Senparc.Areas.Admin.OHS.PL
 {
     public class AdminUserInfo_LoginRequest: FunctionAppRequestBase
     {
