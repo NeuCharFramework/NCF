@@ -8,6 +8,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,8 +35,8 @@ namespace Senparc.Areas.Admin
     [XncfOrder(5996)]
     public class Register : XncfRegisterBase,
         IXncfRegister, //注册 XNCF 基础模块接口（必须）
-        IAreaRegister //注册 XNCF 页面接口（按需选用）
-                      //IXncfDatabase,  //注册 XNCF 模块数据库（按需选用）
+        IAreaRegister, //注册 XNCF 页面接口（按需选用）
+        IXncfDatabase  //注册 XNCF 模块数据库（按需选用）
                       //IXncfRazorRuntimeCompilation  //需要使用 RazorRuntimeCompilation，在开发环境下实时更新 Razor Page
     {
 
@@ -124,6 +125,7 @@ namespace Senparc.Areas.Admin
             new AreaPageMenuItem(GetAreaUrl("/Admin/SenparcTrace/Index"),"SenparcTrace 日志","fa fa-calendar-o"),
         };//Admin比较特殊，不需要全部输出
 
+
         public IMvcBuilder AuthorizeConfig(IMvcBuilder builder, IHostEnvironment env)
         {
             Console.WriteLine("areaRegisterTypes: AuthorizeConfig - AdminArea");
@@ -161,10 +163,26 @@ namespace Senparc.Areas.Admin
             return builder;
         }
 
+
         #endregion
 
 
-        //#region IXncfDatabase 接口
+        #region IXncfDatabase 接口
+
+        public string DatabaseUniquePrefix => "";//系统表，留空
+
+        public Type TryGetXncfDatabaseDbContextType => typeof(AdminSenparcEntities);
+
+
+        public void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+        }
+
+        public void AddXncfDatabaseModule(IServiceCollection services)
+        {
+            services.AddScoped<AdminUserInfo>();
+        }
 
         //public string DatabaseUniquePrefix => "NcfSystemAdmin_";
         //public Type XncfDatabaseDbContextType => typeof(SenparcEntities);
@@ -224,7 +242,7 @@ namespace Senparc.Areas.Admin
         //}
 
 
-        //#endregion
+        #endregion
 
         //#region IXncfRazorRuntimeCompilation 接口
         //public string LibraryPath => Path.GetFullPath(Path.Combine(SiteConfig.WebRootPath, "..", "..", "Senparc.Areas.Admin"));
