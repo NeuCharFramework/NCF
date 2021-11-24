@@ -1,8 +1,8 @@
-﻿using Senparc.Service.OperationQueue;
+﻿using Senparc.Xncf.Accounts.Domain.OperationQueue;
 using System;
 using System.Collections.Generic;
 
-namespace Senparc.Service.OperationQueue
+namespace Senparc.Xncf.Accounts.Domain.OperationQueue
 {
     /// <summary>
     /// 操作列队项

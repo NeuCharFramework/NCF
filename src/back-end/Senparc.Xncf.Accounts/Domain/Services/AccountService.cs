@@ -20,10 +20,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Claims;
 using Senparc.Ncf.Service;
-using Senparc.Service.OperationQueue;
+using Senparc.Xncf.Accounts.Domain.OperationQueue;
 using Microsoft.Extensions.DependencyInjection;
-using Senparc.Ncf.Core.Models;
-using Senparc.Ncf.Core.Cache;
+using Senparc.Xncf.Accounts.Domain.Models;
+using Senparc.Xncf.Accounts.Domain.Cache;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Senparc.Core;
@@ -32,9 +32,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using Senparc.Service.ACL;
+using Senparc.Ncf.Core.Models;
+using Senparc.Service;
 
-namespace Senparc.Service
+namespace Senparc.Xncf.Accounts.Domain.Services
 {
     public class AccountService : BaseClientService<Account> /*, UserService*/
     {
@@ -57,8 +58,7 @@ namespace Senparc.Service
         {
             userName = userName.Trim().ToUpper();
 
-            return
-            this.GetObject(
+            return this.GetObject(
                 z => z.Id != id && z.UserName.ToUpper() == userName /*z.UserName.Equals(userName, StringComparison.CurrentCultureIgnoreCase)*/) != null;
         }
 

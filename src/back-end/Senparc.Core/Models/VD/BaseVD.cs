@@ -12,7 +12,7 @@ namespace Senparc.Core.Models.VD
 
         RouteData RouteData { get; set; }
 
-        FullAccount FullAccount { get; set; }
+        //FullAccount FullAccount { get; set; }
     }
 
 
@@ -32,7 +32,7 @@ namespace Senparc.Core.Models.VD
 
         public List<Messager> MessagerList { get; set; }
 
-        public FullAccount FullAccount { get; set; }
+        //public FullAccount FullAccount { get; set; }
 
         public DateTime PageStartTime { get; set; }
 

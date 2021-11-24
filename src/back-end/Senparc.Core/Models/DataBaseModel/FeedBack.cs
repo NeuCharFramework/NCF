@@ -12,10 +12,10 @@ namespace Senparc.Core.Models
 
         public string Content { get; set; }
 
-        /// <summary>
-        /// 用户
-        /// </summary>
-        /// <value></value>
-        public Account Account { get; set; }
+        ///// <summary>
+        ///// 用户
+        ///// </summary>
+        ///// <value></value>
+        //public Account Account { get; set; }
     }
 }

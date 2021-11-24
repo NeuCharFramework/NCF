@@ -10,8 +10,11 @@ using Senparc.Ncf.Log;
 using Senparc.Ncf.Utility;
 using Senparc.Ncf.Service;
 using Microsoft.Extensions.DependencyInjection;
+using Senparc.Xncf.Accounts.Domain.Models;
+using Senparc.Service;
+using Senparc.Xncf.Accounts.Domain.Services;
 
-namespace Senparc.Service.OperationQueue
+namespace Senparc.Xncf.Accounts.Domain.OperationQueue
 {
     public class OperationQueueService
     {

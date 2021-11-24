@@ -1,9 +1,9 @@
 ﻿using Senparc.CO2NET;
 using Senparc.Core.Models;
 using Senparc.Service.ACL;
-using Senparc.Ncf.Core.Cache;
+using Senparc.Xncf.Accounts.Domain.Cache;
 using Senparc.Ncf.Core.Enums;
-using Senparc.Ncf.Core.Models;
+using Senparc.Xncf.Accounts.Domain.Models;
 using Senparc.Ncf.Log;
 using Senparc.Ncf.Repository;
 using Senparc.Ncf.Service;

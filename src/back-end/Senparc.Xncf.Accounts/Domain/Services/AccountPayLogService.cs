@@ -2,11 +2,12 @@
 using Senparc.Core.Models;
 using Senparc.Service.ACL;
 using Senparc.Ncf.Core.Enums;
-using Senparc.Ncf.Core.Models;
+using Senparc.Xncf.Accounts.Domain.Models;
 using Senparc.Ncf.Log;
 using Senparc.Ncf.Repository;
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using Senparc.Xncf.Accounts.Domain.Services;
 
 namespace Senparc.Service
 {

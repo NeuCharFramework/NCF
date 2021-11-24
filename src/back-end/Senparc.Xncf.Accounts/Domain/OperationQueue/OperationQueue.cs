@@ -7,7 +7,7 @@ using Senparc.Ncf.Log;
 using Senparc.Ncf.Utility;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Senparc.Service.OperationQueue
+namespace Senparc.Xncf.Accounts.Domain.OperationQueue
 {
     public enum OperationQueueType
     {

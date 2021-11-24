@@ -1,0 +1,43 @@
+﻿@page
+@model Senparc.Xncf.Accounts.Areas.Account.Pages.Index
+@{
+    ViewData["Title"] = "Account 首页";
+    Layout = "_Layout_Vue";
+}
+
+@section breadcrumbs{
+    <el-breadcrumb-item>扩展模块</el-breadcrumb-item>
+    <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+    <el-breadcrumb-item>首页</el-breadcrumb-item>
+}
+
+<div>
+    <el-container>
+        <el-header class="module-header">
+            <span class="start-title"> <i class="fa fa-dot-circle-o"></i>&nbsp;<span class="module-header-v">首页</span></span>
+        </el-header>
+
+        <!-- 此处也可以加 SideMenu -->
+        @*<el-aside width="200px">
+            <el-menu background-color="#304156" default-active="1"
+                        text-color="#bfcbd9" active-text-color="#409eff">
+                @(await Html.PartialAsync("_SideMenu"))
+            </el-menu>
+        </el-aside>*@
+        <el-main>
+            <h3>@Model.XncfRegister.MenuName / @Model.XncfRegister.Name</h3>
+            <h4>@Model.XncfRegister.Description</h4>
+            <br />
+            <i>当前模块为自动生成模块</i>
+        </el-main>
+    </el-container>
+</div>
+
+
+@section scripts{
+    <script>
+        new Vue({
+            el: "#app"
+        });
+    </script>
+}
