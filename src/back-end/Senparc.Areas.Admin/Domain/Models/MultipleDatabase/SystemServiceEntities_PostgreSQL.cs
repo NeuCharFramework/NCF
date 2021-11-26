@@ -14,7 +14,7 @@ namespace Senparc.Areas.Admin.Domain.Models
     [MultipleMigrationDbContext(MultipleDatabaseType.PostgreSQL, typeof(Senparc.Service.Register))]
     public class AdminSenparcEntities_PostgreSQL : AdminSenparcEntities
     {
-        public AdminSenparcEntities_PostgreSQL(DbContextOptions<AdminSenparcEntities_PostgreSQL> dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
+        public AdminSenparcEntities_PostgreSQL(DbContextOptions<AdminSenparcEntities_PostgreSQL> dbContextOptions) : base(dbContextOptions)
         {
         }
     }

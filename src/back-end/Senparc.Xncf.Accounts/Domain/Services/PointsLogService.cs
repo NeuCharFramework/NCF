@@ -1,5 +1,4 @@
 ﻿using Senparc.CO2NET;
-using Senparc.Core.Models;
 using Senparc.Service.ACL;
 using Senparc.Xncf.Accounts.Domain.Cache;
 using Senparc.Ncf.Core.Enums;
@@ -13,7 +12,7 @@ using Senparc.Service.ACL;
 
 namespace Senparc.Service
 {
-    public class PointsLogService : BaseClientService<PointsLog>
+    public class PointsLogService :  BaseClientService<PointsLog>
     {
         public PointsLogService(PointsLogRepository pointsLogRepo, IServiceProvider serviceProvider)
             : base(pointsLogRepo, serviceProvider)

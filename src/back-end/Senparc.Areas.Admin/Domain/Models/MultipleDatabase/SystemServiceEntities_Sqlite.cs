@@ -14,7 +14,7 @@ namespace Senparc.Areas.Admin.Domain.Models
     [MultipleMigrationDbContext(MultipleDatabaseType.Sqlite, typeof(Senparc.Service.Register))]
     public class AdminSenparcEntities_Sqlite : AdminSenparcEntities
     {
-        public AdminSenparcEntities_Sqlite(DbContextOptions<AdminSenparcEntities_Sqlite> dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
+        public AdminSenparcEntities_Sqlite(DbContextOptions<AdminSenparcEntities_Sqlite> dbContextOptions) : base(dbContextOptions)
         {
         }
     }

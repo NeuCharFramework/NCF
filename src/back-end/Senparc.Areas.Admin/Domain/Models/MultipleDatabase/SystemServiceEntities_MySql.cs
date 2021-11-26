@@ -19,7 +19,7 @@ namespace Senparc.Areas.Admin.Domain.Models
     [MultipleMigrationDbContext(MultipleDatabaseType.MySql, typeof(Senparc.Service.Register))]
     public class AdminSenparcEntities_MySql : AdminSenparcEntities
     {
-        public AdminSenparcEntities_MySql(DbContextOptions<AdminSenparcEntities_MySql> dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
+        public AdminSenparcEntities_MySql(DbContextOptions<AdminSenparcEntities_MySql> dbContextOptions) : base(dbContextOptions)
         {
         }
     }

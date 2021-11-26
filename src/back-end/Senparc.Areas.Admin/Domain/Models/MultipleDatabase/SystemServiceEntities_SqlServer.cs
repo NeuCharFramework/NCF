@@ -14,7 +14,7 @@ namespace Senparc.Areas.Admin.Domain.Models
     [MultipleMigrationDbContext(MultipleDatabaseType.SqlServer, typeof(Senparc.Service.Register))]
     public class AdminSenparcEntities_SqlServer : AdminSenparcEntities
     {
-        public AdminSenparcEntities_SqlServer(DbContextOptions<AdminSenparcEntities_SqlServer> dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
+        public AdminSenparcEntities_SqlServer(DbContextOptions<AdminSenparcEntities_SqlServer> dbContextOptions) : base(dbContextOptions)
         {
         }
     }
