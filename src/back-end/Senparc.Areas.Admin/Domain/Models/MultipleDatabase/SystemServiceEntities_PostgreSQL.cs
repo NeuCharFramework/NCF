@@ -11,7 +11,7 @@ namespace Senparc.Areas.Admin.Domain.Models
     /// <summary>
     /// 当前 Entities 只为帮助 SenparcEntities 生成 Migration 信息而存在，没有特别的操作意义。
     /// </summary>
-    [MultipleMigrationDbContext(MultipleDatabaseType.PostgreSQL, typeof(Senparc.Service.Register))]
+    [MultipleMigrationDbContext(MultipleDatabaseType.PostgreSQL, typeof(Register))]
     public class AdminSenparcEntities_PostgreSQL : AdminSenparcEntities
     {
         public AdminSenparcEntities_PostgreSQL(DbContextOptions<AdminSenparcEntities_PostgreSQL> dbContextOptions) : base(dbContextOptions)

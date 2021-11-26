@@ -11,7 +11,7 @@ namespace Senparc.Areas.Admin.Domain.Models
     /// <summary>
     /// 当前 Entities 只为帮助 SenparcEntities 生成 Migration 信息而存在，没有特别的操作意义。
     /// </summary>
-    [MultipleMigrationDbContext(MultipleDatabaseType.Sqlite, typeof(Senparc.Service.Register))]
+    [MultipleMigrationDbContext(MultipleDatabaseType.Sqlite, typeof(Register))]
     public class AdminSenparcEntities_Sqlite : AdminSenparcEntities
     {
         public AdminSenparcEntities_Sqlite(DbContextOptions<AdminSenparcEntities_Sqlite> dbContextOptions) : base(dbContextOptions)

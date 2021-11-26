@@ -33,7 +33,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Senparc.CO2NET.WebApi" Version="0.2.4-preview3" />
+		<PackageReference Include="Senparc.CO2NET.WebApi" Version="1.1.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
 	</ItemGroup>
 

@@ -23,6 +23,7 @@ using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Database;
 using Senparc.Ncf.XncfBase;
 using Senparc.Service;
 using System;
@@ -166,12 +167,11 @@ namespace Senparc.Areas.Admin
 
         #endregion
 
-
         #region IXncfDatabase 接口
 
         public string DatabaseUniquePrefix => "";//系统表，留空
 
-        public Type TryGetXncfDatabaseDbContextType => typeof(AdminSenparcEntities);
+        public Type TryGetXncfDatabaseDbContextType => MultipleDatabasePool.Instance.GetXncfDbContextType(this);
 
 
         public void OnModelCreating(ModelBuilder modelBuilder)
