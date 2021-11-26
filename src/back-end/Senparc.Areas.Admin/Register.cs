@@ -142,7 +142,8 @@ namespace Senparc.Areas.Admin
                 });
 
             builder.Services
-                .AddAuthorization(options =>
+                //.AddAuthorization(options =>
+                .AddAuthorizationCore(options =>
                 {
                     options.AddPolicy("AdminOnly", policy =>
                     {
