@@ -153,6 +153,7 @@ namespace Senparc.Web.Pages.Install
                     //开始安装系统模块（Admin）
                     Senparc.Areas.Admin.Register adminRegister = new Areas.Admin.Register();
                     await adminRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
+
                     //启用系统模块（Admin）
                     var adminModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == adminRegister.Uid);
                     adminModule.UpdateState(Ncf.Core.Enums.XncfModules_State.开放);

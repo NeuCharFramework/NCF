@@ -73,6 +73,8 @@ namespace Senparc.Areas.Admin
 
         public override async Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
         {
+            //更新数据库
+            await base.MigrateDatabaseAsync(serviceProvider);
             await base.InstallOrUpdateAsync(serviceProvider, installOrUpdate);
         }
 
