@@ -14,10 +14,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Remove="C:\Users\苏震巍\.nuget\packages\senparc.ncf.databaseplant\0.9.8-beta6\contentFiles\any\netstandard2.1\readme.md" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<!-- 仅在开发环境下引用 -->
 		<PackageReference Condition=" '$(Configuration)' != 'Release' " Include="Senparc.Ncf.DatabasePlant" Version="0.9.8.2-beta6" />
 	</ItemGroup>
@@ -42,7 +38,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Domain\Migrations\Migrations\PostgreSQL\" />
 	  <Folder Include="OHS\AppService\" />
 	  <Folder Include="OHS\Remote\" />
 	</ItemGroup>

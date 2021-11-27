@@ -47,9 +47,9 @@ namespace Senparc.Areas.Admin
 
         public override string Uid => SiteConfig.SYSTEM_XNCF_MODULE_AREAS_ADMIN_UID;// "00000000-0000-0000-0000-000000000002";
 
-        public override string Version => "0.2.0-beta4";
+        public override string Version => "0.3.0-beta4";
 
-        public override string MenuName => "NCF 系统后台";
+        public override string MenuName => "NCF 系统管理员后台";
 
         public override string Icon => "fa fa-university";
 
@@ -58,8 +58,6 @@ namespace Senparc.Areas.Admin
 
         public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<XncfModuleServiceExtension>();
-
             //Attributes
             services.AddScoped(typeof(AuthenticationResultFilterAttribute));
             //services.AddScoped(typeof(AuthenticationAsyncPageFilterAttribute));
@@ -75,25 +73,6 @@ namespace Senparc.Areas.Admin
 
         public override async Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
         {
-            XncfModuleServiceExtension xncfModuleServiceExtension = serviceProvider.GetService<XncfModuleServiceExtension>();
-            //SenparcEntities senparcEntities = (SenparcEntities)xncfModuleServiceExtension.BaseData.BaseDB.BaseDataContext;
-
-            ////更新数据库
-            //var pendingMigs = await senparcEntities.Database.GetPendingMigrationsAsync();
-            //if (pendingMigs.Count() > 0)
-            //{
-            //    senparcEntities.ResetMigrate();//重置合并状态
-            //    senparcEntities.Migrate();//进行合并
-            //}
-
-            var systemModule = xncfModuleServiceExtension.GetObject(z => z.Uid == this.Uid);
-            if (systemModule == null)
-            {
-                //只在未安装的情况下进行安装，InstallModuleAsync会访问到此方法，不做判断可能会引发死循环。
-                //常规模块中请勿在此方法中自动安装模块！
-                await xncfModuleServiceExtension.InstallModuleAsync(this.Uid).ConfigureAwait(false);
-            }
-
             await base.InstallOrUpdateAsync(serviceProvider, installOrUpdate);
         }
 

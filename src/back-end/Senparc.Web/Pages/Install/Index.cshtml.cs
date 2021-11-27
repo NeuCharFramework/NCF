@@ -147,6 +147,8 @@ namespace Senparc.Web.Pages.Install
                     serviceModule.UpdateState(Ncf.Core.Enums.XncfModules_State.开放);
                 }
 
+                //TODO:选择性安装
+
                 {
                     //开始安装系统模块（Admin）
                     Senparc.Areas.Admin.Register adminRegister = new Areas.Admin.Register();
@@ -157,6 +159,11 @@ namespace Senparc.Web.Pages.Install
 
                     //一次性保存修改
                     await _xncfModuleService.SaveObjectAsync(adminModule).ConfigureAwait(false);
+                }
+
+                {
+                    //开始安装用户模块（如有）  TODO:选择性安装
+
                 }
 
                 //((SenparcEntities)_accountInfoService.BaseData.BaseDB.BaseDataContext).ResetMigrate();//重置合并状态
