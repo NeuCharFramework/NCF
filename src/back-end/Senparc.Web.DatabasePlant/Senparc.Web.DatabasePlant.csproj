@@ -15,7 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
+	  <ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
 	</ItemGroup>
 
 </Project>
