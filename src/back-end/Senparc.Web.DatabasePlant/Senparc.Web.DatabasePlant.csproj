@@ -15,7 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
+	  <ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 	</ItemGroup>
 
 </Project>
