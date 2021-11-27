@@ -8,20 +8,20 @@
 以 SQLite 为例：
 
 ```
-dotnet ef migrations add ReBuildDDD -c SystemServiceEntities_Sqlite -s E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Web.DatabasePlant -o E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Service\Domain\Migrations\Sqlite
+dotnet ef migrations add ReBuildDDD -c BasePoolEntities_Sqlite -s E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Web.DatabasePlant -o E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Service\Domain\Migrations\Sqlite
 ```
 
 全部数据库：
 
 ```
-dotnet ef migrations add Init -c SystemServiceEntities_Sqlite -s E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Web.DatabasePlant -o E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Service\Domain\Migrations\Sqlite
+dotnet ef migrations add Init -c BasePoolEntities_Sqlite -s E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Web.DatabasePlant -o E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Service\Domain\Migrations\Sqlite
 
 
-dotnet ef migrations add Init -c SystemServiceEntities_MySql -s E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Web.DatabasePlant -o E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Service\Domain\Migrations\MySql
+dotnet ef migrations add Init -c BasePoolEntities_MySql -s E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Web.DatabasePlant -o E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Service\Domain\Migrations\MySql
 
 
-dotnet ef migrations add Init -c SystemServiceEntities_SqlServer -s E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Web.DatabasePlant -o E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Service\Domain\Migrations\SqlServer
+dotnet ef migrations add Init -c BasePoolEntities_SqlServer -s E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Web.DatabasePlant -o E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Service\Domain\Migrations\SqlServer
 
 
-dotnet ef migrations add Init -c SystemServiceEntities_PostgreSQL -s E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Web.DatabasePlant -o E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Service\Domain\Migrations\PostgreSQL
+dotnet ef migrations add Init -c BasePoolEntities_PostgreSQL -s E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Web.DatabasePlant -o E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Service\Domain\Migrations\PostgreSQL
 ```

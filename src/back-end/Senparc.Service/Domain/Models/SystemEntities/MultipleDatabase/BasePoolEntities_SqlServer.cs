@@ -11,10 +11,10 @@ namespace Senparc.Service
     /// <summary>
     /// 当前 Entities 只为帮助 SenparcEntities 生成 Migration 信息而存在，没有特别的操作意义。
     /// </summary>
-    [MultipleMigrationDbContext(MultipleDatabaseType.PostgreSQL, typeof(Senparc.Service.Register))]
-    public class SystemServiceEntities_PostgreSQL : SystemServiceEntities
+    [MultipleMigrationDbContext(MultipleDatabaseType.SqlServer, typeof(Senparc.Service.Register))]
+    public class BasePoolEntities_SqlServer : BasePoolEntities
     {
-        public SystemServiceEntities_PostgreSQL(DbContextOptions<SystemServiceEntities_PostgreSQL> dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
+        public BasePoolEntities_SqlServer(DbContextOptions<BasePoolEntities_SqlServer> dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
         {
         }
     }
@@ -24,17 +24,17 @@ namespace Senparc.Service
     /// <para>1、切换至 Debug 模式</para>
     /// <para>2、将当前项目设为启动项</para>
     /// <para>3、打开【程序包资源管理器控制台】，默认项目设为当前项目</para>
-    /// <para>4、运行：PM> add-migration [更新名称] -Context SystemServiceEntities_PostgreSQL -o SystemEntities/Migrations/Migrations.PostgreSQL.SystemEntities</para>
+    /// <para>4、运行：PM> add-migration [更新名称] -Context BasePoolEntities_SqlServer -o SystemEntities/Migrations/Migrations.SqlServer.SystemEntities</para>
     /// </summary> 
-    public class SenparcDbContextFactory_PostgreSQL : SenparcDesignTimeDbContextFactoryBase<SystemServiceEntities_PostgreSQL, Register>
+    public class SenparcDbContextFactory_SqlServer : SenparcDesignTimeDbContextFactoryBase<BasePoolEntities_SqlServer, Register>
     {
         protected override Action<IServiceCollection> ServicesAction => services =>
         {
             //指定其他数据库
-            services.AddDatabase("Senparc.Ncf.Database.PostgreSQL", "Senparc.Ncf.Database.PostgreSQL", "PostgreSQLDatabaseConfiguration");
+            services.AddDatabase("Senparc.Ncf.Database.SqlServer", "Senparc.Ncf.Database.SqlServer", "SQLServerDatabaseConfiguration");
         };
 
-        public SenparcDbContextFactory_PostgreSQL()
+        public SenparcDbContextFactory_SqlServer()
             : base(
                  /* Debug模式下项目根目录
                  /* 用于寻找 App_Data 文件夹，从而找到数据库连接字符串配置信息 */

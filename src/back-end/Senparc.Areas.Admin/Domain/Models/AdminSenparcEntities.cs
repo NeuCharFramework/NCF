@@ -16,7 +16,7 @@ namespace Senparc.Areas.Admin.Domain.Models
         {
         }
 
-        //public AdminSenparcEntities(DbContextOptions/*<SystemServiceEntities>*/ dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
+        //public AdminSenparcEntities(DbContextOptions/*<BasePoolEntities>*/ dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
         //{
         //}
 

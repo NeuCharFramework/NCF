@@ -10,8 +10,8 @@ using Senparc.Service;
 
 namespace Senparc.Service.Domain.Migrations.SqlServer
 {
-    [DbContext(typeof(SystemServiceEntities_SqlServer))]
-    partial class SystemServiceEntities_SqlServerModelSnapshot : ModelSnapshot
+    [DbContext(typeof(BasePoolEntities_SqlServer))]
+    partial class BasePoolEntities_SqlServerModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

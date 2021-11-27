@@ -11,7 +11,7 @@ using Senparc.Service;
 
 namespace Senparc.Service.Domain.Migrations.SqlServer
 {
-    [DbContext(typeof(SystemServiceEntities_SqlServer))]
+    [DbContext(typeof(BasePoolEntities_SqlServer))]
     [Migration("20211127064722_Init")]
     partial class Init
     {

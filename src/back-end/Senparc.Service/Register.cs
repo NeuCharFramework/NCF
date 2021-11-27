@@ -45,7 +45,7 @@ namespace Senparc.Service
         public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<XncfModuleServiceExtension>();
-            services.AddScoped<SystemServiceEntities>();
+            services.AddScoped<BasePoolEntities>();
 
             return base.AddXncfModule(services, configuration);
         }
@@ -78,8 +78,8 @@ namespace Senparc.Service
                 }
             }
 
-            //更新数据库（目前不使用 SystemServiceEntities 存放数据库模型）
-            //await base.MigrateDatabaseAsync<SystemServiceEntities>(serviceProvider);
+            //更新数据库（目前不使用 BasePoolEntities 存放数据库模型）
+            //await base.MigrateDatabaseAsync<BasePoolEntities>(serviceProvider);
 
             var systemModule = xncfModuleServiceExtension.GetObject(z => z.Uid == this.Uid);
             if (systemModule == null)
@@ -104,7 +104,7 @@ namespace Senparc.Service
         #region IXncfDatabase 接口
 
         public string DatabaseUniquePrefix => Senparc.Ncf.Core.Models.NcfDatabaseMigrationHelper.SYSTEM_UNIQUE_PREFIX;//特殊情况：没有前缀
-        public Type XncfDatabaseDbContextType => typeof(SystemServiceEntities);
+        public Type XncfDatabaseDbContextType => typeof(BasePoolEntities);
 
         public Type TryGetXncfDatabaseDbContextType => MultipleDatabasePool.Instance.GetXncfDbContextType(this.GetType());
 
@@ -167,13 +167,13 @@ namespace Senparc.Service
 
             #endregion
 
-            //SystemServiceEntities 工厂配置（实际不会用到）
-            Func<IServiceProvider, SystemServiceEntities> systemServiceEntitiesImplementationFactory = s =>
+            //BasePoolEntities 工厂配置（实际不会用到）
+            Func<IServiceProvider, BasePoolEntities> basePoolEntitiesImplementationFactory = s =>
             {
                 var multipleDatabasePool = MultipleDatabasePool.Instance;
-                return multipleDatabasePool.GetXncfDbContext(this.GetType(), serviceProvider: s) as SystemServiceEntities;
+                return multipleDatabasePool.GetXncfDbContext(this.GetType(), serviceProvider: s) as BasePoolEntities;
             };
-            services.AddScoped<SystemServiceEntities>(systemServiceEntitiesImplementationFactory);
+            services.AddScoped<BasePoolEntities>(basePoolEntitiesImplementationFactory);
 
             services.AddScoped(typeof(INcfClientDbData), typeof(NcfClientDbData));
             services.AddScoped(typeof(INcfDbData), typeof(NcfClientDbData));

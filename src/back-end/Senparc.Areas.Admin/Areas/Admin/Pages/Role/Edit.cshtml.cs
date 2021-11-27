@@ -56,7 +56,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// </summary>
         /// <param name="senparcEntities"></param>
         /// <returns></returns>
-        public async Task<IActionResult> OnGetSelectItemsAsync([FromServices] /*SenparcEntities*/ SystemServiceEntities senparcEntities)
+        public async Task<IActionResult> OnGetSelectItemsAsync([FromServices] /*SenparcEntities*/ BasePoolEntities senparcEntities)
         {
             var list = await senparcEntities.SysRoles.Where(_ => _.Enabled)
                 .Select(_ => new SelectListItem() { Value = _.Id, Text = _.RoleName })

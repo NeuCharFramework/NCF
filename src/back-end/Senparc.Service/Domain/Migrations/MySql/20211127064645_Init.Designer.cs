@@ -10,7 +10,7 @@ using Senparc.Service;
 
 namespace Senparc.Service.Domain.Migrations.MySql
 {
-    [DbContext(typeof(SystemServiceEntities_MySql))]
+    [DbContext(typeof(BasePoolEntities_MySql))]
     [Migration("20211127064645_Init")]
     partial class Init
     {

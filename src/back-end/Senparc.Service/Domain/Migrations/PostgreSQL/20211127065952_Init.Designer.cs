@@ -11,7 +11,7 @@ using Senparc.Service;
 
 namespace Senparc.Service.Domain.Migrations.PostgreSQL
 {
-    [DbContext(typeof(SystemServiceEntities_PostgreSQL))]
+    [DbContext(typeof(BasePoolEntities_PostgreSQL))]
     [Migration("20211127065952_Init")]
     partial class Init
     {

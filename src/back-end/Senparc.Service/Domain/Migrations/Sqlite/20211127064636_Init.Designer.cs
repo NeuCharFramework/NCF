@@ -10,7 +10,7 @@ using Senparc.Service;
 
 namespace Senparc.Service.Domain.Migrations.Sqlite
 {
-    [DbContext(typeof(SystemServiceEntities_Sqlite))]
+    [DbContext(typeof(BasePoolEntities_Sqlite))]
     [Migration("20211127064636_Init")]
     partial class Init
     {

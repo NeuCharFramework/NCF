@@ -55,7 +55,7 @@ namespace Senparc.Service
 
             var xncfModuleDtos = xncfModules.Select(z => base.Mapper.Map<CreateOrUpdate_XncfModuleDto>(z)).ToList();
 
-            //var se = _serviceProvider.GetService(typeof(SystemServiceEntities_SqlServer));
+            //var se = _serviceProvider.GetService(typeof(BasePoolEntities_SqlServer));
 
             //进行模块扫描
             InstallOrUpdate? installOrUpdateValue = null;
