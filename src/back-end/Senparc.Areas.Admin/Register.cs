@@ -28,6 +28,7 @@ using Senparc.Ncf.XncfBase;
 using Senparc.Service;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -38,7 +39,7 @@ namespace Senparc.Areas.Admin
         IXncfRegister, //注册 XNCF 基础模块接口（必须）
         IAreaRegister, //注册 XNCF 页面接口（按需选用）
         IXncfDatabase  //注册 XNCF 模块数据库（按需选用）
-                      //IXncfRazorRuntimeCompilation  //需要使用 RazorRuntimeCompilation，在开发环境下实时更新 Razor Page
+                       //IXncfRazorRuntimeCompilation  //需要使用 RazorRuntimeCompilation，在开发环境下实时更新 Razor Page
     {
 
         #region IXncfRegister 接口
@@ -75,14 +76,38 @@ namespace Senparc.Areas.Admin
         {
             //更新数据库
             await base.MigrateDatabaseAsync(serviceProvider);
+
+            XncfModuleServiceExtension xncfModuleServiceExtension = serviceProvider.GetService<XncfModuleServiceExtension>();
+            var adminModule = xncfModuleServiceExtension.GetObject(z => z.Uid == this.Uid);
+            if (adminModule == null)
+            {
+                //只在未安装的情况下进行安装，InstallModuleAsync会访问到此方法，不做判断可能会引发死循环。
+                //常规模块中请勿在此方法中自动安装模块！
+                await xncfModuleServiceExtension.InstallModuleAsync(this.Uid).ConfigureAwait(false);
+            }
+
             await base.InstallOrUpdateAsync(serviceProvider, installOrUpdate);
         }
 
-        public override Task UninstallAsync(IServiceProvider serviceProvider, Func<Task> unsinstallFunc)
+        public override async Task UninstallAsync(IServiceProvider serviceProvider, Func<Task> unsinstallFunc)
         {
             //TODO：应该提供一个 BeforeUninstall 方法，阻止卸载。
 
-            return base.UninstallAsync(serviceProvider, unsinstallFunc);
+
+            #region 删除数据库（演示）
+
+            var mySenparcEntitiesType = this.TryGetXncfDatabaseDbContextType;
+            AdminSenparcEntities mySenparcEntities = serviceProvider.GetService(mySenparcEntitiesType) as AdminSenparcEntities;
+
+            //指定需要删除的数据实体
+
+            //注意：这里作为演示，在卸载模块的时候删除了所有本模块创建的表，实际操作过程中，请谨慎操作，并且按照删除顺序对实体进行排序！
+            var dropTableKeys = EntitySetKeys.GetEntitySetInfo(this.TryGetXncfDatabaseDbContextType).Keys.ToArray();
+            await base.DropTablesAsync(serviceProvider, mySenparcEntities, dropTableKeys);
+
+            #endregion
+
+            await base.UninstallAsync(serviceProvider, unsinstallFunc);
         }
 
         public override IApplicationBuilder UseXncfModule(IApplicationBuilder app, IRegisterService registerService)
@@ -150,8 +175,8 @@ namespace Senparc.Areas.Admin
 
         #region IXncfDatabase 接口
 
-        public const string DATABASE_PREFIX = "";//系统表，留空
-        public string DatabaseUniquePrefix => DATABASE_PREFIX;//系统表，留空
+        public const string DATABASE_PREFIX = NcfDatabaseMigrationHelper.SYSTEM_UNIQUE_PREFIX;//系统表，将会留空
+        public string DatabaseUniquePrefix => DATABASE_PREFIX;
 
         public Type TryGetXncfDatabaseDbContextType => MultipleDatabasePool.Instance.GetXncfDbContextType(this);
 

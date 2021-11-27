@@ -59,7 +59,7 @@
 		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.9.1.2-beta6" />
 		<PackageReference Include="Senparc.Ncf.Service" Version="0.9.1.2-beta6" />
 		<PackageReference Include="Senparc.Ncf.Utility" Version="0.9.1.2-beta6" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.9.1.5-beta6" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.9.1.6-beta6" />
 
 
 		<!--<PackageReference Include="Senparc.Weixin" Version="6.13.0" />

@@ -14,7 +14,7 @@ namespace Senparc.Xncf.Accounts
         /// <summary>
         /// 数据库前缀
         /// </summary>
-        public const string DATABASE_PREFIX = "";//顶级系统表，不加前缀
+        public const string DATABASE_PREFIX = NcfDatabaseMigrationHelper.SYSTEM_UNIQUE_PREFIX;//系统表，将会留空
 
         /// <summary>
         /// 数据库前缀

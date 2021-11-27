@@ -51,7 +51,7 @@ namespace Senparc.Service
                 throw new Exception("相同版本模块已安装，无需重复安装！");
             }
 
-            PagedList<XncfModule> xncfModules = await base.GetObjectListAsync(1, 999, _ => true, _ => _.AddTime, Ncf.Core.Enums.OrderingType.Descending).ConfigureAwait(false);
+            PagedList<XncfModule> xncfModules = await base.GetObjectListAsync(1, 999, z => true, z => z.AddTime, Ncf.Core.Enums.OrderingType.Descending).ConfigureAwait(false);
 
             var xncfModuleDtos = xncfModules.Select(z => base.Mapper.Map<CreateOrUpdate_XncfModuleDto>(z)).ToList();
 

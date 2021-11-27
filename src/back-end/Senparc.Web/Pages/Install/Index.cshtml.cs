@@ -198,7 +198,6 @@ namespace Senparc.Web.Pages.Install
 
                         CreatedRequestTenantInfo = await _tenantInfoService.SetScopedRequestTenantInfoAsync(httpContext);
                         TenantInfoDto = _tenantInfoService.Mapper.Map<TenantInfoDto>(await _tenantInfoService.GetObjectAsync(z => z.Id == CreatedRequestTenantInfo.Id));
-
                     }
                     catch (Exception)
                     {
