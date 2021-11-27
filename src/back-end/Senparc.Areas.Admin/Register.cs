@@ -169,7 +169,8 @@ namespace Senparc.Areas.Admin
 
         #region IXncfDatabase 接口
 
-        public string DatabaseUniquePrefix => "";//系统表，留空
+        public const string DATABASE_PREFIX = "";//系统表，留空
+        public string DatabaseUniquePrefix => DATABASE_PREFIX;//系统表，留空
 
         public Type TryGetXncfDatabaseDbContextType => MultipleDatabasePool.Instance.GetXncfDbContextType(this);
 
