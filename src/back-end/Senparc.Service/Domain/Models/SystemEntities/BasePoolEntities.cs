@@ -17,11 +17,6 @@ namespace Senparc.Service
 
         #region 系统表（无特殊情况不要修改）
 
-        /// <summary>
-        /// 系统设置
-        /// </summary>
-        public DbSet<SystemConfig> SystemConfigs { get; set; }
-
 
         /// <summary>
         /// 系统角色

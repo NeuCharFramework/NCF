@@ -17,6 +17,7 @@
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.14.3.2-beta6" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.1.0" />
 		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.4.2.2-beta6" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.1.1" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.10.1.2-beta6" />
 		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.11.4.2-beta6" />
 		<PackageReference Include="ML.Xncf.Docs" Version="2.1.7.25" />
