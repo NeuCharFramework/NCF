@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.DependencyInjection;
-using Senparc.Areas.Admin;
 using Senparc.Areas.Admin.Domain;
-using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
@@ -12,7 +9,6 @@ using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
-using Senparc.Service;
 using Senparc.Xncf.SystemManager.Domain.Service;
 using Senparc.Xncf.XncfModuleManager.Domain.Services;
 using System;
@@ -73,6 +69,30 @@ namespace Senparc.Web.Pages.Install
             TenantRule = SiteConfig.SenparcCoreSetting.TenantRule;
         }
 
+        private async Task InitDatabaseAsync(Func<Task<(bool, string)>> initDatabaseFunc)
+        {
+            //初始化数据库
+            var (initDbSuccess, initDbMsg) = await initDatabaseFunc();
+
+            Console.WriteLine($"完成 systemCoreRegister.InitDatabase，是否成功：{initDbSuccess}。数据库信息：{initDbMsg}");
+
+            if (!initDbSuccess)
+            {
+                throw new NcfDatabaseException($"ServiceRegister.InitDatabase 失败：{initDbMsg}", DatabaseConfigurationFactory.Instance.Current.GetType());
+            }
+        }
+
+        private async Task<XncfModule> InstallAndOpenModule(IXncfRegister register)
+        {
+            //开始安装模块
+            await register.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
+
+            //启用模块
+            var serviceModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == register.Uid);
+            serviceModule.UpdateState(Ncf.Core.Enums.XncfModules_State.开放);
+            return serviceModule;
+        }
+
         public async Task<IActionResult> OnGetAsync()
         {
             try
@@ -104,10 +124,18 @@ namespace Senparc.Web.Pages.Install
             catch (Exception)
             {
                 Console.WriteLine("开始初始化");
+
                 {
                     //Senparc.Service.Register serviceRegister = new Service.Register();
                     Senparc.Xncf.SystemCore.Register systemCoreRegister = new Senparc.Xncf.SystemCore.Register();
 
+                    Senparc.Xncf.SystemManager.Register systemManagerRegister = new Senparc.Xncf.SystemManager.Register();
+
+                    Senparc.Xncf.SystemPermission.Register systemPermissionRegister = new Senparc.Xncf.SystemPermission.Register();
+
+                    Senparc.Xncf.XncfModuleManager.Register xncfModuleManagerRegister = new Senparc.Xncf.XncfModuleManager.Register();
+
+                    Senparc.Xncf.Menu.Register menuRegister = new Senparc.Xncf.Menu.Register();
 
                     //添加初始化多租户信息
                     if (SiteConfig.SenparcCoreSetting.EnableMultiTenant)
@@ -115,16 +143,16 @@ namespace Senparc.Web.Pages.Install
                         var httpContext = _httpContextAccessor.Value.HttpContext;
                         try
                         {
-
                             //初始化数据库
-                            var (initDbSuccess, initDbMsg) = await systemCoreRegister.InitDatabase(_serviceProvider/*, _tenantInfoService, *//*_httpContextAccessor.Value.HttpContext*/);
 
-                            Console.WriteLine($"完成 serviceRegister.InitDatabase，是否成功：{initDbSuccess}。数据库信息：{initDbMsg}");
+                            //var (initDbSuccess, initDbMsg) = await systemCoreRegister.InitDatabase(_serviceProvider/*, _tenantInfoService, *//*_httpContextAccessor.Value.HttpContext*/);
 
-                            if (!initDbSuccess)
-                            {
-                                throw new NcfDatabaseException($"ServiceRegister.InitDatabase 失败：{initDbMsg}", DatabaseConfigurationFactory.Instance.Current.GetType());
-                            }
+                            await InitDatabaseAsync(() => systemCoreRegister.InitDatabase(_serviceProvider));
+                            //await InitDatabaseAsync(() => systemManagerRegister.InitDatabase(_serviceProvider));
+                            //await InitDatabaseAsync(() => systemPermissionRegister.InitDatabase(_serviceProvider));
+                            //await InitDatabaseAsync(() => xncfModuleManagerRegister.InitDatabase(_serviceProvider));
+                            //await InitDatabaseAsync(() => menuRegister.InitDatabase(_serviceProvider));
+
 
                             var tenantInfo = await _tenantInfoService.CreateInitTenantInfoAsync(httpContext);
 
@@ -145,25 +173,30 @@ namespace Senparc.Web.Pages.Install
                         }
                     }
 
-                    //开始安装系统模块（Service）
-                    await systemCoreRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
-                    //启用系统模块（Service）
-                    var serviceModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == systemCoreRegister.Uid);
-                    serviceModule.UpdateState(Ncf.Core.Enums.XncfModules_State.开放);
+                    //开始安装系统基础模块
+                    await InstallAndOpenModule(systemCoreRegister);
+
+                    //开始安装系统管理管理模块
+                    await InstallAndOpenModule(systemManagerRegister);
+
+                    //开始安装模块管理管理模块
+                    await InstallAndOpenModule(systemPermissionRegister);
+
+                    //开始安装模块理管理模块
+                    await InstallAndOpenModule(xncfModuleManagerRegister);
+
+                    //开始安装菜单管理模块
+                    await InstallAndOpenModule(menuRegister);
                 }
 
                 //TODO:选择性安装
 
                 {
-                    //开始安装系统模块（Admin）
+                    //开始安装并启用系统模块（Admin）
                     Senparc.Areas.Admin.Register adminRegister = new Areas.Admin.Register();
-                    await adminRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
+                    var adminModule = await InstallAndOpenModule(adminRegister);
 
-                    //启用系统模块（Admin）
-                    var adminModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == adminRegister.Uid);
-                    adminModule.UpdateState(Ncf.Core.Enums.XncfModules_State.开放);
-
-                    //一次性保存修改
+                    //一次性保存（所有）修改
                     await _xncfModuleService.SaveObjectAsync(adminModule).ConfigureAwait(false);
                 }
 
