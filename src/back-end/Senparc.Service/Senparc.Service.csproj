@@ -39,6 +39,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Domain\BaseService\" />
+	  <Folder Include="Domain\Models\" />
 	</ItemGroup>
 
 </Project>

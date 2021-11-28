@@ -34,6 +34,7 @@ using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin
 {
+    [XncfRegister]
     [XncfOrder(5996)]
     public class Register : XncfRegisterBase,
         IXncfRegister, //注册 XNCF 基础模块接口（必须）
