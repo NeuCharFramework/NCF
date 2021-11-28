@@ -5,7 +5,7 @@ using Senparc.Ncf.Repository;
 using Senparc.Ncf.Service;
 using System;
 
-namespace Senparc.Service
+namespace Senparc.Areas.Admin.Domain
 {
     public interface IBaseClientService<T> : IClientServiceBase<T> where T : EntityBase//global::System.Data.Objects.DataClasses.EntityObject, new()
     {

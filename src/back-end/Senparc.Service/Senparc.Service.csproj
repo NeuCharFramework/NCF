@@ -38,8 +38,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="OHS\AppService\" />
-	  <Folder Include="OHS\Remote\" />
+	  <Folder Include="Domain\BaseService\" />
 	</ItemGroup>
 
 </Project>

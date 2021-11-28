@@ -28,7 +28,7 @@ using Senparc.Service;
 using Senparc.Areas.Admin.Domain.Models;
 using Senparc.Areas.Admin.Domain.Models.Dto;
 
-namespace Senparc.Areas.Admin
+namespace Senparc.Areas.Admin.Domain
 {
     public class AdminUserInfoService : BaseClientService<AdminUserInfo>
     {
@@ -74,7 +74,7 @@ namespace Senparc.Areas.Admin
             }
             var codedPassword = GetPassword(password, userInfo.PasswordSalt, false);
             return userInfo.Password == codedPassword ? userInfo : null;
-        } 
+        }
 
         public string GetPassword(string password, string salt, bool isMD5Password)
         {
@@ -175,7 +175,7 @@ namespace Senparc.Areas.Admin
             SaveObject(obj);
         }
 
-        public CreateOrUpdate_AdminUserInfoDto GetAdminUserInfo(int id,params string[] includes)
+        public CreateOrUpdate_AdminUserInfoDto GetAdminUserInfo(int id, params string[] includes)
         {
             var obj = GetObject(z => z.Id == id, includes: includes);
 
@@ -184,7 +184,7 @@ namespace Senparc.Areas.Admin
             return objDto;
         }
 
-        public List<AdminUserInfo> GetAdminUserInfo(List<int> ids,params string[] includes)
+        public List<AdminUserInfo> GetAdminUserInfo(List<int> ids, params string[] includes)
         {
             return GetFullList(z => ids.Contains(z.Id), z => z.Id, Ncf.Core.Enums.OrderingType.Ascending, includes: includes);
         }
