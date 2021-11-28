@@ -32,7 +32,7 @@ namespace Senparc.Service
 
         public override string Name => "NeuCharFramework.Services";
 
-        public override string Uid => SiteConfig.SYSTEM_XNCF_MODULE_SERVICE_UID;// "00000000-0000-0000-0000-000000000001";
+        public override string Uid => "10000000-0000-0000-0000-000000000001";// SiteConfig.SYSTEM_XNCF_MODULE_SERVICE_UID;// "00000000-0000-0000-0000-000000000001";
 
         public override string Version => "0.5.0-beta4";
 

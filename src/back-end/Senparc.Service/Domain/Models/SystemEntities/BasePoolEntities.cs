@@ -33,10 +33,6 @@ namespace Senparc.Service
         /// </summary>
         public DbSet<SysRoleAdminUserInfo> SysRoleAdminUserInfos { get; set; }
 
-        /// <summary>
-        /// 扩展模块
-        /// </summary>
-        public DbSet<XncfModule> XncfModules { get; set; }
 
         #endregion
     }
