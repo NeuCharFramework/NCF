@@ -1,6 +1,6 @@
 ﻿using Senparc.Ncf.Core.Models;
 
-namespace Senparc.Core.Models.DataBaseModel
+namespace Senparc.Xncf.Accounts.Domain.Models.Dto
 {
     public class BaseDto : DtoBase
     {

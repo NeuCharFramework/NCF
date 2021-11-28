@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Senparc.Xncf.Accounts.Domain.Models.DataBaseModel.Dto
+namespace Senparc.Xncf.Accounts.Domain.Models.Dto
 {
     public class AccountDto
     {

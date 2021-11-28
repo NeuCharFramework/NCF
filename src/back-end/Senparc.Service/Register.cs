@@ -44,7 +44,6 @@ namespace Senparc.Service
 
         public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<XncfModuleServiceExtension>();
             services.AddScoped<BasePoolEntities>();
 
             return base.AddXncfModule(services, configuration);
@@ -52,51 +51,12 @@ namespace Senparc.Service
 
         public override async Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
         {
-            //TODO：DI注入注册时候，根据指定数据库进行绑定
-
-            XncfModuleServiceExtension xncfModuleServiceExtension = serviceProvider.GetService<XncfModuleServiceExtension>();
-            //SenparcEntities senparcEntities = (SenparcEntities)xncfModuleServiceExtension.BaseData.BaseDB.BaseDataContext;
-            SenparcEntities senparcEntities = (SenparcEntities)xncfModuleServiceExtension.BaseData.BaseDB.BaseDataContext;
-
-            //更新数据库
-            var pendingMigs = await senparcEntities.Database.GetPendingMigrationsAsync();
-            if (pendingMigs.Count() > 0)
-            {
-                senparcEntities.ResetMigrate();//重置合并状态
-
-                try
-                {
-                    var script = senparcEntities.Database.GenerateCreateScript();
-                    SenparcTrace.SendCustomLog("senparcEntities.Database.GenerateCreateScript", script);
-
-                    senparcEntities.Migrate();//进行合并
-                }
-                catch (Exception ex)
-                {
-                    var currentDatabaseConfiguration = DatabaseConfigurationFactory.Instance.Current;
-                    SenparcTrace.BaseExceptionLog(new NcfDatabaseException(ex.Message, currentDatabaseConfiguration.GetType(), senparcEntities.GetType(), ex));
-                }
-            }
-
-            //更新数据库（目前不使用 BasePoolEntities 存放数据库模型）
-            //await base.MigrateDatabaseAsync<BasePoolEntities>(serviceProvider);
-
-            var systemModule = xncfModuleServiceExtension.GetObject(z => z.Uid == this.Uid);
-            if (systemModule == null)
-            {
-                //只在未安装的情况下进行安装，InstallModuleAsync会访问到此方法，不做判断可能会引发死循环。
-                //常规模块中请勿在此方法中自动安装模块！
-                await xncfModuleServiceExtension.InstallModuleAsync(this.Uid).ConfigureAwait(false);
-            }
-
-            await base.InstallOrUpdateAsync(serviceProvider, installOrUpdate);
+           
         }
 
         public override Task UninstallAsync(IServiceProvider serviceProvider, Func<Task> unsinstallFunc)
         {
-            //TODO：应该提供一个 BeforeUninstall 方法，阻止卸载。
-
-            return base.UninstallAsync(serviceProvider, unsinstallFunc);
+            
         }
 
         #endregion
