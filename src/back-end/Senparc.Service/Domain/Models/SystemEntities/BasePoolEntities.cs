@@ -22,15 +22,6 @@ namespace Senparc.Service
         /// </summary>
         public DbSet<SystemConfig> SystemConfigs { get; set; }
 
-        /// <summary>
-        /// 菜单
-        /// </summary>
-        public DbSet<SysMenu> SysMenus { get; set; }
-
-        /// <summary>
-        /// 菜单下面的按钮
-        /// </summary>
-        public DbSet<SysButton> SysButtons { get; set; }
 
         /// <summary>
         /// 系统角色

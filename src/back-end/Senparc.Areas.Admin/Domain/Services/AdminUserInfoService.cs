@@ -55,8 +55,9 @@ namespace Senparc.Areas.Admin
                 z => z.Id != id && z.UserName.ToUpper() == userName /*z.UserName.Equals(userName, StringComparison.CurrentCultureIgnoreCase)*/) != null;
         }
 
-        [ApiBind]
-        [Core.BackendJwtAuthorize]
+        //TODO：放到 OHS 的 Service
+        //[ApiBind]
+        //[Core.BackendJwtAuthorize]
         public async Task<AdminUserInfo> GetUserInfo(string userName)
         {
             await Task.CompletedTask;
