@@ -9,7 +9,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Xncf.Accounts.Domain.Services;
 
-namespace Senparc.Service
+namespace Senparc.Xncf.Accounts.Domain.Services
 {
 
     public class AccountPayLogService : BaseClientService<AccountPayLog>

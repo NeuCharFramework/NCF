@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Areas.Admin;
+using Senparc.Areas.Admin.Domain;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Exceptions;
@@ -12,6 +13,8 @@ using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using Senparc.Service;
+using Senparc.Xncf.SystemManager.Domain.Service;
+using Senparc.Xncf.XncfModuleManager.Domain.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -102,7 +105,9 @@ namespace Senparc.Web.Pages.Install
             {
                 Console.WriteLine("开始初始化");
                 {
-                    Senparc.Service.Register serviceRegister = new Service.Register();
+                    //Senparc.Service.Register serviceRegister = new Service.Register();
+                    Senparc.Xncf.SystemCore.Register systemCoreRegister = new Senparc.Xncf.SystemCore.Register();
+
 
                     //添加初始化多租户信息
                     if (SiteConfig.SenparcCoreSetting.EnableMultiTenant)
@@ -112,7 +117,7 @@ namespace Senparc.Web.Pages.Install
                         {
 
                             //初始化数据库
-                            var (initDbSuccess, initDbMsg) = await serviceRegister.InitDatabase(_serviceProvider/*, _tenantInfoService, *//*_httpContextAccessor.Value.HttpContext*/);
+                            var (initDbSuccess, initDbMsg) = await systemCoreRegister.InitDatabase(_serviceProvider/*, _tenantInfoService, *//*_httpContextAccessor.Value.HttpContext*/);
 
                             Console.WriteLine($"完成 serviceRegister.InitDatabase，是否成功：{initDbSuccess}。数据库信息：{initDbMsg}");
 
@@ -141,9 +146,9 @@ namespace Senparc.Web.Pages.Install
                     }
 
                     //开始安装系统模块（Service）
-                    await serviceRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
+                    await systemCoreRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
                     //启用系统模块（Service）
-                    var serviceModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == serviceRegister.Uid);
+                    var serviceModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == systemCoreRegister.Uid);
                     serviceModule.UpdateState(Ncf.Core.Enums.XncfModules_State.开放);
                 }
 

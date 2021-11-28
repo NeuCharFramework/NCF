@@ -11,7 +11,7 @@ using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Validator;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.Utility;
-using Senparc.Service;
+using Senparc.Xncf.SystemManager.Domain.Service;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {

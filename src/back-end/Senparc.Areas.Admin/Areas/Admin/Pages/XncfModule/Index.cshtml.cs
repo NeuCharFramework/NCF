@@ -3,7 +3,8 @@ using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
-using Senparc.Service;
+using Senparc.Xncf.SystemManager.Domain.Service;
+using Senparc.Xncf.XncfModuleManager.Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,6 +18,8 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         private readonly IServiceProvider _serviceProvider;
         private readonly XncfModuleServiceExtension _xncfModuleServiceEx;
         private readonly SysMenuService _sysMenuService;
+
+        //TODO:从其他模块获得，或独立到对应模块的API
         private readonly Lazy<SystemConfigService> _systemConfigService;
 
         public XncfModuleIndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleServiceEx,

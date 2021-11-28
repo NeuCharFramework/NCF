@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Senparc.Areas.Admin.Domain;
 using Senparc.Areas.Admin.Domain.Models.Dto;
 using Senparc.Areas.Admin.OHS.Local.PL;
 using Senparc.Areas.Admin.OHS.PL;
 using Senparc.CO2NET;
 using Senparc.CO2NET.Extensions;
-using Senparc.Core.Models.DataBaseModel.Dto;
 using Senparc.Ncf.Core.AppServices;
 using Senparc.Ncf.Core.Models;
 using System;

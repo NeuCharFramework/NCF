@@ -16,7 +16,6 @@ using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.Core.Validator;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.Utility;
-using Senparc.Service;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {

@@ -1,5 +1,6 @@
 ﻿using Senparc.Areas.Admin.Domain.Models;
 using Senparc.Core.Models;
+using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Repository;
 
 namespace Senparc.Areas.Admin.ACL
@@ -10,7 +11,7 @@ namespace Senparc.Areas.Admin.ACL
 
     public class AdminUserInfoRepository : ClientRepositoryBase<AdminUserInfo>, IAdminUserInfoRepository
     {
-        public AdminUserInfoRepository(INcfClientDbData NcfClientDbData) : base(NcfClientDbData)
+        public AdminUserInfoRepository(INcfDbData ncfDbData) : base(ncfDbData)
         {
 
         }

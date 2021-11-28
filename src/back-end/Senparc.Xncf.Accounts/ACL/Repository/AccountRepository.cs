@@ -1,6 +1,7 @@
 ﻿using Senparc.Core.Models;
 using Senparc.Xncf.Accounts.Domain.Models;
 using Senparc.Ncf.Repository;
+using Senparc.Ncf.Core.Models;
 
 namespace Senparc.Service.ACL
 {
@@ -10,7 +11,7 @@ namespace Senparc.Service.ACL
 
     public class AccountRepository : ClientRepositoryBase<Account>, IAccountRepository
     {
-        public AccountRepository(INcfClientDbData NcfClientDbData) : base(NcfClientDbData)
+        public AccountRepository(INcfDbData ncfDbData) : base(ncfDbData)
         {
 
         }

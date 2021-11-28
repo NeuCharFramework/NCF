@@ -9,6 +9,7 @@ using Senparc.Ncf.Service;
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Service.ACL;
+using Senparc.Xncf.Accounts.Domain;
 
 namespace Senparc.Service
 {

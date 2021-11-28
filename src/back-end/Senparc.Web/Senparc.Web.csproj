@@ -13,20 +13,22 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.10.1.2-beta6" />
-		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.14.3.2-beta6" />
-		<PackageReference Include="Senparc.Xncf.Menu" Version="0.1.0" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.4.2.2-beta6" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.1.1" />
-		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.10.1.2-beta6" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.11.4.2-beta6" />
+		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.10.2-beta6" />
+		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.14.4-beta6" />
+		<PackageReference Include="Senparc.Xncf.Menu" Version="0.1.2" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.4.3-beta6" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.1.1" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.1.2" />
+		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.1.2" />
+		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.10.2-beta6" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.11.5-beta6" />
 		<PackageReference Include="ML.Xncf.Docs" Version="2.1.7.25" />
 	</ItemGroup>
 	
 	<ItemGroup>
 
-		<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.2.8.2-beta6" />
-		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.9.1.2-beta6" />
+		<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.2.9-beta6" />
+		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.9.2-beta6" />
 		<!--<PackageReference Include="Senparc.Ncf.Database.MySql" Version="0.6.128-beta1" />-->
 
 		<PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.5.2">
@@ -50,15 +52,15 @@
 		<PackageReference Include="AutoMapper" Version="7.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.1.2" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.0.0" />
 		<PackageReference Include="Senparc.CO2NET" Version="2.0.0" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.9.4.7-beta6" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.9.5-beta6" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
-		<ProjectReference Include="..\Senparc.Service\Senparc.Service.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
 	</ItemGroup>
 	<ItemGroup>

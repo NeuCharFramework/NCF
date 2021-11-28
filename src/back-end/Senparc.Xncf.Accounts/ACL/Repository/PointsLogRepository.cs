@@ -1,6 +1,7 @@
 ﻿using Senparc.Core.Models;
 using Senparc.Xncf.Accounts.Domain.Models;
 using Senparc.Ncf.Repository;
+using Senparc.Ncf.Core.Models;
 
 namespace Senparc.Service.ACL
 {
@@ -10,7 +11,7 @@ namespace Senparc.Service.ACL
 
     public class PointsLogRepository : ClientRepositoryBase<PointsLog>, IPointsLogRepository
     {
-        public PointsLogRepository(INcfClientDbData NcfClientDbData) : base(NcfClientDbData)
+        public PointsLogRepository(INcfDbData ncfDbData) : base(ncfDbData)
         {
 
         }

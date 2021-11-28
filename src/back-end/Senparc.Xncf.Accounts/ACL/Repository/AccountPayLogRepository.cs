@@ -1,7 +1,7 @@
 ﻿using Senparc.Core.Models;
 using Senparc.Xncf.Accounts.Domain.Models;
 using Senparc.Ncf.Repository;
-
+using Senparc.Ncf.Core.Models;
 
 namespace Senparc.Service.ACL
 {
@@ -11,7 +11,7 @@ namespace Senparc.Service.ACL
 
     public class AccountPayLogRepository : ClientRepositoryBase<AccountPayLog>, IAccountPayLogRepository
     {
-        public AccountPayLogRepository(INcfClientDbData NcfClientDbData) : base(NcfClientDbData)
+        public AccountPayLogRepository(INcfDbData ncfDbData) : base(ncfDbData)
         {
 
         }

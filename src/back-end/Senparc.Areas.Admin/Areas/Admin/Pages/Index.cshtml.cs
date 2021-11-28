@@ -2,7 +2,7 @@
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
-using Senparc.Service;
+using Senparc.Xncf.XncfModuleManager.Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +14,8 @@ namespace Senparc.Areas.Admin.Pages
     public class IndexModel : BaseAdminPageModel
     {
         private readonly IServiceProvider _serviceProvider;
+
+        //TODO:从其他模块获得
         private readonly XncfModuleServiceExtension _xncfModuleServiceEx;
 
         public IndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleServiceEx)
@@ -158,7 +160,7 @@ namespace Senparc.Areas.Admin.Pages
                         });
                     }
 
-                    
+
                     dest.AddRange(xncfAreapage.AareaPageMenuItems.Select(_ => new SysMenuDto()
                     {
                         MenuName = _.Name,

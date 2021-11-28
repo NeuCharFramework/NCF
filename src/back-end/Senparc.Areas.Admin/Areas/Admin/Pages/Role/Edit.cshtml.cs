@@ -7,10 +7,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Senparc.Core.Models;
-using Senparc.Core.Models.DataBaseModel;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
-using Senparc.Service;
+using Senparc.Xncf.SystemCore.Domain.DatabaseModel;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -58,7 +57,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// <returns></returns>
         public async Task<IActionResult> OnGetSelectItemsAsync([FromServices] /*SenparcEntities*/ BasePoolEntities senparcEntities)
         {
-            var list = await senparcEntities.SysRoles.Where(_ => _.Enabled)
+            var list = await senparcEntities.Set<SysRole>().Where(_ => _.Enabled)
                 .Select(_ => new SelectListItem() { Value = _.Id, Text = _.RoleName })
                 .ToListAsync();
             return Ok(list);

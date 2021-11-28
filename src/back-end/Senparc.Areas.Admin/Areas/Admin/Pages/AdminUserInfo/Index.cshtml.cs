@@ -8,10 +8,10 @@ using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.Utility;
-using Senparc.Service;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Ncf.Core;
 using Senparc.Areas.Admin.Domain.Models;
+using Senparc.Areas.Admin.Domain;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {

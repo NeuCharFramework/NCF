@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
-using Senparc.Core.Models.DataBaseModel;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
-using Senparc.Service;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
