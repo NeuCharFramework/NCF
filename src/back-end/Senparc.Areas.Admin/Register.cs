@@ -25,6 +25,7 @@ using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.XncfBase;
+using Senparc.Ncf.XncfBase.Database;
 using Senparc.Xncf.XncfModuleManager.Domain.Services;
 using System;
 using System.Collections.Generic;
@@ -76,7 +77,7 @@ namespace Senparc.Areas.Admin
         public override async Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
         {
             //更新数据库
-            await base.MigrateDatabaseAsync(serviceProvider);
+            await XncfDatabaseDbContext.MigrateOnInstallAsync(serviceProvider, this);
 
             XncfModuleServiceExtension xncfModuleServiceExtension = serviceProvider.GetService<XncfModuleServiceExtension>();
             var adminModule = xncfModuleServiceExtension.GetObject(z => z.Uid == this.Uid);

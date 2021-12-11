@@ -86,7 +86,7 @@ namespace Senparc.Web.Pages.Install
         {
             //开始安装模块
             await register.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
-
+            Console.WriteLine("1211.1====== 开始启用模块："+ register.GetType().FullName);
             //启用模块
             var serviceModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == register.Uid);
             serviceModule.UpdateState(Ncf.Core.Enums.XncfModules_State.开放);

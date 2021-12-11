@@ -11,6 +11,7 @@ using Senparc.Xncf.Accounts.Models;
 using Senparc.Xncf.Accounts.Domain.Models;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.XncfBase.Database;
 
 namespace Senparc.Xncf.Accounts
 {
@@ -34,7 +35,7 @@ namespace Senparc.Xncf.Accounts
         public override async Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
         {
             //安装或升级版本时更新数据库
-            await base.MigrateDatabaseAsync(serviceProvider);
+            await XncfDatabaseDbContext.MigrateOnInstallAsync(serviceProvider, this);
 
             //根据安装或更新不同条件执行逻辑
             switch (installOrUpdate)
