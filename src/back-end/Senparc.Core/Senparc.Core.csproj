@@ -29,7 +29,7 @@
     </PackageReference>
 
     <PackageReference Include="Senparc.Ncf.Core" Version="0.9.6.2-beta6" />
-    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.9.3.1-beta6" />
+    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.9.3.4-beta6" />
     <PackageReference Include="Senparc.Ncf.Utility" Version="0.9.3-beta6" />
   </ItemGroup>
 
