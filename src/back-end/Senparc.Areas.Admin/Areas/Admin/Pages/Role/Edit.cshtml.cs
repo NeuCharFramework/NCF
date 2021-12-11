@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Senparc.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
-using Senparc.Xncf.SystemCore.Domain.DatabaseModel;
+using Senparc.Xncf.SystemCore.Domain.Database;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {

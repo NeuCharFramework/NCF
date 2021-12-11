@@ -178,6 +178,10 @@ namespace Senparc.Web.Pages.Install
                     //await InitDatabaseAsync(() => menuRegister.InitDatabase(_serviceProvider));
 
 
+                    //开始安装模块理管理模块
+                    //（必须放在第一个，其他模块操作都需要依赖此模块）
+                    await InstallAndOpenModule(xncfModuleManagerRegister);
+
                     //开始安装系统基础模块
                     await InstallAndOpenModule(systemCoreRegister);
 
@@ -187,8 +191,6 @@ namespace Senparc.Web.Pages.Install
                     //开始安装模块管理管理模块
                     await InstallAndOpenModule(systemPermissionRegister);
 
-                    //开始安装模块理管理模块
-                    await InstallAndOpenModule(xncfModuleManagerRegister);
 
                     //开始安装菜单管理模块
                     await InstallAndOpenModule(menuRegister);
