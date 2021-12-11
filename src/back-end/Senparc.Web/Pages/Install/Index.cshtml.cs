@@ -127,6 +127,8 @@ namespace Senparc.Web.Pages.Install
 
                 {
                     //Senparc.Service.Register serviceRegister = new Service.Register();
+                    Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
+
                     Senparc.Xncf.SystemCore.Register systemCoreRegister = new Senparc.Xncf.SystemCore.Register();
 
                     Senparc.Xncf.SystemManager.Register systemManagerRegister = new Senparc.Xncf.SystemManager.Register();
@@ -147,12 +149,8 @@ namespace Senparc.Web.Pages.Install
 
                             //var (initDbSuccess, initDbMsg) = await systemCoreRegister.InitDatabase(_serviceProvider/*, _tenantInfoService, *//*_httpContextAccessor.Value.HttpContext*/);
 
-                            await InitDatabaseAsync(() => systemCoreRegister.InitDatabase(_serviceProvider));
-                            //await InitDatabaseAsync(() => systemManagerRegister.InitDatabase(_serviceProvider));
-                            //await InitDatabaseAsync(() => systemPermissionRegister.InitDatabase(_serviceProvider));
-                            //await InitDatabaseAsync(() => xncfModuleManagerRegister.InitDatabase(_serviceProvider));
-                            //await InitDatabaseAsync(() => menuRegister.InitDatabase(_serviceProvider));
-
+                            //安装多租户
+                            await tenantRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
 
                             var tenantInfo = await _tenantInfoService.CreateInitTenantInfoAsync(httpContext);
 
@@ -173,6 +171,13 @@ namespace Senparc.Web.Pages.Install
                         }
                     }
 
+                    await InitDatabaseAsync(() => systemCoreRegister.InitDatabase(_serviceProvider));
+                    //await InitDatabaseAsync(() => systemManagerRegister.InitDatabase(_serviceProvider));
+                    //await InitDatabaseAsync(() => systemPermissionRegister.InitDatabase(_serviceProvider));
+                    //await InitDatabaseAsync(() => xncfModuleManagerRegister.InitDatabase(_serviceProvider));
+                    //await InitDatabaseAsync(() => menuRegister.InitDatabase(_serviceProvider));
+
+
                     //开始安装系统基础模块
                     await InstallAndOpenModule(systemCoreRegister);
 
@@ -189,7 +194,7 @@ namespace Senparc.Web.Pages.Install
                     await InstallAndOpenModule(menuRegister);
                 }
 
-                //TODO:选择性安装
+                //TODO:选择性安装用户自定义模块
 
                 {
                     //开始安装并启用系统模块（Admin）
