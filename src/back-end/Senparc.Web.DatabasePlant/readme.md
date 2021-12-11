@@ -27,6 +27,15 @@ Senparc.Ncf.DatabasePlant 引用了 NCF 官方实现的所有数据库的 Databa
 这也正是“停机坪”名称的由来：我们只在 Debug 的时候让项目“躺”在停机坪上，可以对数据库进行比如 Migration（迁移） 等各类针对多有数据库的批量操作，
 而当 NCF 起飞（Release）后，这个包会被自动忽略，不会给系统带来额外的负担。
 
+## 手动操作
+
+当手头没有可以直接执行的 NCF 项目（主要是 XncfBuilder 模块）时，可以使用手动命令行方式生成数据库，例如，以 SQLite 为例：
+
+```
+dotnet ef migrations add Init -c AdminSenparcEntities_Sqlite -s E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Web.DatabasePlant -o E:\Senparc项目\NeuCharFramework\NCF\src\back-end\Senparc.Areas.Admin\Domain\Migrations\Sqlite
+```
+
+
 ## 更新说明
 
 当任何 `Senparc.Ncf.Database.xx` 类库版本升级后都应该同样升级当前项目版本，以确保随时引用最新的类库版本。
