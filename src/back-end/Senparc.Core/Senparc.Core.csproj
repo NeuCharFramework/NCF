@@ -28,9 +28,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
 
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.9.6.7-beta6" />
-    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.9.3.10-beta6" />
-    <PackageReference Include="Senparc.Ncf.Utility" Version="0.9.3.2-beta6" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.10.0-beta7" />
+    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.10.0-beta7" />
+    <PackageReference Include="Senparc.Ncf.Utility" Version="0.10.0-beta7" />
   </ItemGroup>
 
   <ItemGroup><!--<DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.0-preview1-final" />-->
