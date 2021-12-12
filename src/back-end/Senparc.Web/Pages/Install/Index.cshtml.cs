@@ -83,9 +83,16 @@ namespace Senparc.Web.Pages.Install
             }
         }
 
+        /// <summary>
+        /// 安装并且开放模块
+        /// </summary>
+        /// <param name="register"></param>
+        /// <param name="installNow">是否立即安装</param>
+        /// <param name="addMenu">是否添加菜单（必须 installNow 为 true 时生效）</param>
+        /// <returns></returns>
         private async Task<XncfModule> InstallAndOpenModuleAsync(IXncfRegister register, bool installNow = true, bool addMenu = true)
         {
-            //开始安装模块
+            //开始安装模块（创建数据库相关表）
             await register.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
 
             XncfModule xncfModule = null;
@@ -96,7 +103,7 @@ namespace Senparc.Web.Pages.Install
                 xncfModule = _xncfModuleService.GetObject(z => z.Uid == register.Uid);
                 if (xncfModule == null)
                 {
-                    await _xncfModuleService.InstallModuleAsync(register.Uid, false);
+                    await _xncfModuleService.InstallModuleAsync(register.Uid, addMenu);
                     xncfModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == register.Uid);
                 }
 
@@ -105,11 +112,11 @@ namespace Senparc.Web.Pages.Install
                 xncfModule.UpdateState(Ncf.Core.Enums.XncfModules_State.开放);
             }
 
-            if (addMenu)
-            {
-                //TODO:判断是否已存在
-                await _xncfModuleService.InstallMenuAsync(register, Ncf.Core.Enums.InstallOrUpdate.Install);
-            }
+            //if (addMenu)
+            //{
+            //    //TODO:判断是否已存在
+            //    await _xncfModuleService.InstallMenuAsync(register, Ncf.Core.Enums.InstallOrUpdate.Install);
+            //}
 
             return xncfModule;
         }
