@@ -63,7 +63,6 @@
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
-		<ProjectReference Include="..\SenparcNew.Xncf.Try\SenparcNew.Xncf.Try.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
