@@ -29,3 +29,4 @@ obj/
 /src/back-end/Senparc.Web/App_Data/ApiDocXml
 /src/back-end/Senparc.Web/wwwroot/NcfDocs-Old202110251817008286/branch
 /src/back-end/Senparc.Web/App_Data/*.Dat
+/BuildOutPut/
