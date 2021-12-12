@@ -79,14 +79,14 @@ namespace Senparc.Areas.Admin
             //更新数据库
             await XncfDatabaseDbContext.MigrateOnInstallAsync(serviceProvider, this);
 
-            XncfModuleServiceExtension xncfModuleServiceExtension = serviceProvider.GetService<XncfModuleServiceExtension>();
-            var adminModule = xncfModuleServiceExtension.GetObject(z => z.Uid == this.Uid);
-            if (adminModule == null)
-            {
-                //只在未安装的情况下进行安装，InstallModuleAsync会访问到此方法，不做判断可能会引发死循环。
-                //常规模块中请勿在此方法中自动安装模块！
-                await xncfModuleServiceExtension.InstallModuleAsync(this.Uid).ConfigureAwait(false);
-            }
+            //XncfModuleServiceExtension xncfModuleServiceExtension = serviceProvider.GetService<XncfModuleServiceExtension>();
+            //var adminModule = xncfModuleServiceExtension.GetObject(z => z.Uid == this.Uid);
+            //if (adminModule == null)
+            //{
+            //    //只在未安装的情况下进行安装，InstallModuleAsync会访问到此方法，不做判断可能会引发死循环。
+            //    //常规模块中请勿在此方法中自动安装模块！
+            //    await xncfModuleServiceExtension.InstallModuleAsync(this.Uid).ConfigureAwait(false);
+            //}
 
             await base.InstallOrUpdateAsync(serviceProvider, installOrUpdate);
         }

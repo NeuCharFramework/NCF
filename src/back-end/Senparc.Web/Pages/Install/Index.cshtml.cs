@@ -92,16 +92,16 @@ namespace Senparc.Web.Pages.Install
             //安装模块
             if (installNow)
             {
-                var module = _xncfModuleService.GetObject(z => z.Uid == register.Uid);
-                if (module == null)
+                xncfModule = _xncfModuleService.GetObject(z => z.Uid == register.Uid);
+                if (xncfModule == null)
                 {
                     await _xncfModuleService.InstallModuleAsync(register.Uid);
-                    module = await _xncfModuleService.GetObjectAsync(z => z.Uid == register.Uid);
+                    xncfModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == register.Uid);
                 }
 
                 //启用模块
                 //xncfModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == register.Uid);
-                module.UpdateState(Ncf.Core.Enums.XncfModules_State.开放);
+                xncfModule.UpdateState(Ncf.Core.Enums.XncfModules_State.开放);
             }
 
             if (addMenu)
@@ -111,6 +111,87 @@ namespace Senparc.Web.Pages.Install
             }
 
             return xncfModule;
+        }
+
+        /// <summary>
+        /// 初始化安装系统
+        /// </summary>
+        /// <returns></returns>
+        private async Task InitSystemAsync()
+        {
+            //Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
+
+            Senparc.Xncf.SystemCore.Register systemCoreRegister = new Senparc.Xncf.SystemCore.Register();
+
+            Senparc.Xncf.SystemManager.Register systemManagerRegister = new Senparc.Xncf.SystemManager.Register();
+
+            Senparc.Xncf.SystemPermission.Register systemPermissionRegister = new Senparc.Xncf.SystemPermission.Register();
+
+            Senparc.Xncf.XncfModuleManager.Register xncfModuleManagerRegister = new Senparc.Xncf.XncfModuleManager.Register();
+
+            Senparc.Xncf.Menu.Register menuRegister = new Senparc.Xncf.Menu.Register();
+
+            {
+                await InitDatabaseAsync(() => systemCoreRegister.InitDatabase(_serviceProvider));//TODO：目前实际已无效，不会构建任何数据库代码，此处仅作占位
+
+                //await InitDatabaseAsync(() => systemManagerRegister.InitDatabase(_serviceProvider));
+                //await InitDatabaseAsync(() => systemPermissionRegister.InitDatabase(_serviceProvider));
+                //await InitDatabaseAsync(() => xncfModuleManagerRegister.InitDatabase(_serviceProvider));
+                //await InitDatabaseAsync(() => menuRegister.InitDatabase(_serviceProvider));
+
+
+                //开始安装权限模块
+                //（必须放在第一个，其他模块操作都需要依赖此模块）
+                await InstallAndOpenModule(systemPermissionRegister, installNow: false, addMenu: false);
+
+                //开始安装菜单管理模块
+                //（必须放在第二个，其他模块操作都需要依赖此模块）
+                await InstallAndOpenModule(menuRegister, installNow: false, addMenu: false);
+                _sysMenuService.Init();
+
+                //开始安装模块理管理模块
+                //（必须放在第三个，其他模块操作都需要依赖此模块）
+                await InstallAndOpenModule(xncfModuleManagerRegister);
+
+                //开始安装系统基础模块
+                await InstallAndOpenModule(systemCoreRegister);
+
+                //开始安装系统管理管理模块
+                await InstallAndOpenModule(systemManagerRegister);
+
+
+                //将权限模块进行安装
+                await _xncfModuleService.InstallModuleAsync(systemPermissionRegister.Uid);
+                await _xncfModuleService.InstallMenuAsync(systemPermissionRegister, Ncf.Core.Enums.InstallOrUpdate.Install);
+
+                //将菜单模块进行安装
+                await _xncfModuleService.InstallModuleAsync(menuRegister.Uid);
+                await _xncfModuleService.InstallMenuAsync(menuRegister, Ncf.Core.Enums.InstallOrUpdate.Install);
+
+            }
+
+            //TODO:选择性安装用户自定义模块
+
+            {
+                //开始安装并启用系统模块（Admin）
+                Senparc.Areas.Admin.Register adminRegister = new Areas.Admin.Register();
+                var adminModule = await InstallAndOpenModule(adminRegister);
+                //确保已被赋值
+                adminModule ??= await _xncfModuleService.GetObjectAsync(z => z.Uid == adminRegister.Uid);
+
+                //一次性保存（所有）修改
+                await _xncfModuleService.SaveObjectAsync(adminModule).ConfigureAwait(false);
+
+                _systemConfigService.Init();//初始化系统信息
+            }
+
+            {
+                //开始安装用户模块（如有）  TODO:选择性安装
+
+            }
+
+            //((SenparcEntities)_accountInfoService.BaseData.BaseDB.BaseDataContext).ResetMigrate();//重置合并状态
+            //((SenparcEntities)_accountInfoService.BaseData.BaseDB.BaseDataContext).Migrate();//进行合并
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -146,18 +227,6 @@ namespace Senparc.Web.Pages.Install
                 Console.WriteLine("开始初始化");
 
                 {
-                    //Senparc.Service.Register serviceRegister = new Service.Register();
-                    Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
-
-                    Senparc.Xncf.SystemCore.Register systemCoreRegister = new Senparc.Xncf.SystemCore.Register();
-
-                    Senparc.Xncf.SystemManager.Register systemManagerRegister = new Senparc.Xncf.SystemManager.Register();
-
-                    Senparc.Xncf.SystemPermission.Register systemPermissionRegister = new Senparc.Xncf.SystemPermission.Register();
-
-                    Senparc.Xncf.XncfModuleManager.Register xncfModuleManagerRegister = new Senparc.Xncf.XncfModuleManager.Register();
-
-                    Senparc.Xncf.Menu.Register menuRegister = new Senparc.Xncf.Menu.Register();
 
                     //添加初始化多租户信息
                     if (SiteConfig.SenparcCoreSetting.EnableMultiTenant)
@@ -170,6 +239,7 @@ namespace Senparc.Web.Pages.Install
                             //var (initDbSuccess, initDbMsg) = await systemCoreRegister.InitDatabase(_serviceProvider/*, _tenantInfoService, *//*_httpContextAccessor.Value.HttpContext*/);
 
                             //安装多租户
+                            Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
                             await tenantRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
 
                             var tenantInfo = await _tenantInfoService.CreateInitTenantInfoAsync(httpContext);
@@ -191,69 +261,17 @@ namespace Senparc.Web.Pages.Install
                         }
                     }
 
-                    //SystemConfig、租户等
-                    await InitDatabaseAsync(() => systemCoreRegister.InitDatabase(_serviceProvider));
-                    //await InitDatabaseAsync(() => systemManagerRegister.InitDatabase(_serviceProvider));
-                    //await InitDatabaseAsync(() => systemPermissionRegister.InitDatabase(_serviceProvider));
-                    //await InitDatabaseAsync(() => xncfModuleManagerRegister.InitDatabase(_serviceProvider));
-                    //await InitDatabaseAsync(() => menuRegister.InitDatabase(_serviceProvider));
-
-
-                    //开始安装权限模块
-                    //（必须放在第一个，其他模块操作都需要依赖此模块）
-                    await InstallAndOpenModule(systemPermissionRegister, installNow: false, addMenu: false);
-
-                    //开始安装菜单管理模块
-                    //（必须放在第二个，其他模块操作都需要依赖此模块）
-                    await InstallAndOpenModule(menuRegister, installNow: false, addMenu: false);
-                    _sysMenuService.Init();
-
-                    //开始安装模块理管理模块
-                    //（必须放在第三个，其他模块操作都需要依赖此模块）
-                    await InstallAndOpenModule(xncfModuleManagerRegister);
-
-                    //开始安装系统基础模块
-                    await InstallAndOpenModule(systemCoreRegister);
-
-                    //开始安装系统管理管理模块
-                    await InstallAndOpenModule(systemManagerRegister);
-
-
-                    //将权限模块进行安装
-                    await _xncfModuleService.InstallModuleAsync(systemPermissionRegister.Uid);
-                    await _xncfModuleService.InstallMenuAsync(systemPermissionRegister, Ncf.Core.Enums.InstallOrUpdate.Install);
-
-                    //将菜单模块进行安装
-                    await _xncfModuleService.InstallModuleAsync(menuRegister.Uid);
-                    await _xncfModuleService.InstallMenuAsync(menuRegister, Ncf.Core.Enums.InstallOrUpdate.Install);
-
-
-                }
-
-                //TODO:选择性安装用户自定义模块
-
-                {
-                    //开始安装并启用系统模块（Admin）
                     Senparc.Areas.Admin.Register adminRegister = new Areas.Admin.Register();
-                    var adminModule = await InstallAndOpenModule(adminRegister);
-
-                    //一次性保存（所有）修改
-                    await _xncfModuleService.SaveObjectAsync(adminModule).ConfigureAwait(false);
+                    var adminModule = await InstallAndOpenModule(adminRegister, installNow: false, addMenu: false);
                 }
 
-                {
-                    //开始安装用户模块（如有）  TODO:选择性安装
-
-                }
-
-                //((SenparcEntities)_accountInfoService.BaseData.BaseDB.BaseDataContext).ResetMigrate();//重置合并状态
-                //((SenparcEntities)_accountInfoService.BaseData.BaseDB.BaseDataContext).Migrate();//进行合并
                 return Page();
             }
 
             //base.Response.StatusCode = 404;
             return new StatusCodeResult(404);//已经安装完毕，且存在管理员则不进行安装
         }
+
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -286,11 +304,11 @@ namespace Senparc.Web.Pages.Install
                     }
                 }
 
-                _systemConfigService.Init();//初始化系统信息
-                _sysMenuService.Init();
+                //进行系统初始化安装
+                await InitSystemAsync();
 
-                IXncfRegister systemRegister = XncfRegisterManager.RegisterList.First(z => z.GetType() == typeof(Senparc.Areas.Admin.Register));
-                await _xncfModuleService.InstallMenuAsync(systemRegister, Ncf.Core.Enums.InstallOrUpdate.Install);//安装菜单
+                //IXncfRegister systemRegister = XncfRegisterManager.RegisterList.First(z => z.GetType() == typeof(Senparc.Areas.Admin.Register));
+                //await _xncfModuleService.InstallMenuAsync(systemRegister, Ncf.Core.Enums.InstallOrUpdate.Install);//安装菜单
 
                 AdminUserName = userName;
                 AdminPassword = password;//这里不可以使用 adminUserInfo.Password，因为此参数已经是加密信息
