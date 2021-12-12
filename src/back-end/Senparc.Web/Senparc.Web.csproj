@@ -53,7 +53,7 @@
 		<PackageReference Include="AutoMapper" Version="7.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.1.4.106-beta6" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.1.4.108-beta6" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.0.0" />
 		<PackageReference Include="Senparc.CO2NET" Version="2.0.0" />

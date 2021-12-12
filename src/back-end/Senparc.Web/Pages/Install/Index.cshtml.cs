@@ -96,7 +96,7 @@ namespace Senparc.Web.Pages.Install
                 xncfModule = _xncfModuleService.GetObject(z => z.Uid == register.Uid);
                 if (xncfModule == null)
                 {
-                    await _xncfModuleService.InstallModuleAsync(register.Uid);
+                    await _xncfModuleService.InstallModuleAsync(register.Uid, false);
                     xncfModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == register.Uid);
                 }
 
@@ -170,13 +170,8 @@ namespace Senparc.Web.Pages.Install
                 //将权限模块进行安装
                 await InstallAndOpenModuleAsync(systemPermissionRegister, true, true);
 
-                //await _xncfModuleService.InstallModuleAsync(systemPermissionRegister.Uid);
-                //await _xncfModuleService.InstallMenuAsync(systemPermissionRegister, Ncf.Core.Enums.InstallOrUpdate.Install);
-
                 //将菜单模块进行安装
                 await InstallAndOpenModuleAsync(menuRegister, true, true);
-                //await _xncfModuleService.InstallModuleAsync(menuRegister.Uid);
-                //await _xncfModuleService.InstallMenuAsync(menuRegister, Ncf.Core.Enums.InstallOrUpdate.Install);
 
             }
 
