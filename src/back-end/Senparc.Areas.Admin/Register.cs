@@ -48,7 +48,7 @@ namespace Senparc.Areas.Admin
 
         public override string Name => "NeuCharFramework.Admin";
 
-        public override string Uid => SiteConfig.SYSTEM_XNCF_MODULE_AREAS_ADMIN_UID;// "00000000-0000-0000-0000-000000000002";
+        public override string Uid => SiteConfig.SYSTEM_XNCF_MODULE_AREAS_ADMIN_UID;// "00000000-0000-0001-0001-000000000001";
 
         public override string Version => "0.3.0-beta4";
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Senparc.Areas.Admin.Domain;
+using Senparc.CO2NET.Cache;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
@@ -167,12 +168,15 @@ namespace Senparc.Web.Pages.Install
 
 
                 //将权限模块进行安装
-                await _xncfModuleService.InstallModuleAsync(systemPermissionRegister.Uid);
-                await _xncfModuleService.InstallMenuAsync(systemPermissionRegister, Ncf.Core.Enums.InstallOrUpdate.Install);
+                await InstallAndOpenModuleAsync(systemPermissionRegister, true, true);
+
+                //await _xncfModuleService.InstallModuleAsync(systemPermissionRegister.Uid);
+                //await _xncfModuleService.InstallMenuAsync(systemPermissionRegister, Ncf.Core.Enums.InstallOrUpdate.Install);
 
                 //将菜单模块进行安装
-                await _xncfModuleService.InstallModuleAsync(menuRegister.Uid);
-                await _xncfModuleService.InstallMenuAsync(menuRegister, Ncf.Core.Enums.InstallOrUpdate.Install);
+                await InstallAndOpenModuleAsync(menuRegister, true, true);
+                //await _xncfModuleService.InstallModuleAsync(menuRegister.Uid);
+                //await _xncfModuleService.InstallMenuAsync(menuRegister, Ncf.Core.Enums.InstallOrUpdate.Install);
 
             }
 
@@ -278,48 +282,51 @@ namespace Senparc.Web.Pages.Install
             return new StatusCodeResult(404);//已经安装完毕，且存在管理员则不进行安装
         }
 
-
         public async Task<IActionResult> OnPostAsync()
         {
-            var adminUserInfo = _accountInfoService.Init(out string userName, out string password);//初始化管理员信息
-
-            if (adminUserInfo == null)
+            var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
+            using (var cacheLock = await cacheStrategy.BeginCacheLockAsync("Install", "OnPostAsync"))
             {
-                return new StatusCodeResult(404);
-            }
-            else
-            {
-                Step = 1;
+                var adminUserInfo = _accountInfoService.Init(out string userName, out string password);//初始化管理员信息
 
-                //添加初始化多租户信息
-                if (SiteConfig.SenparcCoreSetting.EnableMultiTenant)
+                if (adminUserInfo == null)
                 {
-                    var httpContext = _httpContextAccessor.Value.HttpContext;
-                    try
-                    {
-                        //var tenantInfo = await _tenantInfoService.CreateInitTenantInfoAsync(httpContext);
-
-                        CreatedRequestTenantInfo = await _tenantInfoService.SetScopedRequestTenantInfoAsync(httpContext);
-                        TenantInfoDto = _tenantInfoService.Mapper.Map<TenantInfoDto>(await _tenantInfoService.GetObjectAsync(z => z.Id == CreatedRequestTenantInfo.Id));
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    finally
-                    {
-                    }
+                    return new StatusCodeResult(404);
                 }
+                else
+                {
+                    Step = 1;
 
-                //进行系统初始化安装
-                await InitSystemAsync();
+                    //添加初始化多租户信息
+                    if (SiteConfig.SenparcCoreSetting.EnableMultiTenant)
+                    {
+                        var httpContext = _httpContextAccessor.Value.HttpContext;
+                        try
+                        {
+                            //var tenantInfo = await _tenantInfoService.CreateInitTenantInfoAsync(httpContext);
 
-                //IXncfRegister systemRegister = XncfRegisterManager.RegisterList.First(z => z.GetType() == typeof(Senparc.Areas.Admin.Register));
-                //await _xncfModuleService.InstallMenuAsync(systemRegister, Ncf.Core.Enums.InstallOrUpdate.Install);//安装菜单
+                            CreatedRequestTenantInfo = await _tenantInfoService.SetScopedRequestTenantInfoAsync(httpContext);
+                            TenantInfoDto = _tenantInfoService.Mapper.Map<TenantInfoDto>(await _tenantInfoService.GetObjectAsync(z => z.Id == CreatedRequestTenantInfo.Id));
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        finally
+                        {
+                        }
+                    }
 
-                AdminUserName = userName;
-                AdminPassword = password;//这里不可以使用 adminUserInfo.Password，因为此参数已经是加密信息
+                    //进行系统初始化安装
+                    await InitSystemAsync();
 
-                return Page();
+                    //IXncfRegister systemRegister = XncfRegisterManager.RegisterList.First(z => z.GetType() == typeof(Senparc.Areas.Admin.Register));
+                    //await _xncfModuleService.InstallMenuAsync(systemRegister, Ncf.Core.Enums.InstallOrUpdate.Install);//安装菜单
+
+                    AdminUserName = userName;
+                    AdminPassword = password;//这里不可以使用 adminUserInfo.Password，因为此参数已经是加密信息
+
+                    return Page();
+                }
             }
         }
     }
