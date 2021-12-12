@@ -53,13 +53,13 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
 		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="1.0.0" />
 		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="4.0.0" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.9.3-beta6" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.9.6.2-beta6" />
-		<PackageReference Include="Senparc.Ncf.Log" Version="0.9.3-beta6" />
-		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.9.3-beta6" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.9.3-beta6" />
-		<PackageReference Include="Senparc.Ncf.Utility" Version="0.9.3-beta6" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.9.3.6-beta6" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.9.3.1-beta6" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.9.6.5-beta6" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.9.3.1-beta6" />
+		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.9.3.1-beta6" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.9.3.4-beta6" />
+		<PackageReference Include="Senparc.Ncf.Utility" Version="0.9.3.1-beta6" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.9.3.7-beta6" />
 
 
 		<!--<PackageReference Include="Senparc.Weixin" Version="6.13.0" />
@@ -69,9 +69,9 @@
 
 		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
 		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.1.3.4-beta6" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.1.4.4-beta6" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.1.4.8-beta6" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.1.3.5-beta6" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.1.4.6-beta6" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.1.4.100-beta6" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -36,12 +36,12 @@
 		<PackageReference Include="Senparc.CO2NET.WebApi" Version="1.1.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
 		<!--为了兼容部分数据库迁移文件仍然有依赖的情况-->
-		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.9.10-beta6" />
+		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.9.10.1-beta6" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.9.3.6-beta6" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.9.3-beta6" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.9.3.7-beta6" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.9.3.1-beta6" />
 		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
 		<None Include="App_Data\SenparcTraceLog\*" />
 	</ItemGroup>
