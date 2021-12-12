@@ -2,10 +2,12 @@
 using Senparc.Xncf.Accounts.Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Senparc.Xncf.Accounts.Domain.Models
 {
     [Serializable]
+    [Table("AccountPayLogs")]
     public partial class AccountPayLog : EntityBase<int>
     {
         public AccountPayLog()

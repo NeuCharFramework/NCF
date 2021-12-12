@@ -4,10 +4,12 @@ using Senparc.Xncf.Accounts.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Senparc.Xncf.Accounts.Domain.Models
 {
     [Serializable]
+    [Table("Accounts")]
     public partial class Account : EntityBase<int>
     {
         public Account()

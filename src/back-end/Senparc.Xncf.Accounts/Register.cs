@@ -42,9 +42,9 @@ namespace Senparc.Xncf.Accounts
             {
                 case InstallOrUpdate.Install:
                     //新安装
-            #region 初始化数据库数据
+                    #region 初始化数据库数据
 
-            #endregion
+                    #endregion
                     break;
                 case InstallOrUpdate.Update:
                     //更新

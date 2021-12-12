@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Senparc.Xncf.Accounts.Domain.Models
 {
     [Serializable]
+    [Table("PointsLogs")]
     public partial class PointsLog : EntityBase<int>
     {
         public int AccountId { get; set; }

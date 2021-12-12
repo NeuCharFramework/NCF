@@ -82,7 +82,7 @@ namespace Senparc.Web.Pages.Install
             }
         }
 
-        private async Task<XncfModule> InstallAndOpenModule(IXncfRegister register, bool installNow = true, bool addMenu = true)
+        private async Task<XncfModule> InstallAndOpenModuleAsync(IXncfRegister register, bool installNow = true, bool addMenu = true)
         {
             //开始安装模块
             await register.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
@@ -119,7 +119,7 @@ namespace Senparc.Web.Pages.Install
         /// <returns></returns>
         private async Task InitSystemAsync()
         {
-            //Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
+            Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
 
             Senparc.Xncf.SystemCore.Register systemCoreRegister = new Senparc.Xncf.SystemCore.Register();
 
@@ -142,22 +142,28 @@ namespace Senparc.Web.Pages.Install
 
                 //开始安装权限模块
                 //（必须放在第一个，其他模块操作都需要依赖此模块）
-                await InstallAndOpenModule(systemPermissionRegister, installNow: false, addMenu: false);
+                await InstallAndOpenModuleAsync(systemPermissionRegister, installNow: false, addMenu: false);
 
                 //开始安装菜单管理模块
                 //（必须放在第二个，其他模块操作都需要依赖此模块）
-                await InstallAndOpenModule(menuRegister, installNow: false, addMenu: false);
+                await InstallAndOpenModuleAsync(menuRegister, installNow: false, addMenu: false);
                 _sysMenuService.Init();
 
                 //开始安装模块理管理模块
                 //（必须放在第三个，其他模块操作都需要依赖此模块）
-                await InstallAndOpenModule(xncfModuleManagerRegister);
+                await InstallAndOpenModuleAsync(xncfModuleManagerRegister);
 
                 //开始安装系统基础模块
-                await InstallAndOpenModule(systemCoreRegister);
+                await InstallAndOpenModuleAsync(systemCoreRegister);
 
                 //开始安装系统管理管理模块
-                await InstallAndOpenModule(systemManagerRegister);
+                await InstallAndOpenModuleAsync(systemManagerRegister);
+
+                //安装租户模块
+                if (Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.EnableMultiTenant)
+                {
+                    await InstallAndOpenModuleAsync(tenantRegister);
+                }
 
 
                 //将权限模块进行安装
@@ -175,7 +181,7 @@ namespace Senparc.Web.Pages.Install
             {
                 //开始安装并启用系统模块（Admin）
                 Senparc.Areas.Admin.Register adminRegister = new Areas.Admin.Register();
-                var adminModule = await InstallAndOpenModule(adminRegister);
+                var adminModule = await InstallAndOpenModuleAsync(adminRegister);
                 //确保已被赋值
                 adminModule ??= await _xncfModuleService.GetObjectAsync(z => z.Uid == adminRegister.Uid);
 
@@ -262,7 +268,7 @@ namespace Senparc.Web.Pages.Install
                     }
 
                     Senparc.Areas.Admin.Register adminRegister = new Areas.Admin.Register();
-                    var adminModule = await InstallAndOpenModule(adminRegister, installNow: false, addMenu: false);
+                    var adminModule = await InstallAndOpenModuleAsync(adminRegister, installNow: false, addMenu: false);
                 }
 
                 return Page();
