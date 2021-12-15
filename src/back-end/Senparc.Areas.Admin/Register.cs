@@ -5,6 +5,7 @@
  * 如果需要学习扩展模块，请参考 【Senparc.ExtensionAreaTemplate】 项目的 Register.cs 文件！
  */
 
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -256,5 +257,11 @@ namespace Senparc.Areas.Admin
         //#region IXncfRazorRuntimeCompilation 接口
         //public string LibraryPath => Path.GetFullPath(Path.Combine(SiteConfig.WebRootPath, "..", "..", "Senparc.Areas.Admin"));
         //#endregion
+
+        public override void OnAutoMapMapping(IServiceCollection services, IConfiguration configuration)
+        {
+            base.OnAutoMapMapping(services, configuration);
+            services.AddAutoMapper(z => z.AddProfile<AutoMpperProfiles.SenparcAreaAdminAutoMapperProfile>());
+        }
     }
 }

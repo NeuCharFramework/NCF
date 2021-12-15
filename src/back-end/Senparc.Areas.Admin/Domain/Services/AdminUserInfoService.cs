@@ -159,6 +159,20 @@ namespace Senparc.Areas.Admin.Domain
         }
 
         /// <summary>
+        /// 创建管理员
+        /// </summary>
+        /// <param name="objDto"></param>
+        /// <returns></returns>
+        public async Task<AdminUserInfo> CreateAdminUserInfoAsync(CreateOrUpdate_AdminUserInfoDto objDto)
+        {
+            string userName = objDto.UserName;
+            string password = objDto.Password;
+            var obj = new AdminUserInfo(ref userName, ref password, null, null, objDto.Note);
+            await SaveObjectAsync(obj);
+            return obj;
+        }
+
+        /// <summary>
         /// 更新用户信息
         /// </summary>
         /// <param name="objDto"></param>
