@@ -44,7 +44,7 @@ namespace Senparc.Web
             XmlConfigurator.Configure(repository, new FileInfo("log4net.config"));
 
             //激活 Xncf 扩展引擎（必须）
-            var logMsg = services.StartEngine(configuration);
+            var logMsg = services.StartWebEngine(configuration,env);//如果不需要启用 Areas，可以只使用 services.StartEngine() 方法
             Console.WriteLine("============ logMsg =============");
             Console.WriteLine(logMsg);
             Console.WriteLine("============ logMsg END =============");

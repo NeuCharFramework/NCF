@@ -12,6 +12,7 @@ using Senparc.Xncf.Accounts.Domain.Models;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.XncfBase.Database;
+using Microsoft.Extensions.Hosting;
 
 namespace Senparc.Xncf.Accounts
 {
@@ -72,7 +73,7 @@ namespace Senparc.Xncf.Accounts
         }
         #endregion
 
-        public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration)
+        public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
         {
             //注册 User 登录策略
             services.AddAuthorization(options =>
@@ -83,7 +84,7 @@ namespace Senparc.Xncf.Accounts
                 });
             });
 
-            return base.AddXncfModule(services, configuration);
+            return base.AddXncfModule(services, configuration, env);
         }
     }
 }

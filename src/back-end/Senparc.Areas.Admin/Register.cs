@@ -95,7 +95,7 @@ namespace Senparc.Areas.Admin
         }
 
 
-        public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration)
+        public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
         {
             //Attributes
             services.AddScoped<AuthenticationResultFilterAttribute>();
@@ -119,7 +119,7 @@ namespace Senparc.Areas.Admin
             AddJwtAuthentication(services, configuration);
 
 
-            return base.AddXncfModule(services, configuration);
+            return base.AddXncfModule(services, configuration, env);
         }
 
 
