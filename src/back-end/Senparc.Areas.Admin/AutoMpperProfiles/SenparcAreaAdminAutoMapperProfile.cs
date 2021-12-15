@@ -13,7 +13,7 @@ namespace Senparc.Areas.Admin.AutoMpperProfiles
     {
         public SenparcAreaAdminAutoMapperProfile()
         {
-            CreateMap<AdminUserInfo_CreateRequest, CreateOrUpdate_AdminUserInfoDto>();
+            CreateMap<AdminUserInfo_CreateOrUpdateRequest, CreateOrUpdate_AdminUserInfoDto>();
         }
     }
 }

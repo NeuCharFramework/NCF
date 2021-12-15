@@ -18,7 +18,7 @@ namespace Senparc.Areas.Admin.OHS.PL
     /// <summary>
     /// 管理员新增
     /// </summary>
-    public class AdminUserInfo_CreateRequest : IValidatableObject
+    public class AdminUserInfo_CreateOrUpdateRequest : IValidatableObject
     {
         /// <summary>
         /// 用户名

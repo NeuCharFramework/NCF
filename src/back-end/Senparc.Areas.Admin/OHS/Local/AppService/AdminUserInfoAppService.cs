@@ -24,6 +24,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         }
 
         [ApiBind]
+        [BackendJwtAuthorize]
         public async Task<AppResponseBase<AdminUserInfo_GetListResponse>> GetList(int pageIndex, int pageSize)
         {
             return await this.GetResponseAsync<AppResponseBase<AdminUserInfo_GetListResponse>, AdminUserInfo_GetListResponse>(async (response, logger) =>
@@ -38,19 +39,39 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             });
         }
 
-
         /// <summary>
         /// 创建管理员
         /// </summary>
         /// <param name="request">管理员创建请求</param>
         /// <returns></returns>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post, BaseApiControllerType = typeof(TempApiBaseController))]
-        public async Task<AppResponseBase<AdminUserInfo_CreateResponse>> Create(AdminUserInfo_CreateRequest request)
+        [BackendJwtAuthorize]
+        public async Task<AppResponseBase<AdminUserInfo_CreateResponse>> Create(AdminUserInfo_CreateOrUpdateRequest request)
         {
             return await this.GetResponseAsync<AppResponseBase<AdminUserInfo_CreateResponse>, AdminUserInfo_CreateResponse>(async (response, logger) =>
             {
                 var dto = _mapper.Map<CreateOrUpdate_AdminUserInfoDto>(request);
                 var adminUserInfo = await _adminUserInfoService.CreateAdminUserInfoAsync(dto);
+                return new AdminUserInfo_CreateResponse()
+                {
+                    AdminUserInfoId = adminUserInfo.Id
+                };
+            });
+        }
+
+        /// <summary>
+        /// 修改管理员
+        /// </summary>
+        /// <param name="request">管理员创建请求</param>
+        /// <returns></returns>
+        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Put, BaseApiControllerType = typeof(TempApiBaseController))]
+        [BackendJwtAuthorize]
+        public async Task<AppResponseBase<AdminUserInfo_CreateResponse>> Update(AdminUserInfo_CreateOrUpdateRequest request)
+        {
+            return await this.GetResponseAsync<AppResponseBase<AdminUserInfo_CreateResponse>, AdminUserInfo_CreateResponse>(async (response, logger) =>
+            {
+                var dto = _mapper.Map<CreateOrUpdate_AdminUserInfoDto>(request);
+                var adminUserInfo = await _adminUserInfoService.UpdateAdminUserInfoAsync(dto);
                 return new AdminUserInfo_CreateResponse()
                 {
                     AdminUserInfoId = adminUserInfo.Id

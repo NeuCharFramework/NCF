@@ -171,6 +171,23 @@ namespace Senparc.Areas.Admin.Domain
         }
 
         /// <summary>
+        /// 创建管理员
+        /// </summary>
+        /// <param name="objDto"></param>
+        /// <returns></returns>
+        public async Task<AdminUserInfo> UpdateAdminUserInfoAsync(CreateOrUpdate_AdminUserInfoDto objDto)
+        {
+            var obj = this.GetObject(z => z.Id == objDto.Id);
+            if (obj == null)
+            {
+                throw new Exception("用户信息不存在！");
+            }
+            obj.UpdateObject(objDto);
+            await SaveObjectAsync(obj);
+            return obj;
+        }
+
+        /// <summary>
         /// 更新用户信息
         /// </summary>
         /// <param name="objDto"></param>
