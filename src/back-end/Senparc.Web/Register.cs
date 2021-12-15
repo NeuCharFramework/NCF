@@ -43,13 +43,6 @@ namespace Senparc.Web
             var repository = LogManager.CreateRepository("NETCoreRepository");
             XmlConfigurator.Configure(repository, new FileInfo("log4net.config"));
 
-            //提供网站根目录
-            if (env.ContentRootPath != null)
-            {
-                SiteConfig.ApplicationPath = env.ContentRootPath;
-                SiteConfig.WebRootPath = env.WebRootPath;
-            }
-
             //激活 Xncf 扩展引擎（必须）
             var logMsg = services.StartEngine(configuration);
             Console.WriteLine("============ logMsg =============");
@@ -91,8 +84,6 @@ namespace Senparc.Web
                     #region 注册日志（按需，建议）
 
                     globalRegister.RegisterTraceLog(ConfigTraceLog); //配置TraceLog
-
-                    #endregion
 
                     #endregion
                 });
