@@ -127,7 +127,7 @@ namespace Senparc.Web
               .AddRazorPagesOptions(options =>
               {
                   //自动注册  防止跨站请求伪造（XSRF/CSRF）攻击
-                  options.Conventions.Add(new Core.Conventions.AutoValidateAntiForgeryTokenModelConvention());
+                  //options.Conventions.Add(new Core.Conventions.AutoValidateAntiForgeryTokenModelConvention());
               });
 
 #if DEBUG

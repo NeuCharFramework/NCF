@@ -42,7 +42,6 @@
 	<ItemGroup>
 		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.10.0-beta7" />
 		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.10.0-beta7" />
-		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
 		<None Include="App_Data\SenparcTraceLog\*" />
 	</ItemGroup>
 

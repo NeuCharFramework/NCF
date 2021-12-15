@@ -5,35 +5,20 @@
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
+using Microsoft.Extensions.DependencyInjection;
 using Senparc.CO2NET;
-using Senparc.CO2NET.Extensions;
-using Senparc.CO2NET.HttpUtility;
-using Senparc.Core.Models;
-using Senparc.Service.ACL;
-using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Extensions;
 using Senparc.Ncf.Core.Utility;
 using Senparc.Ncf.Log;
+using Senparc.Ncf.Service;
+using Senparc.Service.ACL;
+using Senparc.Xncf.Accounts.Domain.Cache;
+using Senparc.Xncf.Accounts.Domain.Models;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Security.Claims;
-using Senparc.Ncf.Service;
-using Senparc.Xncf.Accounts.Domain.OperationQueue;
-using Microsoft.Extensions.DependencyInjection;
-using Senparc.Xncf.Accounts.Domain.Models;
-using Senparc.Xncf.Accounts.Domain.Cache;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
-using Senparc.Core;
 //using System.IdentityModel.Tokens.Jwt;
 //using Microsoft.IdentityModel.Tokens;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using Senparc.Ncf.Core.Models;
-using Senparc.Service;
 
 namespace Senparc.Xncf.Accounts.Domain.Services
 {

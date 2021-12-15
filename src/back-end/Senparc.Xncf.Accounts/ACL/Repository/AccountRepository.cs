@@ -1,5 +1,4 @@
-﻿using Senparc.Core.Models;
-using Senparc.Xncf.Accounts.Domain.Models;
+﻿using Senparc.Xncf.Accounts.Domain.Models;
 using Senparc.Ncf.Repository;
 using Senparc.Ncf.Core.Models;
 

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Senparc.Core
+namespace Senparc.Areas.Admin
 {
     /// <summary>
     /// 权限认证

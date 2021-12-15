@@ -75,10 +75,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <Folder Include="Domain\Dto\Base\" />
 	</ItemGroup>
 

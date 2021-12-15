@@ -1,4 +1,4 @@
-﻿namespace Senparc.Core
+﻿namespace Senparc.Areas.Admin
 {
     public class JwtSettings
     {
