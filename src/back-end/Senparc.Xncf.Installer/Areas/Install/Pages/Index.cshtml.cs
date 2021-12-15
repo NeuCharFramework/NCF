@@ -16,8 +16,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Senparc.Web.Pages.Install
+namespace Senparc.Xncf.Instraller.Pages
 {
+    [IgnoreAntiforgeryToken]
     public class IndexModel : PageModel //不使用基类，因为无法通过已安装程序自动检测
     {
         private readonly XncfModuleServiceExtension _xncfModuleService;

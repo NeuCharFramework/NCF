@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>NCF 安装</title>
+    <title>NCF 安装 v @Senparc.Ncf.Core.Config.SiteConfig.VERSION</title>
     <style>
 
         body, a {
@@ -120,7 +120,7 @@
                     }
                 </p>
 
-                <form method="post" id="install_form">
+                <form method="post" @*action="/Install/Index"*@ id="install_form">
                     <a href="javascript:void(0);" onclick="return submit()" class="option_block" id="btnInstall">立即安装</a>
                     <p class="install_notice red">注意：安装完成后此页面将失效！</p>
                 </form>
@@ -142,7 +142,7 @@
                     <p>管理员密码：<strong>@Model.AdminPassword</strong></p>
 
                     <p>注意：本页面已经失效，请保存好管理员账号及密码，密码无法找回明文！</p>
-                    <p class="center">&gt; <a asp-page="/Index" asp-area="Admin" target="_blank">点击这里登录</a> &lt;</p>
+                    <p class="center">&gt; <a @*asp-page="/Index" asp-area="Admin"*@ href="/Admin" target="_blank">点击这里登录管理员后台</a> &lt;</p>
                 </div>
                 break;
             default:

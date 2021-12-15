@@ -58,7 +58,6 @@
 		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Areas\Admin\" />
 		<Folder Include="Domain\Models\DatabaseModel\Mapping\" />
 		<Folder Include="Domain\Models\MultipleDatabase\" />
 		<Folder Include="Domain\Services\" />

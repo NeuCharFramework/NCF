@@ -25,7 +25,7 @@ namespace Senparc.Web.Pages
             //判断是否需要自动进入到安装程序
             if (base.FullSystemConfig == null)
             {
-                return new RedirectResult("/Installer");
+                return new RedirectResult("/Install");
             }
             return Page();
         }
