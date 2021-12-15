@@ -18,7 +18,6 @@ using Microsoft.Extensions.Hosting;
 using Senparc.Areas.Admin.Domain.Models;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Trace;
-using Senparc.Core.Models;
 using Senparc.Ncf.AreaBase.Admin.Filters;
 using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Config;

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using Senparc.Core.Models;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Extensions;
 using Senparc.Ncf.Core.Models;
@@ -13,7 +12,6 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
-using Senparc.Core;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;

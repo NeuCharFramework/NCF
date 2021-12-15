@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Senparc.Core.Models;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.XncfBase.Database;

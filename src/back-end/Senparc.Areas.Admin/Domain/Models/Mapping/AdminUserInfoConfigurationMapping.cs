@@ -4,7 +4,7 @@ using Senparc.Areas.Admin.Domain.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.XncfBase.Attributes;
 
-namespace Senparc.Core.Models
+namespace Senparc.Areas.Admin.Models
 {
     [XncfAutoConfigurationMapping]
     public class AdminUserInfoConfigurationMapping : ConfigurationMappingWithIdBase<AdminUserInfo, int>
