@@ -52,9 +52,7 @@ namespace Senparc.Xncf.Instraller.Pages
         public RequestTenantInfo CreatedRequestTenantInfo { get; set; }
         public TenantInfoDto TenantInfoDto { get; private set; }
         public TenantRule TenantRule { get; set; }
-
         public bool MultiTenantEnable { get; set; }
-
 
         public IndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleService, AdminUserInfoService accountService,
             SystemConfigService systemConfigService, SysMenuService sysMenuService, TenantInfoService tenantInfoService, Lazy<IHttpContextAccessor> httpContextAccessor)
