@@ -7,9 +7,8 @@
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -25,7 +24,6 @@ using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.XncfBase;
 using Senparc.Ncf.XncfBase.Database;
-using Senparc.Xncf.XncfModuleManager.Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,21 +55,6 @@ namespace Senparc.Areas.Admin
 
         public override string Description => "这是管理员后台模块，用于 NCF 系统后台的自我管理，请勿删除此模块。如果你实在忍不住，请务必做好数据备份。";
 
-
-        public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration)
-        {
-            //Attributes
-            services.AddScoped(typeof(AuthenticationResultFilterAttribute));
-            //services.AddScoped(typeof(AuthenticationAsyncPageFilterAttribute));
-
-            //AutoMap映射
-            base.AddAutoMapMapping(profile =>
-            {
-                profile.CreateMap<AdminUserInfo, CreateOrUpdate_AdminUserInfoDto>();
-            });
-
-            return base.AddXncfModule(services, configuration);
-        }
 
         public override async Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
         {
@@ -110,6 +93,35 @@ namespace Senparc.Areas.Admin
 
             await base.UninstallAsync(serviceProvider, unsinstallFunc);
         }
+
+
+        public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration)
+        {
+            //Attributes
+            services.AddScoped<AuthenticationResultFilterAttribute>();
+            //services.AddScoped(typeof(AuthenticationAsyncPageFilterAttribute));
+
+            services.Configure<JwtSettings>(JwtSettings.Position_Backend, configuration.GetSection(JwtSettings.Position_Backend));// 配置管理后台jwt
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            //AutoMap映射
+            base.AddAutoMapMapping(profile =>
+            {
+                profile.CreateMap<AdminUserInfo, CreateOrUpdate_AdminUserInfoDto>();
+            });
+
+            AddJwtAuthentication(services, configuration);
+
+
+            return base.AddXncfModule(services, configuration);
+        }
+
 
         public override IApplicationBuilder UseXncfModule(IApplicationBuilder app, IRegisterService registerService)
         {
@@ -255,5 +267,46 @@ namespace Senparc.Areas.Admin
         //#region IXncfRazorRuntimeCompilation 接口
         //public string LibraryPath => Path.GetFullPath(Path.Combine(SiteConfig.WebRootPath, "..", "..", "Senparc.Areas.Admin"));
         //#endregion
+
+        /// <summary>
+        /// 添加前后端认证
+        /// </summary>
+        /// <param name="services"></param>
+        private void AddJwtAuthentication(IServiceCollection services, IConfiguration configuration)
+        {
+            JwtSettings backend = new JwtSettings();
+            configuration.Bind(JwtSettings.Position_Backend, backend);
+            services.AddAuthentication()
+                .AddJwtBearer(BackendJwtAuthorizeAttribute.AuthenticationScheme, options =>
+                {
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                    {
+                        ValidIssuer = backend.Issuer,
+                        ValidAudience = backend.Audience,
+                        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(backend.SecretKey)),
+                        ValidateIssuer = true, //whether or not valid Issuer
+                        ValidateAudience = true, //whether or not valid Audience
+                        ValidateLifetime = true, //whether or not valid out-of-service time
+                        ValidateIssuerSigningKey = true, //whether or not valid SecurityKey　　　　　　　　　　　
+                        ClockSkew = System.TimeSpan.Zero//Allowed server time offset
+                    };
+                })
+            //.AddJwtBearer(Core.ApiAttributes.JwtAuthorizeAttribute.AuthenticationScheme, options =>
+            //{
+            //    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+            //    {
+            //        ValidIssuer = miniPro.Issuer,
+            //        ValidAudience = miniPro.Audience,
+            //        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(miniPro.SecretKey)),
+            //        ValidateIssuer = true, //whether or not valid Issuer
+            //        ValidateAudience = true, //whether or not valid Audience
+            //        ValidateLifetime = true, //whether or not valid out-of-service time
+            //        ValidateIssuerSigningKey = true, //whether or not valid SecurityKey　　　　　　　　　　　
+            //        ClockSkew = System.TimeSpan.Zero//Allowed server time offset
+            //    };
+            //})
+            ;
+
+        }
     }
 }

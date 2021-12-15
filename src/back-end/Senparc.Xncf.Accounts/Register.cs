@@ -74,7 +74,15 @@ namespace Senparc.Xncf.Accounts
 
         public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddScoped<ColorAppService>();
+            //注册 User 登录策略
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("UserAnonymous", policy =>
+                {
+                    policy.RequireClaim("UserMember");
+                });
+            });
+
             return base.AddXncfModule(services, configuration);
         }
     }
