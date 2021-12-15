@@ -1,0 +1,157 @@
+﻿@page
+@model Senparc.Xncf.Instraller.Pages.IndexModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>NCF 安装 v @Senparc.Ncf.Core.Config.SiteConfig.VERSION</title>
+    <style>
+
+        body, a {
+            color: #535353;
+        }
+
+        h2 {
+            text-align: center;
+            color: #09c821;
+            margin: 30px 0px;
+        }
+
+        a {
+            text-decoration-line: underline;
+        }
+
+        .wrapper {
+            width: 50%;
+            margin: 50px auto;
+        }
+
+        #footer {
+            text-align: center;
+            position: absolute;
+            display: inline-block;
+            width: 50%;
+            bottom: 10%;
+            /*margin: 240px 0px 50px 0px;*/
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+            .logo img {
+                width: 280px;
+            }
+
+        a.option_block {
+            padding: 15px 20px;
+            border: 1px solid #940b91;
+            box-shadow: 0 0 15px #940b91;
+            margin: 30px auto;
+            clear: both;
+            overflow: hidden;
+            display: block;
+            width: 200px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+            a.option_block:hover {
+                background: #610f6a;
+                color: #ffffff;
+            }
+
+        .install_notice {
+            margin: 20px auto;
+            text-align: center;
+            color: #808080;
+            font-size: 80%;
+        }
+
+        .red {
+            color: red;
+        }
+    </style>
+    <script>
+        var installStarted = false;
+        function submit() {
+            if (installStarted) {
+                alert('安装已经在进行中，请等待');
+                return false;
+            }
+
+            if (!confirm('确定要开始安装吗？安装完成后此页面将失效！')) {
+                return false;
+            }
+
+            installStarted = true;
+
+            document.getElementById('install_form').submit();
+            document.getElementById('btnInstall').setAttribute('disabled', true);
+            document.getElementById('btnInstall').innerHTML = '安装已启动，请稍后……';
+
+            return true;
+        }
+
+
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="logo">
+            <img src="~/images/logo-login-ncf.png" />
+        </div>
+        @switch (Model.Step)
+        {
+            case 0:
+                <p class="install_notice">检测到系统未初始化，请进行安装！</p>
+                <p class="install_notice">当前数据库：@Model.MultipleDatabaseType</p>
+                <p class="install_notice">
+                    多租户状态：@(Model.MultiTenantEnable?"开启":"关闭")
+                    @if (Model.MultiTenantEnable)
+                    {
+                        <text>，规则：@Model.TenantRule</text>
+                    }
+                </p>
+
+                <form method="post" @*action="/Install/Index"*@ id="install_form">
+                    <a href="javascript:void(0);" onclick="return submit()" class="option_block" id="btnInstall">立即安装</a>
+                    <p class="install_notice red">注意：安装完成后此页面将失效！</p>
+                </form>
+                break;
+            case 1:
+                <h2>NeuCharFramework<br />初始化安装成功！</h2>
+                <div>
+                    @if (Model.MultiTenantEnable)
+                    {
+                        <p>
+                            当前租户已创建，名称：<strong>@Model.TenantInfoDto.Name</strong>，
+                            匹配规则：<strong>@Model.TenantRule</strong>，
+                            关键匹配条件：<strong>@Model.TenantInfoDto.TenantKey</strong>
+                        </p>
+                    }
+                    <p>&nbsp;</p>
+                    <p>请保存好以下信息：</p>
+                    <p>管理员账号：<strong>@Model.AdminUserName</strong></p>
+                    <p>管理员密码：<strong>@Model.AdminPassword</strong></p>
+
+                    <p>注意：本页面已经失效，请保存好管理员账号及密码，密码无法找回明文！</p>
+                    <p class="center">&gt; <a @*asp-page="/Index" asp-area="Admin"*@ href="/Admin" target="_blank">点击这里登录管理员后台</a> &lt;</p>
+                </div>
+                break;
+            default:
+                break;
+        }
+        <div id="footer">
+            苏州盛派网络科技有限公司 版权所有
+        </div>
+    </div>
+</body>
+</html>
+

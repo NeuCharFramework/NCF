@@ -11,6 +11,13 @@
 		<!--<RestoreFallbackFolders>clear</RestoreFallbackFolders>-->
 
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="Pages\Install\**" />
+	  <Content Remove="Pages\Install\**" />
+	  <EmbeddedResource Remove="Pages\Install\**" />
+	  <None Remove="Pages\Install\**" />
+	  <TypeScriptCompile Remove="Pages\Install\**" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.11.0-beta7" />
@@ -61,8 +68,8 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
-		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
+		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />

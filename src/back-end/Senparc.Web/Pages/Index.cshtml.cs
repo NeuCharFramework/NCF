@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Senparc.Core.Models.VD;
 using Senparc.Ncf.Core.MultiTenant;
+using Senparc.Web.Models.VD;
 using System;
 //using System.Management.Automation;
 using System.Threading.Tasks;

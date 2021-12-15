@@ -1,5 +1,4 @@
 ﻿using Senparc.Areas.Admin.Domain.Models;
-using Senparc.Core.Models;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Repository;
 

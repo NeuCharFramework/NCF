@@ -53,12 +53,12 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
 		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="1.0.0" />
 		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="4.0.0" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.10.0-beta7" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.10.0.1-beta7" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.10.0-beta7" />
 		<PackageReference Include="Senparc.Ncf.Log" Version="0.10.0-beta7" />
 		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.10.0-beta7" />
 		<PackageReference Include="Senparc.Ncf.Service" Version="0.10.0-beta7" />
-		<PackageReference Include="Senparc.Ncf.Utility" Version="0.10.0-beta7" />
+		<PackageReference Include="Senparc.Ncf.Utility" Version="0.10.1-beta7" />
 		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.10.0-beta7" />
 
 
@@ -72,10 +72,6 @@
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.2.0-beta7" />
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.2.0-beta7" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.2.0.1-beta7" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\Senparc.Core\Senparc.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

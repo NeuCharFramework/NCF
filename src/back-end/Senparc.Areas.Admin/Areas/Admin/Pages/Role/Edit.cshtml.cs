@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Senparc.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
 using Senparc.Xncf.SystemCore.Domain.Database;

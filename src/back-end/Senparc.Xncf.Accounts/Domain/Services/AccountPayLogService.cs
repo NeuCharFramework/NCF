@@ -1,5 +1,4 @@
 ﻿using Senparc.CO2NET;
-using Senparc.Core.Models;
 using Senparc.Service.ACL;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Xncf.Accounts.Domain.Models;
