@@ -1,4 +1,4 @@
-﻿namespace Senparc.Core.Models.VD
+﻿namespace Senparc.Web.Models.VD
 {
     public class Install_BaseVD : BaseVD { }
 

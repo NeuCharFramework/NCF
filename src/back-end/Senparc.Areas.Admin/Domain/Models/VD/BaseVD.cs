@@ -4,7 +4,7 @@ using Senparc.Ncf.Core.Models.VD;
 using System;
 using System.Collections.Generic;
 
-namespace Senparc.Core.Models.VD
+namespace Senparc.Areas.Admin.Domain.Models.VD
 {
       public interface IBaseVD : IBaseUiVD
     {

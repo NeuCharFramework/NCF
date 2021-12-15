@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace Senparc.Core.Models.VD
+namespace Senparc.Areas.Admin.Domain.Models.VD
 {
     /// <summary>
     /// 全局所有的Error_ExceptionVD必须实现这个接口

@@ -13,10 +13,6 @@
   </Target>
 
   <ItemGroup>
-    <Compile Remove="SenparcEntitiesModelSnapshot.cs" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="2.2.8" />
@@ -36,6 +32,8 @@
   <ItemGroup><!--<DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.0-preview1-final" />-->
   
     <Folder Include="Models\DataBaseModel\Mapping\" />
+  
+    <Folder Include="Models\VD\" />
   </ItemGroup>
 
 

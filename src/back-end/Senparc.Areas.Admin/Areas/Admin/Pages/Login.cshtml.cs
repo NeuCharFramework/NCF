@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Senparc.Areas.Admin.Domain;
 using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Trace;
-using Senparc.Core.Models.VD;
+using Senparc.Areas.Admin.Domain.Models.VD;
 using Senparc.Ncf.AreaBase.Admin.Filters;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Service;

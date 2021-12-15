@@ -1,4 +1,4 @@
-﻿namespace Senparc.Core.Models.VD
+﻿namespace Senparc.Areas.Admin.Domain.Models.VD
 {
     public class Login_BaseVD : BaseVD
     {
