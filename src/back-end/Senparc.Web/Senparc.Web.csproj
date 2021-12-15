@@ -11,6 +11,13 @@
 		<!--<RestoreFallbackFolders>clear</RestoreFallbackFolders>-->
 
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="Pages\Install\**" />
+	  <Content Remove="Pages\Install\**" />
+	  <EmbeddedResource Remove="Pages\Install\**" />
+	  <None Remove="Pages\Install\**" />
+	  <TypeScriptCompile Remove="Pages\Install\**" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.11.0-beta7" />

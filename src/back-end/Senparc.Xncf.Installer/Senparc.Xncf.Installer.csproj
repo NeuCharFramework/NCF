@@ -26,7 +26,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.10-beta7" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.10-beta7" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.10.0.1-beta7" />
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<!--为了兼容部分数据库迁移文件仍然有依赖的情况-->
 		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.10.0-beta7" />
