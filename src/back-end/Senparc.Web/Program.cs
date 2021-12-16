@@ -1,4 +1,4 @@
-﻿//以下数据库模块根据需要添加或删除
+﻿//以下数据库模块的命名空间根据需要添加或删除
 //using Senparc.Ncf.Database.MySql;//使用需要引用包： Senparc.Ncf.Database.MySql
 //using Senparc.Ncf.Database.Sqlite;//使用需要引用包： Senparc.Ncf.Database.Sqlite
 //using Senparc.Ncf.Database.PostgreSQL;//使用需要引用包： Senparc.Ncf.Database.PostgreSQL
@@ -6,9 +6,8 @@ using Senparc.Ncf.Database.SqlServer;//使用需要引用包： Senparc.Ncf.Data
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 //指定数据库类型（必须）
-builder.AddDatabase<SQLServerDatabaseConfiguration>();//默认使用 SQLServer数据库，根据需要改写
+builder.AddDatabase<SQLServerDatabaseConfiguration>();//默认使用 SQLServer数据库
 #region AddDatabase<TDatabaseConfiguration>() 泛型类型说明
 /* 
  *                  方法                            |         说明
@@ -23,7 +22,7 @@ builder.AddDatabase<SQLServerDatabaseConfiguration>();//默认使用 SQLServer�
 #endregion
 
 //添加（注册） Ncf 服务（必须）
-builder.AddNcfServices(builder.Configuration, builder.Environment);
+builder.AddNcf(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
 
@@ -49,4 +48,3 @@ app.UseEndpoints(endpoints =>
 });
 
 app.Run();
-
