@@ -44,7 +44,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// </summary>
         /// <param name="request">管理员创建请求</param>
         /// <returns></returns>
-        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post, BaseApiControllerType = typeof(TempApiBaseController))]
+        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
         [BackendJwtAuthorize]
         public async Task<AppResponseBase<AdminUserInfo_CreateResponse>> Create(AdminUserInfo_CreateOrUpdateRequest request)
         {
@@ -64,7 +64,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// </summary>
         /// <param name="request">管理员创建请求</param>
         /// <returns></returns>
-        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Put, BaseApiControllerType = typeof(TempApiBaseController))]
+        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Put)]
         [BackendJwtAuthorize]
         public async Task<AppResponseBase<AdminUserInfo_CreateResponse>> Update(AdminUserInfo_CreateOrUpdateRequest request)
         {
@@ -111,15 +111,5 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             saveLogName: "管理员登录");
             return resultDto;
         }
-    }
-
-    /// <summary>
-    /// 临时生成API控制器的基类
-    /// [ApiController] 可以 自动 验证模型状态 模型验证不通过则
-    /// </summary>
-    [ApiController]
-    public class TempApiBaseController: ControllerBase
-    {
-
     }
 }
