@@ -17,10 +17,17 @@ namespace Senparc.Web
         public static void AddNcf<TDatabaseConfiguration>(this WebApplicationBuilder builder)
             where TDatabaseConfiguration : IDatabaseConfiguration, new()
         {
+            //指定数据库（必须）
             builder.Services.AddDatabase<TDatabaseConfiguration>();
 
-            IConfiguration configuration = builder.Configuration;
-            IWebHostEnvironment env = builder.Environment;
+            //激活 Xncf 扩展引擎（必须）
+            var logMsg = builder.Services.StartWebEngine(builder.Configuration, builder.Environment);
+            //如果不需要启用 Areas，可以只使用 services.StartEngine() 方法
+
+            Console.WriteLine("============ logMsg =============");
+            Console.WriteLine(logMsg);
+            Console.WriteLine("============ logMsg END =============");
+
 
             //如果运行在IIS中，需要添加IIS配置
             //https://docs.microsoft.com/zh-cn/aspnet/core/host-and-deploy/iis/index?view=aspnetcore-2.1&tabs=aspnetcore2x#supported-operating-systems
@@ -35,12 +42,6 @@ namespace Senparc.Web
             //    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
             //    options.HttpsPort = 443;
             //});
-
-            //激活 Xncf 扩展引擎（必须）
-            var logMsg = builder.Services.StartWebEngine(configuration, env);//如果不需要启用 Areas，可以只使用 services.StartEngine() 方法
-            Console.WriteLine("============ logMsg =============");
-            Console.WriteLine(logMsg);
-            Console.WriteLine("============ logMsg END =============");
         }
 
         public static void UseNcf(this WebApplication app)
@@ -48,12 +49,6 @@ namespace Senparc.Web
             IWebHostEnvironment env = app.Environment;
             IOptions<SenparcCoreSetting> senparcCoreSetting = app.Services.GetService<IOptions<SenparcCoreSetting>>();
             IOptions<SenparcSetting> senparcSetting = app.Services.GetService<IOptions<SenparcSetting>>();
-
-            ////支持 Session
-            //services.AddSession();
-
-            //注册 SignalR
-            //services.AddSignalR();
 
             // 启动 CO2NET 全局注册，必须！
             // 关于 UseSenparcGlobal() 的更多用法见 CO2NET Demo：https://github.com/Senparc/Senparc.CO2NET/blob/master/Sample/Senparc.CO2NET.Sample.netcore3/Startup.cs
