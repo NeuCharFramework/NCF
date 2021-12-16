@@ -3,6 +3,7 @@ import request from '@/utils/request'
 export function login(data) {
   return request({
     url: '/Admin/Login?handler=Login',
+    // url: '/api/Senparc.Areas.Admin/AdminUserInfoAppService/Areas.Admin_AdminUserInfoAppService.LoginAsync',
     method: 'post',
     data
   })
@@ -11,7 +12,7 @@ export function login(data) {
 export function getAdminUserList(params) {
   return request({
     // url: '/Admin/AdminUserInfo/index',
-    url: '/api/Senparc.Areas.Admin/AdminUserInfoService/Areas.Admin_AdminUserInfoService.GetList',
+    url: '/api/Senparc.Areas.Admin/AdminUserInfoAppService/Areas.Admin_AdminUserInfoAppService.GetList',
     method: 'get',
     params
   })

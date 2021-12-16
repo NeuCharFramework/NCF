@@ -38,24 +38,15 @@
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column label="ID" prop="id" align="center" width="80">
-        <template slot-scope="{ row }">
-          <span>{{ row.id }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="#" type="index" width="50"/>
       <el-table-column label="标题">
         <template slot-scope="{ row }">
-          <span>{{ row.bannerName }}</span>
+          <span>{{ row.title }}</span>
         </template>
       </el-table-column>
       <el-table-column label="时间" align="center">
         <template slot-scope="{ row }">
           <span>{{ row.addTime | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="备注">
-        <template slot-scope="{ row }">
-          <span>{{ row.adminRemark || row.remark }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -104,8 +95,8 @@
         label-width="100px"
         style="width: 400px; margin-left: 50px"
       >
-        <el-form-item label="栏目名称" prop="BannerName">
-          <el-input v-model="temp.BannerName" />
+        <el-form-item label="栏目名称">
+          <el-input v-model="temp.title" />
         </el-form-item>
         <el-form-item label="样式">
           <el-select
@@ -177,7 +168,7 @@ export default {
       statusOptions: ['StyleName'],
       temp: {
         id: undefined,
-        BannerName: '',
+        title: '',
         StyleName: 'StyleName',
         Enabled: true
       },
@@ -204,11 +195,22 @@ export default {
     // 查
     getList() {
       this.listLoading = true
-      fetchTemplate(this.listQuery).then((response) => {
-        this.list = response.data.list
-        this.total = response.data.totalCount
-        this.listLoading = false
-      })
+
+
+
+      this.listLoading = false
+      this.list = [{
+        title: 'jam',
+        addTime:'2021-12-12'
+      }]
+      this.total = 0
+
+
+      // fetchTemplate(this.listQuery).then((response) => {
+      //   this.list = response.data.list
+      //   this.total = response.data.totalCount
+      //   this.listLoading = false
+      // })
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -244,16 +246,23 @@ export default {
           console.log(this.temp)
           const _temp = JSON.parse(JSON.stringify(this.temp))
           delete _temp.id
-          createTemplate(_temp).then(() => {
-            this.getList()
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
+
+
+          //模拟
+          this.list.push(this.temp)
+          this.dialogFormVisible = false
+
+
+          // createTemplate(_temp).then(() => {
+          //   this.getList()
+          //   this.dialogFormVisible = false
+          //   this.$notify({
+          //     title: '成功',
+          //     message: '创建成功',
+          //     type: 'success',
+          //     duration: 2000
+          //   })
+          // })
         }
       })
     },
