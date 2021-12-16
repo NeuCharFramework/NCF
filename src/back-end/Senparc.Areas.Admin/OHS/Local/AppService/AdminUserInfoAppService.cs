@@ -16,13 +16,15 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
     public class AdminUserInfoAppService : AppServiceBase
     {
         private readonly AdminUserInfoService _adminUserInfoService;
-
-        public AdminUserInfoAppService(IServiceProvider serviceProvider, AdminUserInfoService adminUserInfoService) : base(serviceProvider)
+        private readonly AutoMapper.IMapper _mapper;
+        public AdminUserInfoAppService(IServiceProvider serviceProvider, AutoMapper.IMapper mapper, AdminUserInfoService adminUserInfoService) : base(serviceProvider)
         {
             this._adminUserInfoService = adminUserInfoService;
+            _mapper = mapper;
         }
 
         [ApiBind]
+        [BackendJwtAuthorize]
         public async Task<AppResponseBase<AdminUserInfo_GetListResponse>> GetList(int pageIndex, int pageSize)
         {
             return await this.GetResponseAsync<AppResponseBase<AdminUserInfo_GetListResponse>, AdminUserInfo_GetListResponse>(async (response, logger) =>
@@ -37,6 +39,45 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             });
         }
 
+        /// <summary>
+        /// 创建管理员
+        /// </summary>
+        /// <param name="request">管理员创建请求</param>
+        /// <returns></returns>
+        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
+        [BackendJwtAuthorize]
+        public async Task<AppResponseBase<AdminUserInfo_CreateResponse>> Create(AdminUserInfo_CreateOrUpdateRequest request)
+        {
+            return await this.GetResponseAsync<AppResponseBase<AdminUserInfo_CreateResponse>, AdminUserInfo_CreateResponse>(async (response, logger) =>
+            {
+                var dto = _mapper.Map<CreateOrUpdate_AdminUserInfoDto>(request);
+                var adminUserInfo = await _adminUserInfoService.CreateAdminUserInfoAsync(dto);
+                return new AdminUserInfo_CreateResponse()
+                {
+                    AdminUserInfoId = adminUserInfo.Id
+                };
+            });
+        }
+
+        /// <summary>
+        /// 修改管理员
+        /// </summary>
+        /// <param name="request">管理员创建请求</param>
+        /// <returns></returns>
+        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Put)]
+        [BackendJwtAuthorize]
+        public async Task<AppResponseBase<AdminUserInfo_CreateResponse>> Update(AdminUserInfo_CreateOrUpdateRequest request)
+        {
+            return await this.GetResponseAsync<AppResponseBase<AdminUserInfo_CreateResponse>, AdminUserInfo_CreateResponse>(async (response, logger) =>
+            {
+                var dto = _mapper.Map<CreateOrUpdate_AdminUserInfoDto>(request);
+                var adminUserInfo = await _adminUserInfoService.UpdateAdminUserInfoAsync(dto);
+                return new AdminUserInfo_CreateResponse()
+                {
+                    AdminUserInfoId = adminUserInfo.Id
+                };
+            });
+        }
 
         /// <summary>
         /// 管理员登录验证，并进行登录授权
@@ -47,7 +88,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         [FunctionRender("管理员登录", "测试当前管理员登录", typeof(Register))]
         public async Task<object> LoginAsync([FromBody] AdminUserInfo_LoginRequest request)
         {
-            return await this.GetResponseAsync<AppResponseBase<AccountLoginResultDto>, AccountLoginResultDto>(async (response, logger) =>
+            AppResponseBase<AccountLoginResultDto> resultDto = await this.GetResponseAsync<AppResponseBase<AccountLoginResultDto>, AccountLoginResultDto>(async (response, logger) =>
             {
                 var result = await _adminUserInfoService.LoginAsync(new AccountLoginDto()
                 {
@@ -68,6 +109,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             },
             saveLogAfterFinished: true,
             saveLogName: "管理员登录");
+            return resultDto;
         }
     }
 }
