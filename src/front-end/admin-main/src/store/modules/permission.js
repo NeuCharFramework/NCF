@@ -39,6 +39,7 @@ export function filterAsyncRoutes(routes, roles) {
 const state = {
   routes: [],
   addRoutes: [],
+  accessedRoutes:[],
   sidebarRouters: []
 }
 
@@ -47,7 +48,8 @@ const mutations = {
     state.addRoutes = routes
     console.log('routes', routes)
     state.routes = constantRoutes.concat(routes)
-
+    console.log('state.routes',state.routes)
+    console.log('constantRoutes',constantRoutes)
     // state.routes = constantRoutes.concat([])
   },
   SET_SIDEBAR_ROUTERS: (state, routes) => {
@@ -66,14 +68,17 @@ const actions = {
         accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
       }
       console.log('accessedRoutes', accessedRoutes)
+      state.accessedRoutes = accessedRoutes
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
     })
   },
   setRoutes({ commit }, routes) {
-    const list = { ...moduleRouter, ...{}}
+    let list = { ...moduleRouter, ...{}}
     console.log(123, list)
     console.log(123, list.children)
+    console.log(3333, state.routes)
+
     routes.forEach(item => {
       if (item.name === 'b-home1') {
         item.meta = {
@@ -88,7 +93,9 @@ const actions = {
         list.children = [...list.children, ...[item]]
       }
     })
+    // list = [...state.accessedRoutes, ...list]
     console.log(456, routes)
+    console.log('之后的菜单', list)
     commit('SET_ROUTES', list)
   }
 }
