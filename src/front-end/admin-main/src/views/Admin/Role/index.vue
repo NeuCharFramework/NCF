@@ -2,7 +2,7 @@
   <div class="el-main">
     <div class="admin-role">
       <div class="filter-container">
-        <el-button v-has="['role-add']" class="filter-item" type="primary" icon="el-icon-plus" @@click="handleEdit">增加</el-button>
+        <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleEdit">增加</el-button>
       </div>
       <el-table
         :data="tableData"
@@ -52,18 +52,16 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
-              v-has="['role-edit']"
               size="mini"
               type="primary"
-              @@click="handleEdit(scope.$index, scope.row)"
+              @click="handleEdit(scope.$index, scope.row)"
             >编辑</el-button>
             <el-button
-              v-has="['role-grant']"
               size="mini"
               type="primary"
-              @@click="handleRole(scope.$index, scope.row)"
+              @click="handleRole(scope.$index, scope.row)"
             >权限</el-button>
-            <el-popconfirm v-has="['role-delete']" placement="top" title="确认删除此角色吗？" @@on-confirm="handleDelete(scope.$index, scope.row)">
+            <el-popconfirm placement="top" title="确认删除此角色吗？" @on-confirm="handleDelete(scope.$index, scope.row)">
               <el-button slot="reference" size="mini" type="danger">删除</el-button>
             </el-popconfirm>
           </template>
@@ -73,7 +71,7 @@
         :total="paginationQuery.total"
         :page.sync="listQuery.pageIndex"
         :limit.sync="listQuery.pageSize"
-        @@pagination="getList"
+        @pagination="getList"
       />
       <!--编辑、新增 -->
       <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
@@ -102,16 +100,16 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @@click="dialog.visible = false">取 消</el-button>
-          <el-button :loading="dialog.updateLoading" type="primary" @@click="updateData">确 认</el-button>
+          <el-button @click="dialog.visible = false">取 消</el-button>
+          <el-button :loading="dialog.updateLoading" type="primary" @click="updateData">确 认</el-button>
         </div>
       </el-dialog>
       <!--授权 -->
       <el-dialog :title="'为  '+au.title+'  角色授权'" :visible.sync="au.visible" :close-on-click-modal="false">
         <el-tree ref="tree" :data="allMenu" show-checkbox :props="defaultProps" :default-expanded-keys="defaultExpandedKeys" :default-checked-keys="defaultCheckedKeys" node-key="id" />
         <div slot="footer" class="dialog-footer">
-          <el-button @@click="au.visible = false">取 消</el-button>
-          <el-button :loading="au.updateLoading" type="primary" @@click="auUpdateData">确 认</el-button>
+          <el-button @click="au.visible = false">取 消</el-button>
+          <el-button :loading="au.updateLoading" type="primary" @click="auUpdateData">确 认</el-button>
         </div>
       </el-dialog>
     </div>
@@ -296,14 +294,21 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         // 表单校验
         if (valid) {
-          const data = {
-            Id: this.dialog.data.id,
-            RoleName: this.dialog.data.roleName,
-            RoleCode: this.dialog.data.roleCode,
-            AdminRemark: this.dialog.data.adminRemark,
-            Remark: this.dialog.data.remark,
-            Enabled: this.dialog.data.enabled
-          }
+          // const data = {
+          //   Id: this.dialog.data.id,
+          //   RoleName: this.dialog.data.roleName,
+          //   RoleCode: this.dialog.data.roleCode,
+          //   AdminRemark: this.dialog.data.adminRemark,
+          //   Remark: this.dialog.data.remark,
+          //   Enabled: this.dialog.data.enabled
+          // }
+
+
+          const { id,roleName,roleCode,adminRemark,remark,enabled } = this.dialog.data
+          const data = { id,roleName,roleCode,adminRemark,remark,enabled }
+
+
+
           service.post('/Admin/Role/Edit?handler=Save', data).then(res => {
             if (res.data.success) {
               this.getList()

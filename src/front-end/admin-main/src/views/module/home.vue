@@ -55,7 +55,7 @@ export default {
     },
     addModule() {
       this.$moduleLoader({
-        d: 'http://localhost:9528/dist/d.umd.js'
+        d: 'http://localhost:9527/dist/d.umd.js'
       })
     },
     removeModule() {
