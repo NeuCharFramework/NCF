@@ -18,7 +18,7 @@ namespace Senparc.Xncf.Accounts.Domain.Cache
     using Senparc.Ncf.Core.Models;
     using Senparc.Ncf.Core.Cache;
 
-    [AutoDIType(DILifecycleType.Singleton)]
+    [AutoDIType(DILifecycleType.Scoped)]
     public class FullAccountCache : BaseStringDictionaryCache<FullAccount, Account> //, IFullAccountCache
     {
         /// <summary>

@@ -201,7 +201,7 @@ namespace Senparc.Areas.Admin
 
         public void AddXncfDatabaseModule(IServiceCollection services)
         {
-            services.AddScoped<AdminUserInfo>();
+            //services.AddScoped<AdminUserInfo>();
         }
 
         //public string DatabaseUniquePrefix => "NcfSystemAdmin_";

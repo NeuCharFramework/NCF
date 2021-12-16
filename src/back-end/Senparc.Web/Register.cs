@@ -23,7 +23,7 @@ namespace Senparc.Web
     /// </summary>
     public static class Register
     {
-        public static void AddNcfServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
+        public static void AddNcfServices(this WebApplicationBuilder builder, IConfiguration configuration, IWebHostEnvironment env)
         {
             //如果运行在IIS中，需要添加IIS配置
             //https://docs.microsoft.com/zh-cn/aspnet/core/host-and-deploy/iis/index?view=aspnetcore-2.1&tabs=aspnetcore2x#supported-operating-systems
@@ -39,21 +39,29 @@ namespace Senparc.Web
             //    options.HttpsPort = 443;
             //});
 
-            //读取Log配置文件
-            var repository = LogManager.CreateRepository("NETCoreRepository");
-            XmlConfigurator.Configure(repository, new FileInfo("log4net.config"));
-
             //激活 Xncf 扩展引擎（必须）
-            var logMsg = services.StartWebEngine(configuration,env);//如果不需要启用 Areas，可以只使用 services.StartEngine() 方法
+            var logMsg = builder.Services.StartWebEngine(configuration, env);//如果不需要启用 Areas，可以只使用 services.StartEngine() 方法
             Console.WriteLine("============ logMsg =============");
             Console.WriteLine(logMsg);
             Console.WriteLine("============ logMsg END =============");
         }
 
-        public static void UseNcf(this IApplicationBuilder app, IWebHostEnvironment env,
-            IOptions<SenparcCoreSetting> senparcCoreSetting,
-            IOptions<SenparcSetting> senparcSetting)
+        /// <summary>
+        /// 使用指定数据库
+        /// </summary>
+        /// <typeparam name="TDatabaseConfiguration"></typeparam>
+        /// <param name="builder"></param>
+        public static void AddDatabase<TDatabaseConfiguration>(this WebApplicationBuilder builder) where TDatabaseConfiguration : IDatabaseConfiguration, new()
         {
+            builder.AddDatabase<TDatabaseConfiguration>();
+        }
+
+        public static void UseNcf(this WebApplication app)
+        {
+            IWebHostEnvironment env = app.Environment;
+            IOptions<SenparcCoreSetting> senparcCoreSetting = app.Services.GetService<IOptions<SenparcCoreSetting>>();
+            IOptions<SenparcSetting> senparcSetting = app.Services.GetService<IOptions<SenparcSetting>>();
+
             Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting = senparcCoreSetting.Value;
 
             // 启动 CO2NET 全局注册，必须！
