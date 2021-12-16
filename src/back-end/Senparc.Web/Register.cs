@@ -18,11 +18,7 @@ namespace Senparc.Web
             where TDatabaseConfiguration : IDatabaseConfiguration, new()
         {
             builder.Services.AddDatabase<TDatabaseConfiguration>();
-            builder.AddNcf();
-        }
 
-        public static void AddNcf(this WebApplicationBuilder builder)
-        {
             IConfiguration configuration = builder.Configuration;
             IWebHostEnvironment env = builder.Environment;
 
@@ -47,14 +43,17 @@ namespace Senparc.Web
             Console.WriteLine("============ logMsg END =============");
         }
 
-
         public static void UseNcf(this WebApplication app)
         {
             IWebHostEnvironment env = app.Environment;
             IOptions<SenparcCoreSetting> senparcCoreSetting = app.Services.GetService<IOptions<SenparcCoreSetting>>();
             IOptions<SenparcSetting> senparcSetting = app.Services.GetService<IOptions<SenparcSetting>>();
 
-            Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting = senparcCoreSetting.Value;
+            ////支持 Session
+            //services.AddSession();
+
+            //注册 SignalR
+            //services.AddSignalR();
 
             // 启动 CO2NET 全局注册，必须！
             // 关于 UseSenparcGlobal() 的更多用法见 CO2NET Demo：https://github.com/Senparc/Senparc.CO2NET/blob/master/Sample/Senparc.CO2NET.Sample.netcore3/Startup.cs
@@ -88,17 +87,11 @@ namespace Senparc.Web
                     #endregion
                 });
 
-            ////支持 Session
-            //services.AddSession();
-
-            //注册 SignalR
-            //services.AddSignalR();
 
             //XncfModules（必须）
-            Senparc.Ncf.XncfBase.Register.UseXncfModules(app, registerService);
+            Senparc.Ncf.XncfBase.Register.UseXncfModules(app, registerService, senparcCoreSetting.Value);
             //TODO:app.UseXncfModules(registerService);
         }
-
 
         /// <summary>
         /// 判断当前配置是否满足使用 Redis（根据是否已经修改了默认配置字符串判断）
