@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,27 +7,23 @@ using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
-using Senparc.Ncf.Service.MultiTenant;
-using Senparc.Web.Hubs;
-
 //using Senparc.Ncf.Database.MySql;//根据需要添加或删除，使用需要引用包： Senparc.Ncf.Database.MySql
 //using Senparc.Ncf.Database.Sqlite;//根据需要添加或删除，使用需要引用包： Senparc.Ncf.Database.Sqlite
 //using Senparc.Ncf.Database.PostgreSQL;//根据需要添加或删除，使用需要引用包： Senparc.Ncf.Database.PostgreSQL
 using Senparc.Ncf.Database.SqlServer;//根据需要添加或删除，使用需要引用包： Senparc.Ncf.Database.SqlServer
-using Senparc.Areas.Admin;
 
 namespace Senparc.Web
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Env { get; }
+
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
-            this.env = env;
+            Env = env;
         }
-
-        public IConfiguration Configuration { get; }
-        public IWebHostEnvironment env { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -48,60 +43,12 @@ namespace Senparc.Web
             services.AddDatabase<SQLServerDatabaseConfiguration>();//默认使用 SQLServer数据库，根据需要改写
 
             //添加（注册） Ncf 服务（重要，必须！）
-            services.AddNcfServices(Configuration, env);
-            services.Configure<JwtSettings>(JwtSettings.Position_Backend, Configuration.GetSection(JwtSettings.Position_Backend));// 配置管理后台jwt
-            services.Configure<JwtSettings>(JwtSettings.Position_MiniPro, Configuration.GetSection(JwtSettings.Position_MiniPro));// 配置前台jwt
-            AddJwtAuthentication(services);
-        }
-
-        /// <summary>
-        /// 添加前后端认证
-        /// </summary>
-        /// <param name="services"></param>
-        private void AddJwtAuthentication(IServiceCollection services)
-        {
-            JwtSettings backend = new JwtSettings();
-            JwtSettings miniPro = new JwtSettings();
-            Configuration.Bind(JwtSettings.Position_Backend, backend);
-            Configuration.Bind(JwtSettings.Position_MiniPro, miniPro);
-            services.AddAuthentication()
-                .AddJwtBearer(BackendJwtAuthorizeAttribute.AuthenticationScheme, options =>
-                {
-                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-                    {
-                        ValidIssuer = backend.Issuer,
-                        ValidAudience = backend.Audience,
-                        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(backend.SecretKey)),
-                        ValidateIssuer = true, //whether or not valid Issuer
-                        ValidateAudience = true, //whether or not valid Audience
-                        ValidateLifetime = true, //whether or not valid out-of-service time
-                        ValidateIssuerSigningKey = true, //whether or not valid SecurityKey　　　　　　　　　　　
-                        ClockSkew = System.TimeSpan.Zero//Allowed server time offset
-                    };
-                })
-            //.AddJwtBearer(Core.ApiAttributes.JwtAuthorizeAttribute.AuthenticationScheme, options =>
-            //{
-            //    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-            //    {
-            //        ValidIssuer = miniPro.Issuer,
-            //        ValidAudience = miniPro.Audience,
-            //        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(miniPro.SecretKey)),
-            //        ValidateIssuer = true, //whether or not valid Issuer
-            //        ValidateAudience = true, //whether or not valid Audience
-            //        ValidateLifetime = true, //whether or not valid out-of-service time
-            //        ValidateIssuerSigningKey = true, //whether or not valid SecurityKey　　　　　　　　　　　
-            //        ClockSkew = System.TimeSpan.Zero//Allowed server time offset
-            //    };
-            //})
-            ;
-
+            services.AddNcfServices(Configuration, Env);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
-            IOptions<SenparcCoreSetting> senparcCoreSetting,
-            IOptions<SenparcSetting> senparcSetting,
-            IHubContext<ReloadPageHub> hubContext)
+            IOptions<SenparcCoreSetting> senparcCoreSetting, IOptions<SenparcSetting> senparcSetting)
         {
             if (env.IsDevelopment())
             {
@@ -114,14 +61,8 @@ namespace Senparc.Web
                 app.UseHsts();
             }
 
-
-
-            #region 多租户
-
-            app.UseMiddleware<TenantMiddleware>();//如果不启用多租户功能，可以删除此配置
-
-            #endregion
-
+            //Use NCF（必须）
+            app.UseNcf(env, senparcCoreSetting, senparcSetting);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -136,8 +77,6 @@ namespace Senparc.Web
                 endpoints.MapControllers();
             });
 
-            //Use NCF（必须）
-            app.UseNcf(env, senparcCoreSetting, senparcSetting);
         }
     }
 }
