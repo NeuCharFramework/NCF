@@ -52,9 +52,7 @@ namespace Senparc.Xncf.Instraller.Pages
         public RequestTenantInfo CreatedRequestTenantInfo { get; set; }
         public TenantInfoDto TenantInfoDto { get; private set; }
         public TenantRule TenantRule { get; set; }
-
         public bool MultiTenantEnable { get; set; }
-
 
         public IndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleService, AdminUserInfoService accountService,
             SystemConfigService systemConfigService, SysMenuService sysMenuService, TenantInfoService tenantInfoService, Lazy<IHttpContextAccessor> httpContextAccessor)
@@ -138,6 +136,10 @@ namespace Senparc.Xncf.Instraller.Pages
 
             Senparc.Xncf.XncfModuleManager.Register xncfModuleManagerRegister = new Senparc.Xncf.XncfModuleManager.Register();
 
+            Senparc.Xncf.AreasBase.Register areasBaseRegister = new Senparc.Xncf.AreasBase.Register();
+
+            Senparc.Xncf.Installer.Register installerRegister = new Senparc.Xncf.Installer.Register();
+       
             Senparc.Xncf.Menu.Register menuRegister = new Senparc.Xncf.Menu.Register();
 
             {
@@ -168,12 +170,17 @@ namespace Senparc.Xncf.Instraller.Pages
                 //开始安装系统管理管理模块
                 await InstallAndOpenModuleAsync(systemManagerRegister);
 
+                //开始安装 Areas 模块
+                await InstallAndOpenModuleAsync(areasBaseRegister);
+
+                //开始安装 Installer 模块
+                await InstallAndOpenModuleAsync(installerRegister);
+
                 //安装租户模块
                 if (Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.EnableMultiTenant)
                 {
                     await InstallAndOpenModuleAsync(tenantRegister);
                 }
-
 
                 //将权限模块进行安装
                 await InstallAndOpenModuleAsync(systemPermissionRegister, true, true);
