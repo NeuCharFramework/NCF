@@ -23,7 +23,7 @@ namespace Senparc.Web
     /// </summary>
     public static class Register
     {
-        public static void AddNcfServices(this WebApplicationBuilder builder, IConfiguration configuration, IWebHostEnvironment env)
+        public static void AddNcf(this WebApplicationBuilder builder, IConfiguration configuration, IWebHostEnvironment env)
         {
             //如果运行在IIS中，需要添加IIS配置
             //https://docs.microsoft.com/zh-cn/aspnet/core/host-and-deploy/iis/index?view=aspnetcore-2.1&tabs=aspnetcore2x#supported-operating-systems
