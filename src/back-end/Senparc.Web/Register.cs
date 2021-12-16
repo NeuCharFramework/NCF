@@ -1,20 +1,11 @@
-﻿using log4net;
-using log4net.Config;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
 using Senparc.CO2NET.AspNet;
-using Senparc.CO2NET.RegisterServices;
 using Senparc.Ncf.Core.Areas;
-using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Models;
-using Senparc.Ncf.XncfBase;
 using System;
-using System.IO;
 
 namespace Senparc.Web
 {
@@ -23,8 +14,18 @@ namespace Senparc.Web
     /// </summary>
     public static class Register
     {
-        public static void AddNcf(this WebApplicationBuilder builder, IConfiguration configuration, IWebHostEnvironment env)
+        public static void AddNcf<TDatabaseConfiguration>(this WebApplicationBuilder builder)
+            where TDatabaseConfiguration : IDatabaseConfiguration, new()
         {
+            builder.Services.AddDatabase<TDatabaseConfiguration>();
+            builder.AddNcf();
+        }
+
+        public static void AddNcf(this WebApplicationBuilder builder)
+        {
+            IConfiguration configuration = builder.Configuration;
+            IWebHostEnvironment env = builder.Environment;
+
             //如果运行在IIS中，需要添加IIS配置
             //https://docs.microsoft.com/zh-cn/aspnet/core/host-and-deploy/iis/index?view=aspnetcore-2.1&tabs=aspnetcore2x#supported-operating-systems
             //services.Configure<IISOptions>(options =>
@@ -46,15 +47,6 @@ namespace Senparc.Web
             Console.WriteLine("============ logMsg END =============");
         }
 
-        /// <summary>
-        /// 使用指定数据库
-        /// </summary>
-        /// <typeparam name="TDatabaseConfiguration"></typeparam>
-        /// <param name="builder"></param>
-        public static void AddDatabase<TDatabaseConfiguration>(this WebApplicationBuilder builder) where TDatabaseConfiguration : IDatabaseConfiguration, new()
-        {
-            builder.AddDatabase<TDatabaseConfiguration>();
-        }
 
         public static void UseNcf(this WebApplication app)
         {

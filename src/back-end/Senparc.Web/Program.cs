@@ -6,23 +6,21 @@ using Senparc.Ncf.Database.SqlServer;//使用需要引用包： Senparc.Ncf.Data
 
 var builder = WebApplication.CreateBuilder(args);
 
-//指定数据库类型（必须）
-builder.AddDatabase<SQLServerDatabaseConfiguration>();//默认使用 SQLServer数据库
-#region AddDatabase<TDatabaseConfiguration>() 泛型类型说明
+//添加（注册） Ncf 服务（必须）
+builder.AddNcf<SQLServerDatabaseConfiguration>();
+
+#region AddNcf<TDatabaseConfiguration>() 泛型类型说明
 /* 
  *                  方法                            |         说明
  * -------------------------------------------------|-------------------------
- *  AddDatabase<SQLServerDatabaseConfiguration>()   |  使用 SQLServer 数据库
- *  AddDatabase<SqliteMemoryDatabaseConfiguration>()|  使用 SQLite 数据库
- *  AddDatabase<MySqlDatabaseConfiguration>()       |  使用 MySQL 数据库
- *  AddDatabase<PostgreSQLDatabaseConfiguration>()  |  使用 PostgreSQL 数据库
+ *  AddNcf<SQLServerDatabaseConfiguration>()   |  使用 SQLServer 数据库
+ *  AddNcf<SqliteMemoryDatabaseConfiguration>()|  使用 SQLite 数据库
+ *  AddNcf<MySqlDatabaseConfiguration>()       |  使用 MySQL 数据库
+ *  AddNcf<PostgreSQLDatabaseConfiguration>()  |  使用 PostgreSQL 数据库
  *  更多数据库可扩展，依次类推……
  *  
  */
 #endregion
-
-//添加（注册） Ncf 服务（必须）
-builder.AddNcf(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
 
