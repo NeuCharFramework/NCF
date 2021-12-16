@@ -10,7 +10,7 @@
 
     <div style="margin-top: 20px;">
       <el-button @click="addModule">加载模块</el-button>
-      <el-button @click="refreshRouterMenu">刷新路由菜单</el-button>
+<!--      <el-button @click="refreshRouterMenu">刷新路由菜单</el-button>-->
 <!--      <el-button @click="removeModule">卸载模块</el-button>-->
       <el-button @click="trigger">触发事件</el-button>
 <!--      <el-button @click="reset">reset</el-button>-->
@@ -56,6 +56,10 @@ export default {
     addModule() {
       this.$moduleLoader({
         d: 'http://localhost:9527/dist/d.umd.js'
+      }).then(() => {
+        // 加载过程完毕
+        console.log('加载过程完毕')
+        this.refreshRouterMenu()
       })
     },
     removeModule() {
