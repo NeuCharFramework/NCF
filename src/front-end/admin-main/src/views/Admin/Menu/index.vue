@@ -2,7 +2,7 @@
   <div class="el-main">
     <div class="admin-role">
       <div class="filter-container">
-        <el-button class="filter-item" type="primary" icon="el-icon-plus" @@click="handleEdit('','','add')">增加菜单
+        <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleEdit('','','add')">增加菜单
         </el-button>
       </div>
       <el-table
@@ -47,17 +47,17 @@
             <el-button
               size="mini"
               type="primary"
-              @@click="handleEdit(scope.$index, scope.row,'edit')"
+              @click="handleEdit(scope.$index, scope.row,'edit')"
             >编辑
             </el-button>
             <el-button
               v-if="scope.row.children"
               size="mini"
               type="primary"
-              @@click="handleEdit(scope.$index, scope.row,'addNext')"
+              @click="handleEdit(scope.$index, scope.row,'addNext')"
             >增加下一级
             </el-button>
-            <el-popconfirm placement="top" title="确认删除此菜单吗？" @@on-confirm="handleDelete(scope.$index, scope.row)">
+            <el-popconfirm placement="top" title="确认删除此菜单吗？" @on-confirm="handleDelete(scope.$index, scope.row)">
               <el-button slot="reference" size="mini" type="danger">删除</el-button>
             </el-popconfirm>
           </template>
@@ -109,12 +109,12 @@
           </el-form-item>
           <el-form-item label="图标">
             <i v-if="dialog.data.icon" :class="'fa '+dialog.data.icon" />
-            <el-button plain style="margin-left:15px;" @@click="dialogIcon.visible=true">选择图标</el-button>
+            <el-button plain style="margin-left:15px;" @click="dialogIcon.visible=true">选择图标</el-button>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @@click="dialog.visible = false">取 消</el-button>
-          <el-button :loading="dialog.updateLoading" :disabled="dialog.disabled" type="primary" @@click="updateData">确
+          <el-button @click="dialog.visible = false">取 消</el-button>
+          <el-button :loading="dialog.updateLoading" :disabled="dialog.disabled" type="primary" @click="updateData">确
             认
           </el-button>
         </div>
@@ -122,7 +122,7 @@
       <!--选择图标-->
       <el-dialog title="图标列表" :visible.sync="dialogIcon.visible">
         <div class="menu-icons-grid">
-          <div v-for="item in dialogIcon.elementIcons" class="menu-icon-item" @@click="pickIcon(item)">
+          <div v-for="item in dialogIcon.elementIcons" class="menu-icon-item" @click="pickIcon(item)">
             <i :class="'fa ' + item" />
             <span>{{ item }}</span>
           </div>

@@ -12,7 +12,6 @@
           <el-col :span="6"><div class="grid-content bg-purple">匹配关键字：<span>{{ requestTenantInfo.tenantKey }}</span></div></el-col>
           <el-col :span="6"><div class="grid-content bg-purple">匹配时间：<span>{{ requestTenantInfo.beginTime }}</span></div></el-col>
         </el-row>
-
       </div>
 
       <h2 class="current-tenant-info">多租户信息</h2>
@@ -75,13 +74,12 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
-              v-has="['admin-edit']"
               size="mini"
               type="primary"
               @click="handleEdit(scope.$index, scope.row)"
             >编辑</el-button>
           </template>
-          <template v-has="['admin-delete']">
+          <template>
             <el-popconfirm placement="top" title="确认删除此租户吗？删除后所有租户信息将处于游离状态，请谨慎操作！" @on-confirm="handleDelete(scope.$index, scope.row)">
               <el-button slot="reference" size="mini" type="danger">删除</el-button>
             </el-popconfirm>
