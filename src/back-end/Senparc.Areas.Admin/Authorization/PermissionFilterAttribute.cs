@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Senparc.Ncf.Core.AppServices;
 
 namespace Senparc.Areas.Admin.Authorization
 {
@@ -31,7 +32,9 @@ namespace Senparc.Areas.Admin.Authorization
             var result = await _authorizationService.AuthorizeAsync(context.HttpContext.User, null, _requirement);
             if (!result.Succeeded)
             {
-                context.Result = new OkObjectResult(new { success = false, msg = "您没有此操作权限", data = _requirement.ResourceCodes })
+                //TODO... ResourceCodes 是否需要暴露出去?
+                AppResponseBase<string[]> responseBase = new AppResponseBase<string[]>() { Data = _requirement.ResourceCodes, Success = false, ErrorMessage = "您没有此资源的操作权限。" };
+                context.Result = new OkObjectResult(responseBase)
                 {
                     StatusCode = (int)HttpStatusCode.Forbidden
                 };
