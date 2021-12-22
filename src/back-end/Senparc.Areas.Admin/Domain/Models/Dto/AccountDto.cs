@@ -40,8 +40,13 @@ namespace Senparc.Areas.Admin.Domain.Models.Dto
         public string Token { get; set; }
 
         /// <summary>
-        /// 用户所关联的角色
+        /// 角色列表
         /// </summary>
         public IEnumerable<string> RoleCodes { get; set; }
+
+        /// <summary>
+        /// 操作代码
+        /// </summary>
+        public IEnumerable<string> PermissionCodes { get; set; }
     }
 }

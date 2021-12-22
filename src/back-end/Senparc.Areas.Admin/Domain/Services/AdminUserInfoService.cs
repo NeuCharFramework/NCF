@@ -282,13 +282,14 @@ namespace Senparc.Areas.Admin.Domain
             {
                 token = GenerateToken(adminUserInfo.Id);
             }
-
-            var roleCodes = await BaseData.BaseDB.BaseDataContext.Set<Ncf.Core.Models.DataBaseModel.SysRoleAdminUserInfo>().Where(o => o.AccountId == adminUserInfo.Id)
-                .Select(o => o.RoleCode).Distinct()
-                .ToListAsync();
+            var roles = await _serviceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == adminUserInfo.Id);
+            var roleCodes = roles
+                .Select(o => o.RoleCode).Distinct().ToList();
+            var permissions = await _serviceProvider.GetService<SysPermissionService>().GetFullListAsync(p => roles.Select(o => o.RoleId).Contains(p.RoleId));
             result.Token = token;
             result.UserName = adminUserInfo.UserName;
             result.RoleCodes = roleCodes;
+            result.PermissionCodes = permissions.Select(o => o.ResourceCode);
             return result;
         }
 

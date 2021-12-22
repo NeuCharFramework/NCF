@@ -15,6 +15,20 @@ namespace Senparc.Areas.Admin.OHS.PL
         public string Password { get; set; }
     }
 
+    public class AdminUserInfo_AddRoleRequest
+    {
+        /// <summary>
+        /// 角色Id
+        /// </summary>
+        [Required]
+        public IEnumerable<string> RoleId { get; set; }
+
+        /// <summary>
+        /// 管理员id
+        /// </summary>
+        public int AccountId { get; set; }
+    }
+
     /// <summary>
     /// 管理员新增
     /// </summary>

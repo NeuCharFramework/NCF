@@ -78,6 +78,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Domain\Dto\Base\" />
+	  <Folder Include="Domain\Dto\Base\" />
 	</ItemGroup>
 
 	<!-- 
