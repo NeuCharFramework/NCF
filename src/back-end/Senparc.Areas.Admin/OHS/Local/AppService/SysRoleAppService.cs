@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Senparc.Areas.Admin.Authorization;
 using Senparc.Areas.Admin.OHS.Local.PL;
 using Senparc.CO2NET;
 using Senparc.Ncf.Core.AppServices;
@@ -34,6 +35,8 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// <returns></returns>
         /// <exception cref="Ncf.Core.Exceptions.NcfExceptionBase"></exception>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
+        //[Permission(Codes = new string[] { "code" })]
+        //[Permission("role.add,role.update")]
         public async Task<AppResponseBase<SysRole_CreateOrUpdateResponse>> CreateOrUpdateAsync(SysRole_CreateOrUpdateRequest request)
         {
             var response = await this.GetResponseAsync<AppResponseBase<SysRole_CreateOrUpdateResponse>, SysRole_CreateOrUpdateResponse>(async (response, logger) =>
@@ -60,6 +63,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// <param name="request"></param>
         /// <returns></returns>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Get)]
+        //[Permission("role.query")]
         public async Task<AppResponseBase<SysRole_GetListResponse>> GetListAsync([FromQuery] SysRole_GetListRequest request)
         {
             var response = await this.GetResponseAsync<AppResponseBase<SysRole_GetListResponse>, SysRole_GetListResponse>(async (response, logger) =>
@@ -82,6 +86,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// <param name="request"></param>
         /// <returns></returns>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Get)]
+        //[Permission("role.detail")]
         public async Task<AppResponseBase<SysRole_GetSingleResponse>> GetSingeAsync(string id)
         {
             var response = await this.GetResponseAsync<AppResponseBase<SysRole_GetSingleResponse>, SysRole_GetSingleResponse>(async (response, logger) =>
@@ -102,6 +107,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
+        //[Permission("role.delete")]
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Delete)]
         public async Task<AppResponseBase<SysRole_GetSingleResponse>> DeleteSingeAsync(string id)
         {
@@ -125,6 +131,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// <param name="request"></param>
         /// <returns></returns>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Put)]
+        //[Permission("role.addPermission")]
         public async Task<AppResponseBase<SysRole_Response>> AddPermissionAsync(SysRole_AddPermissionRequest request)
         {
             var response = await this.GetResponseAsync<AppResponseBase<SysRole_Response>, SysRole_Response>(async (response, logger) =>
@@ -145,6 +152,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// <param name="roleId"></param>
         /// <returns></returns>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Get)]
+        //[Permission("role.getPermission")]
         public async Task<AppResponseBase<SysRole_PermissionsResponse>> GetRolePermissionsAsync(string roleId)
         {
             var response = await this.GetResponseAsync<AppResponseBase<SysRole_PermissionsResponse>, SysRole_PermissionsResponse>(async (response, logger) =>
