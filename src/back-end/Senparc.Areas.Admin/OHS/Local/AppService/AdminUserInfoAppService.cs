@@ -10,10 +10,13 @@ using Senparc.Ncf.Core.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Senparc.Ncf.Service;
 
 namespace Senparc.Areas.Admin.OHS.Local.AppService
 {
-    public class AdminUserInfoAppService : AppServiceBase
+    [BackendJwtAuthorize]
+    public class AdminUserInfoAppService : LocalAppServiceBase
     {
         private readonly AdminUserInfoService _adminUserInfoService;
         private readonly AutoMapper.IMapper _mapper;
@@ -24,7 +27,6 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         }
 
         [ApiBind]
-        [BackendJwtAuthorize]
         public async Task<AppResponseBase<AdminUserInfo_GetListResponse>> GetList(int pageIndex, int pageSize)
         {
             return await this.GetResponseAsync<AppResponseBase<AdminUserInfo_GetListResponse>, AdminUserInfo_GetListResponse>(async (response, logger) =>
@@ -45,7 +47,6 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// <param name="request">管理员创建请求</param>
         /// <returns></returns>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
-        [BackendJwtAuthorize]
         public async Task<AppResponseBase<AdminUserInfo_CreateResponse>> Create(AdminUserInfo_CreateOrUpdateRequest request)
         {
             return await this.GetResponseAsync<AppResponseBase<AdminUserInfo_CreateResponse>, AdminUserInfo_CreateResponse>(async (response, logger) =>
@@ -65,7 +66,6 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// <param name="request">管理员创建请求</param>
         /// <returns></returns>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Put)]
-        [BackendJwtAuthorize]
         public async Task<AppResponseBase<AdminUserInfo_CreateResponse>> Update(AdminUserInfo_CreateOrUpdateRequest request)
         {
             return await this.GetResponseAsync<AppResponseBase<AdminUserInfo_CreateResponse>, AdminUserInfo_CreateResponse>(async (response, logger) =>
@@ -86,7 +86,8 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// <returns></returns>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
         [FunctionRender("管理员登录", "测试当前管理员登录", typeof(Register))]
-        public async Task<object> LoginAsync([FromBody] AdminUserInfo_LoginRequest request)
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+        public async Task<AppResponseBase<AccountLoginResultDto>> LoginAsync([FromBody] AdminUserInfo_LoginRequest request)
         {
             AppResponseBase<AccountLoginResultDto> resultDto = await this.GetResponseAsync<AppResponseBase<AccountLoginResultDto>, AccountLoginResultDto>(async (response, logger) =>
             {
@@ -95,7 +96,6 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     UserName = request.UserName,
                     Password = request.Password
                 });
-
                 logger.Append("管理员登录：" + request.UserName);
                 logger.Append("结果：" + !result.UserName.IsNullOrEmpty());
 
@@ -110,6 +110,42 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             saveLogAfterFinished: true,
             saveLogName: "管理员登录");
             return resultDto;
+        }
+
+        /// <summary>
+        /// 增加角色
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Put)]
+        public async Task<AppResponseBase<AdminUserInfo_AddRoleResponse>> AddRoleAsync(AdminUserInfo_AddRoleRequest request)
+        {
+            var response = await this.GetResponseAsync<AppResponseBase<AdminUserInfo_AddRoleResponse>, AdminUserInfo_AddRoleResponse>(async (response, logger) =>
+            {
+                await ServiceProvider.GetService<SysRoleAdminUserInfoService>().AddAsync(request.RoleId, request.AccountId);
+                return new AdminUserInfo_AddRoleResponse();
+            });
+            return response;
+        }
+
+        /// <summary>
+        /// 获取当前用户的所有角色
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Put)]
+        public async Task<AppResponseBase<AdminUserInfo_GetRolesResponse>> GetRolesAsync(AdminUserInfo_AddRoleRequest request)
+        {
+            int adminUserInfoId = GetCurrentAdminUserInfoId();
+            var response = await this.GetResponseAsync<AppResponseBase<AdminUserInfo_GetRolesResponse>, AdminUserInfo_GetRolesResponse>(async (response, logger) =>
+            {
+                var roles = await ServiceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == adminUserInfoId);
+                return new AdminUserInfo_GetRolesResponse()
+                {
+                    RoleIds = roles.Select(o => o.RoleId)
+                };
+            });
+            return response;
         }
     }
 }

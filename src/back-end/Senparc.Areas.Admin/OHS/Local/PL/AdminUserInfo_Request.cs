@@ -10,9 +10,22 @@ namespace Senparc.Areas.Admin.OHS.PL
     public class AdminUserInfo_LoginRequest : FunctionAppRequestBase
     {
         [Required]
-        [MaxLength(10)]
         public string UserName { get; set; }
         public string Password { get; set; }
+    }
+
+    public class AdminUserInfo_AddRoleRequest
+    {
+        /// <summary>
+        /// 角色Id
+        /// </summary>
+        [Required]
+        public IEnumerable<string> RoleId { get; set; }
+
+        /// <summary>
+        /// 管理员id
+        /// </summary>
+        public int AccountId { get; set; }
     }
 
     /// <summary>
