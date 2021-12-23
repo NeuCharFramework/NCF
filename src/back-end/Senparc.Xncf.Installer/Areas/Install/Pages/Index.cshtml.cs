@@ -11,6 +11,8 @@ using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.SystemManager.Domain.Service;
+using Senparc.Xncf.Tenant.Domain.DataBaseModel;
+using Senparc.Xncf.Tenant.Domain.Services;
 using Senparc.Xncf.XncfModuleManager.Domain.Services;
 using System;
 using System.Linq;

@@ -18,17 +18,15 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
     public class SystemConfig_IndexModel : BaseAdminPageModel
     {
         private readonly SystemConfigService _systemConfigService;
-        private readonly TenantInfoService _tenantInfoService;
         private readonly FullSystemConfigCache _fullSystemConfigCache;
 
         //[BindProperty]
         //private FullSystemConfig FullSystemConfig { get; set; }
 
 
-        public SystemConfig_IndexModel(SystemConfigService systemConfigService, TenantInfoService tenantInfoService, FullSystemConfigCache fullSystemConfigCache)
+        public SystemConfig_IndexModel(SystemConfigService systemConfigService, FullSystemConfigCache fullSystemConfigCache)
         {
             this._systemConfigService = systemConfigService;
-            this._tenantInfoService = tenantInfoService;
             this._fullSystemConfigCache = fullSystemConfigCache;
 
             //FullSystemConfig = _fullSystemConfigCache.Data;
