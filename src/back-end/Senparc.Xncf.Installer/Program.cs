@@ -54,16 +54,16 @@ var registerService = app
 
 //XncfModules（必须）
 Senparc.Ncf.XncfBase.Register.UseXncfModules(app, registerService, senparcCoreSetting.Value);
-using (var scope = app.Services.CreateScope())
-{
+//using (var scope = app.Services.CreateScope())
+//{
 
-    foreach (var register in Senparc.Ncf.XncfBase.XncfRegisterManager.RegisterList)
-    {
-        await register.InstallOrUpdateAsync(scope.ServiceProvider, Senparc.Ncf.Core.Enums.InstallOrUpdate.Install);
-    }
-}
+//    foreach (var register in Senparc.Ncf.XncfBase.XncfRegisterManager.RegisterList)
+//    {
+//        await register.InstallOrUpdateAsync(scope.ServiceProvider, Senparc.Ncf.Core.Enums.InstallOrUpdate.Install);
+//    }
+//}
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseCookiePolicy();

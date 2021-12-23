@@ -12,11 +12,6 @@ services:
     build:
       context: .
       dockerfile: Senparc.Xncf.Installer/Dockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-    ports:
-      - "5103:80"
 
   installer-dapr:
     image: "daprio/daprd:latest"
@@ -30,11 +25,6 @@ services:
     build:
       context: .
       dockerfile: Senparc.Xncf.Accounts/Dockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-    ports:
-      - "5104:80"
 
   accounts-dapr:
     image: "daprio/daprd:latest"
