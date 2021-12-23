@@ -1,13 +1,16 @@
-import { login, logout, getInfo } from '@/api/adminUserInfoAppService'
-import { getToken, setToken, removeToken, removeRole, setRole } from '@/utils/auth'
-import router, { resetRouter } from '@/router'
+import {login} from '@/api/adminUserInfoAppService'
+import {getToken, removeRole, removeToken, setRole, setToken} from '@/utils/auth'
+import router, {resetRouter} from '@/router'
+import {Message} from 'element-ui'
 
 const state = {
   token: getToken(),
   name: '',
   avatar: '',
   introduction: '',
-  roles: []
+  roles: [],
+  menuTree: [],
+  permissionCodes: []
 }
 
 const mutations = {
@@ -25,36 +28,49 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_MENUTREE: (state, menuTree) => {
+    state.menuTree = menuTree
+  },
+  SET_PERMISSIONCODES: (state, permissionCodes) => {
+    state.permissionCodes = permissionCodes
   }
 }
 
 const actions = {
   // user login
-  login({ commit }, userInfo) {
-    const { username, password } = userInfo
+  login({commit}, userInfo) {
+    const {username, password} = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        // 这里的角色暂时写死
-        setRole(['administrator'])
-        resolve()
+      login({username: username.trim(), password: password}).then(response => {
+        if (response.success) {
+          console.log(888, response)
+          const {data} = response
+          commit('SET_TOKEN', data.token)
+          commit('SET_MENUTREE', data.menuTree)
+          commit('SET_PERMISSIONCODES', data.permissionCodes)
+          setToken(data.token)
+
+          // 这里的角色暂时写死
+          setRole(data.roleCodes)
+
+          resolve()
+        } else {
+          Message({
+            message: response.errorMessage || '登录失败！',
+            type: 'error',
+            duration: 5 * 1000
+          })
+          reject(response)
+        }
       }).catch(error => {
         reject(error)
-      }).finally(res => {
-        // 绕过登录
-        commit('SET_TOKEN', 'jam_token')
-        setToken('jam_token')
-        // 这里的角色暂时写死
-        setRole(['administrator'])
-        resolve()
       })
     })
   },
 
   // get user info
-  getInfo({ commit, state }) {
+  getInfo({commit, state}) {
     return new Promise((resolve, reject) => {
       const data = {
         'roles': [
@@ -103,7 +119,7 @@ const actions = {
   },
 
   // user logout
-  logout({ commit, state, dispatch }) {
+  logout({commit, state, dispatch}) {
     return new Promise((resolve, reject) => {
       console.log('必须移除token和roles')
       commit('SET_TOKEN', '')
@@ -115,7 +131,7 @@ const actions = {
       // 刷新页面
       // location.reload()
 
-      dispatch('tagsView/delAllViews', null, { root: true })
+      dispatch('tagsView/delAllViews', null, {root: true})
       resolve()
 
       // 框架原本的逻辑
@@ -137,7 +153,7 @@ const actions = {
   },
 
   // remove token
-  resetToken({ commit }) {
+  resetToken({commit}) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
@@ -147,23 +163,23 @@ const actions = {
   },
 
   // dynamically modify permissions
-  async changeRoles({ commit, dispatch }, role) {
+  async changeRoles({commit, dispatch}, role) {
     const token = role + '-token'
 
     commit('SET_TOKEN', token)
     setToken(token)
 
-    const { roles } = await dispatch('getInfo')
+    const {roles} = await dispatch('getInfo')
 
     resetRouter()
 
     // generate accessible routes map based on roles
-    const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
+    const accessRoutes = await dispatch('permission/generateRoutes', roles, {root: true})
     // dynamically add accessible routes
     router.addRoutes(accessRoutes)
 
     // reset visited views and cached views
-    dispatch('tagsView/delAllViews', null, { root: true })
+    dispatch('tagsView/delAllViews', null, {root: true})
   }
 }
 

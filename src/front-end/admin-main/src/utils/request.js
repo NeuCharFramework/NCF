@@ -45,6 +45,7 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
+
     return response.status === 200 ? Promise.resolve(res) : Promise.reject(res)
 
     // 框架原本的逻辑
@@ -87,7 +88,6 @@ service.interceptors.response.use(
       window.location.replace = `/login?redirect=${router.history.current.fullPath}`
       return
     }
-    console.log(response)
     Message({
       message: response.data.statusCodeDes || response.data,
       type: 'error',
