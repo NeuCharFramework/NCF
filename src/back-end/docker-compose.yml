@@ -1,0 +1,44 @@
+version: '3.4'
+
+services:
+
+  redis:
+    image: redis:latest
+    ports:
+    - "5379:6379"
+
+  installer:
+    image: ${DOCKER_REGISTRY-}installer
+    build:
+      context: .
+      dockerfile: Senparc.Xncf.Installer/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "5103:80"
+
+  installer-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd", "-app-id", "installer", "-app-port", "80" ]
+    network_mode: "service:installer"
+    depends_on:
+      - installer
+
+  accounts:
+    image: ${DOCKER_REGISTRY-}accounts
+    build:
+      context: .
+      dockerfile: Senparc.Xncf.Accounts/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "5104:80"
+
+  accounts-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd", "-app-id", "accounts", "-app-port", "80" ]
+    network_mode: "service:accounts"
+    depends_on:
+      - accounts
