@@ -34,3 +34,4 @@ obj/
 /src/back-end/Senparc.Web/scripts/app.js.map
 /src/back-end/Senparc.Web/scripts/app.js
 /src/back-end/Senparc.Xncf.Accounts/App_Data/SenparcTraceLog
+/src/back-end/Senparc.Xncf.Installer/App_Data/SenparcTraceLog

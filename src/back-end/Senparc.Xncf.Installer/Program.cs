@@ -16,18 +16,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET.AspNet;
 using Senparc.CO2NET;
-using Dapr;
-using Dapr.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 //指定数据库（必须）
 builder.Services.AddDatabase<SQLServerDatabaseConfiguration>();
-builder.Services.AddDaprClient();
+builder.Services.AddControllers().AddDapr();
+
 //激活 Xncf 扩展引擎（必须）
 var logMsg = builder.Services.StartWebEngine(builder.Configuration, builder.Environment);
 //如果不需要启用 Areas，可以只使用 services.StartEngine() 方法
-
-builder.Services.AddControllers().AddDapr();
 
 Console.WriteLine("============ logMsg =============");
 Console.WriteLine(logMsg);
@@ -39,9 +36,6 @@ var repository = LogManager.CreateRepository("NETCoreRepository");
 XmlConfigurator.Configure(repository, new FileInfo("log4net.config"));
 
 var app = builder.Build();
-
-
-
 
 if (app.Environment.IsDevelopment())
 {
