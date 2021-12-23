@@ -27,7 +27,7 @@
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.3.0.5-beta7" />
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.3.0.1-beta7" />
 		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.3.0.1-beta7" />
-		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.0.5-beta7" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.0.6-beta8" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.12.0-beta7" />
 		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.0.1-beta7" />
 		<PackageReference Include="ML.Xncf.Docs" Version="2.1.7.25" />
@@ -58,7 +58,7 @@
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />-->
 		<PackageReference Include="AutoMapper" Version="7.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.0.1-beta7" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.0.0" />
