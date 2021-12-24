@@ -79,23 +79,23 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/template',
-    component: Layout,
-    name: 'Template',
-    meta: {
-      title: '模板页',
-      icon: 'excel'
-    },
-    children: [
-      {
-        path: 'template',
-        component: () => import('@/views/template/template'),
-        name: '模板页',
-        meta: {title: '模板页'}
-      }
-    ]
-  }
+  // {
+  //   path: '/template',
+  //   component: Layout,
+  //   name: 'Template',
+  //   meta: {
+  //     title: '模板页',
+  //     icon: 'excel'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'template',
+  //       component: () => import('@/views/template/template'),
+  //       name: '模板页',
+  //       meta: {title: '模板页'}
+  //     }
+  //   ]
+  // }
 ]
 
 /**
@@ -145,8 +145,10 @@ export const asyncRoutes = [
     ]
   },
 
+
+
   // chartsRouter,
-  // moduleRouter,
+  moduleRouter,
   // 404 page must be placed at the end !!!
   {path: '*', redirect: '/404', hidden: true}
 ]
