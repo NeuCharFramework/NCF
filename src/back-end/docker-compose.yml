@@ -1,6 +1,15 @@
 version: '3.4'
 
 services:
+  mysql:
+    image: mysql:latest
+    ports:
+     - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_USER: 'root'
+      MYSQL_PASS: '123456'
 
   redis:
     image: redis:latest
@@ -12,6 +21,8 @@ services:
     build:
       context: .
       dockerfile: Senparc.Xncf.Installer/Dockerfile
+    depends_on:
+      - mysql
 
   installer-dapr:
     image: "daprio/daprd:latest"
@@ -32,3 +43,16 @@ services:
     network_mode: "service:accounts"
     depends_on:
       - accounts
+
+  senparc-client:
+    image: ${DOCKER_REGISTRY-}senparcweb
+    build:
+      context: .
+      dockerfile: Senparc.Web/Dockerfile
+ 
+  senparc-client-dapr:
+    image: "daprio/daprd:latest"
+    command: ["./daprd","-app-id","senparc-client","-app-port","80"]
+    network_mode: "service:senparc-client"
+    depends_on:
+      - senparc-client

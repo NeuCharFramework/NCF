@@ -7,6 +7,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
     ports:
       - "5103:80"
+      - "50011:50001"
 
   installer:
     environment:
@@ -14,4 +15,12 @@ services:
       - ASPNETCORE_URLS=http://+:80
     ports:
       - "5104:80"
+      - "50012:50001"
     
+  senparc-client:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5102:80"
+      - "50013:50001"
