@@ -137,7 +137,7 @@ export const asyncRoutes = [
         meta: {title: '系统信息'}
       },
       {
-        path: '/Admin/TenantInfo/Index',
+        path: '/Admin/TenantInfo/Index7',
         component: () => import('@/views/Admin/TenantInfo/index'),
         name: '多租户信息',
         meta: {title: '多租户信息'}

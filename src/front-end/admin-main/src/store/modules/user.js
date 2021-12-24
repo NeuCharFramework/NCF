@@ -2,6 +2,7 @@ import {getInfo, login} from '@/api/adminUserInfoAppService'
 import {getToken, removeRole, removeToken, setRole, setToken} from '@/utils/auth'
 import router, {resetRouter} from '@/router'
 import {Message} from 'element-ui'
+import store from "@/store";
 
 const state = {
   token: getToken(),
@@ -67,7 +68,6 @@ const actions = {
   getInfo({commit, state}) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        console.log(888777, response)
         const {data} = response
         if (!data) {
           reject("验证失败，请重新登录。")
@@ -100,7 +100,7 @@ const actions = {
   // user logout
   logout({commit, state, dispatch}) {
     return new Promise((resolve, reject) => {
-      console.log('必须移除token和roles')
+      console.log('退出登录--必须移除token和roles')
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
       removeToken() // must remove  token  first
@@ -148,13 +148,15 @@ const actions = {
     commit('SET_TOKEN', token)
     setToken(token)
 
-    const {roles} = await dispatch('getInfo')
+    const { roleCodes, menuTree } = await dispatch('getInfo')
 
     resetRouter()
 
-    // generate accessible routes map based on roles
-    const accessRoutes = await dispatch('permission/generateRoutes', roles, {root: true})
-    // dynamically add accessible routes
+    // 根据后端路由表生成可访问的路由
+    const accessRoutes = await store.dispatch('permission/generateRoutes', {roleCodes, menuTree})
+
+    // 动态添加可访问的路由
+    console.log('动态添加可访问的路由',accessRoutes)
     router.addRoutes(accessRoutes)
 
     // reset visited views and cached views

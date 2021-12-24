@@ -22,30 +22,31 @@ router.beforeEach(async(to, from, next) => {
 
   if (hasToken) {
     if (to.path === '/login') {
-      // if is logged in, redirect to the home page
+      // 如果已登录，则重定向到主页
       next({ path: '/' })
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
     } else {
-      // determine whether the user has obtained his permission roles through getInfo
-      const hasRoles = store.getters.roles && store.getters.roles.length > 0
+
+      //通过getInfo判断用户是否获得了他的权限角色
+      const hasRoles = store.getters.menuTree && store.getters.menuTree.length > 0
       if (hasRoles) {
         next()
       } else {
         try {
           // get user info
-          // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
+          //注意：menuTree、roleCodes 必须是一个数组
           const { roleCodes, menuTree } = await store.dispatch('user/getInfo')
 
-          // generate accessible routes map based on roles
+          // 根据后端路由表生成可访问的路由
           const accessRoutes = await store.dispatch('permission/generateRoutes', {roleCodes, menuTree})
 
-          // dynamically add accessible routes
+          // 动态添加可访问的路由
+          // console.log('可访问的路由',accessRoutes)
 
-          console.log('accessRoutes',accessRoutes)
           router.addRoutes(accessRoutes)
 
-          // hack method to ensure that addRoutes is complete
-          // set the replace: true, so the navigation will not leave a history record
+          // hack 方法来确保 addRoutes 是完整的
+          // 设置 replace: true, 这样导航就不会留下历史记录
           next({ ...to, replace: true })
         } catch (error) {
           // remove token and go to login page to re-login

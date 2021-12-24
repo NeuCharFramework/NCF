@@ -3,19 +3,12 @@ import Layout from '@/layout'
 import moduleRouter from '@/router/modules/module'
 
 /**
- * Use meta.role to determine if the current user has permission
- * @param roles
+ * 使用 后端传来的路由表判断当前用户是否有权限
+ * @param menuTree
  * @param route
  */
-function hasPermission(roles, route) {
-  if (route.meta && route.meta.roles) {
-    return roles.some(role => route.meta.roles.includes(role))
-  } else {
-    return true
-  }
-}
 
-function hasPermissionMenuTree(menuTree, route) {
+function hasPermission(menuTree, route) {
 
   //menuTree.some(role => route.path ===role.path)
   if (route.path) {
@@ -26,7 +19,7 @@ function hasPermissionMenuTree(menuTree, route) {
 }
 
 /**
- * Filter asynchronous routing tables by recursion
+ * 通过递归过滤异步路由表
  * @param routes asyncRoutes
  * @param menuTree
  * @param pageNotFind
@@ -37,7 +30,7 @@ export function filterAsyncRoutes(routes, menuTree, pageNotFind=true) {
   routes.forEach(route => {
     const tmp = {...route}
     //路由权限
-    if (hasPermissionMenuTree(menuTree, tmp)) {
+    if (hasPermission(menuTree, tmp)) {
       if (tmp.children) {
         //子路由权限
         let list = menuTree.filter(item => item.url === tmp.path)[0] || {}
@@ -62,6 +55,7 @@ const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
     state.routes = constantRoutes.concat(routes)
+    console.log('SET_ROUTES',state.routes)
   },
   SET_SIDEBAR_ROUTERS: (state, routes) => {
     state.sidebarRouters = routes
@@ -72,6 +66,7 @@ const actions = {
   generateRoutes({commit}, {roleCodes, menuTree}) {
     return new Promise(resolve => {
       let accessedRoutes
+      //超级管理员（administrator）有全部异步路由的权限
       if (roleCodes.includes('administrator8')) {
         accessedRoutes = asyncRoutes || []
       } else {
@@ -84,22 +79,25 @@ const actions = {
   },
   setRoutes({commit}, routes) {
     let list = {...moduleRouter, ...{}}
+    console.log('刷新菜单moduleRouter',moduleRouter)
+    console.log('刷新菜单routes',routes)
 
     routes.forEach(item => {
-      if (item.name === 'b-home1') {
-        item.meta = {
-          title: '拓展模块b-home1'
-        }
-        list.children.push(item)
-      }
-      if (item.name === 'b-about1') {
-        item.meta = {
-          title: '拓展模块b-about1'
-        }
-        list.children = [...list.children, ...[item]]
-      }
+      console.log(item, item.path,item.children)
+      // if (item.name === 'b-home1') {
+      //   item.meta = {
+      //     title: '拓展模块b-home1'
+      //   }
+      //   list.children.push(item)
+      // }
+      // if (item.name === 'b-about1') {
+      //   item.meta = {
+      //     title: '拓展模块b-about1'
+      //   }
+      //   list.children = [...list.children, ...[item]]
+      // }
     })
-    // list = [...state.accessedRoutes, ...list]
+    list = [...state.accessedRoutes, ...list]
 
     commit('SET_ROUTES', list)
   }

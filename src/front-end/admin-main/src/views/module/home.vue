@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-
     <div id="nav">
       <template v-for="menu in menus">
         <router-link :key="menu.name" :to="menu.path.length === 0 ? '/': menu.path">{{ menu.name }}</router-link>
@@ -29,6 +28,7 @@ export default {
     }
   },
   created() {
+
     this.refreshRouterMenu()
   },
   methods: {
@@ -57,6 +57,8 @@ export default {
       this.menus = _menus
 
       this.reset()
+      this.$store.dispatch('permission/setRoutes', routes)
+      console.log('$store77777777777', this.$store.state.permission.routes)
     },
     addModule() {
       this.$moduleLoader({
