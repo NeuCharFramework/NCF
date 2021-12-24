@@ -1,4 +1,4 @@
-import {login} from '@/api/adminUserInfoAppService'
+import {getInfo, login} from '@/api/adminUserInfoAppService'
 import {getToken, removeRole, removeToken, setRole, setToken} from '@/utils/auth'
 import router, {resetRouter} from '@/router'
 import {Message} from 'element-ui'
@@ -47,14 +47,12 @@ const actions = {
           console.log(888, response)
           const {data} = response
           commit('SET_TOKEN', data.token)
+          setToken(data.token)
           commit('SET_MENUTREE', data.menuTree)
           commit('SET_PERMISSIONCODES', data.permissionCodes)
-          setToken(data.token)
-
-          // 这里的角色暂时写死
           setRole(data.roleCodes)
 
-          resolve()
+          resolve(data)
         } else {
           Message({
             message: response.errorMessage || '登录失败！',
@@ -72,51 +70,51 @@ const actions = {
   // get user info
   getInfo({commit, state}) {
     return new Promise((resolve, reject) => {
-      const data = {
-        'roles': [
-          'admin'
-        ],
-        'introduction': 'i am admin',
-        'avatar': '',
-        'name': 'admin'
-      }
-      const {
-        roles,
-        name,
-        avatar,
-        introduction
-      } = data
-      commit('SET_ROLES', roles)
-      commit('SET_NAME', name)
-      commit('SET_AVATAR', avatar)
-      commit('SET_INTRODUCTION', introduction)
-      resolve(data)
+      getInfo(state.token).then(response => {
+        console.log(888777, response)
+        const { data } = response
+        const { roleCodes,userName,menuTree,permissionCodes } = data
+        const avatar = ''
+        const introduction = 'i am admin'
 
-      // 框架原本的逻辑
-      // getInfo(state.token).then(response => {
-      //   const { data } = response
-      //
-      //   if (!data) {
-      //     reject('Verification failed, please Login again.')
-      //   }
-      //
-      //   const { roles, name, avatar, introduction } = data
-      //
-      //   // roles must be a non-empty array
-      //   if (!roles || roles.length <= 0) {
-      //     reject('getInfo: roles must be a non-null array!')
-      //   }
-      //
-      //   commit('SET_ROLES', roles)
-      //   commit('SET_NAME', name)
-      //   commit('SET_AVATAR', avatar)
-      //   commit('SET_INTRODUCTION', introduction)
-      //   resolve(data)
-      // }).catch(error => {
-      //   reject(error)
-      // })
+        commit('SET_ROLES', roleCodes)
+        commit('SET_NAME', userName)
+        commit('SET_AVATAR', avatar)
+        commit('SET_INTRODUCTION', introduction)
+        commit('SET_MENUTREE', menuTree)
+        commit('SET_PERMISSIONCODES', permissionCodes)
+        resolve(data)
+
+      }).catch(error => {
+        reject(error)
+      })
     })
   },
+
+  // get user info
+  // getInfo({commit, state}) {
+  //   return new Promise((resolve, reject) => {
+  //     const data = {
+  //       'roles': [
+  //         'admin'
+  //       ],
+  //       'introduction': 'i am admin',
+  //       'avatar': '',
+  //       'name': 'admin'
+  //     }
+  //     const {
+  //       roles,
+  //       name,
+  //       avatar,
+  //       introduction
+  //     } = data
+  //     commit('SET_ROLES', roles)
+  //     commit('SET_NAME', name)
+  //     commit('SET_AVATAR', avatar)
+  //     commit('SET_INTRODUCTION', introduction)
+  //     resolve(data)
+  //   })
+  // },
 
   // user logout
   logout({commit, state, dispatch}) {
