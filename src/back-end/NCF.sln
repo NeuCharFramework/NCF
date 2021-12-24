@@ -28,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Xncf.Installer", "S
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{580CCA41-34BA-4194-AE78-D7801278FC66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Senparc.Xncf.Installer.Interface", "Senparc.Xncf.Installer.Interface\Senparc.Xncf.Installer.Interface.csproj", "{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Xncf.Installer.Interface", "Senparc.Xncf.Installer.Interface\Senparc.Xncf.Installer.Interface.csproj", "{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
