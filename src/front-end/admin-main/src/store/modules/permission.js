@@ -1,4 +1,4 @@
-import { asyncRoutes, constantRoutes } from '@/router'
+import {asyncRoutes, constantRoutes} from '@/router'
 import Layout from '@/layout'
 import moduleRouter from '@/router/modules/module'
 
@@ -15,23 +15,39 @@ function hasPermission(roles, route) {
   }
 }
 
+function hasPermissionMenuTree(menuTree,route) {
+
+  //menuTree.some(role => route.path ===role.path)
+  if (route.path) {
+    return  menuTree.filter(item=>item.url===route.path).length>0
+  } else {
+    return true
+  }
+}
+
 /**
  * Filter asynchronous routing tables by recursion
  * @param routes asyncRoutes
  * @param roles
+ * @param menuTree
  */
-export function filterAsyncRoutes(routes, roles) {
+export function filterAsyncRoutes(routes, menuTree) {
   const res = []
+  menuTree = menuTree.flat()
+    routes.forEach(route => {
+      console.log('route1234',route)
 
-  routes.forEach(route => {
-    const tmp = { ...route }
-    if (hasPermission(roles, tmp)) {
-      if (tmp.children) {
-        tmp.children = filterAsyncRoutes(tmp.children, roles)
+      const tmp = {...route}
+      if (hasPermissionMenuTree(menuTree, tmp)) {
+        if (tmp.children) {
+          let list = menuTree.filter(item=>item.url===tmp.path)[0] || {}
+          tmp.children = filterAsyncRoutes(tmp.children, list.children)
+        }
+        res.push(tmp)
       }
-      res.push(tmp)
-    }
-  })
+    })
+
+  console.log('res8', res)
 
   return res
 }
@@ -39,7 +55,7 @@ export function filterAsyncRoutes(routes, roles) {
 const state = {
   routes: [],
   addRoutes: [],
-  accessedRoutes:[],
+  accessedRoutes: [],
   sidebarRouters: []
 }
 
@@ -59,22 +75,27 @@ const mutations = {
 }
 
 const actions = {
-  generateRoutes({ commit }, roles) {
+  generateRoutes({commit}, {roleCodes, menuTree}) {
     return new Promise(resolve => {
+      console.log('asyncRoutes7', asyncRoutes)
+      console.log('roles7', roleCodes)
+      console.log('menuTree7', menuTree)
+
       let accessedRoutes
-      if (roles.includes('admin')) {
+      if (roleCodes.includes('administrator8')) {
         accessedRoutes = asyncRoutes || []
       } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+        accessedRoutes = filterAsyncRoutes(asyncRoutes, menuTree)
       }
-      // console.log('accessedRoutes', accessedRoutes)
+      console.log('accessedRoutes7', accessedRoutes)
+
       state.accessedRoutes = accessedRoutes
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
     })
   },
-  setRoutes({ commit }, routes) {
-    let list = { ...moduleRouter, ...{}}
+  setRoutes({commit}, routes) {
+    let list = {...moduleRouter, ...{}}
     // console.log(123, list)
     // console.log(123, list.children)
     // console.log(3333, state.routes)

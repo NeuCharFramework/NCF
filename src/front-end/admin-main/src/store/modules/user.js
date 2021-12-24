@@ -44,14 +44,10 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({username: username.trim(), password: password}).then(response => {
         if (response.success) {
-          console.log(888, response)
           const {data} = response
-          commit('SET_TOKEN', data.token)
-          setToken(data.token)
-          commit('SET_MENUTREE', data.menuTree)
-          commit('SET_PERMISSIONCODES', data.permissionCodes)
-          setRole(data.roleCodes)
-
+          const {token} = data
+          commit('SET_TOKEN', token)
+          setToken(token)
           resolve(data)
         } else {
           Message({
@@ -72,17 +68,27 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         console.log(888777, response)
-        const { data } = response
-        const { roleCodes,userName,menuTree,permissionCodes } = data
+        const {data} = response
+        if (!data) {
+          reject("验证失败，请重新登录。")
+        }
+        const {roleCodes, userName, menuTree, permissionCodes} = data
+        // roles must be a non-empty array
+        if (!roleCodes || roleCodes.length <= 0) {
+          reject('getInfo: roles must be a non-null array!')
+        }
+
         const avatar = ''
         const introduction = 'i am admin'
 
         commit('SET_ROLES', roleCodes)
+        setRole(roleCodes)
         commit('SET_NAME', userName)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
         commit('SET_MENUTREE', menuTree)
         commit('SET_PERMISSIONCODES', permissionCodes)
+
         resolve(data)
 
       }).catch(error => {
@@ -90,31 +96,6 @@ const actions = {
       })
     })
   },
-
-  // get user info
-  // getInfo({commit, state}) {
-  //   return new Promise((resolve, reject) => {
-  //     const data = {
-  //       'roles': [
-  //         'admin'
-  //       ],
-  //       'introduction': 'i am admin',
-  //       'avatar': '',
-  //       'name': 'admin'
-  //     }
-  //     const {
-  //       roles,
-  //       name,
-  //       avatar,
-  //       introduction
-  //     } = data
-  //     commit('SET_ROLES', roles)
-  //     commit('SET_NAME', name)
-  //     commit('SET_AVATAR', avatar)
-  //     commit('SET_INTRODUCTION', introduction)
-  //     resolve(data)
-  //   })
-  // },
 
   // user logout
   logout({commit, state, dispatch}) {
