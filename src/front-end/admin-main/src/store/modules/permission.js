@@ -55,7 +55,6 @@ const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
     state.routes = constantRoutes.concat(routes)
-    console.log('SET_ROUTES',state.routes)
   },
   SET_SIDEBAR_ROUTERS: (state, routes) => {
     state.sidebarRouters = routes
@@ -66,7 +65,7 @@ const actions = {
   generateRoutes({commit}, {roleCodes, menuTree}) {
     return new Promise(resolve => {
       let accessedRoutes
-      //超级管理员（administrator）有全部异步路由的权限
+      //超级管理员（）有全部异步路由的权限
       if (roleCodes.includes('administrator8')) {
         accessedRoutes = asyncRoutes || []
       } else {
@@ -79,24 +78,22 @@ const actions = {
   },
   setRoutes({commit}, routes) {
     let list = {...moduleRouter, ...{}}
-    console.log('刷新菜单moduleRouter',moduleRouter)
-    console.log('刷新菜单routes',routes)
 
-    routes.forEach(item => {
-      console.log(item, item.path,item.children)
-      // if (item.name === 'b-home1') {
-      //   item.meta = {
-      //     title: '拓展模块b-home1'
-      //   }
-      //   list.children.push(item)
-      // }
-      // if (item.name === 'b-about1') {
-      //   item.meta = {
-      //     title: '拓展模块b-about1'
-      //   }
-      //   list.children = [...list.children, ...[item]]
-      // }
-    })
+    // routes.forEach(item => {
+    //   if (item.name === 'b-home1') {
+    //     item.meta = {
+    //       title: '拓展模块b-home1'
+    //     }
+    //     list.children.push(item)
+    //   }
+    //   if (item.name === 'b-about1') {
+    //     item.meta = {
+    //       title: '拓展模块b-about1'
+    //     }
+    //     list.children = [...list.children, ...[item]]
+    //   }
+    // })
+
     list = [...state.accessedRoutes, ...list]
 
     commit('SET_ROUTES', list)

@@ -209,7 +209,6 @@ export default {
   },
   created() {
     this.getList()
-    console.log(999, this.$store)
   },
   methods: {
     // 再次校验密码

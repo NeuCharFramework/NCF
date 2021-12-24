@@ -57,7 +57,7 @@ export default {
       this.menus = _menus
 
       this.reset()
-      this.$store.dispatch('permission/setRoutes', routes)
+      // this.$store.dispatch('permission/setRoutes', routes)
       console.log('$store77777777777', this.$store.state.permission.routes)
     },
     addModule() {
