@@ -113,6 +113,22 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         }
 
         /// <summary>
+        /// 获取当前管理员信息
+        /// </summary>
+        /// <returns></returns>
+        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Get)]
+        public async Task<AppResponseBase<AccountLoginResultDto>> GetAdminUserInfoAsync()
+        {
+            AppResponseBase<AccountLoginResultDto> resultDto = await this.GetResponseAsync<AppResponseBase<AccountLoginResultDto>, AccountLoginResultDto>(async (response, logger) =>
+            {
+                var result = await _adminUserInfoService.GetAdminUserInfoAsync(GetCurrentAdminUserInfoId());
+                return result;
+            });
+            return resultDto;
+        }
+        
+
+        /// <summary>
         /// 增加角色
         /// </summary>
         /// <param name="request"></param>

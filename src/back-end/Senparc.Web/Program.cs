@@ -32,7 +32,7 @@ if (app.Environment.IsDevelopment())
 //Use NCF（必须）
 app.UseNcf();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseCookiePolicy();
