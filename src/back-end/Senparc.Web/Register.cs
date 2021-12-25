@@ -95,7 +95,7 @@ namespace Senparc.Web
             //services.AddSignalR();
 
             //XncfModules（必须）
-            Senparc.Ncf.XncfBase.Register.UseXncfModules(app, registerService);
+            Senparc.Ncf.XncfBase.Register.UseXncfModules(app, registerService, Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting);
             //TODO:app.UseXncfModules(registerService);
         }
 
