@@ -77,7 +77,7 @@ namespace Senparc.Areas.Admin.Domain.Migrations.MySql
 
                     b.HasKey("Id");
 
-                    b.ToTable("AdminUserInfo");
+                    b.ToTable("ADMIN_AdminUserInfos");
                 });
 #pragma warning restore 612, 618
         }
