@@ -30,6 +30,8 @@ Console.WriteLine("============ logMsg =============");
 Console.WriteLine(logMsg);
 Console.WriteLine("============ logMsg END =============");
 
+builder.Services.AddSwaggerGen();
+
 
 //读取Log配置文件
 var repository = LogManager.CreateRepository("NETCoreRepository");
@@ -40,6 +42,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 //Use NCF（必须）
 IOptions<SenparcCoreSetting> senparcCoreSetting = app.Services.GetService<IOptions<SenparcCoreSetting>>();
