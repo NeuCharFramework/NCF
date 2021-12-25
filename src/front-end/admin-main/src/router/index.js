@@ -1,14 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-Vue.use(Router)
-
 /* Layout */
 import Layout from '@/layout'
 
 /* Router Modules */
 import moduleRouter from '@/router/modules/module'
-import chartsRouter from '@/router/modules/charts'
+
+Vue.use(Router)
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -77,10 +75,34 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        meta: {title: 'Dashboard', icon: 'dashboard', affix: true}
       }
     ]
   },
+  // {
+  //   path: '/template',
+  //   component: Layout,
+  //   name: 'Template',
+  //   meta: {
+  //     title: '模板页',
+  //     icon: 'excel'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'template',
+  //       component: () => import('@/views/template/template'),
+  //       name: '模板页',
+  //       meta: {title: '模板页'}
+  //     }
+  //   ]
+  // }
+]
+
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
   {
     path: '/Admin',
     component: Layout,
@@ -91,116 +113,49 @@ export const constantRoutes = [
     },
     children: [
       {
-        path: 'AdminUserInfo',
+        path: '/Admin/AdminUserInfo/Index',
         component: () => import('@/views/Admin/AdminUserInfo/index'),
         name: '管理员管理',
-        meta: { title: '管理员管理' }
+        meta: {title: '管理员管理'}
       },
       {
-        path: 'Role',
+        path: '/Admin/Role/Index',
         component: () => import('@/views/Admin/Role/index'),
         name: '角色管理',
-        meta: { title: '角色管理' }
+        meta: {title: '角色管理'}
       },
       {
-        path: 'Menu',
+        path: '/Admin/Menu/Index',
         component: () => import('@/views/Admin/Menu/index'),
         name: '菜单管理',
-        meta: { title: '菜单管理' }
+        meta: {title: '菜单管理'}
       },
       {
-        path: 'SystemConfig',
+        path: '/Admin/SystemConfig/Index',
         component: () => import('@/views/Admin/SystemConfig/index'),
         name: '系统信息',
-        meta: { title: '系统信息' }
+        meta: {title: '系统信息'}
       },
       {
-        path: 'TenantInfo',
+        path: '/Admin/TenantInfo/Index',
         component: () => import('@/views/Admin/TenantInfo/index'),
         name: '多租户信息',
-        meta: { title: '多租户信息' }
+        meta: {title: '多租户信息'}
       }
     ]
   },
-  {
-    path: '/template',
-    component: Layout,
-    name: 'Template',
-    meta: {
-      title: '模板页',
-      icon: 'excel'
-    },
-    children: [
-      {
-        path: 'template',
-        component: () => import('@/views/template/template'),
-        name: '模板页',
-        meta: { title: '模板页' }
-      }
-    ]
-  }
-]
 
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
-  // {
-  //   path: '/XncfModule',
-  //   component: Layout,
-  //   redirect: '/XncfModule/menu1/menu1-1',
-  //   name: '拓展模块',
-  //   meta: {
-  //     title: '拓展模块',
-  //     icon: 'excel'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: '模块管理',
-  //       component: () => import('@/views/Admin/XncfModule/menu2/index'),
-  //       meta: { title: '模块管理' }
-  //     },
-  //     {
-  //       path: 'menu1',
-  //       component: () => import('@/views/Admin/XncfModule/menu1/index'), // Parent router-view
-  //       name: 'NCF 系统后台',
-  //       meta: { title: 'NCF 系统后台' },
-  //       redirect: '/XncfModule/menu1/menu1-1',
-  //       children: [
-  //         {
-  //           path: 'menu1-1',
-  //           component: () => import('@/views/Admin/XncfModule/menu1/menu1-1'),
-  //           name: '设置/执行',
-  //           meta: { title: '设置/执行' }
-  //         },
-  //         {
-  //           path: 'menu1-3',
-  //           component: () => import('@/views/Admin/XncfModule/menu1/menu1-3'),
-  //           name: '菜单管理',
-  //           meta: { title: '菜单管理' }
-  //         },
-  //         {
-  //           path: 'SenparcTrace',
-  //           component: () => import('@/views/Admin/XncfModule/menu1/menu1-3'),
-  //           name: 'SenparcTrace 日志',
-  //           meta: { title: 'SenparcTrace 日志' }
-  //         }
-  //       ]
-  //     }
-  //   ]
-  // },
+
 
   // chartsRouter,
   moduleRouter,
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  {path: '*', redirect: '/404', hidden: true}
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({y: 0}),
   routes: constantRoutes
 })
 

@@ -60,14 +60,9 @@ export function updateAdminUser(data) {
   })
 }
 
-
-
-
-
-
 export function getInfo(token) {
   return request({
-    url: '/vue-element-admin/user/info',
+    url: `${baseUrl}.GetAdminUserInfoAsync`,
     method: 'get',
     params: { token }
   })
@@ -75,7 +70,7 @@ export function getInfo(token) {
 
 export function logout() {
   return request({
-    url: '/vue-element-admin/user/logout',
+    url: `${baseUrl}.logout`,
     method: 'post'
   })
 }

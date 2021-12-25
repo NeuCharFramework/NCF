@@ -134,7 +134,7 @@ export default {
       // 分页接口传参
       listQuery: {
         pageIndex: 1,
-        pageSize: 20,
+        pageSize: 100,
       },
       tableData: [],
       dialog: {
@@ -245,10 +245,8 @@ export default {
       let res = await getAdminUserList(this.listQuery)
       if(res.success){
         let data = res.data
-        console.log(777,res)
         this.tableData = data.list
         this.paginationQuery.total = data.totalCount
-        console.log(888, this.tableData)
       }
     },
     // 编辑
@@ -276,7 +274,6 @@ export default {
           if (this.isVerPass) {
             // 校验不通过
             if (!this.dialog.isVerTrue) {
-              console.log('不通过')
               return false
             }
           }
