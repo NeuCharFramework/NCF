@@ -33,3 +33,4 @@ obj/
 /src/back-end/Senparc.Web/appsettings.Development.json
 /src/back-end/Senparc.Web/scripts/app.js.map
 /src/back-end/Senparc.Web/scripts/app.js
+/src/back-end/Senparc.Areas.Admin/Senparc.Areas.Admin.XML

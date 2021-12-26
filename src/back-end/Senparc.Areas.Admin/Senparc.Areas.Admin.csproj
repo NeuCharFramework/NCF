@@ -6,6 +6,7 @@
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 		<!--<RazorLangVersion>2.0</RazorLangVersion>-->
 		<!--<AddRazorSupportForMvc>true</AddRazorSupportForMvc>-->
+		<DocumentationFile>../Senparc.Web/App_Data/ApiDocXML/Senparc.Areas.Admin.XML</DocumentationFile>
 
 	</PropertyGroup>
 
