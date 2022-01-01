@@ -10,6 +10,7 @@ using Senparc.CO2NET.AspNet;
 using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
+using Senparc.Ncf.Database.MySql;
 using Senparc.Ncf.Database.SqlServer;
 using Senparc.Xncf.Accounts.Domain.Models;
 using Senparc.Xncf.Accounts.Models;
@@ -31,9 +32,6 @@ Console.WriteLine("============ logMsg =============");
 Console.WriteLine(logMsg);
 Console.WriteLine("============ logMsg END =============");
 
-//读取Log配置文件
-var repository = LogManager.CreateRepository("NETCoreRepository");
-XmlConfigurator.Configure(repository, new FileInfo("log4net.config"));
 
 var app = builder.Build();
 
