@@ -3,7 +3,7 @@
     <div>
       <div class="admin-user-info">
         <div class="filter-container">
-          <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleEdit">增加</el-button>
+          <el-button class="filter-item" icon="el-icon-plus" type="primary" @click="handleEdit">增加</el-button>
         </div>
         <el-table
           :data="tableData"
@@ -44,25 +44,23 @@
               {{ scope.row.addTime }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center">
+          <el-table-column align="center" label="操作">
             <template slot-scope="scope">
-              <!--              <el-button-->
-              <!--                v-has="['admin-edit']"-->
-              <!--                size="mini"-->
-              <!--                type="primary"-->
-              <!--                @click="handleEdit(scope.$index, scope.row)"-->
-              <!--              >编辑</el-button>-->
-              <!--              <el-button-->
-              <!--                v-has="['admin-grant']"-->
-              <!--                size="mini"-->
-              <!--                type="primary"-->
-              <!--                @click="handleSet(scope.$index, scope.row)"-->
-              <!--              >设置角色</el-button>-->
-              <!--              <template v-has="['admin-delete']">-->
-              <!--                <el-popconfirm placement="top" title="确认删除此角色吗？" @on-confirm="handleDelete(scope.$index, scope.row)">-->
-              <!--                  <el-button slot="reference" size="mini" type="danger">删除</el-button>-->
-              <!--                </el-popconfirm>-->
-              <!--              </template>-->
+              <el-button
+                size="mini"
+                type="primary"
+                @click="handleEdit(scope.$index, scope.row)"
+              >编辑
+              </el-button>
+              <el-button
+                size="mini"
+                type="primary"
+                @click="handleSet(scope.$index, scope.row)"
+              >设置角色
+              </el-button>
+              <el-popconfirm placement="top" title="确认删除此角色吗？" @on-confirm="handleDelete(scope.$index, scope.row)">
+                <el-button slot="reference" size="mini" type="danger">删除</el-button>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -73,33 +71,33 @@
         <!--          @pagination="getList"-->
         <!--        />-->
         <!--编辑、新增 -->
-        <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
+        <el-dialog :close-on-click-modal="false" :title="dialog.title" :visible.sync="dialog.visible">
           <el-form
             ref="dataForm"
-            :rules="dialog.rules"
             :model="dialog.data"
+            :rules="dialog.rules"
             label-position="left"
             label-width="100px"
             style="max-width: 400px; margin-left:50px;"
           >
             <p v-if="dialog.title==='编辑管理员'" class="username-tip">不建议修改用户名！</p>
             <el-form-item label="用户名" prop="userName">
-              <el-input v-model="dialog.data.userName" clearable placeholder="请输入用户名" />
+              <el-input v-model="dialog.data.userName" clearable placeholder="请输入用户名"/>
             </el-form-item>
-            <el-form-item label="密码" :error="dialog.passwordError" :required="isVerPass">
-              <el-input v-model="dialog.data.password" show-password clearable placeholder="请输入密码" />
+            <el-form-item :error="dialog.passwordError" :required="isVerPass" label="密码">
+              <el-input v-model="dialog.data.password" clearable placeholder="请输入密码" show-password/>
             </el-form-item>
-            <el-form-item label="再次确认密码" :error="dialog.password2Error" :required="isVerPass">
-              <el-input v-model="dialog.data.password2" show-password clearable placeholder="请再次输入密码" />
+            <el-form-item :error="dialog.password2Error" :required="isVerPass" label="确认密码">
+              <el-input v-model="dialog.data.password2" clearable placeholder="请再次输入密码" show-password/>
             </el-form-item>
             <el-form-item label="真实姓名" prop="realName">
-              <el-input v-model="dialog.data.realName" clearable placeholder="请输入真实姓名" />
+              <el-input v-model="dialog.data.realName" clearable placeholder="请输入真实姓名"/>
             </el-form-item>
             <el-form-item label="手机号" prop="phone">
-              <el-input v-model="dialog.data.phone" clearable placeholder="请输入手机号" />
+              <el-input v-model="dialog.data.phone" clearable placeholder="请输入手机号"/>
             </el-form-item>
             <el-form-item label="备注" prop="note">
-              <el-input v-model="dialog.data.note" clearable placeholder="请输入备注信息" />
+              <el-input v-model="dialog.data.note" clearable placeholder="请输入备注信息"/>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -123,7 +121,7 @@
 </template>
 
 <script>
-import { getAdminUserList } from '@/api/user'
+import { getAdminUserList } from '@/api/adminUserInfoAppService'
 
 export default {
   name: 'AdminUserInfo',
@@ -137,7 +135,6 @@ export default {
       listQuery: {
         pageIndex: 1,
         pageSize: 20,
-        adminUserInfoName: ''
       },
       tableData: [],
       dialog: {
@@ -154,7 +151,7 @@ export default {
         },
         rules: {
           userName: [
-            { required: true, message: '用户名为必填项', trigger: 'blur' }
+            {required: true, message: '用户名为必填项', trigger: 'blur'}
           ]
           // password: [{ required: true, validator: validatePass, trigger: "blur" }],
           // password2: [{ required: true, validator: validatePass2, trigger: "blur" }]
@@ -191,7 +188,7 @@ export default {
     'dialog.data.password2': function myfunction(val) {
       this.checkPass()
     },
-    'dialog.visible': function(val, old) {
+    'dialog.visible': function (val, old) {
       // 关闭dialog，清空
       if (!val) {
         this.dialog.data = {
@@ -244,55 +241,22 @@ export default {
     },
     // 获取数据
     async getList() {
-      const { adminUserInfoName, pageIndex, pageSize } = this.listQuery
-      getAdminUserList({
-        handler: 'list',
-        adminUserInfoName: '',
-        pageIndex: 1,
-        pageSize: 20
-      }).then(res => {
-        console.log(1233, res)
-      })
-      // service.get(`/Admin/AdminUserInfo/index?handler=List&adminUserInfoName=${adminUserInfoName}&pageIndex=${pageIndex}&pageSize=${pageSize}`).then(res => {
-      //   this.tableData = res.data.data.list
-      //   this.paginationQuery.total = res.data.data.totalCount
-      // })
-      const res = {
-        'data': {
-          'list': [
-            {
-              'id': 1,
-              'userName': 'SenparcCoreAdmin25',
-              'password': '68B950596ECAFE09B3EA5E567CCE8A63',
-              'note': '初始化数据',
-              'realName': null,
-              'phone': null,
-              'flag': false,
-              'adminRemark': null,
-              'remark': null,
-              'addTime': '2021-10-31T21:02:13.0675889',
-              'lastUpdateTime': '2021-10-31T21:02:13.0675889',
-              'tenantId': 1
-            }
-          ],
-          'totalCount': 1
-        },
-        'stateCode': 0,
-        'success': true,
-        'errorMessage': null,
-        'requestTempId': 'RequestTempId-637726981640150424-4a587c6a'
+      const {adminUserInfoName, pageIndex, pageSize} = this.listQuery
+      let res = await getAdminUserList(this.listQuery)
+      if(res.success){
+        let data = res.data
+        console.log(777,res)
+        this.tableData = data.list
+        this.paginationQuery.total = data.totalCount
+        console.log(888, this.tableData)
       }
-      this.tableData = res.data.list
-      this.paginationQuery.total = res.data.totalCount
-
-      console.log(777, this.tableData)
     },
     // 编辑
     handleEdit(index, row) {
       this.dialog.visible = true
       if (row) {
         // 编辑
-        const { userName, password, realName, phone, note, id } = row
+        const {userName, password, realName, phone, note, id} = row
         this.dialog.data = {
           userName, realName, phone, note, id, password: '', password2: ''
         }
@@ -346,7 +310,7 @@ export default {
     // 更新设置角色
     updateDataSet() {
       this.dialog.updateLoadingSet = true
-      const data = { RoleIds: this.dialog.dialogSetSelected, AccountId: this.setId }
+      const data = {RoleIds: this.dialog.dialogSetSelected, AccountId: this.setId}
       // service.post('/Admin/AdminUserInfo/AuthorizationPage', data).then(res => {
       //   if (res.data.success) {
       //     this.getList()

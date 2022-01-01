@@ -1,12 +1,13 @@
-﻿using Senparc.Ncf.Core.Enums;
-using Senparc.Ncf.XncfBase;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Senparc.Ncf.Core.Enums;
+using Senparc.Ncf.XncfBase;
+using Senparc.Xncf.Installer.Domain.Dto;
+using Senparc.Xncf.Installer.Domain.Services;
+using Senparc.Xncf.Installer.OHS.Local.AppService;
+using System;
+using System.Threading.Tasks;
 
 namespace Senparc.Xncf.Installer
 {
@@ -39,7 +40,9 @@ namespace Senparc.Xncf.Installer
 
         public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
         {
-            //services.AddScoped<ColorAppService>();
+            services.AddScoped<InstallerService>();
+            services.AddScoped<InstallAppService>();
+            services.AddScoped<InstallDto>();
             return base.AddXncfModule(services, configuration, env);
         }
     }

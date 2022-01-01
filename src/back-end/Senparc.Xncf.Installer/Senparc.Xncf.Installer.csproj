@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<Version>0.3</Version>
@@ -20,27 +20,33 @@
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NcfPackageSources</RepositoryUrl>
 		<Configurations>Debug;Release;Test;TemplateRelease</Configurations>
+		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+		<UserSecretsId>95b039f7-327c-4e1e-a03f-eab8bbe5378f</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
 		<OutputPath>..\..\..\BuildOutPut</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.0-beta7" />
+		<PackageReference Include="Dapr.AspNetCore" Version="1.5.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.0.8-beta8" />
 		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.11.0-beta7" />
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
+		<ProjectReference Include="..\Senparc.Xncf.Installer.Interface\Senparc.Xncf.Installer.Interface.csproj" />
 		<!--为了兼容部分数据库迁移文件仍然有依赖的情况-->
-		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.11.0-beta7" />
+		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.11.0.7-beta8" />
 
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.2.0-beta7" />
-		<PackageReference Include="Senparc.Xncf.Menu" Version="0.3.0-beta7" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.6.0-beta7" />
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.3.0.1-beta7" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.3.0-beta7" />
-		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.3.0-beta7" />
-		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.0-beta7" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.2.0.2-beta7" />
+		<PackageReference Include="Senparc.Xncf.Menu" Version="0.3.0.1-beta7" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.6.0.1-beta7" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.3.0.7-beta7" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.3.0.1-beta7" />
+		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.3.0.1-beta7" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.0.7-beta8" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.12.0-beta7" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.0.1-beta7" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.0-beta7" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.0.3-beta7" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.0.1-beta7" />
 		<None Include="App_Data\SenparcTraceLog\*" />
 	</ItemGroup>
 	<ItemGroup>
@@ -55,13 +61,12 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.1" />
-		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
-		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />
+		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 --><!--
+		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />-->
 	</ItemGroup>
 	<ItemGroup>
+		<Folder Include="Domain\Dto\" />
 		<Folder Include="Domain\Models\DatabaseModel\Mapping\" />
 		<Folder Include="Domain\Models\MultipleDatabase\" />
-		<Folder Include="Domain\Services\" />
-		<Folder Include="OHS\Local\AppService\" />
 	</ItemGroup>
 </Project>

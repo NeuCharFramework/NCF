@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
-	<!--<Project Sdk="Microsoft.NET.Sdk.Razor">-->
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<!--<TargetFramework>net5.0</TargetFramework>-->
@@ -17,30 +16,7 @@
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
 	</ItemGroup>
 
-
 	<ItemGroup>
-		<Compile Remove="Areas\Admin\Pages\Database\**" />
-		<Compile Remove="Areas\Pages\**" />
-		<Compile Remove="Filters\**" />
-		<Content Remove="Areas\Admin\Pages\Database\**" />
-		<Content Remove="Areas\Pages\**" />
-		<Content Remove="Filters\**" />
-		<EmbeddedResource Remove="Areas\Admin\Pages\Database\**" />
-		<EmbeddedResource Remove="Areas\Pages\**" />
-		<EmbeddedResource Remove="Filters\**" />
-		<None Remove="Areas\Admin\Pages\Database\**" />
-		<None Remove="Areas\Pages\**" />
-		<None Remove="Filters\**" />
-	</ItemGroup>
-
-
-	<ItemGroup>
-	  <Compile Remove="Areas\Admin\Pages\XncfModule\StartOld.cshtml.cs" />
-	</ItemGroup>
-
-
-	<ItemGroup>
-		<Content Remove="Areas\Admin\Pages\XncfModule\StartOld.cshtml" />
 		<Content Remove="wwwroot\css\Admin\TenantInfo\Index.css" />
 		<Content Remove="wwwroot\css\Admin\SystemConfig\Index.css" />
 		<Content Remove="wwwroot\js\Admin\Pages\SystemConfig\Index.js" />
@@ -55,12 +31,12 @@
 		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="1.0.0" />
 		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="4.0.0" />
 		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.11.0-beta7" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.11.0-beta7" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.11.0.7-beta7" />
 		<PackageReference Include="Senparc.Ncf.Log" Version="0.11.0-beta7" />
 		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.11.0-beta7" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.11.0-beta7" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.11.0.3-beta7" />
 		<PackageReference Include="Senparc.Ncf.Utility" Version="0.11.0-beta7" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.0-beta7" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.0.8-beta8" />
 
 
 		<!--<PackageReference Include="Senparc.Weixin" Version="6.13.0" />
@@ -68,15 +44,17 @@
 		<PackageReference Include="Senparc.Weixin.Cache.Memcached" Version="2.11.0" />
 		<PackageReference Include="Senparc.Weixin.MP" Version="16.16.0" />-->
 
-		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
+		<!-- 为解决 VS 2019 v16.8 / VS 2022 的一个bug，需要添加下方引用 -->
 		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.2.0-beta7" />
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.3.0.1-beta7" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.3.0-beta7" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.0-beta7" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.2.0.2-beta7" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.3.0.7-beta7" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.3.0.1-beta7" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.0.1-beta7" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.0.7-beta8" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Domain\Dto\Base\" />
 	  <Folder Include="Domain\Dto\Base\" />
 	</ItemGroup>
 

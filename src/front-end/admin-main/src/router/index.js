@@ -80,14 +80,7 @@ export const constantRoutes = [
         meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
       }
     ]
-  }
-]
-
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
+  },
   {
     path: '/Admin',
     component: Layout,
@@ -130,51 +123,6 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/XncfModule',
-    component: Layout,
-    redirect: '/XncfModule/menu1/menu1-1',
-    name: '拓展模块',
-    meta: {
-      title: '拓展模块',
-      icon: 'excel'
-    },
-    children: [
-      {
-        path: 'index',
-        name: '模块管理',
-        component: () => import('@/views/Admin/XncfModule/menu2/index'),
-        meta: { title: '模块管理' }
-      },
-      {
-        path: 'menu1',
-        component: () => import('@/views/Admin/XncfModule/menu1/index'), // Parent router-view
-        name: 'NCF 系统后台',
-        meta: { title: 'NCF 系统后台' },
-        redirect: '/XncfModule/menu1/menu1-1',
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/Admin/XncfModule/menu1/menu1-1'),
-            name: '设置/执行',
-            meta: { title: '设置/执行' }
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/Admin/XncfModule/menu1/menu1-3'),
-            name: '菜单管理',
-            meta: { title: '菜单管理' }
-          },
-          {
-            path: 'SenparcTrace',
-            component: () => import('@/views/Admin/XncfModule/menu1/menu1-3'),
-            name: 'SenparcTrace 日志',
-            meta: { title: 'SenparcTrace 日志' }
-          }
-        ]
-      }
-    ]
-  },
-  {
     path: '/template',
     component: Layout,
     name: 'Template',
@@ -190,9 +138,62 @@ export const asyncRoutes = [
         meta: { title: '模板页' }
       }
     ]
-  },
+  }
+]
+
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
+  // {
+  //   path: '/XncfModule',
+  //   component: Layout,
+  //   redirect: '/XncfModule/menu1/menu1-1',
+  //   name: '拓展模块',
+  //   meta: {
+  //     title: '拓展模块',
+  //     icon: 'excel'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: '模块管理',
+  //       component: () => import('@/views/Admin/XncfModule/menu2/index'),
+  //       meta: { title: '模块管理' }
+  //     },
+  //     {
+  //       path: 'menu1',
+  //       component: () => import('@/views/Admin/XncfModule/menu1/index'), // Parent router-view
+  //       name: 'NCF 系统后台',
+  //       meta: { title: 'NCF 系统后台' },
+  //       redirect: '/XncfModule/menu1/menu1-1',
+  //       children: [
+  //         {
+  //           path: 'menu1-1',
+  //           component: () => import('@/views/Admin/XncfModule/menu1/menu1-1'),
+  //           name: '设置/执行',
+  //           meta: { title: '设置/执行' }
+  //         },
+  //         {
+  //           path: 'menu1-3',
+  //           component: () => import('@/views/Admin/XncfModule/menu1/menu1-3'),
+  //           name: '菜单管理',
+  //           meta: { title: '菜单管理' }
+  //         },
+  //         {
+  //           path: 'SenparcTrace',
+  //           component: () => import('@/views/Admin/XncfModule/menu1/menu1-3'),
+  //           name: 'SenparcTrace 日志',
+  //           meta: { title: 'SenparcTrace 日志' }
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // },
+
   // chartsRouter,
-  // moduleRouter,
+  moduleRouter,
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

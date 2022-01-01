@@ -1,18 +1,12 @@
 ﻿using log4net;
 using log4net.Config;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
 using Senparc.CO2NET.AspNet;
-using Senparc.CO2NET.RegisterServices;
 using Senparc.Ncf.Core.Areas;
-using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Models;
-using Senparc.Ncf.XncfBase;
 using System;
 using System.IO;
 
@@ -23,8 +17,21 @@ namespace Senparc.Web
     /// </summary>
     public static class Register
     {
-        public static void AddNcf(this WebApplicationBuilder builder, IConfiguration configuration, IWebHostEnvironment env)
+        public static void AddNcf<TDatabaseConfiguration>(this WebApplicationBuilder builder)
+            where TDatabaseConfiguration : IDatabaseConfiguration, new()
         {
+            //指定数据库（必须）
+            builder.Services.AddDatabase<TDatabaseConfiguration>();
+
+            //激活 Xncf 扩展引擎（必须）
+            var logMsg = builder.Services.StartWebEngine(builder.Configuration, builder.Environment);
+            //如果不需要启用 Areas，可以只使用 services.StartEngine() 方法
+
+            Console.WriteLine("============ logMsg =============");
+            Console.WriteLine(logMsg);
+            Console.WriteLine("============ logMsg END =============");
+
+
             //如果运行在IIS中，需要添加IIS配置
             //https://docs.microsoft.com/zh-cn/aspnet/core/host-and-deploy/iis/index?view=aspnetcore-2.1&tabs=aspnetcore2x#supported-operating-systems
             //services.Configure<IISOptions>(options =>
@@ -38,22 +45,6 @@ namespace Senparc.Web
             //    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
             //    options.HttpsPort = 443;
             //});
-
-            //激活 Xncf 扩展引擎（必须）
-            var logMsg = builder.Services.StartWebEngine(configuration, env);//如果不需要启用 Areas，可以只使用 services.StartEngine() 方法
-            Console.WriteLine("============ logMsg =============");
-            Console.WriteLine(logMsg);
-            Console.WriteLine("============ logMsg END =============");
-        }
-
-        /// <summary>
-        /// 使用指定数据库
-        /// </summary>
-        /// <typeparam name="TDatabaseConfiguration"></typeparam>
-        /// <param name="builder"></param>
-        public static void AddDatabase<TDatabaseConfiguration>(this WebApplicationBuilder builder) where TDatabaseConfiguration : IDatabaseConfiguration, new()
-        {
-            builder.AddDatabase<TDatabaseConfiguration>();
         }
 
         public static void UseNcf(this WebApplication app)
@@ -61,8 +52,6 @@ namespace Senparc.Web
             IWebHostEnvironment env = app.Environment;
             IOptions<SenparcCoreSetting> senparcCoreSetting = app.Services.GetService<IOptions<SenparcCoreSetting>>();
             IOptions<SenparcSetting> senparcSetting = app.Services.GetService<IOptions<SenparcSetting>>();
-
-            Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting = senparcCoreSetting.Value;
 
             // 启动 CO2NET 全局注册，必须！
             // 关于 UseSenparcGlobal() 的更多用法见 CO2NET Demo：https://github.com/Senparc/Senparc.CO2NET/blob/master/Sample/Senparc.CO2NET.Sample.netcore3/Startup.cs
@@ -96,17 +85,11 @@ namespace Senparc.Web
                     #endregion
                 });
 
-            ////支持 Session
-            //services.AddSession();
-
-            //注册 SignalR
-            //services.AddSignalR();
 
             //XncfModules（必须）
-            Senparc.Ncf.XncfBase.Register.UseXncfModules(app, registerService);
+            Senparc.Ncf.XncfBase.Register.UseXncfModules(app, registerService, senparcCoreSetting.Value);
             //TODO:app.UseXncfModules(registerService);
         }
-
 
         /// <summary>
         /// 判断当前配置是否满足使用 Redis（根据是否已经修改了默认配置字符串判断）

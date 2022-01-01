@@ -16,7 +16,7 @@ const moduleRouter = {
       path: 'home',
       component: () => import('@/views/module/home'),
       name: 'ModuleHome',
-      meta: { title: '模块管理', noCache: false }
+      meta: { title: '拓展模块', noCache: false }
     }
   ]
 }

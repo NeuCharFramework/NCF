@@ -6,7 +6,7 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || 'vue Element Admin' // page title
+const name = defaultSettings.title || 'NCF Admin' // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -42,9 +42,7 @@ module.exports = {
     proxy: {
       // 所有的请求起始部分全部用 '/api'代替，比如访问"https://192.168.1.4/movie"，那么简写成"/api/movie"即可
       '/api': {
-        // target: 'https://www.ncf.pub/Admin',
-        //target: 'https://f5d8-49-73-162-100.ngrok.io',
-        target: 'http://localhost:61126/api',
+        target: 'https://143e-222-93-133-230.ngrok.io/api',
         changeOrigin: true,
         ws: true,
         pathRewrite: {

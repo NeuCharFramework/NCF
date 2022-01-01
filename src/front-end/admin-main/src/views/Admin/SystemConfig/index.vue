@@ -27,7 +27,6 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
-              v-has="['admin-edit']"
               size="mini"
               type="primary"
               @click="handleEdit(scope.$index, scope.row)"
@@ -52,8 +51,8 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @@click="dialog.visible = false">取 消</el-button>
-          <el-button :loading="dialog.updateLoading" type="primary" @@click="updateData">确 认</el-button>
+          <el-button @click="dialog.visible = false">取 消</el-button>
+          <el-button :loading="dialog.updateLoading" type="primary" @click="updateData">确 认</el-button>
         </div>
       </el-dialog>
     </div>

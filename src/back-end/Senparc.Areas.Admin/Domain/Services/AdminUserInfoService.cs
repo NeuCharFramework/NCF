@@ -157,6 +157,37 @@ namespace Senparc.Areas.Admin.Domain
         }
 
         /// <summary>
+        /// 创建管理员
+        /// </summary>
+        /// <param name="objDto"></param>
+        /// <returns></returns>
+        public async Task<AdminUserInfo> CreateAdminUserInfoAsync(CreateOrUpdate_AdminUserInfoDto objDto)
+        {
+            string userName = objDto.UserName;
+            string password = objDto.Password;
+            var obj = new AdminUserInfo(ref userName, ref password, null, null, objDto.Note);
+            await SaveObjectAsync(obj);
+            return obj;
+        }
+
+        /// <summary>
+        /// 创建管理员
+        /// </summary>
+        /// <param name="objDto"></param>
+        /// <returns></returns>
+        public async Task<AdminUserInfo> UpdateAdminUserInfoAsync(CreateOrUpdate_AdminUserInfoDto objDto)
+        {
+            var obj = this.GetObject(z => z.Id == objDto.Id);
+            if (obj == null)
+            {
+                throw new Exception("用户信息不存在！");
+            }
+            obj.UpdateObject(objDto);
+            await SaveObjectAsync(obj);
+            return obj;
+        }
+
+        /// <summary>
         /// 更新用户信息
         /// </summary>
         /// <param name="objDto"></param>
@@ -251,13 +282,14 @@ namespace Senparc.Areas.Admin.Domain
             {
                 token = GenerateToken(adminUserInfo.Id);
             }
-
-            var roleCodes = await BaseData.BaseDB.BaseDataContext.Set<Ncf.Core.Models.DataBaseModel.SysRoleAdminUserInfo>().Where(o => o.AccountId == adminUserInfo.Id)
-                .Select(o => o.RoleCode).Distinct()
-                .ToListAsync();
+            var roles = await _serviceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == adminUserInfo.Id);
+            var roleCodes = roles
+                .Select(o => o.RoleCode).Distinct().ToList();
+            var permissions = await _serviceProvider.GetService<SysPermissionService>().GetFullListAsync(p => roles.Select(o => o.RoleId).Contains(p.RoleId));
             result.Token = token;
             result.UserName = adminUserInfo.UserName;
             result.RoleCodes = roleCodes;
+            result.PermissionCodes = permissions.Select(o => o.ResourceCode);
             return result;
         }
 

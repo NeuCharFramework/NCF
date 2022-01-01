@@ -12,4 +12,22 @@ namespace Senparc.Areas.Admin.OHS.Local.PL
         public IList<AdminUserInfoDto> List { get; set; }
         public int TotalCount { get; set; }
     }
+
+    public class AdminUserInfo_CreateResponse
+    {
+        public int AdminUserInfoId { get; set; }
+    }
+
+    public class AdminUserInfo_AddRoleResponse
+    {
+
+    }
+
+    /// <summary>
+    /// 获取所有
+    /// </summary>
+    public class AdminUserInfo_GetRolesResponse
+    {
+        public IEnumerable<string> RoleIds { get; set; }
+    }
 }

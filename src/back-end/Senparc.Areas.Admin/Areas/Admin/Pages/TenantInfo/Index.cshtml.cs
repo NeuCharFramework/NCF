@@ -1,21 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Ncf.AreaBase.Admin.Filters;
 using Senparc.Ncf.Core.Cache;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Enums;
-using Senparc.Ncf.Core.Models;
-using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Core.MultiTenant;
-using Senparc.Ncf.Core.Validator;
-using Senparc.Ncf.Service;
-using Senparc.Ncf.Utility;
+using Senparc.Xncf.Tenant.Domain.DataBaseModel;
+using Senparc.Xncf.Tenant.Domain.Services;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -23,17 +17,18 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly TenantInfoService _tenantInfoService;
-        private readonly FullSystemConfigCache _fullSystemConfigCache;
+        //private readonly FullSystemConfigCache _fullSystemConfigCache;
 
         //[BindProperty]
         //private FullSystemConfig FullSystemConfig { get; set; }
 
 
-        public TenantInfo_IndexModel(IServiceProvider serviceProvider, TenantInfoService tenantInfoService, FullSystemConfigCache fullSystemConfigCache)
+        public TenantInfo_IndexModel(IServiceProvider serviceProvider, TenantInfoService tenantInfoService
+            /*, FullSystemConfigCache fullSystemConfigCache*/)
         {
             this._serviceProvider = serviceProvider;
             this._tenantInfoService = tenantInfoService;
-            this._fullSystemConfigCache = fullSystemConfigCache;
+            //this._fullSystemConfigCache = fullSystemConfigCache;
 
             //FullSystemConfig = _fullSystemConfigCache.Data;
         }
@@ -48,7 +43,8 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             var requestTenantInfo = _serviceProvider.GetRequiredService<RequestTenantInfo>();
             return Ok(new
             {
-                requestTenantInfo = new {
+                requestTenantInfo = new
+                {
                     requestTenantInfo.Id,
                     requestTenantInfo.Name,
                     requestTenantInfo.TenantKey,
@@ -56,7 +52,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 },
                 tenantRule = SiteConfig.SenparcCoreSetting.TenantRule.ToString(),
                 SiteConfig.SenparcCoreSetting.EnableMultiTenant
-            });;
+            }); ;
         }
 
         /// <summary>

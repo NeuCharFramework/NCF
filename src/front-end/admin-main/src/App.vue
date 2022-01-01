@@ -61,9 +61,9 @@ li {
   color: #23527c;
 }
 
-.el-main {
-  background-color: #e3e3e3;
-}
+/*.el-main {*/
+/*  background-color: #e3e3e3;*/
+/*}*/
 
 /*侧边栏*/
 .el-aside-index {
