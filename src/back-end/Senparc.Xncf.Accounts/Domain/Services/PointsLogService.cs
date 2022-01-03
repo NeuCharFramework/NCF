@@ -1,14 +1,11 @@
-﻿using Senparc.CO2NET;
-using Senparc.Service.ACL;
+﻿using Senparc.Service.ACL;
 using Senparc.Xncf.Accounts.Domain.Cache;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Xncf.Accounts.Domain.Models;
 using Senparc.Ncf.Log;
-using Senparc.Ncf.Repository;
 using Senparc.Ncf.Service;
 using System;
 using Microsoft.Extensions.DependencyInjection;
-using Senparc.Service.ACL;
 using Senparc.Xncf.Accounts.Domain;
 
 namespace Senparc.Service

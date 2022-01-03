@@ -32,10 +32,6 @@ namespace Senparc.Web
             Console.WriteLine("============ logMsg END =============");
 
 
-            //读取Log配置文件
-            var repository = LogManager.CreateRepository("NETCoreRepository");
-            XmlConfigurator.Configure(repository, new FileInfo("log4net.config"));
-
             //如果运行在IIS中，需要添加IIS配置
             //https://docs.microsoft.com/zh-cn/aspnet/core/host-and-deploy/iis/index?view=aspnetcore-2.1&tabs=aspnetcore2x#supported-operating-systems
             //services.Configure<IISOptions>(options =>
