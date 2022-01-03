@@ -1,12 +1,11 @@
 <template>
   <div class="app-container">
-
-<!--    <div id="nav">-->
-<!--      <template v-for="menu in menus">-->
-<!--        <router-link :key="menu.name" :to="menu.path.length === 0 ? '/': menu.path">{{ menu.name }}</router-link>-->
-<!--        ——-->
-<!--      </template>-->
-<!--    </div>-->
+    <div id="nav">
+      <template v-for="menu in menus">
+        <router-link :key="menu.name" :to="menu.path.length === 0 ? '/': menu.path">{{ menu.name }}</router-link>
+        ——
+      </template>
+    </div>
 
     <div style="margin-top: 20px;">
       <el-button @click="addModule">加载模块</el-button>
@@ -14,6 +13,7 @@
 <!--      <el-button @click="removeModule">卸载模块</el-button>-->
       <el-button @click="trigger">触发事件</el-button>
 <!--      <el-button @click="reset">reset</el-button>-->
+      <el-button @click="hideMenu">只显示模块</el-button>
     </div>
   </div>
 </template>
@@ -28,15 +28,20 @@ export default {
     }
   },
   created() {
+
     this.refreshRouterMenu()
   },
   methods: {
+    hideMenu(){
+      const routes = this.$router.getRoutes()
+      this.$store.dispatch('permission/setRoutes', routes)
+    },
     reset() {
       // resetRouter()
       console.log('asyncRoutes', asyncRoutes)
       const routes = this.$router.getRoutes()
       console.log('routes', routes)
-      this.$store.dispatch('permission/setRoutes', routes)
+
     },
     handleSetLineChartData(type) {
       this.lineChartData = lineChartData[type]
@@ -52,10 +57,16 @@ export default {
       this.menus = _menus
 
       this.reset()
+      // this.$store.dispatch('permission/setRoutes', routes)
+      console.log('$store77777777777', this.$store.state.permission.routes)
     },
     addModule() {
       this.$moduleLoader({
         d: 'http://localhost:9527/dist/d.umd.js'
+      }).then(() => {
+        // 加载过程完毕
+        console.log('加载过程完毕')
+        this.refreshRouterMenu()
       })
     },
     removeModule() {

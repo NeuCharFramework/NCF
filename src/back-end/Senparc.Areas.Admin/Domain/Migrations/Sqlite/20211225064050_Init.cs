@@ -10,7 +10,7 @@ namespace Senparc.Areas.Admin.Domain.Migrations.Sqlite
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AdminUserInfo",
+                name: "ADMIN_AdminUserInfos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -34,14 +34,14 @@ namespace Senparc.Areas.Admin.Domain.Migrations.Sqlite
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AdminUserInfo", x => x.Id);
+                    table.PrimaryKey("PK_ADMIN_AdminUserInfos", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AdminUserInfo");
+                name: "ADMIN_AdminUserInfos");
         }
     }
 }

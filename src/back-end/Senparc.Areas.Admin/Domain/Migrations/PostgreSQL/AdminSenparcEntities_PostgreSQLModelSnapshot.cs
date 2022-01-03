@@ -82,7 +82,7 @@ namespace Senparc.Areas.Admin.Domain.Migrations.PostgreSQL
 
                     b.HasKey("Id");
 
-                    b.ToTable("AdminUserInfo");
+                    b.ToTable("ADMIN_AdminUserInfos");
                 });
 #pragma warning restore 612, 618
         }
