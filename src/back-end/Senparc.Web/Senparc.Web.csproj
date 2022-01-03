@@ -8,6 +8,7 @@
 		<UserSecretsId>d2144151-af7a-4d50-896d-4a306e594f7b</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+		<Configurations>Debug;Release;Debug-Dapr</Configurations>
 
 		<!--<RestoreFallbackFolders>clear</RestoreFallbackFolders>-->
 
