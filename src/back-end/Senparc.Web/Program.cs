@@ -2,15 +2,14 @@
 //using Senparc.Ncf.Database.MySql;//使用需要引用包： Senparc.Ncf.Database.MySql
 //using Senparc.Ncf.Database.Sqlite;//使用需要引用包： Senparc.Ncf.Database.Sqlite
 //using Senparc.Ncf.Database.PostgreSQL;//使用需要引用包： Senparc.Ncf.Database.PostgreSQL
-using Microsoft.Extensions.DependencyInjection;
-
 using Senparc.Ncf.Database.SqlServer;//使用需要引用包： Senparc.Ncf.Database.SqlServer
+
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //添加（注册） Ncf 服务（必须）
 builder.AddNcf<SQLServerDatabaseConfiguration>();
-builder.Services.AddDaprClient();
 #region AddNcf<TDatabaseConfiguration>() 泛型类型说明
 /* 
  *                  方法                            |         说明
@@ -23,6 +22,8 @@ builder.Services.AddDaprClient();
  *  
  */
 #endregion
+
+builder.Services.AddDaprClient();
 
 var app = builder.Build();
 
@@ -46,8 +47,8 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
     endpoints.MapControllers();
 });
-app.Map("/test", () =>
-{
-    return "1111";
-});
+//app.Map("/test", () =>
+//{
+//    return "1111";
+//});
 app.Run();

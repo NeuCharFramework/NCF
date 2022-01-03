@@ -6,7 +6,6 @@
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<DocumentationFile>../Senparc.Web/App_Data/ApiDocXML/Senparc.Areas.Admin.XML</DocumentationFile>
-
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -38,7 +37,7 @@
 		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.11.0-beta7" />
 		<PackageReference Include="Senparc.Ncf.Service" Version="0.11.0.3-beta7" />
 		<PackageReference Include="Senparc.Ncf.Utility" Version="0.11.0-beta7" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.0.8-beta8" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.0.9-beta8" />
 
 		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
 		<!--<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />-->
