@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
+		<Configurations>Debug;Release;Debug-Dapr</Configurations>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -19,7 +19,7 @@
 			v0.3 创世
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NcfPackageSources</RepositoryUrl>
-		<Configurations>Debug;Release;Test;TemplateRelease</Configurations>
+		<Configurations>Debug;Release;Test;TemplateRelease;Debug-Dapr</Configurations>
 		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
 		<UserSecretsId>95b039f7-327c-4e1e-a03f-eab8bbe5378f</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -33,7 +33,7 @@
 
 		<PackageReference Include="Dapr.AspNetCore" Version="1.5.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.0.8-beta8" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.0.9-beta8" />
 		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.11.0-beta7" />
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer.Interface\Senparc.Xncf.Installer.Interface.csproj" />
