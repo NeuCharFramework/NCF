@@ -1,13 +1,13 @@
 version: '3.4'
 
 services:
-  mysql:
-    image: mysql:latest
-    ports:
-     - "3307:3306"
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: "123456"
+  #mysql:
+  #  image: mysql:latest
+  #  ports:
+  #   - "3307:3306"
+  #  restart: always
+  #  environment:
+  #    MYSQL_ROOT_PASSWORD: "123456"
 
   redis:
     image: redis:latest
@@ -19,8 +19,8 @@ services:
     build:
       context: .
       dockerfile: Senparc.Xncf.Installer/Dockerfile
-    depends_on:
-      - mysql
+    #depends_on:
+    #  - mysql
 
   installer-dapr:
     image: "daprio/daprd:latest"
