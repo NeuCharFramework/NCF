@@ -144,9 +144,6 @@ export const asyncRoutes = [
       }
     ]
   },
-
-
-
   // chartsRouter,
   moduleRouter,
   // 404 page must be placed at the end !!!
