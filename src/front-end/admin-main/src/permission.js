@@ -26,19 +26,18 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
     } else {
-
-      //通过getInfo判断用户是否获得了他的权限角色
+      // 通过getInfo判断用户是否获得了他的权限角色
       const hasRoles = store.getters.menuTree && store.getters.menuTree.length > 0
       if (hasRoles) {
         next()
       } else {
         try {
           // get user info
-          //注意：menuTree、roleCodes 必须是一个数组
+          // 注意：menuTree、roleCodes 必须是一个数组
           const { roleCodes, menuTree } = await store.dispatch('user/getInfo')
 
           // 根据后端路由表生成可访问的路由
-          const accessRoutes = await store.dispatch('permission/generateRoutes', {roleCodes, menuTree})
+          const accessRoutes = await store.dispatch('permission/generateRoutes', { roleCodes, menuTree })
 
           // 动态添加可访问的路由
           // console.log('可访问的路由',accessRoutes)

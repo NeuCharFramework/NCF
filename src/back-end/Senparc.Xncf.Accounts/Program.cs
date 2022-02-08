@@ -47,7 +47,7 @@ IOptions<SenparcCoreSetting> senparcCoreSetting = app.Services.GetService<IOptio
 var registerService = app.UseSenparcGlobal(app.Environment);
 
 //XncfModules（必须）
-Senparc.Ncf.XncfBase.Register.UseXncfModules(app, registerService, senparcCoreSetting.Value, true);
+Senparc.Ncf.XncfBase.Register.UseXncfModules(app, registerService, senparcCoreSetting.Value);
 
 using (var scope = app.Services.CreateScope())
 {

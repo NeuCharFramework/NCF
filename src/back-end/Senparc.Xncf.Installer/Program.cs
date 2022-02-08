@@ -1,29 +1,21 @@
-﻿using log4net.Config;
-
-using log4net;
-using Microsoft.AspNetCore.Builder;
-
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Senparc.CO2NET;
+using Senparc.CO2NET.AspNet;
 using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Models;
-using Senparc.Ncf.Database;
 using Senparc.Ncf.Database.SqlServer;
-
-using System.IO;
-
+using Senparc.Ncf.XncfBase;
 using System;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Senparc.CO2NET.AspNet;
-using Senparc.CO2NET;
 
 var builder = WebApplication.CreateBuilder(args);
-//指定数据库（必须）
-builder.Services.AddDatabase<SQLServerDatabaseConfiguration>();
+
 builder.Services.AddControllers().AddDapr();
 
 //激活 Xncf 扩展引擎（必须）
-var logMsg = builder.Services.StartWebEngine(builder.Configuration, builder.Environment);
+var logMsg = builder.StartWebEngine<SQLServerDatabaseConfiguration>();
 //如果不需要启用 Areas，可以只使用 services.StartEngine() 方法
 
 Console.WriteLine("============ logMsg =============");
@@ -31,11 +23,6 @@ Console.WriteLine(logMsg);
 Console.WriteLine("============ logMsg END =============");
 
 builder.Services.AddSwaggerGen();
-
-
-//读取Log配置文件
-var repository = LogManager.CreateRepository("NETCoreRepository");
-XmlConfigurator.Configure(repository, new FileInfo("log4net.config"));
 
 var app = builder.Build();
 
@@ -57,7 +44,7 @@ var registerService = app
 
 
 //XncfModules（必须）
-Senparc.Ncf.XncfBase.Register.UseXncfModules(app, registerService, senparcCoreSetting.Value);
+app.UseXncfModules(registerService, senparcCoreSetting.Value);
 //using (var scope = app.Services.CreateScope())
 //{
 
@@ -66,6 +53,8 @@ Senparc.Ncf.XncfBase.Register.UseXncfModules(app, registerService, senparcCoreSe
 //        await register.InstallOrUpdateAsync(scope.ServiceProvider, Senparc.Ncf.Core.Enums.InstallOrUpdate.Install);
 //    }
 //}
+
+app.Map("/TestInstall", () => ("this is a text from Dapr Container." + SystemTime.Now));
 
 //app.UseHttpsRedirection();
 app.UseStaticFiles();
