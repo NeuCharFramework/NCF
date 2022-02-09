@@ -45,6 +45,7 @@ namespace Senparc.Web
         {
             IWebHostEnvironment env = app.Environment;
             IOptions<SenparcSetting> senparcSetting = app.Services.GetService<IOptions<SenparcSetting>>();
+            IOptions<SenparcCoreSetting> senparcCoreSetting = app.Services.GetService<IOptions<SenparcCoreSetting>>();
 
             // 启动 CO2NET 全局注册，必须！
             // 关于 UseSenparcGlobal() 的更多用法见 CO2NET Demo：https://github.com/Senparc/Senparc.CO2NET/blob/master/Sample/Senparc.CO2NET.Sample.netcore3/Startup.cs
@@ -77,7 +78,7 @@ namespace Senparc.Web
 
                     #endregion
                 });
-          
+
 
             //XncfModules（必须）
             app.UseXncfModules(registerService);

@@ -2,14 +2,16 @@
 
 
 # NCF - NeuCharFramework
-NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含了基础的缓存、数据库、模型、验证及配套管理后台，模块化，具有高度的可扩展性。
+NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含了基础的缓存、数据库、模型、验证及配套管理后台，高度模块化，严格遵循 DDD 设计模式，具有高度的可扩展性。
 
-当前版本：`0.2.0-beta6`
+当前 NCF 核心版本：`0.11.2-beta7`
+
+当前 NCF 模板版本：`0.3.1-beta3`
 
 [![Build Status](https://mysenparc.visualstudio.com/NeuCharFramework/_apis/build/status/NeuCharFramework.NCF?branchName=master)](https://mysenparc.visualstudio.com/NeuCharFramework/_build/latest?definitionId=50&branchName=master)
 
 > **Notice**<br>
-> 1. NCF 由盛派（Senparc）团队经过多年优化迭代的自用系统底层框架 SenparcCore 升级而来，经历了 .NET 3.5/4.5 众多系统的实战检验，并最终移植到 .NET Core（同时支持 .NET 5），目前已在众多系统中稳定运行。感谢大家一直以来的支持！<br>
+> 1. NCF 由盛派（Senparc）团队经过多年优化迭代的自用系统底层框架 SenparcCore 升级而来，经历了 .NET 3.5/4.5 众多系统的实战检验，并最终移植到 .NET Core（同时支持 .NET 6+），目前已在众多系统中稳定运行。感谢大家一直以来的支持！<br>
 > 2. 源码中已经附带文档模块，运行 NCF 并安装即可。
 
 
@@ -35,15 +37,16 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 
 ## 环境要求
 
-- Visual Studio 2019+ 或 VS Code 最新版本
+- Visual Studio 2019+（建议 2022）或 VS Code 最新版本
 
 > 友情提示：2020年11月发布的 Visual Stuido 2019 v16.8 存在部分bug，暂时不建议升级到此版本。
 
-- [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1)+ 或 [.NET 5](https://dotnet.microsoft.com/download/dotnet/5.0) 
+- [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1)+ 或 [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0) 
 
 - 如需查看或修改基础包源代码，请看此项目：https://github.com/NeuCharFramework/NcfPackageSources
 
-> - 如使用 EFCore，则需要使用 SQL Server 2012 或以上版本数据库
+> - NCF 默认支持 SQLite、MySQL、SQL Server 等数据库，也可自行实现更多数据库类型。<br>
+> - 如使用 SQL Server，最低支持版本为 2012
 
 
 ## 如何安装
@@ -94,11 +97,32 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 
 ## 待办事项：
 
-- [ ] 开源 [NeuChar.com](https://www.neuchar.com/) 中的微信功能模块，可使用独立模块集成。
-- [ ] 提供完善的示例代码和文档。
+- [x] 定制命名空间
+- [x] 提供交流社区，包括但不仅限于[问答网站](https://weixin.senparc.com/QA)、[QQ群](#qq-技术交流群)、微信群、直播群。
+- [ ] 进一步完善的示例代码和文档。
 - [ ] 提供博客和视频教程（也欢迎开发者参与或发起）。
-- [ ] 提供交流社区，包括但不仅限于[问答网站](https://weixin.senparc.com/QA)、[QQ群](#qq-技术交流群)、微信群、直播群。
 - [ ] 完善 DDD 实践
 - [ ] 添加应用商店
-- [x] 定制命名空间
+- [ ] 提供 CLI 命令行工具
+- [ ] 开源 [NeuChar.com](https://www.neuchar.com/) 中的微信功能模块，可使用独立模块集成。
 
+License
+--------------
+Apache License Version 2.0
+
+```
+Copyright 2022 Suzhou Senparc Network Technology Co.,Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file 
+except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the 
+License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+either express or implied. See the License for the specific language governing permissions 
+and limitations under the License.
+```
+Detail: https://github.com/NeuCharFramework/NcfPackageSources/blob/master/LICENSE
+
+100% 开源，支持商用！
