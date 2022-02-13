@@ -76,8 +76,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'senparcCoreAdmin41',
-        password: '5a0be29e'
+        username: 'SenparcCoreAdmin98',
+        password: '2df49262'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],

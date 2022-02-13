@@ -28,6 +28,7 @@ router.beforeEach(async(to, from, next) => {
     } else {
       // 通过getInfo判断用户是否获得了他的权限角色
       const hasRoles = store.getters.menuTree && store.getters.menuTree.length > 0
+      console.log('hasRoles',hasRoles)
       if (hasRoles) {
         next()
       } else {

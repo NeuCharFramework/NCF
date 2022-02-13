@@ -19,6 +19,7 @@ import './permission' // permission control
 import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
+
 import vueModuleLoader from 'vue-module-loader'
 
 /**

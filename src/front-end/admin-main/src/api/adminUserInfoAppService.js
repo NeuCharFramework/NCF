@@ -4,7 +4,7 @@
 * */
 
 import request from '@/utils/request'
-const baseUrl = "/api/Senparc.Areas.Admin/AdminUserInfoAppService/Areas.Admin_AdminUserInfoAppService"
+const baseUrl = "/Senparc.Areas.Admin/AdminUserInfoAppService/Areas.Admin_AdminUserInfoAppService"
 
 export function login(data) {
   return request({
