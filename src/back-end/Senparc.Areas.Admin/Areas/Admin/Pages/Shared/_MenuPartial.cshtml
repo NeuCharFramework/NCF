@@ -7,9 +7,7 @@
 @addTagHelper *, Senparc.Areas.Admin
 @{
     var sysMenuDtos = await _sysMenuService.GetMenuTreeDtoByCacheAsync();
-}
 
-@functions{
     /// <summary>
     /// 判断当前页面是否为 XNCF 模块入口
     /// </summary>

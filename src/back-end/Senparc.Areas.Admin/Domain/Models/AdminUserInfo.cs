@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Senparc.Areas.Admin.Domain.Models
 {
-    //[Table(Register.DATABASE_PREFIX + nameof(AdminUserInfo))]//必须添加前缀，防止全系统中发生冲突
+    [Table(Register.DATABASE_PREFIX + nameof(AdminUserInfo) + "s")]//必须添加前缀，防止全系统中发生冲突
     [Serializable]
     public partial class AdminUserInfo : EntityBase<int>
     {
