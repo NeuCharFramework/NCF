@@ -32,7 +32,7 @@ export function filterAsyncRoutes(routes, menuTree, pageNotFind=true) {
     //路由权限
     if (hasPermission(menuTree, tmp)) {
       if (tmp.children) {
-        //子路由权限
+        //子路由权限 (比对远程路由的url和定义的动态路由的path)，如果没有值检查远程路由的结构或者url是否为空
         let list = menuTree.filter(item => item.url === tmp.path)[0] || {}
         tmp.children = filterAsyncRoutes(tmp.children, list.children, false)
       }
@@ -65,8 +65,8 @@ const actions = {
   generateRoutes({commit}, {roleCodes, menuTree}) {
     return new Promise(resolve => {
       let accessedRoutes
-      //超级管理员（）有全部异步路由的权限
-      if (roleCodes.includes('administrator8')) {
+      //超级管理员（administrator）有全部异步路由的权限
+      if (roleCodes.includes('administrator')) {
         accessedRoutes = asyncRoutes || []
       } else {
         accessedRoutes = filterAsyncRoutes(asyncRoutes, menuTree)
@@ -77,26 +77,55 @@ const actions = {
     })
   },
   setRoutes({commit}, routes) {
+    console.log(777,routes)
+    console.log("moduleRouter",moduleRouter)
     let list = {...moduleRouter, ...{}}
 
-    // routes.forEach(item => {
-    //   if (item.name === 'b-home1') {
-    //     item.meta = {
-    //       title: '拓展模块b-home1'
-    //     }
-    //     list.children.push(item)
-    //   }
-    //   if (item.name === 'b-about1') {
-    //     item.meta = {
-    //       title: '拓展模块b-about1'
-    //     }
-    //     list.children = [...list.children, ...[item]]
-    //   }
-    // })
+    //是否是远程加载的路由
+    routes.forEach(item => {
+      if (item.name === 'b-home1') {
+        console.log('item',item.name)
+        item.meta = {
+          title: '拓展模块b-home1'
+        }
+        list.children.push(item)
+      }
+      if (item.name === 'b-about1') {
+        item.meta = {
+          title: '拓展模块b-about1'
+        }
+        list.children = [...list.children, ...[item]]
+      }
+    })
+    console.log('list',list)
+    state.accessedRoutes.forEach((item,index)=>{
+      if(item.name==='Module'){
+        console.log(index,item.name)
+        state.accessedRoutes[index] = list
+        // state.accessedRoutes[index].children = [
+        //   ...state.accessedRoutes[index].children,
+        //   ...
+        //   [{
+        //   "path": "/Admin/AdminUserInfo/Index",
+        //   "name": "管理员管理",
+        //   "meta": {
+        //     "title": "管理员管理"
+        //   }
+        // },
+        //   {
+        //     "path": "/Admin/Role/Index",
+        //     "name": "角色管理",
+        //     "meta": {
+        //       "title": "角色管理"
+        //     }
+        //   }]
+        // ]
+      }
+    })
 
-    list = [...state.accessedRoutes, ...list]
-
-    commit('SET_ROUTES', list)
+    // list = [...state.accessedRoutes, ...list]
+    console.log('路由state.accessedRoutes',state.accessedRoutes)
+    commit('SET_ROUTES', state.accessedRoutes)
   }
 }
 

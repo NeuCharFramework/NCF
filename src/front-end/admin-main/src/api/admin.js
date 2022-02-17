@@ -60,11 +60,10 @@ export function updateAdminUser(data) {
   })
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
     url: `${baseUrl}.GetAdminUserInfoAsync`,
-    method: 'get',
-    params: { token }
+    method: 'get'
   })
 }
 

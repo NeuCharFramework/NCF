@@ -105,8 +105,8 @@ export default {
     }
   },
   created() {
-    this.getXncfStat()
-    this.getXncfOpening()
+    // this.getXncfStat()
+    // this.getXncfOpening()
     // this.initChart();
   },
   methods: {

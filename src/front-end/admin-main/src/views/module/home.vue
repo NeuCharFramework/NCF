@@ -13,13 +13,14 @@
 <!--      <el-button @click="removeModule">卸载模块</el-button>-->
       <el-button @click="trigger">触发事件</el-button>
 <!--      <el-button @click="reset">reset</el-button>-->
-      <el-button @click="hideMenu">只显示模块</el-button>
+<!--      <el-button @click="hideMenu">只显示模块</el-button>-->
     </div>
   </div>
 </template>
 
 <script>
 import { resetRouter, asyncRoutes } from '@/router'
+import store from "@/store";
 export default {
   name: 'ModuleHome',
   data() {
@@ -66,7 +67,7 @@ export default {
       }).then(() => {
         // 加载过程完毕
         console.log('加载过程完毕')
-        this.refreshRouterMenu()
+        this.hideMenu()
       })
     },
     removeModule() {
