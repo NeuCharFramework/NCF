@@ -44,9 +44,12 @@ namespace Senparc.Areas.Admin.Domain.Models.Dto
         /// </summary>
         public IEnumerable<string> RoleCodes { get; set; }
 
+        public IEnumerable<Ncf.Core.Models.DataBaseModel.SysMenuTreeItemDto> MenuTree { get; set; }
+
         /// <summary>
         /// 操作代码
         /// </summary>
         public IEnumerable<string> PermissionCodes { get; set; }
+        public string RealName { get; internal set; }
     }
 }
