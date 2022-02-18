@@ -285,9 +285,31 @@ namespace Senparc.Areas.Admin.Domain
             var roles = await _serviceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == adminUserInfo.Id);
             var roleCodes = roles
                 .Select(o => o.RoleCode).Distinct().ToList();
-            var permissions = await _serviceProvider.GetService<SysPermissionService>().GetFullListAsync(p => roles.Select(o => o.RoleId).Contains(p.RoleId));
             result.Token = token;
+            var permissions = await _serviceProvider.GetService<SysPermissionService>().GetFullListAsync(p => roles.Select(o => o.RoleId).Contains(p.RoleId));
+            result.MenuTree = await _serviceProvider.GetService<Domain.Services.SysMenuService>().GetAllMenusTreeAsync(false);
             result.UserName = adminUserInfo.UserName;
+            result.RoleCodes = roleCodes;
+            result.PermissionCodes = permissions.Select(o => o.ResourceCode);
+            return result;
+        }
+
+        /// <summary>
+        /// 获取当前管理信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<AccountLoginResultDto> GetAdminUserInfoAsync(int id)
+        {
+            AccountLoginResultDto result = new AccountLoginResultDto();
+            var adminUserInfo = await GetObjectAsync(z => z.Id == id);
+            var roles = await _serviceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == adminUserInfo.Id);
+            var roleCodes = roles
+                .Select(o => o.RoleCode).Distinct().ToList();
+            var permissions = await _serviceProvider.GetService<SysPermissionService>().GetFullListAsync(p => roles.Select(o => o.RoleId).Contains(p.RoleId));
+            result.MenuTree = await _serviceProvider.GetService<Domain.Services.SysMenuService>().GetAllMenusTreeAsync(false);
+            result.UserName = adminUserInfo.UserName;
+            result.RealName = adminUserInfo.RealName;
             result.RoleCodes = roleCodes;
             result.PermissionCodes = permissions.Select(o => o.ResourceCode);
             return result;

@@ -4,7 +4,7 @@
 * */
 
 import request from '@/utils/request'
-const baseUrl = "/api/Senparc.Areas.Admin/AdminUserInfoAppService/Areas.Admin_AdminUserInfoAppService"
+const baseUrl = "/Senparc.Areas.Admin/AdminUserInfoAppService/Areas.Admin_AdminUserInfoAppService"
 
 export function login(data) {
   return request({
@@ -60,11 +60,10 @@ export function updateAdminUser(data) {
   })
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
     url: `${baseUrl}.GetAdminUserInfoAsync`,
-    method: 'get',
-    params: { token }
+    method: 'get'
   })
 }
 

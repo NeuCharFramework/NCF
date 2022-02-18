@@ -16,7 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Senparc.Areas.Admin.ACL.Repository;
-using Senparc.Areas.Admin.Authorization;
+//using Senparc.Areas.Admin.Authorization;
 using Senparc.Areas.Admin.Domain.Models;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Trace;
@@ -186,7 +186,7 @@ namespace Senparc.Areas.Admin
             SenparcTrace.SendCustomLog("系统启动", "完成 Area:Admin 注册");
             builder.Services.AddScoped<ISysMenuRepository, SysMenuRepository>();
             builder.Services.AddScoped<ISysRolePermissionRepository, SysRolePermissionRepository>();
-            builder.Services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+            builder.Services.AddScoped<IAuthorizationHandler, Ncf.Core.Authorization.PermissionHandler>();
 
             return builder;
         }

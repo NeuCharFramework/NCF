@@ -127,6 +127,7 @@ namespace Senparc.Xncf.Accounts.Domain.Services
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
+        [ApiBind]
         public Account GetAccount(string userName)
         {
             userName = userName.Trim();
