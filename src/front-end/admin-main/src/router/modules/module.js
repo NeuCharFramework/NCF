@@ -18,6 +18,8 @@ const moduleRouter = {
       name: 'ModuleHome',
       meta: { title: '拓展模块', noCache: false }
     },
+
+    //
   ]
 }
 

@@ -2,7 +2,7 @@
   <div class="app-container home">
     <h1>{{title}}1</h1>
     <!-- 加载动态组件 -->
-<!--    <component :is="$store.state.dynamicComponent.GLOBAL.logo"></component>-->
+    <!-- <component :is="$store.state.dynamicComponent.GLOBAL.logo"></component>-->
     <HelloWorld msg="我是远程加载的!" />
   </div>
 </template>
