@@ -16,6 +16,10 @@
 		<PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.0" />
+		<None Include="..\readme.md" Pack="true" Visible="false" PackagePath="readme.md" />
+		<!--<None Include="..\..\front-end\admin-main\dist\index.html" Pack="true" Visible="false" PackagePath="wwwroot/index.html" />
+		<None Include="..\..\front-end\admin-main\dist\**\*" Pack="true" Visible="false" PackagePath="wwwroot/" />-->
+
 	</ItemGroup>
 
 	<ItemGroup>
