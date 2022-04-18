@@ -9,7 +9,7 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
 		<Configurations>Debug;Release;Debug-Dapr</Configurations>
-
+		<ImplicitUsings>enable</ImplicitUsings>
 		<!--<RestoreFallbackFolders>clear</RestoreFallbackFolders>-->
 
 	</PropertyGroup>
@@ -29,7 +29,7 @@
 		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.2-beta7" />
 		<PackageReference Include="ML.Xncf.Docs" Version="2.1.7.25" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 
 		<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.4.2-beta7" />
@@ -65,8 +65,8 @@
 		<None Include="wwwroot\lib\echarts" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
-	  <ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
+		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
+		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Update="wwwroot\css\site.css">
@@ -92,5 +92,9 @@
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
 	</ItemGroup>
-	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+	<ProjectExtensions>
+		<VisualStudio>
+			<UserProperties appsettings_1json__JsonSchema="" />
+		</VisualStudio>
+	</ProjectExtensions>
 </Project>
