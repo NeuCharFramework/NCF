@@ -61,6 +61,9 @@
 		<Compile Remove="Domain\Models\MultipleDatabase\SenparcDbContextFactoryConfig.cs" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Content Remove="appsettings.json" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.1" />
