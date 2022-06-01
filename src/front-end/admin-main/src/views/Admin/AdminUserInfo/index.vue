@@ -121,7 +121,7 @@
 </template>
 
 <script>
-import { getAdminUserList } from '@/api/adminUserInfoAppService'
+import { getAdminUserList } from '@/api/admin'
 
 export default {
   name: 'AdminUserInfo',

@@ -28,6 +28,7 @@ router.beforeEach(async(to, from, next) => {
     } else {
       // 通过getInfo判断用户是否获得了他的权限角色
       const hasRoles = store.getters.menuTree && store.getters.menuTree.length > 0
+      console.log('hasRoles',hasRoles)
       if (hasRoles) {
         next()
       } else {
@@ -40,7 +41,7 @@ router.beforeEach(async(to, from, next) => {
           const accessRoutes = await store.dispatch('permission/generateRoutes', { roleCodes, menuTree })
 
           // 动态添加可访问的路由
-          // console.log('可访问的路由',accessRoutes)
+          console.log('可访问的路由',accessRoutes)
 
           router.addRoutes(accessRoutes)
 

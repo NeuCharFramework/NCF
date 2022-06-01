@@ -43,21 +43,25 @@ namespace Senparc.Areas.Admin.Domain.Services
             foreach (var menu in iteration)
             {
                 var childs = source.Where(_ => _.ParentId == menu.Id).OrderByDescending(o => o.Sort);
-                if (!childs.Any())
-                {
-                    return;
-                }
                 var p = new SysMenuTreeItemDto()
                 {
-                    Children = new List<SysMenuTreeItemDto>(childs.Count()),
                     Icon = menu.Icon,
                     Id = menu.Id,
                     IsMenu = menu.MenuType == MenuType.菜单,
                     MenuName = menu.MenuName,
                     Url = menu.Url
                 };
+                p.Children = childs.Select(c => new SysMenuTreeItemDto()
+                {
+                    Icon = c.Icon,
+                    Id = c.Id,
+                    IsMenu = c.MenuType == MenuType.菜单,
+                    MenuName = c.MenuName,
+                    Children = Array.Empty<SysMenuTreeItemDto>(),
+                    Url = c.Url
+                }).ToList();
                 items.Add(p);
-                buildTreeItems(childs, items, source);
+                buildTreeItems(childs, p.Children, source);
             }
         }
     }

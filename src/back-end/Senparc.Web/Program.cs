@@ -23,6 +23,7 @@ builder.AddNcf<SQLServerDatabaseConfiguration>();
  */
 #endregion
 
+//添加 Dapr
 builder.Services.AddDaprClient();
 
 var app = builder.Build();

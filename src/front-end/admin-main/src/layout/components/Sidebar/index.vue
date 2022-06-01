@@ -15,7 +15,7 @@
         <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
-    <div>8888888888888{{ JSON.stringify(permission_routes) }}</div>
+<!--    <div>{{ JSON.stringify(permission_routes) }}</div>-->
   </div>
 </template>
 
