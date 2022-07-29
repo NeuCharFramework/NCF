@@ -5,6 +5,7 @@
 using Senparc.Ncf.Database.SqlServer;//使用需要引用包： Senparc.Ncf.Database.SqlServer
 
 using Microsoft.Extensions.DependencyInjection;
+using Masa.Utils.Development.Dapr.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,16 @@ builder.AddNcf<SQLServerDatabaseConfiguration>();
 
 //添加 Dapr
 builder.Services.AddDaprClient();
+builder.Services.AddDaprStarter();
+builder.Services.AddDaprStarter(opt =>
+{
+    opt.AppId = "SenparcWeb";
+    opt.AppPort = 5001;
+    opt.AppIdSuffix = "";
+    opt.DaprHttpPort = 8080;
+    opt.DaprGrpcPort = 8081;
+});
+builder.Services.AddControllers().AddDapr();
 
 var app = builder.Build();
 
