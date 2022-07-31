@@ -27,7 +27,7 @@
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.2-beta7" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.12.2-beta7" />
 		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.2-beta7" />
-		<PackageReference Include="ML.Xncf.Docs" Version="2.1.7.25" />
+		<!--<PackageReference Include="ML.Xncf.Docs" Version="2.1.7.25" />-->
 	</ItemGroup>
 
 	<ItemGroup>
@@ -54,7 +54,7 @@
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.2-beta7" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.0.2" />
-		<PackageReference Include="Senparc.CO2NET" Version="2.0.1" />
+		<PackageReference Include="Senparc.CO2NET" Version="2.1.2" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.11.2-beta7" />
 	</ItemGroup>
 	<ItemGroup>
@@ -67,6 +67,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
+		<ProjectReference Include="..\Senparc.Xncf.WeixinManagerBase\Senparc.Xncf.WeixinManagerBase.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Update="wwwroot\css\site.css">
