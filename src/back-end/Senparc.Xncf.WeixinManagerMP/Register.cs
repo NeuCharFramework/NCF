@@ -8,32 +8,31 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
-using Senparc.Xncf.WeixinManagerBase.Models;
-using Senparc.Xncf.WeixinManagerBase.OHS.Local.AppService;
+using Senparc.Xncf.WeixinManagerMP.Models;
+using Senparc.Xncf.WeixinManagerMP.OHS.Local.AppService;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.XncfBase.Database;
-using Senparc.Xncf.WeixinManagerBase.Models.DatabaseModel.Dto;
+using Senparc.Xncf.WeixinManagerMP.Models.DatabaseModel.Dto;
 using Microsoft.AspNetCore.Builder;
 using Senparc.CO2NET.RegisterServices;
-using Senparc.Weixin.RegisterServices;
-using Senparc.Weixin.AspNet;
+using WeixinManagerBase = Senparc.Xncf.WeixinManagerBase;
+using Senparc.Weixin.MP;
 
-namespace Senparc.Xncf.WeixinManagerBase
+namespace Senparc.Xncf.WeixinManagerMP
 {
-    [XncfOrder(4000)]
     [XncfRegister]
     public partial class Register : XncfRegisterBase, IXncfRegister
     {
         #region IXncfRegister 接口
 
-        public override string Name => "Senparc.Xncf.WeixinManagerBase";
+        public override string Name => "Senparc.Xncf.WeixinManagerMP";
 
-        public override string Uid => "C888A082-3CDA-4682-912F-AE86BAC29F01";//必须确保全局唯一，生成后必须固定，已自动生成，也可自行修改
+        public override string Uid => "122A0B1C-27E7-4670-BBEB-687AD75CF874";//必须确保全局唯一，生成后必须固定，已自动生成，也可自行修改
 
         public override string Version => "0.1";//必须填写版本号
 
-        public override string MenuName => "微信公众号";
+        public override string MenuName => "微信公众号管理模块";
 
         public override string Icon => "fa fa-star";
 
@@ -67,7 +66,7 @@ namespace Senparc.Xncf.WeixinManagerBase
             #region 删除数据库（演示）
 
             var mySenparcEntitiesType = this.TryGetXncfDatabaseDbContextType;
-            WeixinManagerBaseSenparcEntities mySenparcEntities = serviceProvider.GetService(mySenparcEntitiesType) as WeixinManagerBaseSenparcEntities;
+            WeixinManagerMPSenparcEntities mySenparcEntities = serviceProvider.GetService(mySenparcEntitiesType) as WeixinManagerMPSenparcEntities;
 
             //指定需要删除的数据实体
 
@@ -83,39 +82,24 @@ namespace Senparc.Xncf.WeixinManagerBase
         public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
         {
             services.AddScoped<ColorAppService>();
-            services.AddScoped<WeixinRegisterService>();
-
-            //添加微信服务
-            services.AddSenparcWeixinServices(configuration);//Senparc.Weixin 注册（必须）
-
-            
             return base.AddXncfModule(services, configuration, env);
         }
 
         public override IApplicationBuilder UseXncfModule(IApplicationBuilder app, IRegisterService registerService)
         {
-            IHostEnvironment env;
-
             using (var scope = app.ApplicationServices.CreateScope())
             {
-                env = scope.ServiceProvider.GetService<IHostEnvironment>();
+                var weixinRegisterService = scope.ServiceProvider.GetService<WeixinManagerBase.OHS.Local.AppService.WeixinRegisterService>();
+
+                weixinRegisterService.RegisterWeixin((r, s) =>
+                {
+                    r.RegisterMpAccount(s, "NCF 微信公众号");
+                    return 0;
+                }).ConfigureAwait(false).GetAwaiter().GetResult();
             }
 
-            //启用微信配置（必须）
-            var weixinRegisterService = app.UseSenparcWeixin(env,
-                null /* 不为 null 则覆盖 appsettings  中的 SenpacSetting 配置*/,
-                null /* 不为 null 则覆盖 appsettings  中的 SenpacWeixinSetting 配置*/,
-                register => { /* CO2NET 全局配置 */ },
-                (register, weixinSetting) =>
-                {
-                    //遍历所有的注册
-                    foreach (var weixinRegister in WeixinRegisterService.WeixinRegisterList)
-                    {
-                        weixinRegister(register, weixinSetting);
-                    }
-                });
-
             return base.UseXncfModule(app, registerService);
+
         }
     }
 }
