@@ -5,6 +5,7 @@ using Senparc.Ncf.Core.Exceptions;
 using Senparc.Xncf.WeixinManagerBase.OHS.Local.PL;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
 
 
 namespace Senparc.Xncf.WeixinManagerMP.OHS.Local.AppService
@@ -32,11 +33,19 @@ namespace Senparc.Xncf.WeixinManagerMP.OHS.Local.AppService
             {
                 var weixinSettting = Senparc.Weixin.Config.SenparcWeixinSetting;
                 var appId = weixinSettting.WeixinAppId;
-                var openId = "oxRg0uLsnpHjb8o93uVnwMK_WAVw";
+                var openId = new[] {
 
-                var userInfo = await Senparc.Weixin.MP.AdvancedAPIs.UserApi.InfoAsync(appId, openId); 
-                
-                await Senparc.Weixin.MP.AdvancedAPIs.CustomApi.SendTextAsync(appId, openId, $"这是一条来自 NCF 直播的消息。时间：{SystemTime.Now}。你的关注信息：{userInfo.subscribe}");
+                    "oxRg0uLsnpHjb8o93uVnwMK_WAVw",
+                    "oxRg0uJ7qwdfktPIWsRH4jIsdVMU",
+                    "oxRg0uLyWVHB1QRVohAEVXNlqDvw",
+                    "oxRg0uAWjbHmpSSE4N90khs614ZA"
+                    };
+
+                openId.AsParallel().ForAll(async openId => {
+                    var userInfo = await Senparc.Weixin.MP.AdvancedAPIs.UserApi.InfoAsync(appId, openId);
+
+                    await Senparc.Weixin.MP.AdvancedAPIs.CustomApi.SendTextAsync(appId, openId, $"这是一条来自 NCF 直播的消息。时间：{SystemTime.Now}。你的关注信息：{userInfo.subscribe}");
+                });
 
                 return weixinSettting.MpSetting.WeixinAppId;
             });

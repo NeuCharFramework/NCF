@@ -21,6 +21,7 @@ using Senparc.Weixin.MP;
 
 namespace Senparc.Xncf.WeixinManagerMP
 {
+    [XncfOrder(4100)]
     [XncfRegister]
     public partial class Register : XncfRegisterBase, IXncfRegister
     {
@@ -82,6 +83,7 @@ namespace Senparc.Xncf.WeixinManagerMP
         public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
         {
             services.AddScoped<ColorAppService>();
+            services.AddScoped<WeixinManagerBase.OHS.Local.AppService.WeixinRegisterService>();
             return base.AddXncfModule(services, configuration, env);
         }
 

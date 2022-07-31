@@ -45,6 +45,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.1" />
 		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
 		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />
+		<PackageReference Include="Senparc.Weixin.MP.Middleware" Version="0.8.2" />
 		<PackageReference Include="Senparc.Weixin.MP.MVC" Version="7.12.2" />
 	</ItemGroup>
 	<ItemGroup>
