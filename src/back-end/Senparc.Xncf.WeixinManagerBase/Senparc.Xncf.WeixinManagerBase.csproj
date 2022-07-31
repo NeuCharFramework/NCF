@@ -25,14 +25,14 @@
 		<OutputPath>..\..\..\BuildOutPut</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Senparc.CO2NET.WebApi" Version="1.1.2" />
+		<PackageReference Include="Senparc.CO2NET.WebApi" Version="1.2.1" />
 		<!--<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />-->
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.10.0-beta7" />
+		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.11.2-beta7" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.2-beta7" />
