@@ -1,7 +1,7 @@
-﻿using Senparc.Ncf.Core.Models;
-using Senparc.Xncf.WeixinManagerBase.Models.DatabaseModel.Dto;
+﻿using Senparc.Xncf.WeixinManagerBase.Models.DatabaseModel.Dto;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Senparc.Ncf.Core.Models;
 
 namespace Senparc.Xncf.WeixinManagerBase
 {

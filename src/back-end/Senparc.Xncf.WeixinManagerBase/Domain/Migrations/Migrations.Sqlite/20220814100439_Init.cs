@@ -1,15 +1,14 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Senparc.Xncf.WeixinManagerBase.Migrations.Migrations.Sqlite
+#nullable disable
+
+namespace Senparc.Xncf.WeixinManagerBase.Domain.Migrations.Migrations.Sqlite
 {
-    public partial class AddTenantId : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "SenparcDemo_NewApp_Color");
-
             migrationBuilder.CreateTable(
                 name: "Senparc_WeixinManagerBase_Color",
                 columns: table => new
@@ -31,6 +30,37 @@ namespace Senparc.Xncf.WeixinManagerBase.Migrations.Migrations.Sqlite
                 {
                     table.PrimaryKey("PK_Senparc_WeixinManagerBase_Color", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Senparc_WeixinManagerBase_User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserName = table.Column<string>(type: "TEXT", nullable: true),
+                    Password = table.Column<string>(type: "TEXT", nullable: true),
+                    Email = table.Column<string>(type: "TEXT", nullable: true),
+                    Phone = table.Column<string>(type: "TEXT", nullable: true),
+                    MpOpenId = table.Column<string>(type: "TEXT", nullable: true),
+                    UnionId = table.Column<string>(type: "TEXT", nullable: true),
+                    NickName = table.Column<string>(type: "TEXT", nullable: true),
+                    Sex = table.Column<int>(type: "INTEGER", nullable: false),
+                    Language = table.Column<string>(type: "TEXT", nullable: true),
+                    City = table.Column<string>(type: "TEXT", nullable: true),
+                    Province = table.Column<string>(type: "TEXT", nullable: true),
+                    Country = table.Column<string>(type: "TEXT", nullable: true),
+                    HeadImgUrl = table.Column<string>(type: "TEXT", nullable: true),
+                    Flag = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AddTime = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    LastUpdateTime = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    TenantId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AdminRemark = table.Column<string>(type: "TEXT", maxLength: 300, nullable: true),
+                    Remark = table.Column<string>(type: "TEXT", maxLength: 300, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Senparc_WeixinManagerBase_User", x => x.Id);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -38,26 +68,8 @@ namespace Senparc.Xncf.WeixinManagerBase.Migrations.Migrations.Sqlite
             migrationBuilder.DropTable(
                 name: "Senparc_WeixinManagerBase_Color");
 
-            migrationBuilder.CreateTable(
-                name: "SenparcDemo_NewApp_Color",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    AddTime = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AdditionNote = table.Column<string>(type: "TEXT", nullable: true),
-                    AdminRemark = table.Column<string>(type: "TEXT", maxLength: 300, nullable: true),
-                    Blue = table.Column<int>(type: "INTEGER", nullable: false),
-                    Flag = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Green = table.Column<int>(type: "INTEGER", nullable: false),
-                    LastUpdateTime = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Red = table.Column<int>(type: "INTEGER", nullable: false),
-                    Remark = table.Column<string>(type: "TEXT", maxLength: 300, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SenparcDemo_NewApp_Color", x => x.Id);
-                });
+            migrationBuilder.DropTable(
+                name: "Senparc_WeixinManagerBase_User");
         }
     }
 }

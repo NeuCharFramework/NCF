@@ -83,7 +83,8 @@ namespace Senparc.Xncf.WeixinManagerMP
         public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
         {
             services.AddScoped<ColorAppService>();
-            services.AddScoped<WeixinManagerBase.OHS.Local.AppService.WeixinRegisterService>();
+              services.AddScoped<Senparc.Xncf.WeixinManagerBase.Domain.Services.UserService>();
+          services.AddScoped<WeixinManagerBase.OHS.Local.AppService.WeixinRegisterService>();
             return base.AddXncfModule(services, configuration, env);
         }
 

@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Builder;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.Weixin.RegisterServices;
 using Senparc.Weixin.AspNet;
+using Senparc.Xncf.WeixinManagerBase.Domain.Services;
 
 namespace Senparc.Xncf.WeixinManagerBase
 {
@@ -31,7 +32,7 @@ namespace Senparc.Xncf.WeixinManagerBase
 
         public override string Uid => "C888A082-3CDA-4682-912F-AE86BAC29F01";//必须确保全局唯一，生成后必须固定，已自动生成，也可自行修改
 
-        public override string Version => "0.1";//必须填写版本号
+        public override string Version => "0.2.1";//必须填写版本号
 
         public override string MenuName => "微信公众号";
 
@@ -83,12 +84,13 @@ namespace Senparc.Xncf.WeixinManagerBase
         public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
         {
             services.AddScoped<ColorAppService>();
+            services.AddScoped<UserService>();
             services.AddScoped<WeixinRegisterService>();
 
             //添加微信服务
             services.AddSenparcWeixinServices(configuration);//Senparc.Weixin 注册（必须）
 
-            
+
             return base.AddXncfModule(services, configuration, env);
         }
 
