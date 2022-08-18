@@ -25,7 +25,7 @@ namespace Senparc.Web.DatabasePlant
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

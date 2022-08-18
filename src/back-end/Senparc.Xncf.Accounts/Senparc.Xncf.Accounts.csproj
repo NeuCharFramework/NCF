@@ -42,7 +42,7 @@
 		<PackageReference Include="Senparc.CO2NET.WebApi" Version="1.1.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
 		<!--为了兼容部分数据库迁移文件仍然有依赖的情况-->
-		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.11.4-beta7" />
+		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.11.4.1-beta7" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -64,6 +64,6 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
 		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 --><!--
 		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />-->
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.3.3-beta7" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.3.3.2-beta7" />
 	</ItemGroup>
 </Project>

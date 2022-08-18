@@ -37,3 +37,4 @@ obj/
 /src/back-end/Senparc.Xncf.Installer/App_Data/SenparcTraceLog
 /src/front-end/Senparc.Xncf.Account.FrontEnd
 /src/back-end/Senparc.Web/App_Data/WeChat_OfficialAccount
+/src/back-end/Template_OrgName.Xncf.Template_XncfName
