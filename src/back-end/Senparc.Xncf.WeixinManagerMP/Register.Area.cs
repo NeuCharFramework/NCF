@@ -30,6 +30,7 @@ namespace Senparc.Xncf.WeixinManagerMP
                 //此处可配置页面权限
             });
 
+            
             SenparcTrace.SendCustomLog("WeixinManagerMP 启动", "完成 Area:Senparc.Xncf.WeixinManagerMP 注册");
 
             return builder;

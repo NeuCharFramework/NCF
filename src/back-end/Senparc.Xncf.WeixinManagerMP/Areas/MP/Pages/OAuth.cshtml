@@ -1,0 +1,18 @@
+﻿@page
+@model Senparc.Xncf.WeixinManagerMP.Areas.MP.Pages.OAuthModel
+@{
+}
+<p>Hello  World！</p>
+
+@if (Model.User_ViewDto != null)
+{
+    <p>欢迎您：<span>@Model.User_ViewDto.NickName</span></p>
+    <p><img src="@Model.User_ViewDto.HeadImgUrl" /></p>
+    <p><a href="?handler=Logout">退出登录</a></p>
+}
+else
+{
+    <p>情况告知</p>
+    <p><a href="?handler=Login">登录</a></p>
+}
+

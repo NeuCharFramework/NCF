@@ -51,4 +51,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Senparc.Xncf.WeixinManagerBase\Senparc.Xncf.WeixinManagerBase.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="ACL\" />
+	</ItemGroup>
 </Project>

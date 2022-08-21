@@ -12,27 +12,27 @@ namespace Senparc.Xncf.WeixinManagerBase.Domain.Models.DatabaseModel
     [Serializable]
     public class User : EntityBase<int>
     {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public string MpOpenId { get; set; }
-        public string UnionId { get; set; }
+        public string UserName { get; private set; }
+        public string Password { get; private set; }
+        public string Email { get; private set; }
+        public string Phone { get; private set; }
+        public string MpOpenId { get; private set; }
+        public string UnionId { get; private set; }
 
-        public string NickName { get; set; }
+        public string NickName { get; private set; }
 
-        public int Sex { get; set; }
+        public int Sex { get; private set; }
         /// <summary>
         ///用户的语言，简体中文为zh_CN
         /// </summary>
-        public string Language { get; set; }
+        public string Language { get; private set; }
 
-        public string City { get; set; }
+        public string City { get; private set; }
 
-        public string Province { get; set; }
+        public string Province { get; private set; }
 
-        public string Country { get; set; }
-        public string HeadImgUrl { get; set; }
+        public string Country { get; private set; }
+        public string HeadImgUrl { get; private set; }
 
         User()
         {
@@ -69,7 +69,8 @@ namespace Senparc.Xncf.WeixinManagerBase.Domain.Models.DatabaseModel
             return Guid.NewGuid().ToString("N");
         }
 
-        public DateTime UpdateLastUpdateTime() {
+        public DateTime UpdateLastUpdateTime()
+        {
             var dt = SystemTime.Now.DateTime;
             this.LastUpdateTime = dt;
             return dt;

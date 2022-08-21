@@ -1,6 +1,7 @@
 ﻿using Senparc.Ncf.Repository;
 using Senparc.Ncf.Service;
 using Senparc.Xncf.WeixinManagerBase.Domain.Models.DatabaseModel;
+using Senparc.Xncf.WeixinManagerBase.Domain.Models.DatabaseModel.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,24 @@ namespace Senparc.Xncf.WeixinManagerBase.Domain.Services
     {
         public UserService(IRepositoryBase<User> repo, IServiceProvider serviceProvider) : base(repo, serviceProvider)
         {
+        }
+
+
+        public async Task<User_CreateOrUpdateDto> CreateOrUpdateFromOAuthAsync(string openid, string nickname, string headimgurl, string unionid)
+        {
+            var user = base.GetObject(z => z.MpOpenId == openid);
+            if (user == null)
+            {
+                user = await this.CreateUserAsync(null,"",mpOpenId:openid, nickName: nickname, headImgUrl: headimgurl, unionId: unionid).ConfigureAwait(false);
+            }
+            else
+            {
+                //TODO:进行更新
+                user.UpdateLastUpdateTime();
+            }
+
+            await base.SaveObjectAsync(user);
+            return base.Mapper.Map<User_CreateOrUpdateDto>(user);
         }
 
         /// <summary>
