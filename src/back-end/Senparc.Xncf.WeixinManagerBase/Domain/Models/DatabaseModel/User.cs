@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 using Senparc.Ncf.Core.Models;
+using System.Linq.Expressions;
+using Senparc.CO2NET.Extensions;
 
 namespace Senparc.Xncf.WeixinManagerBase.Domain.Models.DatabaseModel
 {
@@ -75,5 +77,29 @@ namespace Senparc.Xncf.WeixinManagerBase.Domain.Models.DatabaseModel
             this.LastUpdateTime = dt;
             return dt;
         }
+
+        public bool UpdateUser(string nickName, string headImg)
+        {
+            bool changed = false;
+
+            if (!nickName.IsNullOrEmpty() && NickName != nickName)
+            {
+                changed = changed || true;
+                NickName = nickName;
+            }
+
+            if (!headImg.IsNullOrEmpty() && HeadImgUrl != headImg)
+            {
+                changed = changed || true;
+                HeadImgUrl = headImg;
+            }
+
+            //UpdateElement(z => z.HeadImgUrl, headImg);
+
+            return changed;
+        }
+
+
+        //private bool UpdateElement(Func<Expression<User>,object> )
     }
 }

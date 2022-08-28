@@ -32,11 +32,11 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.11.2-beta7" />
+		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.11.4.1-beta7" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.2-beta7" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.11.2-beta7" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.3.1-beta7" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.11.3-beta7" />
 		<None Include="App_Data\SenparcTraceLog\*" />
 	</ItemGroup>
 	<ItemGroup>

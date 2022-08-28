@@ -6,14 +6,16 @@ using Senparc.Xncf.WeixinManagerBase.OHS.Local.PL;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
-
+using Senparc.Xncf.WeixinManagerMP.Domain.Services;
 
 namespace Senparc.Xncf.WeixinManagerMP.OHS.Local.AppService
 {
     public class ApiAppService : AppServiceBase
     {
-        public ApiAppService(IServiceProvider serviceProvider) : base(serviceProvider)
+        private readonly MpUserService _mpUserService;
+        public ApiAppService(IServiceProvider serviceProvider, MpUserService mpUserService) : base(serviceProvider)
         {
+            _mpUserService = mpUserService;
         }
 
         /*
@@ -41,13 +43,24 @@ namespace Senparc.Xncf.WeixinManagerMP.OHS.Local.AppService
                     "oxRg0uAWjbHmpSSE4N90khs614ZA"
                     };
 
-                openId.AsParallel().ForAll(async openId => {
+                openId.AsParallel().ForAll(async openId =>
+                {
                     var userInfo = await Senparc.Weixin.MP.AdvancedAPIs.UserApi.InfoAsync(appId, openId);
 
                     await Senparc.Weixin.MP.AdvancedAPIs.CustomApi.SendTextAsync(appId, openId, $"这是一条来自 NCF 直播的消息。时间：{SystemTime.Now}。你的关注信息：{userInfo.subscribe}");
                 });
 
                 return weixinSettting.MpSetting.WeixinAppId;
+            });
+        }
+
+        public async Task<StringAppResponse> SyncUser()
+        {
+            return await this.GetResponseAsync<StringAppResponse, string>(async (response, logger) =>
+            {
+                var dt = SystemTime.Now;
+                var changedCount = await _mpUserService.SyncMpUser();
+                return $"总共更新了 {changedCount} 条数据，总耗时：{SystemTime.DiffTotalMS(dt)} 毫秒";
             });
         }
 

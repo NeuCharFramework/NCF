@@ -32,8 +32,8 @@
 
 	<ItemGroup>
 
-		<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.4.2-beta7" />
-		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.11.2-beta7" />
+		<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.4.3-beta7" />
+		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.11.3-beta7" />
 		<!--<PackageReference Include="Senparc.Ncf.Database.MySql" Version="0.6.128-beta1" />-->
 
 		<!--https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-3.1-->
@@ -55,7 +55,7 @@
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.1.1" />
 		<PackageReference Include="Senparc.CO2NET" Version="2.1.2" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.11.2-beta7" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.11.3-beta7" />
 	</ItemGroup>
 	<ItemGroup>
 		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
