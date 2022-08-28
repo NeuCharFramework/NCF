@@ -42,3 +42,5 @@ obj/
 /src/back-end/Senparc.Web/App_Data/WeChat_OfficialAccount/2022-08-21
 /src/back-end/Template_OrgName.Xncf.Template_XncfName
 /src/back-end/Senparc.Web/App_Data/WeChat_OfficialAccount/2022-08-28
+/src/back-end/TestResults
+/src/back-end/Senparc.Xncf.WeixinManagerBase.Tests/App_Data/SenparcTraceLog
