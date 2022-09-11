@@ -2,12 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
+using Senparc.Areas.Admin.Domain;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
+using Senparc.Xncf.AuditLog.Controllers;
+using Senparc.Xncf.AuditLog.Domain.Services;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -15,11 +20,13 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly SysRoleAdminUserInfoService sysRoleAdminUserInfoService;
+        private readonly AuditLogService _auditLogService;
 
-        public AdminUserInfoAuthorizationPageModel(IServiceProvider _serviceProvider, SysRoleAdminUserInfoService sysRoleAdminUserInfoService)
+        public AdminUserInfoAuthorizationPageModel(IServiceProvider _serviceProvider, SysRoleAdminUserInfoService sysRoleAdminUserInfoService,AuditLogService auditLogService)
         {
             this._serviceProvider = _serviceProvider;
             this.sysRoleAdminUserInfoService = sysRoleAdminUserInfoService;
+            this._auditLogService = auditLogService;
         }
 
         public IEnumerable<SysRoleAdminUserInfoDto> RoleAdminUserInfoDtos { get; set; }
@@ -45,6 +52,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         public async Task<IActionResult> OnPostAsync([FromBody] GrantRoleDto grantRoleDto)
         {
             await sysRoleAdminUserInfoService.AddAsync(grantRoleDto.RoleIds, grantRoleDto.AccountId);
+            _auditLogService.CreateAuditLogInfo(HttpContext.Session.GetString("userName"), IPAddressController.GetClientUserIp(HttpContext.Request.HttpContext), "设置管理员角色", DateTime.Now.ToString());
             return Ok(true);
         }
     }

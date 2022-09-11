@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
+using Senparc.Xncf.AuditLog.Controllers;
+using Senparc.Xncf.AuditLog.Domain.Services;
 
 namespace Senparc.Areas.Admin.Areas.Admin
 {
@@ -18,13 +21,16 @@ namespace Senparc.Areas.Admin.Areas.Admin
         //private readonly SysRoleMenuService _sysRoleMenuService;
         private readonly SysMenuService _sysMenuService;
 
-        public PagesRolePermissionModel(SysMenuService sysMenuService, SysRoleService sysRoleService, SysPermissionService sysPermissionService)
+        private readonly AuditLogService _auditLogService;
+
+        public PagesRolePermissionModel(SysMenuService sysMenuService, SysRoleService sysRoleService, SysPermissionService sysPermissionService, AuditLogService auditLogService)
         {
             CurrentMenu = "Role";
             _sysRoleService = sysRoleService;
             _sysPermissionService = sysPermissionService;
             //_sysRoleMenuService = sysRoleMenuService;
             _sysMenuService = sysMenuService;
+            this._auditLogService = auditLogService;
         }
 
         /// <summary>
@@ -59,6 +65,7 @@ namespace Senparc.Areas.Admin.Areas.Admin
                 return Ok(false);
             }
             await _sysPermissionService.AddAsync(sysMenuDto);
+            _auditLogService.CreateAuditLogInfo(HttpContext.Session.GetString("userName"), IPAddressController.GetClientUserIp(HttpContext.Request.HttpContext), "±à¼­½ÇÉ«È¨ÏÞ", DateTime.Now.ToString());
             return Ok(true);
         }
     }

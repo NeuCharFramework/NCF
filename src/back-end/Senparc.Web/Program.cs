@@ -5,6 +5,9 @@
 using Senparc.Ncf.Database.SqlServer;//使用需要引用包： Senparc.Ncf.Database.SqlServer
 
 using Microsoft.Extensions.DependencyInjection;
+using Masa.Utils.Development.Dapr.AspNetCore;
+using DemoAudit.Repository;
+using DemoAudit.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +28,24 @@ builder.AddNcf<SQLServerDatabaseConfiguration>();
 
 //添加 Dapr
 builder.Services.AddDaprClient();
+builder.Services.AddDaprStarter();
+builder.Services.AddDaprStarter(opt =>
+{
+    opt.AppId = "SenparcWeb";
+    opt.AppPort = 5001;
+    opt.AppIdSuffix = "";
+    opt.DaprHttpPort = 8080;
+    opt.DaprGrpcPort = 8081;
+});
+builder.Services.AddControllers().AddDapr();
+
+builder.Services.AddTransient<IAuditRepository, AuditRepository>();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(typeof(AuditFilterAttribute));
+});
+
+builder.Services.AddScoped<AuditFilterAttribute>();
 
 var app = builder.Build();
 
@@ -53,3 +74,5 @@ app.UseEndpoints(endpoints =>
 //    return "1111";
 //});
 app.Run();
+
+app.UseForwardedHeaders();

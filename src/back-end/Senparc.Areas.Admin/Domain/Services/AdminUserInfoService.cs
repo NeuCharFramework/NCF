@@ -23,13 +23,27 @@ using Senparc.Ncf.Service;
 using Senparc.Areas.Admin.ACL;
 using Senparc.Areas.Admin.Domain.Models;
 using Senparc.Areas.Admin.Domain.Models.Dto;
+using DemoAudit.Helpers;
+using DemoAudit.Models;
+using DemoAudit.Repository;
+using System.Globalization;
+using Microsoft.AspNetCore.Mvc;
+using Senparc.Xncf.AuditLog.Domain.Services;
+using Senparc.Xncf.AuditLog.Controllers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Senparc.Areas.Admin.Domain
 {
+
+    [AllowAnonymous]
+    [IgnoreAntiforgeryToken]
+    [BindProperties()]
     public class AdminUserInfoService : BaseClientService<AdminUserInfo>
     {
-
+        
         private readonly Lazy<IHttpContextAccessor> _contextAccessor;
+
+        private readonly IAuditRepository _auditRepository;
         public AdminUserInfoService(AdminUserInfoRepository repository, Lazy<IHttpContextAccessor> httpContextAccessor, IServiceProvider serviceProvider)
             : base(repository, serviceProvider)
         {
@@ -94,10 +108,13 @@ namespace Senparc.Areas.Admin.Domain
             }
         }
 
+
         public virtual void Login(AdminUserInfo userInfo, bool rememberMe)
         {
             #region 使用 .net core 的方法写入 cookie 验证信息
 
+            //AuditLogService auditLogService = _serviceProvider.GetService<AuditLogService>();
+            //auditLogService.CreateAuditLogInfo(userInfo.UserName, "1", "LogIn", DateTime.Now.ToString());
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, userInfo.UserName),
@@ -118,6 +135,9 @@ namespace Senparc.Areas.Admin.Domain
 
             #endregion
         }
+
+
+  
 
         public bool CheckPassword(string userName, string password)
         {
@@ -264,6 +284,8 @@ namespace Senparc.Areas.Admin.Domain
         /// </summary>
         /// <returns></returns>
         //[ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
+
+        
         public async Task<AccountLoginResultDto> LoginAsync(AccountLoginDto loginDto)
         {
             AccountLoginResultDto result = new AccountLoginResultDto();
@@ -315,7 +337,6 @@ namespace Senparc.Areas.Admin.Domain
             return result;
         }
 
-
         /// <summary>
         /// GenerateToken
         /// </summary>
@@ -342,5 +363,7 @@ namespace Senparc.Areas.Admin.Domain
             string tokenStr = tokenHandler.WriteToken(token);
             return tokenStr;
         }
+
+        
     }
 }

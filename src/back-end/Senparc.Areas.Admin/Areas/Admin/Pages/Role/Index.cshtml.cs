@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.Utility;
+using Senparc.Xncf.AuditLog.Controllers;
+using Senparc.Xncf.AuditLog.Domain.Services;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -16,10 +19,13 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
     {
         private readonly SysRoleService _sysRoleService;
 
-        public RoleIndexModel(SysRoleService sysRoleService)
+        private readonly AuditLogService _auditLogService;
+
+        public RoleIndexModel(SysRoleService sysRoleService, AuditLogService auditLogService)
         {
             CurrentMenu = "Role";
             this._sysRoleService = sysRoleService;
+            this._auditLogService = auditLogService;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -82,6 +88,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             foreach (var id in ids)
             {
                 _sysRoleService.DeleteObject(_ => _.Id == id);
+                _auditLogService.CreateAuditLogInfo(HttpContext.Session.GetString("userName"), IPAddressController.GetClientUserIp(HttpContext.Request.HttpContext), "и╬ЁЩ╫ги╚пео╒", DateTime.Now.ToString());
             }
             return Ok(ids.Length);
         }

@@ -11,6 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Senparc.Ncf.Core;
 using Senparc.Areas.Admin.Domain.Models;
 using Senparc.Areas.Admin.Domain;
+using Microsoft.AspNetCore.Http;
+using Senparc.Xncf.AuditLog.Controllers;
+using Senparc.Xncf.AuditLog.Domain.Services;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -18,6 +21,8 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
     public class AdminUserInfo_IndexModel : BaseAdminPageModel
     {
         private readonly AdminUserInfoService _adminUserInfoService;
+
+        private readonly AuditLogService _auditLogService;
         public PagedList<AdminUserInfo> AdminUserInfoList { get; set; }
 
         /// <summary>
@@ -32,9 +37,10 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         [BindProperty(SupportsGet = true)]
         public string OrderField { get; set; } = "AddTime Desc,Id";
 
-        public AdminUserInfo_IndexModel(AdminUserInfoService adminUserInfoService)
+        public AdminUserInfo_IndexModel(AdminUserInfoService adminUserInfoService, AuditLogService auditLogService)
         {
             _adminUserInfoService = adminUserInfoService;
+            this._auditLogService = auditLogService;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -71,6 +77,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             foreach (var id in ids)
             {
                 _adminUserInfoService.DeleteObject(id);
+                _auditLogService.CreateAuditLogInfo(HttpContext.Session.GetString("userName"), IPAddressController.GetClientUserIp(HttpContext.Request.HttpContext), "删除管理员信息", DateTime.Now.ToString());
             }
             return Ok(ids.Length);
             //return RedirectToPage("./Index");

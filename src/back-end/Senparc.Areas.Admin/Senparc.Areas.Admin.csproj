@@ -13,6 +13,8 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	
 		<EmbeddedResource Include="wwwroot\**\*" />
+	
+		<PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.0" />
@@ -33,12 +35,12 @@
 		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="1.0.1" />
 		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="4.0.1" />
 		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.11.2-beta7" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.11.2-beta7" />
-		<PackageReference Include="Senparc.Ncf.Log" Version="0.11.2-beta7" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.11.3-beta7" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.11.3-beta7" />
 		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.11.2-beta7" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.11.2-beta7" />
-		<PackageReference Include="Senparc.Ncf.Utility" Version="0.11.2-beta7" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.2-beta7" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.11.3-beta7" />
+		<PackageReference Include="Senparc.Ncf.Utility" Version="0.11.3-beta7" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.3-beta7" />
 
 		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
 		<!--<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />-->
@@ -47,5 +49,9 @@
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.3.2-beta7" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.2-beta7" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.2-beta7" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Senparc.Xncf.AuditLog\Senparc.Xncf.AuditLog.csproj" />
 	</ItemGroup>
 </Project>
