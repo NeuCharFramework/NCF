@@ -27,6 +27,11 @@
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
 		<OutputPath>..\..\..\BuildOutPut</OutputPath>
 	</PropertyGroup>
+	<PropertyGroup>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+	</PropertyGroup>
+
+
 	<ItemGroup>
 	  <Folder Include="OHS\Remote\" />
 	</ItemGroup>

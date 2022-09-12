@@ -8,7 +8,9 @@
 		<DocumentationFile>../Senparc.Web/App_Data/ApiDocXML/Senparc.Areas.Admin.XML</DocumentationFile>
 		<Configurations>Debug;Release;Debug-Dapr</Configurations>
 	</PropertyGroup>
-
+	<PropertyGroup>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+	</PropertyGroup>
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	

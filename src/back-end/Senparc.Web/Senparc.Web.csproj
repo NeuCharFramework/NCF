@@ -14,10 +14,12 @@
 
 	</PropertyGroup>
 
+
 	<PropertyGroup>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 	</PropertyGroup>
-	
+
+
 	<PropertyGroup>
 		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
