@@ -16,6 +16,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Senparc.Xncf.WeixinManagerBase\Senparc.Xncf.WeixinManagerBase.csproj" />
+	  <ProjectReference Include="..\Senparc.Xncf.WeixinManagerTenPayV3\Senparc.Xncf.WeixinManagerTenPayV3.csproj" />
 	</ItemGroup>
 </Project>
