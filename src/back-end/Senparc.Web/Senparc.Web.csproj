@@ -27,7 +27,6 @@
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.3.1-beta7" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.12.3-beta7" />
 		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.4.1-beta7" />
-		<PackageReference Include="ML.Xncf.Docs" Version="2.1.7.25" />
 	</ItemGroup>
 
 	<ItemGroup>
