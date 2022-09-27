@@ -1,0 +1,136 @@
+﻿@page "{handler?}"
+@model Senparc.Xncf.AuditLog.Areas.AuditLog.Pages.Index
+@{
+    ViewData["Title"] = "审计日志首页";
+    Layout = "_Layout_Vue";
+}
+
+@section breadcrumbs{
+    <el-breadcrumb-item>扩展模块</el-breadcrumb-item>
+    <el-breadcrumb-item>审计日志</el-breadcrumb-item>
+    <el-breadcrumb-item>首页</el-breadcrumb-item>
+}
+
+<div>
+    <el-container>
+        <el-header class="module-header">
+            <span class="start-title"> <i class="fa fa-dot-circle-o"></i>&nbsp;<span class="module-header-v">首页</span></span>
+        </el-header>
+
+        <!-- 此处也可以加 SideMenu -->
+        @*<el-aside width="200px">
+            <el-menu background-color="#304156" default-active="1"
+                        text-color="#bfcbd9" active-text-color="#409eff">
+                @(await Html.PartialAsync("_SideMenu"))
+            </el-menu>
+        </el-aside>*@
+    </el-container>
+
+    <div class="audit-log-info">
+        <h2 class="system-info">日志信息</h2>
+        <el-table :data="tableData"
+                  border
+                  style="width: 100%">
+            <el-table-column align="center"
+                             label="id"
+                             width="80">
+                <template slot-scope="scope">
+                    {{ scope.row.id}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="用户名"
+                             width="180">
+                <template slot-scope="scope">
+                    {{ scope.row.userName}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="操作名称">
+                <template slot-scope="scope">
+                    {{ scope.row.actionName}}
+                </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="操作时间">
+                <template slot-scope="scope">
+                    {{scope.row.actionTime}}
+                </template>
+            </el-table-column>
+        </el-table>
+       <pagination :total="paginationQuery.total"
+                    :page.sync="listQuery.pageIndex"
+                    :limit.sync="listQuery.pageSize"
+                    @@pagination="getList"></pagination>
+        </div>
+</div>
+
+
+@section scripts{
+     
+<script>
+    new Vue({
+            el: "#app",
+
+            data() {
+        return {
+            //分页参数
+            paginationQuery: {
+                total: 5
+            },
+            //分页接口传参（只会有一个）
+            listQuery: {
+                pageIndex: 1,
+                pageSize: 20,
+            },
+            tableData: [],
+            tenantData: {},
+            dialog: {
+                title: '编辑系统信息',
+                visible: false,
+                data: {
+                    id: 0,
+                    systemName: '',
+                },
+                rules: {
+                    systemName: [
+                        { required: true, message: "用户名为必填项", trigger: "blur" }
+                    ]
+                }
+            },
+            updateLoading: false,
+            updateLoadingSet: false, // 确认loading按钮
+        };
+    },
+    created: function () {
+        this.getList();
+    },
+    computed: {
+    },
+    watch: {
+        'dialog.visible': function (val, old) {
+            // 关闭dialog，清空
+            if (!val) {
+                this.dialog.data = {
+                    id: 0,
+                    systemName: ''
+                };
+                this.dialog.updateLoading = false;
+                this.$refs['dataForm'].resetFields();
+            }
+        }
+    },
+    methods: {
+        // 获取数据
+        getList() {
+            let { pageIndex, pageSize } = this.listQuery;
+            service.get(`/Admin/AuditLog/index?handler=List&&pageIndex=${pageIndex}&pageSize=${pageSize}`).then(res => {
+                this.tableData = res.data.data.list;
+                this.paginationQuery.total = res.data.data.totalCount;
+            });
+        }
+    }
+        });
+
+    </script>
+}

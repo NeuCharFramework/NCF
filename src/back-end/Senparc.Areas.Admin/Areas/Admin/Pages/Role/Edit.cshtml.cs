@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
+using Senparc.Xncf.AuditLog.Controllers;
+using Senparc.Xncf.AuditLog.Domain.Services;
 using Senparc.Xncf.SystemCore.Domain.Database;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
@@ -16,11 +19,13 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
     public class RoleEditModel : BaseAdminPageModel
     {
         private readonly SysRoleService _sysRoleService;
+        private readonly AuditLogService _auditLogService;
 
-        public RoleEditModel(SysRoleService sysRoleService)
+        public RoleEditModel(SysRoleService sysRoleService, AuditLogService auditLogService)
         {
             CurrentMenu = "Role";
             _sysRoleService = sysRoleService;
+            this._auditLogService = auditLogService;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -70,6 +75,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         public async Task<IActionResult> OnPostSaveAsync([FromBody] SysRoleDto sysRoleDto)
         {
             await _sysRoleService.CreateOrUpdateAsync(sysRoleDto);
+            _auditLogService.CreateAuditLogInfo(HttpContext.Session.GetString("userName"), IPAddressController.GetClientUserIp(HttpContext.Request.HttpContext), "编辑/添加角色信息", DateTime.Now.ToString());
             return Ok(true);
         }
 
