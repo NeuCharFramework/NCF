@@ -32,7 +32,7 @@ namespace Senparc.Xncf.WeixinManagerTenPayV3
 
         public override string Uid => "EB063894-BFFE-42F2-81E1-A196F4E4A391";//必须确保全局唯一，生成后必须固定，已自动生成，也可自行修改
 
-        public override string Version => "0.1";//必须填写版本号
+        public override string Version => "0.2";//必须填写版本号
 
         public override string MenuName => "微信支付V3模块";
 
