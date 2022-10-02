@@ -44,6 +44,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{17C843BF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Xncf.WeixinManagerTenPayV3", "Senparc.Xncf.WeixinManagerTenPayV3\Senparc.Xncf.WeixinManagerTenPayV3.csproj", "{D122F7AE-9249-418F-8C5F-7177062DA5B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Senparc.Xncf.WeixinManagerTenPayV3Tests", "Senparc.Xncf.WeixinManagerTenPayV3Tests\Senparc.Xncf.WeixinManagerTenPayV3Tests.csproj", "{45739289-CEF5-41ED-839D-0B594F2459A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -179,6 +181,16 @@ Global
 		{D122F7AE-9249-418F-8C5F-7177062DA5B6}.TemplateRelease|Any CPU.Build.0 = TemplateRelease|Any CPU
 		{D122F7AE-9249-418F-8C5F-7177062DA5B6}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{D122F7AE-9249-418F-8C5F-7177062DA5B6}.Test|Any CPU.Build.0 = Test|Any CPU
+		{45739289-CEF5-41ED-839D-0B594F2459A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45739289-CEF5-41ED-839D-0B594F2459A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45739289-CEF5-41ED-839D-0B594F2459A5}.Debug-Dapr|Any CPU.ActiveCfg = Debug|Any CPU
+		{45739289-CEF5-41ED-839D-0B594F2459A5}.Debug-Dapr|Any CPU.Build.0 = Debug|Any CPU
+		{45739289-CEF5-41ED-839D-0B594F2459A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45739289-CEF5-41ED-839D-0B594F2459A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45739289-CEF5-41ED-839D-0B594F2459A5}.TemplateRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{45739289-CEF5-41ED-839D-0B594F2459A5}.TemplateRelease|Any CPU.Build.0 = Release|Any CPU
+		{45739289-CEF5-41ED-839D-0B594F2459A5}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{45739289-CEF5-41ED-839D-0B594F2459A5}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -197,6 +209,7 @@ Global
 		{4EB98970-04D6-4856-A276-20BBA5E7C7D4} = {17C843BF-5656-4644-BFF8-32C22F02366F}
 		{17C843BF-5656-4644-BFF8-32C22F02366F} = {4EF8210D-7CFC-4CA2-A0A0-2E4B6391FA57}
 		{D122F7AE-9249-418F-8C5F-7177062DA5B6} = {4EF8210D-7CFC-4CA2-A0A0-2E4B6391FA57}
+		{45739289-CEF5-41ED-839D-0B594F2459A5} = {17C843BF-5656-4644-BFF8-32C22F02366F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7427A6C9-D522-4B10-B0AC-607D69736B50}

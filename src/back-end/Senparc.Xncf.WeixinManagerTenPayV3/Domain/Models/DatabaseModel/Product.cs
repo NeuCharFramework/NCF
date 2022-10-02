@@ -28,6 +28,9 @@ namespace Senparc.Xncf.WeixinManagerTenPayV3.Domain.Models.DatabaseModel
         [Required]
         public bool IsOpen { get; private set; }
 
+        public decimal? OriginalPrice { get; private set; }
+        public string Note { get; private set; }
+
         Product() { }
 
         public Product(ProductDto productDto)
@@ -38,6 +41,8 @@ namespace Senparc.Xncf.WeixinManagerTenPayV3.Domain.Models.DatabaseModel
             Description = productDto.Description;
             ImageUrl = productDto.ImageUrl;
             IsOpen = productDto.IsOpen;
+            OriginalPrice = productDto.OriginalPrice;
+            Note = productDto.Note;
         }
     }
 }

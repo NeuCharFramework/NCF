@@ -18,6 +18,8 @@ namespace Senparc.Xncf.WeixinManagerTenPayV3.OHS.Local.PL
         [Required]
         [Description("产品价格||必须大于0")]
         public decimal Price { get; set; }
+        [Description("原价||必须大于0")]
+        public decimal? OriginalPrice { get; set; }
         [Required]
         [Description("产品库存||产品库存")]
         public int Store { get; set; }
@@ -33,5 +35,8 @@ namespace Senparc.Xncf.WeixinManagerTenPayV3.OHS.Local.PL
                  new SelectionItem("0","否","商品不上架，不可交易",false),
                  new SelectionItem("1","是","商品上架，可交易",true)
             });
+
+        [Description("备注||商品备注")]
+        public string Note { get; set; }
     }
 }

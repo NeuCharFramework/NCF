@@ -107,7 +107,7 @@ namespace Senparc.Xncf.WeixinManagerTenPayV3
                     return 0;
                 }).ConfigureAwait(false).GetAwaiter().GetResult();
             }
-
+                
             return base.UseXncfModule(app, registerService);
         }
     }

@@ -39,6 +39,8 @@ namespace Senparc.Xncf.WeixinManagerTenPayV3.OHS.Local.AppService
                     Description = request.Description,
                     ImageUrl = request.ImageUrl,
                     IsOpen = request.IsOpen.SelectedValues.FirstOrDefault() == "1",
+                    OriginalPrice = request.OriginalPrice,
+                    Note = request.Note
                 };
 
                 var product = new Product(productDto);
@@ -48,7 +50,7 @@ namespace Senparc.Xncf.WeixinManagerTenPayV3.OHS.Local.AppService
                 await this._productService.SaveObjectAsync(product);
 
                 var productStored = await this._productService.GetProductAsync(product.Id);
-                
+
                 logger.Append("商品保存完毕：" + productStored.ToJson(true));
 
                 return productStored.ToJson(true);

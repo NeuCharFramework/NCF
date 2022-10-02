@@ -11,6 +11,8 @@ namespace Senparc.Xncf.WeixinManagerTenPayV3.Models.DatabaseModel.Dto
         public string Description { get; set; }
         public string ImageUrl { get; set; }
         public bool IsOpen { get; set; }
+        public decimal? OriginalPrice { get; set; }
+        public string Note { get; set; }
 
         public ProductDto() { }
     }

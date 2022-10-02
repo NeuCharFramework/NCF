@@ -14,7 +14,7 @@
     <Title>微信支付V3模块</Title>
     <!--<ProjectUrl> https://github.com/NeuCharFramework/NCF</ProjectUrl>
     <PackageProjectUrl>https://github.com/NeuCharFramework/NcfPackageSources</PackageProjectUrl>-->
-    <PackageIcon>icon.jpg</PackageIcon>
+    <!--<PackageIcon>icon.jpg</PackageIcon>-->
     <PackageReleaseNotes>
 			v0.1 创世
 </PackageReleaseNotes>
@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\Models\DatabaseModel\Mapping\" />
+    <Folder Include="OHS\Remote\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Senparc.Xncf.WeixinManagerBase\Senparc.Xncf.WeixinManagerBase.csproj" />
