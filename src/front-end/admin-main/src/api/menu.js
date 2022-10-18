@@ -4,9 +4,9 @@
 * */
 
 import request from '@/utils/request'
-const baseUrl = "/api/Senparc.Areas.Admin/SysMenuAppService/Areas.Admin_SysMenuAppService"
+const baseUrl = '/Senparc.Areas.Admin/SysMenuAppService/Areas.Admin_SysMenuAppService'
 
-//创建、更新
+// 创建、更新
 export function createOrUpdateMenu(data) {
   return request({
     url: `${baseUrl}.CreateOrUpdateAsync`,
@@ -15,7 +15,7 @@ export function createOrUpdateMenu(data) {
   })
 }
 
-//删除
+// 删除
 export function deleteMenu(params) {
   return request({
     url: `${baseUrl}.DeleteMenuAsync`,
@@ -24,7 +24,7 @@ export function deleteMenu(params) {
   })
 }
 
-//列表
+// 列表
 export function getAllMenus(params) {
   return request({
     url: `${baseUrl}.GetAllMenusTreeAsync`,
@@ -33,7 +33,7 @@ export function getAllMenus(params) {
   })
 }
 
-//列表-子项
+// 列表-子项
 export function getMenus(params) {
   return request({
     url: `${baseUrl}.GetMenusAsync`,
@@ -42,7 +42,7 @@ export function getMenus(params) {
   })
 }
 
-//详情
+// 详情
 export function GetMenuInfo(params) {
   return request({
     url: `${baseUrl}.GetMenuAsync`,
@@ -50,6 +50,3 @@ export function GetMenuInfo(params) {
     params
   })
 }
-
-
-

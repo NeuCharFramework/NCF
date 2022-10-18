@@ -27,8 +27,10 @@ router.beforeEach(async(to, from, next) => {
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
     } else {
       // 通过getInfo判断用户是否获得了他的权限角色
-      const hasRoles = store.getters.menuTree && store.getters.menuTree.length > 0
-      console.log('hasRoles',hasRoles)
+      // const hasRoles = store.getters.menuTree && store.getters.menuTree.length > 0
+      // 模拟登录
+      const hasRoles = store.getters.roles && store.getters.roles.length > 0
+      console.log('hasRoles', hasRoles)
       if (hasRoles) {
         next()
       } else {
@@ -41,10 +43,12 @@ router.beforeEach(async(to, from, next) => {
           const accessRoutes = await store.dispatch('permission/generateRoutes', { roleCodes, menuTree })
 
           // 动态添加可访问的路由
-          console.log('可访问的路由',accessRoutes)
+          console.log('可访问的路由', accessRoutes)
 
-          router.addRoutes(accessRoutes)
-
+          // router.addRoutes(accessRoutes)
+          accessRoutes.forEach(el => {
+            router.addRoute(el)
+          })
           // hack 方法来确保 addRoutes 是完整的
           // 设置 replace: true, 这样导航就不会留下历史记录
           next({ ...to, replace: true })

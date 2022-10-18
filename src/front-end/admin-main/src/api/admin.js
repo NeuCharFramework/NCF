@@ -2,10 +2,8 @@
 * 模块：Senparc.Areas.Admin:AdminUserInfoAppService
 *  管理员相关
 * */
-
 import request from '@/utils/request'
-const baseUrl = "/Senparc.Areas.Admin/AdminUserInfoAppService/Areas.Admin_AdminUserInfoAppService"
-
+const baseUrl = '/Senparc.Areas.Admin/AdminUserInfoAppService/Areas.Admin_AdminUserInfoAppService'
 export function login(data) {
   return request({
     url: `${baseUrl}.LoginAsync`,
@@ -14,7 +12,7 @@ export function login(data) {
   })
 }
 
-//管理员-列表
+// 管理员-列表
 export function getAdminUserList(params) {
   return request({
     url: `${baseUrl}.GetList`,
@@ -23,7 +21,7 @@ export function getAdminUserList(params) {
   })
 }
 
-//管理员-创建
+// 管理员-创建
 export function createAdminUser(data) {
   return request({
     url: `${baseUrl}.Create`,
@@ -32,7 +30,7 @@ export function createAdminUser(data) {
   })
 }
 
-//管理员-更新
+// 管理员-更新
 export function updateAdminUser(data) {
   return request({
     url: `${baseUrl}.Update`,
@@ -41,8 +39,8 @@ export function updateAdminUser(data) {
   })
 }
 
-//创建角色
-  export function createRole(data) {
+// 创建角色
+export function createRole(data) {
   return request({
     url: `${baseUrl}.AddRoleAsync`,
     method: 'put',
@@ -50,9 +48,8 @@ export function updateAdminUser(data) {
   })
 }
 
-
-//获取角色列表
-  export function getRoles(data) {
+// 获取角色列表
+export function getRoles(data) {
   return request({
     url: `${baseUrl}.GetRolesAsync`,
     method: 'put',

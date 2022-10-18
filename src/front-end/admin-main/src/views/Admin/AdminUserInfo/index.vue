@@ -5,60 +5,34 @@
         <div class="filter-container">
           <el-button class="filter-item" icon="el-icon-plus" type="primary" @click="handleEdit">增加</el-button>
         </div>
-        <el-table
-          :data="tableData"
-          border
-          style="width: 100%"
-        >
-          <el-table-column
-            align="center"
-            label="id"
-            width="80"
-          >
+        <el-table :data="tableData" border style="width: 100%">
+          <el-table-column align="center" label="id" width="80">
             <template slot-scope="scope">
               {{ scope.row.id }}
             </template>
           </el-table-column>
-          <el-table-column
-            align="center"
-            label="用户名"
-            width="180"
-          >
+          <el-table-column align="center" label="用户名" width="180">
             <template slot-scope="scope">
               {{ scope.row.userName }}
             </template>
           </el-table-column>
-          <el-table-column
-            align="center"
-            label="备注"
-          >
+          <el-table-column align="center" label="备注">
             <template slot-scope="scope">
               {{ scope.row.note }}
             </template>
           </el-table-column>
-          <el-table-column
-            align="center"
-            label="添加时间"
-          >
+          <el-table-column align="center" label="添加时间">
             <template slot-scope="scope">
-              {{ scope.row.addTime }}
+              {{ scope.row.addTime | formaTime() }}
             </template>
           </el-table-column>
           <el-table-column align="center" label="操作">
             <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="primary"
-                @click="handleEdit(scope.$index, scope.row)"
-              >编辑
+              <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑
               </el-button>
-              <el-button
-                size="mini"
-                type="primary"
-                @click="handleSet(scope.$index, scope.row)"
-              >设置角色
+              <el-button size="mini" type="primary" @click="handleSet(scope.$index, scope.row)">设置角色
               </el-button>
-              <el-popconfirm placement="top" title="确认删除此角色吗？" @on-confirm="handleDelete(scope.$index, scope.row)">
+              <el-popconfirm placement="top" title="确认删除此角色吗？" @confirm="handleDelete(scope.$index, scope.row)">
                 <el-button slot="reference" size="mini" type="danger">删除</el-button>
               </el-popconfirm>
             </template>
@@ -72,43 +46,36 @@
         <!--        />-->
         <!--编辑、新增 -->
         <el-dialog :close-on-click-modal="false" :title="dialog.title" :visible.sync="dialog.visible">
-          <el-form
-            ref="dataForm"
-            :model="dialog.data"
-            :rules="dialog.rules"
-            label-position="left"
-            label-width="100px"
-            style="max-width: 400px; margin-left:50px;"
-          >
+          <el-form ref="dataForm" :model="dialog.data" :rules="dialog.rules" label-position="left" label-width="100px" style="max-width: 400px; margin-left:50px;">
             <p v-if="dialog.title==='编辑管理员'" class="username-tip">不建议修改用户名！</p>
             <el-form-item label="用户名" prop="userName">
-              <el-input v-model="dialog.data.userName" clearable placeholder="请输入用户名"/>
+              <el-input v-model.trim="dialog.data.userName" clearable placeholder="请输入用户名" />
             </el-form-item>
             <el-form-item :error="dialog.passwordError" :required="isVerPass" label="密码">
-              <el-input v-model="dialog.data.password" clearable placeholder="请输入密码" show-password/>
+              <el-input v-model.trim="dialog.data.password" clearable placeholder="请输入密码" show-password />
             </el-form-item>
             <el-form-item :error="dialog.password2Error" :required="isVerPass" label="确认密码">
-              <el-input v-model="dialog.data.password2" clearable placeholder="请再次输入密码" show-password/>
+              <el-input v-model.trim="dialog.data.password2" clearable placeholder="请再次输入密码" show-password />
             </el-form-item>
             <el-form-item label="真实姓名" prop="realName">
-              <el-input v-model="dialog.data.realName" clearable placeholder="请输入真实姓名"/>
+              <el-input v-model.trim="dialog.data.realName" clearable placeholder="请输入真实姓名" />
             </el-form-item>
             <el-form-item label="手机号" prop="phone">
-              <el-input v-model="dialog.data.phone" clearable placeholder="请输入手机号"/>
+              <el-input v-model.trim="dialog.data.phone" clearable placeholder="请输入手机号" />
             </el-form-item>
             <el-form-item label="备注" prop="note">
-              <el-input v-model="dialog.data.note" clearable placeholder="请输入备注信息"/>
+              <el-input v-model.trim="dialog.data.note" clearable placeholder="请输入备注信息" />
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialog.visible = false">取 消</el-button>
-            <el-button :loading="dialog.updateLoading" type="primary" @click="updateData">确 认</el-button>
+            <el-button :loading="dialog.updateLoadingSet" type="primary" @click="updateData">确 认</el-button>
           </div>
         </el-dialog>
         <!--分配角色-->
         <el-dialog :title="'设置角色-'+dialog.setTitle" :visible.sync="dialog.visibleSet">
           <el-checkbox-group v-model="dialog.dialogSetSelected">
-            <el-checkbox v-for="item in dialog.dialogSetData" :label="item.value" border>{{ item.text }}</el-checkbox>
+            <el-checkbox v-for="item in dialog.dialogSetData" :key="item.id" :label="item.id" border>{{ item.roleCode }}</el-checkbox>
           </el-checkbox-group>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialog.visibleSet = false">取 消</el-button>
@@ -121,12 +88,20 @@
 </template>
 
 <script>
-import { getAdminUserList } from '@/api/admin'
-
+import {
+  getAdminUserList,
+  createAdminUser,
+  updateAdminUser,
+  createRole,
+  getRoles
+} from '@/api/admin'
+// 获取角色列表
+import { getAllRoles } from '@/api/roles'
 export default {
   name: 'AdminUserInfo',
   data() {
     return {
+      baseApi: process.env.VUE_APP_BASE_DOMINNAME,
       // 分页参数
       paginationQuery: {
         total: 5
@@ -134,7 +109,7 @@ export default {
       // 分页接口传参
       listQuery: {
         pageIndex: 1,
-        pageSize: 100,
+        pageSize: 100
       },
       tableData: [],
       dialog: {
@@ -151,9 +126,12 @@ export default {
         },
         rules: {
           userName: [
-            {required: true, message: '用户名为必填项', trigger: 'blur'}
+            { required: true, message: '用户名为必填项', trigger: 'blur' },
+            { min: 5, message: '长度大于等于5个字符', trigger: 'blur' }
+          ],
+          password: [
+            { required: true, message: '密码为必填项', trigger: 'blur' }
           ]
-          // password: [{ required: true, validator: validatePass, trigger: "blur" }],
           // password2: [{ required: true, validator: validatePass2, trigger: "blur" }]
         },
         updateLoading: false,
@@ -174,10 +152,16 @@ export default {
     isVerPass() {
       if (this.dialog.title === '新增管理员') {
         return true
-      } else if (this.dialog.title === '编辑管理员' && this.dialog.data.password.length > 0 || this.dialog.title === '编辑管理员' && this.dialog.data.password2.length > 0) {
+      } else if (
+        (this.dialog.title === '编辑管理员' &&
+          this.dialog.data.password.length > 0) ||
+        (this.dialog.title === '编辑管理员' &&
+          this.dialog.data.password2.length > 0)
+      ) {
         return true
       } else {
-        return false
+        return true
+        // return false
       }
     }
   },
@@ -188,7 +172,7 @@ export default {
     'dialog.data.password2': function myfunction(val) {
       this.checkPass()
     },
-    'dialog.visible': function (val, old) {
+    'dialog.visible': function myfunction(val, old) {
       // 关闭dialog，清空
       if (!val) {
         this.dialog.data = {
@@ -241,10 +225,9 @@ export default {
     },
     // 获取数据
     async getList() {
-      const {adminUserInfoName, pageIndex, pageSize} = this.listQuery
-      let res = await getAdminUserList(this.listQuery)
-      if(res.success){
-        let data = res.data
+      const res = await getAdminUserList(this.listQuery)
+      if (res.data) {
+        const data = res.data
         this.tableData = data.list
         this.paginationQuery.total = data.totalCount
       }
@@ -254,9 +237,15 @@ export default {
       this.dialog.visible = true
       if (row) {
         // 编辑
-        const {userName, password, realName, phone, note, id} = row
+        const { userName, realName, phone, note, id } = row
         this.dialog.data = {
-          userName, realName, phone, note, id, password: '', password2: ''
+          userName,
+          realName,
+          phone,
+          note,
+          id,
+          password: '',
+          password2: ''
         }
         this.dialog.title = '编辑管理员'
         this.dialog = Object.assign({}, this.dialog)
@@ -267,7 +256,8 @@ export default {
     },
     // 更新新增编辑
     updateData() {
-      this.$refs['dataForm'].validate(valid => {
+      this.checkPass()
+      this.$refs['dataForm'].validate((valid) => {
         // 表单校验
         if (valid) {
           // 需要校验
@@ -277,73 +267,120 @@ export default {
               return false
             }
           }
-          this.dialog.updateLoading = true
+          this.dialog.updateLoadingSet = true
           const data = {
-            Id: this.dialog.data.id,
-            UserName: this.dialog.data.userName,
-            Password: this.dialog.data.password,
-            Note: this.dialog.data.note,
-            RealName: this.dialog.data.realName,
-            Phone: this.dialog.data.phone
+            userName: this.dialog.data.userName,
+            password: this.dialog.data.password,
+            realName: this.dialog.data.realName,
+            phone: this.dialog.data.phone,
+            note: this.dialog.data.note
           }
-          // service.post('/Admin/AdminUserInfo/Edit?handler=Save', data).then(res => {
-          //   if (res.data.success) {
-          //     this.getList()
-          //     this.$notify({
-          //       title: 'Success',
-          //       message: '成功',
-          //       type: 'success',
-          //       duration: 2000
-          //     })
-          //     this.dialog.visible = false
-          //     this.dialog.updateLoading = false
-          //   }
-          // }).catch(error => {
-          //   this.dialog.updateLoading = false
-          // })
+          if (this.dialog.title === '新增管理员') {
+            // 新增管理员
+            createAdminUser(data)
+              .then((res) => {
+                this.$notify({
+                  title: 'Success',
+                  message: '成功',
+                  type: 'success',
+                  duration: 2000
+                })
+                this.dialog.updateLoadingSet = false
+                this.dialog.visible = false
+                this.getList()
+              })
+              .catch(() => {
+                this.$message.error('失败')
+                this.dialog.updateLoadingSet = false
+              })
+          } else {
+            data.Id = this.dialog.data.id
+            // 编辑管理员信息
+            updateAdminUser(data)
+              .then((res) => {
+                this.$notify({
+                  title: 'Success',
+                  message: '成功',
+                  type: 'success',
+                  duration: 2000
+                })
+                this.dialog.updateLoadingSet = false
+                this.dialog.visible = false
+                this.getList()
+              })
+              .catch(() => {
+                this.$message.error('失败')
+                this.dialog.updateLoadingSet = false
+              })
+          }
         }
       })
     },
     // 更新设置角色
     updateDataSet() {
       this.dialog.updateLoadingSet = true
-      const data = {RoleIds: this.dialog.dialogSetSelected, AccountId: this.setId}
-      // service.post('/Admin/AdminUserInfo/AuthorizationPage', data).then(res => {
-      //   if (res.data.success) {
-      //     this.getList()
-      //     this.$notify({
-      //       title: 'Success',
-      //       message: '成功',
-      //       type: 'success',
-      //       duration: 2000
-      //     })
-      //     this.dialog.visibleSet = false
-      //     this.dialog.updateLoadingSet = false
-      //   }
-      // })
+      const data = {
+        roleId: this.dialog.dialogSetSelected,
+        accountId: this.setId
+      }
+      // console.log('updateDataSet', data)
+      // 修改角色
+      this.dialog.updateLoading = true
+      createRole(data)
+        .then(() => {
+          this.$notify({
+            title: 'Success',
+            message: '成功',
+            type: 'success',
+            duration: 2000
+          })
+          this.dialog.updateLoading = false
+          this.dialog.visibleSet = false
+          this.getList()
+        })
+        .catch(() => {
+          this.$message.error('失败')
+          this.dialog.updateLoading = false
+        })
     },
     // 设置角色
-    handleSet(index, row) {
+    async handleSet(index, row) {
       this.dialog.dialogSetSelected = []
       this.dialog.visibleSet = true
       this.setId = row.id
       this.dialog.setTitle = row.userName
-      // // 所有角色
-      // const a = await service.get('/Admin/Role/edit?Handler=SelectItems')
-      // if (a.data.success) {
-      //   this.dialog.dialogSetData = a.data.data
-      // }
-      // // 已有角色
-      // const b = await service.get(`/Admin/AdminUserInfo/AuthorizationPage?Handler=Detail&accountId=${this.setId}`)
-      // if (b.data.success) {
-      //   b.data.data.map(res => {
-      //     this.dialog.dialogSetSelected.push(res.roleId)
-      //   })
-      // }
+      const data = {
+        roleId: this.dialog.dialogSetSelected,
+        accountId: this.setId
+      }
+      // 获取所有角色
+      const rolesList = await getAllRoles()
+      // console.log('rolesList', rolesList.data.list)
+      if (rolesList) {
+        // 获取当前账号 下 角色
+        const selfRoles = await getRoles(data)
+        // console.log('selfRoles', selfRoles.data.roleIds)
+        if (selfRoles) {
+          this.dialog.dialogSetData = rolesList.data.list
+          this.dialog.dialogSetSelected = selfRoles.data.roleIds
+          return
+        }
+        this.$message.error('拉取角色信息失败')
+        return
+      }
+      this.$message.error('拉取角色信息失败')
     },
     // 删除
     handleDelete(index, row) {
+      console.log('wwwww')
       const ids = [row.id]
+      // this.$notify({
+      //   title: 'Success',
+      //   message: '删除成功',
+      //   type: 'success',
+      //   duration: 2000
+      // })
+      // this.getList()
       // service.post('/Admin/AdminUserInfo/Index?handler=Delete', ids).then(res => {
       //   if (res.data.success) {
       //     this.getList()
@@ -361,5 +398,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

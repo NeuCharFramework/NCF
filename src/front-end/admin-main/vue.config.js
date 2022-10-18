@@ -34,7 +34,7 @@ module.exports = {
     https: false,
     port: port,
     open: true,
-    disableHostCheck: true,
+    disableHostCheck: true, // 是否开启域名检查
     overlay: {
       warnings: false,
       errors: false
@@ -42,7 +42,8 @@ module.exports = {
     proxy: {
       // 所有的请求起始部分全部用 '/api'代替，比如访问"https://192.168.1.4/movie"，那么简写成"/api/movie"即可
       '/api': {
-        target: 'https://localhost:44311/api',
+        target: 'https://localhost:44311/api', // 开发域名
+        // target: 'https://localhost:44311/api',// 正式域名
         changeOrigin: true,
         ws: true,
         pathRewrite: {

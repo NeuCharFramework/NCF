@@ -195,22 +195,17 @@ export default {
     // 查
     getList() {
       this.listLoading = true
-
-
-
-      this.listLoading = false
-      this.list = [{
-        title: 'jam',
-        addTime:'2021-12-12'
-      }]
-      this.total = 0
-
-
-      // fetchTemplate(this.listQuery).then((response) => {
-      //   this.list = response.data.list
-      //   this.total = response.data.totalCount
-      //   this.listLoading = false
-      // })
+      // this.listLoading = false
+      // this.list = [{
+      //   title: 'jam',
+      //   addTime:'2021-12-12'
+      // }]
+      // this.total = 0
+      fetchTemplate(this.listQuery).then((response) => {
+        this.list = response.data.list
+        this.total = response.data.totalCount
+        this.listLoading = false
+      })
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -243,26 +238,22 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          console.log(this.temp)
+          // console.log(this.temp)
           const _temp = JSON.parse(JSON.stringify(this.temp))
           delete _temp.id
-
-
-          //模拟
-          this.list.push(this.temp)
-          this.dialogFormVisible = false
-
-
-          // createTemplate(_temp).then(() => {
-          //   this.getList()
-          //   this.dialogFormVisible = false
-          //   this.$notify({
-          //     title: '成功',
-          //     message: '创建成功',
-          //     type: 'success',
-          //     duration: 2000
-          //   })
-          // })
+          // //模拟
+          // this.list.push(this.temp)
+          // this.dialogFormVisible = false
+          createTemplate(_temp).then(() => {
+            this.getList()
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '创建成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
         }
       })
     },

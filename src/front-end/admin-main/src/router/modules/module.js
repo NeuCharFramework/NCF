@@ -13,11 +13,11 @@ const moduleRouter = {
   },
   children: [
     {
-      path: '/Admin/XncfModule/Index',
+      path: '/Module/Index',
       component: () => import('@/views/module/home'),
       name: 'ModuleHome',
       meta: { title: '拓展模块', noCache: false }
-    },
+    }
   ]
 }
 
