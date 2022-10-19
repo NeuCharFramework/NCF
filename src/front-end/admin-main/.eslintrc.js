@@ -104,11 +104,11 @@ module.exports = {
       'allowSwitch': false
     }],
     'no-lone-blocks': 2,
-    'no-mixed-spaces-and-tabs': 2,
+    'no-mixed-spaces-and-tabs': 4,
     'no-multi-spaces': 2,
     'no-multi-str': 2,
-    'no-multiple-empty-lines': [2, {
-      'max': 1
+    'no-multiple-empty-lines': [1, {
+      'max': 2
     }],
     'no-native-reassign': 2,
     'no-negated-in-lhs': 2,

@@ -44,80 +44,80 @@ const actions = {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       // 模拟登录
-      commit('SET_TOKEN', '123456789QWER')
-      setToken('123456789QWER')
-      resolve('123456789QWER')
+      // commit('SET_TOKEN', '123456789QWER')
+      // setToken('123456789QWER')
+      // resolve('123456789QWER')
       // 登录请求
-      // login({ username: username.trim(), password: password }).then(response => {
-      //   if (response.success) {
-      //     const { data } = response
-      //     const { token } = data
-      //     commit('SET_TOKEN', token)
-      //     setToken(token)
-      //     resolve(data)
-      //   } else {
-      //     Message({
-      //       message: response.errorMessage || '登录失败！',
-      //       type: 'error',
-      //       duration: 5 * 1000
-      //     })
-      //     reject(response)
-      //   }
-      // }).catch(error => {
-      //   reject(error)
-      // })
+      login({ username: username.trim(), password: password }).then(response => {
+        if (response.success) {
+          const { data } = response
+          const { token } = data
+          commit('SET_TOKEN', token)
+          setToken(token)
+          resolve(data)
+        } else {
+          Message({
+            message: response.errorMessage || '登录失败！',
+            type: 'error',
+            duration: 5 * 1000
+          })
+          reject(response)
+        }
+      }).catch(error => {
+        reject(error)
+      })
     })
   },
 
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      console.log('获取信息')
+      // console.log('获取信息')
       // 本地信息
-      const data = {
-        introduction: 'i am admin',
-        avatar: '',
-        userName: 'admin',
-        roleCodes: ['administrator'],
-        menuTree: [],
-        permissioncodes: []
-      }
-      const { roleCodes, avatar, userName, menuTree, permissioncodes, introduction } = data
-      commit('SET_ROLES', roleCodes)
-      setRole(roleCodes)
-      commit('SET_NAME', userName)
-      commit('SET_AVATAR', avatar)
-      commit('SET_INTRODUCTION', introduction)
-      commit('SET_MENUTREE', menuTree)
-      commit('SET_PERMISSIONCODES', permissioncodes)
-      resolve(data)
+      // const data = {
+      //   introduction: 'i am admin',
+      //   avatar: '',
+      //   userName: 'admin',
+      //   roleCodes: ['administrator'],
+      //   menuTree: [],
+      //   permissioncodes: []
+      // }
+      // const { roleCodes, avatar, userName, menuTree, permissioncodes, introduction } = data
+      // commit('SET_ROLES', roleCodes)
+      // setRole(roleCodes)
+      // commit('SET_NAME', userName)
+      // commit('SET_AVATAR', avatar)
+      // commit('SET_INTRODUCTION', introduction)
+      // commit('SET_MENUTREE', menuTree)
+      // commit('SET_PERMISSIONCODES', permissioncodes)
+      // resolve(data)
 
       // 获取账号信息
-      // getInfo(state.token).then(response => {
-      //   const { data } = response
-      //   if (!data) {
-      //     reject('验证失败，请重新登录。')
-      //   }
-      //   const { roleCodes, userName, menuTree, permissionCodes } = data
-      //   // roles must be a non-empty array
-      //   if (!roleCodes || roleCodes.length <= 0) {
-      //     reject('getInfo: roles must be a non-null array!')
-      //   }
+      getInfo(state.token).then(response => {
+        const { data } = response
+        if (!data) {
+          reject('验证失败，请重新登录。')
+        }
+        const { roleCodes, userName, menuTree, permissionCodes } = data
+        // roles must be a non-empty array
+        if (!roleCodes || roleCodes.length <= 0) {
+          reject('getInfo: roles must be a non-null array!')
+        }
 
-      //   const avatar = ''
-      //   const introduction = 'i am admin'
+        const avatar = ''
+        const introduction = 'i am admin'
 
-      //   commit('SET_ROLES', roleCodes)
-      //   setRole(roleCodes)
-      //   commit('SET_NAME', userName)
-      //   commit('SET_AVATAR', avatar)
-      //   commit('SET_INTRODUCTION', introduction)
-      //   commit('SET_MENUTREE', menuTree)
-      //   commit('SET_PERMISSIONCODES', permissionCodes)
-      //   resolve(data)
-      // }).catch(error => {
-      //   reject(error)
-      // })
+        commit('SET_ROLES', roleCodes)
+        setRole(roleCodes)
+        commit('SET_NAME', userName)
+        commit('SET_AVATAR', avatar)
+        commit('SET_INTRODUCTION', introduction)
+        commit('SET_MENUTREE', menuTree)
+        commit('SET_PERMISSIONCODES', permissionCodes)
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
     })
   },
 

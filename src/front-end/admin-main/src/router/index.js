@@ -4,7 +4,7 @@ import Router from 'vue-router'
 import Layout from '@/layout'
 
 /* Router Modules */
-import moduleRouter from '@/router/modules/module'
+// import moduleRouter from '@/router/modules/module'
 
 Vue.use(Router)
 
@@ -96,23 +96,6 @@ export const constantRoutes = [
   //     }
   //   ]
   // }
-  // {
-  //   path: '/template',
-  //   component: Layout,
-  //   name: 'Template',
-  //   meta: {
-  //     title: '模板页',
-  //     icon: 'excel'
-  //   },
-  //   children: [
-  //     {
-  //       path: '/template/index',
-  //       component: () => import('@/views/template/template'),
-  //       name: 'TemplateIndex',
-  //       meta: {title: '模板页'}
-  //     }
-  //   ]
-  // }
 ]
 
 /**
@@ -123,6 +106,7 @@ export const asyncRoutes = [
   {
     path: '/Admin',
     component: Layout,
+    redirect: '/Admin/AdminUserInfo/Index',
     name: 'Admin',
     meta: {
       title: '系统管理',
@@ -146,11 +130,23 @@ export const asyncRoutes = [
         component: () => import('@/views/Admin/Menu/index'),
         name: '菜单管理',
         meta: { title: '菜单管理' }
+      },
+      {
+        path: '/Admin/SystemConfig/Index',
+        component: () => import('@/views/Admin/SystemConfig/index'),
+        name: '系统信息',
+        meta: { title: '系统信息' }
+      },
+      {
+        path: '/Admin/TenantInfo/Index',
+        component: () => import('@/views/Admin/TenantInfo/index'),
+        name: '多租户信息',
+        meta: { title: '多租户信息' }
       }
     ]
   },
   // 拓展模块
-  moduleRouter,
+  // moduleRouter,
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

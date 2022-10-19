@@ -27,9 +27,9 @@ router.beforeEach(async(to, from, next) => {
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
     } else {
       // 通过getInfo判断用户是否获得了他的权限角色
-      // const hasRoles = store.getters.menuTree && store.getters.menuTree.length > 0
+      const hasRoles = store.getters.menuTree && store.getters.menuTree.length > 0
       // 模拟登录
-      const hasRoles = store.getters.roles && store.getters.roles.length > 0
+      // const hasRoles = store.getters.roles && store.getters.roles.length > 0
       console.log('hasRoles', hasRoles)
       if (hasRoles) {
         next()

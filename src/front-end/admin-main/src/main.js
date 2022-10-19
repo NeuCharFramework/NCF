@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Cookies from 'js-cookie'
 
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
-
+import 'font-awesome/css/font-awesome.min.css'// font-awesome 导入font-awesome字体库 https://fontawesome.dashgame.com/
 // 引入 ag-grid 表格插件 样式文件
 import 'ag-grid-community/dist/styles/ag-grid.css'
 import 'ag-grid-community/dist/styles/ag-theme-balham.css'
@@ -26,6 +26,12 @@ import * as filters from './filters' // global filters
 
 import vueModuleLoader from 'vue-module-loader'
 
+import dayjs from 'dayjs' //日期、时间处理插件 https://dayjs.fenxianglu.cn/
+Vue.filter('dateFormat', (originVal,format = "YYYY-MM-DD HH:mm:ss") => {
+  // 直接调用dayjs()得到的是当前时间哟
+  const dtStr = dayjs(originVal).format('YYYY-MM-DD HH:mm:ss')
+  return dtStr
+})
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -34,13 +40,13 @@ import vueModuleLoader from 'vue-module-loader'
  * Currently MockJs will be used in the production environment,
  * please remove it before going online ! ! !
  */
-if (process.env.NODE_ENV === 'production') {
-  const { mockXHR } = require('../mock')
-  mockXHR()
-}
+// if (process.env.NODE_ENV === 'production') {
+//   const { mockXHR } = require('../mock')
+//   mockXHR()
+// }
 
 Vue.use(Element, {
-  size: Cookies.get('size') || 'medium', // set element-ui default size
+  size: Cookies.get('size') || 'medium' // set element-ui default size
   // locale: enLang // 如果使用中文，无需设置，请删除
 })
 Vue.use(vueModuleLoader, { store })

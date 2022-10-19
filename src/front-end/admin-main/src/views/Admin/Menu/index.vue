@@ -12,7 +12,7 @@
         <el-table-column prop="remark" align="center" label="说明" />
         <el-table-column align="center" label="添加时间">
           <template slot-scope="scope">
-            {{ scope.row.addTime | formaTime() }}
+            {{ scope.row.addTime | dateFormat }}
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
@@ -73,7 +73,7 @@
       <!--选择图标-->
       <el-dialog title="图标列表" :visible.sync="dialogIcon.visible">
         <div class="menu-icons-grid">
-          <div v-for="item in dialogIcon.elementIcons" class="menu-icon-item" @click="pickIcon(item)">
+          <div v-for="item in dialogIcon.elementIcons" :key="item" class="menu-icon-item" @click="pickIcon(item)">
             <i :class="'fa ' + item" />
             <span>{{ item }}</span>
           </div>

@@ -23,7 +23,7 @@
           </el-table-column>
           <el-table-column align="center" label="添加时间">
             <template slot-scope="scope">
-              {{ scope.row.addTime | formaTime() }}
+              {{ scope.row.addTime | dateFormat }}
             </template>
           </el-table-column>
           <el-table-column align="center" label="操作">
@@ -97,6 +97,7 @@ import {
 } from '@/api/admin'
 // 获取角色列表
 import { getAllRoles } from '@/api/roles'
+
 export default {
   name: 'AdminUserInfo',
   data() {
