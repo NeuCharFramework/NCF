@@ -118,10 +118,11 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         #region 单个模块页面操作
 
         /// <summary>
-        /// handler=Detail
+        /// 获取单个模块信息
         /// </summary>
         /// <param name="uid"></param>
         /// <returns></returns>
+        [ApiBind]
         public async Task<AppResponseBase<Module_GetItemResponse>> GetItemAsync(string uid)
         {
             return await this.GetResponseAsync<AppResponseBase<Module_GetItemResponse>, Module_GetItemResponse>(async (response, logger) =>
@@ -331,6 +332,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// </summary>
         /// <param name="executeFuncParamDto2">提交参数</param>
         /// <returns></returns>
+        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
         public async Task<AppResponseBase<Module_RunFunctionResponse>> RunFunctionAsync([FromBody] ExecuteFuncParamDto2 executeFuncParamDto2)
         {
             return await this.GetResponseAsync<AppResponseBase<Module_RunFunctionResponse>, Module_RunFunctionResponse>(async (response, logger) =>
