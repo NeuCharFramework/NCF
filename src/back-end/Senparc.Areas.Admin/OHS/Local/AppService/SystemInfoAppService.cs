@@ -50,7 +50,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// <exception cref="Ncf.Core.Exceptions.NcfExceptionBase"></exception>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
         //[Permission(Codes = new string[] { "code" })]
-        [Ncf.Core.Authorization.Permission("role.add,role.update")]
+        //[Ncf.Core.Authorization.Permission("role.add,role.update")]
         public async Task<AppResponseBase<SystemConfigDto>> CreateOrUpdateAsync(SystemConfig_CreateOrUpdateDto request)
         {
             var response = await this.GetResponseAsync<AppResponseBase<SystemConfigDto>, SystemConfigDto>(async (response, logger) =>

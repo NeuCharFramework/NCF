@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Senparc.Areas.Admin.Domain.Dto;
 using Senparc.Areas.Admin.OHS.Local.PL;
 using Senparc.CO2NET;
 using Senparc.Ncf.Core.AppServices;
@@ -57,5 +58,46 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             });
             return response;
         }
+
+
+
+        /// <summary>
+        /// 获取已安装模块信息
+        /// </summary>
+        /// <returns></returns>
+        [ApiBind]
+        public async Task<AppResponseBase<List<XncfModuleDto>>> GetInstalledListAsync()
+        {
+            var response = await this.GetResponseAsync<AppResponseBase<List<XncfModuleDto>>, List<XncfModuleDto>>(async (response, logger) =>
+            {
+                //所有已安装模块
+                var installedXncfModules = await _xncfModuleServiceEx.GetFullListAsync(z => true);
+                var result = installedXncfModules.Select(z => _xncfModuleServiceEx.Mapper.Map<XncfModuleDto>(z)).ToList();
+                return result;
+            });
+            return response;
+        }
+
+
+        /// <summary>
+        /// 获取未安装或待更新（版本不同）模块信息
+        /// </summary>
+        /// <returns></returns>
+        [ApiBind]
+        public async Task<AppResponseBase<List<XncfModuleDto>>> GetUnInstalledListAsync()
+        {
+            var response = await this.GetResponseAsync<AppResponseBase<List<XncfModuleDto>>, List<XncfModuleDto>>(async (response, logger) =>
+            {
+                //所有已安装模块
+                var installedXncfModules = await _xncfModuleServiceEx.GetFullListAsync(z => true);
+                //未安装或待升级模块
+                var updateXncfRegisters = _xncfModuleServiceEx.GetUnInstallXncfModule(installedXncfModules);
+                var result = updateXncfRegisters.Select(z => _xncfModuleServiceEx.Mapper.Map<XncfModuleDto>(z)).ToList();
+                return result;
+            });
+            return response;
+        }
+
+
     }
 }
