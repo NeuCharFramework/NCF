@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using Senparc.Ncf.XncfBase;
+using Senparc.Xncf.XncfModuleManager.Domain.Services;
 
 namespace Senparc.Areas.Admin.OHS.Local.AppService
 {
@@ -17,6 +20,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
     {
         public LocalAppServiceBase(IServiceProvider serviceProvider) : base(serviceProvider)
         {
+
         }
 
         /// <summary>
@@ -33,5 +37,6 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             }
             return -1;
         }
+
     }
 }

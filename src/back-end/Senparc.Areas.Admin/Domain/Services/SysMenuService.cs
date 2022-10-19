@@ -19,26 +19,12 @@ namespace Senparc.Areas.Admin.Domain.Services
         }
 
         /// <summary>
-        /// 获取所有菜单(不包含页面)
-        /// TODO... 缓存
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IEnumerable<SysMenuTreeItemDto>> GetAllMenusTreeAsync(bool hasButton)
-        {
-            var allMenus = await _repo.GetAllMenuDtosAsync(hasButton);
-            IList<SysMenuTreeItemDto> items = new List<SysMenuTreeItemDto>(allMenus.Count() / 2);
-            var iteration = allMenus.Where(_ => _.ParentId == null || _.ParentId == string.Empty).OrderByDescending(o => o.Sort);
-            buildTreeItems(iteration, items, allMenus);
-            return items;
-        }
-
-        /// <summary>
         /// 递归获取树形结构
         /// </summary>
         /// <param name="iteration"></param>
         /// <param name="items"></param>
         /// <param name="source"></param>
-        private void buildTreeItems(IEnumerable<SysMenuDto> iteration, IList<SysMenuTreeItemDto> items, IEnumerable<SysMenuDto> source)
+        private void BuildTreeItems(IEnumerable<SysMenuDto> iteration, IList<SysMenuTreeItemDto> items, IEnumerable<SysMenuDto> source)
         {
             foreach (var menu in iteration)
             {
@@ -61,8 +47,32 @@ namespace Senparc.Areas.Admin.Domain.Services
                     Url = c.Url
                 }).ToList();
                 items.Add(p);
-                buildTreeItems(childs, p.Children, source);
+                BuildTreeItems(childs, p.Children, source);
             }
+        }
+
+        /// <summary>
+        /// 获取所有菜单(不包含页面)
+        /// TODO... 缓存
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<SysMenuTreeItemDto>> GetAllMenusTreeAsync(bool hasButton)
+        {
+            var allMenus = await _repo.GetAllMenuDtosAsync(hasButton);
+            IList<SysMenuTreeItemDto> items = new List<SysMenuTreeItemDto>(allMenus.Count() / 2);
+            var iteration = allMenus.Where(_ => _.ParentId == null || _.ParentId == string.Empty).OrderByDescending(o => o.Sort);
+            BuildTreeItems(iteration, items, allMenus);
+            return items;
+        }
+
+        /// <summary>
+        /// 获取完整菜单信息
+        /// </summary>
+        /// <param name="hasButton">是否包含按钮信息</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<SysMenuDto>> GetAllMenuListAsync(bool hasButton)
+        {
+            return await _repo.GetAllMenuDtosAsync(hasButton);
         }
     }
 }

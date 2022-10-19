@@ -113,6 +113,23 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         }
 
         /// <summary>
+        /// 获取完整菜单信息
+        /// </summary>
+        /// <param name="hasButton">是否包含按钮</param>
+        /// <returns></returns>
+        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Get)]
+        public async Task<AppResponseBase<List<SysMenuDto>>> GetAllMenuListAsync(bool hasButton)
+        {
+            var response = await this.GetResponseAsync<AppResponseBase<List<SysMenuDto>>, List<SysMenuDto>>(async (response, logger) =>
+            {
+                var menuList = await _domainService.GetAllMenuListAsync(hasButton);
+                return menuList.ToList();
+            });
+
+            return response;
+        }
+
+        /// <summary>
         /// 删除菜单
         /// </summary>
         /// <param name="id">父级Id</param>

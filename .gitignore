@@ -38,3 +38,6 @@ obj/
 /src/front-end/Senparc.Xncf.Account.FrontEnd
 /src/back-end/Senparc.Web/App_Data/WeChat_OfficialAccount
 /src/back-end/Template_OrgName.Xncf.Template_XncfName
+/src/back-end/Senparc.Web/wwwroot/docs
+/src/back-end/Senparc.Xncf.WeixinManagerBase.Tests/App_Data/SenparcTraceLog
+/src/back-end/TestResults
