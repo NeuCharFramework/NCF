@@ -122,10 +122,8 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         {
             var response = await this.GetResponseAsync<AppResponseBase<List<SysMenuDto>>, List<SysMenuDto>>(async (response, logger) =>
             {
-                var menu = await _domainService.GetFullListAsync(z => true);
-                var result = menu.Select(z => _domainService.Mapper.Map<SysMenuDto>(z)).ToList();
-
-                return result;
+                var menuList = await _domainService.GetAllMenuListAsync(hasButton);
+                return menuList.ToList();
             });
 
             return response;
