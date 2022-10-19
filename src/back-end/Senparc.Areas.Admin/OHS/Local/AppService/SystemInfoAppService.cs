@@ -26,7 +26,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
 
         /// <summary>
-        /// 获取分页列表
+        /// 获取全部系统信息
         /// </summary>
         /// <returns></returns>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Get)]
@@ -43,7 +43,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
 
         /// <summary>
-        /// 创建or修改角色信息
+        /// 创建or修改系统信息
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
