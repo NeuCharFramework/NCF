@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Areas.Admin.OHS.Local.PL;
+using Senparc.CO2NET;
 using Senparc.Ncf.Core.AppServices;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.XncfModuleManager.Domain.Services;
@@ -25,6 +26,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// 获取模块统计状态
         /// </summary>
         /// <returns></returns>
+        [ApiBind]
         public async Task<AppResponseBase<Module_StatResponse>> StatAsync()
         {
             var response = await this.GetResponseAsync<AppResponseBase<Module_StatResponse>, Module_StatResponse>(async (response, logger) =>
@@ -50,7 +52,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     NewXncfCount = newXncfCount,
                     MissingXncfCount = missingXncfCount
                 };
-                
+
                 return data;
             });
             return response;

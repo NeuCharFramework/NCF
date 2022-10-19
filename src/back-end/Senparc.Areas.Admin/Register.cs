@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Senparc.Areas.Admin.ACL.Repository;
+using Senparc.Areas.Admin.Domain.Dto;
 //using Senparc.Areas.Admin.Authorization;
 using Senparc.Areas.Admin.Domain.Models;
 using Senparc.CO2NET.RegisterServices;
@@ -118,6 +119,7 @@ namespace Senparc.Areas.Admin
             base.AddAutoMapMapping(profile =>
             {
                 profile.CreateMap<AdminUserInfo, CreateOrUpdate_AdminUserInfoDto>();
+                profile.CreateMap<SystemConfig, SystemConfigDto>();
             });
 
             AddJwtAuthentication(services, configuration);
@@ -196,7 +198,7 @@ namespace Senparc.Areas.Admin
         #region IXncfDatabase 接口
 
         public const string DATABASE_PREFIX = "ADMIN_";
-//NcfDatabaseMigrationHelper.SYSTEM_UNIQUE_PREFIX;//系统表，将会留空
+        //NcfDatabaseMigrationHelper.SYSTEM_UNIQUE_PREFIX;//系统表，将会留空
         public string DatabaseUniquePrefix => DATABASE_PREFIX;
 
         public Type TryGetXncfDatabaseDbContextType => MultipleDatabasePool.Instance.GetXncfDbContextType(this);
