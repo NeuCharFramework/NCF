@@ -7,7 +7,7 @@
       <el-main />
     </el-container>
     <el-row :gutter="20">
-      <el-col :span="6">
+      <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
         <a href="~/Admin/XncfModule/Index">
           <div class="grid-content xncf-stat-item">
             <span class="count">{{ xncfStat.installedXncfCount || 0 }}</span>
@@ -18,7 +18,7 @@
           </div>
         </a>
       </el-col>
-      <el-col :span="6">
+      <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
         <a href="~/Admin/XncfModule/Index">
           <div class="grid-content bg-purple xncf-stat-item">
             <span class="count">{{ xncfStat.updateVersionXncfCount || 0 }}</span>
@@ -29,7 +29,7 @@
           </div>
         </a>
       </el-col>
-      <el-col :span="6">
+      <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
         <a href="~/Admin/XncfModule/Index">
           <div class="grid-content bg-purple xncf-stat-item">
             <span class="count">{{ xncfStat.newXncfCount || 0 }}</span>
@@ -40,7 +40,7 @@
           </div>
         </a>
       </el-col>
-      <el-col :span="6">
+      <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
         <a href="~/Admin/XncfModule/Index">
           <div class="grid-content bg-purple xncf-stat-item">
             <span class="count">{{ xncfStat.missingXncfCount || 0 }}</span>
@@ -111,7 +111,7 @@ export default {
     }
   },
   created() {
-    // this.getXncfStat()
+    this.getXncfStat()
     // this.getXncfOpening()
     // this.getCharts();
   },

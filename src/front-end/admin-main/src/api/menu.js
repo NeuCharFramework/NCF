@@ -15,6 +15,16 @@ export function createOrUpdateMenu(data) {
   })
 }
 
+// 获取完整菜单  
+export function getFullMenus(params) {
+  // ?hasButton=true
+  return request({
+    url: `${baseUrl}.GetAllMenuListAsync`,
+    method: 'get',
+    params
+  })
+}
+
 // 删除
 export function deleteMenu(params) {
   return request({

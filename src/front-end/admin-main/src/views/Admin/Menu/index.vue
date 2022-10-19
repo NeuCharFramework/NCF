@@ -89,7 +89,7 @@ import {
   getMenus,
   deleteMenu,
   getAllMenus,
-  GetMenuInfo
+  getFullMenus
 } from '@/api/menu'
 export default {
   name: 'Index',
@@ -819,17 +819,18 @@ export default {
     },
     // 获取所有菜单
     async getList() {
-      const menusList = await getAllMenus({ hasButton: true })
+      const menusList = await getFullMenus()
+      // const menusList = await getAllMenus({ hasButton: true })
       console.log(menusList)
-      const allMenu = menusList.data.items
-      this.menuDeWeight(allMenu)
-      console.log('menuDeWeight', allMenu)
-      await this.getMenuInfo(allMenu)
-      console.log('getMenuInfo', allMenu)
-      this.$nextTick(() => {
-        console.log('1111111', allMenu)
-        this.tableData = allMenu
-      })
+      // const allMenu = menusList.data.items
+      // this.menuDeWeight(allMenu)
+      // console.log('menuDeWeight', allMenu)
+      // await this.getMenuInfo(allMenu)
+      // console.log('getMenuInfo', allMenu)
+      // this.$nextTick(() => {
+      //   console.log('1111111', allMenu)
+      //   this.tableData = allMenu
+      // })
       // this.ddd(b, null, allMenu)
       // this.tableData = allMenu
     },
