@@ -1,9 +1,11 @@
 import request from '@/utils/request'
 
+const baseUrl  = '/Senparc.Areas.Admin/ModuleAppService/Areas.Admin_ModuleAppService'
+
 // XNCF 统计状态数据
 export function getXncfStat() {
   return request({
-    url: '/api/Senparc.Areas.Admin/ModuleAppService/Areas.Admin_ModuleAppService.StatAsync',
+    url: `${baseUrl}.StatAsync`,
     method: 'get'
   })
 }

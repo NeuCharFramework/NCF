@@ -119,12 +119,12 @@ export default {
     // XNCF 统计状态
     async getXncfStat() {
       const xncfStatData = await getXncfStat()
-      this.xncfStat = xncfStatData.data.data || {}
+      this.xncfStat = xncfStatData.data || {}
     },
     // 开放模块数据
     async getXncfOpening() {
       const xncfOpeningList = await getXncfOpening()
-      this.xncfOpeningList = xncfOpeningList.data.data || []
+      this.xncfOpeningList = xncfOpeningList.data || []
     }
     // 图表数据
     // async getCharts() {

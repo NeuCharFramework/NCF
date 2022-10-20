@@ -87,10 +87,8 @@ export default {
   methods: {
     // 获取数据
     async getList() {
-      await getSystemConfig(this.listQuery).then((res) => {
-        console.log('获取数据', res)
-        this.tableData = res.data.data.list
-      })
+      const res = await getSystemConfig(this.listQuery)
+      this.tableData = res.data || []
     },
     // 编辑
     handleEdit(index, row) {
@@ -112,7 +110,7 @@ export default {
         if (valid) {
           this.updateLoading = true
           const data = {
-            Id: this.dialog.data.id,
+            id: this.dialog.data.id,
             SystemName: this.dialog.data.systemName
           }
           setSystemConfig(data)

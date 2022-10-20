@@ -27,7 +27,7 @@
         </el-table-column>
         <el-table-column align="center" label="添加时间">
           <template slot-scope="scope">
-            {{ scope.row.addTime | formaTime }}
+            {{ scope.row.addTime | dateFormat }}
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
@@ -289,6 +289,8 @@ export default {
           const { id, roleName, roleCode, adminRemark, remark, enabled } =
             this.dialog.data
           const data = { id, roleName, roleCode, adminRemark, remark, enabled }
+          console.log('新增角色',data);
+          
           createOrUpdateRole(data)
             .then((res) => {
               this.$notify({
