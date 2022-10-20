@@ -26,7 +26,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
 
         /// <summary>
-        /// 获取分页列表
+        /// 获取全部系统信息
         /// </summary>
         /// <returns></returns>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Get)]
@@ -43,14 +43,14 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
 
         /// <summary>
-        /// 创建or修改角色信息
+        /// 创建or修改系统信息
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         /// <exception cref="Ncf.Core.Exceptions.NcfExceptionBase"></exception>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
         //[Permission(Codes = new string[] { "code" })]
-        [Ncf.Core.Authorization.Permission("role.add,role.update")]
+        //[Ncf.Core.Authorization.Permission("role.add,role.update")]
         public async Task<AppResponseBase<SystemConfigDto>> CreateOrUpdateAsync(SystemConfig_CreateOrUpdateDto request)
         {
             var response = await this.GetResponseAsync<AppResponseBase<SystemConfigDto>, SystemConfigDto>(async (response, logger) =>

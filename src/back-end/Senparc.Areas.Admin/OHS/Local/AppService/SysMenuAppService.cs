@@ -34,6 +34,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// <param name="request"></param>
         /// <returns></returns>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
+        [Ncf.Core.Authorization.Permission("role.add,role.update")]
         public async Task<AppResponseBase<SysMenu_CreateOrUpdateResponse>> CreateOrUpdateAsync(SysMenu_CreateOrUpdateRequest request)
         {
             var response = await this.GetResponseAsync<AppResponseBase<SysMenu_CreateOrUpdateResponse>, SysMenu_CreateOrUpdateResponse>(async (response, logger) =>

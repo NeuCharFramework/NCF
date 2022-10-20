@@ -26,6 +26,7 @@ using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.XncfBase;
 using Senparc.Ncf.XncfBase.Database;
@@ -120,6 +121,8 @@ namespace Senparc.Areas.Admin
             {
                 profile.CreateMap<AdminUserInfo, CreateOrUpdate_AdminUserInfoDto>();
                 profile.CreateMap<SystemConfig, SystemConfigDto>();
+                profile.CreateMap<SystemConfigDto, SystemConfig>();
+                profile.CreateMap<XncfModule, XncfModuleDto>();
             });
 
             AddJwtAuthentication(services, configuration);
