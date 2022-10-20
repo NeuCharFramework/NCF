@@ -4,19 +4,25 @@ import Layout from '@/layout'
 const moduleRouter = {
   path: '/Module',
   component: Layout,
-  redirect: 'noRedirect',
+  redirect: '/Module/Index',
   // 这里的name需要和module模块中module.js的addRoute的name相同
   name: 'Module',
   meta: {
-    title: '拓展模块',
+    title: '扩展模块',
     icon: 'el-icon-cpu'
   },
   children: [
     {
       path: '/Module/Index',
-      component: () => import('@/views/module/home'),
+      component: () => import('@/views/module/index'),
       name: 'ModuleHome',
-      meta: { title: '拓展模块', noCache: false }
+      meta: { title: '模块管理'}
+    },
+    {
+      path: '/Module/Start',
+      component: () => import('@/views/module/start'),
+      name: 'ModuleHome',
+      meta: { title: '执行'}
     }
   ]
 }

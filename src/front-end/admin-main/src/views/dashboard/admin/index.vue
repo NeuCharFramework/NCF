@@ -73,14 +73,14 @@
         </div>
         <div id="xncf-modules-area">
           <el-row :gutter="20">
-            <el-col v-for="item in xncfOpeningList" :key="item.Id" :span="6" class="xncf-item">
+            <el-col v-for="item in xncfOpeningList" :key="item.uid" :span="6" class="xncf-item">
               <el-card class="box-card">
-                <div slot="header" class="clearfix">
-                  <span>{{ item.menuName }}</span> <small class="version">v{{ item.version }}</small>
+                <div slot="header" class="xncf-item-top">
+                  <span class="moudelName">{{ item.menuName }}</span> <small class="version">v{{ item.version }}</small>
                 </div>
                 <a class="component-item" :href="'/Admin/XncfModule/Start/?uid='+item.uid">
                   <span class=""><i :class="[item.icon,'icon']" /></span>
-                  @*<a :href="'/Admin/XncfModule/Start/?uid='+item.uid">{{ item.menuName }}</a>*@
+                  <!-- @*<a :href="'/Admin/XncfModule/Start/?uid='+item.uid">{{ item.menuName }}</a>*@ -->
                 </a>
               </el-card>
             </el-col>
@@ -96,7 +96,7 @@
 import BarChart from './components/BarChart.vue'
 import LineChart from './components/LineChart.vue'
 // 接口
-import { getXncfOpening, getXncfStat } from '@/api/home'
+import { getXncfStat, getModuleList } from '@/api/module'
 
 export default {
   name: 'DashboardAdmin',
@@ -112,7 +112,7 @@ export default {
   },
   created() {
     this.getXncfStat()
-    // this.getXncfOpening()
+    this.getXncfOpening()
     // this.getCharts();
   },
   methods: {
@@ -123,7 +123,7 @@ export default {
     },
     // 开放模块数据
     async getXncfOpening() {
-      const xncfOpeningList = await getXncfOpening()
+      const xncfOpeningList = await getModuleList()
       this.xncfOpeningList = xncfOpeningList.data || []
     }
     // 图表数据
@@ -197,10 +197,20 @@ export default {
   #xncf-modules-area {
     margin-bottom: 50px;
   }
-
-  #xncf-modules-area .xncf-item .version {
-    float: right;
+  #xncf-modules-area .xncf-item .xncf-item-top {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 10px;
   }
+  #xncf-modules-area .xncf-item .xncf-item-top .moudelName {
+    flex: 1;
+    word-break: break-all;
+  }
+  #xncf-modules-area .xncf-item .xncf-item-top .version {
+    white-space:nowrap
+  }
+
   #xncf-modules-area .xncf-item .icon {
     float: left;
   }

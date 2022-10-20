@@ -26,16 +26,18 @@ export function getFullMenus(params) {
 }
 
 // 删除
-export function deleteMenu(params) {
+export function deleteMenu(id) {
   return request({
     url: `${baseUrl}.DeleteMenuAsync`,
     method: 'delete',
-    params
+    params:{
+      id
+    }
   })
 }
 
-// 列表
-export function getAllMenus(params) {
+// 获取菜单树
+export function getTreeMenus(params) {
   return request({
     url: `${baseUrl}.GetAllMenusTreeAsync`,
     method: 'get',
@@ -43,7 +45,7 @@ export function getAllMenus(params) {
   })
 }
 
-// 列表-子项
+// 获取菜单列表
 export function getMenus(params) {
   return request({
     url: `${baseUrl}.GetMenusAsync`,
@@ -52,7 +54,7 @@ export function getMenus(params) {
   })
 }
 
-// 详情
+// 获取菜单详情
 export function GetMenuInfo(params) {
   return request({
     url: `${baseUrl}.GetMenuAsync`,

@@ -4,7 +4,7 @@ import Router from 'vue-router'
 import Layout from '@/layout'
 
 /* Router Modules */
-// import moduleRouter from '@/router/modules/module'
+import moduleRouter from '@/router/modules/module'
 
 Vue.use(Router)
 
@@ -146,7 +146,7 @@ export const asyncRoutes = [
     ]
   },
   // 拓展模块
-  // moduleRouter,
+  moduleRouter,
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

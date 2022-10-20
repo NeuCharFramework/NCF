@@ -4,6 +4,8 @@
 * */
 import request from '@/utils/request'
 const baseUrl = '/Senparc.Areas.Admin/AdminUserInfoAppService/Areas.Admin_AdminUserInfoAppService'
+
+// 登录
 export function login(data) {
   return request({
     url: `${baseUrl}.LoginAsync`,
@@ -48,6 +50,17 @@ export function createRole(data) {
   })
 }
 
+// 删除角色
+export function deleteRole(id) {
+  return request({
+    url: `${baseUrl}.DeleteAsync`,
+    method: 'delete',
+    params:{
+      id
+    }
+  })
+}
+
 // 获取角色列表
 export function getRoles(data) {
   return request({
@@ -57,6 +70,7 @@ export function getRoles(data) {
   })
 }
 
+// 获取账号信息
 export function getInfo() {
   return request({
     url: `${baseUrl}.GetAdminUserInfoAsync`,
@@ -64,6 +78,7 @@ export function getInfo() {
   })
 }
 
+// 退出登录
 export function logout() {
   return request({
     url: `${baseUrl}.logout`,

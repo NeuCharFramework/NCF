@@ -814,14 +814,18 @@ export default {
           duration: 2000
         })
         this.au.visible = false
-        this.au.updateLoading = false
       }
+      this.au.updateLoading = false
     },
     // 获取所有菜单
     async getList() {
-      const menusList = await getFullMenus()
+      const a = await getFullMenus()
+      const b = a.data || []
+      const allMenu = []
+      this.menuFormat(b, null, allMenu)
+      this.tableData = allMenu
       // const menusList = await getAllMenus({ hasButton: true })
-      console.log(menusList)
+
       // const allMenu = menusList.data.items
       // this.menuDeWeight(allMenu)
       // console.log('menuDeWeight', allMenu)
@@ -834,56 +838,14 @@ export default {
       // this.ddd(b, null, allMenu)
       // this.tableData = allMenu
     },
-    // 菜单树去重
-    menuDeWeight(source) {
-      const arr = []
-      for (let i = source.length - 1; i >= 0; i--) {
-        const ele = source[i]
-        ele.hasChildren = false
-        if (arr.indexOf(ele.id) === -1) {
-          arr.push(ele.id)
-        } else {
-          if (ele.children.length > 0) {
-            const arrIndex = source.findIndex((el) => ele.id === el.id)
-            source.splice(arrIndex, 1)
-            if (arrIndex < i) i++
-          } else {
-            source.splice(i, 1)
-          }
-        }
-        if (ele.children.length > 0) {
-          this.menuDeWeight(ele.children)
-        }
-      }
-    },
-    // 获取菜单数据
-    async getMenuInfo(source, info) {
-      for (let i = source.length - 1; i >= 0; i--) {
-        const ele = source[i]
-        if (info && info.length) {
-          const reult = info.find((item) => item.id === ele.id)
-          //  source[i] = Object.assign(source[i], reult)
-          source[i] = {
-            ...reult,
-            ...ele
-          }
-        }
-
-        if (ele.children.length > 0) {
-          const reult = await getMenus({ parentId: ele.id })
-          console.log('reult', reult)
-          this.getMenuInfo(ele.children, reult.data.items)
-        }
-      }
-    },
     // 数据处理
-    ddd(source, parentId, dest) {
+    menuFormat(source, parentId, dest) {
       var array = source.filter((_) => _.parentId === parentId)
       for (var i in array) {
         var ele = array[i]
         ele.children = []
         dest.unshift(ele)
-        this.ddd(source, ele.id, ele.children)
+        this.menuFormat(source, ele.id, ele.children)
       }
     },
     // 编辑 // 新增菜单 // 增加下一级
@@ -982,16 +944,16 @@ export default {
               this.getList()
               this.dialog.visible = false
             }
+          }).catch(()=>{
+            this.dialog.updateLoading = true
           })
         }
       })
     },
     // 删除
     handleDelete(index, row) {
-      const ids = {
-        id: row.id
-      }
-      deleteMenu(ids).then((res) => {
+      if (!row.id) return
+      deleteMenu(row.id).then((res) => {
         if (res.data.success) {
           this.$notify({
             title: 'Success',
@@ -1008,4 +970,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.menu-icon-item{
+  cursor: pointer;
+}
 </style>

@@ -98,6 +98,7 @@ const actions = {
         if (!data) {
           reject('验证失败，请重新登录。')
         }
+        console.log('getInfo',data);
         const { roleCodes, userName, menuTree, permissionCodes } = data
         // roles must be a non-empty array
         if (!roleCodes || roleCodes.length <= 0) {

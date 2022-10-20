@@ -93,7 +93,8 @@ import {
   createAdminUser,
   updateAdminUser,
   createRole,
-  getRoles
+  getRoles,
+  deleteRole
 } from '@/api/admin'
 // 获取角色列表
 import { getAllRoles } from '@/api/roles'
@@ -373,26 +374,17 @@ export default {
     },
     // 删除
     handleDelete(index, row) {
-      console.log('wwwww')
-      const ids = [row.id]
-      // this.$notify({
-      //   title: 'Success',
-      //   message: '删除成功',
-      //   type: 'success',
-      //   duration: 2000
-      // })
-      // this.getList()
-      // service.post('/Admin/AdminUserInfo/Index?handler=Delete', ids).then(res => {
-      //   if (res.data.success) {
-      //     this.getList()
-      //     this.$notify({
-      //       title: 'Success',
-      //       message: '删除成功',
-      //       type: 'success',
-      //       duration: 2000
-      //     })
-      //   }
-      // })
+      deleteRole(row.id).then((res) => {
+        if (res.success) {
+          this.$notify({
+            title: 'Success',
+            message: '删除成功',
+            type: 'success',
+            duration: 2000
+          })
+          this.getList()
+        }
+      })
     }
   }
 }

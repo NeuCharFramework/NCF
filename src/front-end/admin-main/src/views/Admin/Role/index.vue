@@ -85,7 +85,7 @@ import {
   deleteRole,
   getRolePermissions
 } from '@/api/roles'
-import { getAllMenus } from '@/api/menu'
+import { getFullMenus } from '@/api/menu'
 export default {
   name: 'Index',
   data() {
@@ -180,39 +180,53 @@ export default {
       }
       // 当前已有权限
       const c = await getRolePermissions({ roleId: row.id })
-      // console.log('handleRole c', c.data.permissionId)
-      // 默认选中
-      this.defaultCheckedKeys = c.data.permissionId
-      // 菜单列表
-      const a = await getAllMenus({ hasButton: true })
-      // console.log('handleRole a', a.data.items)
-      // 去重菜单树
-      const menuTree = a.data.items
-      this.menuDeWeight(menuTree)
-      // console.log('menuTree', menuTree)
-      // 所有权限 菜单列表
-      this.allMenu = menuTree
-    },
-    // 获取所有权限|菜单树去重
-    menuDeWeight(source) {
-      const arr = []
-      for (var i = source.length - 1; i >= 0; i--) {
-        const ele = source[i]
-        if (arr.indexOf(ele.id) === -1) {
-          arr.push(ele.id)
-        } else {
-          if (ele.children.length > 0) {
-            const arrIndex = source.findIndex((el) => ele.id === el.id)
-            // console.log('arrIndex', arrIndex)
-            source.splice(arrIndex, 1)
-            if (arrIndex < i) i++
-          } else {
-            source.splice(i, 1)
+      if (!c.data) {
+        this.$message.error('获取权限信息失败')
+        return
+      }
+      // console.log('c',c );
+      this.currMenu = c.data.permissionId || []
+      const defaultCheckedKeys = []
+      this.currMenu.map((res) => {
+        defaultCheckedKeys.push(res)
+      })
+
+      const a = await getFullMenus({ hasButton: true })
+      if (!a.data) {
+        this.$message.error('获取权限信息失败')
+        return
+      }
+      // console.log('a',a );
+      const b = a.data || []
+      const allMenu = []
+      // 父节点的集合, 用于求默认和条件为父节点时的差集，解决element tree无半选问题。
+      const parentMenuNodes = []
+      this.ddd(b, null, allMenu, parentMenuNodes)
+      this.allMenu = allMenu
+      // 所有权限  格式后的数据(用于渲染tree)
+      const e = []
+      parentMenuNodes.map((res) => {
+        defaultCheckedKeys.map((ele) => {
+          if (
+            res !== ele &&
+            parentMenuNodes.indexOf(ele) < 0 &&
+            e.indexOf(ele) < 0
+          ) {
+            e.push(ele)
           }
-          // console.log('source splice', item.id, source)
-        }
+        })
+      })
+      this.defaultCheckedKeys = e
+    },
+    ddd(source, parentId, dest, nodes) {
+      var array = source.filter((_) => _.parentId === parentId)
+      for (const i in array) {
+        const ele = array[i]
+        ele.children = []
+        dest.push(ele)
+        this.ddd(source, ele.id, ele.children, nodes)
         if (ele.children.length > 0) {
-          this.menuDeWeight(ele.children)
+          nodes.push(ele.id)
         }
       }
     },
@@ -220,14 +234,13 @@ export default {
     auUpdateData() {
       this.au.updateLoading = true
       const checkNodes = this.$refs.tree.getCheckedNodes(false, true)
-      const array = []
+      let array = []
       checkNodes.map((ele) => {
         array.push({
-          permissionId: ele.id,
+          PermissionId: ele.id,
           roleId: this.au.temp.id,
           isMenu: ele.isMenu,
-          roleCode: this.au.temp.roleCode
-          // resourceCode: ''
+          roleCode: ele.resourceCode
         })
       })
       console.log(this.au.temp, array)
@@ -289,8 +302,8 @@ export default {
           const { id, roleName, roleCode, adminRemark, remark, enabled } =
             this.dialog.data
           const data = { id, roleName, roleCode, adminRemark, remark, enabled }
-          console.log('新增角色',data);
-          
+          console.log('新增角色', data)
+
           createOrUpdateRole(data)
             .then((res) => {
               this.$notify({
