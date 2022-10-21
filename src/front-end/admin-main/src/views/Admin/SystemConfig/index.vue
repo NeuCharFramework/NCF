@@ -64,7 +64,7 @@ export default {
           ]
         }
       },
-      updateLoading: false// 确认loading按钮
+      updateLoading: false // 确认loading按钮
     }
   },
   computed: {},
@@ -88,7 +88,11 @@ export default {
     // 获取数据
     async getList() {
       const res = await getSystemConfig(this.listQuery)
-      this.tableData = res.data || []
+      if (res.data) {
+        this.tableData = res.data || []
+      } else {
+        this.$message.error('获取数据失败')
+      }
     },
     // 编辑
     handleEdit(index, row) {
@@ -115,7 +119,7 @@ export default {
           }
           setSystemConfig(data)
             .then((res) => {
-              if (res.data.success) {
+              if (res.success) {
                 this.getList()
                 this.$notify({
                   title: 'Success',

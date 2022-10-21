@@ -15,13 +15,13 @@ const moduleRouter = {
     {
       path: '/Module/Index',
       component: () => import('@/views/module/index'),
-      name: 'ModuleHome',
+      name: 'ModuleIndex',
       meta: { title: '模块管理'}
     },
     {
       path: '/Module/Start',
       component: () => import('@/views/module/start'),
-      name: 'ModuleHome',
+      name: 'ModuleStart',
       meta: { title: '执行'}
     }
   ]

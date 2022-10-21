@@ -21,7 +21,7 @@
             </el-button>
             <el-button v-if="scope.row.children" size="mini" type="primary" @click="handleEdit(scope.$index, scope.row,'addNext')">增加下一级
             </el-button>
-            <el-popconfirm placement="top" title="确认删除此菜单吗？" @on-confirm="handleDelete(scope.$index, scope.row)">
+            <el-popconfirm placement="top" title="确认删除此菜单吗？" @confirm="handleDelete(scope.$index, scope.row)">
               <el-button slot="reference" size="mini" type="danger">删除</el-button>
             </el-popconfirm>
           </template>
@@ -73,7 +73,7 @@
       <!--选择图标-->
       <el-dialog title="图标列表" :visible.sync="dialogIcon.visible">
         <div class="menu-icons-grid">
-          <div v-for="item in dialogIcon.elementIcons" :key="item" class="menu-icon-item" @click="pickIcon(item)">
+          <div v-for="(item,index) in dialogIcon.elementIcons" :key="`${item}-${index}`" class="menu-icon-item" @click="pickIcon(item)">
             <i :class="'fa ' + item" />
             <span>{{ item }}</span>
           </div>
@@ -791,41 +791,19 @@ export default {
       this.dialogIcon.visible = false
       this.dialog.data.icon = item
     },
-    // 更新授权
-    async auUpdateData() {
-      this.au.updateLoading = true
-      const checkNodes = this.$refs.tree.getCheckedNodes(false, true)
-      const array = []
-      checkNodes.map((ele) => {
-        array.push({
-          PermissionId: ele.id,
-          roleId: this.au.temp.id,
-          isMenu: ele.isMenu,
-          roleCode: ele.resourceCode
-        })
-      })
-      const respnseData = await service.post('/Admin/Role/Permission', array)
-      if (respnseData.data.success) {
-        this.getList()
-        this.$notify({
-          title: 'Success',
-          message: '授权成功',
-          type: 'success',
-          duration: 2000
-        })
-        this.au.visible = false
-      }
-      this.au.updateLoading = false
-    },
     // 获取所有菜单
     async getList() {
       const a = await getFullMenus()
-      const b = a.data || []
-      const allMenu = []
-      this.menuFormat(b, null, allMenu)
-      this.tableData = allMenu
-      // const menusList = await getAllMenus({ hasButton: true })
+      if (a.success) {
+        const b = a.data || []
+        const allMenu = []
+        this.menuFormat(b, null, allMenu)
+        this.tableData = allMenu
+        return
+      }
+      this.$message.error('获取菜单信息失败')
 
+      // const menusList = await getAllMenus({ hasButton: true })
       // const allMenu = menusList.data.items
       // this.menuDeWeight(allMenu)
       // console.log('menuDeWeight', allMenu)
@@ -933,20 +911,22 @@ export default {
             IsLocked: this.dialog.data.isLocked,
             MenuType: this.dialog.data.menuType
           }
-          createOrUpdateMenu(data).then((res) => {
-            if (res.data.success) {
-              this.$notify({
-                title: 'Success',
-                message: '成功',
-                type: 'success',
-                duration: 2000
-              })
-              this.getList()
-              this.dialog.visible = false
-            }
-          }).catch(()=>{
-            this.dialog.updateLoading = true
-          })
+          createOrUpdateMenu(data)
+            .then((res) => {
+              if (res.success) {
+                this.$notify({
+                  title: 'Success',
+                  message: '成功',
+                  type: 'success',
+                  duration: 2000
+                })
+                this.getList()
+                this.dialog.visible = false
+              }
+            })
+            .catch(() => {
+              this.dialog.updateLoading = false
+            })
         }
       })
     },
@@ -954,7 +934,7 @@ export default {
     handleDelete(index, row) {
       if (!row.id) return
       deleteMenu(row.id).then((res) => {
-        if (res.data.success) {
+        if (res.success) {
           this.$notify({
             title: 'Success',
             message: '删除成功',
@@ -970,7 +950,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.menu-icon-item{
-  cursor: pointer;
-}
+  .menu-icon-item {
+    cursor: pointer;
+  }
 </style>

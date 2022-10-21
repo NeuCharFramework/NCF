@@ -8,7 +8,7 @@
     </el-container>
     <el-row :gutter="20">
       <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-        <a href="~/Admin/XncfModule/Index">
+        <router-link to="/">
           <div class="grid-content xncf-stat-item">
             <span class="count">{{ xncfStat.installedXncfCount || 0 }}</span>
             <div class="icon">
@@ -16,10 +16,10 @@
             </div>
             <p class="tit">已安装模块</p>
           </div>
-        </a>
+        </router-link>
       </el-col>
       <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-        <a href="~/Admin/XncfModule/Index">
+        <router-link to="/">
           <div class="grid-content bg-purple xncf-stat-item">
             <span class="count">{{ xncfStat.updateVersionXncfCount || 0 }}</span>
             <div class="icon">
@@ -27,10 +27,10 @@
             </div>
             <p class="tit">待更新模块</p>
           </div>
-        </a>
+        </router-link>
       </el-col>
       <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-        <a href="~/Admin/XncfModule/Index">
+        <router-link to="/">
           <div class="grid-content bg-purple xncf-stat-item">
             <span class="count">{{ xncfStat.newXncfCount || 0 }}</span>
             <div class="icon">
@@ -38,10 +38,10 @@
             </div>
             <p class="tit">发现新模块</p>
           </div>
-        </a>
+        </router-link>
       </el-col>
       <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-        <a href="~/Admin/XncfModule/Index">
+        <router-link to="/">
           <div class="grid-content bg-purple xncf-stat-item">
             <span class="count">{{ xncfStat.missingXncfCount || 0 }}</span>
             <div class="icon">
@@ -49,7 +49,7 @@
             </div>
             <p class="tit">模块异常</p>
           </div>
-        </a>
+        </router-link>
       </el-col>
     </el-row>
     <el-row :gutter="10">
@@ -78,10 +78,12 @@
                 <div slot="header" class="xncf-item-top">
                   <span class="moudelName">{{ item.menuName }}</span> <small class="version">v{{ item.version }}</small>
                 </div>
-                <a class="component-item" :href="'/Admin/XncfModule/Start/?uid='+item.uid">
-                  <span class=""><i :class="[item.icon,'icon']" /></span>
-                  <!-- @*<a :href="'/Admin/XncfModule/Start/?uid='+item.uid">{{ item.menuName }}</a>*@ -->
-                </a>
+                <router-link to="/">
+                  <i :class="[item.icon,'icon']" />
+                </router-link>
+                <!-- <a class="component-item" :href="'/Admin/XncfModule/Start/?uid='+item.uid">
+                  <i :class="[item.icon,'icon']" />
+                </a> -->
               </el-card>
             </el-col>
           </el-row>
@@ -197,6 +199,12 @@ export default {
   #xncf-modules-area {
     margin-bottom: 50px;
   }
+  ::v-deep .el-card__header {
+    padding: 16px;
+  }
+  ::v-deep .el-card__body {
+    padding: 16px;
+  }
   #xncf-modules-area .xncf-item .xncf-item-top {
     display: flex;
     flex-direction: row;
@@ -208,10 +216,11 @@ export default {
     word-break: break-all;
   }
   #xncf-modules-area .xncf-item .xncf-item-top .version {
-    white-space:nowrap
+    white-space: nowrap;
   }
 
   #xncf-modules-area .xncf-item .icon {
-    float: left;
+    // float: left;
+    position: relative;
   }
 </style>

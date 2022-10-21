@@ -75,7 +75,7 @@
         <!--分配角色-->
         <el-dialog :title="'设置角色-'+dialog.setTitle" :visible.sync="dialog.visibleSet">
           <el-checkbox-group v-model="dialog.dialogSetSelected">
-            <el-checkbox v-for="item in dialog.dialogSetData" :key="item.id" :label="item.id" border>{{ item.roleCode }}</el-checkbox>
+            <el-checkbox v-for="item in dialog.dialogSetData" :key="item.id" :label="item.id" border>{{ item.roleName }}</el-checkbox>
           </el-checkbox-group>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialog.visibleSet = false">取 消</el-button>
@@ -271,6 +271,7 @@ export default {
           }
           this.dialog.updateLoadingSet = true
           const data = {
+            id:0,
             userName: this.dialog.data.userName,
             password: this.dialog.data.password,
             realName: this.dialog.data.realName,
@@ -296,7 +297,7 @@ export default {
                 this.dialog.updateLoadingSet = false
               })
           } else {
-            data.Id = this.dialog.data.id
+            data.id = this.dialog.data.id
             // 编辑管理员信息
             updateAdminUser(data)
               .then((res) => {
@@ -320,7 +321,6 @@ export default {
     },
     // 更新设置角色
     updateDataSet() {
-      this.dialog.updateLoadingSet = true
       const data = {
         roleId: this.dialog.dialogSetSelected,
         accountId: this.setId
@@ -357,14 +357,14 @@ export default {
       }
       // 获取所有角色
       const rolesList = await getAllRoles()
-      // console.log('rolesList', rolesList.data.list)
+      // console.log('rolesList', rolesList)
       if (rolesList) {
         // 获取当前账号 下 角色
         const selfRoles = await getRoles(data)
-        // console.log('selfRoles', selfRoles.data.roleIds)
+        // console.log('selfRoles', selfRoles)
         if (selfRoles) {
-          this.dialog.dialogSetData = rolesList.data.list
-          this.dialog.dialogSetSelected = selfRoles.data.roleIds
+          this.dialog.dialogSetData = rolesList.data.list || []
+          this.dialog.dialogSetSelected = selfRoles.data.roleIds || []
           return
         }
         this.$message.error('拉取角色信息失败')

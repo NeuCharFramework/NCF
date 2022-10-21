@@ -162,8 +162,8 @@ export default {
     }
   },
   created() {
-    this.getList()
-    this.getRequestTenantInfo()
+    // this.getList()
+    // this.getRequestTenantInfo()
   },
   methods: {
     // 获取数据

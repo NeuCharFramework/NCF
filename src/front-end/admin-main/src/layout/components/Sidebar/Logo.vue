@@ -2,11 +2,11 @@
   <div class="sidebar-logo-container" :class="{'collapse':collapse}">
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo">
+        <img v-if="logo" :src="logo" class="sidebar-logo sidebar-logo2">
         <h1 v-else class="sidebar-title">{{ title }} </h1>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo">
+        <img v-if="logo" :src="logo" class="sidebar-logo ">
         <h1 class="sidebar-title">{{ title }} </h1>
       </router-link>
     </transition>
@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       title: 'Neu Char Framework',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+      logo: require("@/assets/images/logo_230x55.png")
     }
   }
 }
@@ -46,7 +46,7 @@ export default {
   width: 100%;
   // height: 50px;
   // line-height: 50px;
-  padding: 10px;
+  padding: 13px 10px 10px;
   background: #2b2f3a;
   text-align: center;
   overflow: hidden;
@@ -56,10 +56,11 @@ export default {
     width: 100%;
 
     & .sidebar-logo {
-      width: 32px;
-      height: 32px;
+      // width: 32px;
+      // height: 32px;
+      width: 180px;
       vertical-align: middle;
-      margin-right: 12px;
+      // margin-right: 12px;
     }
 
     & .sidebar-title {
@@ -76,8 +77,10 @@ export default {
   }
 
   &.collapse {
-    .sidebar-logo {
-      margin-right: 0px;
+    padding: 10px 0;
+    & .sidebar-logo {
+      // margin-right: 0px;
+      width: 50px;
     }
   }
 }

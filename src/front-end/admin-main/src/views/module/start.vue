@@ -171,8 +171,8 @@
     <!-- 执行弹窗 -->
     <el-dialog width="60%" v-if="run.data.key" :title="run.data.key.name" :visible.sync="run.visible" class="run-dialog" :close-on-click-modal="false">
       <h4><i class="fa fa-newspaper-o"></i>{{run.data.key.description}}</h4>
-      <el-form :label-position="'left'" @submit.native.prevent>
-        <el-form-item v-for="item in run.data.value" :key="item.title" :label="item.title" label-width="200px" :required="item.isRequired">
+      <el-form :label-position="'left'" >
+        <el-form-item v-for="item in run.data.value" :key="item.name" :label="item.name" label-width="130px" :required="item.isRequired">
           <el-input v-if="item.parameterType===0" v-model="runData[item.name].value" maxlength="500"></el-input>
           <el-select v-if="item.parameterType===1" v-model="runData[item.name].value">
             <template v-if="item.selectionList.items">
@@ -206,7 +206,7 @@
       <p v-html="runResult.tip"></p>
       <p v-html="runResult.msg"></p>
       <span slot="footer" class="dialog-footer">
-        <a :href="'?handler=Log&tempId='+ runResult.tempId" v-if="runResult.hasLog" style="display:block"><i class="fa fa-cloud-download"></i> 下载日志（5分钟内1次有效）</a>
+        <a :href="'https://localhost:44311/Admin/XncfModule/Start/?handler=Log&tempId='+ runResult.tempId" v-if="runResult.hasLog" style="display:block"><i class="fa fa-cloud-download"></i> 下载日志（5分钟内1次有效）</a>
         <el-button type="primary" @click="runResult.visible = false">关 闭</el-button>
       </span>
     </el-dialog>
@@ -483,7 +483,7 @@ export default {
       }
       const data = {
         xncfUid: this.data.xncfModule.uid,
-        xncfFunctionName: this.run.data.key.name,
+        xncfFunctionName: this.run.data.key.name || '',
         xncfFunctionParams: JSON.stringify(xncfFunctionParams)
       }
       const res = await moduleRunFunction(data)

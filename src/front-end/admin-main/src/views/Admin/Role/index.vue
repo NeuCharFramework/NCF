@@ -243,18 +243,20 @@ export default {
           roleCode: ele.resourceCode
         })
       })
-      console.log(this.au.temp, array)
+      console.log('auUpdateData', this.au.temp, array)
       createPermission({ requestDtos: array })
         .then((res) => {
-          this.$notify({
-            title: 'Success',
-            message: '成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.au.updateLoading = false
-          this.au.visible = false
-          this.getList()
+          if (res.success) {
+            this.$notify({
+              title: 'Success',
+              message: '成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.au.updateLoading = false
+            this.au.visible = false
+            this.getList()
+          }
           // window.location.reload()
         })
         .catch(() => {
@@ -302,19 +304,21 @@ export default {
           const { id, roleName, roleCode, adminRemark, remark, enabled } =
             this.dialog.data
           const data = { id, roleName, roleCode, adminRemark, remark, enabled }
-          console.log('新增角色', data)
+          // console.log('新增角色', data)
 
           createOrUpdateRole(data)
             .then((res) => {
-              this.$notify({
-                title: 'Success',
-                message: '成功',
-                type: 'success',
-                duration: 2000
-              })
-              this.dialog.updateLoading = false
-              this.dialog.visible = false
-              this.getList()
+              if (res.success) {
+                this.$notify({
+                  title: 'Success',
+                  message: '成功',
+                  type: 'success',
+                  duration: 2000
+                })
+                this.dialog.updateLoading = false
+                this.dialog.visible = false
+                this.getList()
+              }
             })
             .catch(() => {
               this.$message.error('失败')
@@ -330,13 +334,15 @@ export default {
       }
       deleteRole(id)
         .then((res) => {
-          this.$notify({
-            title: 'Success',
-            message: '删除成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.getList()
+          if (res.success) {
+            this.$notify({
+              title: 'Success',
+              message: '删除成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.getList()
+          }
         })
         .catch(() => {
           this.$message.error('失败')
@@ -350,6 +356,8 @@ export default {
           const data = res.data
           this.tableData = data.list
           this.total = data.totalCount
+        }else{
+          this.$message.error('获取数据失败')
         }
       })
     }
