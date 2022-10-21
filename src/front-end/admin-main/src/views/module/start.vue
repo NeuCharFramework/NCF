@@ -602,6 +602,7 @@ export default {
     padding-left: 12.5px;
     padding-right: 9.33333px;
     // width: 59px;
+    width: fit-content;
     font-size: 14px;
     text-align: right;
   }
@@ -619,7 +620,8 @@ export default {
     margin-right: 10px;
     padding-left: 12.5px;
     padding-right: 9.33333px;
-    width: 59px;
+    // width: 59px;
+    width: fit-content;
     font-size: 14px;
     text-align: right;
   }
