@@ -125,8 +125,6 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             var response = await this.GetResponseAsync<AppResponseBase<int>, int>(async (response, logger) =>
             {
                 var result = await _xncfModuleServiceEx.InstallModuleAsync(uid);
-                //XncfModules = result.Item1;
-                //base.SetMessager(Ncf.Core.Enums.MessageType.info, result.Item2, true);
                 return 0;
             });
             return response;
@@ -466,6 +464,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 return data;
             });
         }
+        
 
         #endregion
     }
