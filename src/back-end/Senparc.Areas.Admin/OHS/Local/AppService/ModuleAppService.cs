@@ -115,6 +115,23 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             return response;
         }
 
+        /// <summary>
+        /// 安装模块
+        /// </summary>
+        /// <returns></returns>
+        [ApiBind]
+        public async Task<AppResponseBase<int>> InstallXncfModuleAsync(string uid)
+        {
+            var response = await this.GetResponseAsync<AppResponseBase<int>, int>(async (response, logger) =>
+            {
+                var result = await _xncfModuleServiceEx.InstallModuleAsync(uid);
+                return 0;
+            });
+            return response;
+        }
+
+
+
         #region 单个模块页面操作
 
         /// <summary>
@@ -213,12 +230,18 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                             }
                         }),
                     },
-                    FunctionParameterInfoCollection = functionParameterInfoCollection.Select(z =>
-                        new KeyValuePair<(string name, string description), List<FunctionParameterInfo>>(
-                            (z.Key.name, z.Key.description), z.Value)
-                        ).OrderBy(z => z.Key.name).ToList(),
+                    //FunctionParameterInfoCollection = functionParameterInfoCollection.Select(z =>
+                    //    new KeyValuePair<(string name, string description), List<FunctionParameterInfo>>(
+                    //        (z.Key.name, z.Key.description), z.Value)
+                    //    ).OrderBy(z => z.Key.name).ToList(),
+                    FunctionParameterInfoCollection = functionParameterInfoCollection
+                            .Select(z => new Module_GetItemResponse.Response_FunctionParameterInfoCollection()
+                            {
+                                Key = (z.Key.name, z.Key.description),
+                                Value = z.Value
+                            }).OrderBy(z => z.Key.name).ToList()
                 };
-
+                
                 return getItemResult;
             });
         }
@@ -447,6 +470,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 return data;
             });
         }
+
 
         #endregion
     }

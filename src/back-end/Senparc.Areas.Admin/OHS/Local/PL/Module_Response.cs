@@ -44,7 +44,7 @@ namespace Senparc.Areas.Admin.OHS.Local.PL
         /// </summary>
         public Response_XncfRegister XncfRegister { get; set; }
 
-        public IEnumerable<KeyValuePair<(string name, string description), List<FunctionParameterInfo>>> FunctionParameterInfoCollection { get; set; }
+        public List<Response_FunctionParameterInfoCollection> FunctionParameterInfoCollection { get; set; }
 
         public class Response_XncfRegister
         {
@@ -122,9 +122,17 @@ namespace Senparc.Areas.Admin.OHS.Local.PL
                 }
             }
         }
+
+        public class Response_FunctionParameterInfoCollection
+        {
+
+            public (string name, string description) Key { get; set; }
+            public List<FunctionParameterInfo> Value { get; set; }
+        }
     }
 
-    public class Module_RunFunctionResponse {
+    public class Module_RunFunctionResponse
+    {
         public string Msg { get; set; }
         public string Log { get; set; }
         public string Exception { get; set; }
