@@ -125,9 +125,8 @@ namespace Senparc.Areas.Admin
                 profile.CreateMap<XncfModule, XncfModuleDto>();
                 profile.CreateMap<XncfModuleDto, XncfModule>();
             });
-
+            
             AddJwtAuthentication(services, configuration);
-
 
             return base.AddXncfModule(services, configuration, env);
         }

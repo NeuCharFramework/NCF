@@ -153,10 +153,10 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Put)]
         public async Task<AppResponseBase<AdminUserInfo_GetRolesResponse>> GetRolesAsync(AdminUserInfo_AddRoleRequest request)
         {
-            int adminUserInfoId = GetCurrentAdminUserInfoId();
+            //int adminUserInfoId = GetCurrentAdminUserInfoId();
             var response = await this.GetResponseAsync<AppResponseBase<AdminUserInfo_GetRolesResponse>, AdminUserInfo_GetRolesResponse>(async (response, logger) =>
             {
-                var roles = await ServiceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == adminUserInfoId);
+                var roles = await ServiceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == request.AccountId);
                 return new AdminUserInfo_GetRolesResponse()
                 {
                     RoleIds = roles.Select(o => o.RoleId)
