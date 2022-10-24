@@ -123,10 +123,11 @@ namespace Senparc.Areas.Admin
                 profile.CreateMap<SystemConfig, SystemConfigDto>();
                 profile.CreateMap<SystemConfigDto, SystemConfig>();
                 profile.CreateMap<SystemConfig_CreateOrUpdateDto, SystemConfig>();
+                profile.CreateMap<SystemConfig, SystemConfig_CreateOrUpdateDto>();
                 profile.CreateMap<XncfModule, XncfModuleDto>();
                 profile.CreateMap<XncfModuleDto, XncfModule>();
             });
-            
+
             AddJwtAuthentication(services, configuration);
 
             return base.AddXncfModule(services, configuration, env);
