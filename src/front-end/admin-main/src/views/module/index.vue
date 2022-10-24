@@ -147,7 +147,6 @@ export default {
       const newTableData = await getUnModuleList()
       // console.log('newTableData', newTableData)
       this.newTableData = newTableData.data || []
-      
     },
 
     // 切换状态
