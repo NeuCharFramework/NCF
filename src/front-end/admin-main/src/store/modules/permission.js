@@ -11,7 +11,7 @@ import moduleRouter from '@/router/modules/module'
 function hasPermission(menuTree, route) {
   // menuTree.some(role => route.path ===role.path)
   if (route.path) {
-    return menuTree.filter(item => item.url === route.path).length > 0
+    return menuTree.filter(item => item.url === route.path || item.url.startsWith(route.path)).length > 0
   } else {
     return false
   }
@@ -30,6 +30,7 @@ export function filterAsyncRoutes(routes, menuTree, pageNotFind = true) {
     const tmp = { ...route }
     // 路由权限
     if (hasPermission(menuTree, tmp)) {
+      
       if (tmp.children) {
         // 子路由权限 (比对远程路由的url和定义的动态路由的path)，如果没有值检查远程路由的结构或者url是否为空
         const list = menuTree.filter(item => item.url === tmp.path)[0] || {}

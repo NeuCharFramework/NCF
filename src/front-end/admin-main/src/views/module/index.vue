@@ -218,7 +218,7 @@ export default {
 
     // 操作
     handleHandle(index, row) {
-      this.$router.push("/Module/Start/?uid=" + row.uid);
+      this.$router.push("/Admin/XncfModule/Start?uid=" + row.uid);
       // window.location.href = "/Admin/XncfModule/Start/?uid=" + row.uid;
     },
     // 主页

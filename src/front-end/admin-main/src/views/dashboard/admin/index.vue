@@ -12,7 +12,7 @@
     </el-container>
     <el-row :gutter="20">
       <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-        <router-link to="/Module/Index">
+        <router-link to="/Admin/XncfModule/Index">
           <div class="grid-content xncf-stat-item">
             <span class="count">{{ xncfStat.installedXncfCount || 0 }}</span>
             <div class="icon">
@@ -23,7 +23,7 @@
         </router-link>
       </el-col>
       <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-        <router-link to="/Module/Index">
+        <router-link to="/Admin/XncfModule/Index">
           <div class="grid-content bg-purple xncf-stat-item">
             <span class="count">
               {{ xncfStat.updateVersionXncfCount || 0 }}
@@ -36,7 +36,7 @@
         </router-link>
       </el-col>
       <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-        <router-link to="/Module/Index">
+        <router-link to="/Admin/XncfModule/Index">
           <div class="grid-content bg-purple xncf-stat-item">
             <span class="count">{{ xncfStat.newXncfCount || 0 }}</span>
             <div class="icon">
@@ -47,7 +47,7 @@
         </router-link>
       </el-col>
       <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-        <router-link to="/Module/Index">
+        <router-link to="/Admin/XncfModule/Index">
           <div class="grid-content bg-purple xncf-stat-item">
             <span class="count">{{ xncfStat.missingXncfCount || 0 }}</span>
             <div class="icon">
@@ -90,7 +90,7 @@
                   <span class="moudelName">{{ item.menuName }}</span>
                   <small class="version">v{{ item.version }}</small>
                 </div>
-                <router-link :to="'/Module/Start/?uid=' + item.uid">
+                <router-link :to="'/Admin/XncfModule/Start?uid=' + item.uid">
                   <i :class="[item.icon, 'icon']" />
                 </router-link>
                 <!-- <a class="component-item" :href="'/Admin/XncfModule/Start/?uid='+item.uid">

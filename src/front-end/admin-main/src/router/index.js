@@ -145,6 +145,7 @@ export const asyncRoutes = [
       }
     ]
   },
+  
   // 拓展模块
   moduleRouter,
   // 404 page must be placed at the end !!!

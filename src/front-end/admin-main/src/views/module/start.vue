@@ -746,7 +746,7 @@ export default {
     async handleDelete() {
       const id = this.data.xncfModule.id;
       const res = await deleteModule(id);
-      console.log("删除", res);
+      // console.log("删除", res);
       if (res.data === "OK") {
         this.$notify({
           title: "Success",
