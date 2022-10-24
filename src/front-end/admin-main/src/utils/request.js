@@ -1,51 +1,51 @@
-import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
-import store from '@/store'
-import { getToken } from '@/utils/auth'
+import axios from "axios";
+import { MessageBox, Message } from "element-ui";
+import store from "@/store";
+import { getToken } from "@/utils/auth";
 
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
-})
+  timeout: 5000, // request timeout
+});
 
 // request interceptor
 service.interceptors.request.use(
-  config => {
+  (config) => {
     // do something before request is sent
 
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      const _token = getToken()
-      config.headers['Authorization'] = `Bearer ${_token}`
+      const _token = getToken();
+      config.headers["Authorization"] = `Bearer ${_token}`;
     }
-    return config
+    return config;
   },
-  error => {
+  (error) => {
     // do something with request error
-    console.log(error) // for debug
-    return Promise.reject(error)
+    console.log(error); // for debug
+    return Promise.reject(error);
   }
-)
+);
 
 // response interceptor
 service.interceptors.response.use(
   /**
    * If you want to get http information such as headers or status
    * Please return  response => response
-  */
+   */
 
   /**
    * Determine the request status by custom code
    * Here is just an example
    * You can also judge the status by HTTP Status Code
    */
-  response => {
-    const res = response.data
-    return response.status === 200 ? Promise.resolve(res) : Promise.reject(res)
+  (response) => {
+    const res = response.data;
+    return response.status === 200 ? Promise.resolve(res) : Promise.reject(res);
 
     // 框架原本的逻辑
     // const res = response.data
@@ -76,23 +76,23 @@ service.interceptors.response.use(
     //   return res
     // }
   },
-  error => {
-    const { response } = error
+  (error) => {
+    const { response } = error;
     if (response && response.status === 401) {
       Message({
-        message: '登录超时请重新登录',
-        type: 'error',
-        duration: 5 * 1000
-      })
-      window.location.replace = `/login?redirect=${router.history.current.fullPath}`
-      return
+        message: "登录超时请重新登录",
+        type: "error",
+        duration: 5 * 1000,
+      });
+      window.location.replace = `/login?redirect=${router.history.current.fullPath}`;
+      return;
     }
     Message({
-      message: response.data.statusCodeDes || response.data,
-      type: 'error',
-      duration: 5 * 1000
-    })
-    return Promise.reject(error)
+      message: response.errorMessage || response.data,
+      type: "error",
+      duration: 5 * 1000,
+    });
+    return Promise.reject(error);
 
     // 框架原本的逻辑
     // console.log('err' + error) // for debug
@@ -103,6 +103,6 @@ service.interceptors.response.use(
     // })
     // return Promise.reject(error)
   }
-)
+);
 
-export default service
+export default service;
