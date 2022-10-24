@@ -2,13 +2,17 @@
   <div class="el-main">
     <el-container>
       <el-header class="module-header">
-        <span class="start-title"><span class="module-header-v">NeuCharFramework 管理员后台</span></span>
+        <span class="start-title"
+          ><span class="module-header-v">
+            NeuCharFramework 管理员后台
+          </span></span
+        >
       </el-header>
       <el-main />
     </el-container>
     <el-row :gutter="20">
       <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-        <router-link to="/">
+        <router-link to="/Module/Index">
           <div class="grid-content xncf-stat-item">
             <span class="count">{{ xncfStat.installedXncfCount || 0 }}</span>
             <div class="icon">
@@ -19,9 +23,11 @@
         </router-link>
       </el-col>
       <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-        <router-link to="/">
+        <router-link to="/Module/Index">
           <div class="grid-content bg-purple xncf-stat-item">
-            <span class="count">{{ xncfStat.updateVersionXncfCount || 0 }}</span>
+            <span class="count">
+              {{ xncfStat.updateVersionXncfCount || 0 }}
+            </span>
             <div class="icon">
               <i class="fa fa-comments-o" />
             </div>
@@ -30,7 +36,7 @@
         </router-link>
       </el-col>
       <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-        <router-link to="/">
+        <router-link to="/Module/Index">
           <div class="grid-content bg-purple xncf-stat-item">
             <span class="count">{{ xncfStat.newXncfCount || 0 }}</span>
             <div class="icon">
@@ -41,7 +47,7 @@
         </router-link>
       </el-col>
       <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-        <router-link to="/">
+        <router-link to="/Module/Index">
           <div class="grid-content bg-purple xncf-stat-item">
             <span class="count">{{ xncfStat.missingXncfCount || 0 }}</span>
             <div class="icon">
@@ -73,13 +79,19 @@
         </div>
         <div id="xncf-modules-area">
           <el-row :gutter="20">
-            <el-col v-for="item in xncfOpeningList" :key="item.uid" :span="6" class="xncf-item">
+            <el-col
+              v-for="item in xncfOpeningList"
+              :key="item.uid"
+              :span="6"
+              class="xncf-item"
+            >
               <el-card class="box-card">
                 <div slot="header" class="xncf-item-top">
-                  <span class="moudelName">{{ item.menuName }}</span> <small class="version">v{{ item.version }}</small>
+                  <span class="moudelName">{{ item.menuName }}</span>
+                  <small class="version">v{{ item.version }}</small>
                 </div>
-                <router-link to="/">
-                  <i :class="[item.icon,'icon']" />
+                <router-link :to="'/Module/Start/?uid=' + item.uid">
+                  <i :class="[item.icon, 'icon']" />
                 </router-link>
                 <!-- <a class="component-item" :href="'/Admin/XncfModule/Start/?uid='+item.uid">
                   <i :class="[item.icon,'icon']" />
@@ -95,13 +107,13 @@
 
 <script>
 // 图表
-import BarChart from './components/BarChart.vue'
-import LineChart from './components/LineChart.vue'
+import BarChart from "./components/BarChart.vue";
+import LineChart from "./components/LineChart.vue";
 // 接口
-import { getXncfStat, getModuleList } from '@/api/module'
+import { getXncfStat, getModuleList } from "@/api/module";
 
 export default {
-  name: 'DashboardAdmin',
+  name: "DashboardAdmin",
   components: { BarChart, LineChart },
   data() {
     return {
@@ -109,118 +121,119 @@ export default {
       // XNCF 统计状态数据
       xncfStat: {},
       // 开放模块数据列表
-      xncfOpeningList: []
-    }
+      xncfOpeningList: [],
+    };
   },
   created() {
-    this.getXncfStat()
-    this.getXncfOpening()
+    this.getXncfStat();
+    this.getXncfOpening();
     // this.getCharts();
   },
   methods: {
     // XNCF 统计状态
     async getXncfStat() {
-      const xncfStatData = await getXncfStat()
-      this.xncfStat = xncfStatData.data || {}
+      const xncfStatData = await getXncfStat();
+      this.xncfStat = xncfStatData.data || {};
     },
     // 开放模块数据
     async getXncfOpening() {
-      const xncfOpeningList = await getModuleList()
-      this.xncfOpeningList = xncfOpeningList.data || []
-    }
+      const xncfOpeningList = await getModuleList();
+      this.xncfOpeningList = xncfOpeningList.data || [];
+      console.log(JSON.parse(JSON.stringify(xncfOpeningList)));
+    },
     // 图表数据
     // async getCharts() {
     //   const xncfOpeningList = await getXncfOpening()
     //   this.xncfOpeningList = xncfOpeningList.data.data || []
     // }
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .xncf-stat-item {
-    position: relative;
-    display: block;
-    margin-bottom: 12px;
-    border: 1px solid #e4e4e4;
-    overflow: hidden;
-    padding: 5px;
-    border-radius: 5px;
-    background-clip: padding-box;
-    background: #fff;
-    transition: all 300ms ease-in-out;
-    padding-left: 10px;
-  }
+.xncf-stat-item {
+  position: relative;
+  display: block;
+  margin-bottom: 12px;
+  border: 1px solid #e4e4e4;
+  overflow: hidden;
+  padding: 5px;
+  border-radius: 5px;
+  background-clip: padding-box;
+  background: #fff;
+  transition: all 300ms ease-in-out;
+  padding-left: 10px;
+}
 
-  .xncf-stat-item .icon {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 60px;
-    color: #bab8b8;
-  }
+.xncf-stat-item .icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 60px;
+  color: #bab8b8;
+}
 
-  .xncf-stat-item .count {
-    font-size: 38px;
-    font-weight: bold;
-    line-height: 1.65857;
-  }
+.xncf-stat-item .count {
+  font-size: 38px;
+  font-weight: bold;
+  line-height: 1.65857;
+}
 
-  .xncf-stat-item .tit {
-    color: #bab8b8;
-    font-size: 24px;
-  }
+.xncf-stat-item .tit {
+  color: #bab8b8;
+  font-size: 24px;
+}
 
-  .xncf-stat-item p {
-    margin-bottom: 5px;
-  }
+.xncf-stat-item p {
+  margin-bottom: 5px;
+}
 
-  .chart-title {
-    font-size: 20px;
-  }
+.chart-title {
+  font-size: 20px;
+}
 
-  .chart-li {
-    padding-top: 20px;
-  }
+.chart-li {
+  padding-top: 20px;
+}
 
-  .chart-li li {
-    line-height: 2;
-  }
+.chart-li li {
+  line-height: 2;
+}
 
-  .chart-li .fa {
-    margin-right: 5px;
-  }
+.chart-li .fa {
+  margin-right: 5px;
+}
 
-  .box-card {
-    margin-top: 20px;
-  }
+.box-card {
+  margin-top: 20px;
+}
 
-  #xncf-modules-area {
-    margin-bottom: 50px;
-  }
-  ::v-deep .el-card__header {
-    padding: 16px;
-  }
-  ::v-deep .el-card__body {
-    padding: 16px;
-  }
-  #xncf-modules-area .xncf-item .xncf-item-top {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    gap: 10px;
-  }
-  #xncf-modules-area .xncf-item .xncf-item-top .moudelName {
-    flex: 1;
-    word-break: break-all;
-  }
-  #xncf-modules-area .xncf-item .xncf-item-top .version {
-    white-space: nowrap;
-  }
+#xncf-modules-area {
+  margin-bottom: 50px;
+}
+::v-deep .el-card__header {
+  padding: 16px;
+}
+::v-deep .el-card__body {
+  padding: 16px;
+}
+#xncf-modules-area .xncf-item .xncf-item-top {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+#xncf-modules-area .xncf-item .xncf-item-top .moudelName {
+  flex: 1;
+  word-break: break-all;
+}
+#xncf-modules-area .xncf-item .xncf-item-top .version {
+  white-space: nowrap;
+}
 
-  #xncf-modules-area .xncf-item .icon {
-    // float: left;
-    position: relative;
-  }
+#xncf-modules-area .xncf-item .icon {
+  // float: left;
+  position: relative;
+}
 </style>
