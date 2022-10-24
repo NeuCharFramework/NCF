@@ -122,6 +122,7 @@ namespace Senparc.Areas.Admin
                 profile.CreateMap<AdminUserInfo, CreateOrUpdate_AdminUserInfoDto>();
                 profile.CreateMap<SystemConfig, SystemConfigDto>();
                 profile.CreateMap<SystemConfigDto, SystemConfig>();
+                profile.CreateMap<SystemConfig_CreateOrUpdateDto, SystemConfig>();
                 profile.CreateMap<XncfModule, XncfModuleDto>();
                 profile.CreateMap<XncfModuleDto, XncfModule>();
             });
