@@ -230,12 +230,18 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                             }
                         }),
                     },
-                    FunctionParameterInfoCollection = functionParameterInfoCollection.Select(z =>
-                        new KeyValuePair<(string name, string description), List<FunctionParameterInfo>>(
-                            (z.Key.name, z.Key.description), z.Value)
-                        ).OrderBy(z => z.Key.name).ToList(),
+                    //FunctionParameterInfoCollection = functionParameterInfoCollection.Select(z =>
+                    //    new KeyValuePair<(string name, string description), List<FunctionParameterInfo>>(
+                    //        (z.Key.name, z.Key.description), z.Value)
+                    //    ).OrderBy(z => z.Key.name).ToList(),
+                    FunctionParameterInfoCollection = functionParameterInfoCollection
+                            .Select(z => new Module_GetItemResponse.Response_FunctionParameterInfoCollection()
+                            {
+                                Key = (z.Key.name, z.Key.description),
+                                Value = z.Value
+                            }).OrderBy(z => z.Key.name).ToList()
                 };
-
+                
                 return getItemResult;
             });
         }
@@ -464,7 +470,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 return data;
             });
         }
-        
+
 
         #endregion
     }
