@@ -115,6 +115,25 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             return response;
         }
 
+        /// <summary>
+        /// 安装模块
+        /// </summary>
+        /// <returns></returns>
+        [ApiBind]
+        public async Task<AppResponseBase<int>> InstallXncfModuleAsync(string uid)
+        {
+            var response = await this.GetResponseAsync<AppResponseBase<int>, int>(async (response, logger) =>
+            {
+                var result = await _xncfModuleServiceEx.InstallModuleAsync(uid);
+                //XncfModules = result.Item1;
+                //base.SetMessager(Ncf.Core.Enums.MessageType.info, result.Item2, true);
+                return 0;
+            });
+            return response;
+        }
+
+
+
         #region 单个模块页面操作
 
         /// <summary>
