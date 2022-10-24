@@ -62,12 +62,12 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     throw new NcfExceptionBase("系统配置信息不存在");
                 }
 
-                systemConfig = _systemConfigService.Mapper.Map(request, systemConfig);
+                systemConfig.Update(request.SystemName, request.MchId, request.MchKey, request.TenPayAppId, systemConfig.HideModuleManager);
 
                 await _systemConfigService.SaveObjectAsync(systemConfig);
 
                 var systemConfigDto = _systemConfigService.Mapper.Map<SystemConfigDto>(systemConfig);
-                
+
                 return systemConfigDto;
             });
             return response;
