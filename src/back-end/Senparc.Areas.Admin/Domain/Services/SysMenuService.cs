@@ -1,4 +1,5 @@
 ﻿using Senparc.Areas.Admin.ACL.Repository;
+using Senparc.CO2NET.Extensions;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using System;
 using System.Collections.Generic;
@@ -21,34 +22,31 @@ namespace Senparc.Areas.Admin.Domain.Services
         /// <summary>
         /// 递归获取树形结构
         /// </summary>
-        /// <param name="iteration"></param>
-        /// <param name="items"></param>
-        /// <param name="source"></param>
-        private void BuildTreeItems(IEnumerable<SysMenuDto> iteration, IList<SysMenuTreeItemDto> items, IEnumerable<SysMenuDto> source)
+        /// <param name="iteration">当前筛选列表</param>
+        /// <param name="source">完整列表数据</param>
+        private IList<SysMenuTreeItemDto> BuildTreeItems(IEnumerable<SysMenuDto> iteration, IEnumerable<SysMenuDto> source)
         {
+            var items = new List<SysMenuTreeItemDto>();
             foreach (var menu in iteration)
             {
-                var childs = source.Where(_ => _.ParentId == menu.Id).OrderByDescending(o => o.Sort);
-                var p = new SysMenuTreeItemDto()
+                //查找子菜单
+                var parentNode = new SysMenuTreeItemDto()
                 {
                     Icon = menu.Icon,
                     Id = menu.Id,
                     IsMenu = menu.MenuType == MenuType.菜单,
                     MenuName = menu.MenuName,
-                    Url = menu.Url
+                    Url = menu.Url,
+                    Children = new List<SysMenuTreeItemDto>()
                 };
-                p.Children = childs.Select(c => new SysMenuTreeItemDto()
-                {
-                    Icon = c.Icon,
-                    Id = c.Id,
-                    IsMenu = c.MenuType == MenuType.菜单,
-                    MenuName = c.MenuName,
-                    Children = Array.Empty<SysMenuTreeItemDto>(),
-                    Url = c.Url
-                }).ToList();
-                items.Add(p);
-                BuildTreeItems(childs, p.Children, source);
+
+                var children = source.Where(z => z.ParentId == menu.Id)
+                                     .OrderByDescending(o => o.Sort)
+                                     .ToList();
+                parentNode.Children = BuildTreeItems(children, source);
+                items.Add(parentNode);
             }
+            return items;
         }
 
         /// <summary>
@@ -59,9 +57,10 @@ namespace Senparc.Areas.Admin.Domain.Services
         public async Task<IEnumerable<SysMenuTreeItemDto>> GetAllMenusTreeAsync(bool hasButton)
         {
             var allMenus = await _repo.GetAllMenuDtosAsync(hasButton);
-            IList<SysMenuTreeItemDto> items = new List<SysMenuTreeItemDto>(allMenus.Count() / 2);
-            var iteration = allMenus.Where(_ => _.ParentId == null || _.ParentId == string.Empty).OrderByDescending(o => o.Sort);
-            BuildTreeItems(iteration, items, allMenus);
+            var iteration = allMenus.Where(z => z.ParentId.IsNullOrEmpty())
+                                    .OrderByDescending(o => o.Sort)
+                                    .ToList();
+            var items = BuildTreeItems(iteration, allMenus);
             return items;
         }
 
