@@ -32,14 +32,14 @@ namespace Senparc.Areas.Admin.Domain.Dto
         /// <summary>
         /// 角色代码
         /// </summary>
-        [Required]
+        //[Required]
         [MaxLength]
         public string RoleCode { get; set; }
 
         /// <summary>
         /// 资源（按钮）代码
         /// </summary>
-        [Required]
+        //[Required]
         [MaxLength]
         public string ResourceCode { get; set; }
     }
