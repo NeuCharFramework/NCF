@@ -4,6 +4,7 @@ using Senparc.Ncf.Core.AppServices;
 using Senparc.Ncf.Core.Cache;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Utility;
 using Senparc.Xncf.SystemManager.Domain.Service;
 using System;
 using System.Collections.Generic;
@@ -63,6 +64,41 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 }
 
                 systemConfig.Update(request.SystemName, request.MchId, request.MchKey, request.TenPayAppId, systemConfig.HideModuleManager);
+
+                await _systemConfigService.SaveObjectAsync(systemConfig);
+
+                var systemConfigDto = _systemConfigService.Mapper.Map<SystemConfigDto>(systemConfig);
+
+                return systemConfigDto;
+            });
+            return response;
+        }
+
+        /// <summary>
+        /// 打开或关闭 模块管理
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="NcfExceptionBase"></exception>
+        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
+        //[Permission(Codes = new string[] { "code" })]
+        //[Ncf.Core.Authorization.Permission("role.add,role.update")]
+        public async Task<AppResponseBase<SystemConfigDto>> HideManagerAsync(int id)
+        {
+            var response = await this.GetResponseAsync<AppResponseBase<SystemConfigDto>, SystemConfigDto>(async (response, logger) =>
+            {
+                var seh = new SenparcExpressionHelper<SystemConfig>();
+                seh.ValueCompare.AndAlso(id > 0, z => z.Id == id);
+                var sehWhere = seh.BuildWhereExpression();
+
+                var systemConfig = await _systemConfigService.GetObjectAsync(sehWhere);
+
+                if (systemConfig == null)
+                {
+                    throw new NcfExceptionBase("系统配置信息不存在");
+                }
+
+                systemConfig.Update(systemConfig.SystemName, systemConfig.MchId, systemConfig.MchKey, systemConfig.TenPayAppId, !systemConfig.HideModuleManager);
 
                 await _systemConfigService.SaveObjectAsync(systemConfig);
 
