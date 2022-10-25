@@ -125,9 +125,22 @@ namespace Senparc.Areas.Admin.OHS.Local.PL
 
         public class Response_FunctionParameterInfoCollection
         {
-
-            public (string name, string description) Key { get; set; }
+            public Response_FunctionParameterInfoCollection_Key Key { get; set; }
             public List<FunctionParameterInfo> Value { get; set; }
+
+        }
+
+        public class Response_FunctionParameterInfoCollection_Key
+        {
+            public string Name { get; set; }
+            public string Description { get; set; }
+
+            public Response_FunctionParameterInfoCollection_Key(string name, string description)
+            {
+                Name = name;
+                Description = description;
+            }
+
         }
     }
 
