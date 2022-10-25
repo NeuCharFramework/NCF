@@ -90,7 +90,7 @@
                   <span class="moudelName">{{ item.menuName }}</span>
                   <small class="version">v{{ item.version }}</small>
                 </div>
-                <router-link :to="'/Admin/XncfModule/Start?uid=' + item.uid">
+                <router-link :to="'/Admin/XncfModule/Start/uid=' + item.uid">
                   <i :class="[item.icon, 'icon']" />
                 </router-link>
                 <!-- <a class="component-item" :href="'/Admin/XncfModule/Start/?uid='+item.uid">

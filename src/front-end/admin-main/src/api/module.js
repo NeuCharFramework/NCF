@@ -32,7 +32,7 @@ export function deleteModule(id) {
     return request({
         url: `${baseUrl}.DeleteAsync`,
         method: 'delete',
-        params:{
+        params: {
             id
         }
     })
@@ -43,7 +43,7 @@ export function getItemModule(uid) {
     return request({
         url: `${baseUrl}.GetItemAsync`,
         method: 'get',
-        params:{
+        params: {
             uid
         }
     })
@@ -64,5 +64,12 @@ export function moduleRunFunction(data) {
         url: `${baseUrl}.RunFunctionAsync`,
         method: 'post',
         data
+    })
+}
+// 安装
+export function moduleInstallXncf(uid) {
+    return request({
+        url: `${baseUrl}.InstallXncfModuleAsync?uid=${uid}`,
+        method: 'get',
     })
 }

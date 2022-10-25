@@ -1,72 +1,80 @@
-import { getInfo, login } from '@/api/admin'
-import { getToken, removeRole, removeToken, setRole, setToken } from '@/utils/auth'
-import router, { resetRouter } from '@/router'
-import { Message } from 'element-ui'
-import store from '@/store'
+import { getInfo, login } from "@/api/admin";
+import {
+  getToken,
+  removeRole,
+  removeToken,
+  setRole,
+  setToken,
+} from "@/utils/auth";
+import router, { resetRouter } from "@/router";
+import { Message } from "element-ui";
+import store from "@/store";
 
 const state = {
   token: getToken(),
-  name: '',
-  avatar: '',
-  introduction: '',
+  name: "",
+  avatar: "",
+  introduction: "",
   roles: [],
   menuTree: [],
-  permissionCodes: []
-}
+  permissionCodes: [],
+};
 
 const mutations = {
   SET_TOKEN: (state, token) => {
-    state.token = token
+    state.token = token;
   },
   SET_INTRODUCTION: (state, introduction) => {
-    state.introduction = introduction
+    state.introduction = introduction;
   },
   SET_NAME: (state, name) => {
-    state.name = name
+    state.name = name;
   },
   SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
+    state.avatar = avatar;
   },
   SET_ROLES: (state, roles) => {
-    state.roles = roles
+    state.roles = roles;
   },
   SET_MENUTREE: (state, menuTree) => {
-    state.menuTree = menuTree
+    state.menuTree = menuTree;
   },
   SET_PERMISSIONCODES: (state, permissionCodes) => {
-    state.permissionCodes = permissionCodes
-  }
-}
+    state.permissionCodes = permissionCodes;
+  },
+};
 
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
+    const { username, password } = userInfo;
     return new Promise((resolve, reject) => {
       // 模拟登录
       // commit('SET_TOKEN', '123456789QWER')
       // setToken('123456789QWER')
       // resolve('123456789QWER')
       // 登录请求
-      login({ username: username.trim(), password: password }).then(response => {
-        if (response.success) {
-          const { data } = response
-          const { token } = data
-          commit('SET_TOKEN', token)
-          setToken(token)
-          resolve(data)
-        } else {
-          Message({
-            message: response.errorMessage || '登录失败！',
-            type: 'error',
-            duration: 5 * 1000
-          })
-          reject(response)
-        }
-      }).catch(error => {
-        reject(error)
-      })
-    })
+      login({ username: username.trim(), password: password })
+        .then((response) => {
+          if (response.success) {
+            const { data } = response;
+            const { token } = data;
+            commit("SET_TOKEN", token);
+            setToken(token);
+            resolve(data);
+          } else {
+            Message({
+              message: response.errorMessage || "登录失败！",
+              type: "error",
+              duration: 5 * 1000,
+            });
+            reject(response);
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   },
 
   // get user info
@@ -93,57 +101,59 @@ const actions = {
       // resolve(data)
 
       // 获取账号信息
-      getInfo(state.token).then(response => {
-        const { data } = response
-        if (!data) {
-          reject('验证失败，请重新登录。')
-        }
-        console.log('getInfo',data);
-        const { roleCodes, userName, menuTree, permissionCodes } = data
-        // roles must be a non-empty array
-        if (!roleCodes || roleCodes.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
-        }
-        menuTree.forEach(item => {
-          if(item.menuName === '系统管理'){
-            item.url = '/Admin'
+      getInfo(state.token)
+        .then((response) => {
+          const { data } = response;
+          if (!data) {
+            reject("验证失败，请重新登录。");
           }
-          if(item.menuName === '扩展模块'){
-            item.url = '/XncfModule'
+          console.log("getInfo", JSON.parse(JSON.stringify(data)));
+          const { roleCodes, userName, menuTree, permissionCodes } = data;
+          // roles must be a non-empty array
+          if (!roleCodes || roleCodes.length <= 0) {
+            reject("getInfo: roles must be a non-null array!");
           }
-        });
-        const avatar = ''
-        const introduction = 'i am admin'
+          menuTree.forEach((item) => {
+            if (item.menuName === "系统管理") {
+              item.url = "/Admin";
+            }
+            if (item.menuName === "扩展模块") {
+              item.url = "/XncfModule";
+            }
+          });
+          const avatar = "";
+          const introduction = "i am admin";
 
-        commit('SET_ROLES', roleCodes)
-        setRole(roleCodes)
-        commit('SET_NAME', userName)
-        commit('SET_AVATAR', avatar)
-        commit('SET_INTRODUCTION', introduction)
-        commit('SET_MENUTREE', menuTree)
-        commit('SET_PERMISSIONCODES', permissionCodes)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
-    })
+          commit("SET_ROLES", roleCodes);
+          setRole(roleCodes);
+          commit("SET_NAME", userName);
+          commit("SET_AVATAR", avatar);
+          commit("SET_INTRODUCTION", introduction);
+          commit("SET_MENUTREE", menuTree);
+          commit("SET_PERMISSIONCODES", permissionCodes);
+          resolve(data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   },
 
   // user logout
   logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
-      console.log('退出登录--必须移除token和roles')
-      commit('SET_TOKEN', '')
-      commit('SET_ROLES', [])
-      removeToken() // must remove  token  first
-      removeRole()
-      resetRouter()
+      console.log("退出登录--必须移除token和roles");
+      commit("SET_TOKEN", "");
+      commit("SET_ROLES", []);
+      removeToken(); // must remove  token  first
+      removeRole();
+      resetRouter();
 
       // 刷新页面
       // location.reload()
 
-      dispatch('tagsView/delAllViews', null, { root: true })
-      resolve()
+      dispatch("tagsView/delAllViews", null, { root: true });
+      resolve();
 
       // 框架原本的逻辑
       // logout(state.token).then(() => {
@@ -160,45 +170,48 @@ const actions = {
       // }).catch(error => {
       //   reject(error)
       // })
-    })
+    });
   },
 
   // remove token
   resetToken({ commit }) {
-    return new Promise(resolve => {
-      commit('SET_TOKEN', '')
-      commit('SET_ROLES', [])
-      removeToken()
-      resolve()
-    })
+    return new Promise((resolve) => {
+      commit("SET_TOKEN", "");
+      commit("SET_ROLES", []);
+      removeToken();
+      resolve();
+    });
   },
 
   // dynamically modify permissions
   async changeRoles({ commit, dispatch }, role) {
-    const token = role + '-token'
+    const token = role + "-token";
 
-    commit('SET_TOKEN', token)
-    setToken(token)
+    commit("SET_TOKEN", token);
+    setToken(token);
 
-    const { roleCodes, menuTree } = await dispatch('getInfo')
+    const { roleCodes, menuTree } = await dispatch("getInfo");
 
-    resetRouter()
+    resetRouter();
 
     // 根据后端路由表生成可访问的路由
-    const accessRoutes = await store.dispatch('permission/generateRoutes', { roleCodes, menuTree })
+    const accessRoutes = await store.dispatch("permission/generateRoutes", {
+      roleCodes,
+      menuTree,
+    });
 
     // 动态添加可访问的路由
-    console.log('动态添加可访问的路由', accessRoutes)
-    router.addRoutes(accessRoutes)
+    console.log("动态添加可访问的路由", accessRoutes);
+    router.addRoutes(accessRoutes);
 
     // reset visited views and cached views
-    dispatch('tagsView/delAllViews', null, { root: true })
-  }
-}
+    dispatch("tagsView/delAllViews", null, { root: true });
+  },
+};
 
 export default {
   namespaced: true,
   state,
   mutations,
-  actions
-}
+  actions,
+};

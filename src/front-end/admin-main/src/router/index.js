@@ -1,12 +1,12 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
 /* Layout */
-import Layout from '@/layout'
+import Layout from "@/layout";
 
 /* Router Modules */
-import moduleRouter from '@/router/modules/module'
+import moduleRouter from "@/router/modules/module";
 
-Vue.use(Router)
+Vue.use(Router);
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -36,49 +36,49 @@ Vue.use(Router)
  */
 export const constantRoutes = [
   {
-    path: '/redirect',
+    path: "/redirect",
     component: Layout,
     hidden: true,
     children: [
       {
-        path: '/redirect/:path(.*)',
-        component: () => import('@/views/redirect/index')
-      }
-    ]
+        path: "/redirect/:path(.*)",
+        component: () => import("@/views/redirect/index"),
+      },
+    ],
   },
   {
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
+    path: "/login",
+    component: () => import("@/views/login/index"),
+    hidden: true,
   },
   {
-    path: '/auth-redirect',
-    component: () => import('@/views/login/auth-redirect'),
-    hidden: true
+    path: "/auth-redirect",
+    component: () => import("@/views/login/auth-redirect"),
+    hidden: true,
   },
   {
-    path: '/404',
-    component: () => import('@/views/error-page/404'),
-    hidden: true
+    path: "/404",
+    component: () => import("@/views/error-page/404"),
+    hidden: true,
   },
   {
-    path: '/401',
-    component: () => import('@/views/error-page/401'),
-    hidden: true
+    path: "/401",
+    component: () => import("@/views/error-page/401"),
+    hidden: true,
   },
   {
-    path: '/',
+    path: "/",
     component: Layout,
-    redirect: '/dashboard',
+    redirect: "/dashboard",
     children: [
       {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
-      }
-    ]
-  }
+        path: "dashboard",
+        component: () => import("@/views/dashboard/index"),
+        name: "Dashboard",
+        meta: { title: "首页", icon: "dashboard", affix: true },
+      },
+    ],
+  },
   // {
   //   path: '/AgGridTemplate',
   //   component: Layout,
@@ -96,74 +96,75 @@ export const constantRoutes = [
   //     }
   //   ]
   // }
-]
+];
 
 /**
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  {
-    path: '/Admin',
-    component: Layout,
-    redirect: '/Admin/AdminUserInfo/Index',
-    name: 'Admin',
-    meta: {
-      title: '系统管理',
-      icon: 'excel'
-    },
-    children: [
-      {
-        path: '/Admin/AdminUserInfo/Index',
-        component: () => import('@/views/Admin/AdminUserInfo/index'),
-        name: '管理员管理',
-        meta: { title: '管理员管理' }
-      },
-      {
-        path: '/Admin/Role/Index',
-        component: () => import('@/views/Admin/Role/index'),
-        name: '角色管理',
-        meta: { title: '角色管理' }
-      },
-      {
-        path: '/Admin/Menu/Index',
-        component: () => import('@/views/Admin/Menu/index'),
-        name: '菜单管理',
-        meta: { title: '菜单管理' }
-      },
-      {
-        path: '/Admin/SystemConfig/Index',
-        component: () => import('@/views/Admin/SystemConfig/index'),
-        name: '系统信息',
-        meta: { title: '系统信息' }
-      },
-      {
-        path: '/Admin/TenantInfo/Index',
-        component: () => import('@/views/Admin/TenantInfo/index'),
-        name: '多租户信息',
-        meta: { title: '多租户信息' }
-      }
-    ]
-  },
-  
+  // {
+  //   path: "/Admin",
+  //   component: Layout,
+  //   redirect: "/Admin/AdminUserInfo/Index",
+  //   name: "Admin",
+  //   meta: {
+  //     title: "系统管理",
+  //     icon: "excel",
+  //   },
+  //   children: [
+  //     {
+  //       path: "/Admin/AdminUserInfo/Index",
+  //       component: () => import("@/views/Admin/AdminUserInfo/Index"),
+  //       name: "管理员管理",
+  //       meta: { title: "管理员管理" },
+  //     },
+  //     {
+  //       path: "/Admin/Role/Index",
+  //       component: () => import("@/views/Admin/Role/Index"),
+  //       name: "角色管理",
+  //       meta: { title: "角色管理" },
+  //     },
+  //     {
+  //       path: "/Admin/Menu/Index",
+  //       component: () => import("@/views/Admin/Menu/Index"),
+  //       name: "菜单管理",
+  //       meta: { title: "菜单管理" },
+  //     },
+  //     {
+  //       path: "/Admin/SystemConfig/Index",
+  //       component: () => import("@/views/Admin/SystemConfig/Index"),
+  //       name: "系统信息",
+  //       meta: { title: "系统信息" },
+  //     },
+  //     {
+  //       path: "/Admin/TenantInfo/Index",
+  //       component: () => import("@/views/Admin/TenantInfo/Index"),
+  //       name: "多租户信息",
+  //       meta: { title: "多租户信息" },
+  //     },
+  //   ],
+  // },
+
   // 拓展模块
-  moduleRouter,
+  // moduleRouter,
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
-]
+  { path: "*", redirect: "/404", hidden: true },
+];
 
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
+const createRouter = () =>
+  new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes,
+  });
 
-const router = createRouter()
+const router = createRouter();
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
+  const newRouter = createRouter();
+  router.matcher = newRouter.matcher; // reset router
 }
 
-export default router
+export default router;

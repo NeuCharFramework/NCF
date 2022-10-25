@@ -1,13 +1,18 @@
 <template>
-  <div class="sidebar-logo-container" :class="{'collapse':collapse}">
+  <div class="sidebar-logo-container" :class="{ collapse: collapse }">
     <transition name="sidebarLogoFade">
-      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo sidebar-logo2">
-        <h1 v-else class="sidebar-title">{{ title }} </h1>
+      <router-link
+        v-if="collapse"
+        key="collapse"
+        class="sidebar-logo-link"
+        to="/"
+      >
+        <img v-if="logo" :src="logo" class="sidebar-logo sidebar-logo2" />
+        <h1 v-else class="sidebar-title">{{ title }}</h1>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo ">
-        <h1 class="sidebar-title">{{ title }} </h1>
+        <img v-if="logo" :src="logo" class="sidebar-logo" />
+        <h1 class="sidebar-title">{{ title }}</h1>
       </router-link>
     </transition>
   </div>
@@ -15,20 +20,20 @@
 
 <script>
 export default {
-  name: 'SidebarLogo',
+  name: "SidebarLogo",
   props: {
     collapse: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      title: 'Neu Char Framework',
-      logo: require("@/assets/images/logo_230x55.png")
-    }
-  }
-}
+      title: "NeuCharFramework",
+      logo: require("@/assets/images/logo_230x55.png"),
+    };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
