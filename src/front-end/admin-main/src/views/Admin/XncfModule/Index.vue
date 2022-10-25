@@ -185,13 +185,13 @@ export default {
     async getList() {
       // 已安装模块
       const oldTableData = await getModuleList();
-      console.log("oldTableData", oldTableData);
+      // console.log("oldTableData", oldTableData);
       this.oldTableData = oldTableData.data || [];
       // 是否切换状态
       // this.isExtend = oldTableData.hideModuleManager
       // 未安装模块
       const newTableData = await getUnModuleList();
-      console.log("newTableData", newTableData);
+      // console.log("newTableData", newTableData);
       this.newTableData = newTableData.data || [];
     },
 

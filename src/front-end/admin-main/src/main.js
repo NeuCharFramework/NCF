@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 import Cookies from 'js-cookie'
 
+import 'default-passive-events' // Passive Event Listeners是Chrome提出的一个新的浏览器特性
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 import 'font-awesome/css/font-awesome.min.css'// font-awesome 导入font-awesome字体库 https://fontawesome.dashgame.com/
 // 引入 ag-grid 表格插件 样式文件

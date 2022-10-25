@@ -188,11 +188,12 @@ export function generateRoutesList(routes, menuTree, pageNotFind = true) {
       if (componentName.includes("Start")) {
         componentName = "/Admin/XncfModule/Start";
       }
+      // console.log('项',tmp);
       const routerObj = {
         path: tmp.url.includes("Start")
           ? "/Admin/XncfModule/Start/" + tmp.url.split("?")[1]
           : tmp.url,
-        name: tmp.menuName,
+        name: tmp.menuName+componentName,
         component: pageNotFind
           ? Layout
           : (resolve) => require(["@/views" + componentName + ".vue"], resolve),

@@ -4,7 +4,7 @@ import Router from "vue-router";
 import Layout from "@/layout";
 
 /* Router Modules */
-import moduleRouter from "@/router/modules/module";
+// import moduleRouter from "@/router/modules/module";
 
 Vue.use(Router);
 
