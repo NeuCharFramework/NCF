@@ -1,5 +1,5 @@
 import { asyncRoutes, constantRoutes } from '@/router'
-// import Layout from '@/layout'
+import Layout from '@/layout'
 import moduleRouter from '@/router/modules/module'
 
 /**
@@ -30,7 +30,7 @@ export function filterAsyncRoutes(routes, menuTree, pageNotFind = true) {
     const tmp = { ...route }
     // 路由权限
     if (hasPermission(menuTree, tmp)) {
-      
+
       if (tmp.children) {
         // 子路由权限 (比对远程路由的url和定义的动态路由的path)，如果没有值检查远程路由的结构或者url是否为空
         const list = menuTree.filter(item => item.url === tmp.path)[0] || {}
@@ -66,11 +66,13 @@ const actions = {
     return new Promise(resolve => {
       let accessedRoutes
       // 超级管理员（administrator）有全部异步路由的权限
-      if (roleCodes.includes('administrator')) {
-        accessedRoutes = asyncRoutes || []
-      } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, menuTree)
-      }
+      // if (roleCodes.includes('administrator')) {
+      //   accessedRoutes = asyncRoutes || []
+      // } else {
+      //   accessedRoutes = filterAsyncRoutes(asyncRoutes, menuTree)
+      // }
+      // 根据后端返回生成动态路由
+      accessedRoutes = generateRoutesList(asyncRoutes, menuTree)
       state.accessedRoutes = accessedRoutes
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
@@ -79,7 +81,7 @@ const actions = {
   setRoutes({ commit }, routes) {
     // console.log(777, routes)
     // console.log('moduleRouter', moduleRouter)
-    const list = { ...moduleRouter, ...{}}
+    const list = { ...moduleRouter, ...{} }
 
     // 是否是远程加载的路由
     routes.forEach(item => {
@@ -130,22 +132,74 @@ const actions = {
 }
 
 // 遍历后台传来的路由字符串，转换为组件对象
-// function filterAsyncRouter(asyncRouterMap) {
-//   return asyncRouterMap.filter(route => {
-//     if (route.component) {
-//       // Layout组件特殊处理
-//       if (route.component === 'Layout') {
-//         route.component = Layout
-//       } else {
-//         route.component = loadView(route.component)
-//       }
-//     }
-//     if (route.children != null && route.children && route.children.length) {
-//       route.children = filterAsyncRouter(route.children)
-//     }
-//     return true
-//   })
-// }
+function filterAsyncRouter(asyncRouterMap) {
+  return asyncRouterMap.filter(route => {
+    if (route.component) {
+      // Layout组件特殊处理
+      if (route.component === 'Layout') {
+        route.component = Layout
+      } else {
+        route.component = loadView(route.component)
+      }
+    }
+    if (route.children != null && route.children && route.children.length) {
+      route.children = filterAsyncRouter(route.children)
+    }
+    return true
+  })
+}
+
+
+
+/**
+ * 通过递归 生成路由表
+ * @param routes asyncRoutes
+ * @param menuTree
+ * @param pageNotFind
+ */
+export function generateRoutesList(routes, menuTree, pageNotFind = true) {
+  const res = []
+  const page404 = routes.filter(item => item.path === '*')[0]
+  menuTree.forEach(route => {
+    const tmp = { ...route }
+    // 查询是否相同路由
+    const isIdentical =  res.findIndex(item=>item.url === tmp.url)
+    // 路由权限
+    if (tmp.url && !isIdentical) {
+      // 有子项递归
+      if (tmp.children && tmp.children.length > 0) {
+        tmp.children = generateRoutesList([], tmp.children, false)
+      }
+      // 生成路由对象
+      // const moduleRouter = {
+      //   path: '/XncfModule',
+      //   component: re,
+      //   redirect: '/Admin/XncfModule/Index',
+      //   // 这里的name需要和module模块中module.js的addRoute的name相同
+      //   name: 'XncfModule',
+      //   meta: {
+      //     title: '扩展模块',
+      //     icon: 'el-icon-cpu'
+      //   },
+      const componentName = tmp.url.includes('?') ? tmp.url.split('?')[0] : tmp.url
+      const routerObj = {
+        path: tmp.url,
+        name: tmp.menuName,
+        component: pageNotFind ? Layout : (resolve) => require(['@/view' + componentName + '.vue'], resolve),
+        meta: {
+          title: tmp.menuName,
+          icon: tmp.icon
+        },
+        children: tmp.children
+      }
+      res.push(routerObj)
+    }
+  })
+  // 把404页面加载到路由最后面
+  pageNotFind && page404 && res.push(page404)
+  return res
+}
+
 
 export default {
   namespaced: true,
