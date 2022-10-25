@@ -237,11 +237,11 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     FunctionParameterInfoCollection = functionParameterInfoCollection
                             .Select(z => new Module_GetItemResponse.Response_FunctionParameterInfoCollection()
                             {
-                                Key = (z.Key.name, z.Key.description),
+                                Key = new Module_GetItemResponse.Response_FunctionParameterInfoCollection_Key(z.Key.name, z.Key.description),
                                 Value = z.Value
-                            }).OrderBy(z => z.Key.name).ToList()
+                            }).OrderBy(z => z.Key.Name).ToList()
                 };
-                
+
                 return getItemResult;
             });
         }
