@@ -35,7 +35,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// <exception cref="Ncf.Core.Exceptions.NcfExceptionBase"></exception>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
         //[Permission(Codes = new string[] { "code" })]
-        //[Ncf.Core.Authorization.Permission("role.add,role.update")]
+        [Ncf.Core.Authorization.Permission("role.add,role.update")]
         public async Task<AppResponseBase<SysRole_CreateOrUpdateResponse>> CreateOrUpdateAsync(SysRole_CreateOrUpdateRequest request)
         {
             var response = await this.GetResponseAsync<AppResponseBase<SysRole_CreateOrUpdateResponse>, SysRole_CreateOrUpdateResponse>(async (response, logger) =>
@@ -135,12 +135,22 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         {
             var response = await this.GetResponseAsync<AppResponseBase<SysRole_Response>, SysRole_Response>(async (response, logger) =>
             {
-                SenparcExpressionHelper<SysRole> helper = new SenparcExpressionHelper<SysRole>();
-                var dto = _mapper.Map<IEnumerable<SysPermissionDto>>(request.RequestDtos);
-                await _sysPermissionService.AddAsync(dto);
-                return new SysRole_Response()
+                try
                 {
-                };
+                    SenparcExpressionHelper<SysRole> helper = new SenparcExpressionHelper<SysRole>();
+                    var dto = _mapper.Map<IEnumerable<SysPermissionDto>>(request.RequestDtos ?? new List<Domain.Dto.PermissionRequestDto>());
+                    await _sysPermissionService.AddAsync(dto ?? new List<SysPermissionDto>());
+                    return new SysRole_Response()
+                    {
+                    };
+                }
+                catch (Exception ex)
+                {
+                    logger.Append(ex.StackTrace);
+                    logger.Append(ex.InnerException?.StackTrace);
+                    logger.SaveLogs("修改权限出错");
+                    throw;
+                }
             });
             return response;
         }
