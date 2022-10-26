@@ -163,14 +163,14 @@ export default {
     // 切换状态
     async handleSwitch() {
       // console.log('dasdd')
-      await openHideManager({ id: 0, hide: !this.isExtend })
-        .then((res) => {
-          // console.log('切换状态', res.data)
-          if(res){
-            this.isExtend = res.data.hideModuleManager
-            this.getList()
-          }
-        })
+      await openHideManager({ id: 0, hide: !this.isExtend }).then((res) => {
+        // console.log('切换状态', res.data)
+        if (res) {
+          this.isExtend = res.data.hideModuleManager
+          this.getList()
+          location.reload()
+        }
+      })
     },
 
     // 安装
@@ -179,8 +179,11 @@ export default {
         .then((res) => {
           console.log('安装 ok', row.uid)
           if (res.success) {
-            // 跳转到模块详情
-            this.$router.push('/Admin/XncfModule/Start/uid=' + row.uid)
+            location.reload()
+            setTimeout(() => {
+              // 跳转到模块详情
+              this.$router.push('/Admin/XncfModule/Start/uid=' + row.uid)
+            }, 1000)
           }
         })
         .catch(() => {
