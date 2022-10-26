@@ -78,12 +78,13 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// 打开或关闭 模块管理
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="hide">是否隐藏管理模块</param>
         /// <returns></returns>
         /// <exception cref="NcfExceptionBase"></exception>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
         //[Permission(Codes = new string[] { "code" })]
         //[Ncf.Core.Authorization.Permission("role.add,role.update")]
-        public async Task<AppResponseBase<SystemConfigDto>> HideManagerAsync(int id)
+        public async Task<AppResponseBase<SystemConfigDto>> HideManagerAsync(int id, bool hide)
         {
             var response = await this.GetResponseAsync<AppResponseBase<SystemConfigDto>, SystemConfigDto>(async (response, logger) =>
             {
@@ -98,7 +99,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     throw new NcfExceptionBase("系统配置信息不存在");
                 }
 
-                systemConfig.Update(systemConfig.SystemName, systemConfig.MchId, systemConfig.MchKey, systemConfig.TenPayAppId, !systemConfig.HideModuleManager);
+                systemConfig.Update(systemConfig.SystemName, systemConfig.MchId, systemConfig.MchKey, systemConfig.TenPayAppId, hide);
 
                 await _systemConfigService.SaveObjectAsync(systemConfig);
 
