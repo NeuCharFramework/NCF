@@ -33,23 +33,23 @@
 
 		<PackageReference Include="Dapr.AspNetCore" Version="1.5.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.3-beta7" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.11.3-beta7" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.4-beta8" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.11.4-beta8" />
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer.Interface\Senparc.Xncf.Installer.Interface.csproj" />
 		<!--为了兼容部分数据库迁移文件仍然有依赖的情况-->
-		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.11.4.1-beta7" />
+		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.11.5-beta8" />
 
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.2.3-beta7" />
-		<PackageReference Include="Senparc.Xncf.Menu" Version="0.3.3.1-beta7" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.6.3-beta7" />
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.3.3.2-beta7" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.3.3.1-beta7" />
-		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.3.3.1-beta7" />
-		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.3.1-beta7" />
-		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.12.3-beta7" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.4.1-beta7" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.3.1-beta7" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.2.4-beta8" />
+		<PackageReference Include="Senparc.Xncf.Menu" Version="0.3.4-beta8" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.6.4-beta8" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.3.4-beta8" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.3.4-beta8" />
+		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.3.4-beta8" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.4-beta8" />
+		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.12.4-beta8" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.5-beta8" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.4-beta8" />
 		<None Include="App_Data\SenparcTraceLog\*" />
 	</ItemGroup>
 	<ItemGroup>
