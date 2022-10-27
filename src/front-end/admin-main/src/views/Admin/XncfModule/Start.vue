@@ -247,7 +247,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="run.visible = false">取 消</el-button>
+        <el-button @click="cancelRun">取 消</el-button>
         <el-button type="primary" @click="handleRun" :loading="isExecut">执 行</el-button>
       </div>
     </el-dialog>
@@ -299,6 +299,14 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="thread.visible = false">关 闭</el-button>
+      </span>
+    </el-dialog>
+    <!-- 取消提示 -->
+    <el-dialog title="提示" :show-close="false" :visible.sync="dialogVisible" width="30%" :close-on-click-modal="false" >
+      <span>您执行的操作，后台正在运行，现在退出后台的运行并不会停止。确定退出吗？</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="closeRunHit">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -356,7 +364,8 @@ export default {
         visible: false
       },
       uid: null,
-      isExecut: false // 是否正在执行
+      isExecut: false, // 是否正在执行
+      dialogVisible: false // 正在执行取消提示
     }
   },
   created() {
@@ -375,13 +384,15 @@ export default {
       // const uid = "00000000-0000-0001-0001-000000000001";
       // 获取详情
       const res = await getItemModule(this.uid)
-      console.log("获取详情", res.data.xncfModule.updateLog);
+      console.log('获取详情', res.data.xncfModule.updateLog)
       // console.log(JSON.parse(JSON.stringify(res)))
       if (res.data) {
         this.data = res.data || {}
         this.data.xncfRegister.interfaces =
           this.data.xncfRegister.interfaces.splice(1)
-          this.data.xncfModule.updateLog = this.data.xncfModule.updateLog.split('/n')
+        this.data.xncfModule.updateLog =
+          // \r or \n
+          this.data.xncfModule.updateLog.split('\r')
         // window.document.title = this.data.xncfModule.menuName
         return
       }
@@ -501,6 +512,21 @@ export default {
       //    }
       //};
       this.run.visible = true
+    },
+    // 取消执行
+    cancelRun() {
+      if (this.isExecut) {
+        this.dialogVisible = true
+      } else {
+        this.runResult.visible = false //关闭结果
+        this.run.visible = false //关闭一层弹框
+      }
+    },
+    // 确定取消执行吗
+    closeRunHit() {
+      this.dialogVisible = false
+      this.runResult.visible = false //关闭结果
+      this.run.visible = false //关闭一层弹框
     },
     // 执行
     async handleRun() {
@@ -683,6 +709,7 @@ export default {
         })
         // 删除成功 返回首页
         this.$router.push('/Admin/XncfModule/Index')
+        location.reload()
         return
       }
       this.$message.error('删除失败')

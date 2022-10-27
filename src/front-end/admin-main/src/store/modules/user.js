@@ -149,10 +149,13 @@ const actions = {
       removeRole();
       resetRouter();
 
+      
+
+      dispatch("tagsView/delAllViews", null, { root: true });
+
       // 刷新页面
       // location.reload()
 
-      dispatch("tagsView/delAllViews", null, { root: true });
       resolve();
 
       // 框架原本的逻辑
