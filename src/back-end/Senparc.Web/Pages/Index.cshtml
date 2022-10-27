@@ -9,10 +9,10 @@
         return await xncfRegisterManager.CheckXncfValiable(xncfName).ConfigureAwait(false);
     }
 
-    protected async Task<string> GetDocsState()
-    {
-        return (await CheckXncfModuleValiable("ML.Xncf.Docs")) ? "true" : "false";
-    }
+    //protected async Task<string> GetDocsState()
+    //{
+    //    return (await CheckXncfModuleValiable("ML.Xncf.Docs")) ? "true" : "false";
+    //}
 }
 
 @{
@@ -53,7 +53,7 @@
         </div>
 
         <div class="row start-now">
-            <a href="/Docs/Index" target="_blank" class="start-btn" id="btnStart" onclick="return start(@(await GetDocsState()),'ML.Xncf.Docs');">
+            <a href="https://www.ncf.pub/docs" target="_blank" class="start-btn" id="btnStart">
                 立即开始
             </a>
         </div>
