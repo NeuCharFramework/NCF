@@ -17,31 +17,30 @@
 	<ItemGroup>
 		<PackageReference Include="Dapr.AspNetCore" Version="1.5.0" />
 		<PackageReference Include="Dapr.Client" Version="1.5.0" />
-		<PackageReference Include="Masa.Utils.Development.Dapr.AspNetCore" Version="0.5.0" />
-		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.12.2-beta7" />
-		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.16.4-beta7" />
-		<PackageReference Include="Senparc.Xncf.Menu" Version="0.3.2-beta7" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.6.2-beta7" />
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.3.2-beta7" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.3.2-beta7" />
-		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.3.2-beta7" />
-		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.2-beta7" />
-		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.12.2-beta7" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.2-beta7" />
-		<PackageReference Include="ML.Xncf.Docs" Version="2.1.7.25" />
+		<PackageReference Include="Masa.Utils.Development.Dapr.AspNetCore" Version="0.6.0" />
+		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.12.3-beta7" />
+		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.16.5.1-beta7" />
+		<PackageReference Include="Senparc.Xncf.Menu" Version="0.3.3.1-beta7" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.6.3-beta7" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.3.3.2-beta7" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.3.3.1-beta7" />
+		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.3.3.1-beta7" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.3.1-beta7" />
+		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.12.3-beta7" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.4.1-beta7" />
 	</ItemGroup>
 
 	<ItemGroup>
 
-		<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.4.2-beta7" />
-		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.11.2-beta7" />
-		<!--<PackageReference Include="Senparc.Ncf.Database.MySql" Version="0.6.128-beta1" />-->
+		<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.4.3-beta7" />
+		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.11.3-beta7" />
+		<!--<PackageReference Include="Senparc.Ncf.Database.MySql" Version="0.11.3-beta7" />-->
 
 		<!--https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-3.1-->
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.6" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.3" />
 		<PackageReference Include="log4net" Version="2.0.13" />
 		<PackageReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
@@ -52,11 +51,11 @@
 		<PackageReference Include="AutoMapper" Version="7.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.2-beta7" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.3.1-beta7" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.0.2" />
 		<PackageReference Include="Senparc.CO2NET" Version="2.0.1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.11.2-beta7" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.11.3-beta7" />
 	</ItemGroup>
 	<ItemGroup>
 		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
