@@ -49,8 +49,4 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
     endpoints.MapControllers();
 });
-//app.Map("/test", () =>
-//{
-//    return "1111";
-//});
 app.Run();
