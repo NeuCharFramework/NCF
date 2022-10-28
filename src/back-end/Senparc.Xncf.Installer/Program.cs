@@ -12,8 +12,6 @@ using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//添加dapr
-builder.Services.AddDaprClient();
 builder.Services.AddControllers().AddDapr();
 
 //激活 Xncf 扩展引擎（必须）

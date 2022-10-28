@@ -19,9 +19,6 @@ using System.IO;
 using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
-//添加dapr
 builder.Services.AddDaprClient();
 builder.Services.AddControllers().AddDapr();
 

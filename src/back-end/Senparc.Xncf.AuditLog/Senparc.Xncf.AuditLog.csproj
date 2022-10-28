@@ -24,11 +24,7 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\..\..\BuildOutPut</OutputPath>
   </PropertyGroup>
-	<PropertyGroup>
-		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-	</PropertyGroup>
-
-	<ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
@@ -44,8 +40,16 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.3-beta7" />
-    <PackageReference Include="Senparc.Ncf.AreaBase" Version="0.11.2-beta7" />
+    <PackageReference Include="Senparc.Ncf.AreaBase" Version="0.11.3-beta7" />
     <None Include="App_Data\SenparcTraceLog\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App_Data\Database\SenparcConfig.config" />
+    <None Include="Areas\Admin\Pages\AuditLog\DatabaseSample.cshtml" />
+    <None Include="Areas\Admin\Pages\AuditLog\Index.cshtml" />
+    <None Include="Areas\Admin\Pages\Shared\_SideMenu.cshtml" />
+    <None Include="Areas\Admin\Pages\Shared\_ViewImports.cshtml" />
+    <None Include="Areas\Admin\Pages\Shared\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
@@ -55,13 +59,4 @@
     <PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
- <ItemGroup>
-      <None Include="..\Senparc.Xncf.AuditLog\icon.jpg" Pack="true" PackagePath="" />
-  </ItemGroup>
- <ItemGroup>
-   <Folder Include="Domain\Migrations\" />
-   <Folder Include="Migrations\Migrations.SqlServer\" />
-   <Folder Include="Migrations\Migrations\SqlServer\" />
- </ItemGroup>
-
 </Project>

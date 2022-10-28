@@ -207,7 +207,7 @@ namespace Senparc.Areas.Admin
         #region IXncfDatabase 接口
 
         public const string DATABASE_PREFIX = "ADMIN_";
-//NcfDatabaseMigrationHelper.SYSTEM_UNIQUE_PREFIX;//系统表，将会留空
+        //NcfDatabaseMigrationHelper.SYSTEM_UNIQUE_PREFIX;//系统表，将会留空
         public string DatabaseUniquePrefix => DATABASE_PREFIX;
 
         public Type TryGetXncfDatabaseDbContextType => MultipleDatabasePool.Instance.GetXncfDbContextType(this);
