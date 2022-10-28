@@ -36,7 +36,7 @@
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.11.4-beta8" />
 		<PackageReference Include="Senparc.Ncf.Log" Version="0.11.4-beta8" />
 		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.11.4-beta8" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.11.4-beta8" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.11.5-beta8" />
 		<PackageReference Include="Senparc.Ncf.Utility" Version="0.11.4-beta8" />
 		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.4-beta8" />
 
