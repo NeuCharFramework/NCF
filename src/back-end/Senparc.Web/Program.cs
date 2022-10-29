@@ -27,6 +27,7 @@ builder.AddNcf<SQLServerDatabaseConfiguration>();
 
 //添加 Dapr
 builder.Services.AddDaprClient();
+builder.Services.AddControllers().AddDapr();
 
 var app = builder.Build();
 
@@ -51,5 +52,4 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
     endpoints.MapControllers();
 });
-
 app.Run();

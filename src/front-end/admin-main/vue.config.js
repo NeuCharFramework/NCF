@@ -34,7 +34,7 @@ module.exports = {
     https: false,
     port: port,
     open: true,
-    disableHostCheck: true,
+    disableHostCheck: true, // 是否开启域名检查
     overlay: {
       warnings: false,
       errors: false
@@ -42,7 +42,8 @@ module.exports = {
     proxy: {
       // 所有的请求起始部分全部用 '/api'代替，比如访问"https://192.168.1.4/movie"，那么简写成"/api/movie"即可
       '/api': {
-        target: 'https://localhost:44311/api',
+        target: 'https://localhost:44311/api', // 开发域名
+        // target: 'https://localhost:44311/api',// 正式域名
         changeOrigin: true,
         ws: true,
         pathRewrite: {
@@ -102,7 +103,7 @@ module.exports = {
             .plugin('ScriptExtHtmlWebpackPlugin')
             .after('html')
             .use('script-ext-html-webpack-plugin', [{
-            // `runtime` must same as runtimeChunk name. default is `runtime`
+            // `runtime` must same as runtimeChunk name. default is `runtime` | ' runtime '必须与runtimeChunk name相同。默认是“运行时”
               inline: /runtime\..*\.js$/
             }])
             .end()
@@ -114,16 +115,16 @@ module.exports = {
                   name: 'chunk-libs',
                   test: /[\\/]node_modules[\\/]/,
                   priority: 10,
-                  chunks: 'initial' // only package third parties that are initially dependent
+                  chunks: 'initial' // only package third parties that are initially dependent 只打包最初依赖的第三方
                 },
                 elementUI: {
-                  name: 'chunk-elementUI', // split elementUI into a single package
-                  priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
-                  test: /[\\/]node_modules[\\/]_?element-ui(.*)/ // in order to adapt to cnpm
+                  name: 'chunk-elementUI', // split elementUI into a single package 将elementUI拆分为单个包
+                  priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app 权重需要大于libs和app，否则它将被打包到libs或app中
+                  test: /[\\/]node_modules[\\/]_?element-ui(.*)/ // in order to adapt to cnpm 为了适应CNPM
                 },
                 commons: {
                   name: 'chunk-commons',
-                  test: resolve('src/components'), // can customize your rules
+                  test: resolve('src/components'), // can customize your rules  可以自定义规则
                   minChunks: 3, //  minimum common number
                   priority: 5,
                   reuseExistingChunk: true

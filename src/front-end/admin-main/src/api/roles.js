@@ -2,11 +2,10 @@
 * 模块：Senparc.Areas.Admin:SysRoleAppService
 * 角色
 * */
-
 import request from '@/utils/request'
-const baseUrl = "/api/Senparc.Areas.Admin/SysRoleAppService/Areas.Admin_SysRoleAppService"
+const baseUrl = '/Senparc.Areas.Admin/SysRoleAppService/Areas.Admin_SysRoleAppService'
 
-//创建Permission
+// 创建Permission
 export function createPermission(data) {
   return request({
     url: `${baseUrl}.AddPermissionAsync`,
@@ -15,7 +14,7 @@ export function createPermission(data) {
   })
 }
 
-//创建、更新
+// 创建、更新
 export function createOrUpdateRole(data) {
   return request({
     url: `${baseUrl}.CreateOrUpdateAsync`,
@@ -24,7 +23,7 @@ export function createOrUpdateRole(data) {
   })
 }
 
-//删除
+// 删除
 export function deleteRole(params) {
   return request({
     url: `${baseUrl}.DeleteSingeAsync`,
@@ -33,7 +32,7 @@ export function deleteRole(params) {
   })
 }
 
-//列表
+// 列表
 export function getAllRoles(params) {
   return request({
     url: `${baseUrl}.GetListAsync`,
@@ -42,7 +41,7 @@ export function getAllRoles(params) {
   })
 }
 
-//列表
+// 列表
 export function getRolePermissions(params) {
   return request({
     url: `${baseUrl}.GetRolePermissionsAsync`,
@@ -51,8 +50,7 @@ export function getRolePermissions(params) {
   })
 }
 
-
-//详情
+// 详情
 export function GetRoleInfo(params) {
   return request({
     url: `${baseUrl}.GetRolePermissionsAsync`,
@@ -60,6 +58,3 @@ export function GetRoleInfo(params) {
     params
   })
 }
-
-
-

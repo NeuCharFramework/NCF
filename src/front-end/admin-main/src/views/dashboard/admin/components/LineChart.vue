@@ -4,7 +4,7 @@
 
 <script>
 import echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
+// require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 
 export default {
@@ -25,11 +25,11 @@ export default {
     autoResize: {
       type: Boolean,
       default: true
-    },
-    chartData: {
-      type: Object,
-      required: true
     }
+    // chartData: {
+    //   type: Object,
+    //   required: true
+    // }
   },
   data() {
     return {
@@ -37,12 +37,12 @@ export default {
     }
   },
   watch: {
-    chartData: {
-      deep: true,
-      handler(val) {
-        this.setOptions(val)
-      }
-    }
+    // chartData: {
+    //   deep: true,
+    //   handler(val) {
+    //     this.setOptions(val)
+    //   }
+    // }
   },
   mounted() {
     this.$nextTick(() => {
@@ -58,76 +58,75 @@ export default {
   },
   methods: {
     initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
-      this.setOptions(this.chartData)
+      // , 'macarons'
+      this.chart = echarts.init(this.$el)
+      this.setOptions()
     },
     setOptions({ expectedData, actualData } = {}) {
       this.chart.setOption({
-        xAxis: {
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          boundaryGap: false,
-          axisTick: {
-            show: false
-          }
-        },
-        grid: {
-          left: 10,
-          right: 10,
-          bottom: 20,
-          top: 30,
-          containLabel: true
-        },
+        //  tooltip: {
+        //   trigger: 'axis',
+        //   axisPointer: {
+        //     type: 'cross'
+        //   },
+        //   padding: [5, 10]
+        // },
+        // grid: {
+        //   left: 10,
+        //   right: 10,
+        //   bottom: 20,
+        //   top: 30,
+        //   containLabel: true
+        // },
+        // legend: {
+        //   data: ['expected', 'actual']
+        // },
         tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross'
-          },
-          padding: [5, 10]
-        },
-        yAxis: {
-          axisTick: {
-            show: false
+          formatter: function(data, ticket, cllback) {
+            // debugger
+            return data.seriesName + ':' + data.value + '元'
           }
+        },
+        title: {
+          text: '数量统计',
+          subtext: '2019年度'
         },
         legend: {
-          data: ['expected', 'actual']
+          data: ['自由商品销售额']
         },
-        series: [{
-          name: 'expected', itemStyle: {
-            normal: {
-              color: '#FF005A',
-              lineStyle: {
-                color: '#FF005A',
-                width: 2
-              }
-            }
-          },
-          smooth: true,
-          type: 'line',
-          data: expectedData,
-          animationDuration: 2800,
-          animationEasing: 'cubicInOut'
+        xAxis: {
+          type: 'category',
+          data: [
+            '一月',
+            '二月',
+            '三月',
+            '四月',
+            '五月',
+            '六月',
+            '七月',
+            '八月',
+            '九月',
+            '十月',
+            '十一月',
+            '十二月'
+          ]
         },
-        {
-          name: 'actual',
-          smooth: true,
-          type: 'line',
-          itemStyle: {
-            normal: {
-              color: '#3888fa',
-              lineStyle: {
-                color: '#3888fa',
-                width: 2
-              },
-              areaStyle: {
-                color: '#f3f8ff'
-              }
-            }
-          },
-          data: actualData,
-          animationDuration: 2800,
-          animationEasing: 'quadraticOut'
-        }]
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            formatter: '{value} 元'
+          }
+        },
+        series: [
+          {
+            data: [
+              2666, 2778, 4926, 5767, 6810, 5670, 4123, 5687, 3654, 4999, 5301,
+              7358
+            ],
+            name: '自由商品销售额',
+            type: 'line'
+          }
+        ]
       })
     }
   }

@@ -4,7 +4,7 @@ import Layout from '@/layout'
 const moduleRouter = {
   path: '/Module',
   component: Layout,
-  redirect: 'noRedirect',
+  redirect: '/Module/home',
   // 这里的name需要和module模块中module.js的addRoute的name相同
   name: 'Module',
   meta: {
@@ -13,11 +13,11 @@ const moduleRouter = {
   },
   children: [
     {
-      path: '/Admin/XncfModule/Index',
+      path: '/Module/home',
       component: () => import('@/views/module/home'),
       name: 'ModuleHome',
-      meta: { title: '拓展模块', noCache: false }
-    },
+      meta: { title: '拓展模块'}
+    }
   ]
 }
 

@@ -5,59 +5,23 @@
         <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleEdit('','','add')">增加菜单
         </el-button>
       </div>
-      <el-table
-        :data="tableData"
-        style="width: 100%;margin-bottom: 20px;"
-        row-key="id"
-        border
-        default-expand-all
-        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-      >
-        <el-table-column
-          prop="menuName"
-          align="left"
-          label="菜单名称"
-        />
-        <el-table-column
-          prop="sort"
-          align="center"
-          label="排序"
-          sortable
-        />
-        <el-table-column
-          prop="adminRemark"
-          align="center"
-          label="备注"
-        />
-        <el-table-column
-          prop="remark"
-          align="center"
-          label="说明"
-        />
-        <el-table-column
-          align="center"
-          label="添加时间"
-        >
+      <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" row-key="id" border default-expand-all :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+        <el-table-column prop="menuName" align="left" label="菜单名称" />
+        <el-table-column prop="sort" align="center" label="排序" sortable />
+        <el-table-column prop="adminRemark" align="center" label="备注" />
+        <el-table-column prop="remark" align="center" label="说明" />
+        <el-table-column align="center" label="添加时间">
           <template slot-scope="scope">
-            {{ formaTableTime(scope.row.addTime) }}
+            {{ scope.row.addTime | dateFormat }}
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="primary"
-              @click="handleEdit(scope.$index, scope.row,'edit')"
-            >编辑
+            <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row,'edit')">编辑
             </el-button>
-            <el-button
-              v-if="scope.row.children"
-              size="mini"
-              type="primary"
-              @click="handleEdit(scope.$index, scope.row,'addNext')"
-            >增加下一级
+            <el-button v-if="scope.row.children" size="mini" type="primary" @click="handleEdit(scope.$index, scope.row,'addNext')">增加下一级
             </el-button>
-            <el-popconfirm placement="top" title="确认删除此菜单吗？" @on-confirm="handleDelete(scope.$index, scope.row)">
+            <el-popconfirm placement="top" title="确认删除此菜单吗？" @confirm="handleDelete(scope.$index, scope.row)">
               <el-button slot="reference" size="mini" type="danger">删除</el-button>
             </el-popconfirm>
           </template>
@@ -65,25 +29,12 @@
       </el-table>
       <!--编辑、新增 -->
       <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
-        <el-form
-          ref="dataForm"
-          :rules="dialog.rules"
-          :model="dialog.data"
-          :disabled="dialog.disabled"
-          label-position="left"
-          label-width="100px"
-          style="max-width: 400px; margin-left:50px;"
-        >
+        <el-form ref="dataForm" :rules="dialog.rules" :model="dialog.data" :disabled="dialog.disabled" label-position="left" label-width="100px" style="max-width: 400px; margin-left:50px;">
           <el-form-item label="菜单名称" prop="menuName">
             <el-input v-model="dialog.data.menuName" clearable placeholder="" />
           </el-form-item>
           <el-form-item label="父级菜单">
-            <el-cascader
-              v-model="dialog.data.parentId"
-              :options="tableData"
-              clearable
-              :props="{ checkStrictly: dialog.checkStrictly,label: 'menuName',value:'id'}"
-            />
+            <el-cascader v-model="dialog.data.parentId" :options="tableData" clearable :props="{ checkStrictly: dialog.checkStrictly,label: 'menuName',value:'id'}" />
           </el-form-item>
           <el-form-item label="排序">
             <el-input v-model="dialog.data.sort" type="number" clearable placeholder="" />
@@ -122,7 +73,7 @@
       <!--选择图标-->
       <el-dialog title="图标列表" :visible.sync="dialogIcon.visible">
         <div class="menu-icons-grid">
-          <div v-for="item in dialogIcon.elementIcons" class="menu-icon-item" @click="pickIcon(item)">
+          <div v-for="(item,index) in dialogIcon.elementIcons" :key="`${item}-${index}`" class="menu-icon-item" @click="pickIcon(item)">
             <i :class="'fa ' + item" />
             <span>{{ item }}</span>
           </div>
@@ -133,6 +84,13 @@
 </template>
 
 <script>
+import {
+  createOrUpdateMenu,
+  getMenus,
+  deleteMenu,
+  getAllMenus,
+  getFullMenus
+} from '@/api/menu'
 export default {
   name: 'Index',
   data() {
@@ -154,14 +112,24 @@ export default {
         title: '新增菜单',
         visible: false,
         data: {
-          id: '', menuName: '', parentId: [], url: '', icon: '', sort: '', visible: true,
-          resourceCode: '', isLocked: false, menuType: ''
+          id: '',
+          menuName: '',
+          parentId: [],
+          url: '',
+          icon: '',
+          sort: '',
+          visible: true,
+          resourceCode: '',
+          isLocked: false,
+          menuType: ''
         },
         rules: {
           menuName: [
             { required: true, message: '菜单名称为必填项', trigger: 'blur' }
           ],
-          menuType: [{ required: true, message: '类型为必选项', trigger: 'blur' }],
+          menuType: [
+            { required: true, message: '类型为必选项', trigger: 'blur' }
+          ],
           resourceCode: [{ validator: validateCode, trigger: 'blur' }]
         },
         updateLoading: false,
@@ -794,19 +762,27 @@ export default {
     }
   },
   watch: {
-    'dialog.visible': function(val, old) {
+    'dialog.visible'(val, old) {
       // 关闭dialog，清空
       if (!val) {
         this.dialog.data = {
-          id: '', menuName: '', parentId: [], url: '', icon: '', sort: '', visible: false,
-          resourceCode: '', isLocked: false, menuType: ''
+          id: '',
+          menuName: '',
+          parentId: [],
+          url: '',
+          icon: '',
+          sort: '',
+          visible: false,
+          resourceCode: '',
+          isLocked: false,
+          menuType: ''
         }
         this.dialog.updateLoading = false
         this.dialog.disabled = false
       }
     }
   },
-  created: function() {
+  created() {
     this.getList()
   },
   methods: {
@@ -815,48 +791,39 @@ export default {
       this.dialogIcon.visible = false
       this.dialog.data.icon = item
     },
-    // 更新授权
-    async  auUpdateData() {
-      this.au.updateLoading = true
-      const checkNodes = this.$refs.tree.getCheckedNodes(false, true)
-      const array = []
-      checkNodes.map((ele) => {
-        array.push({
-          PermissionId: ele.id,
-          roleId: this.au.temp.id,
-          isMenu: ele.isMenu,
-          roleCode: ele.resourceCode
-        })
-      })
-      const respnseData = await service.post('/Admin/Role/Permission', array)
-      if (respnseData.data.success) {
-        this.getList()
-        this.$notify({
-          title: 'Success',
-          message: '授权成功',
-          type: 'success',
-          duration: 2000
-        })
-        this.au.visible = false
-        this.au.updateLoading = false
-      }
-    },
     // 获取所有菜单
-    async  getList() {
-      const a = await service.get('/Admin/Menu/Edit?handler=Menu')
-      const b = a.data.data
-      const allMenu = []
-      this.ddd(b, null, allMenu)
-      this.tableData = allMenu
+    async getList() {
+      const a = await getFullMenus()
+      if (a.success) {
+        const b = a.data || []
+        const allMenu = []
+        this.menuFormat(b, null, allMenu)
+        this.tableData = allMenu
+        return
+      }
+      this.$message.error('获取菜单信息失败')
+
+      // const menusList = await getAllMenus({ hasButton: true })
+      // const allMenu = menusList.data.items
+      // this.menuDeWeight(allMenu)
+      // console.log('menuDeWeight', allMenu)
+      // await this.getMenuInfo(allMenu)
+      // console.log('getMenuInfo', allMenu)
+      // this.$nextTick(() => {
+      //   console.log('1111111', allMenu)
+      //   this.tableData = allMenu
+      // })
+      // this.ddd(b, null, allMenu)
+      // this.tableData = allMenu
     },
     // 数据处理
-    ddd(source, parentId, dest) {
-      var array = source.filter(_ => _.parentId === parentId)
+    menuFormat(source, parentId, dest) {
+      var array = source.filter((_) => _.parentId === parentId)
       for (var i in array) {
         var ele = array[i]
         ele.children = []
         dest.unshift(ele)
-        this.ddd(source, ele.id, ele.children)
+        this.menuFormat(source, ele.id, ele.children)
       }
     },
     // 编辑 // 新增菜单 // 增加下一级
@@ -868,11 +835,29 @@ export default {
         return
       }
       // 编辑
-      const { id, menuName, parentId, url, icon, sort, visible,
-        resourceCode, isLocked, menuType } = row
+      const {
+        id,
+        menuName,
+        parentId,
+        url,
+        icon,
+        sort,
+        visible,
+        resourceCode,
+        isLocked,
+        menuType
+      } = row
       this.dialog.data = {
-        id, menuName, parentId: [parentId], url, icon, sort, visible,
-        resourceCode, isLocked, menuType
+        id,
+        menuName,
+        parentId: [parentId],
+        url,
+        icon,
+        sort,
+        visible,
+        resourceCode,
+        isLocked,
+        menuType
       }
       // dialog中父级菜单 做递归显示
       const x = []
@@ -909,14 +894,15 @@ export default {
     },
     // 更新新增、编辑
     updateData() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs['dataForm'].validate((valid) => {
         // 表单校验
         if (valid) {
           this.dialog.updateLoading = true
           const data = {
             Id: this.dialog.data.id,
             MenuName: this.dialog.data.menuName,
-            ParentId: this.dialog.data.parentId[this.dialog.data.parentId.length - 1],
+            ParentId:
+              this.dialog.data.parentId[this.dialog.data.parentId.length - 1],
             Url: this.dialog.data.url,
             Icon: 'fa ' + this.dialog.data.icon,
             Sort: this.dialog.data.sort * 1,
@@ -925,33 +911,37 @@ export default {
             IsLocked: this.dialog.data.isLocked,
             MenuType: this.dialog.data.menuType
           }
-          service.post('/Admin/Menu/Edit', data).then(res => {
-            if (res.data.success) {
-              this.getList()
-              this.$notify({
-                title: 'Success',
-                message: '成功',
-                type: 'success',
-                duration: 2000
-              })
-              this.dialog.visible = false
-            }
-          })
+          createOrUpdateMenu(data)
+            .then((res) => {
+              if (res.success) {
+                this.$notify({
+                  title: 'Success',
+                  message: '成功',
+                  type: 'success',
+                  duration: 2000
+                })
+                this.getList()
+                this.dialog.visible = false
+              }
+            })
+            .catch(() => {
+              this.dialog.updateLoading = false
+            })
         }
       })
     },
     // 删除
     handleDelete(index, row) {
-      const ids = [row.id]
-      service.post('/Admin/Menu/edit?handler=Delete', ids).then(res => {
-        if (res.data.success) {
-          this.getList()
+      if (!row.id) return
+      deleteMenu(row.id).then((res) => {
+        if (res.success) {
           this.$notify({
             title: 'Success',
             message: '删除成功',
             type: 'success',
             duration: 2000
           })
+          this.getList()
         }
       })
     }
@@ -960,5 +950,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+  .menu-icon-item {
+    cursor: pointer;
+  }
 </style>

@@ -1,15 +1,18 @@
 <template>
   <div class="el-main">
-
     <el-container>
       <el-header class="module-header">
-        <span class="start-title"><span class="module-header-v">NeuCharFramework 管理员后台</span></span>
+        <span class="start-title"
+          ><span class="module-header-v">
+            NeuCharFramework 管理员后台
+          </span></span
+        >
       </el-header>
       <el-main />
     </el-container>
     <el-row :gutter="20">
-      <el-col :span="6">
-        <a href="~/Admin/XncfModule/Index">
+      <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+        <router-link to="/Admin/XncfModule/Index">
           <div class="grid-content xncf-stat-item">
             <span class="count">{{ xncfStat.installedXncfCount || 0 }}</span>
             <div class="icon">
@@ -17,21 +20,23 @@
             </div>
             <p class="tit">已安装模块</p>
           </div>
-        </a>
+        </router-link>
       </el-col>
-      <el-col :span="6">
-        <a href="~/Admin/XncfModule/Index">
+      <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+        <router-link to="/Admin/XncfModule/Index">
           <div class="grid-content bg-purple xncf-stat-item">
-            <span class="count">{{ xncfStat.updateVersionXncfCount || 0 }}</span>
+            <span class="count">
+              {{ xncfStat.updateVersionXncfCount || 0 }}
+            </span>
             <div class="icon">
               <i class="fa fa-comments-o" />
             </div>
             <p class="tit">待更新模块</p>
           </div>
-        </a>
+        </router-link>
       </el-col>
-      <el-col :span="6">
-        <a href="~/Admin/XncfModule/Index">
+      <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+        <router-link to="/Admin/XncfModule/Index">
           <div class="grid-content bg-purple xncf-stat-item">
             <span class="count">{{ xncfStat.newXncfCount || 0 }}</span>
             <div class="icon">
@@ -39,10 +44,10 @@
             </div>
             <p class="tit">发现新模块</p>
           </div>
-        </a>
+        </router-link>
       </el-col>
-      <el-col :span="6">
-        <a href="~/Admin/XncfModule/Index">
+      <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+        <router-link to="/Admin/XncfModule/Index">
           <div class="grid-content bg-purple xncf-stat-item">
             <span class="count">{{ xncfStat.missingXncfCount || 0 }}</span>
             <div class="icon">
@@ -50,18 +55,18 @@
             </div>
             <p class="tit">模块异常</p>
           </div>
-        </a>
+        </router-link>
       </el-col>
     </el-row>
     <el-row :gutter="10">
-      <el-col :xs="20" :sm="20" :md="20" :lg="12" :xl="12">
+      <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
         <el-card class="box-card">
-          <div id="firstChart" style="height:350px;width: 100%" />
+          <BarChart height="350px" />
         </el-card>
       </el-col>
-      <el-col :xs="20" :sm="20" :md="20" :lg="12" :xl="12">
+      <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
         <el-card class="box-card">
-          <div id="secondChart" style="height:350px;width: 100%" />
+          <LineChart height="350px" />
         </el-card>
       </el-col>
     </el-row>
@@ -74,15 +79,23 @@
         </div>
         <div id="xncf-modules-area">
           <el-row :gutter="20">
-            <el-col v-for="item in xncfOpeningList" v-key="item.Id" :span="6" class="xncf-item">
+            <el-col
+              v-for="item in xncfOpeningList"
+              :key="item.uid"
+              :span="6"
+              class="xncf-item"
+            >
               <el-card class="box-card">
-                <div slot="header" class="clearfix">
-                  <span>{{ item.menuName }}</span> <small class="version">v{{ item.version }}</small>
+                <div slot="header" class="xncf-item-top">
+                  <span class="moudelName">{{ item.menuName }}</span>
+                  <small class="version">v{{ item.version }}</small>
                 </div>
-                <a class="component-item" :href="'/Admin/XncfModule/Start/?uid='+item.uid">
-                  <span class=""><i :class="[item.icon,'icon']" /></span>
-                  @*<a :href="'/Admin/XncfModule/Start/?uid='+item.uid">{{ item.menuName }}</a>*@
-                </a>
+                <router-link :to="'/Admin/XncfModule/Start/uid=' + item.uid">
+                  <i :class="[item.icon, 'icon']" />
+                </router-link>
+                <!-- <a class="component-item" :href="'/Admin/XncfModule/Start/?uid='+item.uid">
+                  <i :class="[item.icon,'icon']" />
+                </a> -->
               </el-card>
             </el-col>
           </el-row>
@@ -93,97 +106,48 @@
 </template>
 
 <script>
-import echarts from 'echarts'
-import { getXncfOpening, getXncfStat } from '@/api/home'
+// 图表
+import BarChart from "./components/BarChart.vue";
+import LineChart from "./components/LineChart.vue";
+// 接口
+import { getXncfStat, getModuleList } from "@/api/module";
+
 export default {
-  name: 'DashboardAdmin',
+  name: "DashboardAdmin",
+  components: { BarChart, LineChart },
   data() {
     return {
       chart: null,
+      // XNCF 统计状态数据
       xncfStat: {},
-      xncfOpeningList: {}
-    }
+      // 开放模块数据列表
+      xncfOpeningList: [],
+    };
   },
   created() {
-    // this.getXncfStat()
-    // this.getXncfOpening()
-    // this.initChart();
+    this.getXncfStat();
+    this.getXncfOpening();
+    // this.getCharts();
   },
   methods: {
-    initChart() {
-      const chart1 = document.getElementById('firstChart')
-      const chartOption1 = {
-        title: {
-          text: '数量统计',
-          subtext: '2019年11月1日 - 2019年11月5日'
-        },
-        xAxis: {
-          type: 'category',
-          data: ['商品', '数据', '订单', '消息', '异常', '审批', '退单', '新订单']
-        },
-        yAxis: {
-          type: 'value',
-          axisLabel: {
-            formatter: '{value} 件'
-          }
-        }, tooltip: {
-
-        },
-        series: [{
-          data: [5, 20, 36, 10, 15, 40, 33, 17],
-          type: 'bar',
-          color: '#91c7ae'
-        }]
-      }
-
-      const chartInstance1 = echarts.init(chart1)
-      chartInstance1.setOption(chartOption1)
-
-      // let chart2 = document.getElementById('secondChart');
-      // let chartOption2 = {
-      //   title: {
-      //     text: '数量统计',
-      //     subtext: '2019年度'
-      //   }, legend: {
-      //     data: ['自由商品销售额']
-      //   },
-      //   xAxis: {
-      //     type: 'category',
-      //     data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
-      //   },
-      //   yAxis: {
-      //     type: 'value',
-      //     axisLabel: {
-      //       formatter: '{value} 元'
-      //     }
-      //   }, tooltip: {
-      //     formatter: function (data, ticket, cllback) {
-      //       //debugger
-      //       return data.seriesName + ':' + formatCurrency(data.value) + '元';
-      //     }
-      //   },
-      //   series: [{
-      //     data: [2666, 2778, 4926, 5767, 6810, 5670, 4123, 5687, 3654, 4999, 5301, 7358],
-      //     name: '自由商品销售额',
-      //     type: 'line'
-      //   }]
-      // };
-      //
-      // let chartInstance2 = echarts.init(chart2);
-      // chartInstance2.setOption(chartOption2);
-    },
     // XNCF 统计状态
     async getXncfStat() {
-      const xncfStatData = await getXncfStat()
-      this.xncfStat = xncfStatData.data.data
+      const xncfStatData = await getXncfStat();
+      this.xncfStat = xncfStatData.data || {};
     },
     // 开放模块数据
     async getXncfOpening() {
-      const xncfOpeningList = await getXncfOpening()
-      this.xncfOpeningList = xncfOpeningList.data.data
-    }
-  }
-}
+      const xncfOpeningList = await getModuleList();
+      this.xncfOpeningList = xncfOpeningList.data || [];
+      console.log(JSON.parse(JSON.stringify(xncfOpeningList)));
+    },
+    // 图表数据
+    // async getCharts() {
+    //   const xncfOpeningList = await getXncfOpening()
+    //   this.xncfOpeningList = xncfOpeningList.data.data || []
+    // }
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -191,22 +155,23 @@ export default {
   position: relative;
   display: block;
   margin-bottom: 12px;
-  border: 1px solid #E4E4E4;
+  border: 1px solid #e4e4e4;
   overflow: hidden;
-  padding-bottom: 5px;
+  padding: 5px;
   border-radius: 5px;
   background-clip: padding-box;
-  background: #FFF;
+  background: #fff;
   transition: all 300ms ease-in-out;
   padding-left: 10px;
 }
 
 .xncf-stat-item .icon {
-  font-size: 60px;
-  color: #BAB8B8;
   position: absolute;
   right: 20px;
-  top: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 60px;
+  color: #bab8b8;
 }
 
 .xncf-stat-item .count {
@@ -216,7 +181,7 @@ export default {
 }
 
 .xncf-stat-item .tit {
-  color: #BAB8B8;
+  color: #bab8b8;
   font-size: 24px;
 }
 
@@ -241,14 +206,34 @@ export default {
 }
 
 .box-card {
-  margin-top:20px
+  margin-top: 20px;
 }
 
-#xncf-modules-area{margin-bottom:50px;}
-#xncf-modules-area .xncf-item{
-
+#xncf-modules-area {
+  margin-bottom: 50px;
+}
+::v-deep .el-card__header {
+  padding: 16px;
+}
+::v-deep .el-card__body {
+  padding: 16px;
+}
+#xncf-modules-area .xncf-item .xncf-item-top {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+#xncf-modules-area .xncf-item .xncf-item-top .moudelName {
+  flex: 1;
+  word-break: break-all;
+}
+#xncf-modules-area .xncf-item .xncf-item-top .version {
+  white-space: nowrap;
 }
 
-#xncf-modules-area .xncf-item .version{ float:right;}
-#xncf-modules-area .xncf-item .icon{ float:left;}
+#xncf-modules-area .xncf-item .icon {
+  // float: left;
+  position: relative;
+}
 </style>

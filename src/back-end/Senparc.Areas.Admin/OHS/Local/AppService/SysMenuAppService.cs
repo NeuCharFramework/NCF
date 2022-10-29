@@ -34,6 +34,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// <param name="request"></param>
         /// <returns></returns>
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Post)]
+        [Ncf.Core.Authorization.Permission("role.add,role.update")]
         public async Task<AppResponseBase<SysMenu_CreateOrUpdateResponse>> CreateOrUpdateAsync(SysMenu_CreateOrUpdateRequest request)
         {
             var response = await this.GetResponseAsync<AppResponseBase<SysMenu_CreateOrUpdateResponse>, SysMenu_CreateOrUpdateResponse>(async (response, logger) =>
@@ -109,6 +110,23 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     Item = _mapper.Map<SysMenuDto>(ms)
                 };
             });
+            return response;
+        }
+
+        /// <summary>
+        /// 获取完整菜单信息
+        /// </summary>
+        /// <param name="hasButton">是否包含按钮</param>
+        /// <returns></returns>
+        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Get)]
+        public async Task<AppResponseBase<List<SysMenuDto>>> GetAllMenuListAsync(bool hasButton)
+        {
+            var response = await this.GetResponseAsync<AppResponseBase<List<SysMenuDto>>, List<SysMenuDto>>(async (response, logger) =>
+            {
+                var menuList = await _domainService.GetAllMenuListAsync(hasButton);
+                return menuList.ToList();
+            });
+
             return response;
         }
 
