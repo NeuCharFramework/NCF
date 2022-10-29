@@ -48,4 +48,34 @@
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.4-beta8" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.4-beta8" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Senparc.Xncf.AuditLog\Senparc.Xncf.AuditLog.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Areas\Admin\Pages\AdminUserInfo\AuthorizationPage.cshtml" />
+	  <None Include="Areas\Admin\Pages\AdminUserInfo\Edit.cshtml" />
+	  <None Include="Areas\Admin\Pages\AdminUserInfo\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\Login.cshtml" />
+	  <None Include="Areas\Admin\Pages\Menu\Edit.cshtml" />
+	  <None Include="Areas\Admin\Pages\Menu\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\Role\Edit.cshtml" />
+	  <None Include="Areas\Admin\Pages\Role\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\Role\Permission.cshtml" />
+	  <None Include="Areas\Admin\Pages\SenparcTrace\DateLog.cshtml" />
+	  <None Include="Areas\Admin\Pages\SenparcTrace\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\Shared\_HeaderPartial.cshtml" />
+	  <None Include="Areas\Admin\Pages\Shared\_Layout_Vue.cshtml" />
+	  <None Include="Areas\Admin\Pages\Shared\_MenuPartial.cshtml" />
+	  <None Include="Areas\Admin\Pages\Shared\_XncfModuleLayout.cshtml" />
+	  <None Include="Areas\Admin\Pages\Shared\_XncfModuleLayout_Menu.cshtml" />
+	  <None Include="Areas\Admin\Pages\SystemConfig\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\TenantInfo\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\XncfModule\Index.cshtml" />
+	  <None Include="Areas\Admin\Pages\XncfModule\Start.cshtml" />
+	  <None Include="Areas\Admin\Pages\_ViewImports.cshtml" />
+	  <None Include="Areas\Admin\Pages\_ViewStart.cshtml" />
+	</ItemGroup>
 </Project>

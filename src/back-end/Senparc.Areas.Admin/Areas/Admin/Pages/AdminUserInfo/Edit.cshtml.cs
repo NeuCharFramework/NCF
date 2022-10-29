@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Senparc.Areas.Admin.Domain;
 using Senparc.CO2NET.Extensions;
@@ -5,6 +6,8 @@ using Senparc.Ncf.AreaBase.Admin.Filters;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Validator;
+using Senparc.Xncf.AuditLog.Controllers;
+using Senparc.Xncf.AuditLog.Domain.Services;
 using System;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
@@ -27,11 +30,13 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
         private readonly IServiceProvider _serviceProvider;
         private readonly AdminUserInfoService _adminUserInfoService;
+        private readonly AuditLogService _auditLogService;
 
-        public AdminUserInfo_EditModel(IServiceProvider serviceProvider, AdminUserInfoService adminUserInfoService)
+        public AdminUserInfo_EditModel(IServiceProvider serviceProvider, AdminUserInfoService adminUserInfoService,AuditLogService auditLogService)
         {
             _serviceProvider = serviceProvider;
             _adminUserInfoService = adminUserInfoService;
+            this._auditLogService = auditLogService;
         }
 
         public IActionResult OnGet(int id)
@@ -74,10 +79,12 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             {
                 //dto.Id = Id;
                 _adminUserInfoService.UpdateAdminUserInfo(dto);
+                _auditLogService.CreateAuditLogInfo(HttpContext.Session.GetString("userName"), IPAddressController.GetClientUserIp(HttpContext.Request.HttpContext), "编辑管理员信息", DateTime.Now.ToString());
             }
             else
             {
                 _adminUserInfoService.CreateAdminUserInfo(dto);
+                _auditLogService.CreateAuditLogInfo(HttpContext.Session.GetString("userName"), IPAddressController.GetClientUserIp(HttpContext.Request.HttpContext), "添加管理员信息", DateTime.Now.ToString());
             }
             return Ok(true);
         }
@@ -116,6 +123,8 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             }
 
             base.SetMessager(MessageType.success, $"{(IsEdit ? "修改" : "新增")}成功！");
+            
+
             return RedirectToPage("./Index");
         }
     }

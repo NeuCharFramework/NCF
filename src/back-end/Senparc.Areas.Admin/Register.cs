@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -116,6 +117,13 @@ namespace Senparc.Areas.Admin
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddDistributedMemoryCache();//启用内存缓存
+            services.AddSession(options =>
+            {
+                options.Cookie.IsEssential = true;
+            });
+
+
             //AutoMap映射
             base.AddAutoMapMapping(profile =>
             {
@@ -140,6 +148,9 @@ namespace Senparc.Areas.Admin
             {
                 FileProvider = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly(), "wwwroot")
             });
+
+
+            app.UseSession();//添加会话中间件
 
             return base.UseXncfModule(app, registerService);
         }

@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
+using Senparc.Xncf.AuditLog.Controllers;
+using Senparc.Xncf.AuditLog.Domain.Services;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -14,12 +17,14 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
     {
         private readonly SysMenuService _sysMenuService;
         private readonly SysButtonService _sysButtonService;
+        private readonly AuditLogService _auditLogService;
 
-        public MenuEditModel(SysMenuService _sysMenuService, SysButtonService _sysButtonService)
+        public MenuEditModel(SysMenuService _sysMenuService, SysButtonService _sysButtonService, AuditLogService auditLogService)
         {
             CurrentMenu = "Menu";
             this._sysMenuService = _sysMenuService;
             this._sysButtonService = _sysButtonService;
+            this._auditLogService = auditLogService;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -79,6 +84,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 return Ok(false);
             }
             await _sysButtonService.DeleteObjectAsync(_ => _.Id == buttonId);
+            _auditLogService.CreateAuditLogInfo(HttpContext.Session.GetString("userName"), IPAddressController.GetClientUserIp(HttpContext.Request.HttpContext), "É¾³ý²Ëµ¥", DateTime.Now.ToString());
             return Ok(true);
         }
 
@@ -91,6 +97,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             await _sysMenuService.DeleteAllAsync(entity);
             await _sysMenuService.RemoveMenuAsync();
             IEnumerable<string> unDeleteIds = ids.Except(entity.Select(_ => _.Id));
+            _auditLogService.CreateAuditLogInfo(HttpContext.Session.GetString("userName"), IPAddressController.GetClientUserIp(HttpContext.Request.HttpContext), "É¾³ý²Ëµ¥", DateTime.Now.ToString());
             return Ok(unDeleteIds);
         }
 
@@ -101,6 +108,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 return Ok(false, "²Ëµ¥Ãû³Æ²»ÄÜÎª¿Õ");
             }
             var entity = await _sysMenuService.CreateOrUpdateAsync(sysMenu);
+            //_auditLogService.CreateAuditLogInfo(HttpContext.Session.GetString("userName"), IPAddressController.GetClientUserIp(HttpContext.Request.HttpContext), "Ìí¼Ó²Ëµ¥", DateTime.Now.ToString());
             return Ok(entity.Id);
         }
 
@@ -112,7 +120,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             }
 
             await _sysMenuService.CreateOrUpdateAsync(sysMenuDto);
-
+            _auditLogService.CreateAuditLogInfo(HttpContext.Session.GetString("userName"), IPAddressController.GetClientUserIp(HttpContext.Request.HttpContext), "Ìí¼Ó/±à¼­²Ëµ¥", DateTime.Now.ToString());
             return Ok(new { sysMenuDto });
         }
     }

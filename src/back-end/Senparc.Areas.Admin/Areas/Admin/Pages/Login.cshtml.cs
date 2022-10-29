@@ -11,6 +11,16 @@ using Senparc.Ncf.Service;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using DemoAudit.Repository;
+using Senparc.Areas.Admin.Domain.Models;
+using System;
+using System.Globalization;
+using DemoAudit.Models;
+using System.Data.SqlClient;
+using Microsoft.AspNetCore.Http;
+using Senparc.Xncf.AuditLog.Controllers;
+using Senparc.Xncf.AuditLog.Domain.Services;
+using System.Linq;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -36,9 +46,16 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
 
         private readonly AdminUserInfoService _userInfoService;
-        public LoginModel(AdminUserInfoService userInfoService)
+
+        private readonly AuditLogService _auditLogService;
+
+        //private readonly AuditLogService _auditLogService;
+        //private readonly AuditLogService _auditLogService;
+        public string AdminName;
+        public LoginModel(AdminUserInfoService userInfoService, AuditLogService auditLogService)
         {
             this._userInfoService = userInfoService;
+            this._auditLogService = auditLogService;
         }
 
 
@@ -114,11 +131,17 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             {
                 //errorMsg = "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º102¡£";
                 //ModelState.AddModelError(nameof(this.Password), "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º102¡£");
+
                 return Ok("pwd", false, "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º102¡£");
             }
-
+            AdminName = userInfo.UserName;
+            HttpContext.Session.SetString("userName", userInfo.UserName);
+            _auditLogService.CreateAuditLogInfo(AdminName, IPAddressController.GetClientUserIp(HttpContext.Request.HttpContext),"µÇÂ¼", DateTime.Now.ToString());
             return Ok(true);
         }
+
+
+        
 
         public async Task<IActionResult> OnGetLogoutAsync(string ReturnUrl)
         {
@@ -126,8 +149,13 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             await _userInfoService.LogoutAsync();
             if (string.IsNullOrEmpty(ReturnUrl))
                 return RedirectToPage(new { area = "Admin" });
+                
             else
+            {
+                _auditLogService.CreateAuditLogInfo(HttpContext.Session.GetString("userName"), IPAddressController.GetClientUserIp(HttpContext.Request.HttpContext), "ÍË³öµÇÂ¼", DateTime.Now.ToString());
                 return LocalRedirect(ReturnUrl.UrlDecode());
+
+            }
         }
     }
 
@@ -138,4 +166,6 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         [Required]
         public string Password { get; set; }
     }
+
+
 }
