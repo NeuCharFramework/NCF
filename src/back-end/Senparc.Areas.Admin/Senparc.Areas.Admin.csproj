@@ -47,7 +47,6 @@
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.3.3.1-beta7" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.3.1-beta7" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.3.1-beta7" />
-
 	</ItemGroup>
 
 	<ItemGroup>
