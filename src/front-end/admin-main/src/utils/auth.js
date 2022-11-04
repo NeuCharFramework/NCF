@@ -31,7 +31,7 @@ export function isHaveToken() {
   const hasToken = getToken();
   // console.log('判断token', hasToken);
   if (hasToken == null || hasToken == undefined || !hasToken) {
-    console.log('已过期，退出登录');
+    // console.log('已过期，退出登录');
     Message({
       message: "登录超时请重新登录",
       type: "error",
@@ -41,7 +41,8 @@ export function isHaveToken() {
     removeToken();
     removeRole();
     return;
-  } else {
-    console.log('未过期，正常状态');
-  }
+  } 
+  // else {
+  //   console.log('未过期，正常状态');
+  // }
 }

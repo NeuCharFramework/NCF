@@ -161,8 +161,16 @@ function filterAsyncRouter(asyncRouterMap) {
 export function generateRoutesList(routes, menuTree, pageNotFind = true) {
   const res = [];
   const page404 = routes.filter((item) => item.path === "*")[0];
+  let urlPathList = []
   menuTree.forEach((route) => {
     const tmp = { ...route };
+    // 判断是否有Url 没有随机上成一个   
+    if (!tmp.url) {
+      let urlPath = getUrlPath(urlPathList)
+      urlPathList.push(urlPath)
+      tmp.url = `${urlPath}`
+      tmp.breadcrumb = true
+    }
     // 查询是否相同路由
     const isIdentical = res.findIndex((item) => item.url === tmp.url);
     // 路由权限
@@ -171,38 +179,31 @@ export function generateRoutesList(routes, menuTree, pageNotFind = true) {
       if (tmp.children && tmp.children.length > 0) {
         tmp.children = generateRoutesList([], tmp.children, false);
       }
-      // 生成路由对象
-      // const moduleRouter = {
-      //   path: '/XncfModule',
-      //   component: re,
-      //   redirect: '/Admin/XncfModule/Index',
-      //   // 这里的name需要和module模块中module.js的addRoute的name相同
-      //   name: 'XncfModule',
-      //   meta: {
-      //     title: '扩展模块',
-      //     icon: 'el-icon-cpu'
-      //   },
-      let componentName = tmp.url.includes("?")
-        ? tmp.url.split("?")[0]
-        : tmp.url;
-      if (componentName.includes("Start")) {
+      // console.log('tmp项', tmp);
+      // 拆取path 路径
+      let componentName = tmp.url.includes("?") ? tmp.url.split("?")[0] : tmp.url;
+      // 如果已 Start/ 结尾 就是执行方法页面使用前端路径
+      if (componentName.endsWith("Start/")) {
         componentName = "/Admin/XncfModule/Start";
+        tmp.url = "/Admin/XncfModule/Start/" + tmp.url.split("?")[1]
       }
-      // console.log('项', tmp);
-      const routerObj = {
-        path: tmp.url.includes("Start")
-          ? "/Admin/XncfModule/Start/" + tmp.url.split("?")[1]
-          : tmp.url,
-        name: tmp.menuName + componentName,
-        component: pageNotFind
-          ? Layout
-          : (resolve) => require(["@/views" + componentName + ".vue"], resolve),
+      // 如果 urlPathList 列表中包含则是二级及以上无url的包裹页面
+      if (urlPathList.includes(tmp.url)) {
+        componentName = "/Admin/XncfModule/menu/index";
+      }
+
+      let routerObj = {
+        path: tmp.url,
+        name: tmp.menuName + tmp.url,
+        component: pageNotFind ? Layout : (resolve) => require(["@/views" + componentName + ".vue"], resolve),
         meta: {
           title: tmp.menuName,
           icon: tmp.icon,
+          breadcrumb: tmp.breadcrumb ? false : true
         },
         children: tmp.children,
       };
+
       res.push(routerObj);
     }
   });
@@ -211,6 +212,51 @@ export function generateRoutesList(routes, menuTree, pageNotFind = true) {
   pageNotFind && page404 && res.push(page404);
   return res;
 }
+
+/**
+ * 随机生成字符串
+ * @param 存储数组
+ */
+function getUrlPath(urlPathList) {
+  // 生成随机字符串
+  let urlPath = getRandomString(9);
+  if (!urlPathList.includes(urlPath)) {
+    return urlPath
+  } else {
+    getUrlPath(urlPathList)
+  }
+}
+
+/**
+ * 随机生成字符串
+ * @param len 指定生成字符串长度
+ */
+function getRandomString(len) {
+  let _charStr = 'abacdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ',
+    min = 0,
+    max = _charStr.length - 1,
+    _str = '';                    //定义随机字符串 变量
+  //判断是否指定长度，否则默认长度为15
+  len = len || 9;
+  //循环生成字符串
+  for (var i = 0, index; i < len; i++) {
+    index = (function (randomIndexFunc, i) {
+      return randomIndexFunc(min, max, i, randomIndexFunc);
+    })(function (min, max, i, _self) {
+      let indexTemp = Math.floor(Math.random() * (max - min + 1) + min),
+        numStart = _charStr.length - 10;
+      if (i == 0 && indexTemp >= numStart) {
+        indexTemp = _self(min, max, i, _self);
+      }
+      return indexTemp;
+    }, i);
+    _str += _charStr[index];
+  }
+  return _str;
+}
+
+
+
 export default {
   namespaced: true,
   state,

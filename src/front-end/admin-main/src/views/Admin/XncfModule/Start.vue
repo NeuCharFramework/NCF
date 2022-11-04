@@ -317,30 +317,6 @@
         <!-- 更新记录,错误方案，放置最右侧 -->
         <div style="flex: 1; margin: 10px">
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-            <el-tab-pane label="更新记录" name="first">
-              <div class="start-log">
-                <el-collapse>
-                  <el-collapse-item title="更新记录" name="1">
-                    <el-table
-                      :data="data.xncfModule.updateLog"
-                      stripe
-                      style="width: 100%"
-                    >
-                      <el-table-column label="#" width="30">
-                        <template slot-scope="scope">
-                          {{ scope.$index + 1 }}
-                        </template>
-                      </el-table-column>
-                      <el-table-column label="更新记录">
-                        <template slot-scope="scope">
-                          {{ scope.row }}
-                        </template>
-                      </el-table-column>
-                    </el-table>
-                  </el-collapse-item>
-                </el-collapse>
-              </div>
-            </el-tab-pane>
             <el-tab-pane label="执行方法" name="second">
               <el-main>
                 <template v-if="!data.mustUpdate">
@@ -480,6 +456,31 @@
                 </el-card>
               </el-main>
             </el-tab-pane>
+            <el-tab-pane label="更新记录" name="first">
+              <div class="start-log">
+                <el-collapse>
+                  <el-collapse-item title="更新记录" name="1">
+                    <el-table
+                      :data="data.xncfModule.updateLog"
+                      stripe
+                      style="width: 100%"
+                    >
+                      <el-table-column label="#" width="30">
+                        <template slot-scope="scope">
+                          {{ scope.$index + 1 }}
+                        </template>
+                      </el-table-column>
+                      <el-table-column label="更新记录">
+                        <template slot-scope="scope">
+                          {{ scope.row }}
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                  </el-collapse-item>
+                </el-collapse>
+              </div>
+            </el-tab-pane>
+            
           </el-tabs>
         </div>
       </el-container>
@@ -688,7 +689,7 @@ export default {
       uid: null,
       isExecut: false, // 是否正在执行
       dialogVisible: false, // 正在执行取消提示
-      activeName: "first", //切换更新记录和执行方法
+      activeName: "second", //切换更新记录和执行方法
     };
   },
   created() {
@@ -1039,7 +1040,7 @@ export default {
     },
     //element，tab切换执行和日志
     handleClick(tab, event) {
-      console.log(tab, event);
+      // console.log(tab, event);
     },
   },
 };

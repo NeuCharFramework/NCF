@@ -31,7 +31,7 @@ router.beforeEach(async (to, from, next) => {
         store.getters.menuTree && store.getters.menuTree.length > 0;
       // 模拟登录
       // const hasRoles = store.getters.roles && store.getters.roles.length > 0
-      console.log("hasRoles", hasRoles);
+      // console.log("hasRoles", hasRoles);
       if (hasRoles) {
         next();
       } else {
@@ -46,7 +46,7 @@ router.beforeEach(async (to, from, next) => {
           );
           // 动态添加可访问的路由
           // console.log("可访问的路由", JSON.parse(JSON.stringify(accessRoutes)));
-          router.addRoutes(accessRoutes)
+          // router.addRoutes(accessRoutes)
           accessRoutes.forEach((el) => {
             router.addRoute(el);
           });

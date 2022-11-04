@@ -114,14 +114,18 @@ const actions = {
           if (!roleCodes || roleCodes.length <= 0) {
             reject("getInfo: roles must be a non-null array!");
           }
+          
           menuTree.forEach((item) => {
             if (item.menuName === "系统管理") {
               item.url = "/Admin";
+              item.breadcrumb = true 
             }
             if (item.menuName === "扩展模块") {
               item.url = "/XncfModule";
+              item.breadcrumb = true 
             }
           });
+
           const avatar = "";
           const introduction = "i am admin";
 

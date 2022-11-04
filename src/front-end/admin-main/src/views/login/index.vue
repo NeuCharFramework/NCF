@@ -72,7 +72,7 @@
 <script>
 import { validUsername } from "@/utils/validate";
 import SocialSign from "./components/SocialSignin";
-import setToken from "@/utils/auth";
+// import {setToken} from "@/utils/auth";
 
 export default {
   name: "Login",
@@ -167,7 +167,7 @@ export default {
                 { path: this.redirect || "/", query: this.otherQuery },
                 () => {}
               );
-              setToken(res.token);
+              // setToken(res.token);
               this.loading = false;
             })
             .catch(() => {
