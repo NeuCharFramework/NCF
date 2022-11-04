@@ -40,6 +40,7 @@ app.UseNcf();
 
 //app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseFileServer();//为了访问 docs/ 目录，非必须
 
 app.UseCookiePolicy();
 
@@ -50,8 +51,5 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
     endpoints.MapControllers();
 });
-//app.Map("/test", () =>
-//{
-//    return "1111";
-//});
+
 app.Run();
