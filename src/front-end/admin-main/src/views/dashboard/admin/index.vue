@@ -75,8 +75,16 @@
     <el-row>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>功能模块</span>
+          <span style="font-size: 20px; color: black">功能模块</span>
         </div>
+        <el-input
+          class="box-ipt"
+          v-model="input"
+          placeholder="输入内容按下Enter"
+          @keyup.enter.native="putXncfOpening(input)"
+        ></el-input>
+
+        <!-- 所有的展示数据 -->
         <div id="xncf-modules-area">
           <el-row :gutter="20">
             <el-col
@@ -86,15 +94,18 @@
               class="xncf-item"
             >
               <el-card class="box-card">
-                <div slot="header" class="xncf-item-top">
+                <div slot="header" class="xncf-item-top svgimg greencolor">
                   <span class="moudelName">{{ item.menuName }}</span>
                   <small class="version">v{{ item.version }}</small>
                 </div>
                 <router-link :to="'/Admin/XncfModule/Start/uid=' + item.uid">
-                  <i :class="[item.icon, 'icon']" />
+                  <i style="font-size: 22px" :class="[item.icon, 'icon']" />
                 </router-link>
-                <!-- <a class="component-item" :href="'/Admin/XncfModule/Start/?uid='+item.uid">
-                  <i :class="[item.icon,'icon']" />
+                <!-- <a
+                  class="component-item"
+                  :href="'/Admin/XncfModule/Start/?uid=' + item.uid"
+                >
+                  <i :class="[item.icon, 'icon']" />
                 </a> -->
               </el-card>
             </el-col>
@@ -104,14 +115,13 @@
     </el-row>
   </div>
 </template>
-
 <script>
 // 图表
 import BarChart from "./components/BarChart.vue";
 import LineChart from "./components/LineChart.vue";
 // 接口
 import { getXncfStat, getModuleList } from "@/api/module";
-
+import { isHaveToken } from "@/utils/auth";
 export default {
   name: "DashboardAdmin",
   components: { BarChart, LineChart },
@@ -122,13 +132,17 @@ export default {
       xncfStat: {},
       // 开放模块数据列表
       xncfOpeningList: [],
+      // input模糊搜索使用
+      input: "",
     };
   },
   created() {
     this.getXncfStat();
     this.getXncfOpening();
     // this.getCharts();
+    isHaveToken();
   },
+
   methods: {
     // XNCF 统计状态
     async getXncfStat() {
@@ -143,13 +157,32 @@ export default {
     },
     // 图表数据
     // async getCharts() {
-    //   const xncfOpeningList = await getXncfOpening()
-    //   this.xncfOpeningList = xncfOpeningList.data.data || []
-    // }
+    //   const xncfOpeningList = await getXncfOpening();
+    //   this.xncfOpeningList = xncfOpeningList.data.data || [];
+    // },
+
+    async putXncfOpening(iptValue) {
+      // console.log("输入值", iptValue);
+      if (iptValue) {
+        await this.getXncfStat();
+        let datas = this.xncfOpeningList.filter((i) => {
+          return i.menuName.indexOf(iptValue) != -1;
+        });
+        console.log(JSON.parse(JSON.stringify(datas)));
+        // 解决数据错误
+        if (JSON.parse(JSON.stringify(datas)).length == 0) {
+          this.getXncfOpening();
+        }
+        this.xncfOpeningList = [...datas];
+      }
+      if (!iptValue) {
+        this.getXncfOpening();
+      }
+      iptValue = null;
+    },
   },
 };
 </script>
-
 <style lang="scss" scoped>
 .xncf-stat-item {
   position: relative;
@@ -207,6 +240,38 @@ export default {
 
 .box-card {
   margin-top: 20px;
+
+  .clearfix {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  ::v-deep .el-input {
+    width: 310px;
+  }
+  ::v-deep .el-input__inner {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+  }
+
+  .svgimg {
+    flex: 1;
+    background: url(./img/join.svg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  .svgimgt {
+    flex: 1;
+    background: url(./img/enlarge.svg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  .greencolor {
+    // background-color: #00a971;
+    // color: #fff;
+    font-weight: bold;
+    padding: 10px;
+  }
 }
 
 #xncf-modules-area {
@@ -235,5 +300,10 @@ export default {
 #xncf-modules-area .xncf-item .icon {
   // float: left;
   position: relative;
+}
+</style>
+<style scoped>
+.box-ipt >>> .el-card__body {
+  width: 40px !important;
 }
 </style>

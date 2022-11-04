@@ -19,7 +19,7 @@ router.beforeEach(async (to, from, next) => {
 
   // determine whether the user has logged in
   const hasToken = getToken();
-
+  // console.log('hasToken', hasToken);
   if (hasToken) {
     if (to.path === "/login") {
       // 如果已登录，则重定向到主页
@@ -44,10 +44,9 @@ router.beforeEach(async (to, from, next) => {
             "permission/generateRoutes",
             { roleCodes, menuTree }
           );
-
           // 动态添加可访问的路由
-          console.log("可访问的路由", JSON.parse(JSON.stringify(accessRoutes)));
-          // router.addRoutes(accessRoutes)
+          // console.log("可访问的路由", JSON.parse(JSON.stringify(accessRoutes)));
+          router.addRoutes(accessRoutes)
           accessRoutes.forEach((el) => {
             router.addRoute(el);
           });
@@ -65,6 +64,18 @@ router.beforeEach(async (to, from, next) => {
     }
   } else {
     /* has no token*/
+    // 第一次调用,登录的时候有问题
+    // if (hasToken === null || hasToken === undefined || !hasToken) {
+    //   console.log('无token');
+    //   Message({
+    //     message: "登录超时请重新登录",
+    //     type: "error",
+    //     duration: 5 * 1000,
+    //   });
+    //   window.location.replace = `/login?redirect=${router.history.current.fullPath}`;
+    //   alert('登陆超时轻重新登陆');
+    //   return;
+    // }
 
     if (whiteList.indexOf(to.path) !== -1) {
       // in the free login whitelist, go directly
@@ -72,6 +83,7 @@ router.beforeEach(async (to, from, next) => {
     } else {
       // other pages that do not have permission to access are redirected to the login page.
       next(`/login?redirect=${to.path}`);
+
       NProgress.done();
     }
   }

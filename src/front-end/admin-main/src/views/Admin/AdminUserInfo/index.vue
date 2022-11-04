@@ -187,6 +187,7 @@ import {
 } from "@/api/admin";
 // 获取角色列表
 import { getAllRoles } from "@/api/roles";
+import { isHaveToken } from "@/utils/auth";
 
 export default {
   name: "AdminUserInfo",
@@ -324,6 +325,8 @@ export default {
     },
     // 获取数据
     async getList() {
+      await isHaveToken(); //判断是否过期
+
       const res = await getAdminUserList(this.listQuery);
       if (res.data) {
         const data = res.data;
@@ -332,7 +335,7 @@ export default {
         this.paginationQuery.total = data.totalCount;
       }
     },
-    
+
     // 编辑
     handleEdit(index, row) {
       this.dialog.visible = true;
@@ -496,5 +499,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

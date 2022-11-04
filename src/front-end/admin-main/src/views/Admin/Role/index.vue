@@ -159,6 +159,7 @@ import {
   deleteRole,
   getRolePermissions,
 } from "@/api/roles";
+import { isHaveToken } from "@/utils/auth";
 import { getFullMenus } from "@/api/menu";
 export default {
   name: "Index",
@@ -242,6 +243,7 @@ export default {
   },
   created() {
     this.getList();
+    isHaveToken();
   },
   methods: {
     // 权限
@@ -338,7 +340,6 @@ export default {
           this.au.updateLoading = false;
         });
     },
-
     // 编辑
     handleEdit(index, row) {
       this.dialog.visible = true;
@@ -438,6 +439,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-</style>
