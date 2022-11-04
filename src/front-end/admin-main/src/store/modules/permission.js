@@ -74,8 +74,11 @@ const actions = {
       // } else {
       //   accessedRoutes = filterAsyncRoutes(asyncRoutes, menuTree);
       // }
+
+
       // 根据后端返回生成动态路由
       accessedRoutes = generateRoutesList(asyncRoutes, menuTree);
+
       state.accessedRoutes = accessedRoutes;
       commit("SET_ROUTES", accessedRoutes);
       resolve(accessedRoutes);
@@ -161,8 +164,15 @@ function filterAsyncRouter(asyncRouterMap) {
 export function generateRoutesList(routes, menuTree, pageNotFind = true) {
   const res = [];
   const page404 = routes.filter((item) => item.path === "*")[0];
+  const urlNameList = []
+
   menuTree.forEach((route) => {
+    const url = getUrlName(urlNameList)
+    route.breadcrumb = route.url ? true : false
+    route.url = route.url ? route.url : `/${url}`
+
     const tmp = { ...route };
+
     // 查询是否相同路由
     const isIdentical = res.findIndex((item) => item.url === tmp.url);
     // 路由权限
@@ -171,6 +181,7 @@ export function generateRoutesList(routes, menuTree, pageNotFind = true) {
       if (tmp.children && tmp.children.length > 0) {
         tmp.children = generateRoutesList([], tmp.children, false);
       }
+
       // 生成路由对象
       // const moduleRouter = {
       //   path: '/XncfModule',
@@ -188,18 +199,19 @@ export function generateRoutesList(routes, menuTree, pageNotFind = true) {
       if (componentName.includes("Start")) {
         componentName = "/Admin/XncfModule/Start";
       }
-      // console.log('项',tmp);
+      console.log('项', componentName);
       const routerObj = {
         path: tmp.url.includes("Start")
           ? "/Admin/XncfModule/Start/" + tmp.url.split("?")[1]
           : tmp.url,
-        name: tmp.menuName+componentName,
+        name: tmp.menuName + componentName,
         component: pageNotFind
           ? Layout
-          : (resolve) => require(["@/views" + componentName + ".vue"], resolve),
+          : (resolve) => require(["@/views" + componentName.includes('/Admin') || componentName.includes('/XncfModule') ? componentName : '/Admin/Middle/index' + ".vue"], resolve),
         meta: {
           title: tmp.menuName,
           icon: tmp.icon,
+          breadcrumb: tmp.breadcrumb
         },
         children: tmp.children,
       };
@@ -209,6 +221,23 @@ export function generateRoutesList(routes, menuTree, pageNotFind = true) {
   // 把404页面加载到路由最后面
   pageNotFind && page404 && res.push(page404);
   return res;
+}
+
+// 没有url生成随机url
+function getUrlName(urlNameList) {
+  let urlName = ''
+  const model = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  for (let i = 0; i < 9; i++) {
+    const random = Math.floor(Math.random() * (26 - 0)) + 0
+    urlName += model[random]
+  }
+  if (urlNameList.includes(urlName)) {
+    // console.log(111111111);
+    getUrlName()
+  } else {
+    urlNameList.push(urlName)
+    return urlName
+  }
 }
 
 export default {

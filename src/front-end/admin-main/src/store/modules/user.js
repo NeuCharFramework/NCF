@@ -108,19 +108,154 @@ const actions = {
             reject("验证失败，请重新登录。");
           }
           console.log("getInfo", JSON.parse(JSON.stringify(data)));
-          const { roleCodes, userName, menuTree, permissionCodes } = data;
+          const { roleCodes, userName, permissionCodes } = data;
           // roles must be a non-empty array
           if (!roleCodes || roleCodes.length <= 0) {
             reject("getInfo: roles must be a non-null array!");
           }
+          let menuTree = [
+            {
+              "menuName": "系统管理",
+              "id": "1",
+              "isMenu": false,
+              "children": [
+                {
+                  "menuName": "管理员管理",
+                  "id": "1.1",
+                  "isMenu": false,
+                  "children": [],
+                  "icon": "fa fa-user-secret",
+                  "url": "/Admin/AdminUserInfo/Index"
+                },
+                {
+                  "menuName": "角色管理",
+                  "id": "1.2",
+                  "isMenu": false,
+                  "children": [],
+                  "icon": "fa fa-user",
+                  "url": "/Admin/Role/Index"
+                },
+                {
+                  "menuName": "菜单管理",
+                  "id": "1.3",
+                  "isMenu": false,
+                  "children": [],
+                  "icon": "fa fa-bars",
+                  "url": "/Admin/Menu/Index"
+                },
+                {
+                  "menuName": "系统信息",
+                  "id": "1.4",
+                  "isMenu": false,
+                  "children": [],
+                  "icon": "fa fa-flag",
+                  "url": "/Admin/SystemConfig/Index"
+                },
+                {
+                  "menuName": "多租户信息",
+                  "id": "1.5",
+                  "isMenu": false,
+                  "children": [],
+                  "icon": "fa fa-group",
+                  "url": "/Admin/TenantInfo/Index"
+                }
+              ],
+              "icon": "fa fa-cog",
+              "url": null
+            },
+            {
+              "menuName": "扩展模块",
+              "id": "2",
+              "isMenu": false,
+              "children": [
+                {
+                  "menuName": "模块管理",
+                  "id": "2.1",
+                  "isMenu": false,
+                  "children": [],
+                  "icon": "fa fa-user-secret",
+                  "url": "/Admin/XncfModule/Index"
+                },
+                {
+                  "menuName": "用户管理",
+                  "id": "5c36c849-509a-4d93-9e77-7fc36a01170e",
+                  "isMenu": false,
+                  "children": [
+                    {
+                      "menuName": "设置/执行",
+                      "id": "60000",
+                      "isMenu": false,
+                      "children": [],
+                      "icon": "fa fa-play",
+                      "url": "/Admin/XncfModule/Start/?uid=00000000-0000-0001-0001-000000000002"
+                    },
+                    {
+                      "menuName": "首页",
+                      "id": "60001",
+                      "isMenu": false,
+                      "children": [],
+                      "icon": "fa fa-laptop",
+                      "url": "/Admin/Account/Index?uid=00000000-0000-0001-0001-000000000002"
+                    },
+                    {
+                      "menuName": "数据库操作示例",
+                      "id": "60002",
+                      "isMenu": false,
+                      "children": [],
+                      "icon": "fa fa-bookmark-o",
+                      "url": "/Admin/Account/DatabaseSample?uid=00000000-0000-0001-0001-000000000002"
+                    }
+                  ],
+                  "icon": "fa fa-users",
+                  "url": ""
+                },
+                {
+                  "menuName": "团队管理",
+                  "id": "9fcd48ce-98a5-46b8-aa58-c2121ce54118",
+                  "isMenu": false,
+                  "children": [
+                    {
+                      "menuName": "设置/执行",
+                      "id": "60003",
+                      "isMenu": false,
+                      "children": [],
+                      "icon": "fa fa-play",
+                      "url": "/Admin/XncfModule/Start/?uid=612D064F-16B6-4147-9EC0-8BD1FA3BCA06"
+                    },
+                    {
+                      "menuName": "首页",
+                      "id": "60004",
+                      "isMenu": false,
+                      "children": [],
+                      "icon": "fa fa-laptop",
+                      "url": "/Admin/Teams/Index?uid=612D064F-16B6-4147-9EC0-8BD1FA3BCA06"
+                    },
+                    {
+                      "menuName": "数据库操作示例",
+                      "id": "60005",
+                      "isMenu": false,
+                      "children": [],
+                      "icon": "fa fa-bookmark-o",
+                      "url": "/Admin/Teams/DatabaseSample?uid=612D064F-16B6-4147-9EC0-8BD1FA3BCA06"
+                    }
+                  ],
+                  "icon": "fa fa-star",
+                  "url": ""
+                }
+              ],
+              "icon": "fa fa-cog",
+              "url": null
+            }
+          ]
           menuTree.forEach((item) => {
             if (item.menuName === "系统管理") {
-              item.url = "/Admin";
+              item.url = item.url ? item.url : "/Admin";
             }
             if (item.menuName === "扩展模块") {
-              item.url = "/XncfModule";
+              item.url = item.url ? item.url : "/XncfModule";
             }
           });
+          data.menuTree = menuTree
           const avatar = "";
           const introduction = "i am admin";
 
