@@ -12,7 +12,7 @@ namespace Senparc.Areas.Admin.Models
         public override void Configure(EntityTypeBuilder<AdminUserInfo> builder)
         {
             builder.Property(e => e.LastLoginIp)
-                .HasColumnName("LastLoginIP")
+                //.HasColumnName("LastLoginIP")
                 .HasMaxLength(20)
                 .IsUnicode(false);
 
@@ -31,7 +31,7 @@ namespace Senparc.Areas.Admin.Models
             builder.Property(e => e.RealName).HasMaxLength(50);
 
             builder.Property(e => e.ThisLoginIp)
-                .HasColumnName("ThisLoginIP")
+                //.HasColumnName("ThisLoginIP")
                 .HasMaxLength(20)
                 .IsUnicode(false);
 
