@@ -12,6 +12,6 @@ const getters = {
   menuTree: state => state.user.menuTree,
   permissionCodes: state => state.user.permissionCodes,
   permission_routes: state => state.permission.routes,
-  errorLogs: state => state.errorLog.logs,
+  errorLogs: state => state.errorLog.logs
 }
 export default getters

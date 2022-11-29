@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Ncf.Service;
+using Senparc.Ncf.Core.Exceptions;
 
 namespace Senparc.Areas.Admin.OHS.Local.AppService
 {
@@ -126,7 +127,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             });
             return resultDto;
         }
-        
+
 
         /// <summary>
         /// 增加角色
@@ -152,14 +153,46 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Put)]
         public async Task<AppResponseBase<AdminUserInfo_GetRolesResponse>> GetRolesAsync(AdminUserInfo_AddRoleRequest request)
         {
-            int adminUserInfoId = GetCurrentAdminUserInfoId();
+            //int adminUserInfoId = GetCurrentAdminUserInfoId();
             var response = await this.GetResponseAsync<AppResponseBase<AdminUserInfo_GetRolesResponse>, AdminUserInfo_GetRolesResponse>(async (response, logger) =>
             {
-                var roles = await ServiceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == adminUserInfoId);
+                var roles = await ServiceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == request.AccountId);
                 return new AdminUserInfo_GetRolesResponse()
                 {
                     RoleIds = roles.Select(o => o.RoleId)
                 };
+            });
+            return response;
+        }
+
+        /// <summary>
+        /// 删除管理员
+        /// </summary>
+        /// <param name="id">管理员 ID</param>
+        /// <returns></returns>
+        [ApiBind(ApiRequestMethod = CO2NET.WebApi.ApiRequestMethod.Delete)]
+        public async Task<StringAppResponse> DeleteAsync(int id)
+        {
+            var response = await this.GetResponseAsync<StringAppResponse, string>(async (response, logger) =>
+            {
+                int adminUserInfoId = GetCurrentAdminUserInfoId();
+
+                if (id == adminUserInfoId)
+                {
+                    throw new NcfExceptionBase("管理员不能删除自己！");
+                }
+
+                var adminUserInfo = await _adminUserInfoService.GetObjectAsync(z => z.Id == id);
+                if (adminUserInfo == null)
+                {
+                    throw new NcfExceptionBase("管理员不存在！");
+                }
+
+                //TODO：进行更多层级判断
+
+                await _adminUserInfoService.DeleteObjectAsync(adminUserInfo);
+
+                return "删除成功！";
             });
             return response;
         }

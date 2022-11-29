@@ -4,9 +4,9 @@
 * */
 
 import request from '@/utils/request'
-const baseUrl = "/api/Senparc.Areas.Admin/SysMenuAppService/Areas.Admin_SysMenuAppService"
+const baseUrl = '/Senparc.Areas.Admin/SysMenuAppService/Areas.Admin_SysMenuAppService'
 
-//创建、更新
+// 创建、更新
 export function createOrUpdateMenu(data) {
   return request({
     url: `${baseUrl}.CreateOrUpdateAsync`,
@@ -15,17 +15,29 @@ export function createOrUpdateMenu(data) {
   })
 }
 
-//删除
-export function deleteMenu(params) {
+// 获取完整菜单  
+export function getFullMenus(params) {
+  // ?hasButton=true
   return request({
-    url: `${baseUrl}.DeleteMenuAsync`,
-    method: 'delete',
+    url: `${baseUrl}.GetAllMenuListAsync`,
+    method: 'get',
     params
   })
 }
 
-//列表
-export function getAllMenus(params) {
+// 删除
+export function deleteMenu(id) {
+  return request({
+    url: `${baseUrl}.DeleteMenuAsync`,
+    method: 'delete',
+    params:{
+      id
+    }
+  })
+}
+
+// 获取菜单树
+export function getTreeMenus(params) {
   return request({
     url: `${baseUrl}.GetAllMenusTreeAsync`,
     method: 'get',
@@ -33,7 +45,7 @@ export function getAllMenus(params) {
   })
 }
 
-//列表-子项
+// 获取菜单列表
 export function getMenus(params) {
   return request({
     url: `${baseUrl}.GetMenusAsync`,
@@ -42,7 +54,7 @@ export function getMenus(params) {
   })
 }
 
-//详情
+// 获取菜单详情
 export function GetMenuInfo(params) {
   return request({
     url: `${baseUrl}.GetMenuAsync`,
@@ -50,6 +62,3 @@ export function GetMenuInfo(params) {
     params
   })
 }
-
-
-

@@ -25,3 +25,24 @@ export function setRole(role) {
 export function removeRole() {
   return Cookies.remove(RoleKey)
 }
+
+// isHaveToken();
+export function isHaveToken() {
+  const hasToken = getToken();
+  // console.log('判断token', hasToken);
+  if (hasToken == null || hasToken == undefined || !hasToken) {
+    // console.log('已过期，退出登录');
+    Message({
+      message: "登录超时请重新登录",
+      type: "error",
+      duration: 5 * 1000,
+    });
+    window.location.replace = `/login?redirect=${router.history.current.fullPath}`;
+    removeToken();
+    removeRole();
+    return;
+  } 
+  // else {
+  //   console.log('未过期，正常状态');
+  // }
+}

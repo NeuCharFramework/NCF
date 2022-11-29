@@ -15,7 +15,8 @@ function pluralize(time, label) {
 }
 
 /**
- * @param {number} time
+ * 时间戳转换为 具体的时间 例如3天、1分钟等
+ * @param {number} time 时间戳
  */
 export function timeAgo(time) {
   const between = Date.now() / 1000 - Number(time)
