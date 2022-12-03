@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<PackageType>Template</PackageType>
+		<PackageVersion>0.1.0</PackageVersion>
+		<PackageId>Senparc.NCF.Template</PackageId>
+		<Title>NCF Template</Title>
+		<Authors>JeffreySu</Authors>
+		<Owners>JeffreySu</Owners>
+		<Description>Templates to use when creating a NCF base project.</Description>
+		<PackageTags>NeuCharFramework;NCF;template</PackageTags>
+		<IncludeContentInPack>true</IncludeContentInPack>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<ContentTargetFolders>content</ContentTargetFolders>
+		<!-- IncludeBuildOutput=false 时，出现的NU5017错误处理： https://github.com/NuGet/Home/issues/8583 -->
+		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+		<ProjectUrl> https://github.com/NeuCharFramework/NCF</ProjectUrl>
+		<PackageProjectUrl>https://github.com/NeuCharFramework/NCF</PackageProjectUrl>
+		<PackageIcon>icon.jpg</PackageIcon>
+		<PackageReleaseNotes>
+			v0.1 创世
+		</PackageReleaseNotes>
+		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<ProjectUrl> https://github.com/NeuCharFramework/NCF</ProjectUrl>
+		<Configurations>Debug;Release</Configurations>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	</PropertyGroup>
+	<!--<PropertyGroup Condition=" '$(Configuration)' == 'Release' OR '$(Configuration)'=='TemplateRelease'">
+    <OutputPath Condition=" '$(Configuration)' == 'TemplateRelease'">..\..\..\..\..\NCF\src</OutputPath>
+    <OutputPath Condition=" '$(Configuration)' == 'Release'">..\..\..\BuildOutPut</OutputPath>
+  </PropertyGroup>-->
+	<ItemGroup>
+		<EmbeddedResource Include="..\back-end\**" LinkBase="back-end\" />
+		<Content Include="..\back-end\" />
+	      <None Include="icon.jpg" Pack="true" PackagePath="/" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include=".\**\*" Exclude=".\NCF.Template.csproj;.\**\.vs\**;.\**\*.user;\**\bin\**;.\**\obj\**;**\App_Data\SenparcTraceLog\**;..\back-end\**\bin\**;..\back-end\**\obj\**;..\back-end\**\App_Data\SenparcTraceLog\**;..\back-end\.template.config\**" />
+		<Compile Remove="**\*" />
+		<Compile Remove=".\back-end\App_Data\SenparcTraceLog\**" />
+		<Compile Remove=".\front-end\**" />
+		<Content Remove=".\front-end\**" />
+		<EmbeddedResource Remove=".\back-end\App_Data\SenparcTraceLog\**" />
+		<EmbeddedResource Remove=".\front-end\**" />
+		<None Remove=".\back-end\App_Data\SenparcTraceLog\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<!--<None Include="icon.jpg" Pack="true" Visible="false" PackagePath="" />-->
+	  <!--<None Remove="icon.jpg" />-->
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Update=".\icon.jpg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+</Project>
