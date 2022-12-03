@@ -57,8 +57,6 @@
     "@vue/cli-plugin-unit-jest": "4.4.4",
     "@vue/cli-service": "4.4.4",
     "@vue/test-utils": "1.0.0-beta.29",
-    "ag-grid-community": "^28.2.0",
-    "ag-grid-vue": "^28.2.0",
     "autoprefixer": "9.5.1",
     "babel-eslint": "10.1.0",
     "babel-jest": "23.6.0",
