@@ -33,7 +33,7 @@
 	<ItemGroup>
 		<EmbeddedResource Include="..\back-end\**" LinkBase="back-end\" />
 		<Content Include="..\back-end\" />
-	      <None Include="icon.jpg" Pack="true" PackagePath="/" />
+		<None Include="icon.jpg" Pack="true" PackagePath="/" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include=".\**\*" Exclude=".\NCF.Template.csproj;.\**\.vs\**;.\**\*.user;\**\bin\**;.\**\obj\**;**\App_Data\SenparcTraceLog\**;..\back-end\**\bin\**;..\back-end\**\obj\**;..\back-end\**\App_Data\SenparcTraceLog\**;..\back-end\.template.config\**" />
@@ -47,12 +47,12 @@
 	</ItemGroup>
 	<ItemGroup>
 		<!--<None Include="icon.jpg" Pack="true" Visible="false" PackagePath="" />-->
-	  <!--<None Remove="icon.jpg" />-->
+		<!--<None Remove="icon.jpg" />-->
 	</ItemGroup>
 	<ItemGroup>
-	  <Content Update=".\icon.jpg">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
+		<Content Update=".\icon.jpg">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 </Project>
