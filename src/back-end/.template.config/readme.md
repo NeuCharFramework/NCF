@@ -21,6 +21,10 @@
 
 > PS E:\ ...\NCF > dotnet new NCF -n YourProjectName
 
+可选参数：
+-n 项目名称
+--DB 数据库，配置，格式为：`Database=<Your Database Name>`，如：`Database=MyDb`，默认为 `Database=NCF`
+
 ### 更多使用文档
 
 [从命令行安装（推荐）](https://www.ncf.pub/docs/start/start-develop/get-ncf-template.html#%E4%BB%8E%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%AE%89%E8%A3%85-%E6%8E%A8%E8%8D%90)

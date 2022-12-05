@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.1.0</PackageVersion>
+		<PackageVersion>0.1.1-beta1</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -25,6 +25,7 @@
 		<ProjectUrl> https://github.com/NeuCharFramework/NCF</ProjectUrl>
 		<Configurations>Debug;Release</Configurations>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<OutputPath>.\BuildOutPut</OutputPath>
 	</PropertyGroup>
 	<!--<PropertyGroup Condition=" '$(Configuration)' == 'Release' OR '$(Configuration)'=='TemplateRelease'">
     <OutputPath Condition=" '$(Configuration)' == 'TemplateRelease'">..\..\..\..\..\NCF\src</OutputPath>
@@ -32,18 +33,22 @@
   </PropertyGroup>-->
 	<ItemGroup>
 		<EmbeddedResource Include="..\back-end\**" LinkBase="back-end\" />
-		<Content Include="..\back-end\" />
+		<Content Include="back-end\**\*" />
 		<None Include="icon.jpg" Pack="true" PackagePath="/" />
 	</ItemGroup>
 	<ItemGroup>
-		<Content Include=".\**\*" Exclude=".\NCF.Template.csproj;.\**\.vs\**;.\**\*.user;\**\bin\**;.\**\obj\**;**\App_Data\SenparcTraceLog\**;..\back-end\**\bin\**;..\back-end\**\obj\**;..\back-end\**\App_Data\SenparcTraceLog\**;..\back-end\.template.config\**" />
+		<Content Include=".\**\*;..\back-end\**\*" Exclude=".\NCF.Template.csproj;.\**\.vs\**;.\**\*.user;.\**\bin\**;.\**\obj\**;**\App_Data\SenparcTraceLog\**;..\back-end\**\bin\**\*;..\back-end\**\obj\**;..\back-end\**\App_Data\*;..\back-end\.template.config\**" />
+		
+		<!-- App_Data 支持文件 -->
+		<Content Include="..\back-end\**\App_Data\DataBase\*;..\back-end\**\App_Data\AreaData\*" />
+		
 		<Compile Remove="**\*" />
-		<Compile Remove=".\back-end\App_Data\SenparcTraceLog\**" />
+		<!--<Compile Remove=".\back-end\App_Data\SenparcTraceLog\**" />
 		<Compile Remove=".\front-end\**" />
-		<Content Remove=".\front-end\**" />
-		<EmbeddedResource Remove=".\back-end\App_Data\SenparcTraceLog\**" />
-		<EmbeddedResource Remove=".\front-end\**" />
-		<None Remove=".\back-end\App_Data\SenparcTraceLog\**" />
+		<Content Remove=".\front-end\**" />-->
+		<!--<EmbeddedResource Remove=".\back-end\App_Data\SenparcTraceLog\**" />
+		<EmbeddedResource Remove=".\front-end\**" />-->
+		<!--<None Remove=".\back-end\App_Data\SenparcTraceLog\**" />-->
 	</ItemGroup>
 	<ItemGroup>
 		<!--<None Include="icon.jpg" Pack="true" Visible="false" PackagePath="" />-->

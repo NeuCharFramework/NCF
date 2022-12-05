@@ -13,7 +13,7 @@
   },
   "preferNameDirectory": true,
   "symbols": {
-    "XncfName": {
+    "DB": {
       "type": "parameter",
       "datatype": "text",
       "description": "Database Config. Default: Database=NCF",
