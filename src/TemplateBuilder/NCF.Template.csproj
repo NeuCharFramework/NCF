@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.1.0.2</PackageVersion>
+		<PackageVersion>0.1.1</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -19,6 +19,7 @@
 		<PackageIcon>icon.jpg</PackageIcon>
 		<PackageReleaseNotes>
 			v0.1 创世
+			v0.1.1 优化模板，适配 .NET 7.0 CLI
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -35,10 +36,10 @@
   </PropertyGroup>
 	<ItemGroup>
 		<EmbeddedResource Include="..\back-end\**\*" 
-						  Exclude="..\back-end\bin\**;..\back-end\**\bin\**;..\back-end\**\obj\**;..\back-end\obj\**;..\back-end\.vs\**;..\back-end\.template.config\**;..\back-end\**\SenparcTraceLog\**;..\back-end\**\ApiDocXml\**;..\back-end\Senparc.Web\logs\**;..\back-end\**\*.user;..\back-end\**\WeChat_OfficialAccount\**;..\back-end\**\TestResults\**;..\back-end\**\logs\**" 
+						  Exclude="..\back-end\bin\**;..\back-end\**\bin\**;..\back-end\**\obj\**;..\back-end\obj\**;..\back-end\.vs\**;..\back-end\.template.config\**;..\back-end\**\SenparcTraceLog\**;..\back-end\**\ApiDocXml\**;..\back-end\Senparc.Web\logs\**;..\back-end\**\*.user;..\back-end\**\WeChat_OfficialAccount\**;..\back-end\**\TestResults\**;..\back-end\**\logs\**;..\back-end\**\App_Data\QQWry.Dat;" 
 						  LinkBase="back-end\" />
 		<Content Include="..\back-end\**\*" 
-				 Exclude="..\back-end\bin\**;..\back-end\**\bin\**;..\back-end\**\obj\**;..\back-end\obj\**;..\back-end\.vs\**;..\back-end\.template.config\**;..\back-end\**\SenparcTraceLog\**;..\back-end\**\ApiDocXml\**;..\back-end\Senparc.Web\logs\**;..\back-end\**\*.user;..\back-end\**\WeChat_OfficialAccount\**;..\back-end\**\TestResults\**;..\back-end\**\logs\**"/>
+				 Exclude="..\back-end\bin\**;..\back-end\**\bin\**;..\back-end\**\obj\**;..\back-end\obj\**;..\back-end\.vs\**;..\back-end\.template.config\**;..\back-end\**\SenparcTraceLog\**;..\back-end\**\ApiDocXml\**;..\back-end\Senparc.Web\logs\**;..\back-end\**\*.user;..\back-end\**\WeChat_OfficialAccount\**;..\back-end\**\TestResults\**;..\back-end\**\logs\**;..\back-end\**\App_Data\QQWry.Dat"/>
 		<None Include="icon.jpg" Pack="true" PackagePath="/" />
 	</ItemGroup>
 	<ItemGroup>
