@@ -1,6 +1,6 @@
 {
   "$schema": "http://json.schemastore.org/template",
-  "author": "Jeffrey",
+  "author": "Jeffrey Su",
   "classifications": [ "NCF", "NcfTemplate" ],
   "name": "Custom NCF Base Project Template",
   "identity": "NCF.Template",
