@@ -30,24 +30,36 @@
     <OutputPath Condition=" '$(Configuration)' == 'TemplateRelease'">..\..\..\..\..\NCF\src</OutputPath>
     <OutputPath Condition=" '$(Configuration)' == 'Release'">..\..\..\BuildOutPut</OutputPath>
   </PropertyGroup>-->
+	<PropertyGroup>
+    <OutputPath>..\BuildOutPut</OutputPath>
+  </PropertyGroup>
 	<ItemGroup>
-		<EmbeddedResource Include="..\back-end\**" LinkBase="back-end\" />
-		<Content Include="..\back-end\" />
+		<EmbeddedResource Include="..\back-end\**\*" 
+						  Exclude="..\back-end\bin\**;..\back-end\**\bin\**;..\back-end\**\obj\**;..\back-end\obj\**;..\back-end\.vs\**;..\back-end\.template.config\**;..\back-end\**\SenparcTraceLog\**;..\back-end\**\ApiDocXml\**;..\back-end\Senparc.Web\logs\**;..\back-end\**\*.user;..\back-end\**\WeChat_OfficialAccount\**;..\back-end\**\TestResults\**;..\back-end\**\logs\**" 
+						  LinkBase="back-end\" />
+		<Content Include="..\back-end\**\*" 
+				 Exclude="..\back-end\bin\**;..\back-end\**\bin\**;..\back-end\**\obj\**;..\back-end\obj\**;..\back-end\.vs\**;..\back-end\.template.config\**;..\back-end\**\SenparcTraceLog\**;..\back-end\**\ApiDocXml\**;..\back-end\Senparc.Web\logs\**;..\back-end\**\*.user;..\back-end\**\WeChat_OfficialAccount\**;..\back-end\**\TestResults\**;..\back-end\**\logs\**"/>
 		<None Include="icon.jpg" Pack="true" PackagePath="/" />
 	</ItemGroup>
 	<ItemGroup>
-		<Content Include=".\**\*" Exclude=".\NCF.Template.csproj;.\**\.vs\**;.\**\*.user;.\**\bin\**;.\**\obj\**;**\App_Data\SenparcTraceLog\**;..\back-end\**\bin\**;..\back-end\**\obj\**;..\back-end\**\App_Data\SenparcTraceLog\**;..\back-end\.template.config\**" />
+		<!--<Content Include=".\**\*" Exclude=".\NCF.Template.csproj;.\**\.vs\**;.\**\*.user;.\**\bin\**;.\**\obj\**;**\SenparcTraceLog\**;..\back-end\**\SenparcTraceLog\**;" />-->
 		<Compile Remove="**\*" />
 		<Compile Remove=".\back-end\App_Data\SenparcTraceLog\**" />
 		<Compile Remove=".\front-end\**" />
+		<Compile Remove="bin\**" />
+		<Content Remove="..\back-end\bin\Debug-Dapr\**" />
 		<Content Remove=".\front-end\**" />
 		<EmbeddedResource Remove=".\back-end\App_Data\SenparcTraceLog\**" />
 		<EmbeddedResource Remove=".\front-end\**" />
+		<EmbeddedResource Remove="bin\**" />
 		<None Remove=".\back-end\App_Data\SenparcTraceLog\**" />
 	</ItemGroup>
-	<ItemGroup>
-		<!--<None Include="icon.jpg" Pack="true" Visible="false" PackagePath="" />-->
+	<ItemGroup><!--<None Include="icon.jpg" Pack="true" Visible="false" PackagePath="" />-->
 		<!--<None Remove="icon.jpg" />-->
+	
+	  <None Remove="bin\**" />
+	  <None Remove="obj\**" />
+	  <None Remove=".vs\**" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Update=".\icon.jpg">
