@@ -48,7 +48,7 @@
 		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.3.4-beta8" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.4-beta8" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.12.4-beta8" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.5-beta8" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.6-beta8" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.4-beta8" />
 		<None Include="App_Data\SenparcTraceLog\*" />
 	</ItemGroup>

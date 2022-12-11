@@ -41,3 +41,7 @@ obj/
 /src/back-end/TestResults
 /src/back-end/Senparc.Xncf.WeixinManagerBase.Tests/App_Data/SenparcTraceLog
 /src/back-end/Senparc.Web/wwwroot/docs
+/src/BuildOutPut
+/src/NCF.Template.sln
+/src/NCF.Template.csproj
+/src/back-end/.template.config

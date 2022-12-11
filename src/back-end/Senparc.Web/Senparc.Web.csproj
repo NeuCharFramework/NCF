@@ -26,13 +26,13 @@
 		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.3.4-beta8" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.4-beta8" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.12.4-beta8" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.5-beta8" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.6-beta8" />
 	</ItemGroup>
 
 	<ItemGroup>
 
-		<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.4.4-beta8" />
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.11.4-beta8" />
+		<!--<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.4.4-beta8" />-->
 		<!--<PackageReference Include="Senparc.Ncf.Database.MySql" Version="0.11.3-beta7" />-->
 
 		<!--https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-3.1-->
