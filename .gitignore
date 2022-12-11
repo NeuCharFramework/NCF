@@ -44,3 +44,4 @@ obj/
 /src/BuildOutPut
 /src/NCF.Template.sln
 /src/NCF.Template.csproj
+/src/back-end/.template.config
