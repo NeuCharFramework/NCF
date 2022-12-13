@@ -17,7 +17,6 @@
 	<ItemGroup>
 		<PackageReference Include="Dapr.AspNetCore" Version="1.5.0" />
 		<PackageReference Include="Dapr.Client" Version="1.5.0" />
-		<PackageReference Include="Senparc.Xncf.ChangeNamespace" Version="0.12.4-beta8" />
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.16.6-beta8" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.3.4-beta8" />
 		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.6.4-beta8" />
