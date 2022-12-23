@@ -45,9 +45,87 @@
         </el-card>
         <el-card>
           <div class="item">
-            
+            <div style="padding: 10px">{{ accountNum }} 配置</div>
+            <div class="lis">
+              <div class="lis-li">
+                <i class="el-icon-edit"></i>
+                <span>素材管理</span>
+              </div>
+              <div class="lis-li">
+                <i class="el-icon-edit"></i>
+                <span>关键字回复</span>
+              </div>
+              <div class="lis-li">
+                <i class="el-icon-edit"></i>
+                <span>自定义菜单</span>
+              </div>
+              <div class="lis-li">
+                <i class="el-icon-edit"></i>
+                <span>时光机</span>
+              </div>
+              <div class="lis-li">
+                <i class="el-icon-edit"></i>
+                <span>应用中枢</span>
+              </div>
+              <div class="lis-li">
+                <i class="el-icon-edit"></i>
+                <span>已订阅应用</span>
+              </div>
+            </div>
           </div>
         </el-card>
+        <el-card>
+          <div class="item">
+            <div style="padding: 10px">{{ accountNum }} 配置</div>
+            <div class="lis">
+              <div class="lis-li">
+                <i class="el-icon-edit"></i>
+                <span>运行监测</span>
+              </div>
+              <div class="lis-li">
+                <i class="el-icon-edit"></i>
+                <span>运营设置</span>
+              </div>
+            </div>
+          </div>
+        </el-card>
+      </div>
+      <div class="mainRight">
+        <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+          <el-tab-pane label="微信公众号" name="first">
+            <el-card>
+              <div class="item">
+                <div>选择账号：{{ accountNum }}</div>
+                <div v-for="(item, i) in this.account" :key="i" class="tr">
+                  <el-input v-model="item.acc" :disabled="modify"></el-input>
+
+                  <i
+                    class="el-icon-delete"
+                    style="margin: 0 10px; color: red"
+                  ></i>
+                  <el-button type="success" @click="choice(item, i)"
+                    >选择</el-button
+                  >
+                </div>
+              </div>
+              <el-button type="primary" @click="trueM" v-if="modify"
+                >修改</el-button
+              >
+              <el-button type="primary" @click="falseM" v-else>确定</el-button>
+              <el-button @click="addAccount">添加</el-button>
+            </el-card>
+          </el-tab-pane>
+          <el-tab-pane label="小程序" name="second"
+            ><el-button>添加</el-button></el-tab-pane
+          >
+          <el-tab-pane label="钉钉" name="third"
+            >我们努力为您提供更好的服务......</el-tab-pane
+          >
+          <el-tab-pane label="QQ" name="fourth">请相信我们......</el-tab-pane>
+          <el-tab-pane label="头条" name="fourth"
+            >可以发送邮件给我们哦......</el-tab-pane
+          >
+        </el-tabs>
       </div>
     </main>
   </div>
@@ -65,6 +143,8 @@ export default {
           acc: "NeuChar Group222",
         },
       ],
+      //tab页切换位置
+      activeName: "first",
     };
   },
   methods: {
@@ -129,6 +209,9 @@ export default {
   }
   .main {
     padding: 10px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
 
     // 穿透ipt隐藏边框
     ::v-deep.el-input__inner {
@@ -152,6 +235,33 @@ export default {
           justify-content: center;
           padding: 10px;
         }
+
+        .lis {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          color: #37bc9b;
+
+          .lis-li {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+            cursor: pointer;
+          }
+        }
+      }
+    }
+    .mainRight {
+      width: 100%;
+      .item {
+        .tr {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 10px;
+        }
       }
     }
   }
@@ -160,5 +270,8 @@ export default {
 <style scoped>
 .tr >>> .el-button {
   padding: 5px 10px;
+}
+.mainLeft >>> .el-card__body {
+  margin: 15px 0;
 }
 </style>
