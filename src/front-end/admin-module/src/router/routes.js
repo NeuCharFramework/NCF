@@ -10,5 +10,6 @@ export default [
     name: 'b-home1',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/Home.vue')
-  }
+  },
+
 ]

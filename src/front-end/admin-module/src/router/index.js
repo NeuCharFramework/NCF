@@ -9,6 +9,11 @@ let routes = [
     path: '/',
     name: 'home',
     component: Home
+  },
+  {
+    path: '/appstore',
+    component: () =>
+      import('../views/XncfStore/shopping/Index.vue')
   }
 ]
 const router = new VueRouter({
