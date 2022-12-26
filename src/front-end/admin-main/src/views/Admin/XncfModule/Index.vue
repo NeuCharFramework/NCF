@@ -147,21 +147,46 @@
     <!-- 修改的地方 -->
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <!-- 应用市场 -->
-      <el-tab-pane label="应用市场" name="first"
-        ><el-empty
+      <el-tab-pane label="应用市场" name="first">
+        <!-- 搜索模块 -->
+        <el-input
+          placeholder="请输入内容"
+          v-model="searchIpt.marketIpt"
+          class="input-with-select"
+        >
+          <el-button
+            slot="append"
+            icon="el-icon-search"
+            @click="search('marketIpt')"
+          ></el-button>
+        </el-input>
+        <el-empty
           :image-size="200"
           description="尚未发布，敬请等待！"
         ></el-empty
       ></el-tab-pane>
       <!-- 发现？个新模块 -->
       <el-tab-pane :label="tabItem.findModule" name="findModule"
-        ><el-container v-if="newTableData.length > 0">
+        ><el-container>
+          <!-- v-if="newTableData.length > 0"原判断条件 -->
           <!-- <el-header class="module-header">
             <span class="start-title"
               >发现 {{ newTableData.length }} 个新模块！</span
             >
           </el-header> -->
           <el-main>
+            <!-- 搜索模块 -->
+            <el-input
+              placeholder="请输入内容"
+              v-model="searchIpt.newDiscoveryIpt"
+              class="input-with-select"
+            >
+              <el-button
+                slot="append"
+                icon="el-icon-search"
+                @click="search('newDiscoveryIpt')"
+              ></el-button>
+            </el-input>
             <el-table
               :data="newTableData"
               style="width: 100%; margin-bottom: 20px"
@@ -212,6 +237,18 @@
       <!-- 已安装模块 -->
       <el-tab-pane :label="tabItem.installModule" name="installModule"
         ><el-main>
+          <!-- 搜索模块 -->
+          <el-input
+            placeholder="请输入内容"
+            v-model="searchIpt.alreadyIpt"
+            class="input-with-select"
+          >
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="search('alreadyIpt')"
+            ></el-button>
+          </el-input>
           <el-table
             :data="oldTableData"
             v-if="oldTableData.length > 0"
@@ -287,6 +324,18 @@
       <el-tab-pane :label="tabItem.updateModule" name="updateModule">
         <!-- 判断条件暂时忘了 -->
         <el-main>
+          <!-- 搜索模块 -->
+          <el-input
+            placeholder="请输入内容"
+            v-model="searchIpt.updateIpt"
+            class="input-with-select"
+          >
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="search('updateIpt')"
+            ></el-button>
+          </el-input>
           <el-table
             :data="OldUpdate"
             v-if="OldUpdate.length > 0"
@@ -380,7 +429,7 @@ export default {
       handlerTips: "",
       newData: {},
       // 默认展示已安装模块
-      activeName: "installModule",
+      activeName: "updateModule",
       tabItem: {
         findModule: "发现??个模块", //发现多少模块
         installModule: "已安装模块", //已安装多少模块
@@ -388,6 +437,15 @@ export default {
       },
       // 需要更新的模块
       OldUpdate: [],
+      // 模块搜索的值
+      searchIpt: {
+        marketIpt: "", //应用市场搜索
+        newDiscoveryIpt: "", //发现新模块
+        alreadyIpt: "", //已安装模块
+        updateIpt: "", //发现更新模块
+      },
+      // 模糊搜索
+      branchStoreList: [],
     };
   },
   watch: {
@@ -448,7 +506,6 @@ export default {
         this.tabItem.findModule = `发现 ${this.newTableData.length} 个可安装模块`;
       }
     },
-
     // 切换状态
     async handleSwitch() {
       // console.log('dasdd')
@@ -494,6 +551,64 @@ export default {
     //tab页切换
     handleClick(tab, event) {
       // console.log(tab, event);
+    },
+    //四种搜索框查询搜索
+    search(item) {
+      //应用市场搜索
+      if (item == "marketIpt") {
+        console.log(this.searchIpt.marketIpt);
+      }
+      //发现的新模块
+      if (item == "newDiscoveryIpt") {
+        console.log("iptvalue", this.searchIpt.newDiscoveryIpt);
+        console.log("请求到的数据", this.newTableData);
+        if (this.searchIpt.newDiscoveryIpt) {
+          let _value = this.searchIpt.newDiscoveryIpt.toUpperCase();
+          let datas = this.newTableData.filter((item) => {
+            let _UpperCase = item.description.toUpperCase();
+            return _UpperCase.includes(_value);
+          });
+          this.newTableData = [...datas];
+          console.log("处理后数据", this.newTableData);
+        } else {
+          console.log("刷新请求");
+          this.getList();
+        }
+      }
+      // 已安装模块--模糊搜索
+      if (item == "alreadyIpt") {
+        console.log("iptvalue", this.searchIpt.alreadyIpt);
+        console.log("请求到的数据", this.oldTableData);
+        if (this.searchIpt.alreadyIpt) {
+          let _value = this.searchIpt.alreadyIpt.toUpperCase();
+          let datas = this.oldTableData.filter((item) => {
+            let _UpperCase = item.description.toUpperCase();
+            return _UpperCase.includes(_value);
+          });
+          this.oldTableData = [...datas];
+          console.log("处理后数据", this.oldTableData);
+        } else {
+          console.log("刷新请求");
+          this.getList();
+        }
+      }
+      // 发现的模块更新--模糊搜索
+      if (item == "updateIpt") {
+        // console.log("iptvalue", this.searchIpt.updateIpt);
+        // console.log("模块更新请求数据", this.OldUpdate);
+        if (this.searchIpt.updateIpt) {
+          let _value = this.searchIpt.updateIpt.toUpperCase();
+          let datas = this.OldUpdate.filter((item) => {
+            let _UpperCase = item.description.toUpperCase();
+            return _UpperCase.includes(_value);
+          });
+          this.OldUpdate = [...datas];
+          console.log("处理后数据", this.OldUpdate);
+        } else {
+          console.log("刷新请求");
+          this.getList();
+        }
+      }
     },
   },
 };
@@ -676,9 +791,6 @@ export default {
   text-decoration: none;
 }
 
-.box-card-tip {
-}
-
 .box-card-des {
   padding: 0.25em 0;
   font-style: italic;
@@ -694,5 +806,13 @@ export default {
   font-weight: 400;
   font-size: 22px;
   color: #1f2d3d;
+}
+</style>
+<style scoped>
+.moduleIndex >>> .el-input {
+  width: 300px;
+}
+.el-main {
+  padding: 0;
 }
 </style>

@@ -17,6 +17,7 @@
     "build": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build"
   },
   "dependencies": {
+    "@antv/x6": "^2.1.2",
     "axios": "^0.18.1",
     "clipboard": "2.0.4",
     "codemirror": "5.45.0",
@@ -64,6 +65,7 @@
     "chalk": "2.4.2",
     "chokidar": "2.1.5",
     "connect": "3.6.6",
+    "copy-webpack-plugin": "^4.6.0",
     "eslint": "6.7.2",
     "eslint-plugin-vue": "6.2.2",
     "html-webpack-plugin": "3.2.0",
