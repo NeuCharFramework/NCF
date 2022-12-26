@@ -101,16 +101,27 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         /// </summary>
         /// <returns></returns>
         [ApiBind]
-        public async Task<AppResponseBase<List<XncfRegisterBase>>> GetUnInstalledListAsync()
+        public async Task<AppResponseBase<List<XncfModuleDto>>> GetUnInstalledListAsync()
         {
-            var response = await this.GetResponseAsync<AppResponseBase<List<XncfRegisterBase>>, List<XncfRegisterBase>>(async (response, logger) =>
+            var response = await this.GetResponseAsync<AppResponseBase<List<XncfModuleDto>>, List<XncfModuleDto>>(async (response, logger) =>
             {
                 //所有已安装模块
                 var installedXncfModules = await _xncfModuleServiceEx.GetFullListAsync(z => true);
                 //未安装或待升级模块
                 var updateXncfRegisters = _xncfModuleServiceEx.GetUnInstallXncfModule(installedXncfModules);
-                var result = updateXncfRegisters.Select(z => z as XncfRegisterBase).ToList();
-                return result;
+
+                var uninstallOrUpdateXncfModules = updateXncfRegisters
+                            .Select(z =>
+                            {
+                                var installedXncfModule = installedXncfModules.FirstOrDefault(m => m.Uid == z.Uid);
+                                var state = installedXncfModule != null ? XncfModules_State.更新待审核 : XncfModules_State.关闭;
+                                var xncfModuleId = installedXncfModule?.Id ?? default;
+                                var xncfModuleDto = new XncfModuleDto(xncfModuleId, z.Name, z.Uid, z.MenuName, z.Version, z.Description, null, false, null, z.Icon, state);
+                                return xncfModuleDto;
+                            }).ToList();
+
+                //var result = updateXncfRegisters.Select(z => z as XncfRegisterBase).ToList();
+                return uninstallOrUpdateXncfModules;
             });
             return response;
         }
