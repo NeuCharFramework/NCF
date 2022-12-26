@@ -114,9 +114,10 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                             .Select(z =>
                             {
                                 var installedXncfModule = installedXncfModules.FirstOrDefault(m => m.Uid == z.Uid);
-                                var state = installedXncfModule != null ? XncfModules_State.更新待审核 : XncfModules_State.关闭;
                                 var xncfModuleId = installedXncfModule?.Id ?? default;
-                                var xncfModuleDto = new XncfModuleDto(xncfModuleId, z.Name, z.Uid, z.MenuName, z.Version, z.Description, null, false, null, z.Icon, state);
+                                var version = xncfModuleId != default ? $"{installedXncfModule.Version} -> {z.Version}" : z.Version;
+                                var state = installedXncfModule != null ? XncfModules_State.更新待审核 : XncfModules_State.关闭;
+                                var xncfModuleDto = new XncfModuleDto(xncfModuleId, z.Name, z.Uid, z.MenuName, version, z.Description, null, false, null, z.Icon, state);
                                 return xncfModuleDto;
                             }).ToList();
 
