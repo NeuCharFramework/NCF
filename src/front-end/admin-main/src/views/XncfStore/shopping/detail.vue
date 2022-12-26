@@ -61,7 +61,7 @@
                     <p>微微嗨-签到</p>
                   </div>
                 </div>
-                <div class="DetIt" style="border-left: 1px solid #e4eaec">
+                <div class="DetIt">
                   <div class="infoItem">
                     <span>应 用 单 价：</span>
                     <p>微微嗨-签到</p>
@@ -374,7 +374,7 @@ export default {
   },
 };
 </script>
-  <style lang="scss" scoped>
+<style lang="scss" scoped>
 .box {
   margin: 5px;
   width: 100%;

@@ -468,6 +468,7 @@
                       <el-table-column label="#" width="30">
                         <template slot-scope="scope">
                           {{ scope.$index + 1 }}
+                          <!-- {{ scope.$index }} -->
                         </template>
                       </el-table-column>
                       <el-table-column label="更新记录">
@@ -480,7 +481,6 @@
                 </el-collapse>
               </div>
             </el-tab-pane>
-            
           </el-tabs>
         </div>
       </el-container>
@@ -716,8 +716,10 @@ export default {
         this.data.xncfRegister.interfaces =
           this.data.xncfRegister.interfaces.splice(1);
         this.data.xncfModule.updateLog =
-          // \r or \n
           this.data.xncfModule.updateLog.split("\r");
+        // console.log("查看内容", this.data.xncfModule.updateLog);
+        this.data.xncfModule.updateLog.pop();
+        // \r or \n
         // window.document.title = this.data.xncfModule.menuName
         return;
       }

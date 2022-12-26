@@ -196,7 +196,7 @@ export default {
     }
   }
   .tip {
-    white-space: nowrap;
+    // white-space: nowrap;
     padding: 10px;
     .tips {
       color: #ff902b;

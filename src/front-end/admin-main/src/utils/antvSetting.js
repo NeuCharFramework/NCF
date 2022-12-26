@@ -402,9 +402,9 @@ export const configEdgeLabel = (labelText, fontColor, fill, stroke) => {
         rx: 5,
         ry: 5,
       },
-      form:'12121'
+      form: '12121'
     },
-    
+
   }
 }
 

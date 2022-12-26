@@ -362,7 +362,6 @@ export default {
   /**
    * 这个是作为子组件分别接受了两个数据一个是高度height，一个是反显图表数据tempGroupJson
    * 作为子组件例子 <AntVXSix v-model="tempGroupJson" height="720px" />
-   *
    */
   props: {
     height: {
@@ -402,6 +401,7 @@ export default {
           this.menuItem = "";
           this.selectCell = "";
           this.editDrawer = false;
+          // 这里有未知的错误
           this.graph.dispose();
           this.initGraph();
         }
@@ -414,6 +414,7 @@ export default {
     this.initGraph();
   },
   beforeDestroy() {
+    // 这里有未知的错误
     this.graph.dispose();
   },
   methods: {
@@ -492,6 +493,7 @@ export default {
         container: document.getElementById("wrapper"),
         ...configSetting(Shape),
       });
+      console.log(graph);
       // 画布事件
       graph.on("node:mouseenter", () => {
         this.changePortsShow(true);
@@ -507,7 +509,8 @@ export default {
       });
       // 画布键盘事件
       graphBindKey(graph);
-      // 删除,这里有未知的错误
+      // 删除
+      // 这里有未知的错误
       graph.bindKey(["delete", "backspace"], () => {
         this.handlerDel();
       });
