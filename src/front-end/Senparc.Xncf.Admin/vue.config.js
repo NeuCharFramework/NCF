@@ -7,9 +7,6 @@ function resolve(dir) {
 }
 
 const name = defaultSettings.title || 'NCF Admin' // page title
-
-
-
 //1 引入插件copy-webpack-plugin
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
@@ -31,7 +28,7 @@ module.exports = {
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
   publicPath: './',
-  outputDir: 'dist',
+  outputDir: '../Senparc.Xncf.frontEnd/dist',
   assetsDir: 'static',
   // lintOnSave: process.env.NODE_ENV === 'development',
   lintOnSave: false,

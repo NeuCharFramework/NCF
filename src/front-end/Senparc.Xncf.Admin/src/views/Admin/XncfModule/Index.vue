@@ -560,7 +560,20 @@ export default {
       }
       //发现的新模块
       if (item == "newDiscoveryIpt") {
-        console.log(this.searchIpt.newDiscoveryIpt);
+        console.log("iptvalue", this.searchIpt.newDiscoveryIpt);
+        console.log("请求到的数据", this.newTableData);
+        if (this.searchIpt.newDiscoveryIpt) {
+          let _value = this.searchIpt.newDiscoveryIpt.toUpperCase();
+          let datas = this.newTableData.filter((item) => {
+            let _UpperCase = item.description.toUpperCase();
+            return _UpperCase.includes(_value);
+          });
+          this.newTableData = [...datas];
+          console.log("处理后数据", this.newTableData);
+        } else {
+          console.log("刷新请求");
+          this.getList();
+        }
       }
       // 已安装模块--模糊搜索
       if (item == "alreadyIpt") {
