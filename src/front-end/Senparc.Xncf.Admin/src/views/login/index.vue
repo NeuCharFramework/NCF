@@ -8,63 +8,72 @@
       autocomplete="on"
       label-position="left"
     >
-      <div class="title-container">
-        <h3 class="title">NCF管理员登录</h3>
-      </div>
+      <div class="allarea" style="">
+        <div class="title-container">
+          <!-- <h3 class="title">NCF管理员登录</h3> -->
+          <!-- <img class="titleImg" src="./img/logo-login-ncf.png" alt="" /> -->
+        </div>
 
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="账号"
-          name="username"
-          type="text"
-          tabindex="1"
-          autocomplete="on"
-        />
-      </el-form-item>
-
-      <el-tooltip
-        v-model="capsTooltip"
-        content="Caps lock is On"
-        placement="right"
-        manual
-      >
-        <el-form-item prop="password">
-          <span class="svg-container">
-            <svg-icon icon-class="password" />
-          </span>
-          <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="loginForm.password"
-            :type="passwordType"
-            placeholder="密码"
-            name="password"
-            tabindex="2"
-            autocomplete="on"
-            @keyup.native="checkCapslock"
-            @blur="capsTooltip = false"
-            @keyup.enter.native="handleLogin"
-          />
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon
-              :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
+        <el-card>
+          <el-form-item prop="username">
+            <span class="svg-container">
+              <svg-icon icon-class="user" />
+            </span>
+            <el-input
+              ref="username"
+              v-model="loginForm.username"
+              placeholder="账号"
+              name="username"
+              type="text"
+              tabindex="1"
+              autocomplete="on"
             />
-          </span>
-        </el-form-item>
-      </el-tooltip>
+          </el-form-item>
 
-      <el-button
-        :loading="loading"
-        type="primary"
-        style="width: 100%; margin-bottom: 30px"
-        @click.native.prevent="handleLogin"
-        >Login</el-button
-      >
+          <el-tooltip
+            v-model="capsTooltip"
+            content="Caps lock is On"
+            placement="right"
+            manual
+          >
+            <el-form-item prop="password">
+              <span class="svg-container">
+                <svg-icon icon-class="password" />
+              </span>
+              <el-input
+                :key="passwordType"
+                ref="password"
+                v-model="loginForm.password"
+                :type="passwordType"
+                placeholder="密码"
+                name="password"
+                tabindex="2"
+                autocomplete="on"
+                @keyup.native="checkCapslock"
+                @blur="capsTooltip = false"
+                @keyup.enter.native="handleLogin"
+              />
+              <span class="show-pwd" @click="showPwd">
+                <svg-icon
+                  :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
+                />
+              </span>
+            </el-form-item>
+          </el-tooltip>
+
+          <el-button
+            :loading="loading"
+            type="primary"
+            style="width: 100%; margin-bottom: 30px"
+            @click.native.prevent="handleLogin"
+            >Login</el-button
+          >
+        </el-card>
+        <div class="support">
+          <span>技术支持：</span>
+          <a href="https://www.senparc.com/">苏州盛派网络科技有限公司</a>
+        </div>
+      </div>
     </el-form>
   </div>
 </template>
@@ -159,7 +168,9 @@ export default {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true;
-          this.$store.dispatch("user/login", this.loginForm).then((res) => {
+          this.$store
+            .dispatch("user/login", this.loginForm)
+            .then((res) => {
               // console.log("登录", res);
               // console.log("登录token", res.token);
               // 跳转页面
@@ -233,24 +244,28 @@ $cursor: #fff;
 
     input {
       background: transparent;
-      border: 0px;
+      // border: 0px;
       -webkit-appearance: none;
-      border-radius: 0px;
+      // border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      // margin: 0 15px;
+      // color: $light_gray;
+      color: black;
       height: 47px;
       caret-color: $cursor;
 
       &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
+        // box-shadow: 0 0 0px 1000px $bg inset !important;
+        box-shadow: 0 0 0px 1000px white inset !important;
+        // -webkit-text-fill-color: $cursor !important;
       }
     }
   }
 
   .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
+    // border: 1px solid rgba(255, 255, 255, 0.1);
+    // background: rgba(0, 0, 0, 0.1);
+    background: white;
     border-radius: 5px;
     color: #454545;
   }
@@ -262,11 +277,20 @@ $bg: #2d3a4b;
 $dark_gray: #889aa4;
 $light_gray: #eee;
 
+// 穿透修改按钮颜色和间距，card间距
+::v-deep .el-card {
+  padding-top: 30px;
+}
+
 .login-container {
-  min-height: 100%;
-  width: 100%;
-  background-color: $bg;
-  overflow: hidden;
+  // min-height: 100%;
+  width: 100vw;
+  height: 100vh;
+  // background-color: $bg;
+  // background-image: url(./img/admin_login.jpg);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  // overflow: hidden;
 
   .login-form {
     position: relative;
@@ -295,10 +319,35 @@ $light_gray: #eee;
     vertical-align: middle;
     width: 30px;
     display: inline-block;
+    //
+    margin-right: 10px;
   }
+  .allarea {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
+    .support {
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 0;
+      span {
+        color: white;
+      }
+      a {
+        color: #1382f0;
+        text-decoration: none;
+      }
+    }
+  }
   .title-container {
-    position: relative;
+    // position: relative;
+    margin-bottom: 60px;
+    display: flex;
+    // align-items: center;
 
     .title {
       font-size: 26px;
@@ -307,11 +356,16 @@ $light_gray: #eee;
       text-align: center;
       font-weight: bold;
     }
+
+    .titleImg {
+      width: 213px;
+      margin: auto;
+    }
   }
 
   .show-pwd {
     position: absolute;
-    right: 10px;
+    right: 0px;
     top: 7px;
     font-size: 16px;
     color: $dark_gray;

@@ -13,7 +13,7 @@
             <div class="mainLeft">
               <!-- 标题 -->
               <div class="lefttit">
-                <img src="./imgs/企业微信截图_20221222111152.png" alt="" />
+                <!-- <img src="./imgs/企业微信截图_20221222111152.png" alt="" /> -->
                 <div class="titInfo">
                   <div class="infoTop">
                     <span>已认证</span>
@@ -25,11 +25,11 @@
               <!-- 详情 -->
               <div class="leftDet">
                 <div style="padding: 15px">
-                  <img
+                  <!-- <img
                     style="width: 250px; height: 250px"
                     src="./imgs/201905191646449997..jpg"
                     alt=""
-                  />
+                  /> -->
                 </div>
                 <div class="DetIt">
                   <div class="infoItem">
@@ -225,11 +225,11 @@
                 <el-col :span="6" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                   <el-card style="margin: 5px 0">
                     <div class="forItem">
-                      <img
+                      <!-- <img
                         class="logo"
                         src="./imgs/201905191646449997..jpg"
                         alt=""
-                      />
+                      /> -->
                       <h4>微信API Swagger文档</h4>
                       <div>类别：应用工具</div>
                       <div class="price">
@@ -257,11 +257,11 @@
                   <el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
                     <el-card style="margin: 5px 0">
                       <div class="forItem">
-                        <img
+                        <!-- <img
                           class="logo"
                           src="./imgs/201905191646449997..jpg"
                           alt=""
-                        />
+                        /> -->
                         <h4>微信API Swagger文档</h4>
                         <div>类别：应用工具</div>
                         <div class="price">
