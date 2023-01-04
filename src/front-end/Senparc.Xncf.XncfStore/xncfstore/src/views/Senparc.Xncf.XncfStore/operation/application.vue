@@ -1,8 +1,8 @@
 <template>
-  <!-- 应用中枢 -->
+  <!-- 应用中枢,剩余流程未动 -->
   <div class="application">
     <!-- 标题 -->
-    <el-card>
+    <el-card v-if="!showAddTable">
       <nav class="nav">
         <h3 class="shoptit">NeuChar Group222应用中枢</h3>
         <div class="discover">
@@ -12,7 +12,7 @@
       </nav>
     </el-card>
     <el-card>
-      <main class="main">
+      <main class="main" v-if="!showAddTable">
         <div class="mainTitle">
           <el-button type="danger" @click="addTable">新增</el-button>
           <el-button type="primary">删除</el-button>
@@ -59,6 +59,81 @@
           </div>
         </div>
       </main>
+      <main class="main" v-if="showAddTable">
+        <div class="preservation">
+          <el-button type="primary">保存</el-button>
+        </div>
+        <el-collapse v-model="activeNames" @change="handleChange">
+          <el-collapse-item title="应用中枢基础设置" name="1">
+            <div class="predetail">
+              <el-tabs
+                v-model="activeName"
+                type="card"
+                @tab-click="handleClick"
+              >
+                <el-tab-pane label="基础信息" name="first">
+                  <div class="iptArea">
+                    <span>应用中枢名称</span>
+                    <el-input
+                      v-model="appNameIpt"
+                      placeholder="应用中枢名称"
+                    ></el-input>
+                  </div>
+                  <div class="iptArea">
+                    <span>应用中枢简介</span>
+                    <el-input
+                      v-model="appNameIpt"
+                      type="textarea"
+                      :rows="2"
+                      placeholder="应用中枢简介"
+                    ></el-input>
+                  </div>
+                  <div class="repeatArea">
+                    <span>重复流程:</span>
+                    <el-radio v-model="radio" label="1">允许</el-radio>
+                  </div>
+                  <div class="graycolor">
+                    说明：最后一个流程完成后，扫码重新回到第一个流程中
+                  </div>
+                  <div class="repeatArea">
+                    <span>流程进入码:</span>
+                    <el-button type="success" plain>查看</el-button>
+                  </div>
+                  <div class="graycolor">说明：扫码进入应用中枢。</div>
+                </el-tab-pane>
+                <el-tab-pane label="全局变量设置" name="second">
+                  <div class="graycolor">
+                    说明：最后一个流程完成后，扫码重新回到第一个流程中
+                  </div>
+                  <el-button type="success" plain>添加</el-button>
+                </el-tab-pane>
+              </el-tabs>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
+        <el-collapse v-model="activeNames" @change="handleChange">
+          <el-collapse-item title="搜索App名称" name="2">
+            <div class="prepri">
+              <div class="addArea" @click="showAddProcess">
+                <span>+</span>
+              </div>
+              <div class="process" v-if="showProcess">
+                <h4>添加流程</h4>
+                <span>选择App</span>
+                <el-select v-model="arvalue" placeholder="请选择">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </div>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
+      </main>
     </el-card>
     <!-- 页脚组件 -->
     <footerinfo />
@@ -70,6 +145,7 @@
 <script>
 import footerinfo from "@/components/FooterInfo";
 import feedback from "@/components/Feedback";
+import KeywordReply from "./keywordReply.vue";
 export default {
   components: {
     footerinfo,
@@ -117,6 +193,24 @@ export default {
         },
       ],
       multipleSelection: [],
+      // 切换新增详情首页状态
+      showAddTable: false,
+      // 折叠面板的展示状态
+      activeNames: ["1"],
+      //
+      activeName: "first",
+      // 应用中枢名称ipt
+      radio: "",
+      appNameIpt: "",
+      // 应用中枢配置-添加流程显示状态
+      showProcess: false,
+      // 显示添加流程
+      options: [
+        {
+          value: "选项",
+          label: "选项",
+        },
+      ],
     };
   },
 
@@ -139,11 +233,19 @@ export default {
     },
     // 添加表单
     addTable() {
-      this.tableData.push({
-        date: "2016-05-07",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1518 弄",
-      });
+      this.showAddTable = !this.showAddTable;
+    },
+    // 折叠面板事件
+    handleChange(val) {
+      console.log(val);
+    },
+    // 折叠面板-标签框
+    handleClick(tab, event) {
+      console.log(tab, event);
+    },
+    //显示应用中枢配置添加流程
+    showAddProcess() {
+      this.showProcess = !this.showProcess;
     },
   },
 };
@@ -177,6 +279,16 @@ export default {
     }
   }
   .main {
+    .preservation {
+      background-color: #f5f7fa;
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .predetail {
+      margin-top: 10px;
+    }
     .mainTitle {
       display: flex;
       align-items: center;
@@ -186,6 +298,62 @@ export default {
     .mainCenter {
       padding: 10px;
     }
+    // 详情部分
+    .iptArea {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+
+      span {
+        font-weight: bold;
+        font-family: "Source Sans Pro";
+        color: #656565;
+        display: inline-block;
+        margin-bottom: 10px;
+      }
+    }
+    .repeatArea {
+      margin-bottom: 10px;
+
+      span {
+        font-weight: bold;
+        font-family: "Source Sans Pro";
+        color: #656565;
+        display: inline-block;
+      }
+    }
+    .graycolor {
+      margin-top: 5px;
+      margin-bottom: 10px;
+      color: #909293;
+      font-size: 12px;
+    }
+    .prepri {
+      .addArea {
+        width: 185px;
+        height: 107px;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 4px;
+        margin: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        span {
+          font-size: 16px;
+          font-weight: bold;
+        }
+      }
+      .addArea:hover {
+        background-color: #37bc9b;
+        color: white;
+      }
+    }
   }
 }
 </style>
@@ -194,12 +362,35 @@ export default {
   margin: 0px 10px;
   width: 300px;
 }
-/* 新加穿透 */
-.application >>> .el-card {
-  margin: 10px;
+.main >>> .el-textarea {
+  margin: 0px 10px;
+  width: 98%;
 }
-.application >>> .el-button--danger {
-  background-color: #7266ba;
-  border: transparent;
+/* 折叠面板 */
+.main >>> .el-collapse-item__header {
+  /* background-color: ; */
+  background-image: linear-gradient(to right, #37bc9b 0%, #58ceb1 100%);
+  color: white;
+  padding-left: 15px;
+  font-weight: bold;
+}
+/* 单选框 */
+.main >>> .el-radio__label {
+  font-weight: bold;
+  font-family: "Source Sans Pro";
+  color: #656565;
+  display: inline-block;
+}
+.main >>> .el-radio__input {
+  margin-left: 10px;
+}
+/* 按钮 */
+.repeatArea >>> .el-button--success {
+  border-color: #37bc9b;
+  color: #37bc9b;
+  margin-left: 10px;
+}
+.main >>> .el-tabs__content {
+  margin-left: 20px;
 }
 </style>

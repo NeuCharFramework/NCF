@@ -200,7 +200,7 @@ export default {
     godetail(item) {
       console.log(item);
       this.$router.push({
-        path: "shoppingdetail",
+        path: "/Senparc.Xncf.XncfStore/shopping/detail",
       });
     },
     // 点击成为开发者
@@ -366,16 +366,5 @@ export default {
 .topSelect >>> .el-input-group {
   margin-left: 10px;
   width: 400px;
-}
-/* 新加穿透 */
-.box >>> .el-card {
-  margin: 10px;
-}
-/* .become >>>  */
-.appItem >>> .el-button--mini {
-  font-weight: bold;
-  background-color: #23b7e5;
-  border: transparent;
-  padding: 4px 8px;
 }
 </style>

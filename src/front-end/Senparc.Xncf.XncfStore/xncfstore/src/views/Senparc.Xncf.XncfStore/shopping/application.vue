@@ -345,7 +345,7 @@ export default {
   .shoptit {
     font-size: 24px;
     background-color: #ffffff;
-    // border-bottom: 1px solid #cfdbe2;
+    border-bottom: 1px solid #cfdbe2;
     color: #929292;
     font-weight: normal;
     padding: 15px;

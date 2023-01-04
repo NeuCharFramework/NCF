@@ -1,15 +1,13 @@
 <template>
   <div id="app">
     <nav>
-      <!-- <router-link to="/">Home</router-link> |
+      <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
-      <router-link to="/cells">cells</router-link> | -->
-      <router-link to="/shopping">商城首页</router-link> |
-      <router-link to="/shoppingdetail">商城详情页</router-link> |
-      <router-link to="/applicationall">个人应用总页</router-link> |
-      <router-link to="/application">个人应用详情</router-link> |
+      <router-link to="/cells">cells</router-link> |
+      <router-link to="/shopping">shopping</router-link> |
+      <router-link to="/shoppingdetail">shoppingdetail</router-link> |
+      <router-link to="/application">application</router-link>
     </nav>
-
     <router-view />
   </div>
 </template>

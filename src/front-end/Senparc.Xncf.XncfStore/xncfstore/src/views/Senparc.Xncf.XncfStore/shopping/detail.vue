@@ -434,7 +434,7 @@ export default {
     //去到个人应用
     gomyapp() {
       this.$router.push({
-        path: "/application",
+        path: "/Senparc.Xncf.XncfStore/shopping/application",
       });
     },
   },
@@ -542,7 +542,7 @@ export default {
 
       @keyframes move {
         0% {
-          transform: scale(0.9); /*开始为原始大小*/
+          transform: scale(0.5); /*开始为原始大小*/
         }
         100% {
           transform: scale(1); /*放大1.1倍*/
