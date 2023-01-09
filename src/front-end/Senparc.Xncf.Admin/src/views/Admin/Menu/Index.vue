@@ -16,6 +16,7 @@
         row-key="id"
         border
         default-expand-all
+        v-loading="tableLoading"
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       >
         <el-table-column prop="menuName" align="left" label="菜单名称" />
@@ -183,6 +184,7 @@ export default {
     return {
       // 表格数据
       tableData: [],
+      tableLoading: true,
       dialog: {
         title: "新增菜单",
         visible: false,
@@ -251,7 +253,9 @@ export default {
     },
     // 获取所有菜单
     async getList() {
+      this.tableLoading = true;
       const a = await getFullMenus();
+      this.tableLoading = false;
       if (a.success) {
         const b = a.data || [];
         const allMenu = [];

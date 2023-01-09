@@ -10,7 +10,7 @@
           >增加</el-button
         >
       </div>
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="tableData" v-loading="tableLoading" border style="width: 100%">
         <el-table-column align="center" label="角色名称">
           <template slot-scope="scope">
             {{ scope.row.roleName }}
@@ -128,6 +128,7 @@
         :visible.sync="au.visible"
         :close-on-click-modal="false"
       >
+
         <el-tree
           ref="tree"
           :data="allMenu"
@@ -136,6 +137,7 @@
           :props="defaultProps"
           :default-expanded-keys="defaultExpandedKeys"
           :default-checked-keys="defaultCheckedKeys"
+          v-loading="menuLoading"
         />
         <div slot="footer" class="dialog-footer">
           <el-button @click="au.visible = false">取 消</el-button>
@@ -175,6 +177,7 @@ export default {
         orderField: "",
       },
       tableData: [],
+      tableLoading:true,
       dialog: {
         title: "新增角色",
         visible: false,
@@ -210,6 +213,7 @@ export default {
         temp: {},
       },
       allMenu: [], // 所有权限
+      menuLoading:true,//是否还在获取数据
       currMenu: [], // 当前权限
       defaultExpandedKeys: [], // 默认展开
       defaultCheckedKeys: [], // 默认选中
@@ -258,6 +262,7 @@ export default {
       const c = await getRolePermissions({ roleId: row.id });
       if (!c.data) {
         this.$message.error("获取权限信息失败");
+        this.menuLoading = false;
         return;
       }
       // console.log('c',c );
@@ -268,6 +273,7 @@ export default {
       });
 
       const a = await getFullMenus({ hasButton: true });
+      this.menuLoading = false;
       if (!a.data) {
         this.$message.error("获取权限信息失败");
         return;
@@ -425,6 +431,7 @@ export default {
     },
     // 初始化获取数据
     getList() {
+      this.tableLoading = true;
       getAllRoles(this.listQuery).then((res) => {
         // console.log('getAllRoles', res)
         if (res.data) {
@@ -434,6 +441,7 @@ export default {
         } else {
           this.$message.error("获取数据失败");
         }
+        this.tableLoading = false;
       });
     },
   },

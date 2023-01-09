@@ -3,7 +3,7 @@
     <div class="admin-systemconfig-info">
       <h2 class="system-info">基础信息</h2>
       <!--  -->
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="tableData" v-loading="tableLoading" border style="width: 100%">
         <el-table-column align="center" label="系统名称">
           <template slot-scope="scope">
             {{ scope.row.systemName }}
@@ -73,6 +73,7 @@ export default {
         pageSize: 20,
       },
       tableData: [],
+      tableLoading: true,
       dialog: {
         title: "编辑系统信息",
         visible: false,
@@ -110,12 +111,14 @@ export default {
   methods: {
     // 获取数据
     async getList() {
+      this.tableLoading = true;
       const res = await getSystemConfig(this.listQuery);
       if (res.data) {
         this.tableData = res.data || [];
       } else {
         this.$message.error("获取数据失败");
       }
+      this.tableLoading = false;
     },
     // 编辑
     handleEdit(index, row) {

@@ -11,7 +11,7 @@
             >增加</el-button
           >
         </div>
-        <el-table :data="tableData" border style="width: 100%">
+        <el-table :data="tableData" v-loading="tableLoading" border style="width: 100%">
           <el-table-column align="center" label="id" width="80">
             <template slot-scope="scope">
               {{ scope.row.id }}
@@ -204,6 +204,7 @@ export default {
         pageSize: 100,
       },
       tableData: [],
+      tableLoading:true,
       dialog: {
         title: "新增管理员",
         visible: false,
@@ -325,6 +326,7 @@ export default {
     },
     // 获取数据
     async getList() {
+      this.tableLoading = true;
       await isHaveToken(); //判断是否过期
 
       const res = await getAdminUserList(this.listQuery);
@@ -334,6 +336,7 @@ export default {
         this.tableData = data.list;
         this.paginationQuery.total = data.totalCount;
       }
+      this.tableLoading = false;
     },
 
     // 编辑
