@@ -56,3 +56,10 @@ export default {
   }
 }
 </script>
+<style>
+.el-menu-item,.el-submenu__title,.el-submenu .el-menu-item{
+  height: auto;
+  white-space: normal;
+  word-break: break-all;
+}
+</style>
