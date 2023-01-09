@@ -389,6 +389,7 @@ export default {
 
           createOrUpdateRole(data)
             .then((res) => {
+              this.dialog.updateLoading = false;
               if (res.success) {
                 this.$notify({
                   title: "Success",
@@ -396,12 +397,14 @@ export default {
                   type: "success",
                   duration: 2000,
                 });
-                this.dialog.updateLoading = false;
                 this.dialog.visible = false;
                 this.getList();
+              }else{
+                throw new Error(JSON.stringify(res));
               }
             })
-            .catch(() => {
+            .catch(err => {
+              console.log(err.message)
               this.$message.error("失败");
               this.dialog.updateLoading = false;
             });

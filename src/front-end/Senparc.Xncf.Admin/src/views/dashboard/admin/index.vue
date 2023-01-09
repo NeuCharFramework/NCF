@@ -71,7 +71,7 @@
 
     <!-- 功能模块 -->
     <el-row>
-      <el-card class="box-card">
+      <el-card class="box-card mw-100">
         <div slot="header" class="clearfix">
           <span style="font-size: 20px; color: black">功能模块</span>
         </div>
@@ -227,6 +227,9 @@ export default {
     margin-right: 5px;
   }
 
+  .mw-100{
+    max-width: 100% !important;
+  }
   .box-card {
     margin-top: 20px;
 
