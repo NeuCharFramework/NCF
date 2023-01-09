@@ -33,6 +33,8 @@ service.interceptors.response.use(
     // 正常执行
     const res = response.data;
     return response.status === 200 ? Promise.resolve(res) : Promise.reject(res);
+    // return response.status === 200&&response.data.success ? Promise.resolve(res) : Promise.reject(res);
+    // //考虑使用success辅助判断
   },
   (error) => {
     const { response } = error;
@@ -48,6 +50,7 @@ service.interceptors.response.use(
     Message({
       // message: response.errorMessage || response.data,
       message: response.errorMessage || '请求失败',
+      // message: response.data.errorMessage || '请求失败',
       type: "error",
       duration: 5 * 1000,
     });

@@ -399,12 +399,10 @@ export default {
                 });
                 this.dialog.visible = false;
                 this.getList();
-              }else{
-                throw new Error(JSON.stringify(res));
               }
             })
             .catch(err => {
-              console.log(err.message)
+              console.log(err)
               this.$message.error("失败");
               this.dialog.updateLoading = false;
             });
