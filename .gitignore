@@ -8,6 +8,7 @@ obj/
 .pdb
 .user
 .vscode/
+.idea/
 /src/back-end/Senparc.Web/wwwroot/bower_components
 /src/back-end/Senparc.Web/logs/
 *.user
