@@ -84,14 +84,14 @@
             <el-input
               v-model="dialog.data.roleName"
               clearable
-              placeholder="请输入角色名称"
+              placeholder="请输入角色名称，最多输入50个字符"
             />
           </el-form-item>
           <el-form-item label="角色代码" prop="roleCode">
             <el-input
               v-model="dialog.data.roleCode"
               clearable
-              placeholder="请输入角色代码"
+              placeholder="请输入角色代码，最多输入20个字符"
             />
           </el-form-item>
           <el-form-item label="是否启用">
@@ -193,9 +193,11 @@ export default {
         rules: {
           roleName: [
             { required: true, message: "角色名称为必填项", trigger: "blur" },
+            { min: 1, max: 50, message: '最多输入50个字符', trigger: 'change' }
           ],
           roleCode: [
             { required: true, message: "角色代码为必填项", trigger: "blur" },
+            { min: 1, max: 20, message: '最多输入20个字符', trigger: 'change' }
           ],
         },
         updateLoading: false,
