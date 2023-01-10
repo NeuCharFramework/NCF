@@ -10,11 +10,11 @@
     >
       <div class="allarea" style="">
         <div class="title-container">
-          <!-- <h3 class="title">NCF管理员登录</h3> -->
-          <!-- <img class="titleImg" src="./img/logo-login-ncf.png" alt="" /> -->
+           <img class="titleImg" src="../../assets/images/logo-login-ncf.webp" alt="ncf logo" />
         </div>
 
         <el-card>
+          <h3 class="title">管理员登录</h3>
           <el-form-item prop="username">
             <span class="svg-container">
               <svg-icon icon-class="user" />
@@ -66,8 +66,7 @@
             type="primary"
             style="width: 100%; margin-bottom: 30px"
             @click.native.prevent="handleLogin"
-            >Login</el-button
-          >
+            >登录</el-button>
         </el-card>
         <div class="support">
           <span>技术支持：</span>
@@ -277,20 +276,16 @@ $bg: #2d3a4b;
 $dark_gray: #889aa4;
 $light_gray: #eee;
 
-// 穿透修改按钮颜色和间距，card间距
-::v-deep .el-card {
-  padding-top: 30px;
-}
 
 .login-container {
-  // min-height: 100%;
-  width: 100vw;
-  height: 100vh;
-  // background-color: $bg;
-  // background-image: url(./img/admin_login.jpg);
+  background-image: url('../../assets/images/admin_login.webp');
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
-  background-size: 100%;
-  // overflow: hidden;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
 
   .login-form {
     position: relative;
@@ -349,18 +344,18 @@ $light_gray: #eee;
     display: flex;
     // align-items: center;
 
-    .title {
-      font-size: 26px;
-      color: $light_gray;
-      margin: 0px auto 40px auto;
-      text-align: center;
-      font-weight: bold;
-    }
 
     .titleImg {
       width: 213px;
       margin: auto;
     }
+  }
+
+  .title {
+    color: #1382f0;
+    padding: 40px 0 30px;
+    font-size: 26px;
+    text-align: center;
   }
 
   .show-pwd {
