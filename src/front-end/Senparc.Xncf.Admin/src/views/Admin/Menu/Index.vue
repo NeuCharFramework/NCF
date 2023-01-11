@@ -357,6 +357,15 @@ export default {
     // 更新新增、编辑
     updateData() {
       this.$refs["dataForm"].validate((valid) => {
+        if (!this.dialog.data.icon) {
+          this.$alert('请选择菜单图标', '', {
+            confirmButtonText: '确定',
+            callback: action => {
+              this.openIconsDialog()
+            }
+          });
+          return;
+        }
         // 表单校验
         if (valid) {
           this.dialog.updateLoading = true;
