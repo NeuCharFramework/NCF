@@ -153,17 +153,18 @@ export default {
                 duration: 2000,
               });
               this.dialog.visible = false;
-              this.updateLoading = false;
             })
-            .catch(() => {
+            .catch(({err,hideGlobalError}) => {
+              hideGlobalError()
               this.$notify({
-                title: "Faild",
+                title: "Failed",
                 message: "更新失败",
                 type: "error",
                 duration: 2000,
               });
+            }).finally(()=>{
               this.updateLoading = false;
-            });
+          });
         }
       });
     },

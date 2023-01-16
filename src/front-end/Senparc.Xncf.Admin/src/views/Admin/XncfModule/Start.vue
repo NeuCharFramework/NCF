@@ -736,7 +736,8 @@ export default {
           this.getList();
 
         })
-        .catch(() => {
+        .catch(({err,hideGlobalError}) => {
+          hideGlobalError()
           this.$message.error("更新版本失败");
         });
     },

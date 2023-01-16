@@ -32,7 +32,23 @@ service.interceptors.response.use(
   (response) => {
     // 正常执行
     const res = response.data;
-    return response.status === 200 && response.data.success ? Promise.resolve(res) : Promise.reject(res);
+    if (response.status === 200 && response.data.success){
+      return Promise.resolve(res)
+    }else{
+      // 统一提示错误且控制台打印
+      console.log(res)
+
+      let showGlobalError = true
+      const hideGlobalError = () => showGlobalError = false
+
+      setTimeout(() => {
+        if (showGlobalError) {
+          Message.error(res.errorMessage || '请求失败')
+        }
+      })
+
+      return Promise.reject({ res, hideGlobalError })
+    }
   },
   (error) => {
     const { response } = error;
@@ -45,13 +61,7 @@ service.interceptors.response.use(
       window.location.replace = `/login?redirect=${router.history.current.fullPath}`;
       return;
     }
-    Message({
-      // message: response.errorMessage || response.data,
-      message: response.errorMessage || '请求失败',
-      // message: response.data.errorMessage || '请求失败',
-      type: "error",
-      duration: 5 * 1000,
-    });
+    Message.error(response.errorMessage || '请求失败')
     return Promise.reject(error);
   }
 );

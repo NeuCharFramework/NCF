@@ -529,7 +529,8 @@ export default {
             this.$router.push("/Admin/XncfModule/Start/uid=" + row.uid);
           }, 1000);
         })
-        .catch(() => {
+        .catch(({err,hideGlobalError}) => {
+          hideGlobalError()
           this.$message.error("安装失败");
         });
       // window.sessionStorage.setItem("setNavMenuActive", row.menuName);
