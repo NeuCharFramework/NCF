@@ -732,10 +732,9 @@ export default {
       await moduleInstallXncf(this.uid)
         .then((res) => {
           // console.log("ok", res);
-          if (res.success) {
-            // 安装成功重新获取详情
-            this.getList();
-          }
+          // 安装成功重新获取详情
+          this.getList();
+
         })
         .catch(() => {
           this.$message.error("更新版本失败");

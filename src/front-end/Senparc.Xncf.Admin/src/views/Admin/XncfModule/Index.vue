@@ -523,13 +523,11 @@ export default {
       await moduleInstallXncf(row.uid)
         .then((res) => {
           console.log("安装 ok", row.uid);
-          if (res.success) {
-            location.reload();
-            setTimeout(() => {
-              // 跳转到模块详情
-              this.$router.push("/Admin/XncfModule/Start/uid=" + row.uid);
-            }, 1000);
-          }
+          location.reload();
+          setTimeout(() => {
+            // 跳转到模块详情
+            this.$router.push("/Admin/XncfModule/Start/uid=" + row.uid);
+          }, 1000);
         })
         .catch(() => {
           this.$message.error("安装失败");

@@ -145,26 +145,23 @@ export default {
           };
           setSystemConfig(data)
             .then((res) => {
-              if (res.success) {
-                this.getList();
-                this.$notify({
-                  title: "Success",
-                  message: "更新成功！",
-                  type: "success",
-                  duration: 2000,
-                });
-                this.dialog.visible = false;
-              } else {
-                this.$notify({
-                  title: "Faild",
-                  message: "更新失败：" + res.data.msg,
-                  type: "success",
-                  duration: 2000,
-                });
-              }
+              this.getList();
+              this.$notify({
+                title: "Success",
+                message: "更新成功！",
+                type: "success",
+                duration: 2000,
+              });
+              this.dialog.visible = false;
               this.updateLoading = false;
             })
             .catch(() => {
+              this.$notify({
+                title: "Faild",
+                message: "更新失败",
+                type: "error",
+                duration: 2000,
+              });
               this.updateLoading = false;
             });
         }

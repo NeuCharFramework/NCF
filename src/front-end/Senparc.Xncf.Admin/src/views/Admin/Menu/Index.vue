@@ -384,16 +384,14 @@ export default {
           };
           createOrUpdateMenu(data)
             .then((res) => {
-              if (res.success) {
-                this.$notify({
-                  title: "Success",
-                  message: "成功",
-                  type: "success",
-                  duration: 2000,
-                });
-                this.getList();
-                this.dialog.visible = false;
-              }
+              this.$notify({
+                title: "Success",
+                message: "成功",
+                type: "success",
+                duration: 2000,
+              });
+              this.getList();
+              this.dialog.visible = false;
             })
             .catch(() => {
               this.dialog.updateLoading = false;
@@ -405,7 +403,6 @@ export default {
     handleDelete(index, row) {
       if (!row.id) return;
       deleteMenu(row.id).then((res) => {
-        if (res.success) {
           this.$notify({
             title: "Success",
             message: "删除成功",
@@ -413,7 +410,6 @@ export default {
             duration: 2000,
           });
           this.getList();
-        }
       });
     },
     openIconsDialog(){

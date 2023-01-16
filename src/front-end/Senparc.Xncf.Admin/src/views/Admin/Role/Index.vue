@@ -330,17 +330,15 @@ export default {
       console.log("auUpdateData", this.au.temp, array);
       createPermission({ requestDtos: array })
         .then((res) => {
-          if (res.success) {
-            this.$notify({
-              title: "Success",
-              message: "成功",
-              type: "success",
-              duration: 2000,
-            });
-            this.au.updateLoading = false;
-            this.au.visible = false;
-            this.getList();
-          }
+          this.$notify({
+            title: "Success",
+            message: "成功",
+            type: "success",
+            duration: 2000,
+          });
+          this.au.updateLoading = false;
+          this.au.visible = false;
+          this.getList();
           // window.location.reload()
         })
         .catch(() => {
@@ -392,16 +390,14 @@ export default {
           createOrUpdateRole(data)
             .then((res) => {
               this.dialog.updateLoading = false;
-              if (res.success) {
-                this.$notify({
-                  title: "Success",
-                  message: "成功",
-                  type: "success",
-                  duration: 2000,
-                });
-                this.dialog.visible = false;
-                this.getList();
-              }
+              this.$notify({
+                title: "Success",
+                message: "成功",
+                type: "success",
+                duration: 2000,
+              });
+              this.dialog.visible = false;
+              this.getList();
             })
             .catch(err => {
               console.log(err)
@@ -418,15 +414,13 @@ export default {
       };
       deleteRole(id)
         .then((res) => {
-          if (res.success) {
-            this.$notify({
-              title: "Success",
-              message: "删除成功",
-              type: "success",
-              duration: 2000,
-            });
-            this.getList();
-          }
+          this.$notify({
+            title: "Success",
+            message: "删除成功",
+            type: "success",
+            duration: 2000,
+          });
+          this.getList();
         })
         .catch(() => {
           this.$message.error("失败");

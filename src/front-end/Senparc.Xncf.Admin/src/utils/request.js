@@ -32,9 +32,7 @@ service.interceptors.response.use(
   (response) => {
     // 正常执行
     const res = response.data;
-    return response.status === 200 ? Promise.resolve(res) : Promise.reject(res);
-    // return response.status === 200&&response.data.success ? Promise.resolve(res) : Promise.reject(res);
-    // //考虑使用success辅助判断
+    return response.status === 200 && response.data.success ? Promise.resolve(res) : Promise.reject(res);
   },
   (error) => {
     const { response } = error;
