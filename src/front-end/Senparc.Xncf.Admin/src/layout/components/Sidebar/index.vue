@@ -91,24 +91,10 @@ export default {
 }
 </script>
 <style>
-/*处理文字超出，方案一，换行*/
+/*处理文字超出，换行*/
 .el-menu-item,.el-submenu__title,.el-submenu .el-menu-item{
   height: auto;
   white-space: normal;
   word-break: break-all;
 }
-
-/*方案二，使用动画*/
-/*.el-menu-item:hover,.el-submenu__title:hover,.el-submenu .el-menu-item:hover{*/
-/*  animation: go-left 5s infinite;*/
-/*}*/
-
-/*@keyframes go-left {*/
-/*  0%{*/
-/*    margin-left: 0*/
-/*  }*/
-/*  100%{*/
-/*    margin-left: -300px;*/
-/*  }*/
-/*}*/
 </style>
