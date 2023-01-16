@@ -3,8 +3,8 @@
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-          <div :class="onlyOneChild.meta.title.length>12?'line-height-30':'line-height-56'">
-            <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
+          <div :class="onlyOneChild.meta.title.length>12?'line-height-30':''">
+            <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" :collapse="collapse" />
           </div>
         </el-menu-item>
       </app-link>
@@ -12,8 +12,8 @@
 
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template slot="title">
-        <div :class="item.meta.title.length>12?'line-height-30':'line-height-56'">
-          <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
+        <div :class="item.meta.title.length>12?'line-height-30':''">
+          <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" :collapse="collapse" />
         </div>
       </template>
       <sidebar-item
@@ -53,6 +53,9 @@ export default {
     basePath: {
       type: String,
       default: ''
+    },
+    collapse:{
+      type:Boolean
     }
   },
   data() {
