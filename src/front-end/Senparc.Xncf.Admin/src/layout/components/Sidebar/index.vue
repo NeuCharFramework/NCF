@@ -19,7 +19,7 @@
         :collapse-transition="false"
         mode="vertical"
       >
-        <sidebar-item v-for="route in allMenu" :key="route.path" :item="route" :base-path="route.path" />
+        <sidebar-item v-for="route in allMenu" :key="route.path" :item="route" :base-path="route.path"  :collapse="isCollapse" />
       </el-menu>
     </el-scrollbar>
 
