@@ -11,7 +11,7 @@
             >增加</el-button
           >
         </div>
-        <el-table :data="tableData" border style="width: 100%">
+        <el-table :data="tableData" v-loading="tableLoading" border style="width: 100%">
           <el-table-column align="center" label="id" width="80">
             <template slot-scope="scope">
               {{ scope.row.id }}
@@ -204,6 +204,7 @@ export default {
         pageSize: 100,
       },
       tableData: [],
+      tableLoading:true,
       dialog: {
         title: "新增管理员",
         visible: false,
@@ -325,6 +326,7 @@ export default {
     },
     // 获取数据
     async getList() {
+      this.tableLoading = true;
       await isHaveToken(); //判断是否过期
 
       const res = await getAdminUserList(this.listQuery);
@@ -334,6 +336,7 @@ export default {
         this.tableData = data.list;
         this.paginationQuery.total = data.totalCount;
       }
+      this.tableLoading = false;
     },
 
     // 编辑
@@ -430,8 +433,7 @@ export default {
       // console.log("updateDataSet", data);
       // 修改角色
       this.dialog.updateLoading = true;
-      let res = await createRole(data);
-      if (res.success) {
+      let res = await createRole(data).then(res=>{
         this.$notify({
           title: "Success",
           message: "成功",
@@ -441,10 +443,10 @@ export default {
         this.dialog.updateLoading = false;
         this.dialog.visibleSet = false;
         this.getList();
-      } else {
+      }).catch(()=>{
         this.$message.error(res.errorMessage);
         this.dialog.updateLoading = false;
-      }
+      });
     },
     // 设置角色
     async handleSet(index, row) {
@@ -476,8 +478,7 @@ export default {
     },
     // 删除
     async handleDelete(index, row) {
-      let res = await deleteRole(row.id);
-      if (res.success) {
+      let res = await deleteRole(row.id).then(res=>{
         this.$notify({
           title: "Success",
           message: "删除成功",
@@ -485,15 +486,7 @@ export default {
           duration: 2000,
         });
         this.getList();
-      } else {
-        // console.log(JSON.parse(JSON.stringify(res)));
-        this.$notify({
-          title: "ERROR",
-          message: res.errorMessage,
-          type: "error",
-          duration: 2000,
-        });
-      }
+      });
     },
   },
 };

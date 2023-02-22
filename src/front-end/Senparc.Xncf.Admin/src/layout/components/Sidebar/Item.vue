@@ -10,10 +10,13 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    collapse:{
+      type:Boolean
     }
   },
   render(h, context) {
-    const { icon, title } = context.props
+    const { icon, title,collapse } = context.props
     const vnodes = []
 
     if (icon) {
@@ -25,7 +28,7 @@ export default {
       // }
     }
 
-    if (title) {
+    if (title&&!collapse) {
       vnodes.push(<span slot='title'>{(title)}</span>)
     }
     return vnodes
@@ -38,5 +41,9 @@ export default {
   color: currentColor;
   width: 1em;
   height: 1em;
+}
+
+.openSidebar .sub-el-icon{
+  margin-left: 0 !important;
 }
 </style>
