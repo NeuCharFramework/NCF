@@ -78,7 +78,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
                 await InstallAndOpenModuleAsync(menuRegister, installNow: false, addMenu: false);
                 _sysMenuService.Init();
 
-                //开始安装模块理管理模块
+                //开始安装模块管理模块
                 //（必须放在第三个，其他模块操作都需要依赖此模块）
                 await InstallAndOpenModuleAsync(xncfModuleManagerRegister);
 
