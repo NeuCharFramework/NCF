@@ -28,7 +28,7 @@ module.exports = {
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
   publicPath: './',
-  outputDir: 'dist',
+  outputDir: '../Senparc.Xncf.frontEnd/dist',
   assetsDir: 'static',
   // lintOnSave: process.env.NODE_ENV === 'development',
   lintOnSave: false,
