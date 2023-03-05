@@ -51,8 +51,8 @@
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.4-beta8" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
-		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.1.1" />
-		<PackageReference Include="Senparc.CO2NET" Version="2.1.2" />
+		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.1.4.8" />
+		<PackageReference Include="Senparc.CO2NET" Version="2.1.7.2" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.11.4-beta8" />
 	</ItemGroup>
 	<ItemGroup>
