@@ -6,11 +6,10 @@
 
 <script>
 export default {
-  name: 'App'
-}
+  name: "App",
+};
 </script>
 <style>
-
 [v-cloak] {
   display: none;
 }
@@ -25,7 +24,7 @@ export default {
 }
 
 a {
-  color: #5A738E;
+  color: #5a738e;
   text-decoration: none;
 }
 
@@ -45,6 +44,7 @@ li {
 
 #app {
   height: 100%;
+  background-color: #f5f7fa;
 }
 
 .app-wrapper {
@@ -55,7 +55,7 @@ li {
 
 .footer {
   text-align: right;
-  color: #5A738E
+  color: #5a738e;
 }
 .footer a:hover {
   color: #23527c;
@@ -97,7 +97,7 @@ li {
   overflow: hidden;
   position: relative;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0,21,41,0.08);
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 }
 
 .header-breadcrumb {
@@ -109,7 +109,8 @@ li {
   line-height: 60px;
 }
 
-.el-breadcrumb__inner, .el-breadcrumb__inner a {
+.el-breadcrumb__inner,
+.el-breadcrumb__inner a {
   font-weight: 400 !important;
   color: #303133;
 }
@@ -167,5 +168,4 @@ li {
   line-height: 60px;
   font-size: 20px;
 }
-
 </style>

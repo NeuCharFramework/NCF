@@ -2,9 +2,11 @@
   <div class="el-main">
     <el-container>
       <el-header class="module-header">
-        <span class="start-title"><span class="module-header-v">
+        <span class="start-title"
+          ><span class="module-header-v">
             NeuCharFramework 管理员后台
-          </span></span>
+          </span></span
+        >
       </el-header>
       <el-main />
     </el-container>
@@ -76,12 +78,24 @@
           <span style="font-size: 20px; color: black">功能模块</span>
         </div>
         <!-- 搜索 -->
-        <el-input class="box-ipt" v-model="modelValue" placeholder="输入内容按下Enter" clearable @keyup.enter.native="putXncfOpening" @input="inputXncfOpening"></el-input>
+        <el-input
+          class="box-ipt"
+          v-model="modelValue"
+          placeholder="输入内容按下Enter"
+          clearable
+          @keyup.enter.native="putXncfOpening"
+          @input="inputXncfOpening"
+        ></el-input>
 
         <!-- 所有的展示数据 -->
         <div id="xncf-modules-area">
           <el-row :gutter="20">
-            <el-col v-for="item in xncfOpeningList" :key="item.uid" :span="6" class="xncf-item">
+            <el-col
+              v-for="item in xncfOpeningList"
+              :key="item.uid"
+              :span="6"
+              class="xncf-item"
+            >
               <el-card class="box-card">
                 <div slot="header" class="xncf-item-top svgimg greencolor">
                   <span class="moudelName">{{ item.menuName }}</span>
@@ -106,13 +120,13 @@
 </template>
 <script>
 // 图表
-import BarChart from './components/BarChart.vue'
-import LineChart from './components/LineChart.vue'
+import BarChart from "./components/BarChart.vue";
+import LineChart from "./components/LineChart.vue";
 // 接口
-import { getXncfStat, getModuleList } from '@/api/module'
-import { isHaveToken } from '@/utils/auth'
+import { getXncfStat, getModuleList } from "@/api/module";
+import { isHaveToken } from "@/utils/auth";
 export default {
-  name: 'DashboardAdmin',
+  name: "DashboardAdmin",
   components: { BarChart, LineChart },
   data() {
     return {
@@ -122,26 +136,28 @@ export default {
       // 开放模块数据列表
       xncfOpeningList: [],
       // input模糊搜索使用
-      modelValue: ''
-    }
+      modelValue: "",
+    };
   },
   created() {
-    this.getXncfStat()
-    this.getXncfOpening()
+    this.getXncfStat();
+    this.getXncfOpening();
     // this.getCharts();
-    isHaveToken()
+    isHaveToken();
   },
 
   methods: {
     // XNCF 统计状态
     async getXncfStat() {
-      const xncfStatData = await getXncfStat()
-      this.xncfStat = xncfStatData.data || {}
+      const xncfStatData = await getXncfStat();
+      this.xncfStat = xncfStatData.data || {};
     },
     // 开放模块数据
     async getXncfOpening() {
-      const xncfOpeningList = await getModuleList()
-      this.xncfOpeningList = xncfOpeningList.data || []
+      const xncfOpeningList = await getModuleList();
+      this.xncfOpeningList = xncfOpeningList.data || [];
+      console.log("this.xncfOpeningList", this.xncfOpeningList);
+        
       // console.log(JSON.parse(JSON.stringify(xncfOpeningList)))
     },
     // 图表数据
@@ -153,142 +169,142 @@ export default {
     putXncfOpening() {
       // console.log("输入值", this.modelValue);
       if (this.modelValue) {
-        let _value = this.modelValue.toUpperCase()
+        let _value = this.modelValue.toUpperCase();
         let datas = this.xncfOpeningList.filter((item) => {
-          let _UpperCase = item.menuName.toUpperCase()
-          return _UpperCase.includes(_value)
-        })
-        this.xncfOpeningList = [...datas]
+          let _UpperCase = item.menuName.toUpperCase();
+          return _UpperCase.includes(_value);
+        });
+        this.xncfOpeningList = [...datas];
       } else {
-        this.getXncfOpening()
+        this.getXncfOpening();
       }
     },
     // 搜索框没值时展示全部数据
     inputXncfOpening() {
       if (!this.modelValue) {
-        this.getXncfOpening()
+        this.getXncfOpening();
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-  .xncf-stat-item {
-    position: relative;
-    display: block;
-    margin-bottom: 12px;
-    border: 1px solid #e4e4e4;
-    overflow: hidden;
-    padding: 5px;
-    border-radius: 5px;
-    background-clip: padding-box;
-    background: #fff;
-    transition: all 300ms ease-in-out;
-    padding-left: 10px;
-  }
+.xncf-stat-item {
+  position: relative;
+  display: block;
+  margin-bottom: 12px;
+  border: 1px solid #e4e4e4;
+  overflow: hidden;
+  padding: 5px;
+  border-radius: 5px;
+  background-clip: padding-box;
+  background: #fff;
+  transition: all 300ms ease-in-out;
+  padding-left: 10px;
+}
 
-  .xncf-stat-item .icon {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 60px;
-    color: #bab8b8;
-  }
+.xncf-stat-item .icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 60px;
+  color: #bab8b8;
+}
 
-  .xncf-stat-item .count {
-    font-size: 38px;
-    font-weight: bold;
-    line-height: 1.65857;
-  }
+.xncf-stat-item .count {
+  font-size: 38px;
+  font-weight: bold;
+  line-height: 1.65857;
+}
 
-  .xncf-stat-item .tit {
-    color: #bab8b8;
-    font-size: 24px;
-  }
+.xncf-stat-item .tit {
+  color: #bab8b8;
+  font-size: 24px;
+}
 
-  .xncf-stat-item p {
-    margin-bottom: 5px;
-  }
+.xncf-stat-item p {
+  margin-bottom: 5px;
+}
 
-  .chart-title {
-    font-size: 20px;
-  }
+.chart-title {
+  font-size: 20px;
+}
 
-  .chart-li {
-    padding-top: 20px;
-  }
+.chart-li {
+  padding-top: 20px;
+}
 
-  .chart-li li {
-    line-height: 2;
-  }
+.chart-li li {
+  line-height: 2;
+}
 
-  .chart-li .fa {
-    margin-right: 5px;
-  }
+.chart-li .fa {
+  margin-right: 5px;
+}
 
-  .box-card {
-    margin-top: 20px;
+.box-card {
+  margin-top: 20px;
 
-    .clearfix {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    ::v-deep .el-input {
-      width: 310px;
-    }
-    ::v-deep .el-input__inner {
-      border: 1px solid rgba(0, 0, 0, 0.3);
-    }
-
-    // .svgimg {
-    //   flex: 1;
-    //   background: url(./img/join.svg);
-    //   background-size: 100% 100%;
-    //   background-repeat: no-repeat;
-    // }
-    // .svgimgt {
-    //   flex: 1;
-    //   background: url(./img/enlarge.svg);
-    //   background-size: 100% 100%;
-    //   background-repeat: no-repeat;
-    // }
-    .greencolor {
-      // background-color: #00a971;
-      // color: #fff;
-      font-weight: bold;
-      // padding: 10px;
-    }
-  }
-
-  #xncf-modules-area {
-    margin-bottom: 50px;
-  }
-  ::v-deep .el-card__header {
-    padding: 16px;
-  }
-  ::v-deep .el-card__body {
-    padding: 16px;
-  }
-  #xncf-modules-area .xncf-item .xncf-item-top {
+  .clearfix {
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    gap: 10px;
-  }
-  #xncf-modules-area .xncf-item .xncf-item-top .moudelName {
-    flex: 1;
-    word-break: break-all;
-  }
-  #xncf-modules-area .xncf-item .xncf-item-top .version {
-    white-space: nowrap;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  #xncf-modules-area .xncf-item .icon {
-    // float: left;
-    position: relative;
+  ::v-deep .el-input {
+    width: 310px;
   }
+  ::v-deep .el-input__inner {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+  }
+
+  // .svgimg {
+  //   flex: 1;
+  //   background: url(./img/join.svg);
+  //   background-size: 100% 100%;
+  //   background-repeat: no-repeat;
+  // }
+  // .svgimgt {
+  //   flex: 1;
+  //   background: url(./img/enlarge.svg);
+  //   background-size: 100% 100%;
+  //   background-repeat: no-repeat;
+  // }
+  .greencolor {
+    // background-color: #00a971;
+    // color: #fff;
+    font-weight: bold;
+    // padding: 10px;
+  }
+}
+
+#xncf-modules-area {
+  margin-bottom: 50px;
+}
+::v-deep .el-card__header {
+  padding: 16px;
+}
+::v-deep .el-card__body {
+  padding: 16px;
+}
+#xncf-modules-area .xncf-item .xncf-item-top {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+#xncf-modules-area .xncf-item .xncf-item-top .moudelName {
+  flex: 1;
+  word-break: break-all;
+}
+#xncf-modules-area .xncf-item .xncf-item-top .version {
+  white-space: nowrap;
+}
+
+#xncf-modules-area .xncf-item .icon {
+  // float: left;
+  position: relative;
+}
 </style>
 

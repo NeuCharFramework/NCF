@@ -61,7 +61,7 @@
                     <p>微微嗨-签到</p>
                   </div>
                 </div>
-                <div class="DetIt">
+                <div class="DetIt" style="border-left: 1px solid #e4eaec">
                   <div class="infoItem">
                     <span>应 用 单 价：</span>
                     <p>微微嗨-签到</p>
@@ -307,7 +307,9 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="gomyapp">确 定</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
   </div>
@@ -365,16 +367,10 @@ export default {
     handleClose(done) {
       done();
     },
-    //去到个人应用
-    gomyapp() {
-      this.$router.push({
-        path: "/XncfStore/shopping/application",
-      });
-    },
   },
 };
 </script>
-<style lang="scss" scoped>
+  <!-- <style lang="scss" scoped>
 .box {
   margin: 5px;
   width: 100%;
@@ -621,4 +617,4 @@ export default {
     }
   }
 }
-</style>
+</style> -->

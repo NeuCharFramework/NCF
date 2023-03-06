@@ -5,6 +5,7 @@
     class="theme-picker"
     popper-class="theme-picker-dropdown"
   />
+  
 </template>
 
 <script>

@@ -1,18 +1,8 @@
 <template>
   <div class="moduleIndex">
     <div class="filter-container" style="text-align: left">
-      <el-popconfirm
-        placement="top"
-        :title="handlerTips"
-        @confirm="handleSwitch"
-      >
-        <el-button
-          icon="el-icon-edit"
-          size="mini"
-          type="primary"
-          slot="reference"
-          >{{ handlerText }}</el-button
-        >
+      <el-popconfirm placement="top" :title="handlerTips" @confirm="handleSwitch">
+        <el-button icon="el-icon-edit" size="mini" type="primary" slot="reference">{{ handlerText }}</el-button>
       </el-popconfirm>
     </div>
     <!-- 未安装模块 -->
@@ -143,31 +133,17 @@
         </el-table>
       </el-main>
     </el-container> -->
-
     <!-- 修改的地方 -->
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <!-- 应用市场 -->
       <el-tab-pane label="应用市场" name="first">
         <!-- 搜索模块 -->
-        <el-input
-          placeholder="请输入内容"
-          v-model="searchIpt.marketIpt"
-          class="input-with-select"
-        >
-          <el-button
-            slot="append"
-            icon="el-icon-search"
-            @click="search('marketIpt')"
-          ></el-button>
+        <el-input placeholder="请输入内容" v-model="searchIpt.marketIpt" class="input-with-select">
+          <el-button slot="append" icon="el-icon-search" @click="search('marketIpt')"></el-button>
         </el-input>
-        <el-empty
-          :image-size="200"
-          description="尚未发布，敬请等待！"
-        ></el-empty
-      ></el-tab-pane>
+        <el-empty :image-size="200" description="尚未发布，敬请等待！"></el-empty></el-tab-pane>
       <!-- 发现？个新模块 -->
-      <el-tab-pane :label="tabItem.findModule" name="findModule"
-        ><el-container>
+      <el-tab-pane :label="tabItem.findModule" name="findModule"><el-container>
           <!-- v-if="newTableData.length > 0"原判断条件 -->
           <!-- <el-header class="module-header">
             <span class="start-title"
@@ -176,21 +152,10 @@
           </el-header> -->
           <el-main>
             <!-- 搜索模块 -->
-            <el-input
-              placeholder="请输入内容"
-              v-model="searchIpt.newDiscoveryIpt"
-              class="input-with-select"
-            >
-              <el-button
-                slot="append"
-                icon="el-icon-search"
-                @click="search('newDiscoveryIpt')"
-              ></el-button>
+            <el-input placeholder="请输入内容" v-model="searchIpt.newDiscoveryIpt" class="input-with-select">
+              <el-button slot="append" icon="el-icon-search" @click="search('newDiscoveryIpt')"></el-button>
             </el-input>
-            <el-table
-              :data="newTableData"
-              style="width: 100%; margin-bottom: 20px"
-            >
+            <el-table :data="newTableData" style="width: 100%; margin-bottom: 20px">
               <el-table-column align="left" label="模块名称">
                 <template slot-scope="scope">
                   <i class="fa fa-cubes"></i>
@@ -209,11 +174,7 @@
                   {{ scope.row.version }}
                 </template>
               </el-table-column>
-              <el-table-column
-                align="center"
-                label="唯一编码（全局唯一）"
-                width="350"
-              >
+              <el-table-column align="center" label="唯一编码（全局唯一）" width="350">
                 <template slot-scope="scope">
                   <i class="fa fa-shield"></i>
                   {{ scope.row.uid }}
@@ -221,47 +182,26 @@
               </el-table-column>
               <el-table-column label="操作" width="120" align="center">
                 <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    type="primary"
-                    icon="el-icon-circle-plus"
-                    @click="handleInstall(scope.$index, scope.row)"
-                    >安装</el-button
-                  >
+                  <el-button size="mini" type="primary" icon="el-icon-circle-plus"
+                             @click="handleInstall(scope.$index, scope.row)">安装</el-button>
                 </template>
               </el-table-column>
             </el-table>
           </el-main>
-        </el-container></el-tab-pane
-      >
+        </el-container></el-tab-pane>
       <!-- 已安装模块 -->
-      <el-tab-pane :label="tabItem.installModule" name="installModule"
-        ><el-main>
+      <el-tab-pane :label="tabItem.installModule" name="installModule"><el-main>
           <!-- 搜索模块 -->
-          <el-input
-            placeholder="请输入内容"
-            v-model="searchIpt.alreadyIpt"
-            class="input-with-select"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="search('alreadyIpt')"
-            ></el-button>
+          <el-input placeholder="请输入内容" v-model="searchIpt.alreadyIpt" class="input-with-select">
+            <el-button slot="append" icon="el-icon-search" @click="search('alreadyIpt')"></el-button>
           </el-input>
-          <el-table
-            :data="oldTableData"
-            v-if="oldTableData.length > 0"
-            style="width: 100%; margin-bottom: 20px"
-          >
+          <el-table :data="oldTableData" v-if="oldTableData.length > 0" style="width: 100%; margin-bottom: 20px">
             <el-table-column align="left" label="菜单名称/版本号">
               <template slot-scope="scope">
                 <div>
-                  <i
-                    :class="
-                      scope.row.icon ? scope.row.icon : 'fa fa-chain-broken'
-                    "
-                  ></i>
+                  <i :class="
+                    scope.row.icon ? scope.row.icon : 'fa fa-chain-broken'
+                  "></i>
                   {{ scope.row.menuName }}
                 </div>
                 <div>
@@ -270,11 +210,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              align="center"
-              label="模块名称/唯一编码（全局唯一）"
-              width="350"
-            >
+            <el-table-column align="center" label="模块名称/唯一编码（全局唯一）" width="350">
               <template slot-scope="scope">
                 <div>
                   <i class="fa fa-cubes"></i>
@@ -298,57 +234,30 @@
             </el-table-column>
             <el-table-column label="操作" width="250" align="center">
               <template slot-scope="scope">
-                <el-button
-                  size="mini"
-                  icon="el-icon-s-tools"
-                  type="primary"
-                  v-if="scope.row"
-                  @click="handleHandle(scope.$index, scope.row)"
-                  >操作</el-button
-                >
-                <el-button
-                  size="mini"
-                  v-if="scope.row.homeUrl"
-                  icon="el-icon-s-home"
-                  type="primary"
-                  @click="handleIndex(scope.$index, scope.row)"
-                  >主页</el-button
-                >
+                <el-button size="mini" icon="el-icon-s-tools" type="primary" v-if="scope.row"
+                           @click="handleHandle(scope.$index, scope.row)">操作</el-button>
+                <el-button size="mini" v-if="scope.row.homeUrl" icon="el-icon-s-home" type="primary"
+                           @click="handleIndex(scope.$index, scope.row)">主页</el-button>
                 <span v-if="!scope.row"> 此模块已被删除~ </span>
               </template>
             </el-table-column>
           </el-table>
-        </el-main></el-tab-pane
-      >
-      <!-- 发现？个模块更新 -->
+        </el-main></el-tab-pane>
+      <!-- 发现模块更新部分 -->
       <el-tab-pane :label="tabItem.updateModule" name="updateModule">
         <!-- 判断条件暂时忘了 -->
         <el-main>
           <!-- 搜索模块 -->
-          <el-input
-            placeholder="请输入内容"
-            v-model="searchIpt.updateIpt"
-            class="input-with-select"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="search('updateIpt')"
-            ></el-button>
+          <el-input placeholder="请输入内容" v-model="searchIpt.updateIpt" class="input-with-select">
+            <el-button slot="append" icon="el-icon-search" @click="search('updateIpt')"></el-button>
           </el-input>
-          <el-table
-            :data="OldUpdate"
-            v-if="OldUpdate.length > 0"
-            style="width: 100%; margin-bottom: 20px"
-          >
+          <el-table :data="OldUpdate" v-if="OldUpdate.length > 0" style="width: 100%; margin-bottom: 20px">
             <el-table-column align="left" label="菜单名称/版本号">
               <template slot-scope="scope">
                 <div>
-                  <i
-                    :class="
-                      scope.row.icon ? scope.row.icon : 'fa fa-chain-broken'
-                    "
-                  ></i>
+                  <i :class="
+                    scope.row.icon ? scope.row.icon : 'fa fa-chain-broken'
+                  "></i>
                   {{ scope.row.menuName }}
                 </div>
                 <div>
@@ -357,11 +266,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              align="center"
-              label="模块名称/唯一编码（全局唯一）"
-              width="350"
-            >
+            <el-table-column align="center" label="模块名称/唯一编码（全局唯一）" width="350">
               <template slot-scope="scope">
                 <div>
                   <i class="fa fa-cubes"></i>
@@ -385,22 +290,10 @@
             </el-table-column>
             <el-table-column label="操作" width="250" align="center">
               <template slot-scope="scope">
-                <el-button
-                  size="mini"
-                  icon="el-icon-s-tools"
-                  type="primary"
-                  v-if="scope.row"
-                  @click="handleHandle(scope.$index, scope.row)"
-                  >操作</el-button
-                >
-                <el-button
-                  size="mini"
-                  v-if="scope.row.homeUrl"
-                  icon="el-icon-s-home"
-                  type="primary"
-                  @click="handleIndex(scope.$index, scope.row)"
-                  >主页</el-button
-                >
+                <el-button size="mini" icon="el-icon-s-tools" type="primary" v-if="scope.row"
+                           @click="handleHandle(scope.$index, scope.row)">操作</el-button>
+                <el-button size="mini" v-if="scope.row.homeUrl" icon="el-icon-s-home" type="primary"
+                           @click="handleIndex(scope.$index, scope.row)">主页</el-button>
                 <span v-if="!scope.row"> 此模块已被删除~ </span>
               </template>
             </el-table-column>
@@ -410,7 +303,6 @@
     </el-tabs>
   </div>
 </template>
-
 <script>
 import {
   getModuleList,
@@ -431,9 +323,9 @@ export default {
       // 默认展示已安装模块
       activeName: "updateModule",
       tabItem: {
-        findModule: "发现??个模块", //发现多少模块
+        findModule: "发现0个模块", //发现多少模块
         installModule: "已安装模块", //已安装多少模块
-        updateModule: "发现??个模块更新", //更新发现多少模块
+        updateModule: "发现0个模块更新", //更新发现多少模块
       },
       // 需要更新的模块
       OldUpdate: [],
@@ -809,9 +701,10 @@ export default {
 }
 </style>
 <style scoped>
-.moduleIndex >>> .el-input {
+.moduleIndex>>>.el-input {
   width: 300px;
 }
+
 .el-main {
   padding: 0;
 }

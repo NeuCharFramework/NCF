@@ -5,9 +5,9 @@ export const configSetting = (Shape) => {
     grid: {
       size: 10,// 网格大小 10px
       visible: true,// 绘制网格，默认绘制 dot 类型网格
-      type: 'dot', // 网格类型 'dot' | 'fixedDot' | 'mesh'
+      type: 'fixedDot', // 网格类型 'dot' | 'fixedDot' | 'mesh'
       args: {
-        color: '#a0a0a0', // 网格线/点颜色
+        color: '#fff', // 网格线/点颜色
         thickness: 1,     // 网格线宽度/网格点大小
       }
       // type: 'doubleMesh', // 网格类型 'doubleMesh' 时 以下设置
@@ -40,13 +40,14 @@ export const configSetting = (Shape) => {
           padding: 1,
         },
       },
-      connector: {
-        name: 'rounded',
-        args: {
-          radius: 8,
-        },
-      },
       anchor: 'center',
+      // connector: {
+      //   name: 'rounded',
+      //   args: {
+      //     radius: 8,
+      //   },
+      // },
+      connector: "algo-connector",
       connectionPoint: 'anchor',
       allowBlank: false,
       snap: {
@@ -106,177 +107,198 @@ export const configSetting = (Shape) => {
 
 // 节点预设类型 （0椭圆形: defaultOval, 1方形: defaultSquare, 2圆角矩形: defaultYSquare, 3菱形: defaultRhombus, 4平行四边形: defaultRhomboid, 5圆形: defaultCircle, 6图片: otherImage)
 export const configNodeShape = (type) => {
-  const nodeShapeList = [{
-    label: '椭圆形',
-    /**
-     * 
-     *  加入data里面的标识type是为了方便编辑的时候找到相对应的类型进行不同的编辑处理
-     *  另外获取初始对应的设置
-    */
-    data: {
-      type: 'defaultOval'
-    },
-    shape: 'rect',
-    width: 100,
-    height: 50,
-    attrs: {
-      body: {
-        rx: 20,
-        ry: 26,
-        fill: '#fff',
-        stroke: '#333'
-      },
-      label: {
-        text: '椭圆形',
-        fontSize: 16,
-        fill: '#333'
+  const nodeShapeList = [
+    {
+      // "id": "1",
+      shape: "dag-node",
+      // "x": 290,
+      // "y": 110,
+      width: 180,
+      height: 40,
+      data: {
+        type: 'output',
+        label: "只允许输出",
+        status: "success"
       }
+    },
+    {
+      label: '方形',
+      data: {
+        type: 'defaultSquare',
+      },
+      shape: 'rect',
+      width: 100,
+      height: 50,
+      attrs: {
+        label: {
+          text: "",
+          // 预设置后期获取某个app数据的位置
+          textarea: {
+            title: 'app名称',
+          },
+          fontSize: 16,
+          fill: '#333'
+        },
+        body: {
+          fill: '#fff',
+          stroke: '#333'
+        }
+      },
+    },
+    {
+      label: '椭圆形',
+      /**
+       * 
+       *  加入data里面的标识type是为了方便编辑的时候找到相对应的类型进行不同的编辑处理
+       *  另外获取初始对应的设置
+      */
+      data: {
+        type: 'defaultOval',
+        status: "success"
+      },
+      // shape: 'rect',
+      shape: "dag-node",
+      width: 100,
+      height: 50,
+      attrs: {
+        body: {
+          rx: 20,
+          ry: 26,
+          fill: '#fff',
+          stroke: '#333'
+        },
+        label: {
+          text: '',
+          fontSize: 16,
+          fill: '#333'
+        }
+      }
+    },
+    {
+      label: '圆角矩形',
+      data: {
+        type: 'defaultYSquare'
+      },
+      shape: 'rect',
+      width: 100,
+      height: 50,
+      attrs: {
+        body: {
+          rx: 6,
+          ry: 6,
+          fill: '#fff',
+          stroke: '#333'
+        },
+        label: {
+          text: '',
+          fontSize: 16,
+          fill: '#333'
+        }
+      },
+    },
+    {
+      label: '菱形',
+      data: {
+        type: 'defaultRhombus',
+        status: "success"
+      },
+      shape: 'polygon',
+      width: 120,
+      height: 50,
+      attrs: {
+        body: {
+          refPoints: '0,10 10,0 20,10 10,20',
+          fill: '#fff',
+          stroke: '#333'
+        },
+        label: {
+          text: '菱形',
+          fontSize: 16,
+          fill: '#333'
+        }
+      },
+    },
+    {
+      label: '平行四边形',
+      data: {
+        type: 'defaultRhomboid'
+      },
+      shape: 'polygon',
+      width: 120,
+      height: 50,
+      attrs: {
+        body: {
+          refPoints: '10,0 40,0 30,20 0,20',
+          fill: '#fff',
+          stroke: '#333'
+        },
+        label: {
+          text: '平行四边形',
+          fontSize: 16,
+          fill: '#333'
+        }
+      }
+    },
+    {
+      label: '圆形',
+      data: {
+        type: 'defaultCircle'
+      },
+      shape: 'circle',
+      width: 80,
+      height: 80,
+      attrs: {
+        label: {
+          text: '圆形',
+          fontSize: 16,
+          fill: '#333'
+        },
+        body: {
+          fill: '#fff',
+          stroke: '#333'
+        }
+      }
+    },
+    {
+      label: "图片",
+      data: {
+        type: 'otherImage'
+      },
+      shape: 'rect',
+      width: 80,
+      height: 80,
+      markup: [
+        {
+          tagName: 'rect',
+          selector: 'body',
+        },
+        {
+          tagName: 'image',
+        },
+        {
+          tagName: 'text',
+          selector: 'label',
+        },
+      ],
+      attrs: {
+        body: {
+          stroke: '#5F95FF',
+          fill: '#5F95FF',
+        },
+        image: {
+          width: 80,
+          height: 80,
+          refX: 0,
+          refY: 0,
+          xlinkHref: 'https://gw.alipayobjects.com/zos/bmw-prod/2010ac9f-40e7-49d4-8c4a-4fcf2f83033b.svg',
+        },
+        label: {
+          fontSize: 14,
+          fill: '#fff',
+          text: '图片'
+        },
+      },
     }
-  },
-  {
-    label: '方形',
-    data: {
-      type: 'defaultSquare',
-    },
-    shape: 'rect',
-    width: 100,
-    height: 50,
-    attrs: {
-      label: {
-        text: '方形',
-        fontSize: 16,
-        fill: '#333'
-      },
-      body: {
-        fill: '#fff',
-        stroke: '#333'
-      }
-    },
-  },
-  {
-    label: '圆角矩形',
-    data: {
-      type: 'defaultYSquare'
-    },
-    shape: 'rect',
-    width: 100,
-    height: 50,
-    attrs: {
-      body: {
-        rx: 6,
-        ry: 6,
-        fill: '#fff',
-        stroke: '#333'
-      },
-      label: {
-        text: '圆角矩形',
-        fontSize: 16,
-        fill: '#333'
-      }
-    },
-  },
-  {
-    label: '菱形',
-    data: {
-      type: 'defaultRhombus'
-    },
-    shape: 'polygon',
-    width: 120,
-    height: 50,
-    attrs: {
-      body: {
-        refPoints: '0,10 10,0 20,10 10,20',
-        fill: '#fff',
-        stroke: '#333'
-      },
-      label: {
-        text: '菱形',
-        fontSize: 16,
-        fill: '#333'
-      }
-    },
-  },
-  {
-    label: '平行四边形',
-    data: {
-      type: 'defaultRhomboid'
-    },
-    shape: 'polygon',
-    width: 120,
-    height: 50,
-    attrs: {
-      body: {
-        refPoints: '10,0 40,0 30,20 0,20',
-        fill: '#fff',
-        stroke: '#333'
-      },
-      label: {
-        text: '平行四边形',
-        fontSize: 16,
-        fill: '#333'
-      }
-    }
-  },
-  {
-    label: '圆形',
-    data: {
-      type: 'defaultCircle'
-    },
-    shape: 'circle',
-    width: 80,
-    height: 80,
-    attrs: {
-      label: {
-        text: '圆形',
-        fontSize: 16,
-        fill: '#333'
-      },
-      body: {
-        fill: '#fff',
-        stroke: '#333'
-      }
-    }
-  },
-  {
-    label: "图片",
-    data: {
-      type: 'otherImage'
-    },
-    shape: 'rect',
-    width: 80,
-    height: 80,
-    markup: [
-      {
-        tagName: 'rect',
-        selector: 'body',
-      },
-      {
-        tagName: 'image',
-      },
-      {
-        tagName: 'text',
-        selector: 'label',
-      },
-    ],
-    attrs: {
-      body: {
-        stroke: '#5F95FF',
-        fill: '#5F95FF',
-      },
-      image: {
-        width: 80,
-        height: 80,
-        refX: 0,
-        refY: 0,
-        xlinkHref: 'https://gw.alipayobjects.com/zos/bmw-prod/2010ac9f-40e7-49d4-8c4a-4fcf2f83033b.svg',
-      },
-      label: {
-        fontSize: 14,
-        fill: '#fff',
-        text: '图片'
-      },
-    },
-  }
   ]
   if (type) {
     const obj = nodeShapeList.find(item => { return item.data.type === type })

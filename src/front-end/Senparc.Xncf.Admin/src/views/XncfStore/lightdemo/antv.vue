@@ -362,6 +362,7 @@ export default {
   /**
    * 这个是作为子组件分别接受了两个数据一个是高度height，一个是反显图表数据tempGroupJson
    * 作为子组件例子 <AntVXSix v-model="tempGroupJson" height="720px" />
+   *
    */
   props: {
     height: {
@@ -401,7 +402,6 @@ export default {
           this.menuItem = "";
           this.selectCell = "";
           this.editDrawer = false;
-          // 这里有未知的错误
           this.graph.dispose();
           this.initGraph();
         }
@@ -414,7 +414,6 @@ export default {
     this.initGraph();
   },
   beforeDestroy() {
-    // 这里有未知的错误
     this.graph.dispose();
   },
   methods: {
@@ -493,7 +492,6 @@ export default {
         container: document.getElementById("wrapper"),
         ...configSetting(Shape),
       });
-      console.log(graph);
       // 画布事件
       graph.on("node:mouseenter", () => {
         this.changePortsShow(true);
@@ -510,7 +508,6 @@ export default {
       // 画布键盘事件
       graphBindKey(graph);
       // 删除
-      // 这里有未知的错误
       graph.bindKey(["delete", "backspace"], () => {
         this.handlerDel();
       });
@@ -911,7 +908,6 @@ export default {
         if (item.tools) delete item.tools;
         return item;
       });
-      console.log("tempGroupJson", tempGroupJson);
       if (this.selectCell) {
         this.selectCell.removeTools();
         this.selectCell = "";
@@ -934,8 +930,8 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   // 头部
-  // .antv-head {
-  // }
+  .antv-head {
+  }
   // 内容
   .antv-content {
     background: #fff;
@@ -1090,8 +1086,8 @@ i.icon-circle {
       }
     }
   }
-  // .edit-btn {
-  // }
+  .edit-btn {
+  }
   .see-box {
     padding: 20px;
     background: #f2f2f2;

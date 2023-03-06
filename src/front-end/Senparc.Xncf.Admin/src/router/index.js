@@ -4,7 +4,7 @@ import Router from "vue-router";
 import Layout from "@/layout";
 
 /* Router Modules */
-// import moduleRouter from "@/router/modules/module";
+import moduleRouter from "@/router/modules/module";
 
 Vue.use(Router);
 
@@ -80,7 +80,8 @@ export const constantRoutes = [
       },
     ],
   },
-  
+ 
+
   // {
   //   path: '/AgGridTemplate',
   //   component: Layout,
@@ -105,6 +106,8 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
+  // 加载模块
+  moduleRouter,
   // {
   //   path: "/Admin",
   //   component: Layout,
@@ -148,8 +151,7 @@ export const asyncRoutes = [
   //   ],
   // },
 
-  // 拓展模块
-  // moduleRouter,
+
   // 404 page must be placed at the end !!!
   { path: "*", redirect: "/404", hidden: true },
 ];

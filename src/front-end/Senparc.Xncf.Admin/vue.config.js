@@ -45,6 +45,7 @@ module.exports = {
     proxy: {
       // 所有的请求起始部分全部用 '/api'代替，比如访问"https://192.168.1.4/movie"，那么简写成"/api/movie"即可
       '/api': {
+        // target: 'https://openai.ngrok.toolkitall.com/api', // 开发域名
         target: 'https://localhost:44311/api', // 开发域名
         // target: 'https://localhost:44311/api',// 正式域名
         changeOrigin: true,
@@ -66,16 +67,12 @@ module.exports = {
       }
     },
     //2 使用这个插件copy-webpack-plugin
+    // 暂时未知做什么的，注释
     // plugins: [
     //   new CopyWebpackPlugin([
     //     { from: '要拷贝的文件', to: '要拷贝到的路径（不写默认是打包的根目录）' }
     //   ])
     // ]
-    plugins: [
-      new CopyWebpackPlugin([
-        { from: '', to: '' }
-      ])
-    ]
   },
   chainWebpack(config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload

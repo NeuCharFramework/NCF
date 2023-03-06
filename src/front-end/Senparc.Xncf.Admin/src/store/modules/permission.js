@@ -74,39 +74,56 @@ const actions = {
       // } else {
       //   accessedRoutes = filterAsyncRoutes(asyncRoutes, menuTree);
       // }
+
       // 根据后端返回生成动态路由
       accessedRoutes = generateRoutesList(asyncRoutes, menuTree);
+      // console.log('accessedRoutes', accessedRoutes);
       state.accessedRoutes = accessedRoutes;
       commit("SET_ROUTES", accessedRoutes);
       resolve(accessedRoutes);
+      
     });
   },
+
   setRoutes({ commit }, routes) {
-    // console.log(routes)
+    // console.log('setRoutes', routes)
     // console.log('moduleRouter', moduleRouter)
     const list = { ...moduleRouter, ...{} };
 
     // 是否是远程加载的路由
     routes.forEach((item) => {
-      if (item.name === "b-home1") {
-        console.log("item", item.name);
+      // /Module
+      const unPath = ['/Module', '/Module/home']
+      if (item.path && item.path.startsWith('/Module') && !unPath.includes(item.path)) {
         item.meta = {
-          title: "拓展模块b-home1",
+          title: item.name,
         };
         list.children.push(item);
+        console.log("路由", item.path);//路由
+        console.log('路由列表', list);
+        // list.children = [...list.children, ...[item]];
       }
-      if (item.name === "b-about1") {
-        item.meta = {
-          title: "拓展模块b-about1",
-        };
-        list.children = [...list.children, ...[item]];
-      }
+      // if (item.name === "b-home1") {
+      // item.meta = {
+      //   title: item.name,
+      // };
+      // list.children.push(item);
+      // }
+      // if (item.name === "b-about1") {
+      //   item.meta = {
+      //     title: item.name,
+      //   };
+      //   list.children = [...list.children, ...[item]];
+      // }
+
     });
     // console.log("list", list);
     state.accessedRoutes.forEach((item, index) => {
       if (item.name === "Module") {
         // console.log(index, item.name);
         state.accessedRoutes[index] = list;
+        console.log('this.list', list);
+
         // state.accessedRoutes[index].children = [
         //   ...state.accessedRoutes[index].children,
         //   ...
@@ -129,7 +146,7 @@ const actions = {
     });
 
     // list = [...state.accessedRoutes, ...list]
-    // console.log("路由state.accessedRoutes", state.accessedRoutes);
+    console.log("路由state.accessedRoutes", state.accessedRoutes);
     commit("SET_ROUTES", state.accessedRoutes);
   },
 };
@@ -147,6 +164,7 @@ function filterAsyncRouter(asyncRouterMap) {
     }
     if (route.children != null && route.children && route.children.length) {
       route.children = filterAsyncRouter(route.children);
+      // console.log(route.children);
     }
     return true;
   });
@@ -160,7 +178,8 @@ function filterAsyncRouter(asyncRouterMap) {
  */
 export function generateRoutesList(routes, menuTree, pageNotFind = true) {
   const res = [];
-  const page404 = routes.filter((item) => item.path === "*")[0];
+  const asyncRoutes = routes || []
+  // const page404 = routes.filter((item) => item.path === "*")[0];
   let urlPathList = []
   menuTree.forEach((route) => {
     const tmp = { ...route };
@@ -207,9 +226,15 @@ export function generateRoutesList(routes, menuTree, pageNotFind = true) {
       res.push(routerObj);
     }
   });
-  // console.log('路由',res);
+  // console.log('路由',asyncRoutes);
   // 把404页面加载到路由最后面
-  pageNotFind && page404 && res.push(page404);
+  // pageNotFind && page404 && res.push(page404);
+  if (pageNotFind && asyncRoutes && asyncRoutes instanceof Array) {
+    asyncRoutes.forEach(el => {
+      // console.log('el', el);
+      res.push(el)
+    })
+  }
   return res;
 }
 

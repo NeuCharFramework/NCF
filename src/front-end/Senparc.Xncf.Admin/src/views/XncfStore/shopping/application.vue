@@ -227,7 +227,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<!-- <style lang="scss" scoped>
 .myapplication {
   margin: 5px;
   width: 100%;
@@ -331,7 +331,7 @@ export default {
     }
   }
 }
-</style>
+</style> -->
 <style scoped>
 .myapplication >>> .el-card__body {
   padding: 0px;

@@ -17,8 +17,11 @@
     "build": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build"
   },
   "dependencies": {
-    "@antv/x6": "^2.1.2",
+    "@antv/x6": "^1.29.5",
+    "@antv/x6-vue-shape": "^1.3.0",
+    "@vue/composition-api": "^1.4.3",
     "axios": "^0.18.1",
+    "chatgpt": "^4.7.1",
     "clipboard": "2.0.4",
     "codemirror": "5.45.0",
     "core-js": "3.6.5",
@@ -36,6 +39,7 @@
     "jsonlint": "1.6.3",
     "jspdf": "^2.5.1",
     "jszip": "3.2.1",
+    "lodash-es": "^4.17.21",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",

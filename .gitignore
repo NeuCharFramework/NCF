@@ -45,3 +45,4 @@ obj/
 /src/NCF.Template.sln
 /src/NCF.Template.csproj
 /src/back-end/.template.config
+**/node_modules

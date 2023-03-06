@@ -23,12 +23,21 @@ import './icons' // icon
 import './permission' // permission control
 import './utils/error-log' // error log
 
+import '@antv/x6-vue-shape'//antv-shape
+
 import * as filters from './filters' // global filters
 
 import vueModuleLoader from 'vue-module-loader'
 
+// 引入原生axios
+import axios from 'axios'
+// import VueAxios from 'vue-axios'
+// Vue.use(VueAxios, axios)
+Vue.prototype.$axios = axios
+
+
 import dayjs from 'dayjs' //日期、时间处理插件 https://dayjs.fenxianglu.cn/
-Vue.filter('dateFormat', (originVal,format = "YYYY-MM-DD HH:mm:ss") => {
+Vue.filter('dateFormat', (originVal, format = "YYYY-MM-DD HH:mm:ss") => {
   // 直接调用dayjs()得到的是当前时间哟
   const dtStr = dayjs(originVal).format('YYYY-MM-DD HH:mm:ss')
   return dtStr

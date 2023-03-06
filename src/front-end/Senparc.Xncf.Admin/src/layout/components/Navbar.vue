@@ -1,11 +1,7 @@
 <template>
   <div class="navbar">
-    <hamburger
-      id="hamburger-container"
-      :is-active="sidebar.opened"
-      class="hamburger-container"
-      @toggleClick="toggleSideBar"
-    />
+    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container"
+               @toggleClick="toggleSideBar" />
 
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
@@ -25,10 +21,7 @@
       </template>
       <!-- <div class="avatar-wrapper">111</div> -->
 
-      <el-dropdown
-        class="avatar-container right-menu-item hover-effect"
-        trigger="click"
-      >
+      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <!-- <img
             src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80"
@@ -36,10 +29,7 @@
             alt="user-avatar"
           /> -->
           <span style="margin: 4px">{{ username }}&nbsp;</span>
-          <i
-            class="fa fa-sign-out el-popover__reference"
-            style="cursor: pointer"
-          ></i>
+          <i class="fa fa-sign-out el-popover__reference" style="cursor: pointer"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/">
@@ -105,7 +95,7 @@ export default {
     async logout() {
       await this.$store.dispatch("user/logout");
       location.reload();
-      // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      // this..push(`/login?redirect=${this.$route.fullPath}`)
     },
 
     // 初始化获取数据

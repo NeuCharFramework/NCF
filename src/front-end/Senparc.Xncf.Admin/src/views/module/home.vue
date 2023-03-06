@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div id="nav">
+    <!-- <div id="nav">
       <template v-for="menu in menus">
         <router-link
           :key="menu.name"
@@ -9,12 +9,12 @@
         >
         ——
       </template>
-    </div>
+    </div> -->
 
     <div style="margin-top: 20px">
       <el-button @click="addModule">加载模块</el-button>
       <el-button @click="refreshRouterMenu">刷新路由菜单</el-button>
-      <!--      <el-button @click="removeModule">卸载模块</el-button>-->
+      <el-button @click="removeModule">卸载模块</el-button>
       <el-button @click="trigger">触发事件</el-button>
       <!--      <el-button @click="reset">reset</el-button>-->
       <!--      <el-button @click="hideMenu">只显示模块</el-button>-->
@@ -42,9 +42,9 @@ export default {
     },
     reset() {
       // resetRouter()
-      console.log("asyncRoutes", asyncRoutes);
+      // console.log("asyncRoutes", asyncRoutes);
       const routes = this.$router.getRoutes();
-      console.log("routes", routes);
+      // console.log("routes", routes);
     },
     handleSetLineChartData(type) {
       this.lineChartData = lineChartData[type];
@@ -56,12 +56,12 @@ export default {
         const element = routes[key];
         _menus.push(element);
       }
-      console.info(_menus);
+      // console.info('_menus',_menus);
       this.menus = _menus;
 
       this.reset();
       // this.$store.dispatch('permission/setRoutes', routes)
-      console.log("$store77777777777", this.$store.state.permission.routes);
+      // console.log("$store", this.$store.state.permission.routes);
     },
     addModule() {
       this.$moduleLoader({
@@ -69,21 +69,22 @@ export default {
       }).then(() => {
         // 加载过程完毕
         console.log("加载过程完毕");
-        this.hideMenu();
+        this.hideMenu();//刷新路由
       });
     },
     removeModule() {
       const routes = this.$router.getRoutes();
       console.log("routes", routes);
+      this.$store.dispatch("permission/setRoutes", this.menus);
     },
     trigger() {
       setTimeout(() => {
         this.$eventBus.emit("visitedAbout", { d: new Date() });
       }, 500);
+      
     },
   },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

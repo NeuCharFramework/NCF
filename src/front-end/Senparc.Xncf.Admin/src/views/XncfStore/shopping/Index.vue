@@ -27,11 +27,7 @@
                   v-model="inputInfo"
                   class="input-with-select"
                 >
-                  <el-button
-                    slot="append"
-                    icon="el-icon-search"
-                    @click="searchInfo"
-                  ></el-button>
+                  <el-button slot="append" icon="el-icon-search"></el-button>
                 </el-input>
               </div>
               <div class="mainItem">
@@ -170,117 +166,97 @@ export default {
     // 去详情
     godetail(item) {
       console.log(item);
-      this.$router.push({
-        path: "/XncfStore/shopping/detail",
-      });
     },
     // 点击成为开发者
     become() {
       console.log("成为开发者");
     },
-    // 搜索
-    searchInfo() {
-      console.log(
-        "iptValue",
-        this.inputInfo,
-        "selectValue",
-        this.stateValuex``
-      );
-    },
   },
 };
 </script>
-<style lang="scss" scoped>
+<style  scoped>
 .box {
   margin: 5px;
   width: 100%;
   height: 100%;
   background-color: #f5f7fa;
+}
+.shoptit {
+  font-size: 24px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #cfdbe2;
+  color: #929292;
+  font-weight: normal;
+  padding: 15px;
+}
+.mainLeft {
+  background-color: #fff;
+}
+.topSelect {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  white-space: nowrap;
+  font-weight: bold;
+}
+.mainTit {
+  font-size: 18px;
+  margin: 10.5px 0;
+  padding: 15px 0;
+}
+.forItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 25px;
+  cursor: pointer;
+}
+.forItem .logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 6px;
+}
 
-  .nav {
-    .shoptit {
-      font-size: 24px;
-      background-color: #ffffff;
-      border-bottom: 1px solid #cfdbe2;
-      color: #929292;
-      font-weight: normal;
-      padding: 15px;
-    }
-  }
-  .mainLeft {
-    background-color: #fff;
-    .topSelect {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      white-space: nowrap;
-      font-weight: bold;
-    }
-    .mainItem {
-      .mainTit {
-        font-size: 18px;
-        margin: 10.5px 0;
-        padding: 15px 0;
-      }
-      .mainCen {
-        .forItem {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: 20px 25px;
-          cursor: pointer;
+.forItem h4 {
+  margin-top: 10px;
+  height: 40px;
+}
+.forItem div {
+  margin-bottom: 10px;
+  height: 20px;
+}
 
-          .logo {
-            width: 64px;
-            height: 64px;
-            border-radius: 6px;
-          }
-          h4 {
-            margin-top: 10px;
-            height: 40px;
-          }
-          div {
-            margin-bottom: 10px;
-            height: 20px;
-          }
-
-          .price {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            white-space: nowrap;
-          }
-        }
-      }
-    }
-  }
-  .become {
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    .developer {
-      margin: 10px 30px;
-      padding: 20px;
-      border: 1px solid rgba(0, 0, 0, 0.12);
-      width: 100%;
-      font-size: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-
-      img {
-        width: 80px;
-      }
-      span {
-        color: #37bc9b;
-      }
-    }
-  }
+.forItem .price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+.become {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.developer {
+  margin: 10px 30px;
+  padding: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  width: 100%;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.developer img {
+  width: 80px;
+}
+.developer span {
+  color: #37bc9b;
 }
 </style>
 <style scoped>
