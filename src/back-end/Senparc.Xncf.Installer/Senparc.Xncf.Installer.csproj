@@ -42,7 +42,7 @@
 
 		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.2.5.1-beta9" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.3.5.1-beta9" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.6.5.1-beta9" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.6.5.2-beta9" />
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.3.5.1-beta9" />
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.3.5.1-beta9" />
 		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.3.5.1-beta9" />
