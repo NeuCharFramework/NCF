@@ -223,7 +223,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                         Icon = xncfRegister.Icon,
                         Version = xncfRegister.Version,
                         Uid = xncfRegister.Uid,
-                        AreaPageMenuItems = (xncfRegister as Ncf.Core.Areas.IAreaRegister)?.AareaPageMenuItems ?? new List<Ncf.Core.Areas.AreaPageMenuItem>(),
+                        AreaPageMenuItems = (xncfRegister as Ncf.Core.Areas.IAreaRegister)?.AreaPageMenuItems ?? new List<Ncf.Core.Areas.AreaPageMenuItem>(),
                         Interfaces = xncfRegister.GetType().GetInterfaces().Select(z => z.Name).ToList(),
                         FunctionCount = functionParameterInfoCollection.Count,
                         RegisteredThreadInfo = xncfRegister.RegisteredThreadInfo.Select(z => new Response_XncfRegister_RegisteredThreadInfo()

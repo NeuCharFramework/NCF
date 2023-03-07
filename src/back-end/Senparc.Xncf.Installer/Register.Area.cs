@@ -18,7 +18,7 @@ namespace Senparc.Xncf.Installer
 
         public string HomeUrl => "/Installer";
 
-        public List<AreaPageMenuItem> AareaPageMenuItems => new List<AreaPageMenuItem>() {
+        public List<AreaPageMenuItem> AreaPageMenuItems => new List<AreaPageMenuItem>() {
                          new AreaPageMenuItem(GetAreaHomeUrl(),"首页","fa fa-laptop"),
 			 		};
 
