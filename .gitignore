@@ -45,3 +45,8 @@ obj/
 /src/NCF.Template.sln
 /src/NCF.Template.csproj
 /src/back-end/.template.config
+/src/front-end/admin-module/dist
+/src/front-end/admin-main/public/dist
+/src/front-end/admin-main/node_modules
+/src/front-end/admin-main/dist
+/src/front-end/admin-module/node_modules

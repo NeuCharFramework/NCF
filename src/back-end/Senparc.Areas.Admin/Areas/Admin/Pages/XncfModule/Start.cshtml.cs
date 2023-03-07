@@ -375,7 +375,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                     xncfRegister.Icon,
                     xncfRegister.Version,
                     xncfRegister.Uid,
-                    areaPageMenuItems = (xncfRegister as Ncf.Core.Areas.IAreaRegister)?.AareaPageMenuItems ?? new List<Ncf.Core.Areas.AreaPageMenuItem>(),
+                    areaPageMenuItems = (xncfRegister as Ncf.Core.Areas.IAreaRegister)?.AreaPageMenuItems ?? new List<Ncf.Core.Areas.AreaPageMenuItem>(),
                     Interfaces = xncfRegister.GetType().GetInterfaces().Select(z => z.Name),
                     FunctionCount = functionParameterInfoCollection.Count,
                     registeredThreadInfo = xncfRegister.RegisteredThreadInfo.Select(z => new

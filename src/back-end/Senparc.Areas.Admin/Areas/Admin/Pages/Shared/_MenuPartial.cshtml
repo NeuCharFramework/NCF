@@ -118,7 +118,7 @@
                                     @if (xncfRegister != null)
                                     {
                                         if (xncfRegister is Senparc.Ncf.Core.Areas.IAreaRegister xncfAreapage &&
-                                        xncfAreapage.AareaPageMenuItems.Count() > 0)
+                                        xncfAreapage.AreaPageMenuItems.Count() > 0)
                                         {
                                             //这是一个 XNCF UI 模块菜单，并且包含多个菜单配置
                                             <a><i class="@childrenItem.Icon"></i> @childrenItem.MenuName<span class="fa fa-chevron-down"></span></a>
@@ -129,7 +129,7 @@
                                                         <text>设置/执行</text>
                                                     </a>
                                                 </li>
-                                                @foreach (var xncfSubMenu in xncfAreapage.AareaPageMenuItems)
+                                                @foreach (var xncfSubMenu in xncfAreapage.AreaPageMenuItems)
                                                 {
                                                     <li class="@(hideXncfModuleManager?"":"xncf_area_submenu")">
                                                         <a href="@xncfSubMenu.Url" class="@CurrentXncfSubPage(xncfSubMenu.Url)">
