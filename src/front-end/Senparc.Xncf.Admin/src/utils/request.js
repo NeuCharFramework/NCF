@@ -3,7 +3,7 @@ import { MessageBox, Message } from "element-ui";
 import store from "@/store";
 import { getToken, isHaveToken } from "@/utils/auth";
 
-console.log('axios', axios);
+// console.log('axios', axios);
 
 // create an axios instance
 const service = axios.create({

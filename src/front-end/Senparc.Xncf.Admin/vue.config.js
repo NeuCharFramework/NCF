@@ -27,16 +27,18 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
-  publicPath: './',
-  outputDir: '../Senparc.Xncf.frontEnd/dist',
-  assetsDir: 'static',
+  publicPath: './',//部署应用包基本URL
+  outputDir: '../Senparc.Xncf.frontEnd/dist',//打包输出路径
+  assetsDir: 'static',//放置静态文件夹目录
   // lintOnSave: process.env.NODE_ENV === 'development',
   lintOnSave: false,
-  productionSourceMap: false,
+  productionSourceMap: false, //生产环境是否要生成 sourceMap
+
+  // dev环境下，webpack-dev-serve配置
   devServer: {
-    https: false,
-    port: port,
-    open: true,
+    https: false,//是否启用https
+    port: port,//开发运行时的端口
+    open: true,//启动项目是否打开浏览器
     disableHostCheck: true, // 是否开启域名检查
     overlay: {
       warnings: false,
@@ -57,6 +59,7 @@ module.exports = {
     }
     // before: require('./mock/mock-server.js')
   },
+  // 该对象会被webpack合并入最终的配置
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
@@ -74,6 +77,7 @@ module.exports = {
     //   ])
     // ]
   },
+  // 链式操作(高级)，所有配置都会在选项中进行配置
   chainWebpack(config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload
     // it can improve the speed of the first screen, it is recommended to turn on preload
@@ -149,3 +153,5 @@ module.exports = {
   }
 
 }
+
+// 参考：https://juejin.cn/post/6886698055685373965

@@ -23,7 +23,7 @@ import './icons' // icon
 import './permission' // permission control
 import './utils/error-log' // error log
 
-import '@antv/x6-vue-shape'//antv-shape
+// import '@antv/x6-vue-shape'//antv-shape
 
 import * as filters from './filters' // global filters
 
@@ -34,7 +34,6 @@ import axios from 'axios'
 // import VueAxios from 'vue-axios'
 // Vue.use(VueAxios, axios)
 Vue.prototype.$axios = axios
-
 
 import dayjs from 'dayjs' //日期、时间处理插件 https://dayjs.fenxianglu.cn/
 Vue.filter('dateFormat', (originVal, format = "YYYY-MM-DD HH:mm:ss") => {
@@ -54,7 +53,6 @@ Vue.filter('dateFormat', (originVal, format = "YYYY-MM-DD HH:mm:ss") => {
 //   const { mockXHR } = require('../mock')
 //   mockXHR()
 // }
-
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
   // locale: enLang // 如果使用中文，无需设置，请删除

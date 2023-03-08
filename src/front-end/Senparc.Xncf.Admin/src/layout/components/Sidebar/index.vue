@@ -1,23 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <div :class="{'has-logo':showLogo}">
-    <logo v-if="showLogo" :collapse="isCollapse" />
-    <el-scrollbar wrap-class="scrollbar-wrapper">
-      <el-menu
-        :default-active="activeMenu"
-        :collapse="isCollapse"
-        :background-color="variables.menuBg"
-        :text-color="variables.menuText"
-        :unique-opened="false"
-        :active-text-color="variables.menuActiveText"
-        :collapse-transition="false"
-        mode="vertical"
-      >
-        <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
-      </el-menu>
-    </el-scrollbar>
-<!--    <div>{{ JSON.stringify(permission_routes) }}</div>-->
-=======
   <div :class="{ 'has-logo': showLogo }">
     <logo v-if="showLogo" :collapse="isCollapse" />
     <!-- 菜单搜索-结果展示 -->
@@ -38,7 +19,6 @@
                       :collapse="isCollapse" />
       </el-menu>
     </el-scrollbar>
->>>>>>> a24c880 (更新Senparc.Xncf.Admin模块)
   </div>
 </template>
 
@@ -50,8 +30,6 @@ import variables from '@/styles/variables.scss'
 
 export default {
   components: { SidebarItem, Logo },
-<<<<<<< HEAD
-=======
   data() {
     return {
       searchValue: '',
@@ -79,7 +57,6 @@ export default {
       })
     }
   },
->>>>>>> a24c880 (更新Senparc.Xncf.Admin模块)
   computed: {
     ...mapGetters([
       'permission_routes',
@@ -88,11 +65,7 @@ export default {
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
-<<<<<<< HEAD
-      // if set path, the sidebar will highlight the path you set
-=======
       // 如果设置路径，侧边栏将突出显示您设置的路径
->>>>>>> a24c880 (更新Senparc.Xncf.Admin模块)
       if (meta.activeMenu) {
         return meta.activeMenu
       }
@@ -109,12 +82,8 @@ export default {
     }
   },
   mounted() {
-<<<<<<< HEAD
-
-=======
     this.allMenu = this.permission_routes// 初始化展示路由配置信息
     // console.log(this.permission_routes);
->>>>>>> a24c880 (更新Senparc.Xncf.Admin模块)
   }
 }
 </script>

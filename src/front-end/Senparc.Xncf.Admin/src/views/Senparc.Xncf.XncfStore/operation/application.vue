@@ -16,45 +16,25 @@
         <div class="mainTitle">
           <el-button @click="addTable">新增</el-button>
           <el-button type="danger">删除</el-button>
-          <el-input
-            placeholder="请输入内容"
-            v-model="input3"
-            class="input-with-select"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="search"
-            ></el-button>
+          <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
+            <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
           </el-input>
         </div>
         <div class="mainCenter">
-          <el-table
-            ref="multipleTable"
-            :data="tableData"
-            tooltip-effect="dark"
-            style="width: 100%"
-            @selection-change="handleSelectionChange"
-            border
-          >
+          <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%"
+                    @selection-change="handleSelectionChange" border>
             <el-table-column type="selection"> </el-table-column>
             <el-table-column label="名称">
               <template slot-scope="scope">{{ scope.row.date }}</template>
             </el-table-column>
             <el-table-column prop="name" label="是否允许重复">
             </el-table-column>
-            <el-table-column
-              prop="address"
-              label="添加事件"
-              show-overflow-tooltip
-            >
+            <el-table-column prop="address" label="添加事件" show-overflow-tooltip>
             </el-table-column>
             <el-table-column label="操作"> </el-table-column>
           </el-table>
           <div style="margin-top: 1.25rem">
-            <el-button @click="toggleSelection([tableData[1], tableData[2]])"
-              >切换第二、第三行的选中状态</el-button
-            >
+            <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
             <el-button @click="toggleSelection()">取消选择</el-button>
           </div>
         </div>
@@ -66,27 +46,15 @@
         <el-collapse v-model="activeNames" @change="handleChange">
           <el-collapse-item title="应用中枢基础设置" name="1">
             <div class="predetail">
-              <el-tabs
-                v-model="activeName"
-                type="card"
-                @tab-click="handleClick"
-              >
+              <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="基础信息" name="first">
                   <div class="iptArea">
                     <span>应用中枢名称</span>
-                    <el-input
-                      v-model="appNameIpt"
-                      placeholder="应用中枢名称"
-                    ></el-input>
+                    <el-input v-model="appNameIpt" placeholder="应用中枢名称"></el-input>
                   </div>
                   <div class="iptArea">
                     <span>应用中枢简介</span>
-                    <el-input
-                      v-model="appNameIpt"
-                      type="textarea"
-                      :rows="2"
-                      placeholder="应用中枢简介"
-                    ></el-input>
+                    <el-input v-model="appNameIpt" type="textarea" :rows="2" placeholder="应用中枢简介"></el-input>
                   </div>
                   <div class="repeatArea">
                     <span>重复流程:</span>
@@ -119,48 +87,25 @@
               <!-- antv区域 -->
               <el-card>
                 <!-- 添加区块 -->
-                <div
-                  v-if="prostate == true && whetherData == true"
-                  class="addArea"
-                >
-                  <div
-                    class="addAreain"
-                    @drag="menuDrag('defaultSquare')"
-                    draggable="true"
-                  >
+                <div v-if="prostate == true && whetherData == true" class="addArea">
+                  <div class="addAreain" @drag="menuDrag('defaultSquare')" draggable="true">
                     <i class="icon-square"></i><strong>矩形模块</strong>
                   </div>
-                  <div
-                    class="addAreain"
-                    draggable="true"
-                    @drag="menuDrag('defaultYSquare')"
-                  >
+                  <div class="addAreain" draggable="true" @drag="menuDrag('defaultYSquare')">
                     <i class="icon-square"></i><strong>圆角矩形</strong>
                   </div>
-                  <div
-                    class="addAreain"
-                    draggable="true"
-                    @drag="menuDrag('output')"
-                  >
+                  <div class="addAreain" draggable="true" @drag="menuDrag('output')">
                     <i class="icon-square"></i><strong>Dag</strong>
                   </div>
                   <el-button @click="actionStore">触发运行</el-button>
                 </div>
                 <!-- 绘制区域 -->
                 <div class="antv-wrapper">
-                  <div
-                    class="wrapper-canvas"
-                    :style="{ height: height }"
-                    id="wrapper"
-                    @drop="drop($event)"
-                    @dragover.prevent
-                  ></div>
+                  <div class="wrapper-canvas" :style="{ height: height }" id="wrapper" @drop="drop($event)"
+                       @dragover.prevent></div>
                   <div class="wrapper-tips">
                     <div class="wrapper-tips-item">
-                      <el-switch
-                        v-model="isPortsShow"
-                        @change="changePortsShow"
-                      ></el-switch>
+                      <el-switch v-model="isPortsShow" @change="changePortsShow"></el-switch>
                       <span>链接桩常显</span>
                     </div>
                   </div>
@@ -173,17 +118,9 @@
                   <div v-if="prostate == false" class="editsmall">
                     <h4>添加流程</h4>
                     <span>选择App</span>
-                    <el-select
-                      v-model="ruleForm.appname"
-                      placeholder="请选择"
-                      @input="changeNode('labelText', ruleForm.appname)"
-                    >
-                      <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      >
+                    <el-select v-model="ruleForm.appname" placeholder="请选择"
+                               @input="changeNode('labelText', ruleForm.appname)">
+                      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                       </el-option>
                     </el-select>
                     <el-button @click="changepro">开始配置</el-button>
@@ -217,21 +154,12 @@
                         </div>
                       </el-radio>
                     </div>
-                    <el-form
-                      :model="ruleForm"
-                      :rules="rules"
-                      mn
-                      ref="ruleForm"
-                      label-width="6.25rem"
-                      class="demo-ruleForm"
-                    >
+                    <el-form :model="ruleForm" :rules="rules" mn ref="ruleForm" label-width="6.25rem"
+                             class="demo-ruleForm">
                       <div class="elform">
                         <div class="itemtit">流程名称</div>
                         <el-form-item prop="name">
-                          <el-input
-                            v-model="ruleForm.name"
-                            placeholder="请输入流程名称"
-                          >
+                          <el-input v-model="ruleForm.name" placeholder="请输入流程名称">
                           </el-input>
                         </el-form-item>
                         <div class="itemtit">流程描述</div>
@@ -240,16 +168,9 @@
                           </el-input>
                         </el-form-item>
                         <div class="itemtit">选择版本</div>
-                        <el-select
-                          v-model="ruleForm.value"
-                          placeholder="请选择"
-                        >
-                          <el-option
-                            v-for="item in ruleForm.options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                          >
+                        <el-select v-model="ruleForm.value" placeholder="请选择">
+                          <el-option v-for="item in ruleForm.options" :key="item.value" :label="item.label"
+                                     :value="item.value">
                           </el-option>
                         </el-select>
                         <div class="check">
@@ -259,44 +180,20 @@
                           </div>
                         </div>
                         <div>
-                          <el-radio v-model="ruleForm.appIdradio" label="1"
-                            >填写</el-radio
-                          >
-                          <el-radio v-model="ruleForm.appIdradio" label="2"
-                            >选择上级输出</el-radio
-                          >
-                          <el-radio v-model="ruleForm.appIdradio" label="3"
-                            >全局变量</el-radio
-                          >
-                          <el-input
-                            v-if="ruleForm.appIdradio == '1'"
-                            v-model="ruleForm.appIdinput"
-                            placeholder="请输入内容"
-                          ></el-input>
-                          <el-select
-                            v-if="ruleForm.appIdradio == '2'"
-                            v-model="ruleForm.appIdselect"
-                            placeholder="请选择"
-                          >
-                            <el-option
-                              v-for="item in ruleForm.options"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value"
-                            >
+                          <el-radio v-model="ruleForm.appIdradio" label="1">填写</el-radio>
+                          <el-radio v-model="ruleForm.appIdradio" label="2">选择上级输出</el-radio>
+                          <el-radio v-model="ruleForm.appIdradio" label="3">全局变量</el-radio>
+                          <el-input v-if="ruleForm.appIdradio == '1'" v-model="ruleForm.appIdinput"
+                                    placeholder="请输入内容"></el-input>
+                          <el-select v-if="ruleForm.appIdradio == '2'" v-model="ruleForm.appIdselect" placeholder="请选择">
+                            <el-option v-for="item in ruleForm.options" :key="item.value" :label="item.label"
+                                       :value="item.value">
                             </el-option>
                           </el-select>
-                          <el-select
-                            v-if="ruleForm.appIdradio == '3'"
-                            v-model="ruleForm.appIdselectoverall"
-                            placeholder="请选择"
-                          >
-                            <el-option
-                              v-for="item in ruleForm.overalloptions"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value"
-                            >
+                          <el-select v-if="ruleForm.appIdradio == '3'" v-model="ruleForm.appIdselectoverall"
+                                     placeholder="请选择">
+                            <el-option v-for="item in ruleForm.overalloptions" :key="item.value" :label="item.label"
+                                       :value="item.value">
                             </el-option>
                           </el-select>
                         </div>
@@ -307,45 +204,21 @@
                           </div>
                         </div>
                         <div>
-                          <el-radio v-model="ruleForm.lineIdradio" label="1"
-                            >填写</el-radio
-                          >
-                          <el-radio v-model="ruleForm.lineIdradio" label="2"
-                            >选择上级输出</el-radio
-                          >
-                          <el-radio v-model="ruleForm.lineIdradio" label="3"
-                            >全局变量</el-radio
-                          >
+                          <el-radio v-model="ruleForm.lineIdradio" label="1">填写</el-radio>
+                          <el-radio v-model="ruleForm.lineIdradio" label="2">选择上级输出</el-radio>
+                          <el-radio v-model="ruleForm.lineIdradio" label="3">全局变量</el-radio>
                           <!-- 先注释状态，交互未添加 -->
-                          <el-input
-                            v-if="ruleForm.lineIdradio == '1'"
-                            v-model="ruleForm.Idinput"
-                            placeholder="请输入内容"
-                          ></el-input>
-                          <el-select
-                            v-if="ruleForm.lineIdradio == '2'"
-                            v-model="ruleForm.Idselect"
-                            placeholder="请选择"
-                          >
-                            <el-option
-                              v-for="item in ruleForm.options"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value"
-                            >
+                          <el-input v-if="ruleForm.lineIdradio == '1'" v-model="ruleForm.Idinput"
+                                    placeholder="请输入内容"></el-input>
+                          <el-select v-if="ruleForm.lineIdradio == '2'" v-model="ruleForm.Idselect" placeholder="请选择">
+                            <el-option v-for="item in ruleForm.options" :key="item.value" :label="item.label"
+                                       :value="item.value">
                             </el-option>
                           </el-select>
-                          <el-select
-                            v-if="ruleForm.lineIdradio == '3'"
-                            v-model="ruleForm.Idselectoverall"
-                            placeholder="请选择"
-                          >
-                            <el-option
-                              v-for="item in ruleForm.overalloptions"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value"
-                            >
+                          <el-select v-if="ruleForm.lineIdradio == '3'" v-model="ruleForm.Idselectoverall"
+                                     placeholder="请选择">
+                            <el-option v-for="item in ruleForm.overalloptions" :key="item.value" :label="item.label"
+                                       :value="item.value">
                             </el-option>
                           </el-select>
                           <!-- <el-input
@@ -366,14 +239,10 @@
                           </el-select> -->
                         </div>
                         <div style="margin: 0.9375rem 0">
-                          <el-button @click="handlerSend('ruleForm')"
-                            >确认/导出</el-button
-                          >
-                          <el-button @click="handlerDel"
-                            >删除此{{
-                              editTitle === "编辑节点" ? "节点" : "连线"
-                            }}</el-button
-                          >
+                          <el-button @click="handlerSend('ruleForm')">确认/导出</el-button>
+                          <el-button @click="handlerDel">删除此{{
+                            editTitle === "编辑节点" ? "节点" : "连线"
+                          }}</el-button>
                         </div>
                       </div>
                     </el-form>
@@ -431,11 +300,9 @@
                       </el-select>
                     </div> -->
                     <div style="margin: 0.9375rem 0">
-                      <el-button @click="handlerDel"
-                        >删除此{{
-                          editTitle === "编辑节点" ? "节点" : "连线"
-                        }}</el-button
-                      >
+                      <el-button @click="handlerDel">删除此{{
+                        editTitle === "编辑节点" ? "节点" : "连线"
+                      }}</el-button>
                     </div>
                   </div>
                 </div>
@@ -1663,8 +1530,7 @@ export default {
     // 删除节点
     handlerDel() {
       this.$confirm(
-        `此操作将永久删除此${
-          this.editTitle === "编辑节点" ? "节点" : "连线"
+        `此操作将永久删除此${this.editTitle === "编辑节点" ? "节点" : "连线"
         }, 是否继续?`,
         "提示",
         {
@@ -1689,7 +1555,7 @@ export default {
             this.ruleForm = null; //清空数据
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     // 确认/导出
     handlerSend(formName) {
@@ -1728,14 +1594,17 @@ export default {
 </script>
 <style scoped lang="scss">
 .application {
+
   // 穿透修改按钮颜色和间距，card间距
   ::v-deep .el-card {
     margin: 0.625rem;
   }
+
   ::v-deep .el-button--danger {
     background-color: #7266ba;
     border: transparent;
   }
+
   .nav {
     // border-bottom: .0625rem solid #cfdbe2;
     display: flex;
@@ -1749,10 +1618,12 @@ export default {
       font-weight: normal;
       // padding: .9375rem;
     }
+
     .discover {
       color: #37bc9b;
     }
   }
+
   .main {
     .preservation {
       background-color: #f5f7fa;
@@ -1761,6 +1632,7 @@ export default {
       align-items: center;
       justify-content: flex-end;
     }
+
     // 添加流程区块
     .addArea {
       width: 100%;
@@ -1782,27 +1654,33 @@ export default {
         margin-right: 0.625rem;
         border-radius: 0.3125rem;
       }
+
       span {
         font-size: 1rem;
         font-weight: bold;
       }
     }
+
     .addAreain:hover {
       background-color: #37bc9b;
       color: white;
     }
+
     .predetail {
       margin-top: 0.625rem;
     }
+
     .mainTitle {
       display: flex;
       align-items: center;
       justify-content: flex-start;
       padding: 0.625rem;
     }
+
     .mainCenter {
       padding: 0.625rem;
     }
+
     // 详情部分
     .iptArea {
       display: flex;
@@ -1821,6 +1699,7 @@ export default {
         margin-bottom: 0.625rem;
       }
     }
+
     .repeatArea {
       margin-bottom: 0.625rem;
 
@@ -1831,16 +1710,19 @@ export default {
         display: inline-block;
       }
     }
+
     .graycolor {
       margin-top: 0.3125rem;
       margin-bottom: 0.625rem;
       color: #909293;
       font-size: 0.75rem;
     }
+
     .prepri {
       display: flex;
       align-items: flex-start;
       justify-content: flex-start;
+
       .process {
         width: 26vw;
 
@@ -1848,17 +1730,21 @@ export default {
           span {
             font-weight: bold;
           }
+
           .shopping {
             color: #37bc9b;
             cursor: pointer;
           }
         }
+
         .editbig {
           color: #656565;
+
           h2 {
             font-size: 1.125rem;
             margin: 0.625rem 0;
           }
+
           .check {
             display: flex;
             font-size: 0.875rem;
@@ -1867,38 +1753,47 @@ export default {
             .checkl {
               display: flex;
               align-items: center;
+
               p {
                 font-weight: bold;
               }
             }
+
             .checkr {
               display: flex;
               align-items: center;
+
               span {
                 color: #37bc9b;
                 padding: 0 0.9375rem;
               }
+
               p {
                 color: gray;
               }
             }
+
             .itemtit {
               font-weight: bold;
             }
           }
+
           .cessout {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             justify-content: space-between;
+
             .cess {
               display: flex;
               align-items: center;
               margin: 0.625rem 0;
+
               span {
                 font-weight: bold;
                 font-size: 0.875rem;
               }
+
               p {
                 font-weight: normal;
                 color: gray;
@@ -1906,9 +1801,11 @@ export default {
               }
             }
           }
+
           .elform {
             display: flex;
             flex-direction: column;
+
             .itemtit {
               font-family: "Source Sans Pro", sans-serif;
               color: #656565;
@@ -1918,21 +1815,24 @@ export default {
             }
           }
         }
+
         // 编辑线的位置
-        .editline {
-        }
+        .editline {}
       }
+
       // ANTV区域
       .antv-wrapper {
         width: 48vw;
         height: 100%;
         border: #37bc9b 0.0625rem solid;
         position: relative;
+
         .wrapper-canvas {
           position: relative;
           height: 100vh;
           min-height: 45rem;
         }
+
         .wrapper-tips {
           padding: 0.625rem;
           display: flex;
@@ -1940,6 +1840,7 @@ export default {
           position: absolute;
           top: 0;
           left: 0;
+
           .wrapper-tips-item {
             span {
               padding-left: 0.625rem;
@@ -1953,46 +1854,54 @@ export default {
 }
 </style>
 <style scoped>
-.main >>> .el-input {
+.main>>>.el-input {
   margin: 0rem 0.625rem;
   width: 18.75rem;
 }
-.main >>> .el-textarea {
+
+.main>>>.el-textarea {
   margin: 0rem 0.625rem;
   width: 98%;
 }
+
 /* 折叠面板 */
-.main >>> .el-collapse-item__header {
+.main>>>.el-collapse-item__header {
   /* background-color: ; */
   background-image: linear-gradient(to right, #37bc9b 0%, #58ceb1 100%);
   color: white;
   padding-left: 0.9375rem;
   font-weight: bold;
 }
+
 /* 单选框 */
-.main >>> .el-radio__label {
+.main>>>.el-radio__label {
   font-weight: bold;
   font-family: "Source Sans Pro";
   color: #656565;
   display: inline-block;
 }
-.main >>> .el-radio__input {
+
+.main>>>.el-radio__input {
   margin-left: 0.625rem;
 }
+
 /* 按钮 */
-.repeatArea >>> .el-button--success {
+.repeatArea>>>.el-button--success {
   border-color: #37bc9b;
   color: #37bc9b;
   margin-left: 0.625rem;
 }
-.main >>> .el-tabs__content {
+
+.main>>>.el-tabs__content {
   margin-left: 1.25rem;
 }
-.elform >>> .el-form-item__content {
+
+.elform>>>.el-form-item__content {
   margin: 0 !important;
 }
+
 /* 流程部分 */
-.elform >>> .el-textarea {
+.elform>>>.el-textarea {
   width: 25.625rem;
 }
 </style>

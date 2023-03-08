@@ -65,7 +65,8 @@ export default {
     },
     addModule() {
       this.$moduleLoader({
-        d: "http://localhost:9527/dist/d.umd.js",
+        // d: "http://localhost:9527/dist/d.umd.js",
+        SenparcXncfOpenAI: "http://localhost:9528/dist/Senparc.Xncf.OpenAI.umd.js",
       }).then(() => {
         // 加载过程完毕
         console.log("加载过程完毕");
@@ -79,9 +80,10 @@ export default {
     },
     trigger() {
       setTimeout(() => {
-        this.$eventBus.emit("visitedAbout", { d: new Date() });
+        // this.$eventBus.emit("visitedAbout", { d: new Date() });
+        this.$eventBus.emit("visitedAbout", { SenparcXncfOpenAI: new Date() });
       }, 500);
-      
+
     },
   },
 };
