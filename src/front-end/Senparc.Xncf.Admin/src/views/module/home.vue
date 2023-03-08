@@ -66,7 +66,7 @@ export default {
     addModule() {
       this.$moduleLoader({
         // d: "http://localhost:9527/dist/d.umd.js",
-        SenparcXncfOpenAI: "http://localhost:9528/dist/Senparc.Xncf.OpenAI.umd.js",
+        SenparcXncfOpenAI: "http://localhost:9527/dist/SenparcXncfOpenAI.umd.js",//openai打包配置命名
       }).then(() => {
         // 加载过程完毕
         console.log("加载过程完毕");
