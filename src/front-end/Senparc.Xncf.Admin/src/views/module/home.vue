@@ -10,7 +10,6 @@
         ——
       </template>
     </div> -->
-
     <div style="margin-top: 20px">
       <el-button @click="addModule">加载模块</el-button>
       <el-button @click="refreshRouterMenu">刷新路由菜单</el-button>
@@ -21,7 +20,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import { resetRouter, asyncRoutes } from "@/router";
 import store from "@/store";

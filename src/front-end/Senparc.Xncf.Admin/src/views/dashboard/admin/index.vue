@@ -2,11 +2,9 @@
   <div class="el-main">
     <el-container>
       <el-header class="module-header">
-        <span class="start-title"
-          ><span class="module-header-v">
+        <span class="start-title"><span class="module-header-v">
             NeuCharFramework 管理员后台
-          </span></span
-        >
+          </span></span>
       </el-header>
       <el-main />
     </el-container>
@@ -78,24 +76,13 @@
           <span style="font-size: 20px; color: black">功能模块</span>
         </div>
         <!-- 搜索 -->
-        <el-input
-          class="box-ipt"
-          v-model="modelValue"
-          placeholder="输入内容按下Enter"
-          clearable
-          @keyup.enter.native="putXncfOpening"
-          @input="inputXncfOpening"
-        ></el-input>
+        <el-input class="box-ipt" v-model="modelValue" placeholder="输入内容按下Enter" clearable
+                  @keyup.enter.native="putXncfOpening" @input="inputXncfOpening"></el-input>
 
         <!-- 所有的展示数据 -->
         <div id="xncf-modules-area">
           <el-row :gutter="20">
-            <el-col
-              v-for="item in xncfOpeningList"
-              :key="item.uid"
-              :span="6"
-              class="xncf-item"
-            >
+            <el-col v-for="item in xncfOpeningList" :key="item.uid" :span="6" class="xncf-item">
               <el-card class="box-card">
                 <div slot="header" class="xncf-item-top svgimg greencolor">
                   <span class="moudelName">{{ item.menuName }}</span>
@@ -156,8 +143,7 @@ export default {
     async getXncfOpening() {
       const xncfOpeningList = await getModuleList();
       this.xncfOpeningList = xncfOpeningList.data || [];
-      console.log("this.xncfOpeningList", this.xncfOpeningList);
-        
+      // console.log("this.xncfOpeningList", this.xncfOpeningList);
       // console.log(JSON.parse(JSON.stringify(xncfOpeningList)))
     },
     // 图表数据
@@ -174,6 +160,7 @@ export default {
           let _UpperCase = item.menuName.toUpperCase();
           return _UpperCase.includes(_value);
         });
+        console.log(datas);
         this.xncfOpeningList = [...datas];
       } else {
         this.getXncfOpening();
@@ -255,6 +242,7 @@ export default {
   ::v-deep .el-input {
     width: 310px;
   }
+
   ::v-deep .el-input__inner {
     border: 1px solid rgba(0, 0, 0, 0.3);
   }
@@ -282,22 +270,27 @@ export default {
 #xncf-modules-area {
   margin-bottom: 50px;
 }
+
 ::v-deep .el-card__header {
   padding: 16px;
 }
+
 ::v-deep .el-card__body {
   padding: 16px;
 }
+
 #xncf-modules-area .xncf-item .xncf-item-top {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   gap: 10px;
 }
+
 #xncf-modules-area .xncf-item .xncf-item-top .moudelName {
   flex: 1;
   word-break: break-all;
 }
+
 #xncf-modules-area .xncf-item .xncf-item-top .version {
   white-space: nowrap;
 }

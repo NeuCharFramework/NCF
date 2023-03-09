@@ -150,6 +150,7 @@
               >发现 {{ newTableData.length }} 个新模块！</span
             >
           </el-header> -->
+          <!--  -->
           <el-main>
             <!-- 搜索模块 -->
             <el-input placeholder="请输入内容" v-model="searchIpt.newDiscoveryIpt" class="input-with-select">
@@ -157,6 +158,7 @@
             </el-input>
             <el-table :data="newTableData" style="width: 100%; margin-bottom: 20px">
               <el-table-column align="left" label="模块名称">
+
                 <template slot-scope="scope">
                   <i class="fa fa-cubes"></i>
                   {{ scope.row.name }}

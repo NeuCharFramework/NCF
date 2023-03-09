@@ -18,31 +18,6 @@ const moduleRouter = {
       name: 'ModuleHome',
       meta: { title: '加载模块' }
     },
-    // 首页
-    {
-      path: "/openaiindex",
-      component: Layout,
-      hidden: true,
-      children: [
-        {
-          path: "/redirect/:path(.*)",
-          component: () => import("@/views/OpenAI/index"),
-        },
-      ],
-    },
-    // 详情页
-    {
-      path: "/openaidetail",
-      component: Layout,
-      hidden: true,
-      children: [
-        {
-          path: "/redirect/:path(.*)",
-          component: () => import("@/views/OpenAI/detail"),
-        },
-      ],
-    },
   ]
 }
-
 export default moduleRouter

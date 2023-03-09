@@ -6,23 +6,10 @@
       <el-header class="module-header">
         <span class="start-title">
           <i :class="data.xncfRegister.icon"></i>{{ data.xncfModule.menuName }}
-          <span class="module-header-v"
-            >模块 {{ data.xncfModule.version }}</span
-          ></span
-        >
+          <span class="module-header-v">模块 {{ data.xncfModule.version }}</span></span>
         <span class="start-delete">
-          <el-popconfirm
-            placement="top"
-            title="确认删除此模块吗？"
-            @confirm="handleDelete()"
-          >
-            <el-button
-              size="mini"
-              type="danger"
-              slot="reference"
-              v-if="data.xncfModule.state === 1"
-              >删除</el-button
-            >
+          <el-popconfirm placement="top" title="确认删除此模块吗？" @confirm="handleDelete()">
+            <el-button size="mini" type="danger" slot="reference" v-if="data.xncfModule.state === 1">删除</el-button>
           </el-popconfirm>
         </span>
       </el-header>
@@ -33,15 +20,10 @@
             <ul>
               <!-- 模块信息 xncfModule -->
               <li>
-                <span class="start-green"
-                  ><i class="fa fa-map-marker fa-cubes"></i
-                  >{{ data.xncfModule.name }}</span
-                >
+                <span class="start-green"><i class="fa fa-map-marker fa-cubes"></i>{{ data.xncfModule.name }}</span>
               </li>
               <li>
-                <i class="fa fa-map-marker fa-code-fork"></i>v{{
-                  data.xncfModule.version
-                }}
+                <i class="fa fa-map-marker fa-code-fork"></i>v{{ data.xncfModule.version }}
               </li>
               <li v-if="data.xncfModule.version !== data.xncfRegister.version">
                 发现新版本:v{{ data.xncfRegister.version }}
@@ -50,12 +32,7 @@
                 </el-button>
               </li>
               <li>
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  :content="data.xncfModule.uid"
-                  placement="top-start"
-                >
+                <el-tooltip class="item" effect="dark" :content="data.xncfModule.uid" placement="top-start">
                   <span>
                     <i class="fa fa-map-marker fa-shield"></i>
                     唯一编号
@@ -64,90 +41,48 @@
               </li>
               <li>
                 <i class="fa fa-map-marker puzzle-piece"></i>特性：
-                <el-tooltip
-                  v-for="item in data.xncfRegister.interfaces"
-                  :key="item"
-                  class="item"
-                  effect="dark"
-                  placement="top"
-                >
+                <el-tooltip v-for="item in data.xncfRegister.interfaces" :key="item" class="item" effect="dark"
+                            placement="top">
                   <div slot="content">
                     {{ tooltip[item] }}
-                    <span
-                      v-if="item === 'IXncfRazorRuntimeCompilation'"
-                      @click="thread.visible = true"
-                    >
+                    <span v-if="item === 'IXncfRazorRuntimeCompilation'" @click="thread.visible = true">
                       <el-button size="mini"> 查看 </el-button>
                     </span>
                   </div>
                   <!-- 网页 -->
-                  <i
-                    v-if="item === 'IAreaRegister'"
-                    class="fa fa-map-marker fa-external-link"
-                  ></i>
+                  <i v-if="item === 'IAreaRegister'" class="fa fa-map-marker fa-external-link"></i>
                   <!-- 数据库 -->
-                  <i
-                    v-if="item === 'IXncfDatabase'"
-                    class="fa fa-map-marker fa-database"
-                  ></i>
+                  <i v-if="item === 'IXncfDatabase'" class="fa fa-map-marker fa-database"></i>
                   <!-- 中间件 -->
-                  <i
-                    v-if="item === 'IXncfMiddleware'"
-                    class="fa fa-map-marker fa-plug"
-                  ></i>
+                  <i v-if="item === 'IXncfMiddleware'" class="fa fa-map-marker fa-plug"></i>
                   <!-- 线程 -->
-                  <i
-                    v-if="item === 'IXncfRazorRuntimeCompilation'"
-                    class="fa fa-map-marker fa-retweet"
-                  ></i>
+                  <i v-if="item === 'IXncfRazorRuntimeCompilation'" class="fa fa-map-marker fa-retweet"></i>
                 </el-tooltip>
                 <template v-if="data.xncfRegister.functionCount > 0">
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    content="执行方法"
-                    placement="top-start"
-                  >
-                    <i class="fa fa-map-marker fa-rocket"
-                      >({{ data.xncfRegister.functionCount }})</i
-                    >
+                  <el-tooltip class="item" effect="dark" content="执行方法" placement="top-start">
+                    <i class="fa fa-map-marker fa-rocket">({{ data.xncfRegister.functionCount }})</i>
                   </el-tooltip>
                 </template>
               </li>
               <li>
-                <i class="fa fa-map-marker fa-sliders"></i
-                ><span
-                  :class="[
-                    data.xncfModule.state === 1 ? 'start-green' : 'start-gray',
-                  ]"
-                  style="margin-right: 10px"
-                  >{{ xNcfModules_State[data.xncfModule.state] }}</span
-                >
-                <template
-                  v-if="
-                    data.xncfModule.state === 3 ||
-                    data.xncfModule.state === 0 ||
-                    data.xncfModule.state === 2
-                  "
-                >
-                  <el-button
-                    size="mini"
-                    :type="data.xncfModule.state === 0 ? 'success' : 'warning'"
-                    @click="updataState('1')"
-                  >
+                <i class="fa fa-map-marker fa-sliders"></i><span :class="[
+                  data.xncfModule.state === 1 ? 'start-green' : 'start-gray',
+                ]" style="margin-right: 10px">{{ xNcfModules_State[data.xncfModule.state] }}</span>
+                <template v-if="
+                  data.xncfModule.state === 3 ||
+                  data.xncfModule.state === 0 ||
+                  data.xncfModule.state === 2
+                ">
+                  <el-button size="mini" :type="data.xncfModule.state === 0 ? 'success' : 'warning'"
+                             @click="updataState('1')">
                     <em class="glyphicon glyphicon-flash"></em> 开启
                   </el-button>
                   <p class="red">
-                    <i class="fa fa-exclamation-triangle"></i
-                    >未开启的模块无法执行功能
+                    <i class="fa fa-exclamation-triangle"></i>未开启的模块无法执行功能
                   </p>
                 </template>
                 <template v-if="data.xncfModule.state === 1">
-                  <el-button
-                    size="mini"
-                    type="danger"
-                    @click="updataState('0')"
-                  >
+                  <el-button size="mini" type="danger" @click="updataState('0')">
                     <em class="glyphicon glyphicon-off"></em> 关闭
                   </el-button>
                 </template>
@@ -158,8 +93,9 @@
               </li>
             </ul>
           </div>
-          <!-- 更新记录-刚开始的样式 -->
-          <!-- <div class="start-log">
+        </el-aside>
+        <!-- 更新记录-刚开始的样式 -->
+        <!-- <div class="start-log">
             <el-collapse>
               <el-collapse-item title="更新记录" name="1">
                 <el-table
@@ -181,7 +117,6 @@
               </el-collapse-item>
             </el-collapse>
           </div> -->
-        </el-aside>
         <!-- <el-main>
           <template v-if="!data.mustUpdate">
             <template
@@ -320,32 +255,24 @@
             <el-tab-pane label="执行方法" name="second">
               <el-main>
                 <template v-if="!data.mustUpdate">
-                  <template
-                    v-if="
-                      data.xncfRegister.interfaces.includes('IAreaRegister') &&
-                      data.xncfRegister.areaHomeUrl !== null
-                    "
-                  >
+                  <template v-if="
+                    data.xncfRegister.interfaces.includes('IAreaRegister') &&
+                    data.xncfRegister.areaHomeUrl !== null
+                  ">
                     <el-card class="box-card">
                       <div slot="header" class="clearfix">
-                        <span
-                          >进入 {{ data.xncfRegister.menuName }} 的首页</span
-                        >
-                        <a
-                          @click="
-                            openUrl(
-                              data.xncfRegister.areaHomeUrl,
-                              data.xncfModule.state
-                            )
-                          "
-                          :class="[
-                            data.xncfModule.state === 1
-                              ? 'box-card-action'
-                              : 'box-card-action2',
-                            'box-card-action',
-                          ]"
-                          >进入首页</a
-                        >
+                        <span>进入 {{ data.xncfRegister.menuName }} 的首页</span>
+                        <a @click="
+                          openUrl(
+                            data.xncfRegister.areaHomeUrl,
+                            data.xncfModule.state
+                          )
+                        " :class="[
+  data.xncfModule.state === 1
+    ? 'box-card-action'
+    : 'box-card-action2',
+  'box-card-action',
+]">进入首页</a>
                         <p class="box-card-des">
                           地址：<a :href="data.xncfRegister.areaHomeUrl">{{
                             data.xncfRegister.areaHomeUrl
@@ -356,19 +283,10 @@
                         <div class="item-container">
                           <el-collapse>
                             <el-collapse-item title="页面透视" name="2">
-                              <el-menu
-                                default-active="2"
-                                class="el-menu-vertical-demo"
-                                background-color="#304156"
-                                text-color="#bfcbd9"
-                                width="300px"
-                                active-text-color="#409eff"
-                              >
-                                <el-menu-item
-                                  v-for="(item, index) in data.xncfRegister
-                                    .areaPageMenuItems"
-                                  :key="index"
-                                >
+                              <el-menu default-active="2" class="el-menu-vertical-demo" background-color="#304156"
+                                       text-color="#bfcbd9" width="300px" active-text-color="#409eff">
+                                <el-menu-item v-for="(item, index) in data.xncfRegister
+                                  .areaPageMenuItems" :key="index">
                                   <router-link :to="item.url">
                                     <div>
                                       <i class="el-icon-location"></i>
@@ -389,36 +307,21 @@
                     </el-card>
                   </template>
                 </template>
-                <el-card
-                  class="box-card"
-                  v-for="item in data.functionParameterInfoCollection"
-                  :key="item.key.name"
-                >
+                <el-card class="box-card" v-for="item in data.functionParameterInfoCollection" :key="item.key.name">
                   <div slot="header" class="clearfix">
-                    <span
-                      ><i class="fa fa-terminal"></i> {{ item.key.name }}</span
-                    >
-                    <span
-                      type="text"
-                      :class="[
-                        data.xncfModule.state === 1
-                          ? 'box-card-action'
-                          : 'box-card-action2',
-                      ]"
-                      @click="openRun(item, data.xncfModule.state)"
-                      >执行</span
-                    >
+                    <span><i class="fa fa-terminal"></i> {{ item.key.name }}</span>
+                    <span type="text" :class="[
+                      data.xncfModule.state === 1
+                        ? 'box-card-action'
+                        : 'box-card-action2',
+                    ]" @click="openRun(item, data.xncfModule.state)">执行</span>
                     <p class="box-card-des">{{ item.key.description }}</p>
                   </div>
                   <template>
                     <div class="item-container">
                       <el-collapse>
                         <el-collapse-item title="参数透视" name="2">
-                          <el-table
-                            v-if="item.value.length > 0"
-                            :data="item.value"
-                            style="width: 100%"
-                          >
+                          <el-table v-if="item.value.length > 0" :data="item.value" style="width: 100%">
                             <el-table-column label="#" width="30">
                               <template slot-scope="scope">
                                 {{ scope.$index + 1 }}
@@ -460,11 +363,7 @@
               <div class="start-log">
                 <el-collapse>
                   <el-collapse-item title="更新记录" name="1">
-                    <el-table
-                      :data="data.xncfModule.updateLog"
-                      stripe
-                      style="width: 100%"
-                    >
+                    <el-table :data="data.xncfModule.updateLog" stripe style="width: 100%">
                       <el-table-column label="#" width="30">
                         <template slot-scope="scope">
                           {{ scope.$index + 1 }}
@@ -486,55 +385,28 @@
       </el-container>
     </el-container>
     <!-- 执行弹窗 -->
-    <el-dialog
-      width="60%"
-      v-if="run.data.key"
-      :title="run.data.key.name"
-      :visible.sync="run.visible"
-      class="run-dialog"
-      @close="runVisibleClose"
-      :close-on-click-modal="false"
-    >
+    <el-dialog width="60%" v-if="run.data.key" :title="run.data.key.name" :visible.sync="run.visible" class="run-dialog"
+               @close="runVisibleClose" :close-on-click-modal="false">
       <h4><i class="fa fa-newspaper-o"></i>{{ run.data.key.description }}</h4>
       <el-form :label-position="'left'">
-        <el-form-item
-          v-for="item in run.data.value"
-          :key="item.name"
-          :label="item.title || item.name"
-          label-width="130px"
-          :required="item.isRequired"
-        >
-          <el-input
-            v-if="item.parameterType === 0"
-            v-model="runData[item.name].value"
-            maxlength="500"
-          ></el-input>
-          <el-select
-            v-if="item.parameterType === 1"
-            v-model="runData[item.name].value"
-          >
+        <el-form-item v-for="item in run.data.value" :key="item.name" :label="item.title || item.name" label-width="130px"
+                      :required="item.isRequired">
+          <el-input v-if="item.parameterType === 0" v-model="runData[item.name].value" maxlength="500"></el-input>
+          <el-select v-if="item.parameterType === 1" v-model="runData[item.name].value">
             <template v-if="item.selectionList.items">
-              <el-option
-                v-for="selectionItem in item.selectionList.items"
-                :key="selectionItem.text"
-                :label="selectionItem.text"
-                :value="selectionItem.value"
-              ></el-option>
+              <el-option v-for="selectionItem in item.selectionList.items" :key="selectionItem.text"
+                         :label="selectionItem.text" :value="selectionItem.value"></el-option>
             </template>
           </el-select>
           <template v-if="item.parameterType === 2 && item.selectionList.items">
             <el-checkbox-group v-model="runData[item.name].value">
               <template v-for="selectionItem in item.selectionList.items">
-                <el-checkbox
-                  :key="selectionItem.value"
-                  :label="selectionItem.value"
-                >
+                <el-checkbox :key="selectionItem.value" :label="selectionItem.value">
                   {{ selectionItem.text }}
                   <template v-if="selectionItem.note !== null">
                     <span class="icon-note">
                       <i class="fa fa-info-circle"></i>
-                      {{ selectionItem.note }}</span
-                    >
+                      {{ selectionItem.note }}</span>
                   </template>
                 </el-checkbox>
               </template>
@@ -547,30 +419,18 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancelRun">取 消</el-button>
-        <el-button type="primary" @click="handleRun" :loading="isExecut"
-          >执 行</el-button
-        >
+        <el-button type="primary" @click="handleRun" :loading="isExecut">执 行</el-button>
       </div>
     </el-dialog>
     <!-- 运行结果 -->
-    <el-dialog
-      :title="runResult.tit"
-      :visible.sync="runResult.visible"
-      :close-on-click-modal="false"
-      width="30%"
-    >
+    <el-dialog :title="runResult.tit" :visible.sync="runResult.visible" :close-on-click-modal="false" width="30%">
       <p v-html="runResult.tip"></p>
       <p v-html="runResult.msg"></p>
       <span slot="footer" class="dialog-footer">
-        <a
-          :href="
-            'https://localhost:44311/Admin/XncfModule/Start/?handler=Log&tempId=' +
-            runResult.tempId
-          "
-          v-if="runResult.hasLog"
-          style="display: block"
-          ><i class="fa fa-cloud-download"></i> 下载日志（5分钟内1次有效）</a
-        >
+        <a :href="
+          'https://localhost:44311/Admin/XncfModule/Start/?handler=Log&tempId=' +
+          runResult.tempId
+        " v-if="runResult.hasLog" style="display: block"><i class="fa fa-cloud-download"></i> 下载日志（5分钟内1次有效）</a>
         <el-button type="primary" @click="closeDialog">
           <!-- <el-button type="primary" @click="runResult.visible = false"> -->
           关 闭
@@ -596,8 +456,8 @@
             <template slot-scope="scope">
               {{
                 scope.row.value.isAlive
-                  ? formaTableTime(scope.row.value.threadState)
-                  : "-"
+                ? formaTableTime(scope.row.value.threadState)
+                : "-"
               }}
             </template>
           </el-table-column>
@@ -609,22 +469,12 @@
         </el-table>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="thread.visible = false"
-          >关 闭</el-button
-        >
+        <el-button type="primary" @click="thread.visible = false">关 闭</el-button>
       </span>
     </el-dialog>
     <!-- 取消提示 -->
-    <el-dialog
-      title="提示"
-      :show-close="false"
-      :visible.sync="dialogVisible"
-      width="30%"
-      :close-on-click-modal="false"
-    >
-      <span
-        >您执行的操作，后台正在运行，现在退出后台的运行并不会停止。确定退出吗？</span
-      >
+    <el-dialog title="提示" :show-close="false" :visible.sync="dialogVisible" width="30%" :close-on-click-modal="false">
+      <span>您执行的操作，后台正在运行，现在退出后台的运行并不会停止。确定退出吗？</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="closeRunHit">确 定</el-button>
@@ -709,6 +559,7 @@ export default {
       // const uid = "00000000-0000-0001-0001-000000000001";
       // 获取详情
       const res = await getItemModule(this.uid);
+
       // console.log("获取详情", res.data.xncfModule.updateLog);
       // console.log(JSON.parse(JSON.stringify(res)))
       if (res.data) {
@@ -819,6 +670,7 @@ export default {
         }
       });
       this.runData = Object.assign({}, this.runData);
+
       //  this.runData数组结构
       //在接口传输时，将下拉单选转成数组
       //{
@@ -845,7 +697,7 @@ export default {
       if (this.isExecut) {
         this.dialogVisible = true;
       } else {
-        this.runResult.visible = false; //关闭结果
+        this.runResult.visible = false;//关闭结果
         this.run.visible = false; //关闭一层弹框
       }
     },

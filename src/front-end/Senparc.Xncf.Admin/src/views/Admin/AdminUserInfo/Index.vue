@@ -1,4 +1,5 @@
 <template>
+  <!-- 管理员管理 -->
   <div class="el-main">
     <div>
       <div class="admin-user-info">
@@ -73,22 +74,19 @@
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialog.visible = false">取 消</el-button>
-            <el-button :loading="dialog.updateLoadingSet" type="primary" @click="updateData">
-              确 认
-            </el-button>
+            <el-button :loading="dialog.updateLoadingSet" type="primary" @click="updateData">确 认</el-button>
           </div>
         </el-dialog>
         <!--分配角色-->
         <el-dialog :title="'设置角色-' + dialog.setTitle" :visible.sync="dialog.visibleSet">
           <el-checkbox-group v-model="dialog.dialogSetSelected">
-            <el-checkbox v-for="item in dialog.dialogSetData" :key="item.id" :label="item.id" border>{{ item.roleName
-            }}</el-checkbox>
+            <el-checkbox v-for="item in dialog.dialogSetData" :key="item.id" :label="item.id" border>
+              {{ item.roleName }}
+            </el-checkbox>
           </el-checkbox-group>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialog.visibleSet = false">取 消</el-button>
-            <el-button :loading="dialog.updateLoading" type="primary" @click="updateDataSet">
-              确 认
-            </el-button>
+            <el-button :loading="dialog.updateLoading" type="primary" @click="updateDataSet">确 认</el-button>
           </div>
         </el-dialog>
       </div>

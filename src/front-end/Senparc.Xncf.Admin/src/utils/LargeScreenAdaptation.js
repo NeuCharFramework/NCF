@@ -7,6 +7,13 @@
  * @param {HTMLElement} appRef
  */
 
+/*
+    引入方式：
+    import drawMixin from '@/utils/drawMixin'
+    mixins: [drawMixin],
+    ref="appRef"
+*/
+
 // 默认缩放比例
 const scale = {
     width: "1",

@@ -16,12 +16,8 @@
           </el-col>
           <el-col :span="6">
             <div class="grid-content bg-purple">
-              名称：<span
-                >{{ requestTenantInfo.name }}
-                <span class="float-right"
-                  >(ID:{{ requestTenantInfo.id }})</span
-                ></span
-              >
+              名称：<span>{{ requestTenantInfo.name }}
+                <span class="float-right">(ID:{{ requestTenantInfo.id }})</span></span>
             </div>
           </el-col>
           <el-col :span="6">
@@ -72,65 +68,28 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="primary"
-              @click="handleEdit(scope.$index, scope.row)"
-              >编辑</el-button
-            >
+            <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           </template>
           <template>
-            <el-popconfirm
-              placement="top"
-              title="确认删除此租户吗？删除后所有租户信息将处于游离状态，请谨慎操作！"
-              @confirm="handleDelete(scope.$index, scope.row)"
-            >
-              <el-button slot="reference" size="mini" type="danger"
-                >删除</el-button
-              >
+            <el-popconfirm placement="top" title="确认删除此租户吗？删除后所有租户信息将处于游离状态，请谨慎操作！"
+                           @confirm="handleDelete(scope.$index, scope.row)">
+              <el-button slot="reference" size="mini" type="danger">删除</el-button>
             </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
-
       <!--编辑、新增 -->
-      <el-dialog
-        :title="dialog.title"
-        :visible.sync="dialog.visible"
-        :close-on-click-modal="false"
-      >
-        <el-form
-          ref="dataForm"
-          :rules="dialog.rules"
-          :model="dialog.data"
-          label-position="left"
-          label-width="100px"
-          style="max-width: 400px; margin-left: 50px"
-        >
+      <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
+        <el-form ref="dataForm" :rules="dialog.rules" :model="dialog.data" label-position="left" label-width="100px"
+                 style="max-width: 400px; margin-left: 50px">
           <el-form-item label="租户名称" :error="dialog.nameError" prop="name">
-            <el-input
-              v-model="dialog.data.name"
-              clearable
-              placeholder="请输入租户名称"
-            />
+            <el-input v-model="dialog.data.name" clearable placeholder="请输入租户名称" />
           </el-form-item>
-          <el-form-item
-            label="租户匹配关键字"
-            :error="dialog.tenantKeyError"
-            prop="tenantKey"
-          >
-            <el-input
-              v-model="dialog.data.tenantKey"
-              clearable
-              placeholder="请输入租户匹配关键字"
-            />
+          <el-form-item label="租户匹配关键字" :error="dialog.tenantKeyError" prop="tenantKey">
+            <el-input v-model="dialog.data.tenantKey" clearable placeholder="请输入租户匹配关键字" />
           </el-form-item>
           <el-form-item label="管理员备注" prop="adminRemark">
-            <el-input
-              v-model="dialog.data.adminRemark"
-              clearable
-              placeholder="请输入管理员备注"
-            />
+            <el-input v-model="dialog.data.adminRemark" clearable placeholder="请输入管理员备注" />
           </el-form-item>
           <el-form-item label="是否启用">
             <el-switch v-model="dialog.data.enable" />
@@ -138,12 +97,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialog.visible = false">取 消</el-button>
-          <el-button
-            :loading="dialog.updateLoading"
-            type="primary"
-            @click="updateData"
-            >确 认</el-button
-          >
+          <el-button :loading="dialog.updateLoading" type="primary" @click="updateData">确 认</el-button>
         </div>
       </el-dialog>
     </div>
