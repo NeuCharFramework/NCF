@@ -50,3 +50,4 @@ obj/
 /src/front-end/admin-main/node_modules
 /src/front-end/admin-main/dist
 /src/front-end/admin-module/node_modules
+/src/back-end/Senparc.Web/App_Data/OpenAiImageTemp
