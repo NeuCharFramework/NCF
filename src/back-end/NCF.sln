@@ -30,6 +30,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Xncf.Installer.Interface", "Senparc.Xncf.Installer.Interface\Senparc.Xncf.Installer.Interface.csproj", "{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Xncf.OpenAI", "..\..\..\Senparc.Xncf.OpenAI\src\back-end\Senparc.Xncf.OpenAI\Senparc.Xncf.OpenAI.csproj", "{CF1C5CCC-222F-4EE7-B04B-036B2C882E45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +117,16 @@ Global
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.TemplateRelease|Any CPU.Build.0 = Release|Any CPU
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{CF1C5CCC-222F-4EE7-B04B-036B2C882E45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF1C5CCC-222F-4EE7-B04B-036B2C882E45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF1C5CCC-222F-4EE7-B04B-036B2C882E45}.Debug-Dapr|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF1C5CCC-222F-4EE7-B04B-036B2C882E45}.Debug-Dapr|Any CPU.Build.0 = Debug|Any CPU
+		{CF1C5CCC-222F-4EE7-B04B-036B2C882E45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF1C5CCC-222F-4EE7-B04B-036B2C882E45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF1C5CCC-222F-4EE7-B04B-036B2C882E45}.TemplateRelease|Any CPU.ActiveCfg = TemplateRelease|Any CPU
+		{CF1C5CCC-222F-4EE7-B04B-036B2C882E45}.TemplateRelease|Any CPU.Build.0 = TemplateRelease|Any CPU
+		{CF1C5CCC-222F-4EE7-B04B-036B2C882E45}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{CF1C5CCC-222F-4EE7-B04B-036B2C882E45}.Test|Any CPU.Build.0 = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -126,6 +138,7 @@ Global
 		{1D1A334A-7DFD-4830-88F9-5E3347158040} = {76FC86E0-991D-47B7-8AAB-42B27DAB10C1}
 		{540DC001-C430-449A-90AA-FEF131E1633E} = {76FC86E0-991D-47B7-8AAB-42B27DAB10C1}
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3} = {76FC86E0-991D-47B7-8AAB-42B27DAB10C1}
+		{CF1C5CCC-222F-4EE7-B04B-036B2C882E45} = {76FC86E0-991D-47B7-8AAB-42B27DAB10C1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7427A6C9-D522-4B10-B0AC-607D69736B50}
