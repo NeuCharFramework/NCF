@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Google.Api;
+using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
 using Senparc.CO2NET.AspNet;
+using Senparc.CO2NET.Utilities;
 using Senparc.CO2NET.WebApi;
 using Senparc.CO2NET.WebApi.WebApiEngines;
 using Senparc.Ncf.Core.Areas;
@@ -31,19 +33,8 @@ namespace Senparc.Web
             // https://github.com/Senparc/Senparc.CO2NET/blob/master/Sample/Senparc.CO2NET.Sample.net7/Startup.cs
 
             //var services = builder.Services;
-            //var docXmlPath = Path.Combine(builder.Environment.ContentRootPath, "App_Data", "ApiDocXml");
             //var mvcBuilder = services.AddMvcCore();
-            //services.AddAndInitDynamicApi(mvcBuilder, options =>
-            //{
-            //    options.DocXmlPath = docXmlPath;
-            //    options.DefaultRequestMethod = ApiRequestMethod.Get;
-            //    options.BaseApiControllerType = null;
-            //    options.CopyCustomAttributes = true;
-            //    options.TaskCount = Environment.ProcessorCount * 4;
-            //    options.ShowDetailApiLog = true;
-            //    options.AdditionalAttributeFunc = null;
-            //    options.ForbiddenExternalAccess = true;
-            //});
+            //services.AddAndInitDynamicApi(mvcBuilder, options => { });
 
             #endregion
 
