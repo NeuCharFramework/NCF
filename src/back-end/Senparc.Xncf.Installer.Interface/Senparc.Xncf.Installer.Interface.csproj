@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Version>0.1</Version>
+		<AssemblyName>Senparc.Xncf.Installer.Interface</AssemblyName>
+		<RootNamespace>Senparc.Xncf.Installer.Interface</RootNamespace>
+		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+		<Description>NCF 初始化安装模块，安装完成后可卸载或移除</Description>
+		<Copyright>Senparc</Copyright>
+		<PackageTags>Senparc,NeuCharFramework,NCF,Senparc.Xncf.Installer.Interface</PackageTags>
+		<Authors>Senparc</Authors>
+		<Owners>Senparc</Owners>
+		<!-- <PackageLicenseUrl>https://github.com/NeuCharFramework/NcfPackageSources/blob/master/LICENSE</PackageLicenseUrl> -->
+		<Title>NCF 安装程序</Title>
+		<!--<ProjectUrl> https://github.com/NeuCharFramework/NCF</ProjectUrl>
+    <PackageProjectUrl>https://github.com/NeuCharFramework/NcfPackageSources</PackageProjectUrl>
+    <PackageIconUrl>https://sdk.weixin.senparc.com/Images/logo-square-ncf.jpg</PackageIconUrl>-->
+		<PackageReleaseNotes>
+			v0.1 创世
+		</PackageReleaseNotes>
+		<RepositoryUrl>https://github.com/NeuCharFramework/NcfPackageSources</RepositoryUrl>
+		<Configurations>Debug;Release;Test;TemplateRelease</Configurations>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<OutputPath>..\..\..\BuildOutPut</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Folder Include="OHS\Remote\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="Senparc.Xncf.Tenant.Interface" Version="0.1.4.1-beta9" />
+	</ItemGroup>
+
+
+</Project>

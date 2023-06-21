@@ -1,0 +1,189 @@
+@model Senparc.Ncf.AreaBase.Admin.IAdminPageModelBase
+@using Senparc.Ncf.XncfBase;
+@using Senparc.Ncf.Core.Areas;
+@using Microsoft.AspNetCore.Http;
+@inject Senparc.Ncf.Service.SysMenuService _sysMenuService
+@inject IHttpContextAccessor _httpContextAccessor
+@addTagHelper *, Senparc.Areas.Admin
+@{
+    var sysMenuDtos = await _sysMenuService.GetMenuTreeDtoByCacheAsync();
+
+    /// <summary>
+    /// 判断当前页面是否为 XNCF 模块入口
+    /// </summary>
+    /// <param name="currentMenuUrl"></param>
+    /// <returns></returns>
+    string CurrentXncfPage(string currentMenuUrl)
+    {
+        if (!Model.Uid.IsNullOrEmpty())
+        {
+            var pathAndQuery = Microsoft.AspNetCore.Http.Extensions.UriHelper.GetEncodedPathAndQuery(_httpContextAccessor.HttpContext.Request);
+            if (pathAndQuery.Contains("/Admin/XncfModule/Start", StringComparison.OrdinalIgnoreCase) &&
+                currentMenuUrl.Contains(Model.Uid, StringComparison.OrdinalIgnoreCase))
+            {
+                return "current-page-xncf";
+            }
+            return "";
+        }
+
+        return "";
+    }
+    /// <summary>
+    /// 判断当前页面是否为 XNCF 子页面
+    /// </summary>
+    /// <param name="currentMenuUrl"></param>
+    /// <returns></returns>
+    string CurrentXncfSubPage(string currentMenuUrl)
+    {
+        var pathAndQuery = Microsoft.AspNetCore.Http.Extensions.UriHelper.GetEncodedPathAndQuery(_httpContextAccessor.HttpContext.Request);
+        if (pathAndQuery.Contains(currentMenuUrl, StringComparison.OrdinalIgnoreCase) ||
+            (ViewData["TempMenuUrl"] is string tempMenuUrl && currentMenuUrl.Contains(tempMenuUrl, StringComparison.OrdinalIgnoreCase)))
+        {
+            return "current-page-xncf";
+        }
+        return "";
+    }
+}
+
+
+<div class="col-md-3 left_col">
+    <div class="left_col scroll-view">
+        <div class="navbar nav_title hidden-small">
+            @*<a href="/Home/Index" class="site_title">
+                    <img src="~/images/Admin/base/head/logo_230x55.png" class="hidden-small" />
+                    <img src="~/images/Admin/base/head/logo_70x55.png" class="hidden-lg" />
+                </a>*@
+            <a href="/" class="site_title">
+                <img src="~/images/Admin/base/head/logo_230x55.png" />
+            </a>
+        </div>
+
+        <div class="clearfix"></div>
+        <!-- menu profile quick info -->
+        <div class="profile clearfix">
+            <div class="profile_pic">
+                <img src="~/images/Admin/base/head/logo_128x128.png" class="img-circle profile_img" style="background-color:transparent" />
+            </div>
+            <div class="profile_info" style="padding: 25px 0px 10px;">
+                <span>Welcome,</span>
+                <h2>@Model.UserName</h2>
+            </div>
+        </div>
+        <!-- /menu profile quick info -->
+        <!-- sidebar menu -->
+        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+            <div class="menu_section">
+                @*<h3>菜单</h3>*@
+                <ul class="nav side-menu">
+                    <li>
+                        <a href="~/Admin/Index">首页</a>
+                    </li>
+                    @foreach (var item in sysMenuDtos)
+                    {
+                        //判断是否隐藏模块管理单元
+                        var hideXncfModuleManager = item.MenuName == "扩展模块" && Model.FullSystemConfig.HideModuleManager == true;
+
+                        @if (!hideXncfModuleManager)
+                        {
+                            //显示扩展模块，建立一级目录
+                            @Html.Raw(@"<li>")
+
+                            <a href="@item.Url">
+                                @if (!string.IsNullOrEmpty(item.Icon))
+                                {
+                                    <i class="@item.Icon"></i>
+                                }
+                                @item.MenuName
+
+                            </a>
+                        }
+
+                        @if (item.Children != null)
+                        {
+                            @if (!hideXncfModuleManager)
+                            {
+                                //显示扩展模块，建立二级目录
+                                @Html.Raw(@"<ul class=""nav child_menu"">")
+                            }
+                            @foreach (var childrenItem in item.Children.Where(_ => _.IsMenu))
+                            {
+                                if (hideXncfModuleManager && childrenItem.MenuName=="模块管理")
+                                {
+                                    continue;//隐藏“模块管理”菜单
+                                }
+                                <li>
+                                    @{
+                                        var xncfRegister = Model.XncfRegisterList.FirstOrDefault(z => !childrenItem.Url.IsNullOrEmpty() && childrenItem.Url.Contains($"uid={z.Uid}", StringComparison.OrdinalIgnoreCase));
+                                    }
+                                    @if (xncfRegister != null)
+                                    {
+                                        if (xncfRegister is Senparc.Ncf.Core.Areas.IAreaRegister xncfAreapage &&
+                                        xncfAreapage.AreaPageMenuItems.Count() > 0)
+                                        {
+                                            //这是一个 XNCF UI 模块菜单，并且包含多个菜单配置
+                                            <a><i class="@childrenItem.Icon"></i> @childrenItem.MenuName<span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li class="sub_menu @(hideXncfModuleManager?"":"xncf_area_submenu")">
+                                                    <a href="@childrenItem.Url" class="@CurrentXncfPage(childrenItem.Url)">
+                                                        <i class="fa fa-gear"></i>
+                                                        <text>设置/执行</text>
+                                                    </a>
+                                                </li>
+                                                @foreach (var xncfSubMenu in xncfAreapage.AreaPageMenuItems)
+                                                {
+                                                    <li class="@(hideXncfModuleManager?"":"xncf_area_submenu")">
+                                                        <a href="@xncfSubMenu.Url" class="@CurrentXncfSubPage(xncfSubMenu.Url)">
+                                                            @if (!string.IsNullOrEmpty(xncfSubMenu.Icon))
+                                                            {
+                                                                <i class="@xncfSubMenu.Icon"></i>
+                                                            }
+                                                            @xncfSubMenu.Name
+                                                        </a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                        else
+                                        {
+                                            //这是一个普通的 XNCF（可能只包含 Functions）菜单
+                                            <a href="@childrenItem.Url" class="@CurrentXncfPage(childrenItem.Url)">
+                                                @if (!string.IsNullOrEmpty(childrenItem.Icon))
+                                                {
+                                                    <i class="@childrenItem.Icon"></i>
+                                                }
+                                                @childrenItem.MenuName
+                                            </a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //其他菜单，如系统或自定义菜单
+                                        <a href="@childrenItem.Url">
+                                            @if (!string.IsNullOrEmpty(childrenItem.Icon))
+                                            {
+                                                <i class="@childrenItem.Icon"></i>
+                                            }
+                                            @childrenItem.MenuName
+                                        </a>
+                                    }
+                                </li>
+                            }
+                            @if (!hideXncfModuleManager)
+                            {
+                                //显示扩展模块，二级目录结束
+                                @Html.Raw(@"</ul>")
+                            }
+                        }
+                        @if (!hideXncfModuleManager)
+                        {
+                            //显示扩展模块，一级目录结束
+                            @Html.Raw(@"</li>")
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+        <!-- /sidebar menu -->
+    </div>
+</div>
+<!-- /menu footer buttons -->

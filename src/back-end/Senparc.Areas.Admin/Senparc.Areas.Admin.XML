@@ -1,0 +1,1039 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Senparc.Areas.Admin</name>
+    </assembly>
+    <members>
+        <member name="M:Senparc.Areas.Admin.ACL.Repository.ISysMenuRepository.GetVisibleMenuDtosAsync(System.Int32)">
+            <summary>
+            获取用户可见菜单
+            </summary>
+            <param name="accountId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.ACL.Repository.ISysMenuRepository.GetAllMenuDtosAsync(System.Boolean)">
+            <summary>
+            获取所有菜单(仅包含菜单 和 页面)
+            <param name="hasButton"></param>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.ACL.Repository.SysMenuRepository.GetAllMenuDtosAsync(System.Boolean)">
+            <summary>
+            获取用户可见的菜单
+            </summary>
+            <param name="hasButton"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.ACL.Repository.SysMenuRepository.GetVisibleMenuDtosAsync(System.Int32)">
+            <summary>
+            获取用户可见的菜单
+            </summary>
+            <param name="accountId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.ACL.Repository.ISysRolePermissionRepository.GetAllResouceCodesByAccountIdAsync(System.Int32)">
+            <summary>
+            获取某个用户下面的所有资源
+            </summary>
+            <param name="adminUserInfoId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.ACL.Repository.SysRolePermissionRepository.GetAllResouceCodesByAccountIdAsync(System.Int32)">
+            <summary>
+            获取某个用户下面的所有资源
+            </summary>
+            <param name="adminUserInfoId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.AdminUserInfoAuthorizationPageModel.OnGetDetailAsync(System.Int32)">
+            <summary>
+            获取用户的角色
+            </summary>
+            <param name="accountId"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Areas.Admin.Pages.AdminUserInfo_EditModel.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.AdminUserInfo_EditModel.OnGetDetail(System.Int32)">
+            <summary>
+            Handler=Detail
+            获取详情
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.AdminUserInfo_EditModel.OnPostSave(Senparc.Ncf.Core.Models.CreateOrUpdate_AdminUserInfoDto)">
+            <summary>
+            Handler=Save
+            保存
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Areas.Admin.Pages.AdminUserInfo_IndexModel.PageIndex">
+            <summary>
+            属性绑定，支持GET
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Areas.Admin.Pages.AdminUserInfo_IndexModel.OrderField">
+            <summary>
+            排序方法
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.AdminUserInfo_IndexModel.OnGetListAsync(System.String,System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="adminUserInfoName"></param>
+            <param name="pageIndex"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.AdminUserInfo_IndexModel.OnPostDelete(System.Int32[])">
+            <summary>
+            Handler=Delete
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.MenuEditModel.OnGetMenuAsync">
+            <summary>
+            获取菜单
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.MenuEditModel.OnGetButtonsAsync(System.String)">
+            <summary>
+            获取菜单下的按钮
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Areas.Admin.Pages.MenuIndexModel.SysMenus">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.MenuIndexModel.OnGetAsync">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.RoleEditModel.OnGetDetailAsync(System.String)">
+            <summary>
+            Handler=Detail
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.RoleEditModel.OnGetSelectItemsAsync(Senparc.Xncf.SystemCore.Domain.Database.BasePoolEntities)">
+            <summary>
+            handler=SelectItems
+            </summary>
+            <param name="senparcEntities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.RoleEditModel.OnPostSaveAsync(Senparc.Ncf.Core.Models.DataBaseModel.SysRoleDto)">
+            <summary>
+            Handler=Save
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Areas.Admin.Pages.RoleIndexModel.SysRoles">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.RoleIndexModel.OnGetListAsync(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Handler=List
+            </summary>
+            <param name="roleName"></param>
+            <param name="orderField">XXX DESC,YYY ASC</param>
+            <param name="pageIndex"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.RoleIndexModel.OnPostDelete(System.String[])">
+            <summary>
+            Handler=Delete
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.SystemConfig_IndexModel.OnGetListAsync(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="adminUserInfoName"></param>
+            <param name="pageIndex"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.SystemConfig_IndexModel.OnPostEditAsync(Senparc.Ncf.Core.Models.FullSystemConfig)">
+            <summary>
+            编辑 SystemConfig 信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.TenantInfo_IndexModel.OnGetListAsync(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="adminUserInfoName"></param>
+            <param name="pageIndex"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.TenantInfo_IndexModel.OnPostSaveAsync(Senparc.Xncf.Tenant.Domain.DataBaseModel.CreateOrUpdate_TenantInfoDto)">
+            <summary>
+            Handler=Save
+            保存
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleIndexModel.XncfModules">
+            <summary>
+            数据库已存的XncfModules
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleIndexModel.OnGetScanAsync(System.String)">
+            <summary>
+            扫描新模块
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleIndexModel.OnPostHideManagerAsync">
+            <summary>
+            隐藏“模块管理”功能
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleIndexModel.OnPostHideManagerAjaxAsync">
+            <summary>
+            隐藏“模块管理”功能 handler=HideManagerAjax
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleIndexModel.OnGetMofulesAsync(System.Int32,System.Int32)">
+            <summary>
+            获取已安装模块模块 handler=Mofules
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleIndexModel.OnGetUnMofulesAsync">
+            <summary>
+            获取未安装模块模块 handler=UnMofules
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleIndexModel.OnGetScanAjaxAsync(System.String)">
+            <summary>
+            扫描新模块 handler=ScanAjax
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleIndexModel.OnGetInstallModuleAsync(System.String)">
+            <summary>
+            根据名称安装模块
+            </summary>
+            <param name="xncfName"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleStartModel.RegisteredThreadInfo">
+            <summary>
+            获取当前模块的已注册线程信息
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleStartModel.MustUpdate">
+            <summary>
+            是否必须更新（常规读取失败）
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleStartModel.OnGetChangeStateAsync(System.Int32,Senparc.Ncf.Core.Enums.XncfModules_State)">
+            <summary>
+            更新状态
+            </summary>
+            <param name="id"></param>
+            <param name="toState"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleStartModel.OnPostRunFunctionAsync(Senparc.Areas.Admin.Areas.Admin.Pages.ExecuteFuncParamDto2)">
+            <summary>
+            提交信息，执行方法
+            </summary>
+            <param name="xncfUid"></param>
+            <param name="xncfFunctionName"></param>
+            <param name="xncfFunctionParams"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleStartModel.OnGetLogAsync(System.String)">
+            <summary>
+            获取日志
+            </summary>
+            <param name="tempId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleStartModel.OnPostDeleteAsync(System.Int32)">
+            <summary>
+            删除模块
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleStartModel.OnGetDetailAsync(System.String)">
+            <summary>
+            handler=Detail
+            </summary>
+            <param name="uid"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Areas.Admin.Pages.XncfModuleStartModel.OnGetChangeStateAjaxAsync(System.Int32,Senparc.Ncf.Core.Enums.XncfModules_State)">
+            <summary>
+            handler=ChangeStateAjax
+            </summary>
+            <param name="id"></param>
+            <param name="toState"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Areas.Admin.PagesRolePermissionModel.RoleId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Areas.Admin.PagesRolePermissionModel.SysRoleInfo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Pages.IndexModel.OnGetXncfStatAsync">
+            <summary>
+            获取状态
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Pages.IndexModel.OnGetXncfOpeningAsync">
+            <summary>
+            获取开放中的模块信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Pages.IndexModel.OnGetMenuTreeAsync(Senparc.Ncf.Service.SysPermissionService)">
+            <summary>
+            获取无状态的菜单信息
+            </summary>
+            <param name="sysPermissionService"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Pages.IndexModel.OnGetMenuResourceAsync(Senparc.Ncf.Service.SysPermissionService)">
+            <summary>
+            获取包含当前停留页面信息的菜单信息
+            </summary>
+            <param name="sysPermissionService"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Pages.IndexModel.GetSysMenuTreesMainRecursiveAsync(System.Collections.Generic.IEnumerable{Senparc.Ncf.Core.Models.DataBaseModel.SysMenuDto})">
+            <summary>
+            获取 Admin 后台左侧菜单结构
+            </summary>
+            <param name="sysMenuTreeItems"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Pages.IndexModel.GetSysMenuTreesRecursive(System.Collections.Generic.IEnumerable{Senparc.Ncf.Core.Models.DataBaseModel.SysMenuDto},System.Collections.Generic.IList{Senparc.Ncf.Core.Models.DataBaseModel.SysMenuTreeItemDto},Senparc.Ncf.Core.Models.DataBaseModel.SysMenuDto)">
+            <summary>
+            递归设置菜单节点信息
+            </summary>
+            <param name="sysMenuTreeItems"></param>
+            <param name="sysMenuTrees"></param>
+            <param name="parent"></param>
+        </member>
+        <member name="T:Senparc.Areas.Admin.Authorization.PermissionAttribute">
+            <summary>
+            权限特性
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Authorization.PermissionAttribute.#ctor(System.String)">
+            <summary>
+            code里面不能存在英文逗号 TODO
+            </summary>
+            <param name="codes">多个code 英文逗号分割</param>
+        </member>
+        <member name="T:Senparc.Areas.Admin.Authorization.PermissionFilterAttribute">
+            <summary>
+            权限相关
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.Authorization.PermissionHandler">
+            <summary>
+            校验
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.Authorization.PermissionRequirement">
+            <summary>
+            资源
+            </summary>
+        </member>
+        <member name="F:Senparc.Areas.Admin.Authorization.PermissionRequirement.All">
+            <summary>
+            登录后即可访问
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Authorization.PermissionRequirement.ResourceCodes">
+            <summary>
+            资源code
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.BackendJwtAuthorizeAttribute">
+            <summary>
+            权限认证
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.BaseAdminPageModel.OnPageHandlerExecuting(Microsoft.AspNetCore.Mvc.Filters.PageHandlerExecutingContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.PermissionRequestDto.RoleId">
+            <summary>
+            角色Id
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.PermissionRequestDto.PermissionId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.PermissionRequestDto.RoleCode">
+            <summary>
+            角色代码
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.PermissionRequestDto.ResourceCode">
+            <summary>
+            资源（按钮）代码
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.SysRoleDetailDto.Enabled">
+            <summary>
+            启用状态
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.SysRoleDetailDto.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.SysRoleDetailDto.RoleName">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.SysRoleDetailDto.RoleCode">
+            <summary>
+            角色代码
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.SysRoleDetailDto.AddTime">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.SysRoleDetailDto.LastUpdateTime">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.SysRoleListDto.Enabled">
+            <summary>
+            启用状态
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.SysRoleListDto.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.SysRoleListDto.RoleName">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.SysRoleListDto.RoleCode">
+            <summary>
+            角色代码
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.SysRoleListDto.AddTime">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Dto.SysRoleListDto.LastUpdateTime">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.Domain.Models.AdminSenparcEntities">
+            <summary>
+            当前 Entities 只为帮助 SenparcEntities 生成 Migration 信息而存在，没有特别的操作意义。
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Models.AdminSenparcEntities.SystemConfigs">
+            <summary>
+            系统设置
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Domain.Models.AdminUserInfo.GenerateUserName">
+            <summary>
+            生成用户名
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Domain.Models.AdminUserInfo.GeneratePassword">
+            <summary>
+            生成随机密码
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Domain.Models.AdminUserInfo.GeneratePasswordSalt">
+            <summary>
+            生成密码盐
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Domain.Models.AdminUserInfo.GetMD5Password(System.String,System.String,System.Boolean)">
+            <summary>
+            获取加盐后的 MD5 密码
+            </summary>
+            <param name="password"></param>
+            <param name="salt"></param>
+            <param name="isMD5Password"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Models.Dto.AccountLoginDto.ValidateCode">
+            <summary>
+            验证码
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Models.Dto.AccountLoginResultDto.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Models.Dto.AccountLoginResultDto.Token">
+            <summary>
+            Jwt token
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Models.Dto.AccountLoginResultDto.RoleCodes">
+            <summary>
+            角色列表
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Models.Dto.AccountLoginResultDto.PermissionCodes">
+            <summary>
+            操作代码
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.Domain.Models.AdminSenparcEntities_MySql">
+            <summary>
+            当前 Entities 只为帮助 SenparcEntities 生成 Migration 信息而存在，没有特别的操作意义。
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.Domain.Models.SenparcDbContextFactory_MySql">
+            <summary>
+            设计时 DbContext 创建（仅在开发时创建 Code-First 的数据库 Migration 使用，在生产环境不会执行）
+            <para>1、切换至 Debug 模式</para>
+            <para>2、将当前项目设为启动项</para>
+            <para>3、打开【程序包资源管理器控制台】，默认项目设为当前项目</para>
+            <para>4、运行：PM> add-migration [更新名称] -Context AdminSenparcEntities_MySql -o SystemEntities/Migrations/Migrations.MySql.SystemEntities</para>
+            </summary> 
+        </member>
+        <member name="T:Senparc.Areas.Admin.Domain.Models.AdminSenparcEntities_PostgreSQL">
+            <summary>
+            当前 Entities 只为帮助 SenparcEntities 生成 Migration 信息而存在，没有特别的操作意义。
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.Domain.Models.SenparcDbContextFactory_PostgreSQL">
+            <summary>
+            设计时 DbContext 创建（仅在开发时创建 Code-First 的数据库 Migration 使用，在生产环境不会执行）
+            <para>1、切换至 Debug 模式</para>
+            <para>2、将当前项目设为启动项</para>
+            <para>3、打开【程序包资源管理器控制台】，默认项目设为当前项目</para>
+            <para>4、运行：PM> add-migration [更新名称] -Context AdminSenparcEntities_PostgreSQL -o SystemEntities/Migrations/Migrations.PostgreSQL.SystemEntities</para>
+            </summary> 
+        </member>
+        <member name="T:Senparc.Areas.Admin.Domain.Models.AdminSenparcEntities_Sqlite">
+            <summary>
+            当前 Entities 只为帮助 SenparcEntities 生成 Migration 信息而存在，没有特别的操作意义。
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.Domain.Models.SenparcDbContextFactory_SQLite">
+            <summary>
+            设计时 DbContext 创建（仅在开发时创建 Code-First 的数据库 Migration 使用，在生产环境不会执行）
+            <para>1、切换至 Debug 模式</para>
+            <para>2、将当前项目设为启动项</para>
+            <para>3、打开【程序包资源管理器控制台】，默认项目设为当前项目</para>
+            <para>4、运行：PM> add-migration [更新名称] -Context AdminSenparcEntities_SQLite -o SystemEntities/Migrations/Migrations.SQLite.SystemEntities</para>
+            </summary> 
+        </member>
+        <member name="T:Senparc.Areas.Admin.Domain.Models.AdminSenparcEntities_SqlServer">
+            <summary>
+            当前 Entities 只为帮助 SenparcEntities 生成 Migration 信息而存在，没有特别的操作意义。
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.Domain.Models.SenparcDbContextFactory_SqlServer">
+            <summary>
+            设计时 DbContext 创建（仅在开发时创建 Code-First 的数据库 Migration 使用，在生产环境不会执行）
+            <para>1、切换至 Debug 模式</para>
+            <para>2、将当前项目设为启动项</para>
+            <para>3、打开【程序包资源管理器控制台】，默认项目设为当前项目</para>
+            <para>4、运行：PM> add-migration [更新名称] -Context AdminSenparcEntities_SqlServer -o SystemEntities/Migrations/Migrations.SqlServer.SystemEntities</para>
+            </summary> 
+        </member>
+        <member name="T:Senparc.Areas.Admin.Domain.Models.VD.BasePageModel">
+            <summary>
+            当前项目供前端（非Areas）使用的PageModel全局基类
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.Domain.Models.VD.IError_BaseVD">
+            <summary>
+            全局所有的Error_ExceptionVD必须实现这个接口
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Models.VD.IError_BaseVD.Url">
+            <summary>
+            给Error_Error404VD用
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.Domain.Models.VD.Error_BaseVD.Url">
+            <summary>
+            给Error_Error404VD用
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Domain.AdminUserInfoService.CheckUserNameExisted(System.Int64,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="userName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Domain.AdminUserInfoService.CreateAdminUserInfo(Senparc.Ncf.Core.Models.CreateOrUpdate_AdminUserInfoDto)">
+            <summary>
+            添加用户信息
+            </summary>
+            <param name="objDto"></param>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Domain.AdminUserInfoService.CreateAdminUserInfoAsync(Senparc.Ncf.Core.Models.CreateOrUpdate_AdminUserInfoDto)">
+            <summary>
+            创建管理员
+            </summary>
+            <param name="objDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Domain.AdminUserInfoService.UpdateAdminUserInfoAsync(Senparc.Ncf.Core.Models.CreateOrUpdate_AdminUserInfoDto)">
+            <summary>
+            创建管理员
+            </summary>
+            <param name="objDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Domain.AdminUserInfoService.UpdateAdminUserInfo(Senparc.Ncf.Core.Models.CreateOrUpdate_AdminUserInfoDto)">
+            <summary>
+            更新用户信息
+            </summary>
+            <param name="objDto"></param>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Domain.AdminUserInfoService.Init(System.String@,System.String@)">
+            <summary>
+            初始化
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Domain.AdminUserInfoService.LoginAsync(Senparc.Areas.Admin.Domain.Models.Dto.AccountLoginDto)">
+            <summary>
+            登录
+            <paramref name="loginDto">登录dto</paramref>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Domain.AdminUserInfoService.GenerateToken(System.Int32)">
+            <summary>
+            GenerateToken
+            </summary>
+            <param name="memberId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Senparc.Areas.Admin.Domain.Services.SysMenuService">
+            <summary>
+            菜单
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Domain.Services.SysMenuService.GetAllMenusTreeAsync(System.Boolean)">
+            <summary>
+            获取所有菜单(不包含页面)
+            TODO... 缓存
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Domain.Services.SysMenuService.buildTreeItems(System.Collections.Generic.IEnumerable{Senparc.Ncf.Core.Models.DataBaseModel.SysMenuDto},System.Collections.Generic.IList{Senparc.Ncf.Core.Models.DataBaseModel.SysMenuTreeItemDto},System.Collections.Generic.IEnumerable{Senparc.Ncf.Core.Models.DataBaseModel.SysMenuDto})">
+            <summary>
+            递归获取树形结构
+            </summary>
+            <param name="iteration"></param>
+            <param name="items"></param>
+            <param name="source"></param>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Domain.Services.SysRolePermissionService.HasPermissionAsync(System.Collections.Generic.IEnumerable{System.String},System.Int32)">
+            <summary>
+            检查当前用户是否权限
+            </summary>
+            <param name="resourceCodes">资源codes</param>
+            <param name="adminUserInfoId">当前用户Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.SenparcTraceManager.SenparcTraceHelper.GetLogDate">
+            <summary>
+            获取所有日期列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.SenparcTraceManager.SenparcTraceHelper.GetAllLogs(System.String)">
+            <summary>
+            获取指定日期的日志
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Senparc.Areas.Admin.SenparcTraceManager.SenparcTraceItem.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.SenparcTraceManager.SenparcTraceItem.DateTime">
+            <summary>
+            时间
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.SenparcTraceManager.SenparcTraceItem.ThreadId">
+            <summary>
+            线程
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.SenparcTraceManager.SenparcTraceItem.Line">
+            <summary>
+            在日志中的行数
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.SenparcTraceManager.SenparcTraceItem.weixinTraceType">
+            <summary>
+            日志类型
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.SenparcTraceManager.SenparcTraceItem.IsException">
+            <summary>
+            是否是一条异常日志
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.SenparcTraceManager.SenparcTraceItem.Result">
+            <summary>
+            结果
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.SenparcTraceManager.WeicinTraceItemContent.Result">
+            <summary>
+            返回结果，通常为JSON
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.SenparcTraceManager.SenparcTraceType">
+            <summary>
+            消息类型
+            </summary>
+        </member>
+        <member name="F:Senparc.Areas.Admin.JwtSettings.Position_MiniPro">
+            <summary>
+            前台jwt
+            </summary>
+        </member>
+        <member name="F:Senparc.Areas.Admin.JwtSettings.Position_Backend">
+            <summary>
+            管理后台jwt
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.JwtSettings.Issuer">
+            <summary>
+            token是谁颁发的
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.JwtSettings.Audience">
+            <summary>
+            token可以给哪些客户端使用
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.JwtSettings.SecretKey">
+            <summary>
+            加密的key
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.JwtSettings.Expires">
+            <summary>
+            过期时间，单位【小时】
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.AdminUserInfoAppService.Create(Senparc.Areas.Admin.OHS.PL.AdminUserInfo_CreateOrUpdateRequest)">
+            <summary>
+            创建管理员
+            </summary>
+            <param name="request">管理员创建请求</param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.AdminUserInfoAppService.Update(Senparc.Areas.Admin.OHS.PL.AdminUserInfo_CreateOrUpdateRequest)">
+            <summary>
+            修改管理员
+            </summary>
+            <param name="request">管理员创建请求</param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.AdminUserInfoAppService.LoginAsync(Senparc.Areas.Admin.OHS.PL.AdminUserInfo_LoginRequest)">
+            <summary>
+            管理员登录验证，并进行登录授权
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.AdminUserInfoAppService.AddRoleAsync(Senparc.Areas.Admin.OHS.PL.AdminUserInfo_AddRoleRequest)">
+            <summary>
+            增加角色
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.AdminUserInfoAppService.GetRolesAsync(Senparc.Areas.Admin.OHS.PL.AdminUserInfo_AddRoleRequest)">
+            <summary>
+            获取当前用户的所有角色
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Senparc.Areas.Admin.OHS.Local.AppService.LocalAppServiceBase">
+            <summary>
+            基类
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.LocalAppServiceBase.GetCurrentAdminUserInfoId(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            获取当前用的Id
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Senparc.Areas.Admin.OHS.Local.AppService.SysMenuAppService">
+            <summary>
+            菜单表
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.SysMenuAppService.CreateOrUpdateAsync(Senparc.Areas.Admin.OHS.Local.PL.SysMenu_CreateOrUpdateRequest)">
+            <summary>
+            创建菜单
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.SysMenuAppService.GetAllMenusTreeAsync(System.Boolean)">
+            <summary>
+            获取菜单树 不包含按钮
+            </summary>
+            <param name="hasButton">是否包含按钮</param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.SysMenuAppService.GetMenusAsync(System.String)">
+            <summary>
+            获取菜单列表
+            </summary>
+            <param name="parentId">父级Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.SysMenuAppService.GetMenuAsync(System.String)">
+            <summary>
+            获取菜单详情
+            </summary>
+            <param name="id">父级Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.SysMenuAppService.DeleteMenuAsync(System.String)">
+            <summary>
+            删除菜单
+            </summary>
+            <param name="id">父级Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.SysRoleAppService.CreateOrUpdateAsync(Senparc.Areas.Admin.OHS.Local.PL.SysRole_CreateOrUpdateRequest)">
+            <summary>
+            创建or修改角色信息
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+            <exception cref="T:Senparc.Ncf.Core.Exceptions.NcfExceptionBase"></exception>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.SysRoleAppService.GetListAsync(Senparc.Areas.Admin.OHS.Local.PL.SysRole_GetListRequest)">
+            <summary>
+            获取分页列表
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.SysRoleAppService.GetSingeAsync(System.String)">
+            <summary>
+            获取详情
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.SysRoleAppService.DeleteSingeAsync(System.String)">
+            <summary>
+            删除角色
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.SysRoleAppService.AddPermissionAsync(Senparc.Areas.Admin.OHS.Local.PL.SysRole_AddPermissionRequest)">
+            <summary>
+            增加权限
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Senparc.Areas.Admin.OHS.Local.AppService.SysRoleAppService.GetRolePermissionsAsync(System.String)">
+            <summary>
+            获取角色下面的所有菜单
+            </summary>
+            <param name="roleId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Senparc.Areas.Admin.OHS.Local.PL.AdminUserInfo_GetRolesResponse">
+            <summary>
+            获取所有
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.OHS.Local.PL.SysMenu_CreateOrUpdateRequest">
+            <summary>
+            菜单创建请求
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.OHS.Local.PL.SysMenu_CreateOrUpdateRequest.ParentId">
+            <summary>
+            父菜单
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.OHS.Local.PL.SysMenu_CreateOrUpdateRequest.Icon">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.OHS.Local.PL.SysMenu_CreateOrUpdateRequest.Sort">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.OHS.Local.PL.SysMenu_CreateOrUpdateRequest.Visible">
+            <summary>
+            是否可见
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.OHS.Local.PL.SysMenu_CreateOrUpdateResponse">
+            <summary>
+            菜单创建响应
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.OHS.Local.PL.SysMenu_CreateOrUpdateResponse.Id">
+            <summary>
+            创建后的主键编号
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.OHS.Local.PL.SysMenu_MenuTreeResponse">
+            <summary>
+            菜单树 不包含按钮
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.OHS.Local.PL.SysMenu_MenusResponse">
+            <summary>
+            菜单列表项目
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.OHS.Local.PL.SysMenu_GetMenuResponse">
+            <summary>
+            菜单详情
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.OHS.Local.PL.SysRole_AddPermissionRequest">
+            <summary>
+            授权操作
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.OHS.Local.PL.SysRole_GetListResponse">
+            <summary>
+            角色列表
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.OHS.Local.PL.SysRole_GetSingleResponse">
+            <summary>
+            详情
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.OHS.Local.PL.SysRole_CreateOrUpdateResponse">
+            <summary>
+            角色更新
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.OHS.Local.PL.SysRole_CreateOrUpdateResponse.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.OHS.Local.PL.SysRole_PermissionsResponse">
+            <summary>
+            角色下面的所有权限
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.OHS.PL.AdminUserInfo_AddRoleRequest.RoleId">
+            <summary>
+            角色Id
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.OHS.PL.AdminUserInfo_AddRoleRequest.AccountId">
+            <summary>
+            管理员id
+            </summary>
+        </member>
+        <member name="T:Senparc.Areas.Admin.OHS.PL.AdminUserInfo_CreateOrUpdateRequest">
+            <summary>
+            管理员新增
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.OHS.PL.AdminUserInfo_CreateOrUpdateRequest.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.OHS.PL.AdminUserInfo_CreateOrUpdateRequest.AdminRemark">
+            <summary>
+            备注1
+            </summary>
+        </member>
+        <member name="P:Senparc.Areas.Admin.OHS.PL.AdminUserInfo_CreateOrUpdateRequest.Remark">
+            <summary>
+            备注2
+            </summary>
+        </member>
+        <member name="M:Senparc.Areas.Admin.Register.AddJwtAuthentication(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            添加前后端认证
+            </summary>
+            <param name="services"></param>
+        </member>
+    </members>
+</doc>
