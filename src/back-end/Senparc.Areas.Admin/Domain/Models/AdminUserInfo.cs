@@ -27,6 +27,24 @@ namespace Senparc.Areas.Admin.Domain.Models
         public DateTime LastLoginTime { get; private set; }
         public string LastLoginIp { get; private set; }
 
+        /// <summary>
+        /// 获取加盐后的 MD5 密码
+        /// MD5 作为登陆凭证已经缺少安全性，请使用 GetSHA512Password() 方法
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="salt"></param>
+        /// <param name="isMD5Password"></param>
+        /// <returns></returns>
+        private string GetMD5Password(string password, string salt, bool isMD5Password)
+        {
+            string md5 = password.ToUpper().Replace("-", "");
+            if (!isMD5Password)
+            {
+                md5 = MD5.GetMD5Code(password, "").Replace("-", ""); //原始MD5
+            }
+            return MD5.GetMD5Code(md5, salt).Replace("-", ""); //再加密
+        }
+
         private AdminUserInfo() { }
 
         public AdminUserInfo(ref string userName, ref string password, string realName, string phone, string note)
@@ -36,7 +54,7 @@ namespace Senparc.Areas.Admin.Domain.Models
 
             UserName = userName;
             PasswordSalt = GeneratePasswordSalt();//生成密码盐
-            Password = GetMD5Password(password, PasswordSalt, false);//生成密码
+            Password = GetSHA512Password(password, PasswordSalt);//生成密码
             RealName = realName;
             Phone = phone;
             Note = note;
@@ -74,24 +92,6 @@ namespace Senparc.Areas.Admin.Domain.Models
         public string GeneratePasswordSalt()
         {
             return DateTime.Now.Ticks.ToString();
-        }
-
-        /// <summary>
-        /// 获取加盐后的 MD5 密码
-        /// MD5 作为登陆凭证已经缺少安全性，请使用 GetSHA512Password() 方法
-        /// </summary>
-        /// <param name="password"></param>
-        /// <param name="salt"></param>
-        /// <param name="isMD5Password"></param>
-        /// <returns></returns>
-        public string GetMD5Password(string password, string salt, bool isMD5Password)
-        {
-            string md5 = password.ToUpper().Replace("-", "");
-            if (!isMD5Password)
-            {
-                md5 = MD5.GetMD5Code(password, "").Replace("-", ""); //原始MD5
-            }
-            return MD5.GetMD5Code(md5, salt).Replace("-", ""); //再加密
         }
 
         public string GetSHA512Password(string password, string salt, bool usePasswordToken = true)
@@ -145,7 +145,7 @@ namespace Senparc.Areas.Admin.Domain.Models
             UserName = objDto.UserName;
             if (!objDto.Password.IsNullOrEmpty())
             {
-                Password = GetMD5Password(objDto.Password, this.PasswordSalt, false);
+                Password = GetSHA512Password(objDto.Password, this.PasswordSalt, false);
             }
 
             RealName = objDto.RealName;
