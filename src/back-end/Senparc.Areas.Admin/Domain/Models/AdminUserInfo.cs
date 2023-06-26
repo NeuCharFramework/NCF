@@ -1,8 +1,14 @@
 ﻿using Senparc.CO2NET.Extensions;
+using Senparc.CO2NET.Helpers;
+using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Utility;
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Text.Unicode;
 
 namespace Senparc.Areas.Admin.Domain.Models
 {
@@ -58,7 +64,7 @@ namespace Senparc.Areas.Admin.Domain.Models
         /// <returns></returns>
         public string GeneratePassword()
         {
-            return Guid.NewGuid().ToString("n").Substring(0, 8);//TODO:更强的代码策略，或自定义的代码策略
+            return Guid.NewGuid().ToString("n").Substring(0, 16);
         }
 
         /// <summary>
@@ -77,6 +83,7 @@ namespace Senparc.Areas.Admin.Domain.Models
         /// <param name="salt"></param>
         /// <param name="isMD5Password"></param>
         /// <returns></returns>
+        [Obsolete("MD5 作为登陆凭证已经缺少安全性，请使用 GetSHA512Password() 方法")]
         public string GetMD5Password(string password, string salt, bool isMD5Password)
         {
             string md5 = password.ToUpper().Replace("-", "");
@@ -85,6 +92,47 @@ namespace Senparc.Areas.Admin.Domain.Models
                 md5 = MD5.GetMD5Code(password, "").Replace("-", ""); //原始MD5
             }
             return MD5.GetMD5Code(md5, salt).Replace("-", ""); //再加密
+        }
+
+        public string GetSHA512Password(string password, string salt, bool usePasswordToken = true)
+        {
+            if (salt.Length < 16)
+            {
+                throw new NcfExceptionBase($"{nameof(salt)} 必须大于 16 位！");
+            }
+
+            var passwordToken = (usePasswordToken
+                                        ? Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.PasswordSaltToken
+                                        : null) ?? "";
+
+            salt += passwordToken;
+
+            var ascii = Encoding.ASCII.GetBytes(MD5.GetMD5Code(salt, "").Replace("-", ""));
+
+            string sha512 = password;
+
+            var splitPoint = usePasswordToken ? Encoding.ASCII.GetBytes(passwordToken).LastOrDefault() : 50;
+
+            for (int i = 0; i < 20; i++)
+            {
+                if (ascii[i] % 2 == 0)
+                {
+                    sha512 = EncryptHelper.GetHmacSha256(sha512, salt);
+                }
+                else
+                {
+                    if (ascii[i] > splitPoint)
+                    {
+                        sha512 = EncryptHelper.GetSha1(sha512);
+                    }
+                    else
+                    {
+                        sha512 = EncryptHelper.GetSha1(sha512, toUpper: true);
+                    }
+                }
+            }
+
+            return "g01" + sha512;
         }
 
         public void UpdateObject(CreateOrUpdate_AdminUserInfoDto objDto)
