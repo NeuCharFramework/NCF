@@ -78,12 +78,12 @@ namespace Senparc.Areas.Admin.Domain.Models
 
         /// <summary>
         /// 获取加盐后的 MD5 密码
+        /// MD5 作为登陆凭证已经缺少安全性，请使用 GetSHA512Password() 方法
         /// </summary>
         /// <param name="password"></param>
         /// <param name="salt"></param>
         /// <param name="isMD5Password"></param>
         /// <returns></returns>
-        [Obsolete("MD5 作为登陆凭证已经缺少安全性，请使用 GetSHA512Password() 方法")]
         public string GetMD5Password(string password, string salt, bool isMD5Password)
         {
             string md5 = password.ToUpper().Replace("-", "");
@@ -101,9 +101,14 @@ namespace Senparc.Areas.Admin.Domain.Models
                 throw new NcfExceptionBase($"{nameof(salt)} 必须大于 16 位！");
             }
 
-            var passwordToken = (usePasswordToken
+            if (usePasswordToken && Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.PasswordSaltToken.IsNullOrEmpty())
+            {
+                return GetMD5Password(password, salt, false);
+            }
+
+            var passwordToken = usePasswordToken
                                         ? Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.PasswordSaltToken
-                                        : null) ?? "";
+                                        : "";
 
             salt += passwordToken;
 
