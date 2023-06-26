@@ -54,7 +54,7 @@ namespace Senparc.Areas.Admin.Domain.Models
 
             UserName = userName;
             PasswordSalt = GeneratePasswordSalt();//生成密码盐
-            Password = GetSHA512Password(password, PasswordSalt);//生成密码
+            Password = GetSHA512Password(password, PasswordSalt, true);//生成密码
             RealName = realName;
             Phone = phone;
             Note = note;
