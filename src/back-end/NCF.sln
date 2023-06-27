@@ -30,6 +30,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Xncf.Installer.Interface", "Senparc.Xncf.Installer.Interface\Senparc.Xncf.Installer.Interface.csproj", "{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Senparc.Areas.Admin.Tests", "Tests\Senparc.Areas.Admin.Tests\Senparc.Areas.Admin.Tests.csproj", "{6228437D-3EF6-43D9-A75C-255C883F293B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,9 +61,7 @@ Global
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Test|Any CPU.Build.0 = Release|Any CPU
 		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.Debug-Dapr|Any CPU.ActiveCfg = Debug-Dapr|Any CPU
-		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.Debug-Dapr|Any CPU.Build.0 = Debug-Dapr|Any CPU
 		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.TemplateRelease|Any CPU.ActiveCfg = Release|Any CPU
@@ -115,6 +115,13 @@ Global
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.TemplateRelease|Any CPU.Build.0 = Release|Any CPU
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{6228437D-3EF6-43D9-A75C-255C883F293B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6228437D-3EF6-43D9-A75C-255C883F293B}.Debug-Dapr|Any CPU.ActiveCfg = Debug|Any CPU
+		{6228437D-3EF6-43D9-A75C-255C883F293B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6228437D-3EF6-43D9-A75C-255C883F293B}.TemplateRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{6228437D-3EF6-43D9-A75C-255C883F293B}.TemplateRelease|Any CPU.Build.0 = Release|Any CPU
+		{6228437D-3EF6-43D9-A75C-255C883F293B}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{6228437D-3EF6-43D9-A75C-255C883F293B}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -126,6 +133,7 @@ Global
 		{1D1A334A-7DFD-4830-88F9-5E3347158040} = {76FC86E0-991D-47B7-8AAB-42B27DAB10C1}
 		{540DC001-C430-449A-90AA-FEF131E1633E} = {76FC86E0-991D-47B7-8AAB-42B27DAB10C1}
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3} = {76FC86E0-991D-47B7-8AAB-42B27DAB10C1}
+		{6228437D-3EF6-43D9-A75C-255C883F293B} = {4D53646F-67EE-430A-8B50-9600CFACF434}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7427A6C9-D522-4B10-B0AC-607D69736B50}
