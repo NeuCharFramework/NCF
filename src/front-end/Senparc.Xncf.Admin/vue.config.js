@@ -71,11 +71,7 @@ module.exports = {
     //     { from: '要拷贝的文件', to: '要拷贝到的路径（不写默认是打包的根目录）' }
     //   ])
     // ]
-    plugins: [
-      new CopyWebpackPlugin([
-        { from: '', to: '' }
-      ])
-    ]
+    plugins: []
   },
   chainWebpack(config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload
