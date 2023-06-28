@@ -110,7 +110,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 return Ok("pwd", false, "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º101¡£");
                 //ModelState.AddModelError(nameof(this.Password), "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º101¡£");
             }
-            else if (_userInfoService.TryLogin(loginInDto.Name, loginInDto.Password, true) == null)
+            else if (_userInfoService.TryLogin(userInfo, loginInDto.Password, true) == null)
             {
                 //errorMsg = "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º102¡£";
                 //ModelState.AddModelError(nameof(this.Password), "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º102¡£");
