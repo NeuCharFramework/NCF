@@ -68,6 +68,18 @@ namespace Senparc.Areas.Admin.Domain.Models
         }
 
         /// <summary>
+        /// 检查密码是否正确
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="usePasswordSaltToken"></param>
+        /// <returns></returns>
+        public bool CheckPassword(string password, bool usePasswordSaltToken = true)
+        {
+            var encodedPassword = GetSHA512Password(password, PasswordSalt, usePasswordSaltToken);
+            return encodedPassword.Equals(Password);
+        }
+
+        /// <summary>
         /// 生成用户名
         /// </summary>
         /// <returns></returns>
