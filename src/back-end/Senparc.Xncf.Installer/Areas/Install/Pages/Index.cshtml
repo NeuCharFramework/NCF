@@ -137,14 +137,14 @@
                 </div>
                 <div class="install_options" v-if="isExpanded">
                     <el-form label-width="140px" :label-position="labelPosition">
-                        <el-form-item label="系统名称">
+                        <el-form-item label="系统名称" required>
                             <el-input v-model="installOptions.systemName"></el-input>
                         </el-form-item>
-                        <el-form-item label="管理员名称">
+                        <el-form-item label="管理员名称" required>
                             <el-input v-model="installOptions.adminUserName"></el-input>
                         </el-form-item>
-                        <el-form-item label="数据库连接字符串">
-                            <el-input type="textarea" v-model="installOptions.connectionString"></el-input>
+                        <el-form-item label="数据库连接字符串" required>
+                            <el-input type="textarea" v-model="installOptions.dbConnectionString"></el-input>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -187,13 +187,15 @@
                     installOptions:{
                         systemName: "Default",
                         adminUserName:"admin",
-                        connectionString:"123"
+                        dbConnectionString:"123"
                     }
                 }
             },
             methods: {
                 toggleInfo() {
                     this.isExpanded = !this.isExpanded;
+                },
+                saveOptions(){
                 },
                 submit() {
                     if (installStarted) {

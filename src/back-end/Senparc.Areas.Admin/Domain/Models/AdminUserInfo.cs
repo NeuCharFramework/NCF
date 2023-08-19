@@ -47,6 +47,14 @@ namespace Senparc.Areas.Admin.Domain.Models
 
         private AdminUserInfo() { }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userName">用户名为空时会按照SenparcCoreAdmin+两位数字的格式随机生成</param>
+        /// <param name="password">密码为空时会生成16字符长度的随机字符串作为密码</param>
+        /// <param name="realName">真实姓名</param>
+        /// <param name="phone">电话号码</param>
+        /// <param name="note">备注</param>
         public AdminUserInfo(ref string userName, ref string password, string realName, string phone, string note)
         {
             userName ??= GenerateUserName();//记录用户名
