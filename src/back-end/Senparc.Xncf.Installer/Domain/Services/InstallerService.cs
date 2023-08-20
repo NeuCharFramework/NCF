@@ -9,6 +9,7 @@ using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.Installer.Domain.Dto;
+using Senparc.Xncf.Installer.Interface.Domain.Dto;
 using Senparc.Xncf.SystemManager.Domain.Service;
 using Senparc.Xncf.Tenant.Domain.DataBaseModel;
 using Senparc.Xncf.Tenant.Domain.Services;
@@ -42,7 +43,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
         /// 初始化安装系统
         /// </summary>
         /// <returns></returns>
-        private async Task InitSystemAsync()
+        private async Task InitSystemAsync(InstallOptionsDto installOptionsDto)
         {
             Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
 
@@ -120,7 +121,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
                 //一次性保存（所有）修改
                 await _xncfModuleService.SaveObjectAsync(adminModule).ConfigureAwait(false);
 
-                _systemConfigService.Init();//初始化系统信息
+                _systemConfigService.Init(installOptionsDto.SystemName);//初始化系统信息
             }
 
             {
@@ -200,12 +201,10 @@ namespace Senparc.Xncf.Installer.Domain.Services
         /// 执行默认包的安装命令
         /// </summary>
         /// <returns></returns>
-        public async Task<InstallDto> InstallAsync()
+        public async Task<InstallResponseDto> InstallAsync(InstallOptionsDto installOptionsDto)
         {
-            var installDto = new InstallDto()
-            {
-                StatCode = 404
-            };
+            var installResponseDto = new InstallResponseDto();
+            installResponseDto.StatCode = 404;
 
             //原 Get 请求
             {
@@ -244,30 +243,30 @@ namespace Senparc.Xncf.Installer.Domain.Services
                 var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
                 using (var cacheLock = await cacheStrategy.BeginCacheLockAsync("InstallerService", "Install"))
                 {
-                    var adminUserInfo = _accountInfoService.Init(out string userName, out string password);//初始化管理员信息
+                    var adminUserInfo = _accountInfoService.Init(installOptionsDto.AdminUserName, out string password);//初始化管理员信息
 
                     if (adminUserInfo == null)
                     {
-                        installDto.StatCode = 404;
-                        return installDto;
+                        installResponseDto.StatCode = 404;
+                        return installResponseDto;
                     }
                     else
                     {
-                        installDto.Step = 1;
+                        installResponseDto.Step = 1;
 
                         //进行系统初始化安装
-                        await InitSystemAsync();
+                        await InitSystemAsync(installOptionsDto);
 
                         //IXncfRegister systemRegister = XncfRegisterManager.RegisterList.First(z => z.GetType() == typeof(Senparc.Areas.Admin.Register));
                         //await _xncfModuleService.InstallMenuAsync(systemRegister, Ncf.Core.Enums.InstallOrUpdate.Install);//安装菜单
 
-                        installDto.AdminUserName = userName;
-                        installDto.AdminPassword = password;//这里不可以使用 adminUserInfo.Password，因为此参数已经是加密信息
-                        installDto.StatCode = 0;
+                        installResponseDto.AdminUserName = installOptionsDto.AdminUserName;
+                        installResponseDto.AdminPassword = password;//这里不可以使用 adminUserInfo.Password，因为此参数已经是加密信息
+                        installResponseDto.StatCode = 0;
                     }
                 }
             }
-            return installDto;
+            return installResponseDto;
         }
     }
 }

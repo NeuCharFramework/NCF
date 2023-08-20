@@ -47,7 +47,7 @@ namespace Senparc.Xncf.Installer
         {
             services.AddScoped<InstallerService>();
             services.AddScoped<InstallAppService>();
-            services.AddScoped<InstallDto>();
+            services.AddScoped<InstallResponseDto>();
             return base.AddXncfModule(services, configuration, env);
         }
 

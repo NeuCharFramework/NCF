@@ -4,6 +4,7 @@ using Senparc.CO2NET;
 using Senparc.Ncf.Core.AppServices;
 using Senparc.Xncf.Installer.Domain.Dto;
 using Senparc.Xncf.Installer.Domain.Services;
+using Senparc.Xncf.Installer.Interface.Domain.Dto;
 using Senparc.Xncf.Tenant.Domain.DataBaseModel;
 using Senparc.Xncf.Tenant.Domain.Services;
 using System;
@@ -28,11 +29,11 @@ namespace Senparc.Xncf.Installer.OHS.Local.AppService
         }
 
         [ApiBind()]
-        public async Task<AppResponseBase<InstallDto>> InstallAsyunc()
+        public async Task<AppResponseBase<InstallResponseDto>> InstallAsyunc(InstallOptionsDto installOptionsDto)
         {
-            return await this.GetResponseAsync<AppResponseBase<InstallDto>, InstallDto>(async (response, logger) =>
+            return await this.GetResponseAsync<AppResponseBase<InstallResponseDto>, InstallResponseDto>(async (response, logger) =>
             {
-                return await _installerService.InstallAsync();
+                return await _installerService.InstallAsync(installOptionsDto);
             });
         }
 

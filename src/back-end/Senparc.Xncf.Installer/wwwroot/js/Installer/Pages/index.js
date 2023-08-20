@@ -1,38 +1,43 @@
 var app = new Vue({
     el: '#app',
-    data() {
-        return {
-            labelPosition: 'left',
-            isExpanded: false,
-            installStarted: false,
-            installOptions: {
-                systemName: "Default",
-                adminUserName: "admin",
-                dbConnectionString: "123"
-            }
+    data: {
+        labelPosition: 'left',
+        isExpanded: false,
+        installStarted: false,
+        installOptions: {
+            systemName: "",
+            adminUserName: "",
+            dbConnectionString: ""
         }
     },
     methods: {
         toggleInfo() {
             this.isExpanded = !this.isExpanded;
         },
-        saveOptions() {
-        },
         submit() {
-            if (installStarted) {
-                alert('°²×°ÒÑ¾­ÔÚ½øÐÐÖÐ£¬ÇëµÈ´ý');
+            if (this.installStarted) {
+                alert('å®‰è£…å·²ç»åœ¨è¿›è¡Œä¸­ï¼Œè¯·ç­‰å¾…');
                 return false;
             }
 
-            if (!confirm('È·¶¨Òª¿ªÊ¼°²×°Âð£¿°²×°Íê³Éºó´ËÒ³Ãæ½«Ê§Ð§£¡')) {
+            if (!confirm('ç¡®å®šè¦å¼€å§‹å®‰è£…å—ï¼Ÿå®‰è£…å®ŒæˆåŽæ­¤é¡µé¢å°†å¤±æ•ˆï¼')) {
                 return false;
             }
 
-            installStarted = true;
+            this.installStarted = true;
 
-            document.getElementById('install_form').submit();
+            //document.getElementById('install_form').submit();
             document.getElementById('btnInstall').setAttribute('disabled', true);
-            document.getElementById('btnInstall').innerHTML = '°²×°ÒÑÆô¶¯£¬ÇëÉÔºó¡­¡­';
+            document.getElementById('btnInstall').innerHTML = 'å®‰è£…å·²å¯åŠ¨ï¼Œè¯·ç¨åŽâ€¦â€¦';
+
+            axios.post("/Install/Index", this.installOptions, {
+            }).then(res => {
+                if (res.data.success) {
+                    console.log(res.data);
+                } else {
+                    console.log(res.data);
+                }
+            });
 
             return true;
         }

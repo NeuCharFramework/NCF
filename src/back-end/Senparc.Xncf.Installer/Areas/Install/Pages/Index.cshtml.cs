@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Senparc.Areas.Admin.Domain;
+using Senparc.Areas.Admin.Domain.Models;
 using Senparc.CO2NET.Cache;
+using Senparc.CO2NET.Extensions;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
@@ -10,6 +13,8 @@ using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
+using Senparc.Xncf.Installer.Domain.Dto;
+using Senparc.Xncf.Installer.Interface.Domain.Dto;
 using Senparc.Xncf.Installer.OHS.Local.AppService;
 using Senparc.Xncf.SystemManager.Domain.Service;
 using Senparc.Xncf.Tenant.Domain.DataBaseModel;
@@ -27,7 +32,10 @@ namespace Senparc.Xncf.Instraller.Pages
         private readonly AdminUserInfoService _accountInfoService;
         private readonly InstallAppService _installAppService;
         private readonly IServiceProvider _serviceProvider;
-
+        /// <summary>
+        /// 系统名称
+        /// </summary>
+        public string SystemName { get; set; }
         /// <summary>
         /// 管理员用户名
         /// </summary>
@@ -36,6 +44,10 @@ namespace Senparc.Xncf.Instraller.Pages
         /// 管理员密码
         /// </summary>
         public string AdminPassword { get; set; }
+        /// <summary>
+        /// 数据库连接字符串
+        /// </summary>
+        public string DbConnectionString { get; set; }
         /// <summary>
         /// 需要修改的命名空间
         /// </summary>
@@ -62,9 +74,12 @@ namespace Senparc.Xncf.Instraller.Pages
 
             MultiTenantEnable = SiteConfig.SenparcCoreSetting.EnableMultiTenant;
             TenantRule = SiteConfig.SenparcCoreSetting.TenantRule;
+
+            //初始化页面显示的配置项的默认值
+            SystemName = "NCF - Template Project";
+            AdminUserName = GenerateUserName();
+            DbConnectionString = GetDbConnectionString();
         }
-
-
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -106,9 +121,20 @@ namespace Senparc.Xncf.Instraller.Pages
             return new StatusCodeResult(404);//已经安装完毕，且存在管理员则不进行安装
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync([FromBody] InstallRequestDto installRequestDto)
         {
-            var result = await _installAppService.InstallAsyunc();
+            var installOptionsDto = new InstallOptionsDto();
+
+            //将为空的配置项设为默认值
+            installOptionsDto.SystemName = installRequestDto.SystemName.IsNullOrEmpty() ?
+                this.SystemName: installRequestDto.SystemName;
+            installOptionsDto.AdminUserName = installRequestDto.AdminUserName.IsNullOrEmpty() ? 
+                this.AdminUserName : installRequestDto.AdminUserName;
+            installOptionsDto.DbConnectionString = installRequestDto.DbConnectionString.IsNullOrEmpty() ? 
+                this.DbConnectionString : installRequestDto.DbConnectionString;
+
+            //开始安装
+            var result = await _installAppService.InstallAsyunc(installOptionsDto);
             if (result.Success != true)
             {
                 if (result.Data == null)
@@ -132,5 +158,27 @@ namespace Senparc.Xncf.Instraller.Pages
             }
             return Page();
         }
+
+        //TODO: 此方法为AdminUserInfo类内部方法, 应该改由AdminUserInfoService提供
+        /// <summary>
+        /// 生成用户名
+        /// </summary>
+        /// <returns></returns>
+        public string GenerateUserName()
+        {
+            return $"SenparcCoreAdmin{new Random().Next(100).ToString("00")}";
+        }
+
+        public string GetDbConnectionString()
+        {
+            return "temp database connection string";
+        }
+    }
+
+    public class InstallRequestDto
+    {
+        public string? SystemName { get; set; }
+        public string? AdminUserName { get; set; }
+        public string? DbConnectionString { get; set;}
     }
 }
