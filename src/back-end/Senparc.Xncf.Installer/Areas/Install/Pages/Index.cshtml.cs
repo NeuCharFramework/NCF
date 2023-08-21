@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Senparc.Areas.Admin.Domain;
 using Senparc.Areas.Admin.Domain.Models;
 using Senparc.CO2NET.Cache;
@@ -11,10 +13,11 @@ using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Core.MultiTenant;
+using Senparc.Ncf.Core.Utility;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.Installer.Domain.Dto;
-using Senparc.Xncf.Installer.Interface.Domain.Dto;
+using Senparc.Xncf.Installer.Domain.Services;
 using Senparc.Xncf.Installer.OHS.Local.AppService;
 using Senparc.Xncf.SystemManager.Domain.Service;
 using Senparc.Xncf.Tenant.Domain.DataBaseModel;
@@ -23,6 +26,8 @@ using Senparc.Xncf.XncfModuleManager.Domain.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Senparc.Xncf.Instraller.Pages
 {
@@ -31,7 +36,9 @@ namespace Senparc.Xncf.Instraller.Pages
     {
         private readonly AdminUserInfoService _accountInfoService;
         private readonly InstallAppService _installAppService;
+        private readonly InstallOptionsService _installOptionsService;
         private readonly IServiceProvider _serviceProvider;
+
         /// <summary>
         /// 系统名称
         /// </summary>
@@ -66,19 +73,20 @@ namespace Senparc.Xncf.Instraller.Pages
         public bool MultiTenantEnable { get; set; }
 
         public IndexModel(IServiceProvider serviceProvider, AdminUserInfoService accountService,
-            InstallAppService installAppService)
+            InstallAppService installAppService, InstallOptionsService installOptionsService)
         {
+            _serviceProvider = serviceProvider;
             _accountInfoService = accountService;
             this._installAppService = installAppService;
-            _serviceProvider = serviceProvider;
-
+            this._installOptionsService = installOptionsService;
+            
             MultiTenantEnable = SiteConfig.SenparcCoreSetting.EnableMultiTenant;
             TenantRule = SiteConfig.SenparcCoreSetting.TenantRule;
 
             //初始化页面显示的配置项的默认值
-            SystemName = "NCF - Template Project";
-            AdminUserName = GenerateUserName();
-            DbConnectionString = GetDbConnectionString();
+            SystemName = installOptionsService.Options.SystemName;
+            AdminUserName = installOptionsService.Options.AdminUserName;
+            DbConnectionString = installOptionsService.Options.DbConnectionString;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -123,18 +131,18 @@ namespace Senparc.Xncf.Instraller.Pages
 
         public async Task<IActionResult> OnPostAsync([FromBody] InstallRequestDto installRequestDto)
         {
-            var installOptionsDto = new InstallOptionsDto();
+            //配置安装选项
+            if(!installRequestDto.SystemName.IsNullOrEmpty())
+                _installOptionsService.Options.SystemName = installRequestDto.SystemName;
 
-            //将为空的配置项设为默认值
-            installOptionsDto.SystemName = installRequestDto.SystemName.IsNullOrEmpty() ?
-                this.SystemName: installRequestDto.SystemName;
-            installOptionsDto.AdminUserName = installRequestDto.AdminUserName.IsNullOrEmpty() ? 
-                this.AdminUserName : installRequestDto.AdminUserName;
-            installOptionsDto.DbConnectionString = installRequestDto.DbConnectionString.IsNullOrEmpty() ? 
-                this.DbConnectionString : installRequestDto.DbConnectionString;
+            if(!installRequestDto.AdminUserName.IsNullOrEmpty())
+                _installOptionsService.Options.AdminUserName = installRequestDto.AdminUserName;
+
+            if(!installRequestDto.DbConnectionString.IsNullOrEmpty())
+                _installOptionsService.Options.DbConnectionString = installRequestDto.DbConnectionString;
 
             //开始安装
-            var result = await _installAppService.InstallAsyunc(installOptionsDto);
+            var result = await _installAppService.InstallAsyunc();
             if (result.Success != true)
             {
                 if (result.Data == null)
@@ -159,26 +167,12 @@ namespace Senparc.Xncf.Instraller.Pages
             return Page();
         }
 
-        //TODO: 此方法为AdminUserInfo类内部方法, 应该改由AdminUserInfoService提供
-        /// <summary>
-        /// 生成用户名
-        /// </summary>
-        /// <returns></returns>
-        public string GenerateUserName()
-        {
-            return $"SenparcCoreAdmin{new Random().Next(100).ToString("00")}";
-        }
-
-        public string GetDbConnectionString()
-        {
-            return "temp database connection string";
-        }
     }
 
     public class InstallRequestDto
     {
-        public string? SystemName { get; set; }
-        public string? AdminUserName { get; set; }
-        public string? DbConnectionString { get; set;}
+        public string SystemName { get; set; }
+        public string AdminUserName { get; set; }
+        public string DbConnectionString { get; set;}
     }
 }
