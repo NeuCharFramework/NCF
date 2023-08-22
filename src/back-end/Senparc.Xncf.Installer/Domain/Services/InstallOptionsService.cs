@@ -54,6 +54,9 @@ namespace Senparc.Xncf.Installer.Domain.Services
         /// </summary>
         public void ResetDbConnectionString()
         {
+            if (Options.DbConnectionString == GetDbConnectionString())
+                return;
+
             string dbConfigName = SenparcDatabaseConnectionConfigs.GetFullDatabaseName(_senparcCoreSetting.DatabaseName);
 
             //清空数据库配置缓存

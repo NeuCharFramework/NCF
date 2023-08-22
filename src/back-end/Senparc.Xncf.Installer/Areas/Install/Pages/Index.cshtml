@@ -55,7 +55,7 @@
                         <el-form-item label="管理员名称" :disabled="installStarted" required>
                             <el-input v-model="installOptions.adminUserName" placeholder="@Model.AdminUserName"></el-input>
                         </el-form-item>
-                        <el-form-item label="数据库连接字符串" :disabled="installStarted" required>
+                        <el-form-item label="数据库连接字符串(修改后需重启项目)" :disabled="installStarted" required>
                             <el-input type="textarea" v-model="installOptions.dbConnectionString" :autosize="{ minRows: 2, maxRows: 6}"  placeholder="@Model.DbConnectionString"></el-input>
                         </el-form-item>
                     </el-form>
