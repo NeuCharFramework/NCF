@@ -1,7 +1,6 @@
 var app = new Vue({
     el: '#app',
     data: {
-        labelPosition: 'left',
         isExpanded: false,
         installStarted: false,
         installOptions: {
