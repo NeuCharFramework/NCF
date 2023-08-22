@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Senparc.Areas.Admin.Domain;
 using Senparc.CO2NET;
@@ -25,14 +26,12 @@ namespace Senparc.Xncf.Installer.Domain.Services
     public class InstallOptionsService
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly AdminUserInfoService _accountInfoService;
         private readonly SenparcCoreSetting  _senparcCoreSetting;
         public InstallOptions Options { get; set; }
         public InstallOptionsService(IServiceProvider serviceProvider, AdminUserInfoService _accountInfoService, 
             IOptions<SenparcCoreSetting> senparcCoreSetting)
         {
             this._serviceProvider = serviceProvider;
-            this._accountInfoService = _accountInfoService;
             this._senparcCoreSetting = senparcCoreSetting.Value;
 
             //初始化Options的默认值
@@ -55,13 +54,12 @@ namespace Senparc.Xncf.Installer.Domain.Services
         /// </summary>
         public void ResetDbConnectionString()
         {
-            //修改配置文件中的数据库连接字符串
-            //string senparcConfigFilePath = SiteConfig.SenparcConfigDirctory + "SenparcConfig.config";
             string dbConfigName = SenparcDatabaseConnectionConfigs.GetFullDatabaseName(_senparcCoreSetting.DatabaseName);
 
             //清空数据库配置缓存
             MethodCache.ClearMethodCache<ConcurrentDictionary<string, SenparcConfig>>(SenparcDatabaseConnectionConfigs.SENPARC_CONFIG_KEY);
 
+            //修改数据库连接字符串
             Func<ConcurrentDictionary<string, SenparcConfig>> func = () =>
             {
                 ConcurrentDictionary<string, SenparcConfig> configs = new ConcurrentDictionary<string, SenparcConfig>();
@@ -75,6 +73,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
                         if (item.Name == dbConfigName)
                         {
                             item.ConnectionStringFull = Options.DbConnectionString;
+                            configs[dbConfigName].ConnectionStringFull = Options.DbConnectionString;
                             break;
                         }
                     }
@@ -82,37 +81,14 @@ namespace Senparc.Xncf.Installer.Domain.Services
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("=== NCF === 读取数据库配置错误：" + e.ToString());
-                    LogUtility.WebLogger.ErrorFormat("SenparcConfigs.Configs 读取错误：" + e.Message, e);
+                    Console.WriteLine("=== NCF === 修改数据库配置错误：" + e.ToString());
+                    LogUtility.WebLogger.ErrorFormat("SenparcConfigs.Configs 修改错误：" + e.Message, e);
                 }
                 return configs;
             };
-            var cacheData = MethodCache.GetMethodCache(SenparcDatabaseConnectionConfigs.SENPARC_CONFIG_KEY, func, 60 * 999);
 
-            
-
-            //XmlDocument xmlDoc = new XmlDocument();
-            //xmlDoc.Load(senparcConfigFilePath);
-            //XmlNodeList configNodes = xmlDoc.SelectNodes("//SenparcConfig");
-            //foreach (XmlNode configNode in configNodes)
-            //{
-            //    XmlNode nameNode = configNode.SelectSingleNode("Name");
-            //    if (nameNode != null && nameNode.InnerText == dbConfigName)
-            //    {
-            //        XmlNode connectionStringNode = configNode.SelectSingleNode("ConnectionStringFull");
-            //        if (connectionStringNode != null)
-            //        {
-            //            //修改数据库连接字符串
-            //            connectionStringNode.RemoveAll();
-            //            XmlCDataSection cdata = xmlDoc.CreateCDataSection(dbConfigName);
-            //            connectionStringNode.AppendChild(cdata);
-            //        }
-            //        break;
-            //    }
-            //}
-            //xmlDoc.Save(senparcConfigFilePath);
+            //刷新数据库配置缓存
+            _ = MethodCache.GetMethodCache(SenparcDatabaseConnectionConfigs.SENPARC_CONFIG_KEY, func, 60 * 999);
         }
-
-        //修改缓存中的数据库连接字符串
     }
 }

@@ -13,9 +13,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <!--element-->
-    <link href="~/lib/element-ui_2.13.2/element.css" rel="stylesheet" />
     <!--css-->
+    <link href="~/lib/element-ui_2.13.2/element.css" rel="stylesheet" />
     <link href="~/css/Installer/Pages/index.css" rel="stylesheet" />
 </head>
 <body>
@@ -36,16 +35,16 @@
                             <text>，规则：@Model.TenantRule</text>
                         }
                     </p>
-                    <form method="post" @*action="/Install/Index"*@ id="install_form">
-                        <a href="javascript:void(0);" v-on:click="submit" class="option_block" id="btnInstall">立即安装</a>
+                    <form method="post" id="install_form">
+                        <a v-on:click="submit" class="option_block" id="btnInstall">立即安装</a>
                         <p class="install_notice red">注意：安装完成后此页面将失效！</p>
                     </form>
                     <el-button type="text" v-on:click="toggleInfo" id="btnOptions">高级选项<i class="el-icon-arrow-right el-icon--right"></i></el-button>
                 </div>
                 <div class="vertical-line" v-if="isExpanded">
                 </div>
-                <div class="install_options" v-if="isExpanded">
-                    <el-form label-width="140px" :label-position="labelPosition">
+                <div class="install_expand" v-if="isExpanded">
+                    <el-form label-width="140px" :label-position="labelPosition" id="advanced_options">
                         <el-form-item label="系统名称" required>
                             <el-input v-model="installOptions.systemName" placeholder="@Model.SystemName"></el-input>
                         </el-form-item>
