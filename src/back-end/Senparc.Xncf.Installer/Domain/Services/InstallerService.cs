@@ -206,7 +206,9 @@ namespace Senparc.Xncf.Installer.Domain.Services
         /// <returns></returns>
         public async Task<InstallResponseDto> InstallAsync()
         {
-            _installOptionsService.ResetDbConnectionString();
+            //比对配置选项中的数据库连接字符串和配置文件中的数据库连接字符串
+            if(_installOptionsService.Options.DbConnectionString != _installOptionsService.GetDbConnectionString())
+                _installOptionsService.ResetDbConnectionString();
 
             var installResponseDto = new InstallResponseDto();
             installResponseDto.StatCode = 404;

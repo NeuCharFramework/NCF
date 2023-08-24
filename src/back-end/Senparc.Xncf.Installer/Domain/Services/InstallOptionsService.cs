@@ -40,17 +40,17 @@ namespace Senparc.Xncf.Installer.Domain.Services
         }
 
         /// <summary>
-        /// 读取目标数据库连接字符串
+        /// 读取配置中目标数据库连接字符串
         /// </summary>
         /// <returns></returns>
-        private string GetDbConnectionString()
+        public string GetDbConnectionString()
         {
             //string dbConfigName = SenparcDatabaseConnectionConfigs.GetFullDatabaseName(_senparcCoreSetting.DatabaseName);
             return SenparcDatabaseConnectionConfigs.ClientConnectionString;
         }
 
         /// <summary>
-        /// 重新设置目标数据库连接字符串
+        /// 修改配置及缓存中目标数据库连接字符串
         /// </summary>
         public void ResetDbConnectionString()
         {
