@@ -33,7 +33,9 @@ var app = new Vue({
             axios.post("/Install/Index", this.installOptions, {
             }).then(res => {
                 document.getElementById('app').innerHTML = res.data;
-            });
+            }).catch(error => {
+                document.getElementById('app').innerHTML = '安装失败:' + error;
+            });;
             return true;
         }
     }
