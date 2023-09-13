@@ -6,7 +6,7 @@ namespace Senparc.Xncf.Accounts.Domain.Models
 {
     [Serializable]
     [Table("AccountOperationLogs")]
-    public class AccountOperationLog:EntityBase<int>
+    public class AccountOperationLog : EntityBase<int>
     {
         public string Note { get; private set; }
         public string Operator { get; private set; }
@@ -17,7 +17,7 @@ namespace Senparc.Xncf.Accounts.Domain.Models
         }
 
         public AccountOperationLog(string note, string @operator, DateTime operateTime)
-            :this()
+            : this()
         {
             Note = note;
             Operator = @operator;

@@ -32,7 +32,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Xncf.Installer.Inte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Areas.Admin.Tests", "Tests\Senparc.Areas.Admin.Tests\Senparc.Areas.Admin.Tests.csproj", "{6228437D-3EF6-43D9-A75C-255C883F293B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Senparc.Xncf.AccountsTests", "..\Senparc.Xncf.AccountsTests\Senparc.Xncf.AccountsTests.csproj", "{B81A1332-E5F6-4FEF-9E34-6950B3495B72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Xncf.AccountsTests", "..\Senparc.Xncf.AccountsTests\Senparc.Xncf.AccountsTests.csproj", "{B81A1332-E5F6-4FEF-9E34-6950B3495B72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,7 +51,7 @@ Global
 		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.TemplateRelease|Any CPU.ActiveCfg = Release|Any CPU
 		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.TemplateRelease|Any CPU.Build.0 = Release|Any CPU
-		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Debug-Dapr|Any CPU.ActiveCfg = Debug-Dapr|Any CPU
@@ -60,8 +60,8 @@ Global
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.TemplateRelease|Any CPU.ActiveCfg = Release|Any CPU
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.TemplateRelease|Any CPU.Build.0 = Release|Any CPU
-		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Test|Any CPU.ActiveCfg = Release|Any CPU
-		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Test|Any CPU.Build.0 = Release|Any CPU
+		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Test|Any CPU.Build.0 = Debug|Any CPU
 		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.Debug-Dapr|Any CPU.ActiveCfg = Debug-Dapr|Any CPU
 		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.Release|Any CPU.ActiveCfg = Release|Any CPU

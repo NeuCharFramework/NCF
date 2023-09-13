@@ -20,7 +20,6 @@ namespace Senparc.Xncf.Accounts.Models
         /// <summary>
         /// 用户支付日志
         /// </summary>
-
         public virtual DbSet<AccountPayLog> AccountPayLogs { get; set; }
 
         /// <summary>
