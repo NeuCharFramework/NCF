@@ -27,6 +27,11 @@ namespace Senparc.Xncf.Accounts.Models
         /// </summary>
         public virtual DbSet<PointsLog> PointsLogs { get; set; }
 
+        /// <summary>
+        /// 账户操作日志
+        /// </summary>
+        public virtual DbSet<AccountOperationLog> AccountOperationLogs { get; set; }
+
         //DOT REMOVE OR MODIFY THIS LINE 请勿移除或修改本行 - Entities Point
         //ex. public DbSet<Color> Colors { get; set; }
 
@@ -43,6 +48,6 @@ namespace Senparc.Xncf.Accounts.Models
     /// </summary>
     public class SenparcDbContextFactoryHeler
     {
-      
+
     }
 }
