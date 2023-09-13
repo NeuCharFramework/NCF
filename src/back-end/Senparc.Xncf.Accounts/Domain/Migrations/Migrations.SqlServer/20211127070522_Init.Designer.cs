@@ -3,17 +3,19 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Senparc.Xncf.Accounts.Models;
 
 #nullable disable
 
-namespace Senparc.Xncf.Accounts.Domain.Migrations.SqlServer
+namespace Senparc.Xncf.Accounts.Domain.Migrations.Migrations.SqlServer
 {
     [DbContext(typeof(AccountSenparcEntities_SqlServer))]
-    partial class AccountSenparcEntities_SqlServerModelSnapshot : ModelSnapshot
+    [Migration("20211127070522_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

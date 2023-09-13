@@ -25,7 +25,7 @@ namespace Senparc.Xncf.Accounts
 
         public override string Uid => Senparc.Ncf.Core.Config.SiteConfig.SYSTEM_XNCF_MODULE_ACCOUNTS_UID;//不可修改
 
-        public override string Version => "0.1";//必须填写版本号
+        public override string Version => "0.1.1";//必须填写版本号
 
         public override string MenuName => "用户管理";
 

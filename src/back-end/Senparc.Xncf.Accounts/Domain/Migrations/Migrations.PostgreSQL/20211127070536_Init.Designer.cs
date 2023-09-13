@@ -9,7 +9,7 @@ using Senparc.Xncf.Accounts.Models;
 
 #nullable disable
 
-namespace Senparc.Xncf.Accounts.Domain.Migrations.PostgreSQL
+namespace Senparc.Xncf.Accounts.Domain.Migrations.Migrations.PostgreSQL
 {
     [DbContext(typeof(AccountSenparcEntities_PostgreSQL))]
     [Migration("20211127070536_Init")]

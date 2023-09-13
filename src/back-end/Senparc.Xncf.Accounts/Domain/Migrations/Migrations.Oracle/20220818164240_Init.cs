@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Senparc.Xncf.Accounts.Domain.Migrations.Oracle
+namespace Senparc.Xncf.Accounts.Domain.Migrations.Migrations.Oracle
 {
     public partial class Init : Migration
     {
