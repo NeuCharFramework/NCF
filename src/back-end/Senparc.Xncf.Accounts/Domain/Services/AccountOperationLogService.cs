@@ -6,7 +6,7 @@ namespace Senparc.Xncf.Accounts.Domain.Services
 {
     public class AccountOperationLogService : BaseClientService<AccountOperationLog>
     {
-        public AccountOperationLogService(IClientRepositoryBase<AccountOperationLog> repo, IServiceProvider serviceProvider) : base(repo, serviceProvider)
+        public AccountOperationLogService(ClientRepositoryBase<AccountOperationLog> repo, IServiceProvider serviceProvider) : base(repo, serviceProvider)
         {
         }
     }

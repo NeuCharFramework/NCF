@@ -11,19 +11,19 @@ using System.Threading.Tasks;
 namespace Senparc.Xncf.AccountsTests.Domain.Services
 {
     [TestClass]
-    public class AccountOpserationLogServiceTests:TestBase
+    public class AccountOpserationLogServiceTests : TestBase
     {
         [TestMethod]
         public async Task CreateTest()
         {
-            var note = "这里是备注信息";
+            var note = "这里是备注信息-" + SystemTime.Now;
             var @operator = "操作人";
             var operateTime = SystemTime.Now.DateTime;
 
             var accountOperationLog = new AccountOperationLog(note, @operator, operateTime);
 
             var service = base.ServiceProvider.GetService<AccountOperationLogService>();
-           
+
             await service.SaveObjectAsync(accountOperationLog);
         }
     }

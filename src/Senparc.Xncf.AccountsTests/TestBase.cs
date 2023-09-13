@@ -20,6 +20,7 @@ using Senparc.Ncf.Database;
 using Senparc.Xncf.SystemCore.Domain.Database;
 using Senparc.Xncf.Accounts.Models;
 using Senparc.Xncf.Accounts.Domain.Models;
+using Senparc.Ncf.Repository;
 
 namespace Senparc.Xncf.AccountsTests
 {
@@ -32,12 +33,13 @@ namespace Senparc.Xncf.AccountsTests
         {
             var args = new string[0];
             var webBuilder = WebApplication.CreateBuilder(args);
-            ServiceCollection = new ServiceCollection();
+            ServiceCollection = webBuilder.Services;
 
 
-            ServiceCollection.AddScoped<AccountOperationLog>();
+            //ServiceCollection.AddScoped<AccountOperationLog>();
             ServiceCollection.AddScoped<AccountOperationLogService>();
-
+            //ServiceCollection.AddScoped<ClientRepositoryBase<AccountOperationLog>>();
+            
 
             //激活 Xncf 扩展引擎（必须）
             var logMsg = webBuilder.StartWebEngine<SQLServerDatabaseConfiguration>();
@@ -46,7 +48,6 @@ namespace Senparc.Xncf.AccountsTests
             Console.WriteLine("============ logMsg =============");
             Console.WriteLine(logMsg);
             Console.WriteLine("============ logMsg END =============");
-
 
             //
 
@@ -65,7 +66,8 @@ namespace Senparc.Xncf.AccountsTests
             #endregion
 
             var app = webBuilder.Build();
-            ServiceProvider = ServiceCollection.BuildServiceProvider();
+
+            ServiceProvider = app.Services;
 
             IWebHostEnvironment env = app.Environment;
             IOptions<SenparcSetting> senparcSetting = app.Services.GetService<IOptions<SenparcSetting>>();
