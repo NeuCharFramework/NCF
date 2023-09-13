@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Senparc.Areas.Admin.Domain.Models;
+using Senparc.Ncf.Core.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,20 @@ namespace Senparc.Areas.Admin.Domain.Models.Tests
             result = adminUserInfo.GetSHA512Password(pwd, salt, true);
             Console.WriteLine(result);
             Assert.AreEqual("A1BC21E701CF0C70995D3B5360F581D0", result);
+
+            //Salt 少于 16 位
+            salt = "1234";//15/16/17位都要测试
+            try
+            {
+                result = adminUserInfo.GetSHA512Password(pwd, salt, true);
+                Assert.Fail("未完成 SALT 位数校验");
+            }
+            catch (NcfExceptionBase ex)
+            {
+                Console.WriteLine(ex);
+                Assert.IsTrue(ex.Message.EndsWith("必须大于 16 位！"));
+                Assert.AreEqual("salt 必须大于 16 位！", ex.Message);
+            }
         }
     }
 }
