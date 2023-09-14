@@ -33,13 +33,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Areas.Admin.Tests", "Tests\Senparc.Areas.Admin.Tests\Senparc.Areas.Admin.Tests.csproj", "{6228437D-3EF6-43D9-A75C-255C883F293B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Accounts", "Accounts", "{6A65FA9C-1D84-4C58-A1B7-0B5B3EE8E2DF}"
-	ProjectSection(SolutionItems) = preProject
-		Senparc.Xncf.AccountsTests\Senparc.Xncf.AccountsTests.csproj = Senparc.Xncf.AccountsTests\Senparc.Xncf.AccountsTests.csproj
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Admin", "Admin", "{7F460B30-B133-45C4-989D-66A4DEF3DFE7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installer", "Installer", "{BB22CD54-FF01-40EE-8E08-BED82A65E22B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Xncf.AccountsTests", "Senparc.Xncf.AccountsTests\Senparc.Xncf.AccountsTests.csproj", "{BFC7D920-23AF-4F84-B2EF-E662D54EE509}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -131,6 +130,16 @@ Global
 		{6228437D-3EF6-43D9-A75C-255C883F293B}.TemplateRelease|Any CPU.Build.0 = Release|Any CPU
 		{6228437D-3EF6-43D9-A75C-255C883F293B}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{6228437D-3EF6-43D9-A75C-255C883F293B}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{BFC7D920-23AF-4F84-B2EF-E662D54EE509}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFC7D920-23AF-4F84-B2EF-E662D54EE509}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFC7D920-23AF-4F84-B2EF-E662D54EE509}.Debug-Dapr|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFC7D920-23AF-4F84-B2EF-E662D54EE509}.Debug-Dapr|Any CPU.Build.0 = Debug|Any CPU
+		{BFC7D920-23AF-4F84-B2EF-E662D54EE509}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFC7D920-23AF-4F84-B2EF-E662D54EE509}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFC7D920-23AF-4F84-B2EF-E662D54EE509}.TemplateRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{BFC7D920-23AF-4F84-B2EF-E662D54EE509}.TemplateRelease|Any CPU.Build.0 = Release|Any CPU
+		{BFC7D920-23AF-4F84-B2EF-E662D54EE509}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFC7D920-23AF-4F84-B2EF-E662D54EE509}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -146,6 +155,7 @@ Global
 		{6A65FA9C-1D84-4C58-A1B7-0B5B3EE8E2DF} = {76FC86E0-991D-47B7-8AAB-42B27DAB10C1}
 		{7F460B30-B133-45C4-989D-66A4DEF3DFE7} = {76FC86E0-991D-47B7-8AAB-42B27DAB10C1}
 		{BB22CD54-FF01-40EE-8E08-BED82A65E22B} = {76FC86E0-991D-47B7-8AAB-42B27DAB10C1}
+		{BFC7D920-23AF-4F84-B2EF-E662D54EE509} = {6A65FA9C-1D84-4C58-A1B7-0B5B3EE8E2DF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7427A6C9-D522-4B10-B0AC-607D69736B50}
