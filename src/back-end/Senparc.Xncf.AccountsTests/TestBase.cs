@@ -39,7 +39,7 @@ namespace Senparc.Xncf.AccountsTests
             //ServiceCollection.AddScoped<AccountOperationLog>();
             ServiceCollection.AddScoped<AccountOperationLogService>();
             //ServiceCollection.AddScoped<ClientRepositoryBase<AccountOperationLog>>();
-            
+            //ServiceCollection.AddScoped<INcfDbData, NcfDbData>();
 
             //激活 Xncf 扩展引擎（必须）
             var logMsg = webBuilder.StartWebEngine<SQLServerDatabaseConfiguration>();
