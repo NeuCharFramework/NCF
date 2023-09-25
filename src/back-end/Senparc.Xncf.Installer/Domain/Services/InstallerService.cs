@@ -29,6 +29,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
         private readonly SystemConfigService _systemConfigService;
         private readonly TenantInfoService _tenantInfoService;
         private readonly AdminUserInfoService _accountInfoService;
+        private readonly InstallOptionsService _installOptionsService;
 
         /// <summary>
         /// 新创建的 RequestTenantInfo
@@ -120,7 +121,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
                 //一次性保存（所有）修改
                 await _xncfModuleService.SaveObjectAsync(adminModule).ConfigureAwait(false);
 
-                _systemConfigService.Init();//初始化系统信息
+                _systemConfigService.Init(_installOptionsService.Options.SystemName);//初始化系统信息
             }
 
             {
@@ -186,7 +187,9 @@ namespace Senparc.Xncf.Installer.Domain.Services
 
 
 
-        public InstallerService(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleService, SysMenuService sysMenuService, SystemConfigService systemConfigService, TenantInfoService tenantInfoService, AdminUserInfoService accountInfoService)
+        public InstallerService(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleService, 
+            SysMenuService sysMenuService, SystemConfigService systemConfigService, TenantInfoService tenantInfoService, 
+            AdminUserInfoService accountInfoService, InstallOptionsService installOptionsService)
         {
             this._serviceProvider = serviceProvider;
             this._xncfModuleService = xncfModuleService;
@@ -194,18 +197,21 @@ namespace Senparc.Xncf.Installer.Domain.Services
             this._systemConfigService = systemConfigService;
             this._tenantInfoService = tenantInfoService;
             this._accountInfoService = accountInfoService;
+            this._installOptionsService = installOptionsService;
         }
 
         /// <summary>
         /// 执行默认包的安装命令
         /// </summary>
         /// <returns></returns>
-        public async Task<InstallDto> InstallAsync()
+        public async Task<InstallResponseDto> InstallAsync()
         {
-            var installDto = new InstallDto()
-            {
-                StatCode = 404
-            };
+            //比对配置选项中的数据库连接字符串和配置文件中的数据库连接字符串
+            if(_installOptionsService.Options.DbConnectionString != _installOptionsService.GetDbConnectionString())
+                _installOptionsService.ResetDbConnectionString();
+
+            var installResponseDto = new InstallResponseDto();
+            installResponseDto.StatCode = 404;
 
             //原 Get 请求
             {
@@ -244,16 +250,16 @@ namespace Senparc.Xncf.Installer.Domain.Services
                 var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
                 using (var cacheLock = await cacheStrategy.BeginCacheLockAsync("InstallerService", "Install"))
                 {
-                    var adminUserInfo = _accountInfoService.Init(out string userName, out string password);//初始化管理员信息
+                    var adminUserInfo = _accountInfoService.Init(_installOptionsService.Options.AdminUserName, out string password);//初始化管理员信息
 
                     if (adminUserInfo == null)
                     {
-                        installDto.StatCode = 404;
-                        return installDto;
+                        installResponseDto.StatCode = 404;
+                        return installResponseDto;
                     }
                     else
                     {
-                        installDto.Step = 1;
+                        installResponseDto.Step = 1;
 
                         //进行系统初始化安装
                         await InitSystemAsync();
@@ -261,13 +267,13 @@ namespace Senparc.Xncf.Installer.Domain.Services
                         //IXncfRegister systemRegister = XncfRegisterManager.RegisterList.First(z => z.GetType() == typeof(Senparc.Areas.Admin.Register));
                         //await _xncfModuleService.InstallMenuAsync(systemRegister, Ncf.Core.Enums.InstallOrUpdate.Install);//安装菜单
 
-                        installDto.AdminUserName = userName;
-                        installDto.AdminPassword = password;//这里不可以使用 adminUserInfo.Password，因为此参数已经是加密信息
-                        installDto.StatCode = 0;
+                        installResponseDto.AdminUserName = _installOptionsService.Options.AdminUserName;
+                        installResponseDto.AdminPassword = password;//这里不可以使用 adminUserInfo.Password，因为此参数已经是加密信息
+                        installResponseDto.StatCode = 0;
                     }
                 }
             }
-            return installDto;
+            return installResponseDto;
         }
     }
 }
