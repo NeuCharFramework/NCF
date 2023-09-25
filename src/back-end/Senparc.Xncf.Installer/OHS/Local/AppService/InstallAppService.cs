@@ -28,9 +28,9 @@ namespace Senparc.Xncf.Installer.OHS.Local.AppService
         }
 
         [ApiBind()]
-        public async Task<AppResponseBase<InstallDto>> InstallAsyunc()
+        public async Task<AppResponseBase<InstallResponseDto>> InstallAsyunc()
         {
-            return await this.GetResponseAsync<AppResponseBase<InstallDto>, InstallDto>(async (response, logger) =>
+            return await this.GetResponseAsync<AppResponseBase<InstallResponseDto>, InstallResponseDto>(async (response, logger) =>
             {
                 return await _installerService.InstallAsync();
             });

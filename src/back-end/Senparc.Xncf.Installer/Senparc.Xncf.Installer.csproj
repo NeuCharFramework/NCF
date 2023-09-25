@@ -5,6 +5,8 @@
 		<AssemblyName>Senparc.Xncf.Installer</AssemblyName>
 		<RootNamespace>Senparc.Xncf.Installer</RootNamespace>
 		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+
+		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 		<Description>NCF 初始化安装模块，安装完成后可卸载或移除</Description>
 		<Copyright>Senparc</Copyright>
 		<PackageTags>Senparc,NeuCharFramework,NCF,Senparc.Xncf.Installer</PackageTags>
@@ -62,6 +64,10 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Remove="appsettings.json" />
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="wwwroot\**\*" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.3" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
