@@ -39,13 +39,14 @@
                         </p>
                         <form method="post" id="install_main_form">
                             <a v-on:click="submit" class="option_block" id="btnInstall">立即安装</a>
-                            <p class="install_notice red">注意：安装完成后此页面将失效！</p>
                         </form>
                         <el-button type="text" v-on:click="toggleInfo" id="btnOptions">
                             高级选项
                             <i class="el-icon-arrow-right el-icon--right" v-if="!isExpanded"></i>
                             <i class="el-icon-arrow-left el-icon--left" v-if="isExpanded"></i>
                         </el-button>
+
+                        <p class="install_notice red">注意：安装完成后此页面将失效！</p>
                     </div>
                     <!-- 展开高级选项时 -->
                     <div class="vertical-line" v-if="isExpanded">
