@@ -10,13 +10,13 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.11.6.1-beta9" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.6.6-beta9" />
+		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.11.7-beta10" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.6.7-beta10" />
 		<!--<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />-->
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
+		<ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
 	</ItemGroup>
 
 </Project>
