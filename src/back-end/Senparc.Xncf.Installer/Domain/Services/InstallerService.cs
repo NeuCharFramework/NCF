@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Senparc.Areas.Admin.Domain;
 using Senparc.CO2NET.Cache;
+using Senparc.CO2NET.Extensions;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
@@ -185,20 +186,24 @@ namespace Senparc.Xncf.Installer.Domain.Services
             return xncfModule;
         }
 
-        //如果置空就使用默认值
+        /// <summary>
+        /// 检验安装请求内各项配置的值是否合法
+        /// </summary>
+        /// <param name="installRequestDto">安装请求</param>
+        /// <returns></returns>
         private bool VerifyInstallRequest(InstallRequestDto installRequestDto)
         {
-            if(installRequestDto.DbConnectionString == null)
+            if(installRequestDto.DbConnectionString.IsNullOrEmpty())
             {
                 return false;
             }
 
-            if(installRequestDto.SystemName == null)
+            if(installRequestDto.SystemName.IsNullOrEmpty())
             {
                 return false;
             }
 
-            if(installRequestDto.AdminUserName == null)
+            if(installRequestDto.AdminUserName.IsNullOrEmpty())
             {
                 return false;
             }
