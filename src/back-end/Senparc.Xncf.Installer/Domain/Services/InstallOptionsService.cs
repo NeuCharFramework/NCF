@@ -28,8 +28,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
         private readonly IServiceProvider _serviceProvider;
         private readonly SenparcCoreSetting  _senparcCoreSetting;
         public InstallOptions Options { get; set; }
-        public InstallOptionsService(IServiceProvider serviceProvider, AdminUserInfoService _accountInfoService, 
-            IOptions<SenparcCoreSetting> senparcCoreSetting)
+        public InstallOptionsService(IServiceProvider serviceProvider, IOptions<SenparcCoreSetting> senparcCoreSetting)
         {
             this._serviceProvider = serviceProvider;
             this._senparcCoreSetting = senparcCoreSetting.Value;
@@ -55,8 +54,10 @@ namespace Senparc.Xncf.Installer.Domain.Services
         public void ResetDbConnectionString()
         {
             if (Options.DbConnectionString == GetDbConnectionString())
+            {
                 return;
-
+            }
+                
             string dbConfigName = SenparcDatabaseConnectionConfigs.GetFullDatabaseName(_senparcCoreSetting.DatabaseName);
 
             //清空数据库配置缓存

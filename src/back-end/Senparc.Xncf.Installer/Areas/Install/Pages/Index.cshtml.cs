@@ -132,14 +132,21 @@ namespace Senparc.Xncf.Instraller.Pages
         public async Task<IActionResult> OnPostAsync([FromBody] InstallRequestDto installRequestDto)
         {
             //配置安装选项
-            if(!installRequestDto.SystemName.IsNullOrEmpty())
+            if (!installRequestDto.SystemName.IsNullOrEmpty())
+            {
                 _installOptionsService.Options.SystemName = installRequestDto.SystemName;
+            }
+                
 
-            if(!installRequestDto.AdminUserName.IsNullOrEmpty())
+            if (!installRequestDto.AdminUserName.IsNullOrEmpty())
+            {
                 _installOptionsService.Options.AdminUserName = installRequestDto.AdminUserName;
+            }
 
-            if(!installRequestDto.DbConnectionString.IsNullOrEmpty())
+            if (!installRequestDto.DbConnectionString.IsNullOrEmpty())
+            {
                 _installOptionsService.Options.DbConnectionString = installRequestDto.DbConnectionString;
+            }
 
             //开始安装
             var result = await _installAppService.InstallAsyunc();
