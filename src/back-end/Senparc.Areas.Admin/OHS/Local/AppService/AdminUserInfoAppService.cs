@@ -36,7 +36,12 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
                 return new AdminUserInfo_GetListResponse()
                 {
-                    List = list.Select(z => _adminUserInfoService.Mapper.Map<AdminUserInfoDto>(z)).ToList(),
+                    List = list.Select(z =>
+                    {
+                        var item = _adminUserInfoService.Mapper.Map<AdminUserInfoDto>(z);
+                        item.Password = "";
+                        return item;
+                    }).ToList(),
                     TotalCount = list.TotalCount
                 };
             });
