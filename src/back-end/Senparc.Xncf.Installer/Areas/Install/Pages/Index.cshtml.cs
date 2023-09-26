@@ -36,7 +36,6 @@ namespace Senparc.Xncf.Instraller.Pages
     {
         private readonly AdminUserInfoService _accountInfoService;
         private readonly InstallAppService _installAppService;
-        private readonly InstallOptionsService _installOptionsService;
         private readonly IServiceProvider _serviceProvider;
 
         /// <summary>
@@ -73,20 +72,14 @@ namespace Senparc.Xncf.Instraller.Pages
         public bool MultiTenantEnable { get; set; }
 
         public IndexModel(IServiceProvider serviceProvider, AdminUserInfoService accountService,
-            InstallAppService installAppService, InstallOptionsService installOptionsService)
+            InstallAppService installAppService)
         {
             _serviceProvider = serviceProvider;
             _accountInfoService = accountService;
             this._installAppService = installAppService;
-            this._installOptionsService = installOptionsService;
             
             MultiTenantEnable = SiteConfig.SenparcCoreSetting.EnableMultiTenant;
             TenantRule = SiteConfig.SenparcCoreSetting.TenantRule;
-
-            //初始化页面显示的配置项的默认值
-            SystemName = installOptionsService.Options.SystemName;
-            AdminUserName = installOptionsService.Options.AdminUserName;
-            DbConnectionString = installOptionsService.Options.DbConnectionString;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -121,6 +114,11 @@ namespace Senparc.Xncf.Instraller.Pages
             {
                 Console.WriteLine("开始初始化");
 
+                //初始化页面显示的配置项的默认值
+                var result = await _installAppService.GetInstallOptionsAsync();
+                SystemName = result.Data.SystemName;
+                AdminUserName = result.Data.AdminUserName;
+                DbConnectionString = result.Data.DbConnectionString;
 
                 return Page();
             }
@@ -131,25 +129,8 @@ namespace Senparc.Xncf.Instraller.Pages
 
         public async Task<IActionResult> OnPostAsync([FromBody] InstallRequestDto installRequestDto)
         {
-            //配置安装选项
-            if (!installRequestDto.SystemName.IsNullOrEmpty())
-            {
-                _installOptionsService.Options.SystemName = installRequestDto.SystemName;
-            }
-                
-
-            if (!installRequestDto.AdminUserName.IsNullOrEmpty())
-            {
-                _installOptionsService.Options.AdminUserName = installRequestDto.AdminUserName;
-            }
-
-            if (!installRequestDto.DbConnectionString.IsNullOrEmpty())
-            {
-                _installOptionsService.Options.DbConnectionString = installRequestDto.DbConnectionString;
-            }
-
             //开始安装
-            var result = await _installAppService.InstallAsyunc();
+            var result = await _installAppService.InstallAsync(installRequestDto);
             if (result.Success != true)
             {
                 if (result.Data == null)
@@ -174,12 +155,5 @@ namespace Senparc.Xncf.Instraller.Pages
             return Page();
         }
 
-    }
-
-    public class InstallRequestDto
-    {
-        public string SystemName { get; set; }
-        public string AdminUserName { get; set; }
-        public string DbConnectionString { get; set;}
     }
 }
