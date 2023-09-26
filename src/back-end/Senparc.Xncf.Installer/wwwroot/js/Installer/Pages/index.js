@@ -13,6 +13,19 @@ var app = new Vue({
         toggleInfo() {
             this.isExpanded = !this.isExpanded;
         },
+        initOptions() {
+            axios.get("/Install/Index?handler=DefaultOptions")
+                .then(response => {
+                    var data = response.data.result.data;
+                    this.installOptions.systemName = data.systemName;
+                    console.log(data)
+                    this.installOptions.adminUserName = data.adminUserName;
+                    this.installOptions.dbConnectionString = data.dbConnectionString;
+                })
+                .catch(error => {
+                    console.error("获取配置发生错误:", error);
+                });
+        },
         submit() {
             if (this.installStarted) {
                 alert('安装已经在进行中，请等待');
@@ -25,10 +38,8 @@ var app = new Vue({
 
             this.installStarted = true;
 
-            //document.getElementById('install_form').submit();
             document.getElementById('btnInstall').setAttribute('disabled', true);
             document.getElementById('btnInstall').innerHTML = '安装已启动，请稍后……';
-
 
             axios.post("/Install/Index", this.installOptions, {
             }).then(res => {
@@ -38,5 +49,8 @@ var app = new Vue({
             });
             return true;
         }
+    },
+    mounted() {
+        this.initOptions();
     }
 })

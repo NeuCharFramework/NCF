@@ -53,13 +53,13 @@
                     <div id="install_start_expand" v-if="isExpanded">
                         <el-form label-width="300px" label-position="top" id="advanced_options">
                             <el-form-item label="系统名称" :disabled="installStarted" required>
-                                <el-input v-model="installOptions.systemName" placeholder="@Model.SystemName"></el-input>
+                                <el-input v-model="installOptions.systemName"></el-input>
                             </el-form-item>
                             <el-form-item label="管理员名称" :disabled="installStarted" required>
-                                <el-input v-model="installOptions.adminUserName" placeholder="@Model.AdminUserName"></el-input>
+                                <el-input v-model="installOptions.adminUserName"></el-input>
                             </el-form-item>
                             <el-form-item label="数据库连接字符串(修改后需重启项目)" :disabled="installStarted" required>
-                                <el-input type="textarea" v-model="installOptions.dbConnectionString" :autosize="{ minRows: 2, maxRows: 6}" placeholder="@Model.DbConnectionString"></el-input>
+                                <el-input type="textarea" v-model="installOptions.dbConnectionString" :autosize="{ minRows: 2, maxRows: 6}"></el-input>
                             </el-form-item>
                         </el-form>
                     </div>

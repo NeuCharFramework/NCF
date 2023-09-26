@@ -32,7 +32,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
         private readonly SystemConfigService _systemConfigService;
         private readonly TenantInfoService _tenantInfoService;
         private readonly AdminUserInfoService _accountInfoService;
-        private readonly InstallOptionsService _InstallOptionsService;
+        private readonly InstallOptionsService _installOptionsService;
 
         /// <summary>
         /// 新创建的 RequestTenantInfo
@@ -221,7 +221,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
             this._systemConfigService = systemConfigService;
             this._tenantInfoService = tenantInfoService;
             this._accountInfoService = accountInfoService;
-            this._InstallOptionsService = installOptionsService;
+            this._installOptionsService = installOptionsService;
         }
 
         public GetDefaultInstallOptionsResponseDto GetDefaultInstallOptions()
@@ -229,9 +229,9 @@ namespace Senparc.Xncf.Installer.Domain.Services
             var result = new GetDefaultInstallOptionsResponseDto();
 
             //读取现有配置的默认值
-            result.DbConnectionString = _InstallOptionsService.GetDbConnectionString();
-            result.SystemName = _InstallOptionsService.GetDefaultSystemName();
-            result.AdminUserName = _InstallOptionsService.GetDefaultAdminUserName();
+            result.DbConnectionString = _installOptionsService.GetDbConnectionString();
+            result.SystemName = _installOptionsService.GetDefaultSystemName();
+            result.AdminUserName = _installOptionsService.GetDefaultAdminUserName();
 
             return result;
         }
@@ -251,9 +251,9 @@ namespace Senparc.Xncf.Installer.Domain.Services
             }
 
             //比对传入的和原有的数据库连接字符串
-            if (installRequestDto.DbConnectionString != _InstallOptionsService.GetDbConnectionString())
+            if (installRequestDto.DbConnectionString != _installOptionsService.GetDbConnectionString())
             {
-                _InstallOptionsService.ResetDbConnectionString(installRequestDto.DbConnectionString);
+                _installOptionsService.ResetDbConnectionString(installRequestDto.DbConnectionString);
             }
 
             //原 Get 请求

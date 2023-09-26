@@ -155,5 +155,9 @@ namespace Senparc.Xncf.Instraller.Pages
             return Page();
         }
 
+        public IActionResult OnGetDefaultOptions()
+        {
+            return new JsonResult(_installAppService.GetInstallOptionsAsync());
+        }
     }
 }
