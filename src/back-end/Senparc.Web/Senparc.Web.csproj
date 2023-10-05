@@ -19,6 +19,7 @@
 		<PackageReference Include="Dapr.Client" Version="1.5.0" />
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.16.9-beta10" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.3.6-beta10" />
+		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.1.1.11" />
 		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.6.7-beta10" />
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.3.6-beta10" />
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.3.6-beta10" />
