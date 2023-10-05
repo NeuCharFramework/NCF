@@ -27,7 +27,7 @@
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.6-beta10" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.12.6-beta10" />
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.9.3-beta1" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.9.1-beta10" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.15.0.14-beta10" />
 	</ItemGroup>
 
 	<ItemGroup>
