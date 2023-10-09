@@ -2,8 +2,10 @@
 using Senparc.Areas.Admin.Domain.Models.Dto;
 using Senparc.CO2NET;
 using Senparc.Ncf.Core.AppServices;
+using Senparc.Xncf.Installer.Domain;
 using Senparc.Xncf.Installer.Domain.Dto;
 using Senparc.Xncf.Installer.Domain.Services;
+using Senparc.Xncf.Instraller.Pages;
 using Senparc.Xncf.Tenant.Domain.DataBaseModel;
 using Senparc.Xncf.Tenant.Domain.Services;
 using System;
@@ -28,11 +30,19 @@ namespace Senparc.Xncf.Installer.OHS.Local.AppService
         }
 
         [ApiBind()]
-        public async Task<AppResponseBase<InstallResponseDto>> InstallAsyunc()
+        public async Task<AppResponseBase<InstallResponseDto>> InstallAsync(InstallRequestDto installRequestDto)
         {
             return await this.GetResponseAsync<AppResponseBase<InstallResponseDto>, InstallResponseDto>(async (response, logger) =>
             {
-                return await _installerService.InstallAsync();
+                return await _installerService.InstallAsync(installRequestDto);
+            });
+        }
+
+        public async Task<AppResponseBase<GetDefaultInstallOptionsResponseDto>> GetInstallOptionsAsync()
+        {
+            return await this.GetResponseAsync<AppResponseBase<GetDefaultInstallOptionsResponseDto>, GetDefaultInstallOptionsResponseDto>(async (response, logger) =>
+            {
+                return _installerService.GetDefaultInstallOptions();
             });
         }
 
