@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Senparc.Areas.Admin.Domain;
 using Senparc.CO2NET.Cache;
+using Senparc.CO2NET.Extensions;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
@@ -29,6 +32,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
         private readonly SystemConfigService _systemConfigService;
         private readonly TenantInfoService _tenantInfoService;
         private readonly AdminUserInfoService _accountInfoService;
+        private readonly InstallOptionsService _installOptionsService;
 
         /// <summary>
         /// 新创建的 RequestTenantInfo
@@ -36,13 +40,11 @@ namespace Senparc.Xncf.Installer.Domain.Services
         public RequestTenantInfo CreatedRequestTenantInfo { get; set; }
         public TenantRule TenantRule { get; set; }
         public bool MultiTenantEnable { get; set; }
-
-
         /// <summary>
         /// 初始化安装系统
         /// </summary>
         /// <returns></returns>
-        private async Task InitSystemAsync()
+        private async Task InitSystemAsync(string systemName)
         {
             Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
 
@@ -120,7 +122,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
                 //一次性保存（所有）修改
                 await _xncfModuleService.SaveObjectAsync(adminModule).ConfigureAwait(false);
 
-                _systemConfigService.Init();//初始化系统信息
+                _systemConfigService.Init(systemName);//初始化系统信息
             }
 
             {
@@ -184,9 +186,34 @@ namespace Senparc.Xncf.Installer.Domain.Services
             return xncfModule;
         }
 
+        /// <summary>
+        /// 检验安装请求内各项配置的值是否合法
+        /// </summary>
+        /// <param name="installRequestDto">安装请求</param>
+        /// <returns></returns>
+        private bool VerifyInstallRequest(InstallRequestDto installRequestDto)
+        {
+            if(installRequestDto.DbConnectionString.IsNullOrEmpty())
+            {
+                return false;
+            }
+
+            if(installRequestDto.SystemName.IsNullOrEmpty())
+            {
+                return false;
+            }
+
+            if(installRequestDto.AdminUserName.IsNullOrEmpty())
+            {
+                return false;
+            }
+            return true;
+        }
 
 
-        public InstallerService(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleService, SysMenuService sysMenuService, SystemConfigService systemConfigService, TenantInfoService tenantInfoService, AdminUserInfoService accountInfoService)
+        public InstallerService(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleService, 
+            SysMenuService sysMenuService, SystemConfigService systemConfigService, TenantInfoService tenantInfoService, 
+            AdminUserInfoService accountInfoService, InstallOptionsService installOptionsService)
         {
             this._serviceProvider = serviceProvider;
             this._xncfModuleService = xncfModuleService;
@@ -194,18 +221,40 @@ namespace Senparc.Xncf.Installer.Domain.Services
             this._systemConfigService = systemConfigService;
             this._tenantInfoService = tenantInfoService;
             this._accountInfoService = accountInfoService;
+            this._installOptionsService = installOptionsService;
+        }
+
+        public GetDefaultInstallOptionsResponseDto GetDefaultInstallOptions()
+        {
+            var result = new GetDefaultInstallOptionsResponseDto();
+
+            //读取现有配置的默认值
+            result.DbConnectionString = _installOptionsService.GetDbConnectionString();
+            result.SystemName = _installOptionsService.GetDefaultSystemName();
+            result.AdminUserName = _installOptionsService.GetDefaultAdminUserName();
+
+            return result;
         }
 
         /// <summary>
         /// 执行默认包的安装命令
         /// </summary>
         /// <returns></returns>
-        public async Task<InstallDto> InstallAsync()
+        public async Task<InstallResponseDto> InstallAsync(InstallRequestDto installRequestDto)
         {
-            var installDto = new InstallDto()
+            var installResponseDto = new InstallResponseDto();
+            installResponseDto.StatCode = 404;
+
+            if (VerifyInstallRequest(installRequestDto) == false)
             {
-                StatCode = 404
-            };
+                return installResponseDto;
+            }
+
+            //比对传入的和原有的数据库连接字符串
+            if (installRequestDto.DbConnectionString != _installOptionsService.GetDbConnectionString())
+            {
+                _installOptionsService.ResetDbConnectionString(installRequestDto.DbConnectionString);
+            }
 
             //原 Get 请求
             {
@@ -244,30 +293,30 @@ namespace Senparc.Xncf.Installer.Domain.Services
                 var cacheStrategy = CacheStrategyFactory.GetObjectCacheStrategyInstance();
                 using (var cacheLock = await cacheStrategy.BeginCacheLockAsync("InstallerService", "Install"))
                 {
-                    var adminUserInfo = _accountInfoService.Init(out string userName, out string password);//初始化管理员信息
+                    var adminUserInfo = _accountInfoService.Init(installRequestDto.AdminUserName, out string password);//初始化管理员信息
 
                     if (adminUserInfo == null)
                     {
-                        installDto.StatCode = 404;
-                        return installDto;
+                        installResponseDto.StatCode = 404;
+                        return installResponseDto;
                     }
                     else
                     {
-                        installDto.Step = 1;
+                        installResponseDto.Step = 1;
 
                         //进行系统初始化安装
-                        await InitSystemAsync();
+                        await InitSystemAsync(installRequestDto.SystemName);
 
                         //IXncfRegister systemRegister = XncfRegisterManager.RegisterList.First(z => z.GetType() == typeof(Senparc.Areas.Admin.Register));
                         //await _xncfModuleService.InstallMenuAsync(systemRegister, Ncf.Core.Enums.InstallOrUpdate.Install);//安装菜单
 
-                        installDto.AdminUserName = userName;
-                        installDto.AdminPassword = password;//这里不可以使用 adminUserInfo.Password，因为此参数已经是加密信息
-                        installDto.StatCode = 0;
+                        installResponseDto.AdminUserName = installRequestDto.AdminUserName;
+                        installResponseDto.AdminPassword = password;//这里不可以使用 adminUserInfo.Password，因为此参数已经是加密信息
+                        installResponseDto.StatCode = 0;
                     }
                 }
             }
-            return installDto;
+            return installResponseDto;
         }
     }
 }

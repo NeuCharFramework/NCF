@@ -1,18 +1,23 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Senparc.CO2NET.RegisterServices;
+using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.Installer.Domain.Dto;
 using Senparc.Xncf.Installer.Domain.Services;
 using Senparc.Xncf.Installer.OHS.Local.AppService;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Senparc.Xncf.Installer
 {
     [XncfRegister]
-    public partial class Register : XncfRegisterBase, IXncfRegister
+    public partial class Register : XncfRegisterBase, IXncfRegister, IAreaRegister
     {
         #region IXncfRegister 接口
 
@@ -42,8 +47,18 @@ namespace Senparc.Xncf.Installer
         {
             services.AddScoped<InstallerService>();
             services.AddScoped<InstallAppService>();
-            services.AddScoped<InstallDto>();
+            services.AddScoped<InstallOptionsService>();
             return base.AddXncfModule(services, configuration, env);
+        }
+
+        public override IApplicationBuilder UseXncfModule(IApplicationBuilder app, IRegisterService registerService)
+        {
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly(), "wwwroot")
+            });
+
+            return base.UseXncfModule(app, registerService);
         }
     }
 }
