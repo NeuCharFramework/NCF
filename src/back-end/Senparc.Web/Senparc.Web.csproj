@@ -68,7 +68,6 @@
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.AIGenerateTest\Senparc.Xncf.AIGenerateTest.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
-		<!--<ProjectReference Include="..\Senparc.Xncf.SenparcAIModule\Senparc.Xncf.SenparcAIModule.csproj" />-->
 	</ItemGroup>
 	<ItemGroup>
 		<Content Update="wwwroot\css\site.css">
