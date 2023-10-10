@@ -30,7 +30,7 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Xncf.Installer.Interface", "Senparc.Xncf.Installer.Interface\Senparc.Xncf.Installer.Interface.csproj", "{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Senparc.Areas.Admin.Tests", "Tests\Senparc.Areas.Admin.Tests\Senparc.Areas.Admin.Tests.csproj", "{6228437D-3EF6-43D9-A75C-255C883F293B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Areas.Admin.Tests", "Tests\Senparc.Areas.Admin.Tests\Senparc.Areas.Admin.Tests.csproj", "{6228437D-3EF6-43D9-A75C-255C883F293B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

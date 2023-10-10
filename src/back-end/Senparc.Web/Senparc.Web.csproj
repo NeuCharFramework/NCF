@@ -27,7 +27,7 @@
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.6-beta10" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.12.6-beta10" />
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.9.3-beta1" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.15.0.15-beta10" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.15.0.17-beta10" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -66,7 +66,9 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
+		<ProjectReference Include="..\Senparc.Xncf.AIGenerateTest\Senparc.Xncf.AIGenerateTest.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
+		<!--<ProjectReference Include="..\Senparc.Xncf.SenparcAIModule\Senparc.Xncf.SenparcAIModule.csproj" />-->
 	</ItemGroup>
 	<ItemGroup>
 		<Content Update="wwwroot\css\site.css">
