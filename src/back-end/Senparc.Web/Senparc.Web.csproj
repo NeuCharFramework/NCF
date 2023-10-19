@@ -13,6 +13,9 @@
 		<!--<RestoreFallbackFolders>clear</RestoreFallbackFolders>-->
 
 	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="App_Data\ApiDocXML\Senparc.Xncf.PromptRange.XML" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Dapr.AspNetCore" Version="1.5.0" />
