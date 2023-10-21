@@ -35,7 +35,7 @@
 
 		<PackageReference Include="Dapr.AspNetCore" Version="1.5.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.8-beta10" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.11.9.1-beta10" />
 		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.11.6-beta10" />
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer.Interface\Senparc.Xncf.Installer.Interface.csproj" />
@@ -50,7 +50,7 @@
 		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.3.6-beta10" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.3.6-beta10" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.12.6-beta10" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.13.9.1-beta10" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.15.0.17-beta10" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.3.6-beta10" />
 		<None Include="App_Data\SenparcTraceLog\*" />
 	</ItemGroup>
