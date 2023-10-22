@@ -6,7 +6,7 @@
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<DocumentationFile>../Senparc.Web/App_Data/ApiDocXML/Senparc.Areas.Admin.XML</DocumentationFile>
-		<Configurations>Debug;Release;Debug-Dapr</Configurations>
+		<Configurations>Debug;Release;Debug-Dapr;DebugForPromptRange</Configurations>
 	</PropertyGroup>
 
 	<ItemGroup>
