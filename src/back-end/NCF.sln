@@ -48,8 +48,8 @@ Global
 		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.Debug-Dapr|Any CPU.ActiveCfg = Debug-Dapr|Any CPU
 		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.Debug-Dapr|Any CPU.Build.0 = Debug-Dapr|Any CPU
-		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.NcfDebugForPromptRange|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.NcfDebugForPromptRange|Any CPU.Build.0 = Debug|Any CPU
+		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.NcfDebugForPromptRange|Any CPU.ActiveCfg = NcfDebugForPromptRange|Any CPU
+		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.NcfDebugForPromptRange|Any CPU.Build.0 = NcfDebugForPromptRange|Any CPU
 		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6F3C7D09-7FA4-41B5-9E91-945DB61DEB48}.TemplateRelease|Any CPU.ActiveCfg = Release|Any CPU
@@ -59,8 +59,8 @@ Global
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Debug-Dapr|Any CPU.ActiveCfg = Debug-Dapr|Any CPU
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Debug-Dapr|Any CPU.Build.0 = Debug-Dapr|Any CPU
-		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.NcfDebugForPromptRange|Any CPU.ActiveCfg = DebugForPromptRange|Any CPU
-		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.NcfDebugForPromptRange|Any CPU.Build.0 = DebugForPromptRange|Any CPU
+		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.NcfDebugForPromptRange|Any CPU.ActiveCfg = NcfDebugForPromptRange|Any CPU
+		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.NcfDebugForPromptRange|Any CPU.Build.0 = NcfDebugForPromptRange|Any CPU
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.TemplateRelease|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,7 +69,7 @@ Global
 		{346475E8-6E39-4AA9-896F-893DC47AD3D7}.Test|Any CPU.Build.0 = Release|Any CPU
 		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.Debug-Dapr|Any CPU.ActiveCfg = Debug-Dapr|Any CPU
-		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.NcfDebugForPromptRange|Any CPU.ActiveCfg = DebugForPromptRange|Any CPU
+		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.NcfDebugForPromptRange|Any CPU.ActiveCfg = NcfDebugForPromptRange|Any CPU
 		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{22B88A11-137D-42FB-9ED0-AC15A3FF651F}.TemplateRelease|Any CPU.ActiveCfg = Release|Any CPU
@@ -80,8 +80,8 @@ Global
 		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.Debug-Dapr|Any CPU.ActiveCfg = Debug-Dapr|Any CPU
 		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.Debug-Dapr|Any CPU.Build.0 = Debug-Dapr|Any CPU
-		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.NcfDebugForPromptRange|Any CPU.ActiveCfg = DebugForPromptRange|Any CPU
-		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.NcfDebugForPromptRange|Any CPU.Build.0 = DebugForPromptRange|Any CPU
+		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.NcfDebugForPromptRange|Any CPU.ActiveCfg = NcfDebugForPromptRange|Any CPU
+		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.NcfDebugForPromptRange|Any CPU.Build.0 = NcfDebugForPromptRange|Any CPU
 		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.TemplateRelease|Any CPU.ActiveCfg = Release|Any CPU
 		{1C8D4D4B-E005-4F05-ADEF-534A4415AD7E}.TemplateRelease|Any CPU.Build.0 = Release|Any CPU
@@ -91,8 +91,8 @@ Global
 		{1D1A334A-7DFD-4830-88F9-5E3347158040}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D1A334A-7DFD-4830-88F9-5E3347158040}.Debug-Dapr|Any CPU.ActiveCfg = Debug-Dapr|Any CPU
 		{1D1A334A-7DFD-4830-88F9-5E3347158040}.Debug-Dapr|Any CPU.Build.0 = Debug-Dapr|Any CPU
-		{1D1A334A-7DFD-4830-88F9-5E3347158040}.NcfDebugForPromptRange|Any CPU.ActiveCfg = DebugForPromptRange|Any CPU
-		{1D1A334A-7DFD-4830-88F9-5E3347158040}.NcfDebugForPromptRange|Any CPU.Build.0 = DebugForPromptRange|Any CPU
+		{1D1A334A-7DFD-4830-88F9-5E3347158040}.NcfDebugForPromptRange|Any CPU.ActiveCfg = NcfDebugForPromptRange|Any CPU
+		{1D1A334A-7DFD-4830-88F9-5E3347158040}.NcfDebugForPromptRange|Any CPU.Build.0 = NcfDebugForPromptRange|Any CPU
 		{1D1A334A-7DFD-4830-88F9-5E3347158040}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D1A334A-7DFD-4830-88F9-5E3347158040}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1D1A334A-7DFD-4830-88F9-5E3347158040}.TemplateRelease|Any CPU.ActiveCfg = TemplateRelease|Any CPU
@@ -103,8 +103,8 @@ Global
 		{540DC001-C430-449A-90AA-FEF131E1633E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{540DC001-C430-449A-90AA-FEF131E1633E}.Debug-Dapr|Any CPU.ActiveCfg = Debug-Dapr|Any CPU
 		{540DC001-C430-449A-90AA-FEF131E1633E}.Debug-Dapr|Any CPU.Build.0 = Debug-Dapr|Any CPU
-		{540DC001-C430-449A-90AA-FEF131E1633E}.NcfDebugForPromptRange|Any CPU.ActiveCfg = DebugForPromptRange|Any CPU
-		{540DC001-C430-449A-90AA-FEF131E1633E}.NcfDebugForPromptRange|Any CPU.Build.0 = DebugForPromptRange|Any CPU
+		{540DC001-C430-449A-90AA-FEF131E1633E}.NcfDebugForPromptRange|Any CPU.ActiveCfg = NcfDebugForPromptRange|Any CPU
+		{540DC001-C430-449A-90AA-FEF131E1633E}.NcfDebugForPromptRange|Any CPU.Build.0 = NcfDebugForPromptRange|Any CPU
 		{540DC001-C430-449A-90AA-FEF131E1633E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{540DC001-C430-449A-90AA-FEF131E1633E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{540DC001-C430-449A-90AA-FEF131E1633E}.TemplateRelease|Any CPU.ActiveCfg = TemplateRelease|Any CPU
@@ -124,8 +124,8 @@ Global
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.Debug-Dapr|Any CPU.ActiveCfg = Debug|Any CPU
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.Debug-Dapr|Any CPU.Build.0 = Debug|Any CPU
-		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.NcfDebugForPromptRange|Any CPU.ActiveCfg = DebugForPromptRange|Any CPU
-		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.NcfDebugForPromptRange|Any CPU.Build.0 = DebugForPromptRange|Any CPU
+		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.NcfDebugForPromptRange|Any CPU.ActiveCfg = NcfDebugForPromptRange|Any CPU
+		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.NcfDebugForPromptRange|Any CPU.Build.0 = NcfDebugForPromptRange|Any CPU
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.TemplateRelease|Any CPU.ActiveCfg = Release|Any CPU
@@ -134,7 +134,7 @@ Global
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3}.Test|Any CPU.Build.0 = Debug|Any CPU
 		{6228437D-3EF6-43D9-A75C-255C883F293B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6228437D-3EF6-43D9-A75C-255C883F293B}.Debug-Dapr|Any CPU.ActiveCfg = Debug|Any CPU
-		{6228437D-3EF6-43D9-A75C-255C883F293B}.NcfDebugForPromptRange|Any CPU.ActiveCfg = DebugForPromptRange|Any CPU
+		{6228437D-3EF6-43D9-A75C-255C883F293B}.NcfDebugForPromptRange|Any CPU.ActiveCfg = NcfDebugForPromptRange|Any CPU
 		{6228437D-3EF6-43D9-A75C-255C883F293B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6228437D-3EF6-43D9-A75C-255C883F293B}.TemplateRelease|Any CPU.ActiveCfg = Release|Any CPU
 		{6228437D-3EF6-43D9-A75C-255C883F293B}.TemplateRelease|Any CPU.Build.0 = Release|Any CPU
@@ -144,8 +144,8 @@ Global
 		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.Debug-Dapr|Any CPU.ActiveCfg = Debug|Any CPU
 		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.Debug-Dapr|Any CPU.Build.0 = Debug|Any CPU
-		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.NcfDebugForPromptRange|Any CPU.ActiveCfg = TemplateRelease|Any CPU
-		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.NcfDebugForPromptRange|Any CPU.Build.0 = TemplateRelease|Any CPU
+		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.NcfDebugForPromptRange|Any CPU.ActiveCfg = NcfDebugForPromptRange|Any CPU
+		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.NcfDebugForPromptRange|Any CPU.Build.0 = NcfDebugForPromptRange|Any CPU
 		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.Release|Any CPU.Build.0 = Release|Any CPU
 		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.TemplateRelease|Any CPU.ActiveCfg = TemplateRelease|Any CPU
