@@ -7,7 +7,7 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <Configurations>Debug;Release;DebugForPromptRange</Configurations>
+    <Configurations>Debug;Release;NcfDebugForPromptRange</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

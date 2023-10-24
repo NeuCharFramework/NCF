@@ -8,38 +8,13 @@
 		<UserSecretsId>d2144151-af7a-4d50-896d-4a306e594f7b</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
-		<Configurations>Debug;Release;Debug-Dapr;DebugForPromptRange</Configurations>
+		<Configurations>Debug;Release;Debug-Dapr;NcfDebugForPromptRange</Configurations>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<!--<RestoreFallbackFolders>clear</RestoreFallbackFolders>-->
-
+		<DefineConstants Condition="'$(Configuration)|$(Platform)'=='NcfDebugForPromptRange|AnyCPU'">$(DefineConstants);DEBUG</DefineConstants>
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugForPromptRange|AnyCPU'">
-	  <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
-	</PropertyGroup>
-	
 
 	<ItemGroup>
-		<PackageReference Include="Dapr.AspNetCore" Version="1.5.0" />
-		<PackageReference Include="Dapr.Client" Version="1.5.0" />
-		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.16.9-beta10" />
-		<PackageReference Include="Senparc.Xncf.Menu" Version="0.4.0-beta11" />
-		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.2.0" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.7.0-beta11" />
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.4.0-beta11" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.4.0-beta11" />
-		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.4.0-beta11" />
-		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.4.0-beta11" />
-		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.13.0-beta11" />
-		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.9.3-beta1" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.16.2-beta10" />
-	</ItemGroup>
-
-	<ItemGroup>
-
-		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.12.0-beta11" />
-		<!--<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.4.4-beta8" />-->
-		<!--<PackageReference Include="Senparc.Ncf.Database.MySql" Version="0.11.6-beta7" />-->
-
 		<!--https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-3.1-->
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.3" />
 		<PackageReference Include="log4net" Version="2.0.13" />
@@ -50,54 +25,48 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
 
-		<!--<PackageReference Include="AutoMapper" Version="10.1.1" />
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />-->
-		<PackageReference Include="AutoMapper" Version="7.0.1" />
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.4.0-beta11" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Dapr.AspNetCore" Version="1.5.0" />
+		<PackageReference Include="Dapr.Client" Version="1.5.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.12.0-beta11" />
+		<!--<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.4.4-beta8" />-->
+		<!--<PackageReference Include="Senparc.Ncf.Database.MySql" Version="0.11.6-beta7" />-->
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.1.5.9" />
 		<PackageReference Include="Senparc.CO2NET" Version="2.2.1" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.12.0-beta11" />
-	</ItemGroup>
-	<ItemGroup>
-		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="wwwroot\lib\Chart.js" />
-		<None Include="wwwroot\lib\echarts" />
+		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.16.9-beta10" />
+		<PackageReference Include="Senparc.Xncf.Menu" Version="0.4.0-beta11" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.7.0-beta11" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.4.0-beta11" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.4.0-beta11" />
+		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.4.0-beta11" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.4.0-beta11" />
+		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.13.0-beta11" />
+		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.9.3-beta1" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.4.0-beta11" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.16.2-beta10" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.PromptRange\Senparc.Xncf.PromptRange.csproj" />
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
 	</ItemGroup>
+
 	<ItemGroup>
-		<Content Update="wwwroot\css\site.css">
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-		<Content Update="wwwroot\css\site.min.css">
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-		<Content Update="wwwroot\css\User\base\pagecss.css">
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-		<Content Update="wwwroot\css\User\styles.css">
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-		<Content Update="wwwroot\css\WX\base\base.css">
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-		<Content Update="wwwroot\css\WX\styles.css">
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-		<Content Update="wwwroot\lib\element-ui_2.13.2\element.css">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Update="wwwroot\**\*">
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
 	</ItemGroup>
-	<ProjectExtensions>
-		<VisualStudio><UserProperties /></VisualStudio>
-	</ProjectExtensions>
 </Project>

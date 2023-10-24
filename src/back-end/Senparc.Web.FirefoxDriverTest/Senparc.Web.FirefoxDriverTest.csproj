@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<IsPackable>false</IsPackable>
-		<Configurations>Debug;Release;Debug-Dapr;DebugForPromptRange</Configurations>
+		<Configurations>Debug;Release;Debug-Dapr;NcfDebugForPromptRange</Configurations>
 	</PropertyGroup>
 
 	<ItemGroup>
