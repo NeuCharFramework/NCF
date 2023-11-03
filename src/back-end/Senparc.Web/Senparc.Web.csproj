@@ -20,7 +20,6 @@
 		<PackageReference Include="Dapr.Client" Version="1.5.0" />
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.16.9-beta10" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.4.0-beta11" />
-		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.2.0" />
 		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.7.0-beta11" />
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.4.0-beta11" />
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.4.0-beta11" />
@@ -28,7 +27,7 @@
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.4.0-beta11" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.13.0-beta11" />
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.9.3-beta1" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.16.2-beta10" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.17.1.2-beta10" />
 	</ItemGroup>
 
 	<ItemGroup>
