@@ -15,8 +15,4 @@
 		<!--<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />-->
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
-	</ItemGroup>
-
 </Project>
