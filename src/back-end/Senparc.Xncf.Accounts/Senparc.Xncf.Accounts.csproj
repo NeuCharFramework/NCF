@@ -10,7 +10,7 @@
 		<PackageTags>Senparc,NeuCharFramework,NCF,Senparc.Xncf.Accounts</PackageTags>
 		<Authors>Senparc</Authors>
 		<Owners>Senparc</Owners>
-		 <PackageLicenseUrl>https://github.com/NeuCharFramework/NcfPackageSources/blob/master/LICENSE</PackageLicenseUrl> f
+		 <PackageLicenseUrl>https://github.com/NeuCharFramework/NcfPackageSources/blob/master/LICENSE</PackageLicenseUrl>
 		<Title>用户管理</Title>
 		<!--<ProjectUrl> https://github.com/NeuCharFramework/NCF</ProjectUrl>
     <PackageProjectUrl>https://github.com/NeuCharFramework/NcfPackageSources</PackageProjectUrl>
