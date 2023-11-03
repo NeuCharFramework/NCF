@@ -10,10 +10,6 @@ using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Utility;
 using Senparc.Ncf.Log;
-using Senparc.Xncf.Installer.Domain.Dto;
-using Senparc.Xncf.Installer.OHS.Local.AppService;
-using Senparc.Xncf.Instraller.Pages;
-using Senparc.Xncf.XncfBuilder;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -27,16 +23,31 @@ namespace Senparc.Xncf.Installer.Domain.Services
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly SenparcCoreSetting  _senparcCoreSetting;
-        public InstallOptions Options { get; set; }
-        public InstallOptionsService(IServiceProvider serviceProvider, AdminUserInfoService _accountInfoService, 
-            IOptions<SenparcCoreSetting> senparcCoreSetting)
+        public InstallOptionsService(IServiceProvider serviceProvider, IOptions<SenparcCoreSetting> senparcCoreSetting)
         {
             this._serviceProvider = serviceProvider;
             this._senparcCoreSetting = senparcCoreSetting.Value;
 
             //初始化Options的默认值
-            Options = new InstallOptions();
-            Options.DbConnectionString = GetDbConnectionString();
+            
+        }
+
+        /// <summary>
+        /// 获取自动生成的管理员用户名称
+        /// </summary>
+        /// <returns></returns>
+        public string GetDefaultAdminUserName()
+        {
+            return $"SenparcCoreAdmin{new Random().Next(100).ToString("00")}";
+        }
+
+        /// <summary>
+        /// 获取默认的系统名称
+        /// </summary>
+        /// <returns></returns>
+        public string GetDefaultSystemName()
+        {
+            return "NCF - Template Project";
         }
 
         /// <summary>
@@ -52,11 +63,13 @@ namespace Senparc.Xncf.Installer.Domain.Services
         /// <summary>
         /// 修改配置及缓存中目标数据库连接字符串
         /// </summary>
-        public void ResetDbConnectionString()
+        public void ResetDbConnectionString(string dbConnectionString)
         {
-            if (Options.DbConnectionString == GetDbConnectionString())
+            if (dbConnectionString == GetDbConnectionString())
+            {
                 return;
-
+            }
+                
             string dbConfigName = SenparcDatabaseConnectionConfigs.GetFullDatabaseName(_senparcCoreSetting.DatabaseName);
 
             //清空数据库配置缓存
@@ -75,8 +88,8 @@ namespace Senparc.Xncf.Installer.Domain.Services
                     {
                         if (item.Name == dbConfigName)
                         {
-                            item.ConnectionStringFull = Options.DbConnectionString;
-                            configs[dbConfigName].ConnectionStringFull = Options.DbConnectionString;
+                            item.ConnectionStringFull = dbConnectionString;
+                            configs[dbConfigName].ConnectionStringFull = dbConnectionString;
                             break;
                         }
                     }
