@@ -52,7 +52,7 @@
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.13.0-beta11" />
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.9.3-beta1" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.4.0-beta11" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.16.2.1024-beta10" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.17.0-beta10" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.PromptRange\Senparc.Xncf.PromptRange.csproj" />
