@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<!--<TargetFramework>net5.0</TargetFramework>-->
-		<Version>0.3.7-beta3</Version>
+		<Version>0.4.0-beta3</Version>
 		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
 		<TypeScriptToolsVersion>4.1</TypeScriptToolsVersion>
 		<UserSecretsId>d2144151-af7a-4d50-896d-4a306e594f7b</UserSecretsId>
@@ -16,8 +16,8 @@
 	
 
 	<ItemGroup>
-		<PackageReference Include="Dapr.AspNetCore" Version="1.5.0" />
-		<PackageReference Include="Dapr.Client" Version="1.5.0" />
+		<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
+		<PackageReference Include="Dapr.Client" Version="1.12.0" />
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.16.9-beta10" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.4.0-beta11" />
 		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.7.0-beta11" />
@@ -33,28 +33,29 @@
 	<ItemGroup>
 
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.12.0-beta11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0" />
 		<!--<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.4.4-beta8" />-->
 		<!--<PackageReference Include="Senparc.Ncf.Database.MySql" Version="0.11.6-beta7" />-->
 
 		<!--https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-3.1-->
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.3" />
-		<PackageReference Include="log4net" Version="2.0.13" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.0" />
+		<PackageReference Include="log4net" Version="2.0.15" />
 		<PackageReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
 
 		<!--<PackageReference Include="AutoMapper" Version="10.1.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />-->
 		<PackageReference Include="AutoMapper" Version="7.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.4.0-beta11" />
-		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
-		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.1.5.9" />
-		<PackageReference Include="Senparc.CO2NET" Version="2.2.1" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.3.0" />
+		<PackageReference Include="Senparc.CO2NET" Version="2.3.0" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.12.0-beta11" />
 	</ItemGroup>
 	<ItemGroup>
