@@ -8,6 +8,7 @@ using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database.SqlServer;
 using Senparc.Ncf.XncfBase;
+using Senparc.Xncf.AreasBase;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
-using Senparc.Areas.Admin.Domain;
+﻿using Senparc.Areas.Admin.Domain;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Extensions;
 using Senparc.Ncf.Core.Config;
@@ -13,13 +10,9 @@ using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.Installer.Domain.Dto;
 using Senparc.Xncf.SystemManager.Domain.Service;
-using Senparc.Xncf.Tenant.Domain.DataBaseModel;
 using Senparc.Xncf.Tenant.Domain.Services;
 using Senparc.Xncf.XncfModuleManager.Domain.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Senparc.Xncf.Installer.Domain.Services
@@ -193,17 +186,17 @@ namespace Senparc.Xncf.Installer.Domain.Services
         /// <returns></returns>
         private bool VerifyInstallRequest(InstallRequestDto installRequestDto)
         {
-            if(installRequestDto.DbConnectionString.IsNullOrEmpty())
+            if (installRequestDto.DbConnectionString.IsNullOrEmpty())
             {
                 return false;
             }
 
-            if(installRequestDto.SystemName.IsNullOrEmpty())
+            if (installRequestDto.SystemName.IsNullOrEmpty())
             {
                 return false;
             }
 
-            if(installRequestDto.AdminUserName.IsNullOrEmpty())
+            if (installRequestDto.AdminUserName.IsNullOrEmpty())
             {
                 return false;
             }
@@ -211,8 +204,8 @@ namespace Senparc.Xncf.Installer.Domain.Services
         }
 
 
-        public InstallerService(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleService, 
-            SysMenuService sysMenuService, SystemConfigService systemConfigService, TenantInfoService tenantInfoService, 
+        public InstallerService(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleService,
+            SysMenuService sysMenuService, SystemConfigService systemConfigService, TenantInfoService tenantInfoService,
             AdminUserInfoService accountInfoService, InstallOptionsService installOptionsService)
         {
             this._serviceProvider = serviceProvider;
@@ -268,8 +261,8 @@ namespace Senparc.Xncf.Installer.Domain.Services
                         //var (initDbSuccess, initDbMsg) = await systemCoreRegister.InitDatabase(_serviceProvider/*, _tenantInfoService, *//*_httpContextAccessor.Value.HttpContext*/);
 
                         //安装多租户
-                            Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
-                            await tenantRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
+                        Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
+                        await tenantRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
                     }
                     catch (Exception ex)
                     {

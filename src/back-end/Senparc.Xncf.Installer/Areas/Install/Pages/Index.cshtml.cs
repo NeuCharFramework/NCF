@@ -1,33 +1,14 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Senparc.Areas.Admin.Domain;
-using Senparc.Areas.Admin.Domain.Models;
-using Senparc.CO2NET.Cache;
-using Senparc.CO2NET.Extensions;
 using Senparc.Ncf.Core.Config;
-using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
-using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Core.MultiTenant;
-using Senparc.Ncf.Core.Utility;
-using Senparc.Ncf.Service;
-using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.Installer.Domain.Dto;
-using Senparc.Xncf.Installer.Domain.Services;
 using Senparc.Xncf.Installer.OHS.Local.AppService;
-using Senparc.Xncf.SystemManager.Domain.Service;
 using Senparc.Xncf.Tenant.Domain.DataBaseModel;
-using Senparc.Xncf.Tenant.Domain.Services;
-using Senparc.Xncf.XncfModuleManager.Domain.Services;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Xml;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Senparc.Xncf.Instraller.Pages
 {
@@ -77,7 +58,7 @@ namespace Senparc.Xncf.Instraller.Pages
             _serviceProvider = serviceProvider;
             _accountInfoService = accountService;
             this._installAppService = installAppService;
-            
+
             MultiTenantEnable = SiteConfig.SenparcCoreSetting.EnableMultiTenant;
             TenantRule = SiteConfig.SenparcCoreSetting.TenantRule;
         }

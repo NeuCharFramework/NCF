@@ -13,53 +13,52 @@
 		<!--<RestoreFallbackFolders>clear</RestoreFallbackFolders>-->
 
 	</PropertyGroup>
-	
+
 
 	<ItemGroup>
+		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.13.0-beta11.5" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
 		<PackageReference Include="Dapr.Client" Version="1.12.0" />
+		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.3.0" />
+		<PackageReference Include="Senparc.CO2NET" Version="2.3.0" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.4.0-beta11.4" />
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.17.1-beta11" />
-		<PackageReference Include="Senparc.Xncf.Menu" Version="0.5.0-beta11" />
+		<PackageReference Include="Senparc.Xncf.Menu" Version="0.5.0-beta11.1" />
 		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.8.0-beta11" />
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.5.0-beta11" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.5.0-beta11" />
-		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.5.0-beta11" />
-		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.5.0-beta11" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.5.0-beta11.1" />
+		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.5.0-beta11.1" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.5.0-beta11.1" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.14.0-beta11" />
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.9.3-beta1" />
 		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.19.0-beta14" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.5.0-beta11.1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.13.0.4-beta11" />
 	</ItemGroup>
 
 	<ItemGroup>
 
-		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.13.0-beta11" />
+		<!--<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.13.0-beta11" />-->
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0" />
 		<!--<PackageReference Include="Senparc.Ncf.Database.PostgreSQL" Version="0.4.4-beta8" />-->
 		<!--<PackageReference Include="Senparc.Ncf.Database.MySql" Version="0.11.6-beta7" />-->
 
 		<!--https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-3.1-->
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.0" />
-		<PackageReference Include="log4net" Version="2.0.15" />
-		<PackageReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+		<!--<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.0" />-->
+		<!--<PackageReference Include="log4net" Version="2.0.15" />-->
+		<!--<PackageReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.2" />-->
+		<!--<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+		</PackageReference>-->
+		<!--<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />-->
 
-		<!--<PackageReference Include="AutoMapper" Version="10.1.1" />
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />-->
-		<PackageReference Include="AutoMapper" Version="7.0.1" />
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
 		<!--<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />-->
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.5.0-beta11" />
-		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
-		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.3.0" />
-		<PackageReference Include="Senparc.CO2NET" Version="2.3.0" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.13.0-beta11" />
+
 	</ItemGroup>
 	<ItemGroup>
-		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+		<!--<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />-->
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="wwwroot\lib\Chart.js" />
@@ -94,6 +93,8 @@
 		</Content>
 	</ItemGroup>
 	<ProjectExtensions>
-		<VisualStudio><UserProperties /></VisualStudio>
+		<VisualStudio>
+			<UserProperties />
+		</VisualStudio>
 	</ProjectExtensions>
 </Project>

@@ -15,6 +15,7 @@ namespace Senparc.Xncf.Accounts.Models
     {
         public AccountSenparcEntities_Oracle(DbContextOptions<AccountSenparcEntities_Oracle> dbContextOptions) : base(dbContextOptions)
         {
+
         }
     }
     
