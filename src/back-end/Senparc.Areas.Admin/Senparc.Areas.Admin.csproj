@@ -50,10 +50,10 @@
 
 		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
 		<!--<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />-->
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.4.0-beta11.4" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.4.0-beta11.5" />
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.5.0-beta11" />
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.5.0-beta11.1" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.5.0-beta11.1" />
-		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.5.0-beta11.1" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.5.0-beta11.2" />
 	</ItemGroup>
 </Project>
