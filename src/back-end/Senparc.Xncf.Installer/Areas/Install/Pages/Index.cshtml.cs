@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Senparc.AI.Kernel;
 using Senparc.Areas.Admin.Domain;
+using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.MultiTenant;
@@ -105,6 +107,9 @@ namespace Senparc.Xncf.Instraller.Pages
             }
 
             //base.Response.StatusCode = 404;
+
+            SenparcTrace.SendCustomLog("风险提示", "Install 被访问，已返回 404 进行混淆。如果您已经确保完成项目初始化，建议移除 Senparc.Xncf.Install 模块");
+
             return new StatusCodeResult(404);//已经安装完毕，且存在管理员则不进行安装
         }
 

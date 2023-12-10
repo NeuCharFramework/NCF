@@ -23,7 +23,7 @@
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.3.0" />
 		<PackageReference Include="Senparc.CO2NET" Version="2.3.0" />
 		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.4.0-beta11.5" />
-		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.17.1-beta11.2" />
+		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.17.1-beta11.3" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.5.0-beta11.1" />
 		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.8.0-beta11" />
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.5.0-beta11" />
@@ -34,7 +34,7 @@
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.9.3-beta1" />
 		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.19.0-beta14.1" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.5.0-beta11.1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.13.0.4-beta11" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.13.0.4-beta11.1" />
 	</ItemGroup>
 
 	<ItemGroup>
