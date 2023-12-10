@@ -55,6 +55,7 @@ namespace Senparc.Xncf.Installer
         {
             app.UseStaticFiles(new StaticFileOptions
             {
+               
                 FileProvider = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly(), "wwwroot")
             });
 

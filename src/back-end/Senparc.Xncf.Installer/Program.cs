@@ -64,10 +64,8 @@ app.UseCookiePolicy();
 
 app.UseRouting();
 app.UseAuthorization();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapRazorPages();
-    endpoints.MapControllers();
-});
+
+app.MapRazorPages();
+app.MapControllers();
 
 app.Run();

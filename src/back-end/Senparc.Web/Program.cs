@@ -23,6 +23,9 @@ builder.AddNcf<SQLServerDatabaseConfiguration>();
  *  
  */
 
+System.Net.ServicePointManager.ServerCertificateValidationCallback =
+    ((sender, certificate, chain, sslPolicyErrors) => true);
+
 //添加 Dapr
 builder.Services.AddDaprClient();
 
@@ -34,7 +37,7 @@ if (app.Environment.IsDevelopment())
 }
 
 //Use NCF（必须）
-//app.UseNcf();
+app.UseNcf();
 
 //app.UseHttpsRedirection();
 app.UseStaticFiles();
