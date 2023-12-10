@@ -2,10 +2,8 @@
 //using Senparc.Ncf.Database.MySql;         //使用需要引用包： Senparc.Ncf.Database.MySql
 //using Senparc.Ncf.Database.Sqlite;        //使用需要引用包： Senparc.Ncf.Database.Sqlite
 //using Senparc.Ncf.Database.PostgreSQL;    //使用需要引用包： Senparc.Ncf.Database.PostgreSQL
-//using Senparc.Ncf.Database.Oracle;          //使用需要引用包： Senparc.Ncf.Database.Oracle
+//using Senparc.Ncf.Database.Oracle;        //使用需要引用包： Senparc.Ncf.Database.Oracle
 using Senparc.Ncf.Database.SqlServer;       //使用需要引用包： Senparc.Ncf.Database.SqlServer
-
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +22,9 @@ builder.AddNcf<SQLServerDatabaseConfiguration>();
  *  更多数据库可扩展，依次类推……
  *  
  */
+
+System.Net.ServicePointManager.ServerCertificateValidationCallback =
+    ((sender, certificate, chain, sslPolicyErrors) => true);
 
 //添加 Dapr
 builder.Services.AddDaprClient();
@@ -46,10 +47,14 @@ app.UseCookiePolicy();
 
 app.UseRouting();
 app.UseAuthorization();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapRazorPages();
-    endpoints.MapControllers();
-});
+
+app.MapRazorPages();
+app.MapControllers();
+
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapRazorPages();
+//    endpoints.MapControllers();
+//});
 
 app.Run();
