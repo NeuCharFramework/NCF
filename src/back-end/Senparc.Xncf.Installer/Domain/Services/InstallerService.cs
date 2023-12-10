@@ -1,6 +1,7 @@
 ﻿using Senparc.Areas.Admin.Domain;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Extensions;
+using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
@@ -71,7 +72,16 @@ namespace Senparc.Xncf.Installer.Domain.Services
                 //开始安装菜单管理模块
                 //（必须放在第二个，其他模块操作都需要依赖此模块）
                 await InstallAndOpenModuleAsync(menuRegister, installNow: false, addMenu: false);
-                _sysMenuService.Init();
+                try
+                {
+                    _sysMenuService.Init();
+                }
+                catch (Exception ex)
+                {
+                    SenparcTrace.SendCustomLog("_sysMenuService.Init 异常", ex.Message);
+                    SenparcTrace.BaseExceptionLog(ex);
+                    throw;
+                }
 
                 //开始安装模块理管理模块
                 //（必须放在第三个，其他模块操作都需要依赖此模块）
@@ -150,8 +160,18 @@ namespace Senparc.Xncf.Installer.Domain.Services
         /// <returns></returns>
         private async Task<XncfModule> InstallAndOpenModuleAsync(IXncfRegister register, bool installNow = true, bool addMenu = true)
         {
-            //开始安装模块（创建数据库相关表）
+            try
+            {
+                //开始安装模块（创建数据库相关表）
             await register.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
+            }
+            catch (Exception ex)
+            {
+                SenparcTrace.BaseExceptionLog(ex);
+
+                throw;
+            }
+          
 
             XncfModule xncfModule = null;
 
@@ -161,8 +181,18 @@ namespace Senparc.Xncf.Installer.Domain.Services
                 xncfModule = _xncfModuleService.GetObject(z => z.Uid == register.Uid);
                 if (xncfModule == null)
                 {
-                    await _xncfModuleService.InstallModuleAsync(register.Uid, addMenu);
-                    xncfModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == register.Uid);
+                    try
+                    {
+                        await _xncfModuleService.InstallModuleAsync(register.Uid, addMenu);
+                        xncfModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == register.Uid);
+                    }
+                    catch (Exception ex)
+                    {
+                        SenparcTrace.SendCustomLog("_xncfModuleService.InstallModuleAsync 异常：", ex.Message);
+                        SenparcTrace.BaseExceptionLog(ex);
+                        throw;
+                    }
+                   
                 }
 
                 //启用模块
