@@ -5,7 +5,6 @@
  * 如果需要学习扩展模块，请参考 【Senparc.ExtensionAreaTemplate】 项目的 Register.cs 文件！
  */
 
-using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -25,6 +24,7 @@ using Senparc.Ncf.AreaBase.Admin.Filters;
 using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Enums;
+using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Database;
@@ -326,7 +326,16 @@ namespace Senparc.Areas.Admin
         public override void OnAutoMapMapping(IServiceCollection services, IConfiguration configuration)
         {
             base.OnAutoMapMapping(services, configuration);
-            services.AddAutoMapper(z => z.AddProfile<AutoMpperProfiles.SenparcAreaAdminAutoMapperProfile>());
+            try
+            {
+                services.AddAutoMapper(z => z.AddProfile<AutoMpperProfiles.SenparcAreaAdminAutoMapperProfile>());
+            }
+            catch (Exception ex)
+            {
+                //TODO: Oracle 未升级到 .NET 8.0，此处会抛错
+                _ = new NcfExceptionBase(ex.Message, ex);
+            }
+
         }
     }
 

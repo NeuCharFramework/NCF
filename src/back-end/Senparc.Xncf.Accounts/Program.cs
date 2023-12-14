@@ -14,6 +14,7 @@ using Senparc.Ncf.Database.MySql;
 using Senparc.Ncf.Database.SqlServer;
 using Senparc.Xncf.Accounts.Domain.Models;
 using Senparc.Xncf.Accounts.Models;
+using Senparc.Xncf.AreasBase;
 using System;
 using System.IO;
 using System.Linq;

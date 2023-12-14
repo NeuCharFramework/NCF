@@ -8,6 +8,7 @@ using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database.SqlServer;
 using Senparc.Ncf.XncfBase;
+using Senparc.Xncf.AreasBase;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,10 +64,8 @@ app.UseCookiePolicy();
 
 app.UseRouting();
 app.UseAuthorization();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapRazorPages();
-    endpoints.MapControllers();
-});
+
+app.MapRazorPages();
+app.MapControllers();
 
 app.Run();
