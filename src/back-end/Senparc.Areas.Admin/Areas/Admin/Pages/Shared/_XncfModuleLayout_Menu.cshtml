@@ -21,7 +21,7 @@
     }
 }
 <ul class="nav side-menu">
-    @foreach (var menu in Model.AareaPageMenuItems)
+    @foreach (var menu in Model.AreaPageMenuItems)
     {
         <li class="xncf_area_submenu @CurrentXncfSubPage(menu.Url)"><a href="@menu.Url"><i class="@menu.Icon"></i> @menu.Name</a></li>
     }

@@ -51,9 +51,9 @@ namespace Senparc.Areas.Admin.Domain
                 z => z.Id != id && z.UserName.ToUpper() == userName /*z.UserName.Equals(userName, StringComparison.CurrentCultureIgnoreCase)*/) != null;
         }
 
-        //TODO：放到 OHS 的 Service
-        //[ApiBind]
-        //[Core.BackendJwtAuthorize]
+        ////TODO：放到 OHS 的 Service
+        ////[ApiBind]
+        ////[Core.BackendJwtAuthorize]
         public async Task<AdminUserInfo> GetUserInfo(string userName)
         {
             await Task.CompletedTask;
@@ -61,26 +61,6 @@ namespace Senparc.Areas.Admin.Domain
             return obj;
         }
 
-        public AdminUserInfo GetUserInfo(string userName, string password)
-        {
-            AdminUserInfo userInfo = GetObject(z => z.UserName.Equals(userName), null);
-            if (userInfo == null)
-            {
-                return null;
-            }
-            var codedPassword = GetPassword(password, userInfo.PasswordSalt, false);
-            return userInfo.Password == codedPassword ? userInfo : null;
-        }
-
-        public string GetPassword(string password, string salt, bool isMD5Password)
-        {
-            string md5 = password.ToUpper().Replace("-", "");
-            if (!isMD5Password)
-            {
-                md5 = MD5.GetMD5Code(password, "").Replace("-", ""); //原始MD5
-            }
-            return MD5.GetMD5Code(md5, salt).Replace("-", ""); //再加密
-        }
 
         public async Task LogoutAsync()
         {
@@ -119,24 +99,30 @@ namespace Senparc.Areas.Admin.Domain
             #endregion
         }
 
-        public bool CheckPassword(string userName, string password)
-        {
-            var userInfo = GetObject(z => z.UserName.Equals(userName));
-            if (userInfo == null)
-            {
-                return false;
-            }
-            var codedPassword = GetPassword(password, userInfo.PasswordSalt, false);
-            return userInfo.Password == codedPassword;
-        }
+        //public bool CheckPassword(string userName, string password)
+        //{
+        //    var userInfo = GetObject(z => z.UserName.Equals(userName));
+        //    if (userInfo == null)
+        //    {
+        //        return false;
+        //    }
+        //    var codedPassword = GetPassword(password, userInfo.PasswordSalt, false);
+        //    return userInfo.Password == codedPassword;
+        //}
 
-        public AdminUserInfo TryLogin(string userNameOrEmail, string password, bool rememberMe)
+        /// <summary>
+        /// 如果密码正确，则尝试登录
+        /// </summary>
+        /// <param name="adminUserInfo"></param>
+        /// <param name="password"></param>
+        /// <param name="rememberMe"></param>
+        /// <returns></returns>
+        public AdminUserInfo TryLogin(AdminUserInfo adminUserInfo, string password, bool rememberMe)
         {
-            AdminUserInfo userInfo = GetUserInfo(userNameOrEmail, password);
-            if (userInfo != null)
+            if (adminUserInfo.CheckPassword(password))
             {
-                Login(userInfo, rememberMe);
-                return userInfo;
+                Login(adminUserInfo, rememberMe);
+                return adminUserInfo;
             }
             else
             {
@@ -215,14 +201,27 @@ namespace Senparc.Areas.Admin.Domain
         {
             return GetFullList(z => ids.Contains(z.Id), z => z.Id, Ncf.Core.Enums.OrderingType.Ascending, includes: includes);
         }
-
+        //TODO: 统一此处初始化方法为一个方法
         /// <summary>
-        /// 初始化
+        /// 初始化，随机生成用户名和密码
         /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
         /// <returns></returns>
         public AdminUserInfo Init(out string userName, out string password)
         {
             userName = null;
+            return Init(userName, out password);
+        }
+
+        /// <summary>
+        /// 初始化，随机生成密码
+        /// </summary>
+        /// <param name="userName">用户名</param>
+        /// <param name="password">密码</param>
+        /// <returns></returns>
+        public AdminUserInfo Init(string userName, out string password)
+        {
             password = null;
 
             var oldAdminUserInfo = GetObject(z => true);
@@ -230,7 +229,7 @@ namespace Senparc.Areas.Admin.Domain
             {
                 return null;
             }
-            var adminUserInfo = new AdminUserInfo(ref userName, ref password, null, null, "初始化数据");
+            var adminUserInfo = new AdminUserInfo (ref userName, ref password, null, null, "初始化数据");
             SaveObject(adminUserInfo);
             return adminUserInfo;
         }
@@ -271,12 +270,12 @@ namespace Senparc.Areas.Admin.Domain
             var userInfo = await GetObjectAsync(z => z.UserName == loginDto.UserName);
             if (userInfo == null)
             {
-                throw new Ncf.Core.Exceptions.NcfExceptionBase($"用户名不存在或密码不正确：{loginDto.UserName}（101）！");
+                throw new Ncf.Core.Exceptions.NcfExceptionBase($"用户名不存在或密码不正确：{loginDto.UserName}！");
             }
-            var adminUserInfo = TryLogin(loginDto.UserName, loginDto.Password, false);
+            var adminUserInfo = TryLogin(userInfo, loginDto.Password, false);
             if (adminUserInfo == null)
             {
-                throw new Ncf.Core.Exceptions.NcfExceptionBase("用户名不存在或密码不正确（102）！");
+                throw new Ncf.Core.Exceptions.NcfExceptionBase("用户名不存在或密码不正确！");
             }
             else
             {

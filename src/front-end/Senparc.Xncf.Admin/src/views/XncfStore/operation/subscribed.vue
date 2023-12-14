@@ -18,11 +18,11 @@
           <el-table-column label="应用">
             <el-table-column prop="name" label="图标">
               <template slot="">
-                <!-- <img
+                <img
                   style="width: 100px"
                   src="../../XncfStore/shopping/imgs/201905191646449997..jpg"
                   alt=""
-                /> -->
+                />
               </template>
             </el-table-column>
             <!-- <el-table-column label="地址"> -->

@@ -80,7 +80,7 @@
               <el-tab-pane label="我创建的应用" name="first">
                 <div class="become">
                   <div class="developer" title="成为开发者" @click="become">
-                    <!-- <img src="./imgs/企业微信截图_20221222111152.png" alt="" /> -->
+                    <img src="./imgs/企业微信截图_20221222111152.png" alt="" />
                     <span>成为开发者</span>
                   </div>
                   <span class="application">暂无相关应用</span>

@@ -20,7 +20,7 @@
           <div class="appdetail-left">
             <h4>应用</h4>
             <div class="logo">
-              <!-- <img src="./imgs/企业微信截图_20221222111152.png" alt="" /> -->
+              <img src="./imgs/企业微信截图_20221222111152.png" alt="" />
             </div>
           </div>
           <div class="appdetail-right">

@@ -150,7 +150,7 @@ namespace Senparc.Areas.Admin
 
         public string HomeUrl => "/Admin";
 
-        public List<AreaPageMenuItem> AareaPageMenuItems => new List<AreaPageMenuItem>()
+        public List<AreaPageMenuItem> AreaPageMenuItems => new List<AreaPageMenuItem>()
         {
             new AreaPageMenuItem(GetAreaUrl("/Admin/Menu/Index"),"菜单管理","fa fa-bug"),
             new AreaPageMenuItem(GetAreaUrl("/Admin/SenparcTrace/Index"),"SenparcTrace 日志","fa fa-calendar-o"),

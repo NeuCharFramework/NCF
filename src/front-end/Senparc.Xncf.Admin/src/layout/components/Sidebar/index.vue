@@ -1,13 +1,6 @@
 <template>
   <div :class="{'has-logo':showLogo}">
     <logo v-if="showLogo" :collapse="isCollapse" />
-    <div style="padding: 20px">
-      <el-input placeholder="搜索菜单" v-if="!isCollapse" v-model="searchValue" @input="changeMenu(permission_routes)" clearable />
-    </div>
-    <div v-if="allMenu.length===0&&searchValue!==''" style="text-align: center">
-      <p style="font-size: 14px;color: white;margin-bottom: 5px">没有结果</p>
-      <el-button size="mini" type="primary" @click="searchValue='';changeMenu(permission_routes)">点击清空搜索</el-button>
-    </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
         :default-active="activeMenu"
@@ -19,11 +12,10 @@
         :collapse-transition="false"
         mode="vertical"
       >
-        <sidebar-item v-for="route in allMenu" :key="route.path" :item="route" :base-path="route.path"  :collapse="isCollapse" />
+        <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
-
-    <!--    <div>{{ JSON.stringify(permission_routes) }}</div>-->
+<!--    <div>{{ JSON.stringify(permission_routes) }}</div>-->
   </div>
 </template>
 
@@ -35,12 +27,6 @@ import variables from '@/styles/variables.scss'
 
 export default {
   components: { SidebarItem, Logo },
-  data() {
-    return {
-      searchValue: '',
-      allMenu: []
-    }
-  },
   computed: {
     ...mapGetters([
       'permission_routes',
@@ -66,35 +52,7 @@ export default {
     }
   },
   mounted() {
-    this.allMenu = this.permission_routes
-  },
-  methods: {
-    changeMenu(menu) {
-      if (!this.searchValue || this.searchValue === '') {
-        this.allMenu = this.permission_routes
-        return;
-      }
-      let res = []
-      this.findMenu(menu, res)
 
-      this.allMenu = res;
-    },
-    findMenu(menu, arr) {
-      menu.forEach(el => {
-        if (el.meta && el.meta.title.includes(this.searchValue)) arr.push(el)
-        if (el.children) {
-          this.findMenu(el.children, arr)
-        }
-      })
-    }
   }
 }
 </script>
-<style>
-/*处理文字超出，换行*/
-.el-menu-item,.el-submenu__title,.el-submenu .el-menu-item{
-  height: auto;
-  white-space: normal;
-  word-break: break-all;
-}
-</style>

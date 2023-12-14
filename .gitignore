@@ -46,3 +46,16 @@ obj/
 /src/NCF.Template.sln
 /src/NCF.Template.csproj
 /src/back-end/.template.config
+/src/front-end/admin-module/dist
+/src/front-end/admin-main/public/dist
+/src/front-end/admin-main/node_modules
+/src/front-end/admin-main/dist
+/src/front-end/admin-module/node_modules
+/src/back-end/Senparc.Web/App_Data/OpenAiImageTemp
+/src/TemplateBuilder
+/src/back-end/Senparc.Web/App_Data/ApiDocXML
+/src/back-end/Senparc.Web/App_Data/ApiDocXML
+/src/back-end/Senparc.Web/App_Data/ApiDocXML
+/src/back-end/Senparc.Web/App_Data/ApiDocXML
+*.DS_Store
+/src/back-end/Senparc.Web/Domain/PromptPlugins/XncfBuilderPlugin

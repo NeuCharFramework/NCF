@@ -141,7 +141,7 @@ namespace Senparc.Areas.Admin.Pages
 
                 if (xncfRegister != null &&
                     xncfRegister is Senparc.Ncf.Core.Areas.IAreaRegister xncfAreapage &&
-                    xncfAreapage.AareaPageMenuItems.Count() > 0)
+                    xncfAreapage.AreaPageMenuItems.Count() > 0)
                 {
                     if (hideModuleManager)
                     {
@@ -161,7 +161,7 @@ namespace Senparc.Areas.Admin.Pages
                     }
 
 
-                    dest.AddRange(xncfAreapage.AareaPageMenuItems.Select(_ => new SysMenuDto()
+                    dest.AddRange(xncfAreapage.AreaPageMenuItems.Select(_ => new SysMenuDto()
                     {
                         MenuName = _.Name,
                         Url = _.Url,
