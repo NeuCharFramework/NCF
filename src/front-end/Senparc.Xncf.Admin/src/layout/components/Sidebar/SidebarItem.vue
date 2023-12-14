@@ -3,14 +3,18 @@
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-          <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
+          <div :class="onlyOneChild.meta.title.length>12?'line-height-30':''">
+            <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" :collapse="collapse" />
+          </div>
         </el-menu-item>
       </app-link>
     </template>
 
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template slot="title">
-        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
+        <div :class="item.meta.title.length>12?'line-height-30':''">
+          <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" :collapse="collapse" />
+        </div>
       </template>
       <sidebar-item
         v-for="child in item.children"
@@ -30,10 +34,11 @@ import { isExternal } from '@/utils/validate'
 import Item from './Item'
 import AppLink from './Link'
 import FixiOSBug from './FixiOSBug'
+import Sticky from "@/components/Sticky";
 
 export default {
   name: 'SidebarItem',
-  components: { Item, AppLink },
+  components: {Sticky, Item, AppLink },
   mixins: [FixiOSBug],
   props: {
     // route object
@@ -48,6 +53,9 @@ export default {
     basePath: {
       type: String,
       default: ''
+    },
+    collapse:{
+      type:Boolean
     }
   },
   data() {
@@ -93,3 +101,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.line-height-30{
+  line-height: 30px;
+}
+
+/*element原来的line-height*/
+.line-height-56{
+  line-height: 56px;
+}
+</style>

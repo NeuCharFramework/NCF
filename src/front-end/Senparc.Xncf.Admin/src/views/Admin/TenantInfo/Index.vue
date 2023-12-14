@@ -39,7 +39,7 @@
 
       <h2 class="current-tenant-info">多租户信息</h2>
 
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="tableData" v-loading="tableLoading" border style="width: 100%">
         <el-table-column align="center" label="id(TentanId)" width="120">
           <template slot-scope="scope">
             {{ scope.row.id }}
@@ -169,6 +169,7 @@ export default {
         adminUserInfoName: "",
       },
       tableData: [],
+      tableLoading: true,
       requestTenantInfo: {},
       tenantRule: "",
       enableMultiTenant: true,
@@ -228,9 +229,11 @@ export default {
   methods: {
     // 获取数据
     async getList() {
+      this.tableLoading = true;
       await getTenantInfoList(this.listQuery).then((res) => {
         console.log("获取数据", res);
         this.tableData = res.data.data.list || [];
+        this.tableLoading = false;
       });
     },
     // 编辑
