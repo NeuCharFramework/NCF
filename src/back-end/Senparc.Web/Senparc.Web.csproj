@@ -20,8 +20,8 @@
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
 		<PackageReference Include="Dapr.Client" Version="1.12.0" />
-		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.3.0" />
-		<PackageReference Include="Senparc.CO2NET" Version="2.3.0" />
+		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.3.1" />
+		<PackageReference Include="Senparc.CO2NET" Version="2.3.1" />
 		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.4.1.5-beta1" />
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.17.2.4-beta1" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.5.1.1-beta1" />
@@ -32,7 +32,7 @@
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.5.1.3-beta1" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.14.1-beta1" />
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.9.3-beta1" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.19.3-beta1.1" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.19.6-beta2" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.5.1.2-beta1" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.13.1.4-beta1" />
 	</ItemGroup>
