@@ -15,8 +15,4 @@
 		<!--<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />-->
 	</ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.PromptRange\Senparc.Xncf.PromptRange.csproj" />
-	</ItemGroup>
-
 </Project>
