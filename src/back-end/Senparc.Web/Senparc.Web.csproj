@@ -17,6 +17,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.13.1.6-beta1" />
+		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.3.8-beta2" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
 		<PackageReference Include="Dapr.Client" Version="1.12.0" />
@@ -31,7 +32,7 @@
 		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.5.1.1-beta1" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.5.1.3-beta1" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.14.1-beta1" />
-		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.9.3-beta1" />
+		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.10.0-beta1" />
 		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.19.6-beta2" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.5.1.2-beta1" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.13.1.4-beta1" />
@@ -67,6 +68,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
+		<ProjectReference Include="..\SenparcConf.Xncf.WechatBot\SenparcConf.Xncf.WechatBot.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Update="wwwroot\css\site.css">
