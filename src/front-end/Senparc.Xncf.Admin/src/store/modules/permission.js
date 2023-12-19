@@ -1,6 +1,7 @@
 import { asyncRoutes, constantRoutes } from '@/router';
 import Layout from '@/layout';
 import moduleRouter from '@/router/modules/module';
+import { Message } from 'element-ui';
 
 /**
  * 使用 后端传来的路由表判断当前用户是否有权限
@@ -208,7 +209,12 @@ export function generateRoutesList(routes, menuTree, pageNotFind = true) {
         routerObj.path = `${tmp.url}?parent=1`
         routerObj.children = [{
           path: tmp.url,
-          component: (resolve) => require(['@/views' + componentName + '.vue'], resolve),
+          component: (resolve) => {
+            require(['@/views' + componentName + '.vue'], resolve)
+              .catch(() => {
+                Message.error('菜单设置错误：请检查是否存在' + componentName);
+              });
+          },
           name: tmp.menuName + tmp.url,
           meta: {
             title: tmp.menuName,
