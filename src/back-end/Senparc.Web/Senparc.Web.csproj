@@ -18,25 +18,25 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.13.1.6-beta1" />
+		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.13.1.7-beta1" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
 		<PackageReference Include="Dapr.Client" Version="1.12.0" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.3.1" />
 		<PackageReference Include="Senparc.CO2NET" Version="2.3.1" />
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.4.1.5-beta1" />
-		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.17.2.4-beta1" />
-		<PackageReference Include="Senparc.Xncf.Menu" Version="0.5.1.1-beta1" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.8.1-beta1" />
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.5.2-beta1" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.5.1.1-beta1" />
-		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.5.1.1-beta1" />
-		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.5.1.3-beta1" />
-		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.14.1-beta1" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.4.1.6-beta1" />
+		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.17.2.5-beta1" />
+		<PackageReference Include="Senparc.Xncf.Menu" Version="0.5.1.2-beta1" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.8.1.1-beta1" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.5.2.1-beta1" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.5.1.2-beta1" />
+		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.5.1.2-beta1" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.5.1.4-beta1" />
+		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.14.1.1-beta1" />
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.10.0-beta1" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.20.0-beta2" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.5.3.2-beta1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.14.1.2-beta1" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.20.0.1-beta2" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.5.3.3-beta1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.14.1.4-beta1" />
 	</ItemGroup>
 
 	<ItemGroup>
