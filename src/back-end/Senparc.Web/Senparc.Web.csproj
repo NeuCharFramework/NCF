@@ -64,7 +64,7 @@
 		<None Include="wwwroot\lib\echarts" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.PromptRange\Senparc.Xncf.PromptRange.Plant.csproj" />
+		<!--<ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.PromptRange\Senparc.Xncf.PromptRange.Plant.csproj" />-->
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />

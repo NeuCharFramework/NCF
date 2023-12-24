@@ -40,6 +40,7 @@
   <ItemGroup>
     <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.14.1.6-beta1+d29af850107e637cc591f6da9b086e8fa73ec9ac" />
     <PackageReference Include="Senparc.Ncf.AreaBase" Version="0.13.1-beta1+d29af850107e637cc591f6da9b086e8fa73ec9ac" />
+    <PackageReference Include="Senparc.Weixin.MP" Version="16.20.4" />
     <PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.10.0-beta1" />
     <None Include="App_Data\SenparcTraceLog\*" />
   </ItemGroup>

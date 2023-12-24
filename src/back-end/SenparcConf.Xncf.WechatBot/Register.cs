@@ -19,6 +19,7 @@ using Senparc.AI.Interfaces;
 using Senparc.AI.Kernel;
 using Microsoft.AspNetCore.Builder;
 using Senparc.CO2NET.RegisterServices;
+using Senparc.CO2NET;
 
 namespace SenparcConf.Xncf.WechatBot
 {
@@ -38,6 +39,8 @@ namespace SenparcConf.Xncf.WechatBot
         public override string Icon => "fa fa-star";
 
         public override string Description => "自动回复机器人";
+
+        SenparcAiSetting _senparcAiSetting;
 
         public override async Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
         {
@@ -84,13 +87,16 @@ namespace SenparcConf.Xncf.WechatBot
         {
             services.AddScoped<ColorAppService>();
             services.AddScoped<IAiHandler, SemanticAiHandler>();
+            
+            _senparcAiSetting = new Senparc.AI.Kernel.SenparcAiSetting();
+            configuration.GetSection("SenparcAiSetting").Bind(_senparcAiSetting);
 
             return base.AddXncfModule(services, configuration, env);
         }
 
         public override IApplicationBuilder UseXncfModule(IApplicationBuilder app, IRegisterService registerService)
         {
-
+            registerService.UseSenparcAI(_senparcAiSetting);
             return base.UseXncfModule(app, registerService);
         }
     }
