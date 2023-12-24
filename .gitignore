@@ -59,3 +59,4 @@ obj/
 /src/back-end/Senparc.Web/App_Data/ApiDocXML
 *.DS_Store
 /src/back-end/Senparc.Web/Domain/PromptPlugins/XncfBuilderPlugin
+SenparcConfig.Development.config
