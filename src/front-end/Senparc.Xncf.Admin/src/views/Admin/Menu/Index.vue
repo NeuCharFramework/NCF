@@ -280,9 +280,10 @@ export default {
     },
     // 数据处理
     menuFormat(source, parentId, dest) {
-      var array = source.filter((_) => _.parentId === parentId);
-      for (var i in array) {
-        var ele = array[i];
+      const array = source.filter((_) => _.parentId === parentId);
+      array.sort((a, b) => a.sort - b.sort);
+      for (let i in array) {
+        const ele = array[i];
         ele.children = [];
         dest.unshift(ele);
         this.menuFormat(source, ele.id, ele.children);
