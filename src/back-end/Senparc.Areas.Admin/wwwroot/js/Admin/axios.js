@@ -33,7 +33,7 @@ service.interceptors.response.use(
                     return;
                 }
                 app.$message({
-                    message: response.data.msg || 'Error',
+                    message: response.data.msg||response.data.exception|| 'Error',
                     type: 'error',
                     duration: 5 * 1000
                 });
