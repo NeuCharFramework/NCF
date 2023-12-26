@@ -211,9 +211,8 @@
             if ((res.data.log || '').length > 0 && (res.data.tempId || '').length > 0) {
                 this.runResult.hasLog = true;
             }
-            let msg = res.data.msg
             // purify dom, prevent attack
-            msg = DOMPurify.sanitize(res.data.msg);
+            const msg = DOMPurify.sanitize(res.data.msg);
             
             if (!res.data.success) {
                 this.runResult.tit = '遇到错误';
@@ -221,7 +220,7 @@
                 this.runResult.msg = msg;
                 return;
             }
-            if (res.data.msg && (res.data.msg.indexOf('http://') !== -1 || msg.indexOf('https://') !== -1)) {
+            if (msg && (msg.indexOf('http://') !== -1 || msg.indexOf('https://') !== -1)) {
                 this.runResult.tit = '执行成功';
                 this.runResult.tip = '收到网址，点击下方打开<br />（此链接由第三方提供，请注意安全）：';
                 this.runResult.msg = '<i class="fa fa-external-link"></i> <a href="' + msg + '" target="_blank">' + msg + '</a>';
