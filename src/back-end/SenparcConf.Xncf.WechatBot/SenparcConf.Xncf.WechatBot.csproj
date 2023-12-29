@@ -27,7 +27,7 @@
     <OutputPath>..\..\..\BuildOutPut</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Senparc.AI.Kernel" Version="0.6.3-rc3" />
+    <PackageReference Include="Senparc.AI.Kernel" Version="0.6.5-rc3" />
     <PackageReference Include="Senparc.CO2NET.WebApi" Version="1.5.1" />
     <!--<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />-->
   </ItemGroup>
@@ -35,12 +35,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.13.3.3-beta1" />
+    <PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.13.5-beta1" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.14.1.6-beta1+d29af850107e637cc591f6da9b086e8fa73ec9ac" />
-    <PackageReference Include="Senparc.Ncf.AreaBase" Version="0.13.1-beta1+d29af850107e637cc591f6da9b086e8fa73ec9ac" />
+    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.14.1.7-beta1" />
+    <PackageReference Include="Senparc.Ncf.AreaBase" Version="0.13.1.1-beta1" />
     <PackageReference Include="Senparc.Weixin.MP" Version="16.20.4" />
+    <PackageReference Include="Senparc.Xncf.AIKernel" Version="0.1.0.1" />
     <PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.10.0-beta1" />
     <None Include="App_Data\SenparcTraceLog\*" />
   </ItemGroup>
