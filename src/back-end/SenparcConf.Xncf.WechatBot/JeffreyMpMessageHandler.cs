@@ -82,12 +82,18 @@ namespace Senparc.Web
                         await Console.Out.WriteLineAsync("result is null");
                     }
 
-                    //异步发送 AI 结果到用户
-                    _ = Senparc.Weixin.MP.AdvancedAPIs.CustomApi.SendTextAsync(_mpAccountDto.AppId, requestMessage.FromUserName, result.Output);
 
-                    _ = Senparc.Weixin.MP.AdvancedAPIs.CustomApi.SendTextAsync(_mpAccountDto.AppId, requestMessage.FromUserName, $"总共耗时：{SystemTime.DiffTotalMS(dt)}ms");
+                    //异步发送 AI 结果到用户
+                    var resultMsg =$"{result.Output}\r\n -- AI 计算耗时：{SystemTime.DiffTotalMS(dt)}毫秒";
+                    _ = Senparc.Weixin.MP.AdvancedAPIs.CustomApi.SendTextAsync(_mpAccountDto.AppId, requestMessage.FromUserName, resultMsg);
+
+                    //_ = Senparc.Weixin.MP.AdvancedAPIs.CustomApi.SendTextAsync(_mpAccountDto.AppId, requestMessage.FromUserName, $"总共耗时：{SystemTime.DiffTotalMS(dt)}ms");
                 });
 
+            //不返回任何信息
+            return this.CreateResponseMessage<ResponseMessageNoResponse>();
+
+            //返回明文提示
             var reponseMessage = this.CreateResponseMessage<ResponseMessageText>();
             reponseMessage.Content = "消息已收到，正在思考中……";
             return reponseMessage;
