@@ -6,7 +6,7 @@ using Senparc.Weixin.MP.Entities.Request;
 using Senparc.Weixin.MP.MessageContexts;
 using Senparc.Weixin.MP.MessageHandlers;
 using Senparc.Xncf.WeixinManager;
-using Senparc.Xncf.WeixinManager.Models;
+using Senparc.Xncf.WeixinManager.Domain.Models.DatabaseModel.Dto;
 using System;
 using System.Collections.Generic;
 using System.IO;

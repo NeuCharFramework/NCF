@@ -13,7 +13,7 @@ using Senparc.Weixin.MP.Entities.Request;
 using Senparc.Weixin.MP.MessageContexts;
 using Senparc.Weixin.MP.MessageHandlers;
 using Senparc.Xncf.WeixinManager;
-using Senparc.Xncf.WeixinManager.Models;
+using Senparc.Xncf.WeixinManager.Domain.Models.DatabaseModel.Dto;
 using SenparcConf.Xncf.WechatBot;
 using System;
 using System.Collections.Concurrent;
@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 namespace Senparc.Web
 {
     [MpMessageHandlerAttribute("JeffreyMp")]
-    public class JeffreyMpMessageHandler : MessageHandler<DefaultMpMessageContext> //MessageHandler<WechatAiContext>
+    public class JeffreyMpMessageHandler : MessageHandler<WechatAiContext> //MessageHandler<DefaultMpMessageContext>
     {
         private readonly MpAccountDto _mpAccountDto;
         private readonly ServiceProvider _services;
