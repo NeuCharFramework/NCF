@@ -13,7 +13,7 @@
         <span class="start-delete">
           <el-popconfirm
             placement="top"
-            title="确认删除此模块吗？"
+            title="确认删除此模块吗？此模块内相关数据也将被删除，请做好备份！"
             @confirm="handleDelete()"
           >
             <el-button

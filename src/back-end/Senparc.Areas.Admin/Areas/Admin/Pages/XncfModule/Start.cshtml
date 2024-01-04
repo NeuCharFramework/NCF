@@ -17,7 +17,7 @@
         <el-header class="module-header">
             <span class="start-title"> <i :class="data.xncfRegister.icon"></i>&nbsp;{{data.xncfModule.menuName}} <span class="module-header-v">模块 {{data.xncfModule.version}}</span></span>
             <span class="start-delete">
-                <el-popconfirm placement="top" title="确认删除此模块吗？" @@on-confirm="handleDelete()">
+                <el-popconfirm placement="top" title="确认删除此模块吗？此模块内相关数据也将被删除，请做好备份！" @@on-confirm="handleDelete()">
                     <el-button size="mini" type="danger" slot="reference">删除</el-button>
                 </el-popconfirm>
             </span>
