@@ -11,9 +11,7 @@
 		<Configurations>Debug;Release;Debug-Dapr;NcfDebugForPromptRange</Configurations>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<!--<RestoreFallbackFolders>clear</RestoreFallbackFolders>-->
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NcfDebugForPromptRange|AnyCPU'">
-	  <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
+		<DefineConstants Condition="'$(Configuration)|$(Platform)'=='NcfDebugForPromptRange|AnyCPU'">$(DefineConstants);DEBUG</DefineConstants>
 	</PropertyGroup>
 
 
