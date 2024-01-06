@@ -17,6 +17,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.13.1.7-beta1" />
+		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.4.0.8-beta2" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
 		<PackageReference Include="Dapr.Client" Version="1.12.0" />
@@ -31,8 +32,8 @@
 		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.5.1.2-beta1" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.5.1.4-beta1" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.14.1.1-beta1" />
-		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.11.0.15-beta1" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.20.1-beta2" />
+		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.11.0.18-beta1" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.20.1.6-beta2" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.5.3.3-beta1" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.14.1.4-beta1" />
 	</ItemGroup>
@@ -62,7 +63,6 @@
 		<None Include="wwwroot\lib\echarts" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.PromptRange\Senparc.Xncf.PromptRange.Plant.csproj" />
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
 	</ItemGroup>
