@@ -11,15 +11,15 @@
 
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	
+
 		<EmbeddedResource Include="wwwroot\**\*" />
-	
+
 		<Compile Remove="Domain\Migrations\Oracle\**" />
-	
+
 		<Content Remove="Domain\Migrations\Oracle\**" />
-	
+
 		<EmbeddedResource Remove="Domain\Migrations\Oracle\**" />
-	
+
 		<None Remove="Domain\Migrations\Oracle\**" />
 		<PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.0" />
@@ -55,5 +55,7 @@
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.5.1.2-beta1" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.5.3.3-beta1" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.5.1.4-beta1" />
+		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.11.0.18-beta1" />
+
 	</ItemGroup>
 </Project>
