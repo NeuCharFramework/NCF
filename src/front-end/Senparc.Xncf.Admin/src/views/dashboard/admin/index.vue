@@ -71,7 +71,7 @@
 
     <!-- 功能模块 -->
     <el-row>
-      <el-card class="box-card">
+      <el-card class="box-card mw-100">
         <div slot="header" class="clearfix">
           <span style="font-size: 20px; color: black">功能模块</span>
         </div>
@@ -80,9 +80,7 @@
 
         <!-- 所有的展示数据 -->
         <div id="xncf-modules-area">
-          <el-row :gutter="20">
-            <el-col v-for="item in xncfOpeningList" :key="item.uid" :span="6" class="xncf-item">
-              <el-card class="box-card">
+              <el-card class="box-card" v-for="item in xncfOpeningList" :key="item.uid" :span="6">
                 <div slot="header" class="xncf-item-top svgimg greencolor">
                   <span class="moudelName">{{ item.menuName }}</span>
                   <small class="version">v{{ item.version }}</small>
@@ -90,15 +88,7 @@
                 <router-link :to="'/Admin/XncfModule/Start/uid=' + item.uid">
                   <i style="font-size: 22px" :class="[item.icon, 'icon']" />
                 </router-link>
-                <!-- <a
-                  class="component-item"
-                  :href="'/Admin/XncfModule/Start/?uid=' + item.uid"
-                >
-                  <i :class="[item.icon, 'icon']" />
-                </a> -->
               </el-card>
-            </el-col>
-          </el-row>
         </div>
       </el-card>
     </el-row>
@@ -227,6 +217,9 @@ export default {
     margin-right: 5px;
   }
 
+  .mw-100{
+    max-width: 100% !important;
+  }
   .box-card {
     margin-top: 20px;
 
@@ -264,6 +257,10 @@ export default {
   }
 
   #xncf-modules-area {
+    display: grid;
+    grid-template-columns:repeat(auto-fill,minmax(251px,1fr));
+    grid-auto-rows:130px;
+    grid-gap: 20px;
     margin-bottom: 50px;
   }
   ::v-deep .el-card__header {
@@ -273,6 +270,7 @@ export default {
     padding: 16px;
   }
   #xncf-modules-area .xncf-item .xncf-item-top {
+    width: 100px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -284,6 +282,10 @@ export default {
   }
   #xncf-modules-area .xncf-item .xncf-item-top .version {
     white-space: nowrap;
+  }
+
+  .version{
+    float:right;
   }
 
   #xncf-modules-area .xncf-item .icon {

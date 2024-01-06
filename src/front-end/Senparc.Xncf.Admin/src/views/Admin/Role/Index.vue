@@ -7,10 +7,10 @@
           type="primary"
           icon="el-icon-plus"
           @click="handleEdit"
-          >增加</el-button
-        >
+        >增加
+        </el-button>
       </div>
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table v-loading="tableLoading" :data="tableData" border style="width: 100%">
         <el-table-column align="center" label="角色名称">
           <template slot-scope="scope">
             {{ scope.row.roleName }}
@@ -48,8 +48,8 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleRole(scope.$index, scope.row)"
               style="margin-right: 10px"
+              @click="handleRole(scope.$index, scope.row)"
             >
               权限
             </el-button>
@@ -58,14 +58,22 @@
               title="确认删除此角色吗？"
               @confirm="handleDelete(scope.$index, scope.row)"
             >
-              <el-button slot="reference" size="mini" type="danger"
-                >删除</el-button
-              >
+              <el-button slot="reference" size="mini" type="danger">删除</el-button>
             </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
-      <!-- <pagination :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getList" /> -->
+      <!--      el-pagination-->
+      <br><br>
+      <el-pagination
+        :current-page.sync="listQuery.pageIndex"
+        :page-sizes="[10, 20, 30,40]"
+        :page-size="listQuery.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="getList"
+        @current-change="getList"
+      />
       <!--编辑、新增 -->
       <el-dialog
         :title="dialog.title"
@@ -84,14 +92,14 @@
             <el-input
               v-model="dialog.data.roleName"
               clearable
-              placeholder="请输入角色名称"
+              placeholder="请输入角色名称，最多输入50个字符"
             />
           </el-form-item>
           <el-form-item label="角色代码" prop="roleCode">
             <el-input
               v-model="dialog.data.roleCode"
               clearable
-              placeholder="请输入角色代码"
+              placeholder="请输入角色代码，最多输入20个字符"
             />
           </el-form-item>
           <el-form-item label="是否启用">
@@ -118,8 +126,8 @@
             :loading="dialog.updateLoading"
             type="primary"
             @click="updateData"
-            >确 认</el-button
-          >
+          >确 认
+          </el-button>
         </div>
       </el-dialog>
       <!--授权 -->
@@ -128,8 +136,10 @@
         :visible.sync="au.visible"
         :close-on-click-modal="false"
       >
+
         <el-tree
           ref="tree"
+          v-loading="menuLoading"
           :data="allMenu"
           show-checkbox
           node-key="id"
@@ -143,8 +153,8 @@
             :loading="au.updateLoading"
             type="primary"
             @click="auUpdateData"
-            >确 认</el-button
-          >
+          >确 认
+          </el-button>
         </div>
       </el-dialog>
     </div>
@@ -157,12 +167,13 @@ import {
   createPermission,
   createOrUpdateRole,
   deleteRole,
-  getRolePermissions,
-} from "@/api/roles";
-import { isHaveToken } from "@/utils/auth";
-import { getFullMenus } from "@/api/menu";
+  getRolePermissions
+} from '@/api/roles';
+import { isHaveToken } from '@/utils/auth';
+import { getFullMenus } from '@/api/menu';
+
 export default {
-  name: "Index",
+  name: 'Index',
   data() {
     return {
       // 数据总数
@@ -170,68 +181,72 @@ export default {
       // 分页接口传参
       listQuery: {
         pageIndex: 1,
-        pageSize: 100,
-        roleName: "",
-        orderField: "",
+        pageSize: 10,
+        roleName: '',
+        orderField: ''
       },
       tableData: [],
+      tableLoading: true,
       dialog: {
-        title: "新增角色",
+        title: '新增角色',
         visible: false,
         data: {
-          roleName: "",
-          roleCode: "",
-          adminRemark: "",
-          remark: "",
-          addTime: "",
-          id: "",
-          enabled: false,
+          roleName: '',
+          roleCode: '',
+          adminRemark: '',
+          remark: '',
+          addTime: '',
+          id: '',
+          enabled: false
         },
         rules: {
           roleName: [
-            { required: true, message: "角色名称为必填项", trigger: "blur" },
+            { required: true, message: '角色名称为必填项', trigger: 'blur' },
+            { min: 1, max: 50, message: '最多输入50个字符', trigger: 'change' }
           ],
           roleCode: [
-            { required: true, message: "角色代码为必填项", trigger: "blur" },
-          ],
+            { required: true, message: '角色代码为必填项', trigger: 'blur' },
+            { min: 1, max: 20, message: '最多输入20个字符', trigger: 'change' }
+          ]
         },
-        updateLoading: false,
+        updateLoading: false
       },
       // 树结构字段
       defaultProps: {
-        children: "children",
-        label: "menuName",
+        children: 'children',
+        label: 'menuName'
       },
       // 授权
       au: {
-        title: "",
+        title: '',
         visible: false,
         updateLoading: false,
-        temp: {},
+        temp: {}
       },
       allMenu: [], // 所有权限
+      menuLoading: true, // 是否还在获取数据
       currMenu: [], // 当前权限
       defaultExpandedKeys: [], // 默认展开
       defaultCheckedKeys: [], // 默认选中
-      parentArr: [], // 父节点集合
+      parentArr: [] // 父节点集合
     };
   },
   watch: {
-    "dialog.visible"(val, old) {
+    'dialog.visible'(val, old) {
       // 关闭dialog，清空
       if (!val) {
         this.dialog.data = {
-          roleName: "",
-          roleCode: "",
-          adminRemark: "",
-          remark: "",
-          addTime: "",
-          id: "",
+          roleName: '',
+          roleCode: '',
+          adminRemark: '',
+          remark: '',
+          addTime: '',
+          id: ''
         };
         this.dialog.updateLoading = false;
       }
     },
-    "au.visible"(val, old) {
+    'au.visible'(val, old) {
       // 关闭dialog，清空
       if (!val) {
         this.currMenu = [];
@@ -239,7 +254,7 @@ export default {
         this.defaultExpandedKeys = [];
         this.au.updateLoading = false;
       }
-    },
+    }
   },
   created() {
     this.getList();
@@ -252,12 +267,13 @@ export default {
       this.au = {
         title: row.roleName,
         visible: true,
-        temp: row,
+        temp: row
       };
       // 当前已有权限
       const c = await getRolePermissions({ roleId: row.id });
       if (!c.data) {
-        this.$message.error("获取权限信息失败");
+        this.$message.error('获取权限信息失败');
+        this.menuLoading = false;
         return;
       }
       // console.log('c',c );
@@ -268,8 +284,9 @@ export default {
       });
 
       const a = await getFullMenus({ hasButton: true });
+      this.menuLoading = false;
       if (!a.data) {
-        this.$message.error("获取权限信息失败");
+        this.$message.error('获取权限信息失败');
         return;
       }
       // console.log('a',a );
@@ -310,33 +327,31 @@ export default {
     auUpdateData() {
       this.au.updateLoading = true;
       const checkNodes = this.$refs.tree.getCheckedNodes(false, true);
-      let array = [];
+      const array = [];
       checkNodes.map((ele) => {
         array.push({
           PermissionId: ele.id,
           roleId: this.au.temp.id,
           isMenu: ele.isMenu,
-          roleCode: ele.resourceCode,
+          roleCode: ele.resourceCode
         });
       });
-      console.log("auUpdateData", this.au.temp, array);
+      console.log('auUpdateData', this.au.temp, array);
       createPermission({ requestDtos: array })
         .then((res) => {
-          if (res.success) {
-            this.$notify({
-              title: "Success",
-              message: "成功",
-              type: "success",
-              duration: 2000,
-            });
-            this.au.updateLoading = false;
-            this.au.visible = false;
-            this.getList();
-          }
+          this.$notify({
+            title: 'Success',
+            message: '成功',
+            type: 'success',
+            duration: 2000
+          });
+          this.au.updateLoading = false;
+          this.au.visible = false;
+          this.getList();
           // window.location.reload()
         })
         .catch(() => {
-          this.$message.error("失败");
+          this.$message.error('失败');
           this.au.updateLoading = false;
         });
     },
@@ -352,7 +367,7 @@ export default {
           remark,
           addTime,
           id,
-          enabled,
+          enabled
         } = row;
         this.dialog.data = {
           roleName,
@@ -361,42 +376,40 @@ export default {
           remark,
           addTime,
           id,
-          enabled,
+          enabled
         };
-        this.dialog.title = "编辑角色";
+        this.dialog.title = '编辑角色';
       } else {
         // 新增
-        this.dialog.title = "新增角色";
+        this.dialog.title = '新增角色';
       }
     },
     // 更新新增、编辑
     updateData() {
       // 没有操作权限
-      this.$refs["dataForm"].validate((valid) => {
+      this.$refs['dataForm'].validate((valid) => {
         // 表单校验
         if (valid) {
           this.dialog.updateLoading = true;
-          const { id, roleName, roleCode, adminRemark, remark, enabled } =
-            this.dialog.data;
+          const { id, roleName, roleCode, adminRemark, remark, enabled } = this.dialog.data;
           const data = { id, roleName, roleCode, adminRemark, remark, enabled };
           // console.log('新增角色', data)
 
           createOrUpdateRole(data)
             .then((res) => {
-              if (res.success) {
-                this.$notify({
-                  title: "Success",
-                  message: "成功",
-                  type: "success",
-                  duration: 2000,
-                });
-                this.dialog.updateLoading = false;
-                this.dialog.visible = false;
-                this.getList();
-              }
+              this.dialog.updateLoading = false;
+              this.$notify({
+                title: 'Success',
+                message: '成功',
+                type: 'success',
+                duration: 2000
+              });
+              this.dialog.visible = false;
+              this.getList();
             })
-            .catch(() => {
-              this.$message.error("失败");
+            .catch(err => {
+              console.log(err)
+              this.$message.error('失败');
               this.dialog.updateLoading = false;
             });
         }
@@ -405,26 +418,25 @@ export default {
     // 删除
     handleDelete(index, row) {
       const id = {
-        id: row.id,
+        id: row.id
       };
       deleteRole(id)
         .then((res) => {
-          if (res.success) {
-            this.$notify({
-              title: "Success",
-              message: "删除成功",
-              type: "success",
-              duration: 2000,
-            });
-            this.getList();
-          }
+          this.$notify({
+            title: 'Success',
+            message: '删除成功',
+            type: 'success',
+            duration: 2000
+          });
+          this.getList();
         })
         .catch(() => {
-          this.$message.error("失败");
+          this.$message.error('失败');
         });
     },
     // 初始化获取数据
     getList() {
+      this.tableLoading = true;
       getAllRoles(this.listQuery).then((res) => {
         // console.log('getAllRoles', res)
         if (res.data) {
@@ -432,10 +444,11 @@ export default {
           this.tableData = data.list;
           this.total = data.totalCount;
         } else {
-          this.$message.error("获取数据失败");
+          this.$message.error('获取数据失败');
         }
+        this.tableLoading = false;
       });
-    },
-  },
+    }
+  }
 };
 </script>
