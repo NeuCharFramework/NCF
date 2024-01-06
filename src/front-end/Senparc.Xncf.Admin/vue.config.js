@@ -7,9 +7,6 @@ function resolve(dir) {
 }
 
 const name = defaultSettings.title || 'NCF Admin' // page title
-//1 引入插件copy-webpack-plugin
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -45,7 +42,7 @@ module.exports = {
     proxy: {
       // 所有的请求起始部分全部用 '/api'代替，比如访问"https://192.168.1.4/movie"，那么简写成"/api/movie"即可
       '/api': {
-        target: 'https://localhost:44311/api', // 开发域名
+        target: 'https://localhost:5001/api', // 开发域名
         // target: 'https://localhost:44311/api',// 正式域名
         changeOrigin: true,
         ws: true,
@@ -64,14 +61,7 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
-    },
-    //2 使用这个插件copy-webpack-plugin
-    // plugins: [
-    //   new CopyWebpackPlugin([
-    //     { from: '要拷贝的文件', to: '要拷贝到的路径（不写默认是打包的根目录）' }
-    //   ])
-    // ]
-    plugins: []
+    }
   },
   chainWebpack(config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload
@@ -146,5 +136,4 @@ module.exports = {
         }
       )
   }
-
 }

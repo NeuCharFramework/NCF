@@ -8,6 +8,7 @@ using Senparc.CO2NET.WebApi.WebApiEngines;
 using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.XncfBase;
+using Senparc.Xncf.AreasBase;
 
 namespace Senparc.Web
 {

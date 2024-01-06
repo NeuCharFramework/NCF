@@ -783,7 +783,7 @@
                         MenuName: this.dialog.data.menuName,
                         ParentId: this.dialog.data.parentId[this.dialog.data.parentId.length - 1],
                         Url: this.dialog.data.url,
-                        Icon: 'fa ' + this.dialog.data.icon,
+                        Icon: this.dialog.data.icon.includes("fa ") ? this.dialog.data.icon : "fa " + this.dialog.data.icon,
                         Sort: this.dialog.data.sort * 1,
                         Visible: this.dialog.data.visible,
                         ResourceCode: this.dialog.data.resourceCode,

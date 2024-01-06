@@ -1,6 +1,7 @@
-import { asyncRoutes, constantRoutes } from "@/router";
-import Layout from "@/layout";
-import moduleRouter from "@/router/modules/module";
+import { asyncRoutes, constantRoutes } from '@/router';
+import Layout from '@/layout';
+import moduleRouter from '@/router/modules/module';
+import { Message } from 'element-ui';
 
 /**
  * 使用 后端传来的路由表判断当前用户是否有权限
@@ -29,7 +30,7 @@ function hasPermission(menuTree, route) {
  */
 export function filterAsyncRoutes(routes, menuTree, pageNotFind = true) {
   const res = [];
-  const page404 = routes.filter((item) => item.path === "*")[0];
+  const page404 = routes.filter((item) => item.path === '*')[0];
   routes.forEach((route) => {
     const tmp = { ...route };
     // 路由权限
@@ -51,7 +52,7 @@ const state = {
   routes: [],
   addRoutes: [],
   accessedRoutes: [],
-  sidebarRouters: [],
+  sidebarRouters: []
 };
 
 const mutations = {
@@ -61,7 +62,7 @@ const mutations = {
   },
   SET_SIDEBAR_ROUTERS: (state, routes) => {
     state.sidebarRouters = routes;
-  },
+  }
 };
 
 const actions = {
@@ -77,34 +78,34 @@ const actions = {
       // 根据后端返回生成动态路由
       accessedRoutes = generateRoutesList(asyncRoutes, menuTree);
       state.accessedRoutes = accessedRoutes;
-      commit("SET_ROUTES", accessedRoutes);
+      commit('SET_ROUTES', accessedRoutes);
       resolve(accessedRoutes);
     });
   },
   setRoutes({ commit }, routes) {
     // console.log(routes)
     // console.log('moduleRouter', moduleRouter)
-    const list = { ...moduleRouter, ...{} };
+    const list = { ...moduleRouter, ...{}};
 
     // 是否是远程加载的路由
     routes.forEach((item) => {
-      if (item.name === "b-home1") {
-        console.log("item", item.name);
+      if (item.name === 'b-home1') {
+        console.log('item', item.name);
         item.meta = {
-          title: "拓展模块b-home1",
+          title: '拓展模块b-home1'
         };
         list.children.push(item);
       }
-      if (item.name === "b-about1") {
+      if (item.name === 'b-about1') {
         item.meta = {
-          title: "拓展模块b-about1",
+          title: '拓展模块b-about1'
         };
         list.children = [...list.children, ...[item]];
       }
     });
     // console.log("list", list);
     state.accessedRoutes.forEach((item, index) => {
-      if (item.name === "Module") {
+      if (item.name === 'Module') {
         // console.log(index, item.name);
         state.accessedRoutes[index] = list;
         // state.accessedRoutes[index].children = [
@@ -130,8 +131,8 @@ const actions = {
 
     // list = [...state.accessedRoutes, ...list]
     // console.log("路由state.accessedRoutes", state.accessedRoutes);
-    commit("SET_ROUTES", state.accessedRoutes);
-  },
+    commit('SET_ROUTES', state.accessedRoutes);
+  }
 };
 
 // 遍历后台传来的路由字符串，转换为组件对象
@@ -139,7 +140,7 @@ function filterAsyncRouter(asyncRouterMap) {
   return asyncRouterMap.filter((route) => {
     if (route.component) {
       // Layout组件特殊处理
-      if (route.component === "Layout") {
+      if (route.component === 'Layout') {
         route.component = Layout;
       } else {
         route.component = loadView(route.component);
@@ -160,13 +161,13 @@ function filterAsyncRouter(asyncRouterMap) {
  */
 export function generateRoutesList(routes, menuTree, pageNotFind = true) {
   const res = [];
-  const page404 = routes.filter((item) => item.path === "*")[0];
-  let urlPathList = []
+  const page404 = routes.filter((item) => item.path === '*')[0];
+  const urlPathList = []
   menuTree.forEach((route) => {
     const tmp = { ...route };
-    // 判断是否有Url 没有随机上成一个   
+    // 判断是否有Url 没有随机上成一个
     if (!tmp.url) {
-      let urlPath = getUrlPath(urlPathList)
+      const urlPath = getUrlPath(urlPathList)
       urlPathList.push(urlPath)
       tmp.url = `${urlPath}`
       tmp.breadcrumb = true
@@ -181,29 +182,47 @@ export function generateRoutesList(routes, menuTree, pageNotFind = true) {
       }
       // console.log('tmp项', tmp);
       // 拆取path 路径
-      let componentName = tmp.url.includes("?") ? tmp.url.split("?")[0] : tmp.url;
+      let componentName = tmp.url.includes('?') ? tmp.url.split('?')[0] : tmp.url;
       // 如果已 Start/ 结尾 就是执行方法页面使用前端路径
-      if (componentName.endsWith("Start/")) {
-        componentName = "/Admin/XncfModule/Start";
-        tmp.url = "/Admin/XncfModule/Start/" + tmp.url.split("?")[1]
+      if (componentName.endsWith('Start/')) {
+        componentName = '/Admin/XncfModule/Start';
+        tmp.url = '/Admin/XncfModule/Start/' + tmp.url.split('?')[1]
       }
       // 如果 urlPathList 列表中包含则是二级及以上无url的包裹页面
       if (urlPathList.includes(tmp.url)) {
-        componentName = "/Admin/XncfModule/menu/index";
+        componentName = '/Admin/XncfModule/menu/index';
       }
 
-      let routerObj = {
+      const routerObj = {
         path: tmp.url,
         name: tmp.menuName + tmp.url,
-        component: pageNotFind ? Layout : (resolve) => require(["@/views" + componentName + ".vue"], resolve),
+        component: pageNotFind ? Layout : (resolve) => require(['@/views' + componentName + '.vue'], resolve),
         meta: {
           title: tmp.menuName,
           icon: tmp.icon,
-          breadcrumb: tmp.breadcrumb ? false : true
+          breadcrumb: !tmp.breadcrumb
         },
-        children: tmp.children,
+        children: tmp.children
       };
 
+      if (!tmp.isMenu) {
+        routerObj.path = `${tmp.url}?parent=1`
+        routerObj.children = [{
+          path: tmp.url,
+          component: (resolve) => {
+            require(['@/views' + componentName + '.vue'], resolve)
+              .catch(() => {
+                Message.error('菜单设置错误：请检查是否存在' + componentName);
+              });
+          },
+          name: tmp.menuName + tmp.url,
+          meta: {
+            title: tmp.menuName,
+            icon: tmp.icon,
+            breadcrumb: !tmp.breadcrumb
+          }
+        }]
+      }
       res.push(routerObj);
     }
   });
@@ -219,7 +238,7 @@ export function generateRoutesList(routes, menuTree, pageNotFind = true) {
  */
 function getUrlPath(urlPathList) {
   // 生成随机字符串
-  let urlPath = getRandomString(9);
+  const urlPath = getRandomString(9);
   if (!urlPathList.includes(urlPath)) {
     return urlPath
   } else {
@@ -232,19 +251,19 @@ function getUrlPath(urlPathList) {
  * @param len 指定生成字符串长度
  */
 function getRandomString(len) {
-  let _charStr = 'abacdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ',
-    min = 0,
-    max = _charStr.length - 1,
-    _str = '';                    //定义随机字符串 变量
-  //判断是否指定长度，否则默认长度为15
+  const _charStr = 'abacdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ';
+  const min = 0;
+  const max = _charStr.length - 1;
+  let _str = ''; // 定义随机字符串 变量
+  // 判断是否指定长度，否则默认长度为15
   len = len || 9;
-  //循环生成字符串
+  // 循环生成字符串
   for (var i = 0, index; i < len; i++) {
-    index = (function (randomIndexFunc, i) {
+    index = (function(randomIndexFunc, i) {
       return randomIndexFunc(min, max, i, randomIndexFunc);
-    })(function (min, max, i, _self) {
-      let indexTemp = Math.floor(Math.random() * (max - min + 1) + min),
-        numStart = _charStr.length - 10;
+    })(function(min, max, i, _self) {
+      let indexTemp = Math.floor(Math.random() * (max - min + 1) + min);
+      const numStart = _charStr.length - 10;
       if (i == 0 && indexTemp >= numStart) {
         indexTemp = _self(min, max, i, _self);
       }
@@ -256,10 +275,9 @@ function getRandomString(len) {
 }
 
 
-
 export default {
   namespaced: true,
   state,
   mutations,
-  actions,
+  actions
 };

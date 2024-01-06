@@ -8,63 +8,71 @@
       autocomplete="on"
       label-position="left"
     >
-      <div class="title-container">
-        <h3 class="title">NCF管理员登录</h3>
-      </div>
+      <div class="allarea" style="">
+        <div class="title-container">
+           <img class="titleImg" src="../../assets/images/logo-login-ncf.webp" alt="ncf logo" />
+        </div>
 
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="账号"
-          name="username"
-          type="text"
-          tabindex="1"
-          autocomplete="on"
-        />
-      </el-form-item>
-
-      <el-tooltip
-        v-model="capsTooltip"
-        content="Caps lock is On"
-        placement="right"
-        manual
-      >
-        <el-form-item prop="password">
-          <span class="svg-container">
-            <svg-icon icon-class="password" />
-          </span>
-          <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="loginForm.password"
-            :type="passwordType"
-            placeholder="密码"
-            name="password"
-            tabindex="2"
-            autocomplete="on"
-            @keyup.native="checkCapslock"
-            @blur="capsTooltip = false"
-            @keyup.enter.native="handleLogin"
-          />
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon
-              :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
+        <el-card>
+          <h3 class="title">管理员登录</h3>
+          <el-form-item prop="username">
+            <span class="svg-container">
+              <svg-icon icon-class="user" />
+            </span>
+            <el-input
+              ref="username"
+              v-model="loginForm.username"
+              placeholder="账号"
+              name="username"
+              type="text"
+              tabindex="1"
+              autocomplete="on"
             />
-          </span>
-        </el-form-item>
-      </el-tooltip>
+          </el-form-item>
 
-      <el-button
-        :loading="loading"
-        type="primary"
-        style="width: 100%; margin-bottom: 30px"
-        @click.native.prevent="handleLogin"
-        >Login</el-button
-      >
+          <el-tooltip
+            v-model="capsTooltip"
+            content="Caps lock is On"
+            placement="right"
+            manual
+          >
+            <el-form-item prop="password">
+              <span class="svg-container">
+                <svg-icon icon-class="password" />
+              </span>
+              <el-input
+                :key="passwordType"
+                ref="password"
+                v-model="loginForm.password"
+                :type="passwordType"
+                placeholder="密码"
+                name="password"
+                tabindex="2"
+                autocomplete="on"
+                @keyup.native="checkCapslock"
+                @blur="capsTooltip = false"
+                @keyup.enter.native="handleLogin"
+              />
+              <span class="show-pwd" @click="showPwd">
+                <svg-icon
+                  :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
+                />
+              </span>
+            </el-form-item>
+          </el-tooltip>
+
+          <el-button
+            :loading="loading"
+            type="primary"
+            style="width: 100%; margin-bottom: 30px"
+            @click.native.prevent="handleLogin"
+            >登录</el-button>
+        </el-card>
+        <div class="support">
+          <span>技术支持：</span>
+          <a href="https://www.senparc.com/">苏州盛派网络科技有限公司</a>
+        </div>
+      </div>
     </el-form>
   </div>
 </template>
@@ -159,7 +167,9 @@ export default {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true;
-          this.$store.dispatch("user/login", this.loginForm).then((res) => {
+          this.$store
+            .dispatch("user/login", this.loginForm)
+            .then((res) => {
               // console.log("登录", res);
               // console.log("登录token", res.token);
               // 跳转页面
@@ -168,11 +178,9 @@ export default {
                 () => {}
               );
               // setToken(res.token);
-              this.loading = false;
-            })
-            .catch(() => {
-              this.loading = false;
-            });
+            }).finally(()=>{
+            this.loading = false;
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -233,24 +241,28 @@ $cursor: #fff;
 
     input {
       background: transparent;
-      border: 0px;
+      // border: 0px;
       -webkit-appearance: none;
-      border-radius: 0px;
+      // border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      // margin: 0 15px;
+      // color: $light_gray;
+      color: black;
       height: 47px;
       caret-color: $cursor;
 
       &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
+        // box-shadow: 0 0 0px 1000px $bg inset !important;
+        box-shadow: 0 0 0px 1000px white inset !important;
+        // -webkit-text-fill-color: $cursor !important;
       }
     }
   }
 
   .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
+    // border: 1px solid rgba(255, 255, 255, 0.1);
+    // background: rgba(0, 0, 0, 0.1);
+    background: white;
     border-radius: 5px;
     color: #454545;
   }
@@ -262,11 +274,16 @@ $bg: #2d3a4b;
 $dark_gray: #889aa4;
 $light_gray: #eee;
 
+
 .login-container {
-  min-height: 100%;
+  background-image: url('../../assets/images/admin_login.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  content: '';
+  position: absolute;
   width: 100%;
-  background-color: $bg;
-  overflow: hidden;
+  height: 100%;
 
   .login-form {
     position: relative;
@@ -295,23 +312,53 @@ $light_gray: #eee;
     vertical-align: middle;
     width: 30px;
     display: inline-block;
+    //
+    margin-right: 10px;
+  }
+  .allarea {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .support {
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 0;
+      span {
+        color: white;
+      }
+      a {
+        color: #1382f0;
+        text-decoration: none;
+      }
+    }
+  }
+  .title-container {
+    // position: relative;
+    margin-bottom: 60px;
+    display: flex;
+    // align-items: center;
+
+
+    .titleImg {
+      width: 213px;
+      margin: auto;
+    }
   }
 
-  .title-container {
-    position: relative;
-
-    .title {
-      font-size: 26px;
-      color: $light_gray;
-      margin: 0px auto 40px auto;
-      text-align: center;
-      font-weight: bold;
-    }
+  .title {
+    color: #1382f0;
+    padding: 40px 0 30px;
+    font-size: 26px;
+    text-align: center;
   }
 
   .show-pwd {
     position: absolute;
-    right: 10px;
+    right: 0px;
     top: 7px;
     font-size: 16px;
     color: $dark_gray;

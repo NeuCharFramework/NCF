@@ -1,28 +1,22 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using Senparc.Ncf.Core.Config;
-using Senparc.Ncf.Core.Extensions;
-using Senparc.Ncf.Core.Models;
-using Senparc.Ncf.Core.Utility;
-using Senparc.Ncf.Log;
-using Senparc.Ncf.Repository;
-using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using Senparc.CO2NET;
 using Microsoft.EntityFrameworkCore;
-using Senparc.Ncf.Service;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Senparc.Areas.Admin.ACL;
 using Senparc.Areas.Admin.Domain.Models;
 using Senparc.Areas.Admin.Domain.Models.Dto;
+using Senparc.Ncf.Core.Config;
+using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Log;
+using Senparc.Ncf.Service;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin.Domain
 {
@@ -229,7 +223,7 @@ namespace Senparc.Areas.Admin.Domain
             {
                 return null;
             }
-            var adminUserInfo = new AdminUserInfo (ref userName, ref password, null, null, "初始化数据");
+            var adminUserInfo = new AdminUserInfo(ref userName, ref password, null, null, "初始化数据");
             SaveObject(adminUserInfo);
             return adminUserInfo;
         }

@@ -13,7 +13,7 @@
         <span class="start-delete">
           <el-popconfirm
             placement="top"
-            title="确认删除此模块吗？"
+            title="确认删除此模块吗？此模块内相关数据也将被删除，请做好备份！"
             @confirm="handleDelete()"
           >
             <el-button
@@ -732,12 +732,12 @@ export default {
       await moduleInstallXncf(this.uid)
         .then((res) => {
           // console.log("ok", res);
-          if (res.success) {
-            // 安装成功重新获取详情
-            this.getList();
-          }
+          // 安装成功重新获取详情
+          this.getList();
+
         })
-        .catch(() => {
+        .catch(({err,hideGlobalError}) => {
+          hideGlobalError()
           this.$message.error("更新版本失败");
         });
     },

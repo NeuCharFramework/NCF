@@ -8,12 +8,12 @@ obj/
 .pdb
 .user
 .vscode/
+.idea/
 /src/back-end/Senparc.Web/wwwroot/bower_components
 /src/back-end/Senparc.Web/logs/
 *.user
 /src/back-end/Senparc.Web.OldMvc
 /src/back-end/Senparc.Web/App_Data/SenparcTraceLog/*
-# /src/back-end/Senparc.Web/wwwroot/lib/*
 /src/back-end/ProjectFileManager
 /src/back-end/Senparc.Web/App_Data/*.bak
 /src/back-end/Senparc.Web/wwwroot/NcfDocs
@@ -53,8 +53,7 @@ obj/
 /src/back-end/Senparc.Web/App_Data/OpenAiImageTemp
 /src/TemplateBuilder
 /src/back-end/Senparc.Web/App_Data/ApiDocXML
-/src/back-end/Senparc.Web/App_Data/ApiDocXML
-/src/back-end/Senparc.Web/App_Data/ApiDocXML
-/src/back-end/Senparc.Web/App_Data/ApiDocXML
 *.DS_Store
 /src/back-end/Senparc.Web/Domain/PromptPlugins/XncfBuilderPlugin
+**/.idea/*
+SenparcConfig.Development.config
