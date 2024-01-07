@@ -1,4 +1,5 @@
 ﻿using Google.Api;
+using Google.Type;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
 using Senparc.CO2NET.AspNet;
@@ -9,6 +10,7 @@ using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.AreasBase;
+using System.Reflection;
 
 namespace Senparc.Web
 {
@@ -17,6 +19,8 @@ namespace Senparc.Web
     /// </summary>
     public static class Register
     {
+        private static System.DateTime StartTime = SystemTime.Now.Date;
+
         public static void AddNcf<TDatabaseConfiguration>(this WebApplicationBuilder builder)
             where TDatabaseConfiguration : IDatabaseConfiguration, new()
         {
@@ -96,6 +100,18 @@ namespace Senparc.Web
 
             //XncfModules（必须）
             app.UseXncfModules(registerService);
+
+           
+        }
+
+        /// <summary>
+        /// 输出启动成功标志
+        /// </summary>
+        /// <param name="app"></param>
+        public static void ShowSuccessTip(this WebApplication app)
+        {
+            //输出启动成功标志
+            Senparc.Ncf.Core.VersionManager.ShowSuccessTip($"\t\t启动工作准备就绪\r\n\t\t用时：{SystemTime.NowDiff(StartTime).TotalMilliseconds}ms");
         }
 
         /// <summary>
