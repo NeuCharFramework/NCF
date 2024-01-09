@@ -32,11 +32,13 @@ service.interceptors.response.use(
                 if (response.config.url.includes('HideManager') || response.config.url.includes('ChangeState')) {
                     return;
                 }
-                app.$message({
-                    message: response.data.msg || 'Error',
-                    type: 'error',
-                    duration: 5 * 1000
-                });
+                if (!response.config.customAlert){
+                    app.$message({
+                        message: response.data.msg||response.data.exception|| 'Error',
+                        type: 'error',
+                        duration: 5 * 1000
+                    });
+                }
                 return Promise.resolve(response);
             }
         } else {
