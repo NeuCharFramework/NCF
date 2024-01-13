@@ -54,3 +54,9 @@ App_Data/SenparcTraceLog
 /src/back-end/Senparc.Web/App_Data/WeChat_OfficialAccount
 /src/back-end/Senparc.Web/App_Data/OpenAiImageTemp
 
+/src/back-end/Senparc.Web.DatabasePlant/App_Data/SenparcTraceLog
+/src/back-end/Senparc.Web/App_Data/ApiDocXML
+/src/back-end/Senparc.Web/App_Data/SenparcTraceLog
+/src/back-end/Senparc.Web/App_Data/SenparcTraceLog/SenparcTrace-20231231.log
+/src/back-end/Senparc.Web/App_Data/Files/ExportedPlugins
+/src/back-end/Senparc.Web/App_Data/Files/toImportFileTemp
