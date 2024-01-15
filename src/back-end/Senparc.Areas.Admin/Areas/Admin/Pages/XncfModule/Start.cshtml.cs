@@ -345,12 +345,12 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 if (Senparc.Ncf.XncfBase.Register.FunctionRenderCollection.TryGetValue(xncfRegister.GetType(), out var functionGroup))
                 {
                     //遍历某个 Register 下所有的方法      TODO：未来可添加分组
-                    foreach (var funtionBag in functionGroup.Values)
+                    foreach (var functionBag in functionGroup.Values)
                     {
-                        var result = await FunctionHelper.GetFunctionParameterInfoAsync(this._serviceProvider, funtionBag, true);
+                        var result = await FunctionHelper.GetFunctionParameterInfoAsync(this._serviceProvider, functionBag, true);
 
-                        var functionKey = funtionBag.Key;
-                        functionParameterInfoCollection[(functionKey, funtionBag.FunctionRenderAttribute.Name, funtionBag.FunctionRenderAttribute.Description)] = result;
+                        var functionKey = functionBag.Key;
+                        functionParameterInfoCollection[(functionKey, functionBag.FunctionRenderAttribute.Name, functionBag.FunctionRenderAttribute.Description)] = result;
                     }
                 }
             }
