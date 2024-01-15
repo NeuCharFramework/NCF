@@ -26,7 +26,10 @@ using System.Threading.Tasks;
 
 namespace Senparc.Web
 {
-    [MpMessageHandlerAttribute("JeffreyMp")]
+    /// <summary>
+    /// Senparc.AI 系列直播（一）中的示例
+    /// </summary>
+    [MpMessageHandlerAttribute("JeffreyMp_Old")]
     public class JeffreyMpMessageHandler : MessageHandler<WechatAiContext> //MessageHandler<DefaultMpMessageContext>
     {
         private readonly MpAccountDto _mpAccountDto;
