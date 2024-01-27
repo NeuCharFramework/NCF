@@ -16,18 +16,5 @@ namespace Senparc.Web
         {
         }
 
-        public override async Task<IResponseMessageBase> OnVoiceRequestAsync(RequestMessageVoice requestMessage)
-        {
-            var content = requestMessage.Recognition;
-            var textRequestMessage = new RequestMessageText()
-            {
-                FromUserName = requestMessage.FromUserName,
-                ToUserName = requestMessage.ToUserName,
-                CreateTime = requestMessage.CreateTime,
-                Content = content,
-                MsgId = requestMessage.MsgId
-            };
-            return await OnTextRequestAsync(textRequestMessage);
-        }
     }
 }
