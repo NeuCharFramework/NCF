@@ -17,6 +17,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.13.1.8-beta1" />
+		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.3.0-beta2.1" />
 		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.4.7-preview1" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
