@@ -63,7 +63,9 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
+		<ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
+		<ProjectReference Include="..\SenparcConf.Xncf.WechatBot\SenparcConf.Xncf.WechatBot.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Update="wwwroot\css\site.css">
