@@ -61,7 +61,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// <returns></returns>
         public async Task<IActionResult> OnGetScanAsync(string uid)
         {
-            var result = await _xncfModuleServiceEx.InstallModuleAsync(uid);
+            var result = await _xncfModuleServiceEx.InstallModuleAsync(uid, true);
             XncfModules = result.Item1;
             base.SetMessager(Ncf.Core.Enums.MessageType.info, result.Item2, true);
 
@@ -162,7 +162,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// <returns></returns>
         public async Task<IActionResult> OnGetScanAjaxAsync(string uid)
         {
-            var result = await _xncfModuleServiceEx.InstallModuleAsync(uid);
+            var result = await _xncfModuleServiceEx.InstallModuleAsync(uid, true);
             //XncfModules = result.Item1;
             //base.SetMessager(Ncf.Core.Enums.MessageType.info, result.Item2, true);
             return Ok(result.XncfModuleList);
@@ -199,7 +199,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                         var docModule = await _xncfModuleServiceEx.GetObjectAsync(z => z.Uid == docRegister.Uid);
                         if (docModule == null)
                         {
-                            await _xncfModuleServiceEx.InstallModuleAsync(docRegister.Uid);
+                            await _xncfModuleServiceEx.InstallModuleAsync(docRegister.Uid, true);
                             docModule = await _xncfModuleServiceEx.GetObjectAsync(z => z.Uid == docRegister.Uid);
                         }
                         //开启模块
