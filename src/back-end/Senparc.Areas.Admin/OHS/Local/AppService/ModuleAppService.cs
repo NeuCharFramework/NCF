@@ -136,7 +136,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         {
             var response = await this.GetResponseAsync<AppResponseBase<int>, int>(async (response, logger) =>
             {
-                var result = await _xncfModuleServiceEx.InstallModuleAsync(uid);
+                var result = await _xncfModuleServiceEx.InstallModuleAsync(uid, true);
                 return 0;
             });
             return response;

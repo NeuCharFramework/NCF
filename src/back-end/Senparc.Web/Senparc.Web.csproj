@@ -17,7 +17,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.13.1.8-beta1" />
-		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.4.6.17-preview1" />
+		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.4.7-preview1" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
 		<PackageReference Include="Dapr.Client" Version="1.12.0" />
@@ -33,7 +33,7 @@
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.5.1.5-beta1" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.14.1.2-beta1" />
 		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.21.2.1-beta2" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.5.3.4-beta1" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.6.0-beta1" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.14.1.7-beta1" />
 	</ItemGroup>
 
