@@ -217,7 +217,7 @@
             if (!res.data.success) {
                 this.runResult.tit = '遇到错误';
                 this.runResult.tip = '错误信息';
-                this.runResult.msg = (msg || DOMPurify.sanitize(res.data.exception)).replace('&lt;br /&gt;','<br />');
+                this.runResult.msg = (msg || DOMPurify.sanitize(res.data.exception)).replace(/&lt;br \/&gt;/g, '<br />').replace('\r\n', '<br />').replace('\n', '<br />').replace('\r', '<br />');
                 this.runResult.visible = true;
                 return;
             }
@@ -229,7 +229,7 @@
             else {
                 this.runResult.tit = '执行成功';
                 this.runResult.tip = '返回信息';
-                this.runResult.msg = msg.replace('&lt;br /&gt;', '<br />').replace('\r\n', '<br />').replace('\n', '<br />').replace('\r','<br />');
+                this.runResult.msg = msg.replace(/&lt;br \/&gt;/g, '<br />').replace('\r\n', '<br />').replace('\n', '<br />').replace('\r','<br />');
             }
             // 打开执行结果弹窗
             this.runResult.visible = true;

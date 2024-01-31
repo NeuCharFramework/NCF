@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Senparc.Areas.Admin.OHS.Local.PL;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Helpers;
@@ -226,12 +227,15 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             //    await cache.SetAsync(tempId, result.Data.ToJson(), TimeSpan.FromMinutes(5));//TODO：可设置
             //}
 
-            var data = new { 
-                success = result.Success, 
-                msg = result.Data?.ToJson().HtmlEncode(), 
-                log = result.Data?.ToJson().HtmlEncode(),
-                exception = result.ErrorMessage, 
-                tempId = result.RequestTempId 
+            var returnData = result.Data is string stringData ? stringData.HtmlEncode() : result.Data?.ToJson().HtmlEncode();
+
+            var data = new
+            {
+                success = result.Success,
+                msg = returnData,
+                log = returnData,
+                exception = result.ErrorMessage,
+                tempId = result.RequestTempId
             };
             return new JsonResult(data);
         }
