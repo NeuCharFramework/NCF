@@ -217,11 +217,11 @@
             if (!res.data.success) {
                 this.runResult.tit = '遇到错误';
                 this.runResult.tip = '错误信息';
-                this.runResult.msg = msg||DOMPurify.sanitize(res.data.exception);
+                this.runResult.msg = (msg || DOMPurify.sanitize(res.data.exception)).replace(/&lt;br \/&gt;/g, '<br />').replace('\r\n', '<br />').replace('\n', '<br />').replace('\r', '<br />');
                 this.runResult.visible = true;
                 return;
             }
-            if (msg && (msg.indexOf('http://') !== -1 || msg.indexOf('https://') !== -1)) {
+            if (msg && (msg.indexOf('http://') === 0 || msg.indexOf('https://') === 0)) {
                 this.runResult.tit = '执行成功';
                 this.runResult.tip = '收到网址，点击下方打开<br />（此链接由第三方提供，请注意安全）：';
                 this.runResult.msg = '<i class="fa fa-external-link"></i> <a href="' + msg + '" target="_blank">' + msg + '</a>';
@@ -229,7 +229,7 @@
             else {
                 this.runResult.tit = '执行成功';
                 this.runResult.tip = '返回信息';
-                this.runResult.msg = msg;
+                this.runResult.msg = msg.replace(/&lt;br \/&gt;/g, '<br />').replace('\r\n', '<br />').replace('\n', '<br />').replace('\r','<br />');
             }
             // 打开执行结果弹窗
             this.runResult.visible = true;
