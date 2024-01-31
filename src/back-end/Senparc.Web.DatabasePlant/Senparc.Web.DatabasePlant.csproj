@@ -15,4 +15,8 @@
 		<!--<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />-->
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\SenparcConf.Xncf.WechatBot\SenparcConf.Xncf.WechatBot.csproj" />
+	</ItemGroup>
+
 </Project>
