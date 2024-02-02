@@ -46,7 +46,7 @@
 		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.13.1.2-beta1" />
 		<PackageReference Include="Senparc.Ncf.Service" Version="0.14.0-beta1" />
 		<PackageReference Include="Senparc.Ncf.Utility" Version="0.13.1.2-beta1" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.15.1-beta1.2" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.15.1.1-beta1.2" />
 
 		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
 		<!--<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />-->
