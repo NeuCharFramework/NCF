@@ -57,4 +57,7 @@ app.MapControllers();
 //    endpoints.MapControllers();
 //});
 
+app.ShowSuccessTip();
+
 app.Run();
+

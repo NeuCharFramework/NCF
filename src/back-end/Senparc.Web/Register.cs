@@ -1,11 +1,6 @@
-﻿using Google.Api;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
 using Senparc.CO2NET.AspNet;
-using Senparc.CO2NET.Utilities;
-using Senparc.CO2NET.WebApi;
-using Senparc.CO2NET.WebApi.WebApiEngines;
-using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.AreasBase;
@@ -17,9 +12,13 @@ namespace Senparc.Web
     /// </summary>
     public static class Register
     {
+        private static System.DateTime StartTime = SystemTime.Now.DateTime;
+
         public static void AddNcf<TDatabaseConfiguration>(this WebApplicationBuilder builder)
             where TDatabaseConfiguration : IDatabaseConfiguration, new()
         {
+            StartTime = SystemTime.Now.DateTime;
+
             //激活 Xncf 扩展引擎（必须）
             var logMsg = builder.StartWebEngine<TDatabaseConfiguration>();
             //如果不需要启用 Areas，可以只使用 services.StartEngine() 或 services.StartEngine<TDatabaseConfiguration>() 方法
@@ -96,6 +95,18 @@ namespace Senparc.Web
 
             //XncfModules（必须）
             app.UseXncfModules(registerService);
+
+
+        }
+
+        /// <summary>
+        /// 输出启动成功标志
+        /// </summary>
+        /// <param name="app"></param>
+        public static void ShowSuccessTip(this WebApplication app)
+        {
+            //输出启动成功标志
+            Senparc.Ncf.Core.VersionManager.ShowSuccessTip($"\t\t启动工作准备就绪\r\n\t\t用时：{SystemTime.NowDiff(StartTime).TotalSeconds} s");
         }
 
         /// <summary>

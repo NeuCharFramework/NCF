@@ -136,7 +136,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         {
             var response = await this.GetResponseAsync<AppResponseBase<int>, int>(async (response, logger) =>
             {
-                var result = await _xncfModuleServiceEx.InstallModuleAsync(uid);
+                var result = await _xncfModuleServiceEx.InstallModuleAsync(uid, true);
                 return 0;
             });
             return response;
@@ -472,10 +472,12 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 //    await cache.SetAsync(tempId, result.Data.ToJson(), TimeSpan.FromMinutes(5));//TODO：可设置
                 //}
 
+                var returnData = result.Data is string stringData ? stringData.HtmlEncode() : result.Data?.ToJson().HtmlEncode();
+
                 var data = new Module_RunFunctionResponse
                 {
-                    Msg = result.Data?.ToJson().HtmlEncode(),
-                    Log = result.Data?.ToJson().HtmlEncode(),
+                    Msg = returnData,
+                    Log = returnData,
                     Exception = result.ErrorMessage,
                     TempId = result.RequestTempId
                 };

@@ -32,8 +32,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Xncf.Installer.Inte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Areas.Admin.Tests", "Tests\Senparc.Areas.Admin.Tests\Senparc.Areas.Admin.Tests.csproj", "{6228437D-3EF6-43D9-A75C-255C883F293B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Xncf.PromptRange", "..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.PromptRange\Senparc.Xncf.PromptRange.csproj", "{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,18 +139,6 @@ Global
 		{6228437D-3EF6-43D9-A75C-255C883F293B}.TemplateRelease|Any CPU.Build.0 = Release|Any CPU
 		{6228437D-3EF6-43D9-A75C-255C883F293B}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{6228437D-3EF6-43D9-A75C-255C883F293B}.Test|Any CPU.Build.0 = Debug|Any CPU
-		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.Debug-Dapr|Any CPU.ActiveCfg = Debug|Any CPU
-		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.Debug-Dapr|Any CPU.Build.0 = Debug|Any CPU
-		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.NcfDebugForPromptRange|Any CPU.ActiveCfg = NcfDebugForPromptRange|Any CPU
-		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.NcfDebugForPromptRange|Any CPU.Build.0 = NcfDebugForPromptRange|Any CPU
-		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.Release|Any CPU.Build.0 = Release|Any CPU
-		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.TemplateRelease|Any CPU.ActiveCfg = TemplateRelease|Any CPU
-		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.TemplateRelease|Any CPU.Build.0 = TemplateRelease|Any CPU
-		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.Test|Any CPU.ActiveCfg = Test|Any CPU
-		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025}.Test|Any CPU.Build.0 = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -165,7 +151,6 @@ Global
 		{540DC001-C430-449A-90AA-FEF131E1633E} = {76FC86E0-991D-47B7-8AAB-42B27DAB10C1}
 		{FFA57F48-BF90-4BC0-B719-FC72CE592CA3} = {76FC86E0-991D-47B7-8AAB-42B27DAB10C1}
 		{6228437D-3EF6-43D9-A75C-255C883F293B} = {4D53646F-67EE-430A-8B50-9600CFACF434}
-		{75A8BD2D-A4FF-4B6A-8C6F-6C923D9EF025} = {76FC86E0-991D-47B7-8AAB-42B27DAB10C1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7427A6C9-D522-4B10-B0AC-607D69736B50}

@@ -18,7 +18,7 @@ namespace Senparc.Web.FirefoxDriverTest
         // please follow the instructions from https://github.com/mozilla/geckodriver/releases
         // to install Firefox WebDriver.
 
-        protected RemoteWebDriver _driver;
+        protected /*RemoteWebDriver*/ RemoteWebDriver _driver;
 
         /// <summary>
         /// ½ØÍ¼Â·¾¶
@@ -51,7 +51,7 @@ namespace Senparc.Web.FirefoxDriverTest
             {
                 System.IO.Directory.CreateDirectory(screenShotPath);
             }
-            _driver = new FirefoxDriver(options);
+            _driver = new RemoteWebDriver /*new FirefoxDriver*/(options);
             loadPage();
         }
 
@@ -111,7 +111,7 @@ namespace Senparc.Web.FirefoxDriverTest
         {
             Screenshot screenShot = _driver.GetScreenshot();
             Interlocked.Increment(ref step);
-            screenShot.SaveAsFile(string.Concat(screenShotPath, "\\step_", step, '_', stepName, ".png"), ScreenshotImageFormat.Png);
+            screenShot.SaveAsFile(string.Concat(screenShotPath, "\\step_", step, '_', stepName, ".png")/*, ScreenshotImageFormat.Png*/);
         }
     }
 }
