@@ -58,4 +58,6 @@ App_Data/SenparcTraceLog
 **/App_Data/SenparcTraceLog/*
 **/App_Data/ApiDocXml/*
 
-/src/back-end/Senparc.Web/App_Data/Database/NCF.DB
+/src/back-end/Senparc.Web/App_Data/Database/*.DB
+/src/back-end/Senparc.Web/App_Data/Database/*.DB-shm
+/src/back-end/Senparc.Web/App_Data/Database/*.DB-wal

@@ -18,7 +18,7 @@ var app = new Vue({
             let chartOption1 = {
                 title: {
                     text: '数量统计',
-                    subtext: '2019年11月1日 - 2019年11月5日'
+                    subtext: '2024年1月1日 - 2024年11月5日'
                 },
                 xAxis: {
                     type: 'category',
@@ -47,7 +47,7 @@ var app = new Vue({
             let chartOption2 = {
                 title: {
                     text: '数量统计',
-                    subtext: '2019年度'
+                    subtext: '2014年度'
                 }, legend: {
                     data: ['自由商品销售额']
                 },
