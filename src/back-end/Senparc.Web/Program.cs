@@ -3,12 +3,13 @@
 //using Senparc.Ncf.Database.Sqlite;        //使用需要引用包： Senparc.Ncf.Database.Sqlite
 //using Senparc.Ncf.Database.PostgreSQL;    //使用需要引用包： Senparc.Ncf.Database.PostgreSQL
 //using Senparc.Ncf.Database.Oracle;        //使用需要引用包： Senparc.Ncf.Database.Oracle
-using Senparc.Ncf.Database.SqlServer;       //使用需要引用包： Senparc.Ncf.Database.SqlServer
+//using Senparc.Ncf.Database.SqlServer;       //使用需要引用包： Senparc.Ncf.Database.SqlServer
+using Senparc.Ncf.Database.Sqlite;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//添加（注册） Ncf 服务（必须）
-builder.AddNcf<SQLServerDatabaseConfiguration>();
+//添加（注册） NCF 服务（必须）
+builder.AddNcf<SqliteMemoryDatabaseConfiguration>();
 /*      AddNcf<TDatabaseConfiguration>() 泛型类型说明
  *                
  *                  方法                            |         说明
@@ -51,13 +52,6 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers();
 
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapRazorPages();
-//    endpoints.MapControllers();
-//});
-
-app.ShowSuccessTip();
+app.ShowSuccessTip();//显示系统准备成功提示
 
 app.Run();
-
