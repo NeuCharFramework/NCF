@@ -5,11 +5,12 @@
 //using Senparc.Ncf.Database.Oracle;        //使用需要引用包： Senparc.Ncf.Database.Oracle
 //using Senparc.Ncf.Database.SqlServer;       //使用需要引用包： Senparc.Ncf.Database.SqlServer
 using Senparc.Ncf.Database.Sqlite;
+using Senparc.Ncf.Database.SqlServer;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //添加（注册） NCF 服务（必须）
-builder.AddNcf<SqliteMemoryDatabaseConfiguration>();
+builder.AddNcf<SQLServerDatabaseConfiguration>();
 /*      AddNcf<TDatabaseConfiguration>() 泛型类型说明
  *                
  *                  方法                            |         说明
