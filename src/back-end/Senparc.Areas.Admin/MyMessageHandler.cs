@@ -64,15 +64,28 @@ namespace Senparc.Web
                 {
                     await Senparc.CO2NET.HttpUtility.Get.DownloadAsync(serviceProvider, imageUrl, fs);
                     await fs.FlushAsync();
+
+                    fs.Close();
                     await Console.Out.WriteLineAsync("图片已保存：" + filePath);
                 }
 
-                //保存微信图片素材
-                var uploadResult = await Senparc.Weixin.MP.AdvancedAPIs.MediaApi.UploadTemporaryMediaAsync(mpAccountDto.AppId, Senparc.Weixin.MP.UploadMediaFileType.image, filePath);
+                try
+                {
+                    //保存微信图片素材
+                    var uploadResult = await Senparc.Weixin.MP.AdvancedAPIs.MediaApi.UploadTemporaryMediaAsync(mpAccountDto.AppId, Senparc.Weixin.MP.UploadMediaFileType.image, filePath, timeOut: 50000000);
 
-                //推送图片
-                await Senparc.Weixin.MP.AdvancedAPIs.CustomApi.SendImageAsync(mpAccountDto.AppId, requestMessage.FromUserName, uploadResult.media_id);
+                    //推送图片
+                    await Senparc.Weixin.MP.AdvancedAPIs.CustomApi.SendImageAsync(mpAccountDto.AppId, requestMessage.FromUserName, uploadResult.media_id);
+                }
+                catch (Exception ex)
+                {
+                    await Console.Out.WriteLineAsync(ex.Message);
+                    await Console.Out.WriteLineAsync(ex.StackTrace?.ToString());
+                    await Console.Out.WriteLineAsync(ex.InnerException?.Message);
 
+                    _ = await Senparc.Weixin.MP.AdvancedAPIs.CustomApi.SendTextAsync(mpAccountDto.AppId, requestMessage.FromUserName, $"图片生成失败：" + ex.Message);
+
+                }
 #pragma warning restore SKEXP0002 // 类型仅用于评估，在将来的更新中可能会被更改或删除。取消此诊断以继续。
             }
             else
