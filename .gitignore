@@ -61,3 +61,5 @@ App_Data/SenparcTraceLog
 /src/back-end/Senparc.Web/App_Data/Database/*.DB
 /src/back-end/Senparc.Web/App_Data/Database/*.DB-shm
 /src/back-end/Senparc.Web/App_Data/Database/*.DB-wal
+/src/back-end/Senparc.Web/Senparc.AI.Dalle-*.jpg
+Thumbs.db
