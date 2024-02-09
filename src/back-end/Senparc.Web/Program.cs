@@ -10,7 +10,7 @@ using Senparc.Ncf.Database.SqlServer;
 var builder = WebApplication.CreateBuilder(args);
 
 //添加（注册） NCF 服务（必须）
-builder.AddNcf<SQLServerDatabaseConfiguration>();
+builder.AddNcf<SqliteMemoryDatabaseConfiguration>();
 /*      AddNcf<TDatabaseConfiguration>() 泛型类型说明
  *                
  *                  方法                            |         说明
