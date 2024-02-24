@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
+using Senparc.AI.Interfaces;
+using Senparc.AI.Kernel;
 using Senparc.CO2NET;
 using Senparc.CO2NET.AspNet;
 using Senparc.Ncf.Core.Models;
@@ -18,6 +20,9 @@ namespace Senparc.Web
             where TDatabaseConfiguration : IDatabaseConfiguration, new()
         {
             StartTime = SystemTime.Now.DateTime;
+
+            //为 AI 模块注册
+            builder.Services.AddScoped<ISenparcAiSetting, SenparcAiSetting>();
 
             //激活 Xncf 扩展引擎（必须）
             var logMsg = builder.StartWebEngine<TDatabaseConfiguration>();
