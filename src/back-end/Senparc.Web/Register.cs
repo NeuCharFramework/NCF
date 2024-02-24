@@ -21,9 +21,6 @@ namespace Senparc.Web
         {
             StartTime = SystemTime.Now.DateTime;
 
-            //为 AI 模块注册
-            builder.Services.AddScoped<ISenparcAiSetting, SenparcAiSetting>();
-
             //激活 Xncf 扩展引擎（必须）
             var logMsg = builder.StartWebEngine<TDatabaseConfiguration>();
             //如果不需要启用 Areas，可以只使用 services.StartEngine() 或 services.StartEngine<TDatabaseConfiguration>() 方法
