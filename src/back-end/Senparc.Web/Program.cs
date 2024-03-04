@@ -5,7 +5,6 @@
 //using Senparc.Ncf.Database.Oracle;        //使用需要引用包： Senparc.Ncf.Database.Oracle
 //using Senparc.Ncf.Database.SqlServer;       //使用需要引用包： Senparc.Ncf.Database.SqlServer
 using Senparc.Ncf.Database.Sqlite;
-using Senparc.Ncf.Database.SqlServer;
 
 var builder = WebApplication.CreateBuilder(args);
 
