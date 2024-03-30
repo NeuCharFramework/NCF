@@ -16,13 +16,12 @@ namespace Senparc.Web
     {
         private static System.DateTime StartTime = SystemTime.Now.DateTime;
 
-        public static void AddNcf<TDatabaseConfiguration>(this WebApplicationBuilder builder)
-            where TDatabaseConfiguration : IDatabaseConfiguration, new()
+        public static void AddNcf(this WebApplicationBuilder builder)
         {
             StartTime = SystemTime.Now.DateTime;
 
             //激活 Xncf 扩展引擎（必须）
-            var logMsg = builder.StartWebEngine<TDatabaseConfiguration>();
+            var logMsg = builder.StartWebEngine();
             //如果不需要启用 Areas，可以只使用 services.StartEngine() 或 services.StartEngine<TDatabaseConfiguration>() 方法
 
             Console.WriteLine("============ logMsg =============");
@@ -56,7 +55,8 @@ namespace Senparc.Web
             //});
         }
 
-        public static void UseNcf(this WebApplication app)
+        public static void UseNcf<TDatabaseConfiguration>(this WebApplication app)
+            where TDatabaseConfiguration : IDatabaseConfiguration, new()
         {
             IWebHostEnvironment env = app.Environment;
             IOptions<SenparcSetting> senparcSetting = app.Services.GetService<IOptions<SenparcSetting>>();
@@ -94,11 +94,9 @@ namespace Senparc.Web
                     #endregion
                 });
 
-
             //XncfModules（必须）
-            app.UseXncfModules(registerService);
-
-
+            app.UseXncfModules(registerService)
+               .UseNcfDatabase<TDatabaseConfiguration>();
         }
 
         /// <summary>
