@@ -49,7 +49,7 @@ var registerService = app.UseSenparcGlobal(app.Environment);
 //XncfModules（必须）
 app.UseXncfModules(registerService, senparcCoreSetting.Value)
 //指定数据库（必须）
-   .UseNcfDatabase<SQLServerDatabaseConfiguration>();
+   .UseNcfDatabase<SqlServerDatabaseConfiguration>();
 
 using (var scope = app.Services.CreateScope())
 {

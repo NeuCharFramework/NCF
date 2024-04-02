@@ -26,11 +26,12 @@ if (app.Environment.IsDevelopment())
 }
 
 //Use NCF（必须）
-app.UseNcf< SQLServerDatabaseConfiguration>();
+app.UseNcf<BySettingDatabaseConfiguration>();
 /*  UseNcf<TDatabaseConfiguration>() 泛型类型说明
  *                
  *                  方法                            |         说明
  * -------------------------------------------------|-------------------------
+ *  UseNcf<BySettingDatabaseConfiguration>()        |  由 appsettings.json 决定配置
  *  UseNcf<SQLServerDatabaseConfiguration>()        |  使用 SQLServer 数据库
  *  UseNcf<SqliteMemoryDatabaseConfiguration>()     |  使用 SQLite 数据库
  *  UseNcf<MySqlDatabaseConfiguration>()            |  使用 MySQL 数据库
