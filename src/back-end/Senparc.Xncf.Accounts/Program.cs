@@ -12,6 +12,7 @@ using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.Database.MySql;
 using Senparc.Ncf.Database.SqlServer;
+using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.Accounts.Domain.Models;
 using Senparc.Xncf.Accounts.Models;
 using Senparc.Xncf.AreasBase;
@@ -23,10 +24,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDaprClient();
 builder.Services.AddControllers().AddDapr();
 
-//指定数据库（必须）
-builder.Services.AddDatabase<SQLServerDatabaseConfiguration>();
 //激活 Xncf 扩展引擎（必须）
-var logMsg = builder.Services.StartWebEngine(builder.Configuration, builder.Environment);
+var logMsg = builder.StartWebEngine(new[] { "Senparc.Areas.Admin" });
 //如果不需要启用 Areas，可以只使用 services.StartEngine() 方法
 
 Console.WriteLine("============ logMsg =============");
@@ -48,7 +47,9 @@ IOptions<SenparcCoreSetting> senparcCoreSetting = app.Services.GetService<IOptio
 var registerService = app.UseSenparcGlobal(app.Environment);
 
 //XncfModules（必须）
-Senparc.Ncf.XncfBase.Register.UseXncfModules(app, registerService, senparcCoreSetting.Value);
+app.UseXncfModules(registerService, senparcCoreSetting.Value)
+//指定数据库（必须）
+   .UseNcfDatabase<SqlServerDatabaseConfiguration>();
 
 using (var scope = app.Services.CreateScope())
 {
