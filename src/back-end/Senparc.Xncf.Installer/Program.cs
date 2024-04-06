@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddDapr();
 
 //激活 Xncf 扩展引擎（必须）
-var logMsg = builder.StartWebEngine();
+var logMsg = builder.StartWebEngine(new[] { "Senparc.Areas.Admin" });
 //如果不需要启用 Areas，可以只使用 services.StartEngine() 方法
 
 Console.WriteLine("============ logMsg =============");

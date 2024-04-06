@@ -32,7 +32,7 @@ app.UseNcf<BySettingDatabaseConfiguration>();
  *                  方法                            |         说明
  * -------------------------------------------------|-------------------------
  *  UseNcf<BySettingDatabaseConfiguration>()        |  由 appsettings.json 决定配置
- *  UseNcf<SQLServerDatabaseConfiguration>()        |  使用 SQLServer 数据库
+ *  UseNcf<SqlServerDatabaseConfiguration>()        |  使用 SQLServer 数据库
  *  UseNcf<SqliteMemoryDatabaseConfiguration>()     |  使用 SQLite 数据库
  *  UseNcf<MySqlDatabaseConfiguration>()            |  使用 MySQL 数据库
  *  UseNcf<PostgreSQLDatabaseConfiguration>()       |  使用 PostgreSQL 数据库
