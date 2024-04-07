@@ -5,7 +5,12 @@ Console.WriteLine("即将开始 v0.8.0 NCF 模板升级，请将 NCF 模板项�
 
 Console.ReadKey();
 
+#if RELEASE
+string srcDirectory = Path.Combine(Directory.GetCurrentDirectory(), "../../src/");
+#else
 string srcDirectory = Path.Combine(Directory.GetCurrentDirectory(), "../src/");
+#endif
+
 ProcessDirectory(srcDirectory);
 
 Console.WriteLine("升级完成，点击任意键退出。");
