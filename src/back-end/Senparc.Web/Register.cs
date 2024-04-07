@@ -98,6 +98,21 @@ namespace Senparc.Web
             //XncfModules（必须）
             app.UseXncfModules(registerService)
                .UseNcfDatabase<TDatabaseConfiguration>();
+
+            /*  UseNcfDatabase<TDatabaseConfiguration>() 泛型类型说明
+             *                
+             *                  方法                            |         说明
+             * -------------------------------------------------|-------------------------
+             *  UseNcf<BySettingDatabaseConfiguration>()        |  由 appsettings.json 决定配置
+             *  UseNcf<SqlServerDatabaseConfiguration>()        |  使用 SQLServer 数据库
+             *  UseNcf<SqliteMemoryDatabaseConfiguration>()     |  使用 SQLite 数据库
+             *  UseNcf<MySqlDatabaseConfiguration>()            |  使用 MySQL 数据库
+             *  UseNcf<PostgreSQLDatabaseConfiguration>()       |  使用 PostgreSQL 数据库
+             *  UseNcf<OracleDatabaseConfiguration>()           |  使用 Oracle 数据库（V12+）
+             *  UseNcf<OracleDatabaseConfigurationForV11>()     |  使用 Oracle 数据库（V11+）
+             *  更多数据库可扩展，依次类推……
+             *  
+             */
         }
 
         /// <summary>
