@@ -60,6 +60,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Remove="App_Data\Database\SenparcConfig.config" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="App_Data\Database\SenparcConfig.config">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
@@ -72,11 +82,5 @@
 		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 --><!--
 		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />-->
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.6.1-preview1" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Update="App_Data\Database\SenparcConfig.config">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
 	</ItemGroup>
 </Project>

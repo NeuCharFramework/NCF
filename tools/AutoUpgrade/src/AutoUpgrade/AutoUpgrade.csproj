@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<!-- 指定支持的运行时 -->
+		<RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+	</PropertyGroup>
+
+	<!-- Release配置下的设置 -->
+	<!--<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<PublishSingleFile>true</PublishSingleFile>
+		<SelfContained>true</SelfContained>
+		<PublishTrimmed>true</PublishTrimmed>
+		<IncludeAllContentForSelfExtract>false</IncludeAllContentForSelfExtract>
+		<SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
+		--><!-- 禁止生成.pdb文件 --><!--
+		<DebugType>none</DebugType>
+	</PropertyGroup>
+
+	--><!-- 特定于平台且仅在Release时的发布目录 --><!--
+	<PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(RuntimeIdentifier)' == 'win-x64'">
+		<PublishDir>..\BuildOutput\win-x64\</PublishDir>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(RuntimeIdentifier)' == 'linux-x64'">
+		<PublishDir>..\BuildOutput\linux-x64\</PublishDir>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(RuntimeIdentifier)' == 'osx-x64'">
+		<PublishDir>..\BuildOutput\osx-x64\</PublishDir>
+	</PropertyGroup>-->
+
+</Project>
