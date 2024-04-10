@@ -107,14 +107,14 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             if (userInfo == null)
             {
                 //errorMsg = "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º101¡£";
-                return Ok("pwd", false, "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º101¡£");
+                return Ok("pwd", false, "ÕËºÅ»òÃÜÂë´íÎó£¡");
                 //ModelState.AddModelError(nameof(this.Password), "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º101¡£");
             }
             else if (_userInfoService.TryLogin(userInfo, loginInDto.Password, true) == null)
             {
                 //errorMsg = "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º102¡£";
                 //ModelState.AddModelError(nameof(this.Password), "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º102¡£");
-                return Ok("pwd", false, "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º102¡£");
+                return Ok("pwd", false, "ÕËºÅ»òÃÜÂë´íÎó£¡");
             }
 
             return Ok(true);

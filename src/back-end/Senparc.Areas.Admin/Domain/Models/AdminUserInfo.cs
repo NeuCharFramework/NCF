@@ -165,7 +165,7 @@ namespace Senparc.Areas.Admin.Domain.Models
             UserName = objDto.UserName;
             if (!objDto.Password.IsNullOrEmpty())
             {
-                Password = GetSHA512Password(objDto.Password, this.PasswordSalt, false);
+                Password = GetSHA512Password(objDto.Password, this.PasswordSalt, true);
             }
 
             RealName = objDto.RealName;
