@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  * 特别注意：
  * 当前注册类是比较特殊的底层系统支持模块，
  * 其中加入了一系列特殊处理的代码，并不适合所有模块使用，
@@ -53,7 +53,7 @@ namespace Senparc.Areas.Admin
 
         public override string Uid => SiteConfig.SYSTEM_XNCF_MODULE_AREAS_ADMIN_UID;// "00000000-0000-0001-0001-000000000001";
 
-        public override string Version => "0.3.0-beta4";
+        public override string Version => "0.4.0-beta4";
 
         public override string MenuName => "NCF 系统管理员后台";
 
