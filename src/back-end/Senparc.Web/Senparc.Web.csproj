@@ -27,7 +27,7 @@
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.15.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.5.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.6.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.6.1-preview1" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.6.1.5-preview1" />
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.19.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.7.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.10.1-preview1" />

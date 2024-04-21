@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -134,6 +135,49 @@ namespace Senparc.Areas.Admin
         }
 
 
+        /// <summary>
+        /// 添加前后端认证
+        /// </summary>
+        /// <param name="services"></param>
+        private void AddJwtAuthentication(IServiceCollection services, IConfiguration configuration)
+        {
+            JwtSettings backend = new JwtSettings();
+            configuration.Bind(JwtSettings.Position_Backend, backend);
+            services.AddAuthentication()
+                .AddJwtBearer(BackendJwtAuthorizeAttribute.AuthenticationScheme, options =>
+                {
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                    {
+                        ValidIssuer = backend.Issuer,
+                        ValidAudience = backend.Audience,
+                        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(backend.SecretKey)),
+                        ValidateIssuer = true, //whether or not valid Issuer
+                        ValidateAudience = true, //whether or not valid Audience
+                        ValidateLifetime = true, //whether or not valid out-of-service time
+                        ValidateIssuerSigningKey = true, //whether or not valid SecurityKey　　　　　　　　　　　
+                        ClockSkew = System.TimeSpan.Zero//Allowed server time offset
+                    };
+                })
+            //.AddJwtBearer(Core.ApiAttributes.JwtAuthorizeAttribute.AuthenticationScheme, options =>
+            //{
+            //    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+            //    {
+            //        ValidIssuer = miniPro.Issuer,
+            //        ValidAudience = miniPro.Audience,
+            //        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(miniPro.SecretKey)),
+            //        ValidateIssuer = true, //whether or not valid Issuer
+            //        ValidateAudience = true, //whether or not valid Audience
+            //        ValidateLifetime = true, //whether or not valid out-of-service time
+            //        ValidateIssuerSigningKey = true, //whether or not valid SecurityKey　　　　　　　　　　　
+            //        ClockSkew = System.TimeSpan.Zero//Allowed server time offset
+            //    };
+            //})
+            ;
+
+        }
+
+
+
         public override IApplicationBuilder UseXncfModule(IApplicationBuilder app, IRegisterService registerService)
         {
             app.UseStaticFiles(new StaticFileOptions
@@ -159,7 +203,7 @@ namespace Senparc.Areas.Admin
 
         public IMvcBuilder AuthorizeConfig(IMvcBuilder builder, IHostEnvironment env)
         {
-            Console.WriteLine("areaRegisterTypes: AuthorizeConfig - AdminArea");
+            Console.WriteLine("[IAreaRegister - Admin] AuthorizeConfig - AdminArea");
 
             //鉴权配置
             //添加基于Cookie的权限验证：https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-2.1&tabs=aspnetcore2x
@@ -184,6 +228,30 @@ namespace Senparc.Areas.Admin
 
             builder.AddRazorPagesOptions(options =>
             {
+                //options.Conventions.AddAreaFolderApplicationModelConvention("Admin", "/", model =>
+                //{
+                //    model.Filters.Add(new AdminAuthorizeAttribute());
+                //});
+
+                //options.Conventions.AuthorizeAreaFolder("Admin", "/", "AdminOnly");//必须登录
+                //options.Conventions.AddAreaPageRoute("Admin", "/Login", "/Admin/Login");//允许匿名
+                //options.Conventions.AddAreaPageRoute("Admin", "/Index", "/Admin/Index");//允许匿名
+
+                options.Conventions.AddAreaFolderRouteModelConvention("Admin","/Admin/", model =>
+                {
+                    foreach (var selector in model.Selectors)
+                    {
+                        var template = selector.AttributeRouteModel.Template;
+                        if (template.StartsWith("/"))
+                        {
+                            selector.AttributeRouteModel.Template = AttributeRouteModel.CombineTemplates(
+                                "{area:exists}",
+                                template.TrimStart('/'));
+                        }
+                    }
+                });
+
+
                 options.Conventions.AuthorizePage("/", "AdminOnly");//必须登录
                 options.Conventions.AllowAnonymousToPage("/Login");//允许匿名
 
@@ -191,6 +259,7 @@ namespace Senparc.Areas.Admin
             });
 
             SenparcTrace.SendCustomLog("系统启动", "完成 Area:Admin 注册");
+
             builder.Services.AddScoped<ISysMenuRepository, SysMenuRepository>();
             builder.Services.AddScoped<ISysRolePermissionRepository, SysRolePermissionRepository>();
             builder.Services.AddScoped<IAuthorizationHandler, Ncf.Core.Authorization.PermissionHandler>();
@@ -282,47 +351,6 @@ namespace Senparc.Areas.Admin
         //#region IXncfRazorRuntimeCompilation 接口
         //public string LibraryPath => Path.GetFullPath(Path.Combine(SiteConfig.WebRootPath, "..", "..", "Senparc.Areas.Admin"));
         //#endregion
-
-        /// <summary>
-        /// 添加前后端认证
-        /// </summary>
-        /// <param name="services"></param>
-        private void AddJwtAuthentication(IServiceCollection services, IConfiguration configuration)
-        {
-            JwtSettings backend = new JwtSettings();
-            configuration.Bind(JwtSettings.Position_Backend, backend);
-            services.AddAuthentication()
-                .AddJwtBearer(BackendJwtAuthorizeAttribute.AuthenticationScheme, options =>
-                {
-                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-                    {
-                        ValidIssuer = backend.Issuer,
-                        ValidAudience = backend.Audience,
-                        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(backend.SecretKey)),
-                        ValidateIssuer = true, //whether or not valid Issuer
-                        ValidateAudience = true, //whether or not valid Audience
-                        ValidateLifetime = true, //whether or not valid out-of-service time
-                        ValidateIssuerSigningKey = true, //whether or not valid SecurityKey　　　　　　　　　　　
-                        ClockSkew = System.TimeSpan.Zero//Allowed server time offset
-                    };
-                })
-            //.AddJwtBearer(Core.ApiAttributes.JwtAuthorizeAttribute.AuthenticationScheme, options =>
-            //{
-            //    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-            //    {
-            //        ValidIssuer = miniPro.Issuer,
-            //        ValidAudience = miniPro.Audience,
-            //        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(miniPro.SecretKey)),
-            //        ValidateIssuer = true, //whether or not valid Issuer
-            //        ValidateAudience = true, //whether or not valid Audience
-            //        ValidateLifetime = true, //whether or not valid out-of-service time
-            //        ValidateIssuerSigningKey = true, //whether or not valid SecurityKey　　　　　　　　　　　
-            //        ClockSkew = System.TimeSpan.Zero//Allowed server time offset
-            //    };
-            //})
-            ;
-
-        }
         public override void OnAutoMapMapping(IServiceCollection services, IConfiguration configuration)
         {
             base.OnAutoMapMapping(services, configuration);
