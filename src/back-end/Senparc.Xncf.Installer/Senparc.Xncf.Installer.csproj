@@ -72,8 +72,8 @@
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+		<!--<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />-->
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

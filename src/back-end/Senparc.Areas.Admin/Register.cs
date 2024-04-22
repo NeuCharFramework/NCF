@@ -237,25 +237,25 @@ namespace Senparc.Areas.Admin
                 //options.Conventions.AddAreaPageRoute("Admin", "/Login", "/Admin/Login");//允许匿名
                 //options.Conventions.AddAreaPageRoute("Admin", "/Index", "/Admin/Index");//允许匿名
 
-                options.Conventions.AddAreaFolderRouteModelConvention("Admin","/Admin/", model =>
-                {
-                    foreach (var selector in model.Selectors)
-                    {
-                        var template = selector.AttributeRouteModel.Template;
-                        if (template.StartsWith("/"))
-                        {
-                            selector.AttributeRouteModel.Template = AttributeRouteModel.CombineTemplates(
-                                "{area:exists}",
-                                template.TrimStart('/'));
-                        }
-                    }
-                });
+                //options.Conventions.AddAreaFolderRouteModelConvention("Admin","/Admin/", model =>
+                //{
+                //    foreach (var selector in model.Selectors)
+                //    {
+                //        var template = selector.AttributeRouteModel.Template;
+                //        if (template.StartsWith("/"))
+                //        {
+                //            selector.AttributeRouteModel.Template = AttributeRouteModel.CombineTemplates(
+                //                "{area:exists}",
+                //                template.TrimStart('/'));
+                //        }
+                //    }
+                //});
 
 
                 options.Conventions.AuthorizePage("/", "AdminOnly");//必须登录
                 options.Conventions.AllowAnonymousToPage("/Login");//允许匿名
 
-                //更多：https://docs.microsoft.com/en-us/aspnet/core/security/authorization/razor-pages-authorization?view=aspnetcore-2.2
+                //更多：https://learn.microsoft.com/en-us/aspnet/core/security/authorization/razor-pages-authorization?view=aspnetcore-8.0
             });
 
             SenparcTrace.SendCustomLog("系统启动", "完成 Area:Admin 注册");
