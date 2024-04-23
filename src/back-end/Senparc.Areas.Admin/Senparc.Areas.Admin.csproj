@@ -53,7 +53,7 @@
 		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.6.1.5-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.7.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.7.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.8.1-preview1" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.8.1.5-preview1" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.8.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.16.1-preview1" />
 
