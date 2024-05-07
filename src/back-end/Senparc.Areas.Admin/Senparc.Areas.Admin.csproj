@@ -10,7 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+		<!--<FrameworkReference Include="Microsoft.AspNetCore.App" />-->
 
 		<EmbeddedResource Include="wwwroot\**\*" />
 
@@ -21,7 +21,7 @@
 		<EmbeddedResource Remove="Domain\Migrations\Oracle\**" />
 
 		<None Remove="Domain\Migrations\Oracle\**" />
-		<PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+		<!--<PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />-->
 		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0" />
 	</ItemGroup>
@@ -35,26 +35,26 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+		<!--<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />-->
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
 		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="1.2.2" />
 		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="4.2.2" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.14.1-preview1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.15.1-preview1" />
-		<PackageReference Include="Senparc.Ncf.Log" Version="0.14.1-preview1" />
-		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.14.1-preview1" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.15.1-preview1" />
-		<PackageReference Include="Senparc.Ncf.Utility" Version="0.14.1-preview1" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.16.1-preview1" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.15.1-preview1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.16.1-preview1" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.15.1-preview1" />
+		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.15.1-preview1" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.16.1-preview1" />
+		<PackageReference Include="Senparc.Ncf.Utility" Version="0.15.1-preview1" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.17.1-preview1" />
 
 		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 -->
 		<!--<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />-->
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.5.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.6.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.6.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.7.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.7.1-preview1" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.6.1.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.7.1-preview1" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.7.1-preview1" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.8.1.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.8.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.16.1-preview1" />
 
 	</ItemGroup>
