@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Senparc.Ncf.Core.Models.DataBaseModel;
+using Senparc.Ncf.XncfBase.Attributes;
 using System;
 
 namespace Senparc.Xncf.Accounts.Domain.Models
 {
+    [XncfAutoConfigurationMapping]
     public class PointsLogConfigurationMapping : ConfigurationMappingWithIdBase<PointsLog, int>
     {
         public override void Configure(EntityTypeBuilder<PointsLog> builder)
