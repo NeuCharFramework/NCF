@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Models.DataBaseModel;
+using Senparc.Ncf.XncfBase.Attributes;
 
 namespace Senparc.Xncf.Accounts.Domain.Models
 {
-    public class AccountConfigurationMapping : ConfigurationMappingWithIdBase<Account,int>
+    [XncfAutoConfigurationMapping]
+    public class AccountConfigurationMapping : ConfigurationMappingWithIdBase<Account, int>
     {
         public override void Configure(EntityTypeBuilder<Account> builder)
         {
@@ -48,7 +50,7 @@ namespace Senparc.Xncf.Accounts.Domain.Models
             builder.Property(e => e.UserName)
                 .IsRequired()
                 .HasMaxLength(50);
-          
+
 
             builder.HasMany(z => z.PointsLogs).WithOne(z => z.Account).HasForeignKey(z => z.AccountId).OnDelete(DeleteBehavior.Restrict);
 

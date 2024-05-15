@@ -33,9 +33,10 @@ namespace Senparc.Xncf.Accounts.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new AccountConfigurationMapping());
-            modelBuilder.ApplyConfiguration(new AccountPayLogConfigurationMapping());
-            modelBuilder.ApplyConfiguration(new PointsLogConfigurationMapping());
+            //使用 [XncfAutoConfigurationMapping] 可自动执行
+            //modelBuilder.ApplyConfiguration(new AccountConfigurationMapping());
+            //modelBuilder.ApplyConfiguration(new AccountPayLogConfigurationMapping());
+            //modelBuilder.ApplyConfiguration(new PointsLogConfigurationMapping());
         }
     }
 
