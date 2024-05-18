@@ -24,4 +24,5 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.PL
         public string Description { get; set; }
 
     }
+
 }

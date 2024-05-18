@@ -54,8 +54,11 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.AppService
                 logger.Append("Agent 模板更新成功！");
                 logger.Append("当前代理使用的 Prompt 模板：" + promptTemplate);
 
-                return null;
+                return logger.ToString();
             });
         }
+
+      
+
     }
 }
