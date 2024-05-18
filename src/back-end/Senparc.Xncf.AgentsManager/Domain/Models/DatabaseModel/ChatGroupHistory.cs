@@ -30,16 +30,15 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
         [InverseProperty(nameof(AgentTemplate.ToChatGroupHistoies))]
         public AgentTemplate ToAgentTemplate { get; private set; }
 
-        [ForeignKey(nameof(FromChatGroupMember))]
-        public int? FromChatGroupMemberId { get; private set; }
+        //[ForeignKey(nameof(FromChatGroupMember))]
+        //public int? FromChatGroupMemberId { get; private set; }
 
+        //public ChatGroupMember FromChatGroupMember { get; private set; }
 
-        public ChatGroupMember FromChatGroupMember { get; private set; }
+        //[ForeignKey(nameof(ToChatGroupMember))]
+        //public int? ToChatGroupMemberId { get; private set; }
 
-        [ForeignKey(nameof(ToChatGroupMember))]
-        public int? ToChatGroupMemberId { get; private set; }
-
-        public ChatGroupMember ToChatGroupMember { get; private set; }
+        //public ChatGroupMember ToChatGroupMember { get; private set; }
 
         [Required]
         public string Message { get; private set; }
@@ -49,7 +48,7 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
 
         private ChatGroupHistory() { }
 
-        public ChatGroupHistory(int chatGroupId, ChatGroup chatGroup, int? fromAgentTemplateId, AgentTemplate fromAgentTemplate, int? toAgentTemplateId, AgentTemplate toAgentTemplate, int? fromChatGroupMemberId, ChatGroupMember fromChatGroupMember, int? toChatGroupMemberId, ChatGroupMember toChatGroupMember, string message, MessageType messageType)
+        public ChatGroupHistory(int chatGroupId, ChatGroup chatGroup, int? fromAgentTemplateId, AgentTemplate fromAgentTemplate, int? toAgentTemplateId, AgentTemplate toAgentTemplate, /*int? fromChatGroupMemberId, ChatGroupMember fromChatGroupMember, int? toChatGroupMemberId, ChatGroupMember toChatGroupMember,*/ string message, MessageType messageType)
         {
             ChatGroupId = chatGroupId;
             ChatGroup = chatGroup;
@@ -57,10 +56,10 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
             FromAgentTemplate = fromAgentTemplate;
             ToAgentTemplateId = toAgentTemplateId;
             ToAgentTemplate = toAgentTemplate;
-            FromChatGroupMemberId = fromChatGroupMemberId;
-            FromChatGroupMember = fromChatGroupMember;
-            ToChatGroupMemberId = toChatGroupMemberId;
-            ToChatGroupMember = toChatGroupMember;
+            //FromChatGroupMemberId = fromChatGroupMemberId;
+            //FromChatGroupMember = fromChatGroupMember;
+            //ToChatGroupMemberId = toChatGroupMemberId;
+            //ToChatGroupMember = toChatGroupMember;
             Message = message;
             MessageType = messageType;
         }
@@ -73,10 +72,10 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
             FromAgentTemplate = chatGroupHistoryDto.FromAgentTemplate;
             ToAgentTemplateId = chatGroupHistoryDto.ToAgentTemplateId;
             ToAgentTemplate = chatGroupHistoryDto.ToAgentTemplate;
-            FromChatGroupMemberId = chatGroupHistoryDto.FromChatGroupMemberId;
-            FromChatGroupMember = chatGroupHistoryDto.FromChatGroupMember;
-            ToChatGroupMemberId = chatGroupHistoryDto.ToChatGroupMemberId;
-            ToChatGroupMember = chatGroupHistoryDto.ToChatGroupMember;
+            //FromChatGroupMemberId = chatGroupHistoryDto.FromChatGroupMemberId;
+            //FromChatGroupMember = chatGroupHistoryDto.FromChatGroupMember;
+            //ToChatGroupMemberId = chatGroupHistoryDto.ToChatGroupMemberId;
+            //ToChatGroupMember = chatGroupHistoryDto.ToChatGroupMember;
             Message = chatGroupHistoryDto.Message;
             MessageType = chatGroupHistoryDto.MessageType;
         }

@@ -12,7 +12,7 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
     /// </summary>
     [Table(Register.DATABASE_PREFIX + nameof(ChatGroupMember))]//必须添加前缀，防止全系统中发生冲突
     [Serializable]
-    public class ChatGroupMember : EntityBase
+    public class ChatGroupMember : EntityBase<int>
     {
         /// <summary>
         /// UID
@@ -44,11 +44,11 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
         /// </summary>
         public ChatGroup ChatGroup { get; private set; }
 
-        [InverseProperty(nameof(ChatGroupHistory.FromChatGroupMember))]
-        public List<ChatGroupHistory> FromChatGroupHistories { get; set; }
+        //[InverseProperty(nameof(ChatGroupHistory.FromChatGroupMember))]
+        //public List<ChatGroupHistory> FromChatGroupHistories { get; set; }
 
-        [InverseProperty(nameof(ChatGroupHistory.ToChatGroupMember))]
-        public List<ChatGroupHistory> ToChatGroupHistories { get; set; }
+        //[InverseProperty(nameof(ChatGroupHistory.ToChatGroupMember))]
+        //public List<ChatGroupHistory> ToChatGroupHistories { get; set; }
 
 
         private ChatGroupMember() { }
