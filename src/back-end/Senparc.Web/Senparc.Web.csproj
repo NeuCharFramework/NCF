@@ -36,13 +36,14 @@
 		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.7.2-preview1" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.8.2-preview1" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.16.2-preview1" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.24.3.44-beta1" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.24.3.46-beta1" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.8.2-preview1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.16.2-preview1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.16.3-preview1" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
+		<ProjectReference Include="..\Senparc.Xncf.AgentsManager\Senparc.Xncf.AgentsManager.csproj" />
 	</ItemGroup>
 </Project>
