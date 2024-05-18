@@ -26,6 +26,8 @@ using AutoGen;
 using Senparc.Xncf.PromptRange.Domain.Models.DatabaseModel;
 using AutoGen.Core;
 using Senparc.Ncf.Core.AppServices;
+using Senparc.CO2NET.Trace;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Senparc.Xncf.AgentsManager.Domain.Services
 {
@@ -35,7 +37,7 @@ namespace Senparc.Xncf.AgentsManager.Domain.Services
         {
         }
 
-        public async Task<IEnumerable<IMessage>> RunGroup(AppServiceLogger logger, int id, ISenparcAiSetting senparcAiSetting, bool individuation)
+        public async Task<IEnumerable<IMessage>> RunGroup(AppServiceLogger logger, int id, string userCommand, ISenparcAiSetting senparcAiSetting, bool individuation)
         {
             var chatGroupMemberService = base._serviceProvider.GetService<ServiceBase<ChatGroupMember>>();
             var agentTemplateService = base._serviceProvider.GetService<AgentsTemplateService>();
@@ -66,7 +68,7 @@ namespace Senparc.Xncf.AgentsManager.Domain.Services
 
             //作为唯一入口和汇报的关键人（TODO：需要增加一个设置）
             AgentTemplate enterAgentTemplate = null;
-            SemanticKernelAgent enterAgent = null;
+            MiddlewareAgent<SemanticKernelAgent> enterAgent = null;
 
             foreach (var groupMember in groupMemebers)
             {
@@ -96,20 +98,22 @@ namespace Senparc.Xncf.AgentsManager.Domain.Services
                             .RegisterCustomPrintMessage(new PrintWechatMessageMiddleware((a, m, mStr) =>
                             {
                                 AgentKeys.SendWechatMessage.Invoke(a, m, mStr);
-                                logger.Append($"[{chatGroup}]组 {a.Name} 发送消息：{mStr}");
+                                logger.Append($"[{chatGroup.Name}]组 {a.Name} 发送消息：{mStr}");
                             }));
 
-                if (enterAgentTemplate == null)
+                if (enterAgentTemplate == null && agentTemplate.Name.Contains("行政"))
                 {
+                    //TODO：添加指定入口对接人员，参考群主
                     enterAgentTemplate = agentTemplate;
-                    enterAgent = agent;
+                    enterAgent = agentMiddleware;
                 }
                 agentsMiddlewares.Add(agentMiddleware);
                 agents.Add(agent);
             }
 
             // Create the hearing member
-            var hearingMember = new UserProxyAgent(name: chatGroup.Name + "群友");
+            //var hearingMember = new UserProxyAgent(name: chatGroup.Name + "群友");
+            var hearingMember = new DefaultReplyAgent(name: chatGroup.Name + "群友", GroupChatExtension.TERMINATE);
 
             // Create the group admin
             var adminAgenttemplate = await agentTemplateService.GetObjectAsync(x => x.Id == chatGroup.AdminAgentTemplateId);
@@ -147,14 +151,28 @@ namespace Senparc.Xncf.AgentsManager.Domain.Services
 
             var aiTeam = finishedGraph.CreateAiTeam(admin);
 
-            var greetingMessage = await enterAgent.SendAsync($"你好，如果已经就绪，请告诉我们“已就位”，并和 {hearingMember.Name} 打个招呼");
+            try
+            {
+                var greetingMessage = await enterAgent.SendAsync($"你好，如果已经就绪，请告诉我们“已就位”，并和 {hearingMember.Name} 打个招呼");
 
-            IEnumerable<IMessage> result = await enterAgent.SendMessageToGroupAsync(
-                     groupChat: aiTeam,
-                     chatHistory: [greetingMessage],
-                     maxRound: 20);
+                var commandMessage = new TextMessage(Role.Assistant, userCommand, hearingMember.Name);
 
-            return result;
+                IEnumerable<IMessage> result = await enterAgent.SendMessageToGroupAsync(
+                      groupChat: aiTeam,
+                      chatHistory: [greetingMessage, commandMessage],
+                      maxRound: 10);
+
+                Console.WriteLine("Chat finished.");
+                logger.Append("未完成运行："+ chatGroup.Name);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                SenparcTrace.BaseExceptionLog(ex);
+                throw;
+            }
+
         }
     }
 }

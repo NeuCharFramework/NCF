@@ -125,7 +125,7 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.AppService
 
                 foreach (var chatGroupId in request.ChatGroups.SelectedValues.Select(z => int.Parse(z)))
                 {
-                    var task = _chatGroupService.RunGroup(logger, chatGroupId, aiSetting, request.Individuation.IsSelected("1"));
+                    var task = _chatGroupService.RunGroup(logger, chatGroupId, request.Command, aiSetting, request.Individuation.IsSelected("1"));
                     tasks.Add(task);
                 }
 

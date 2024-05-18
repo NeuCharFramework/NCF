@@ -12,13 +12,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Senparc.Ncf.Service;
 using Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models;
 using Senparc.Xncf.XncfBuilder.OHS.PL;
+using System.Web.Mvc;
 
 namespace Senparc.Xncf.AgentsManager.OHS.Local.PL
 {
     public class ChatGroup_ManageChatGroupRequest : FunctionAppRequestBase
     {
         [Description("选择组||选择需要操作的组，或新增")]
-        public SelectionList ChatGroup { get; set; } = new SelectionList(SelectionType.DropDownList, new[] {
+        public SelectionList ChatGroup { get; set; } = new SelectionList(SelectionType.DropDownList, new List<SelectionItem> {
                  new SelectionItem("New","新建组","新建",true)
             });
 
@@ -42,18 +43,18 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.PL
         public override async Task LoadData(IServiceProvider serviceProvider)
         {
             //ChatGroup
-            var chatGroupService = serviceProvider.GetService<ServiceBase<ChatGroup>>();
+            var chatGroupService = serviceProvider.GetService<ChatGroupService>();
             var chatGroups = await chatGroupService.GetFullListAsync(z => true, z => z.Id, Ncf.Core.Enums.OrderingType.Ascending);
 
             chatGroups.Select(z => new SelectionItem(z.Id.ToString(), z.Name, z.Description))
-                .ToList().ForEach(x => ChatGroup.Items.Add(x));
+                .ToList().ForEach(z => ChatGroup.Items.Add(z));
 
             //Agent
             var agentTemplateService = serviceProvider.GetService<AgentsTemplateService>();
-            var agents = await agentTemplateService.GetFullListAsync(z => z.Enable, z => z.Name, Ncf.Core.Enums.OrderingType.Ascending);
+            var agentsTemplates = await agentTemplateService.GetFullListAsync(z => z.Enable, z => z.Name, Ncf.Core.Enums.OrderingType.Ascending);
 
-            Members.Items = agents.Select(z => new SelectionItem(z.Id.ToString(), z.Name, z.Description)).ToList();
-            Admin.Items = agents.Select(z => new SelectionItem(z.Id.ToString(), z.Name, z.Description)).ToList();
+            Members.Items = agentsTemplates.Select(z => new SelectionItem(z.Id.ToString(), z.Name, z.Description)).ToList();
+            Admin.Items = agentsTemplates.Select(z => new SelectionItem(z.Id.ToString(), z.Name, z.Description)).ToList();
 
             var admin = Admin.Items.FirstOrDefault(z => z.Text == "群主");
             if (admin != null)
@@ -82,6 +83,10 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.PL
             new SelectionItem("1","是","采用个性化 AI 参数运行 Agent",true)
         });
 
+        [Required]
+        [MaxLength(500)]
+        [Description("我能帮你做什么||说明需要 Agents 协助你完成的工作内容")]
+        public string Command { get; set; }
 
         public override async Task LoadData(IServiceProvider serviceProvider)
         {
@@ -89,8 +94,7 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.PL
             var chatGroupService = serviceProvider.GetService<ServiceBase<ChatGroup>>();
             var chatGroups = await chatGroupService.GetFullListAsync(z => true, z => z.Id, Ncf.Core.Enums.OrderingType.Ascending);
 
-            chatGroups.Select(z => new SelectionItem(z.Id.ToString(), z.Name, z.Description))
-                .ToList().ForEach(x => ChatGroups.Items.Add(x));
+            ChatGroups.Items = chatGroups.Select(z => new SelectionItem(z.Id.ToString(), z.Name, z.Description)).ToList();
 
             //载入 AI 模型
             await BuildXncfRequestHelper.LoadAiModelData(serviceProvider, AIModel);

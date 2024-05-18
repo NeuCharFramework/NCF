@@ -10,9 +10,9 @@ namespace Senaprc.AI.Agents
 {
     public static class AgentKeys
     {
-        public static string AgentKey1 = "d06f1c81-9cff-4c4c-9451-abaaebf3e1f3";
-        public static string AgentKey2 = "e0ba6355-b67d-42ef-863a-1e4444441a89";
-        public static string AgentKey3 = "957c57fe-c4a0-41ef-95ec-3f9145d1d372";
+        public static string AgentKey1 = "d06f1c81-9cff-4c4c-9451-abaaebf3e1f9";
+        public static string AgentKey2 = "e0ba6355-b67d-42ef-863a-1e4444441a83";
+        public static string AgentKey3 = "957c57fe-c4a0-41ef-95ec-3f9145d1d371";
 
         public static Action<IAgent, IMessage, string> SendWechatMessage => async (agent, replyObject, message) =>
          {
