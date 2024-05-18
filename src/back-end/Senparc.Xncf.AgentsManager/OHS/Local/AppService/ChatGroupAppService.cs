@@ -1,4 +1,5 @@
-﻿using Senparc.Ncf.Core.AppServices;
+﻿using AutoMapper.Execution;
+using Senparc.Ncf.Core.AppServices;
 using Senparc.Ncf.Service;
 using Senparc.Xncf.AgentsManager.Domain.Services;
 using Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models;
@@ -17,11 +18,16 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.AppService
     public class ChatGroupAppService : AppServiceBase
     {
         private readonly ServiceBase<ChatGroup> _chatGroupService;
+        private readonly ServiceBase<ChatGroupMember> _chatGroupMemeberService;
         private readonly AgentsTemplateService _agentsTemplateService;
 
-        public ChatGroupAppService(IServiceProvider serviceProvider, ServiceBase<ChatGroup> chatGroupService, AgentsTemplateService agentsTemplateService) : base(serviceProvider)
+        public ChatGroupAppService(IServiceProvider serviceProvider,
+            ServiceBase<ChatGroup> chatGroupService,
+            ServiceBase<ChatGroupMember> chatGroupMemeberService,
+            AgentsTemplateService agentsTemplateService) : base(serviceProvider)
         {
             this._chatGroupService = chatGroupService;
+            this._chatGroupMemeberService = chatGroupMemeberService;
             this._agentsTemplateService = agentsTemplateService;
         }
 
@@ -61,6 +67,20 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.AppService
 
                 logger.Append($"ChatGroup {(isNew ? "新增" : "编辑")} 成功！");
 
+
+                //添加成员
+                var memberList = new List<ChatGroupMember>();
+                foreach (var agentId in request.Members.SelectedValues.Select(z => int.Parse(z)))
+                {
+                    var chatGroupMemberDto = new ChatGroupMemberDto(null, chatGroup.Id, agentId);
+                    var member = new ChatGroupMember(chatGroupMemberDto);
+                    member.ResetUID();
+                    memberList.Add(member);
+                }
+                await _chatGroupMemeberService.SaveObjectListAsync(memberList);
+
+                logger.Append($"ChatGroup 成员添加成功！");
+
                 return logger.ToString();
             });
         }
@@ -75,10 +95,7 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.AppService
                 {
                     return "至少选择一个组！";
                 }
-                
 
-
-                logger.Append($"ChatGroup {(isNew ? "新增" : "编辑")} 成功！");
 
                 return logger.ToString();
             });

@@ -15,6 +15,13 @@ namespace Senparc.Xncf.AgentsManager.Domain.Services
         {
         }
 
+        public async Task<string> RunGroup(int id)
+        {
+            var chatGroup = await base.GetObjectAsync(x => x.Id == id);
 
+
+
+            return chatGroup.Name;
+        }
     }
 }

@@ -32,12 +32,11 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
         /// </summary>
         public AgentTemplate AgentTemplate { get; private set; }
 
-        ///// <summary>
-        ///// ChatGroupId
-        ///// </summary>
-        //[Required]
-        //[ForeignKey(nameof(ChatGroup))]
-        //public int ChatGroupId { get; private set; }
+        /// <summary>
+        /// ChatGroupId
+        /// </summary>
+        [Required]
+        public int ChatGroupId { get; private set; }
 
         ///// <summary>
         ///// ChatGroup（类型同名）

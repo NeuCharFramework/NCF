@@ -25,10 +25,10 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.Dto
         /// </summary>
         public AgentTemplate AgentTemplate { get; private set; }
 
-        ///// <summary>
-        ///// ChatGroupId
-        ///// </summary>
-        //public int ChatGroupId { get; private set; }
+        /// <summary>
+        /// chatgroupid
+        /// </summary>
+        public int ChatGroupId { get; private set; }
 
         ///// <summary>
         ///// ChatGroup（类型同名）
@@ -37,12 +37,12 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.Dto
 
         private ChatGroupMemberDto() { }
 
-        public ChatGroupMemberDto(string uID, int agentTemplateId, AgentTemplate agentTemplate/*, int chatGroupId, ChatGroup chatGroup*/)
+        public ChatGroupMemberDto(string uID, int chatGroupId, int agentTemplateId /*,AgentTemplate agentTemplate  ChatGroup chatGroup*/)
         {
             UID = uID;
+            ChatGroupId = chatGroupId;
             AgentTemplateId = agentTemplateId;
-            AgentTemplate = agentTemplate;
-            //ChatGroupId = chatGroupId;
+            //AgentTemplate = agentTemplate;
             //ChatGroup = chatGroup;
         }
 
@@ -51,7 +51,7 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.Dto
             UID = chatGroupMemer.UID;
             AgentTemplateId = chatGroupMemer.AgentTemplateId;
             AgentTemplate = chatGroupMemer.AgentTemplate;
-            //ChatGroupId = chatGroupMemer.ChatGroupId;
+            ChatGroupId = chatGroupMemer.ChatGroupId;
             //ChatGroup = chatGroupMemer.ChatGroup;
         }
     }
