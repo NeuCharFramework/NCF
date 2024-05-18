@@ -16,10 +16,10 @@ namespace Senparc.Xncf.AgentsManager.Domain.Models.DatabaseModel.Mapping
             //联合主键
             //builder.HasKey(e => new { e.ChatGroupId, e.AgentTemplateId });
 
-            builder.HasOne(z => z.ChatGroup)
-                .WithMany(z => z.ChatGroupMembers)
-                .HasForeignKey(z => z.ChatGroupId)
-                .OnDelete(DeleteBehavior.Restrict);
+            //builder.HasOne(z => z.ChatGroup)
+            //    .WithMany(z => z.ChatGroupMembers)
+            //    .HasForeignKey(z => z.ChatGroupId)
+            //    .OnDelete(DeleteBehavior.NoAction);
         }
 
     }

@@ -32,17 +32,17 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
         /// </summary>
         public AgentTemplate AgentTemplate { get; private set; }
 
-        /// <summary>
-        /// ChatGroupId
-        /// </summary>
-        [Required]
-        [ForeignKey(nameof(ChatGroup))]
-        public int ChatGroupId { get; private set; }
+        ///// <summary>
+        ///// ChatGroupId
+        ///// </summary>
+        //[Required]
+        //[ForeignKey(nameof(ChatGroup))]
+        //public int ChatGroupId { get; private set; }
 
-        /// <summary>
-        /// ChatGroup（类型同名）
-        /// </summary>
-        public ChatGroup ChatGroup { get; private set; }
+        ///// <summary>
+        ///// ChatGroup（类型同名）
+        ///// </summary>
+        //public ChatGroup ChatGroup { get; private set; }
 
         //[InverseProperty(nameof(ChatGroupHistory.FromChatGroupMember))]
         //public List<ChatGroupHistory> FromChatGroupHistories { get; set; }
@@ -53,13 +53,13 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
 
         private ChatGroupMember() { }
 
-        public ChatGroupMember(int agentTemplateId, AgentTemplate agentTemplate, int chatGroupId, ChatGroup chatGroup)
+        public ChatGroupMember(int agentTemplateId, AgentTemplate agentTemplate/*, int chatGroupId, ChatGroup chatGroup*/)
         {
             ResetUID();
             AgentTemplateId = agentTemplateId;
             AgentTemplate = agentTemplate;
-            ChatGroupId = chatGroupId;
-            ChatGroup = chatGroup;
+            //ChatGroupId = chatGroupId;
+            //ChatGroup = chatGroup;
         }
 
         public ChatGroupMember(ChatGroupMemberDto chatGroupMemerDto)
@@ -67,8 +67,8 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
             UID = chatGroupMemerDto.UID;
             AgentTemplateId = chatGroupMemerDto.AgentTemplateId;
             AgentTemplate = chatGroupMemerDto.AgentTemplate;
-            ChatGroupId = chatGroupMemerDto.ChatGroupId;
-            ChatGroup = chatGroupMemerDto.ChatGroup;
+            //ChatGroupId = chatGroupMemerDto.ChatGroupId;
+            //ChatGroup = chatGroupMemerDto.ChatGroup;
         }
 
         /// <summary>

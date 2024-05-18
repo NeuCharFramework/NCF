@@ -46,7 +46,7 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
 
         public AgentTemplate AdminAgentTemplate { get; set; }
 
-        public ICollection<ChatGroupMember> ChatGroupMembers { get; set; }
+        //public ICollection<ChatGroupMember> ChatGroupMembers { get; set; }
 
 
         private ChatGroup() { }
