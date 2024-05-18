@@ -11,6 +11,7 @@ using Senparc.Xncf.AgentsManager.Domain.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Ncf.Service;
 using Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models;
+using Senparc.Xncf.XncfBuilder.OHS.PL;
 
 namespace Senparc.Xncf.AgentsManager.OHS.Local.PL
 {
@@ -69,6 +70,19 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.PL
         [Description("选择组||选择需要运行的组")]
         public SelectionList ChatGroups { get; set; } = new SelectionList(SelectionType.CheckBoxList, new List<SelectionItem>());
 
+        [Description("AI 模型||请选择运行此程序的外围 AI 模型")]
+        public SelectionList AIModel { get; set; } = new SelectionList(SelectionType.DropDownList, new List<SelectionItem>
+        {
+            //new SelectionItem("Default","系统默认","通过系统默认配置的固定 AI 模型信息",true)
+        });
+
+        [Description("个性化智能体||")]
+        public SelectionList Individuation { get; set; } = new SelectionList(SelectionType.CheckBoxList, new List<SelectionItem>
+        {
+            new SelectionItem("1","是","采用个性化 AI 参数运行 Agent",true)
+        });
+
+
         public override async Task LoadData(IServiceProvider serviceProvider)
         {
             //ChatGroup
@@ -77,6 +91,9 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.PL
 
             chatGroups.Select(z => new SelectionItem(z.Id.ToString(), z.Name, z.Description))
                 .ToList().ForEach(x => ChatGroups.Items.Add(x));
+
+            //载入 AI 模型
+            await BuildXncfRequestHelper.LoadAiModelData(serviceProvider, AIModel);
 
             await base.LoadData(serviceProvider);
         }

@@ -52,12 +52,12 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
 
         private ChatGroupMember() { }
 
-        public ChatGroupMember(int agentTemplateId, AgentTemplate agentTemplate/*, int chatGroupId, ChatGroup chatGroup*/)
+        public ChatGroupMember(int agentTemplateId, AgentTemplate agentTemplate, int chatGroupId/* ChatGroup chatGroup*/)
         {
             ResetUID();
             AgentTemplateId = agentTemplateId;
             AgentTemplate = agentTemplate;
-            //ChatGroupId = chatGroupId;
+            ChatGroupId = chatGroupId;
             //ChatGroup = chatGroup;
         }
 
@@ -66,7 +66,7 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
             UID = chatGroupMemerDto.UID;
             AgentTemplateId = chatGroupMemerDto.AgentTemplateId;
             AgentTemplate = chatGroupMemerDto.AgentTemplate;
-            //ChatGroupId = chatGroupMemerDto.ChatGroupId;
+            ChatGroupId = chatGroupMemerDto.ChatGroupId;
             //ChatGroup = chatGroupMemerDto.ChatGroup;
         }
 
