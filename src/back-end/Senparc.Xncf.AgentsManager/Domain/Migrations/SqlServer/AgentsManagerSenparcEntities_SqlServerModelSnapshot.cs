@@ -90,6 +90,9 @@ namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
+                    b.Property<int?>("ChatGroupId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -120,6 +123,8 @@ namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
 
                     b.HasIndex("AdminAgentTemplateId");
 
+                    b.HasIndex("ChatGroupId");
+
                     b.ToTable("Senparc_AgentsManager_ChatGroup");
                 });
 
@@ -144,10 +149,10 @@ namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
                     b.Property<bool>("Flag")
                         .HasColumnType("bit");
 
-                    b.Property<int>("FromAgentTemplateId")
+                    b.Property<int?>("FromAgentTemplateId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FromChatGroupMemberId")
+                    b.Property<int?>("FromChatGroupMemberId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LastUpdateTime")
@@ -167,10 +172,10 @@ namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ToAgentTemplateId")
+                    b.Property<int?>("ToAgentTemplateId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ToChatGroupMemberId")
+                    b.Property<int?>("ToChatGroupMemberId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -238,10 +243,14 @@ namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
             modelBuilder.Entity("Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.ChatGroup", b =>
                 {
                     b.HasOne("Senparc.Xncf.AgentsManager.Models.DatabaseModel.AgentTemplate", "AdminAgentTemplate")
-                        .WithMany("ChatGroups")
+                        .WithMany()
                         .HasForeignKey("AdminAgentTemplateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.ChatGroup", null)
+                        .WithMany("ChatGroupMemebers")
+                        .HasForeignKey("ChatGroupId");
 
                     b.Navigation("AdminAgentTemplate");
                 });
@@ -255,28 +264,20 @@ namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
                         .IsRequired();
 
                     b.HasOne("Senparc.Xncf.AgentsManager.Models.DatabaseModel.AgentTemplate", "FromAgentTemplate")
-                        .WithMany()
-                        .HasForeignKey("FromAgentTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("FromChatGroupHistories")
+                        .HasForeignKey("FromAgentTemplateId");
 
                     b.HasOne("Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.ChatGroupMember", "FromChatGroupMember")
-                        .WithMany()
-                        .HasForeignKey("FromChatGroupMemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("FromChatGroupHistories")
+                        .HasForeignKey("FromChatGroupMemberId");
 
                     b.HasOne("Senparc.Xncf.AgentsManager.Models.DatabaseModel.AgentTemplate", "ToAgentTemplate")
-                        .WithMany()
-                        .HasForeignKey("ToAgentTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("ToChatGroupHistoies")
+                        .HasForeignKey("ToAgentTemplateId");
 
                     b.HasOne("Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.ChatGroupMember", "ToChatGroupMember")
-                        .WithMany()
-                        .HasForeignKey("ToChatGroupMemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("ToChatGroupHistories")
+                        .HasForeignKey("ToChatGroupMemberId");
 
                     b.Navigation("ChatGroup");
 
@@ -292,7 +293,7 @@ namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
             modelBuilder.Entity("Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.ChatGroupMember", b =>
                 {
                     b.HasOne("Senparc.Xncf.AgentsManager.Models.DatabaseModel.AgentTemplate", "AgentTemplate")
-                        .WithMany()
+                        .WithMany("ChatGroupMembers")
                         .HasForeignKey("AgentTemplateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -310,7 +311,23 @@ namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
 
             modelBuilder.Entity("Senparc.Xncf.AgentsManager.Models.DatabaseModel.AgentTemplate", b =>
                 {
-                    b.Navigation("ChatGroups");
+                    b.Navigation("ChatGroupMembers");
+
+                    b.Navigation("FromChatGroupHistories");
+
+                    b.Navigation("ToChatGroupHistoies");
+                });
+
+            modelBuilder.Entity("Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.ChatGroup", b =>
+                {
+                    b.Navigation("ChatGroupMemebers");
+                });
+
+            modelBuilder.Entity("Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.ChatGroupMember", b =>
+                {
+                    b.Navigation("FromChatGroupHistories");
+
+                    b.Navigation("ToChatGroupHistories");
                 });
 #pragma warning restore 612, 618
         }

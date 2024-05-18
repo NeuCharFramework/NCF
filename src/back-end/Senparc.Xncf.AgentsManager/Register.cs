@@ -13,6 +13,10 @@ using Senparc.Xncf.AgentsManager.OHS.Local.AppService;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.XncfBase.Database;
+using Senparc.Ncf.Core.Models.DataBaseModel;
+using Senparc.Xncf.AgentsManager.Models.DatabaseModel;
+using Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.Dto;
+using Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models;
 
 namespace Senparc.Xncf.AgentsManager
 {
@@ -76,6 +80,15 @@ namespace Senparc.Xncf.AgentsManager
 
         public override IServiceCollection AddXncfModule(IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
         {
+            //AutoMap映射
+            base.AddAutoMapMapping(profile =>
+            {
+                profile.CreateMap<AgentTemplate, AgentTemplateDto>().ReverseMap();
+                profile.CreateMap<ChatGroup, ChatGroupDto>().ReverseMap();
+                profile.CreateMap<ChatGroupMember, ChatGroupMemberDto>().ReverseMap();
+                profile.CreateMap<ChatGroupHistory, ChatGroupHistoryDto>().ReverseMap();
+            });
+
 
             return base.AddXncfModule(services, configuration, env);
         }

@@ -1,6 +1,7 @@
 using Senparc.Ncf.Core.Models;
 using Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.Dto;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -11,7 +12,7 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
     /// </summary>
     [Table(Register.DATABASE_PREFIX + nameof(ChatGroupMember))]//必须添加前缀，防止全系统中发生冲突
     [Serializable]
-    public class ChatGroupMember : EntityBase<int>
+    public class ChatGroupMember : EntityBase
     {
         /// <summary>
         /// UID
@@ -23,6 +24,7 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
         /// AgentTemplateId
         /// </summary>
         [Required]
+        [ForeignKey(nameof(AgentTemplate))]
         public int AgentTemplateId { get; private set; }
 
         /// <summary>
@@ -34,12 +36,20 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
         /// ChatGroupId
         /// </summary>
         [Required]
+        [ForeignKey(nameof(ChatGroup))]
         public int ChatGroupId { get; private set; }
 
         /// <summary>
         /// ChatGroup（类型同名）
         /// </summary>
         public ChatGroup ChatGroup { get; private set; }
+
+        [InverseProperty(nameof(ChatGroupHistory.FromChatGroupMember))]
+        public List<ChatGroupHistory> FromChatGroupHistories { get; set; }
+
+        [InverseProperty(nameof(ChatGroupHistory.ToChatGroupMember))]
+        public List<ChatGroupHistory> ToChatGroupHistories { get; set; }
+
 
         private ChatGroupMember() { }
 

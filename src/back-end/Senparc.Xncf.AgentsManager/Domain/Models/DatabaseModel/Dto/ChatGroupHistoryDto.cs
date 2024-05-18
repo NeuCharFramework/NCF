@@ -14,19 +14,19 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.Dto
 
         public ChatGroup ChatGroup { get; private set; }
 
-        public int FromAgentTemplateId { get; private set; }
+        public int? FromAgentTemplateId { get; private set; }
 
         public AgentTemplate FromAgentTemplate { get; private set; }
 
-        public int ToAgentTemplateId { get; private set; }
+        public int? ToAgentTemplateId { get; private set; }
 
         public AgentTemplate ToAgentTemplate { get; private set; }
 
-        public int FromChatGroupMemberId { get; private set; }
+        public int? FromChatGroupMemberId { get; private set; }
 
         public ChatGroupMember FromChatGroupMember { get; private set; }
 
-        public int ToChatGroupMemberId { get; private set; }
+        public int? ToChatGroupMemberId { get; private set; }
 
         public ChatGroupMember ToChatGroupMember { get; private set; }
 

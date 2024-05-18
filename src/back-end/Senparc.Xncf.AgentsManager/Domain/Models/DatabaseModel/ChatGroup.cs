@@ -1,6 +1,7 @@
 using Senparc.Ncf.Core.Models;
 using Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.Dto;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -40,9 +41,12 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
         /// 管理员代理模板Id
         /// </summary>
         [Required]
+        [ForeignKey(nameof(AdminAgentTemplate))]
         public int AdminAgentTemplateId { get; private set; }
 
         public AgentTemplate AdminAgentTemplate { get; set; }
+
+        public ICollection<ChatGroupMember> ChatGroupMembers { get; set; }
 
 
         private ChatGroup() { }

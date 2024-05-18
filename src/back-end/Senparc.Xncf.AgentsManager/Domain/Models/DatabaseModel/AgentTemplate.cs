@@ -42,7 +42,13 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel
         /// </summary>
         public string Description { get; private set; }
 
-        public List<ChatGroup> ChatGroups { get; private set; }
+        public List<ChatGroupMember> ChatGroupMembers { get; private set; }
+
+        [InverseProperty(nameof(ChatGroupHistory.FromAgentTemplate))]
+        public List<ChatGroupHistory> FromChatGroupHistories { get; set; }
+
+        [InverseProperty(nameof(ChatGroupHistory.ToAgentTemplate))]
+        public List<ChatGroupHistory> ToChatGroupHistoies { get; set; }
 
         private AgentTemplate() { }
 
@@ -53,6 +59,18 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel
             Enable = enable;
             Description = description;
             PromptCode = promptCode;
+        }
+
+        public bool EnableAgent()
+        {
+            Enable = true;
+            return true;
+        }   
+
+        public bool DisableAgent()
+        {
+            Enable = false;
+            return true;
         }
     }
 }

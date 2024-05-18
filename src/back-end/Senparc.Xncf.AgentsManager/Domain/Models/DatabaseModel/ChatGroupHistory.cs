@@ -19,19 +19,25 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
         [Required]
         public ChatGroup ChatGroup { get; private set; }
 
-        public int FromAgentTemplateId { get; private set; }
-
+        [ForeignKey(nameof(FromAgentTemplate))]
+        public int? FromAgentTemplateId { get; private set; }
+        [InverseProperty(nameof(AgentTemplate.FromChatGroupHistories))]
         public AgentTemplate FromAgentTemplate { get; private set; }
 
-        public int ToAgentTemplateId { get; private set; }
+        [ForeignKey(nameof(ToAgentTemplate))]
+        public int? ToAgentTemplateId { get; private set; }
 
+        [InverseProperty(nameof(AgentTemplate.ToChatGroupHistoies))]
         public AgentTemplate ToAgentTemplate { get; private set; }
 
-        public int FromChatGroupMemberId { get; private set; }
+        [ForeignKey(nameof(FromChatGroupMember))]
+        public int? FromChatGroupMemberId { get; private set; }
+
 
         public ChatGroupMember FromChatGroupMember { get; private set; }
 
-        public int ToChatGroupMemberId { get; private set; }
+        [ForeignKey(nameof(ToChatGroupMember))]
+        public int? ToChatGroupMemberId { get; private set; }
 
         public ChatGroupMember ToChatGroupMember { get; private set; }
 
@@ -43,7 +49,7 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
 
         private ChatGroupHistory() { }
 
-        public ChatGroupHistory(int chatGroupId, ChatGroup chatGroup, int fromAgentTemplateId, AgentTemplate fromAgentTemplate, int toAgentTemplateId, AgentTemplate toAgentTemplate, int fromChatGroupMemberId, ChatGroupMember fromChatGroupMember, int toChatGroupMemberId, ChatGroupMember toChatGroupMember, string message, MessageType messageType)
+        public ChatGroupHistory(int chatGroupId, ChatGroup chatGroup, int? fromAgentTemplateId, AgentTemplate fromAgentTemplate, int? toAgentTemplateId, AgentTemplate toAgentTemplate, int? fromChatGroupMemberId, ChatGroupMember fromChatGroupMember, int? toChatGroupMemberId, ChatGroupMember toChatGroupMember, string message, MessageType messageType)
         {
             ChatGroupId = chatGroupId;
             ChatGroup = chatGroup;

@@ -35,6 +35,7 @@
   <ItemGroup>
     <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.17.3-preview1+37312e28c788cba6605dfcc00947f80a36023b86" />
     <PackageReference Include="Senparc.Ncf.AreaBase" Version="0.15.2-preview1+37312e28c788cba6605dfcc00947f80a36023b86" />
+    <PackageReference Include="Senparc.Xncf.PromptRange" Version="0.6.4.19-preview1" />
     <None Include="App_Data\SenparcTraceLog\*" />
   </ItemGroup>
   <ItemGroup>
@@ -45,9 +46,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App_Data\Database\SenparcConfig.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Domain\Models\DatabaseModel\Mapping\" />
-    <Folder Include="Domain\Services\" />
   </ItemGroup>
 </Project>
