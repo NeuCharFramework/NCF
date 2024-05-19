@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Senparc.Xncf.AgentsManager.Models;
 
@@ -11,9 +12,11 @@ using Senparc.Xncf.AgentsManager.Models;
 namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
 {
     [DbContext(typeof(AgentsManagerSenparcEntities_SqlServer))]
-    partial class AgentsManagerSenparcEntities_SqlServerModelSnapshot : ModelSnapshot
+    [Migration("20240519153227_Update_ChatGroup")]
+    partial class Update_ChatGroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
