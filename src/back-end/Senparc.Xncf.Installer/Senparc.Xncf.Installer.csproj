@@ -36,7 +36,7 @@
 		<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0" />
 		<!--<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />-->
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.17.3-preview1" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.17.3.1-preview1" />
 		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.15.2-preview1" />
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer.Interface\Senparc.Xncf.Installer.Interface.csproj" />

@@ -351,10 +351,18 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                     //遍历某个 Register 下所有的方法      TODO：未来可添加分组
                     foreach (var functionBag in functionGroup.Values)
                     {
-                        var result = await FunctionHelper.GetFunctionParameterInfoAsync(this._serviceProvider, functionBag, true);
+                        try
+                        {
+                            var result = await FunctionHelper.GetFunctionParameterInfoAsync(this._serviceProvider, functionBag, true);
 
-                        var functionKey = functionBag.Key;
-                        functionParameterInfoCollection[(functionKey, functionBag.FunctionRenderAttribute.Name, functionBag.FunctionRenderAttribute.Description)] = result;
+                            var functionKey = functionBag.Key;
+                            functionParameterInfoCollection[(functionKey, functionBag.FunctionRenderAttribute.Name, functionBag.FunctionRenderAttribute.Description)] = result;
+                        }
+                        catch (Exception ex)
+                        {
+                            SenparcTrace.BaseExceptionLog(ex);
+                            throw new Exception($"载入 {functionBag.Key} 时出错，请查看日志！如果刚添加数据库迁移，请先完成模块升级！");
+                        }
                     }
                 }
             }

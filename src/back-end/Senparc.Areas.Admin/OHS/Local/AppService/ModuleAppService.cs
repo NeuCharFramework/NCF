@@ -192,12 +192,20 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     if (Senparc.Ncf.XncfBase.Register.FunctionRenderCollection.TryGetValue(xncfRegister.GetType(), out var functionGroup))
                     {
                         //遍历某个 Register 下所有的方法      TODO：未来可添加分组
-                        foreach (var funtionBag in functionGroup.Values)
+                        foreach (var functionBag in functionGroup.Values)
                         {
-                            var result = await FunctionHelper.GetFunctionParameterInfoAsync(base.ServiceProvider, funtionBag, true);
+                            try
+                            {
+                                var result = await FunctionHelper.GetFunctionParameterInfoAsync(base.ServiceProvider, functionBag, true);
 
-                            var functionKey = funtionBag.Key;
-                            functionParameterInfoCollection[(functionKey, funtionBag.FunctionRenderAttribute.Name, funtionBag.FunctionRenderAttribute.Description)] = result;
+                                var functionKey = functionBag.Key;
+                                functionParameterInfoCollection[(functionKey, functionBag.FunctionRenderAttribute.Name, functionBag.FunctionRenderAttribute.Description)] = result;
+                            }
+                            catch (Exception ex)
+                            {
+                                SenparcTrace.BaseExceptionLog(ex);
+                                throw new Exception($"载入 {functionBag.Key} 时出错，请查看日志！如果刚添加数据库迁移，请先完成模块升级！");
+                            }
                         }
                     }
                 }

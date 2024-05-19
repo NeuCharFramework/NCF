@@ -1,23 +1,18 @@
-using Senparc.Ncf.Core.Enums;
-using Senparc.Ncf.XncfBase;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
-using Senparc.Xncf.AgentsManager.Models;
-using Senparc.Xncf.AgentsManager.OHS.Local.AppService;
+using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Models;
-using Senparc.Ncf.Database;
+using Senparc.Ncf.XncfBase;
 using Senparc.Ncf.XncfBase.Database;
-using Senparc.Ncf.Core.Models.DataBaseModel;
-using Senparc.Xncf.AgentsManager.Models.DatabaseModel;
-using Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.Dto;
-using Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models;
 using Senparc.Xncf.AgentsManager.Domain.Services;
+using Senparc.Xncf.AgentsManager.Models;
+using Senparc.Xncf.AgentsManager.Models.DatabaseModel;
+using Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models;
+using Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.Dto;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Senparc.Xncf.AgentsManager
 {
@@ -30,7 +25,7 @@ namespace Senparc.Xncf.AgentsManager
 
         public override string Uid => "D858D7FA-775A-4690-9023-CFB0B3B84994";//必须确保全局唯一，生成后必须固定，已自动生成，也可自行修改
 
-        public override string Version => "0.2.3";//必须填写版本号
+        public override string Version => "0.2.6";//必须填写版本号
 
         public override string MenuName => "Agents 管理模块";
 

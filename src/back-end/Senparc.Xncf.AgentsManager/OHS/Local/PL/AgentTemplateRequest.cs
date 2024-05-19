@@ -40,13 +40,11 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.PL
         {
             await base.LoadData(serviceProvider);
 
-
             var hookRobotTypeItems = Enum.GetValues<HookRobotType>();
             foreach (var item in hookRobotTypeItems)
             {
                 HookRobotType.Items.Add(new SelectionItem(((int)item).ToString(), item.ToString(), item.ToString(), false));
             }
-
         }
     }
 
