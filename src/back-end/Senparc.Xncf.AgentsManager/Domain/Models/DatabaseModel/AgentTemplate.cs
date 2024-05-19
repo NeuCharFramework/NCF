@@ -35,7 +35,17 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel
         /// <summary>
         /// PromptRange 的代号
         /// </summary>
-        public string PromptCode { get; set; }
+        public string PromptCode { get; private set; }
+
+        /// <summary>
+        /// 第三方机器人平台类型
+        /// </summary>
+        public HookRobotType HookRobotType { get; private set; }
+
+        /// <summary>
+        /// 第三方机器人平台参数
+        /// </summary>
+        public string HookRobotParameter { get; set; }
 
         /// <summary>
         /// 描述
@@ -52,25 +62,43 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel
 
         private AgentTemplate() { }
 
-        public AgentTemplate(string name, string systemMessage, bool enable, string description, string promptCode)
+        public AgentTemplate(string name, string systemMessage, bool enable, string description, string promptCode, HookRobotType hookRobotType, string hookRobotParameter)
         {
             Name = name;
             SystemMessage = systemMessage;
             Enable = enable;
             Description = description;
             PromptCode = promptCode;
+            HookRobotType = hookRobotType;
+            HookRobotParameter = hookRobotParameter;
         }
 
         public bool EnableAgent()
         {
             Enable = true;
             return true;
-        }   
+        }
 
         public bool DisableAgent()
         {
             Enable = false;
             return true;
         }
+    }
+
+    /// <summary>
+    /// 第三方机器人平台类型
+    /// </summary>
+    public enum HookRobotType
+    {
+        None = 0,
+        /// <summary>
+        /// 微信公众号
+        /// </summary>
+        WeChatMp = 1,
+        /// <summary>
+        /// 企业微信机器人
+        /// </summary>
+        WeChatWorkRobot = 2
     }
 }

@@ -51,13 +51,20 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.AppService
                     return "必须选择一位群主，请到 AgentTemplate 中设置！";
                 }
 
-                var agentsTemplateAdmin = await _agentsTemplateService.GetAgentTemplateAsync(adminId);
+                //对接人
+                if (request.EnterAgent.SelectedValues.Count() == 0 || !int.TryParse(request.EnterAgent.SelectedValues.First(), out int enterAgentId))
+                {
+                    return "必须选择一位对接人，请到 AgentTemplate 中设置！";
+                }
+
+                //var agentsTemplateAdmin = await _agentsTemplateService.GetAgentTemplateAsync(adminId);
+                //var agentsTemplateEnterAgent = await _agentsTemplateService.GetAgentTemplateAsync(enterAgent);
 
                 SenparcAI_GetByVersionResponse promptResult;
 
                 //TODO:封装到 Service 中
                 ChatGroup chatGroup = null;
-                var chatGroupDto = new ChatGroupDto(request.Name, true, ChatGroupState.Unstart, request.Description, agentsTemplateAdmin.Id);
+                var chatGroupDto = new ChatGroupDto(request.Name, true, ChatGroupState.Unstart, request.Description, adminId, enterAgentId);
                 var isNew = false;
                 if (request.ChatGroup.IsSelected("New"))
                 {
@@ -76,10 +83,16 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.AppService
 
                 logger.Append($"ChatGroup {(isNew ? "新增" : "编辑")} 成功！");
 
-
                 //添加成员
                 var memberList = new List<ChatGroupMember>();
-                foreach (var agentId in request.Members.SelectedValues.Select(z => int.Parse(z)))
+                var memberIdList= request.Members.SelectedValues.Select(z => int.Parse(z)).ToList();
+                //合并“对接人”为成员
+                if (!memberIdList.Contains(chatGroupDto.EnterAgentTemplateId))
+                {
+                    memberIdList.Add(chatGroupDto.EnterAgentTemplateId);
+                }
+
+                foreach (var agentId in memberIdList)
                 {
                     var chatGroupMemberDto = new ChatGroupMemberDto(null, chatGroup.Id, agentId);
                     var member = new ChatGroupMember(chatGroupMemberDto);

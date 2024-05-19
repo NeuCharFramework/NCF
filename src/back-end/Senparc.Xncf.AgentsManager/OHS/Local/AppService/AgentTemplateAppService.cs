@@ -4,6 +4,7 @@ using Senparc.CO2NET.Extensions;
 using Senparc.Ncf.Core.AppServices;
 using Senparc.Ncf.Core.Models;
 using Senparc.Xncf.AgentsManager.Domain.Services;
+using Senparc.Xncf.AgentsManager.Models.DatabaseModel;
 using Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.Dto;
 using Senparc.Xncf.AgentsManager.OHS.Local.PL;
 using Senparc.Xncf.PromptRange.Domain.Services;
@@ -44,10 +45,12 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.AppService
                     // Prompt Code不存在的时候，会抛出异常
                     return ex.Message;
                 }
-             
+
                 var promptTemplate = promptResult.PromptItem.Content;// Prompt
 
-                var agentTemplateDto = new AgentTemplateDto(request.Name, request.SystemMessagePromptCode, true, request.Description, request.SystemMessagePromptCode);
+                var agentTemplateDto = new AgentTemplateDto(request.Name, request.SystemMessagePromptCode, true,
+                    request.Description, request.SystemMessagePromptCode,
+                    Enum.Parse<HookRobotType>(request.HookRobotType.SelectedValues.FirstOrDefault()), request.HookRobotParameter);
 
                 await this._agentsTemplateService.UpdateAgentTemplateAsync(request.Id, agentTemplateDto);
 
@@ -58,7 +61,7 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.AppService
             });
         }
 
-      
+
 
     }
 }

@@ -17,17 +17,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Senparc.AI.Kernel.Handlers;
 using Senparc.Xncf.PromptRange.Domain.Services;
 using Senaprc.AI.Agents.AgentExtensions;
-using Senaprc.AI.Agents;
 using AutoGen;
 using Senparc.Xncf.PromptRange.Domain.Models.DatabaseModel;
 using AutoGen.Core;
 using Senparc.Ncf.Core.AppServices;
 using Senparc.CO2NET.Trace;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.Dto;
+using Senparc.Xncf.AgentsManager.ACL;
 
 namespace Senparc.Xncf.AgentsManager.Domain.Services
 {
@@ -37,17 +37,17 @@ namespace Senparc.Xncf.AgentsManager.Domain.Services
         {
         }
 
-        public async Task<IEnumerable<IMessage>> RunGroup(AppServiceLogger logger, int id, string userCommand, ISenparcAiSetting senparcAiSetting, bool individuation)
+        public async Task<IEnumerable<IMessage>> RunGroup(AppServiceLogger logger, int groupId, string userCommand, ISenparcAiSetting senparcAiSetting, bool individuation)
         {
             var chatGroupMemberService = base._serviceProvider.GetService<ServiceBase<ChatGroupMember>>();
             var agentTemplateService = base._serviceProvider.GetService<AgentsTemplateService>();
             var promptItemService = base._serviceProvider.GetService<PromptItemService>();
 
-            var chatGroup = await base.GetObjectAsync(x => x.Id == id);
+            var chatGroup = await base.GetObjectAsync(x => x.Id == groupId);
             logger.Append($"开始运行 {chatGroup.Name}");
 
-            var groupMemebers = await chatGroupMemberService.GetFullListAsync(z => z.ChatGroupId == id);
-            var agentsTemplates = new List<AgentTemplate>();
+            var groupMemebers = await chatGroupMemberService.GetFullListAsync(z => z.ChatGroupId == groupId);
+            var agentsTemplates = new List<AgentTemplateDto>();
             var agents = new List<SemanticKernelAgent>();
             List<MiddlewareAgent<SemanticKernelAgent>> agentsMiddlewares = new List<MiddlewareAgent<SemanticKernelAgent>>();
 
@@ -67,13 +67,16 @@ namespace Senparc.Xncf.AgentsManager.Domain.Services
             var kernel = iWantToRun.Kernel;//同一外围 Agent
 
             //作为唯一入口和汇报的关键人（TODO：需要增加一个设置）
-            AgentTemplate enterAgentTemplate = null;
+            AgentTemplate enterAgentTemplate = await agentTemplateService.GetObjectAsync(z => z.Id == chatGroup.EnterAgentTemplateId);
+
             MiddlewareAgent<SemanticKernelAgent> enterAgent = null;
+
 
             foreach (var groupMember in groupMemebers)
             {
                 var agentTemplate = await agentTemplateService.GetObjectAsync(x => x.Id == groupMember.AgentTemplateId);
-                agentsTemplates.Add(agentTemplate);
+                var agentTemplateDto = agentTemplateService.Mapper.Map<AgentTemplateDto>(agentTemplate);
+                agentsTemplates.Add(agentTemplateDto);
 
                 //TODO：确认 Prompt 此时是否存在，如果不存在需要给出提示
 
@@ -97,16 +100,17 @@ namespace Senparc.Xncf.AgentsManager.Domain.Services
                             .RegisterTextMessageConnector()
                             .RegisterCustomPrintMessage(new PrintWechatMessageMiddleware((a, m, mStr) =>
                             {
-                                AgentKeys.SendWechatMessage.Invoke(a, m, mStr);
+                                PrintWechatMessageMiddlewareExtension.SendWechatMessage.Invoke(a, m, mStr, agentTemplateDto);
                                 logger.Append($"[{chatGroup.Name}]组 {a.Name} 发送消息：{mStr}");
                             }));
 
-                if (enterAgentTemplate == null && agentTemplate.Name.Contains("行政"))
+                if (groupMember.Id == enterAgentTemplate.Id)
                 {
                     //TODO：添加指定入口对接人员，参考群主
                     enterAgentTemplate = agentTemplate;
                     enterAgent = agentMiddleware;
                 }
+
                 agentsMiddlewares.Add(agentMiddleware);
                 agents.Add(agent);
             }
@@ -163,7 +167,7 @@ namespace Senparc.Xncf.AgentsManager.Domain.Services
                       maxRound: 10);
 
                 Console.WriteLine("Chat finished.");
-                logger.Append("未完成运行："+ chatGroup.Name);
+                logger.Append("未完成运行：" + chatGroup.Name);
 
                 return result;
             }

@@ -46,18 +46,28 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
 
         public AgentTemplate AdminAgentTemplate { get; set; }
 
+        /// <summary>
+        /// 对接人代理模板Id
+        /// </summary>
+        [Required]
+        [ForeignKey(nameof(EnterAgentTemplate))]
+        public int EnterAgentTemplateId { get; private set; }
+
+        public AgentTemplate EnterAgentTemplate { get; set; }
+
         //public ICollection<ChatGroupMember> ChatGroupMembers { get; set; }
 
 
         private ChatGroup() { }
 
-        public ChatGroup(string name, bool enable, ChatGroupState state, string description, int adminAgentTemplateId)
+        public ChatGroup(string name, bool enable, ChatGroupState state, string description, int adminAgentTemplateId, int enterAgentTemplateId)
         {
             Name = name;
             Enable = enable;
             State = state;
             Description = description;
             AdminAgentTemplateId = adminAgentTemplateId;
+            EnterAgentTemplateId = enterAgentTemplateId;
         }
 
         public ChatGroup(ChatGroupDto chatGroupDto)
@@ -67,6 +77,7 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
             State = chatGroupDto.State;
             Description = chatGroupDto.Description;
             AdminAgentTemplateId = chatGroupDto.AdminAgentTemplateId;
+            EnterAgentTemplateId = chatGroupDto.EnterAgentTemplateId;
         }
 
         public void Start()

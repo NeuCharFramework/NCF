@@ -1,5 +1,6 @@
 using Senparc.Ncf.Core.Models;
 using Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.Dto
 {
@@ -33,15 +34,26 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.Dto
         /// </summary>
         public int AdminAgentTemplateId { get; private set; }
 
+        public AgentTemplate AdminAgentTemplate { get; set; }
+
+        /// <summary>
+        /// 对接人代理模板Id
+        /// </summary>
+
+        public int EnterAgentTemplateId { get; private set; }
+
+        public AgentTemplate EnterAgentTemplate { get; set; }
+
         private ChatGroupDto() { }
 
-        public ChatGroupDto(string name, bool enable, ChatGroupState state, string description, int adminAgentTemplateId)
+        public ChatGroupDto(string name, bool enable, ChatGroupState state, string description, int adminAgentTemplateId, int enterAgentTemplateId)
         {
             Name = name;
             Enable = enable;
             State = state;
             Description = description;
             AdminAgentTemplateId = adminAgentTemplateId;
+            EnterAgentTemplateId = enterAgentTemplateId;
         }
 
         public ChatGroupDto(ChatGroup chatGroup)
@@ -51,6 +63,7 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.Dto
             State = chatGroup.State;
             Description = chatGroup.Description;
             AdminAgentTemplateId = chatGroup.AdminAgentTemplateId;
+            EnterAgentTemplateId = chatGroup.EnterAgentTemplateId;
         }
 
         public void Start()

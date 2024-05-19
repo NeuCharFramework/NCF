@@ -33,8 +33,13 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.PL
         public SelectionList Members { get; set; } = new SelectionList(SelectionType.CheckBoxList, new List<SelectionItem>());
 
         [Required]
-        [Description("群主||群主")]
+        [Description("群主||群管理员，群管理员不会被合并到“群成员”中，通常不参与显式的发言。")]
         public SelectionList Admin { get; set; } = new SelectionList(SelectionType.DropDownList, new List<SelectionItem>());
+
+        [Required]
+        [Description("对接人||对接人，即接受命令的人，通常也是期待返回期望结果的人。对接人也会被合并到“群成员”中")]
+        public SelectionList EnterAgent { get; set; } = new SelectionList(SelectionType.DropDownList, new List<SelectionItem>());
+
 
         [MaxLength(200)]
         [Description("说明||说明")]
@@ -55,6 +60,7 @@ namespace Senparc.Xncf.AgentsManager.OHS.Local.PL
 
             Members.Items = agentsTemplates.Select(z => new SelectionItem(z.Id.ToString(), z.Name, z.Description)).ToList();
             Admin.Items = agentsTemplates.Select(z => new SelectionItem(z.Id.ToString(), z.Name, z.Description)).ToList();
+            EnterAgent.Items = agentsTemplates.Select(z => new SelectionItem(z.Id.ToString(), z.Name, z.Description)).ToList();
 
             var admin = Admin.Items.FirstOrDefault(z => z.Text == "群主");
             if (admin != null)

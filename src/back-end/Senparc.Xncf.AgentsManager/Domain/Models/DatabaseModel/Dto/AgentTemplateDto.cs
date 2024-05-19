@@ -33,17 +33,29 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.Dto
         /// <summary>
         /// PromptRange 的代号
         /// </summary>
-        public string PromptCode { get; set; }
+        public string PromptCode { get;private set; }
+
+        /// <summary>
+        /// 第三方机器人平台类型
+        /// </summary>
+        public HookRobotType HookRobotType { get; private set; }
+
+        /// <summary>
+        /// 第三方机器人平台参数
+        /// </summary>
+        public string HookRobotParameter { get; set; }
 
         private AgentTemplateDto() { }
 
-        public AgentTemplateDto(string name, string systemMessage, bool enable, string description, string promptCode = null)
+        public AgentTemplateDto(string name, string systemMessage, bool enable, string description, string promptCode = null, HookRobotType hookRobotType = default, string hookRobotParameter = null)
         {
             Name = name;
             SystemMessage = systemMessage;
             Enable = enable;
             Description = description;
             PromptCode = promptCode;
+            HookRobotType = hookRobotType;
+            HookRobotParameter = hookRobotParameter;
         }
     }
 }
