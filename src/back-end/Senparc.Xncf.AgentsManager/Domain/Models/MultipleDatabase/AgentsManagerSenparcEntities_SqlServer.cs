@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using Senparc.Xncf.AgentsManager.Models.DatabaseModel;
 using Microsoft.AspNetCore.Builder;
+using Senparc.Xncf.AgentsManager.Domain.Models.DatabaseModel.Mapping;
 
 namespace Senparc.Xncf.AgentsManager.Models
 {

@@ -15,6 +15,7 @@ namespace Senparc.Xncf.AgentsManager.Domain.Models.DatabaseModel.Mapping
     {
         public override void Configure(EntityTypeBuilder<AgentTemplate> builder)
         {
+
             base.Configure(builder);
         }
     }

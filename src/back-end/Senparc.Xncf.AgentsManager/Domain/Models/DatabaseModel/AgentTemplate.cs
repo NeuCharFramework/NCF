@@ -52,13 +52,21 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel
         /// </summary>
         public string Description { get; private set; }
 
+
+        //[InverseProperty(nameof(ChatGroupMember.AgentTemplate))]
         public List<ChatGroupMember> ChatGroupMembers { get; private set; }
 
+        //[InverseProperty(nameof(ChatGroup.AdminAgentTemplate))]
+        public ICollection<ChatGroup> AdminChatGroups { get; private set; }
+
+        //[InverseProperty(nameof(ChatGroup.EnterAgentTemplate))]
+        public ICollection<ChatGroup> EnterAgentChatGroups { get; private set; }
+
         [InverseProperty(nameof(ChatGroupHistory.FromAgentTemplate))]
-        public List<ChatGroupHistory> FromChatGroupHistories { get; set; }
+        public ICollection<ChatGroupHistory> FromChatGroupHistories { get; set; }
 
         [InverseProperty(nameof(ChatGroupHistory.ToAgentTemplate))]
-        public List<ChatGroupHistory> ToChatGroupHistoies { get; set; }
+        public ICollection<ChatGroupHistory> ToChatGroupHistoies { get; set; }
 
         private AgentTemplate() { }
 

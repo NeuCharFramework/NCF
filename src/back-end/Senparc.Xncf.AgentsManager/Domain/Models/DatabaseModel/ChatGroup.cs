@@ -41,18 +41,19 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
         /// 管理员代理模板Id
         /// </summary>
         [Required]
-        [ForeignKey(nameof(AdminAgentTemplate))]
+        //[ForeignKey(nameof(AdminAgentTemplate))]
         public int AdminAgentTemplateId { get; private set; }
-
+        //[InverseProperty(nameof(AgentTemplate.AdminChatGroups))]
         public AgentTemplate AdminAgentTemplate { get; set; }
 
         /// <summary>
         /// 对接人代理模板Id
         /// </summary>
         [Required]
-        [ForeignKey(nameof(EnterAgentTemplate))]
+        //[ForeignKey(nameof(EnterAgentTemplate))]
         public int EnterAgentTemplateId { get; private set; }
 
+        //[InverseProperty(nameof(AgentTemplate.EnterAgentChatGroups))]
         public AgentTemplate EnterAgentTemplate { get; set; }
 
         //public ICollection<ChatGroupMember> ChatGroupMembers { get; set; }

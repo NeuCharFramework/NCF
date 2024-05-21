@@ -21,6 +21,8 @@ namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
                     SystemMessage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Enable = table.Column<bool>(type: "bit", nullable: false),
                     PromptCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HookRobotType = table.Column<int>(type: "int", nullable: false),
+                    HookRobotParameter = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Flag = table.Column<bool>(type: "bit", nullable: false),
                     AddTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -45,6 +47,7 @@ namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
                     State = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AdminAgentTemplateId = table.Column<int>(type: "int", nullable: false),
+                    EnterAgentTemplateId = table.Column<int>(type: "int", nullable: false),
                     Flag = table.Column<bool>(type: "bit", nullable: false),
                     AddTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -59,8 +62,12 @@ namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
                         name: "FK_Senparc_AgentsManager_ChatGroup_Senparc_AgentsManager_AgentTemplate_AdminAgentTemplateId",
                         column: x => x.AdminAgentTemplateId,
                         principalTable: "Senparc_AgentsManager_AgentTemplate",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Senparc_AgentsManager_ChatGroup_Senparc_AgentsManager_AgentTemplate_EnterAgentTemplateId",
+                        column: x => x.EnterAgentTemplateId,
+                        principalTable: "Senparc_AgentsManager_AgentTemplate",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -71,6 +78,7 @@ namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UID = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AgentTemplateId = table.Column<int>(type: "int", nullable: false),
+                    ChatGroupId = table.Column<int>(type: "int", nullable: false),
                     Flag = table.Column<bool>(type: "bit", nullable: false),
                     AddTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -132,6 +140,11 @@ namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
                 name: "IX_Senparc_AgentsManager_ChatGroup_AdminAgentTemplateId",
                 table: "Senparc_AgentsManager_ChatGroup",
                 column: "AdminAgentTemplateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Senparc_AgentsManager_ChatGroup_EnterAgentTemplateId",
+                table: "Senparc_AgentsManager_ChatGroup",
+                column: "EnterAgentTemplateId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Senparc_AgentsManager_ChatGroupHistory_ChatGroupId",

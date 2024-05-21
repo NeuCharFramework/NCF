@@ -4,7 +4,7 @@
  */
 // 创建一个axios实例
 var service = axios.create({
-    timeout: 100000 // request timeout
+    timeout: 1000000 // request timeout
 });
 // 请求拦截
 service.interceptors.request.use(

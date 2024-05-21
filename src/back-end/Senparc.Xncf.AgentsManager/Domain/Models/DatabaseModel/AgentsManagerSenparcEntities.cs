@@ -4,6 +4,7 @@ using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.XncfBase.Database;
 using Senparc.Xncf.AgentsManager.Models.DatabaseModel;
 using Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models;
+using Senparc.Xncf.AgentsManager.Domain.Models.DatabaseModel.Mapping;
 
 namespace Senparc.Xncf.AgentsManager.Models
 {

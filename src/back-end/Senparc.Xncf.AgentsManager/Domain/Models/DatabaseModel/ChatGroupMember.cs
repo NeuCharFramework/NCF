@@ -27,6 +27,7 @@ namespace Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models
         [ForeignKey(nameof(AgentTemplate))]
         public int AgentTemplateId { get; private set; }
 
+        [InverseProperty(nameof(AgentTemplate.ChatGroupMembers))]
         /// <summary>
         /// AgentTemplate（类型同名）
         /// </summary>

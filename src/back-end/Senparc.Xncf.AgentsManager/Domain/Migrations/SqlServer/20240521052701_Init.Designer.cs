@@ -12,8 +12,8 @@ using Senparc.Xncf.AgentsManager.Models;
 namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
 {
     [DbContext(typeof(AgentsManagerSenparcEntities_SqlServer))]
-    [Migration("20240519153227_Update_ChatGroup")]
-    partial class Update_ChatGroup
+    [Migration("20240521052701_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -240,15 +240,15 @@ namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
             modelBuilder.Entity("Senparc.Xncf.AgentsManager.Models.DatabaseModel.Models.ChatGroup", b =>
                 {
                     b.HasOne("Senparc.Xncf.AgentsManager.Models.DatabaseModel.AgentTemplate", "AdminAgentTemplate")
-                        .WithMany()
+                        .WithMany("AdminChatGroups")
                         .HasForeignKey("AdminAgentTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Senparc.Xncf.AgentsManager.Models.DatabaseModel.AgentTemplate", "EnterAgentTemplate")
-                        .WithMany()
+                        .WithMany("EnterAgentChatGroups")
                         .HasForeignKey("EnterAgentTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("AdminAgentTemplate");
@@ -292,7 +292,11 @@ namespace Senparc.Xncf.AgentsManager.Domain.Migrations.SqlServer
 
             modelBuilder.Entity("Senparc.Xncf.AgentsManager.Models.DatabaseModel.AgentTemplate", b =>
                 {
+                    b.Navigation("AdminChatGroups");
+
                     b.Navigation("ChatGroupMembers");
+
+                    b.Navigation("EnterAgentChatGroups");
 
                     b.Navigation("FromChatGroupHistories");
 

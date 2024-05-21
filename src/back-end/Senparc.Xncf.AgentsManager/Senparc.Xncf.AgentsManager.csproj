@@ -50,4 +50,7 @@
   <ItemGroup>
     <None Include="App_Data\Database\SenparcConfig.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Domain\Migrations\" />
+  </ItemGroup>
 </Project>
