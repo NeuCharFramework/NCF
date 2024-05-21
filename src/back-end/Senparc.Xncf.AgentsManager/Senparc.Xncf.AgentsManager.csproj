@@ -37,8 +37,8 @@
     <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.17.3.1-preview1" />
     <PackageReference Include="Senparc.Ncf.AreaBase" Version="0.15.2-preview1+37312e28c788cba6605dfcc00947f80a36023b86" />
     <PackageReference Include="Senparc.Weixin.Work" Version="3.21.1" />
-    <PackageReference Include="Senparc.Xncf.PromptRange" Version="0.6.4.19-preview1" />
-    <PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.24.3.46-beta1" />
+    <PackageReference Include="Senparc.Xncf.PromptRange" Version="0.6.4.20-preview1" />
+    <PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.24.3.48-beta1" />
     <None Include="App_Data\SenparcTraceLog\*" />
   </ItemGroup>
   <ItemGroup>
