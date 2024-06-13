@@ -104,7 +104,7 @@ namespace Senparc.Xncf.AgentsManager.Domain.Services
                                 logger.Append($"[{chatGroup.Name}]组 {a.Name} 发送消息：{mStr}");
                             }));
 
-                if (groupMember.Id == enterAgentTemplate.Id)
+                if (groupMember.AgentTemplateId == enterAgentTemplate.Id)
                 {
                     //TODO：添加指定入口对接人员，参考群主
                     enterAgentTemplate = agentTemplate;
