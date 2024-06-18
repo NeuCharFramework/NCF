@@ -16,17 +16,18 @@
 
 
 	<ItemGroup>
+		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.1.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<!--<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
 		<PackageReference Include="Dapr.Client" Version="1.12.0" />-->
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0" />
 
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.3.2" />
-		<PackageReference Include="Senparc.CO2NET" Version="2.4.0.1" />
+		<PackageReference Include="Senparc.CO2NET" Version="2.4.1.1" />
 		<PackageReference Include="Senparc.Ncf.Database.Sqlite" Version="0.15.2-preview1" />
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.15.2-preview1" />
-		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.5.3.5-preview1" />
-		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.6.4.18-preview1" />
+		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.5.3.6-preview1" />
+		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.6.4.22-preview1" />
 		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.6.2-preview1" />
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.19.2-preview1" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.7.2-preview1" />
@@ -36,9 +37,9 @@
 		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.7.2-preview1" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.8.2-preview1" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.16.2-preview1" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.24.3.44-beta1" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.24.3.50-beta1" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.8.2-preview1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.16.2-preview1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.16.4.1-preview1" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
