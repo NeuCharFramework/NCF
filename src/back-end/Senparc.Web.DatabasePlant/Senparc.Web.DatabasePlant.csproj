@@ -12,7 +12,6 @@
     <PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.15.2-preview1" />
     <PackageReference Include="Senparc.Xncf.Swagger" Version="0.10.2-preview1" />
     <!--<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />-->
-    <ProjectReference Include="..\Senparc.Xncf.AgentsManager\Senparc.Xncf.AgentsManager.csproj" />
   </ItemGroup>
   <ItemGroup />
 </Project>

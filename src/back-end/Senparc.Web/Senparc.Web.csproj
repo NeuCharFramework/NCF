@@ -16,6 +16,7 @@
 
 
 	<ItemGroup>
+		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.1.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<!--<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
 		<PackageReference Include="Dapr.Client" Version="1.12.0" />-->
@@ -44,6 +45,5 @@
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
-		<ProjectReference Include="..\Senparc.Xncf.AgentsManager\Senparc.Xncf.AgentsManager.csproj" />
 	</ItemGroup>
 </Project>
