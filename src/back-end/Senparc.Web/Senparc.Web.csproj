@@ -16,7 +16,7 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.1.1.18" />
+		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.1.1.22" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<!--<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
 		<PackageReference Include="Dapr.Client" Version="1.12.0" />-->
@@ -27,7 +27,7 @@
 		<PackageReference Include="Senparc.Ncf.Database.Sqlite" Version="0.15.2-preview1" />
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.15.2-preview1" />
 		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.5.3.6-preview1" />
-		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.6.5.3-preview1" />
+		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.6.5.5-preview1" />
 		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.6.2-preview1" />
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.19.2-preview1" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.7.2-preview1" />
