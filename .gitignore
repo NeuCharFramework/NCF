@@ -65,3 +65,4 @@ App_Data/SenparcTraceLog
 Thumbs.db
 /tools/AutoUpgrade/src/BuildOutput/net8.0/AutoUpgrade.pdb
 /tools/AutoUpgrade/src/BuildOutput
+/tools/Build
