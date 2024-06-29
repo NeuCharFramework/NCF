@@ -4,11 +4,11 @@
 # NCF - NeuCharFramework
 NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含了基础的缓存、数据库、模型、验证及配套管理后台，高度模块化，严格遵循 DDD 设计模式，具有高度的可扩展性。
 
-当前 NCF 核心版本：`0.14.4`
+当前 NCF 核心版本：`0.16.6`
 
-当前 NCF 模板版本：`0.3.1-beta3`
+当前 NCF 模板版本：`0.9.6`
 
-[![Build Status](https://mysenparc.visualstudio.com/NeuCharFramework/_apis/build/status/NeuCharFramework.NCF?branchName=master)](https://mysenparc.visualstudio.com/NeuCharFramework/_build/latest?definitionId=50&branchName=master)
+[![Build Status](https://mysenparc.visualstudio.com/NCF%20and%20Senparc.AI%20Cummunity%20Projects/_apis/build/status%2FNeuCharFramework.NCF?branchName=master)](https://mysenparc.visualstudio.com/NCF%20and%20Senparc.AI%20Cummunity%20Projects/_build/latest?definitionId=65&branchName=master)
 
 > **Notice**<br>
 > 1. NCF 由盛派（Senparc）团队经过多年优化迭代的自用系统底层框架 SenparcCore 升级而来，经历了 .NET 3.5/4.5 众多系统的实战检验，并最终移植到 .NET Core（同时支持 .NET 6 / .NET 8），目前已在众多系统中稳定运行。感谢大家一直以来的支持！<br>
