@@ -66,3 +66,5 @@ Thumbs.db
 /tools/AutoUpgrade/src/BuildOutput/net8.0/AutoUpgrade.pdb
 /tools/AutoUpgrade/src/BuildOutput
 /tools/Build
+/tools/NcfTemplateBuild/nuget_key.txt
+/tools/NcfTemplateBuild/nuget.exe
