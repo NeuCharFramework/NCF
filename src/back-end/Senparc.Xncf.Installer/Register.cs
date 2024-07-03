@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 namespace Senparc.Xncf.Installer
 {
     [XncfRegister]
-    public partial class Register : XncfRegisterBase, IXncfRegister, IAreaRegister, IXncfDatabase
+    public partial class Register : XncfRegisterBase, IXncfRegister, IAreaRegister/*, IXncfDatabase*/
     {
         #region IXncfRegister 接口
 
@@ -67,16 +67,16 @@ namespace Senparc.Xncf.Installer
             return base.UseXncfModule(app, registerService);
         }
 
-        #region Database
+        //#region Database
 
-        public void OnModelCreating(ModelBuilder modelBuilder)
-        {
-        }
+        //public void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //}
 
-        public void AddXncfDatabaseModule(IServiceCollection services)
-        {
-        }
+        //public void AddXncfDatabaseModule(IServiceCollection services)
+        //{
+        //}
 
-        #endregion
+        //#endregion
     }
 }

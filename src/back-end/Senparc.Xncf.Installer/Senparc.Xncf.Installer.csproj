@@ -61,6 +61,13 @@
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Include="wwwroot\**\*" />
+		<Compile Remove="Domain\Models\DatabaseModel\InstallerSenparcEntities.cs" />
+		<Compile Remove="Domain\Models\MultipleDatabase\InstallerSenparcEntities_Dm.cs" />
+		<Compile Remove="Domain\Models\MultipleDatabase\InstallerSenparcEntities_MySql.cs" />
+		<Compile Remove="Domain\Models\MultipleDatabase\InstallerSenparcEntities_PostgreSQL.cs" />
+		<Compile Remove="Domain\Models\MultipleDatabase\InstallerSenparcEntities_SQLite.cs" />
+		<Compile Remove="Domain\Models\MultipleDatabase\InstallerSenparcEntities_SqlServer.cs" />
+		<Compile Remove="Domain\Models\MultipleDatabase\SenparcDbContextFactoryConfig.cs" />
 		<!--<Compile Remove="Domain\Dto\**" />
 		<Compile Remove="Domain\Models\DatabaseModel\Mapping\**" />
 		<Content Remove="Domain\Dto\**" />
@@ -91,5 +98,9 @@
 	  <EmbeddedResource Update="wwwroot\js\Installer\Pages\index.js">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Domain\Models\DatabaseModel\" />
+	  <Folder Include="Domain\Models\MultipleDatabase\" />
 	</ItemGroup>
 </Project>
