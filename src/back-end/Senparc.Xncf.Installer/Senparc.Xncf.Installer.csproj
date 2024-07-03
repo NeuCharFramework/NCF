@@ -61,14 +61,14 @@
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Include="wwwroot\**\*" />
-		<Compile Remove="Domain\Dto\**" />
+		<!--<Compile Remove="Domain\Dto\**" />
 		<Compile Remove="Domain\Models\DatabaseModel\Mapping\**" />
 		<Content Remove="Domain\Dto\**" />
 		<Content Remove="Domain\Models\DatabaseModel\Mapping\**" />
 		<EmbeddedResource Remove="Domain\Dto\**" />
 		<EmbeddedResource Remove="Domain\Models\DatabaseModel\Mapping\**" />
 		<None Remove="Domain\Dto\**" />
-		<None Remove="Domain\Models\DatabaseModel\Mapping\**" />
+		<None Remove="Domain\Models\DatabaseModel\Mapping\**" />-->
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0" />
 	</ItemGroup>
 	<ItemGroup>
