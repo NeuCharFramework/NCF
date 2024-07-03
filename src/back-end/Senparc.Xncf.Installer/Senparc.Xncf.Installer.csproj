@@ -56,19 +56,19 @@
 		<None Include="App_Data\SenparcTraceLog\*" />
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Remove="Domain\Models\DatabaseModel\InstallerSenparcEntities.cs" />
-		<Compile Remove="Domain\Models\MultipleDatabase\InstallerSenparcEntities_MySql.cs" />
-		<Compile Remove="Domain\Models\MultipleDatabase\InstallerSenparcEntities_PostgreSQL.cs" />
-		<Compile Remove="Domain\Models\MultipleDatabase\InstallerSenparcEntities_SQLite.cs" />
-		<Compile Remove="Domain\Models\MultipleDatabase\InstallerSenparcEntities_SqlServer.cs" />
-		<Compile Remove="Domain\Models\MultipleDatabase\SenparcDbContextFactoryConfig.cs" />
-	</ItemGroup>
-	<ItemGroup>
 	  <Content Remove="appsettings.json" />
 	  <Content Remove="App_Data\Database\SenparcConfig.config" />
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Include="wwwroot\**\*" />
+		<Compile Remove="Domain\Dto\**" />
+		<Compile Remove="Domain\Models\DatabaseModel\Mapping\**" />
+		<Content Remove="Domain\Dto\**" />
+		<Content Remove="Domain\Models\DatabaseModel\Mapping\**" />
+		<EmbeddedResource Remove="Domain\Dto\**" />
+		<EmbeddedResource Remove="Domain\Models\DatabaseModel\Mapping\**" />
+		<None Remove="Domain\Dto\**" />
+		<None Remove="Domain\Models\DatabaseModel\Mapping\**" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0" />
 	</ItemGroup>
 	<ItemGroup>
@@ -80,11 +80,6 @@
 		</PackageReference>
 		<!-- 为解决 VS 2019 v16.8 的一个bug，需要添加下方引用 --><!--
 		<PackageReference Include="Microsoft.NET.Sdk.Razor" Version="3.1.10" />-->
-	</ItemGroup>
-	<ItemGroup>
-		<Folder Include="Domain\Dto\" />
-		<Folder Include="Domain\Models\DatabaseModel\Mapping\" />
-		<Folder Include="Domain\Models\MultipleDatabase\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <None Include="App_Data\Database\SenparcConfig.config" />
