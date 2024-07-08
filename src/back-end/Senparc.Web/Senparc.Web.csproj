@@ -28,7 +28,7 @@
 		<PackageReference Include="Senparc.Ncf.Database.Sqlite" Version="0.16.1-preview1" />
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.16.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.6.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.7.1-preview1" />
+		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.7.1-preview2" />
 		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.7.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.20.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.8.1-preview1" />
@@ -38,7 +38,7 @@
 		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.8.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.9.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.17.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.26.1-beta1" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.26.1-beta2" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.9.1-preview1" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.17.1-preview1" />
 	</ItemGroup>
