@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Senparc.Areas.Admin.ACL;
 using Senparc.Areas.Admin.ACL.Repository;
 using Senparc.Areas.Admin.Domain.Dto;
 //using Senparc.Areas.Admin.Authorization;
@@ -130,6 +131,8 @@ namespace Senparc.Areas.Admin
             });
 
             AddJwtAuthentication(services, configuration);
+
+            services.AddScoped<IAdminUserInfoRepository, AdminUserInfoRepository>();
 
             return base.AddXncfModule(services, configuration, env);
         }
