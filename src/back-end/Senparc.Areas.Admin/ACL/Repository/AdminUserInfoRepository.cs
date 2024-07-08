@@ -10,6 +10,8 @@ namespace Senparc.Areas.Admin.ACL
 
     public class AdminUserInfoRepository : ClientRepositoryBase<AdminUserInfo>, IAdminUserInfoRepository
     {
+        private AdminUserInfoRepository() : base(null) { }
+
         public AdminUserInfoRepository(INcfDbData ncfDbData) : base(ncfDbData)
         {
 

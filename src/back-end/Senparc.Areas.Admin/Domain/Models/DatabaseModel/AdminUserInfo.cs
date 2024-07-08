@@ -26,6 +26,9 @@ namespace Senparc.Areas.Admin.Domain.Models
         public string ThisLoginIp { get; private set; }
         public DateTime LastLoginTime { get; private set; }
         public string LastLoginIp { get; private set; }
+        public bool IsLocked { get; private set; }
+
+        //public bool? IsLocked { get; set; }
 
         /// <summary>
         /// 获取加盐后的 MD5 密码
@@ -173,6 +176,11 @@ namespace Senparc.Areas.Admin.Domain.Models
             Note = objDto.Note;
 
             base.SetUpdateTime();
+        }
+
+        public bool CheckIsLocked()
+        {
+            return IsLocked == true;
         }
     }
 }

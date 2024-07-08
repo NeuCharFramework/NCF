@@ -103,7 +103,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 return Ok(new { loginInDto.Name, loginInDto.Password });
             }
 
-            var userInfo = await _userInfoService.GetUserInfo(loginInDto.Name);
+            var userInfo = await _userInfoService.GetUserInfoAsync(loginInDto.Name);
             if (userInfo == null)
             {
                 //errorMsg = "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º101¡£";

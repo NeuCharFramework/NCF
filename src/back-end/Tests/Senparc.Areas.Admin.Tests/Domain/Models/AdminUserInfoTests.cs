@@ -38,5 +38,18 @@ namespace Senparc.Areas.Admin.Domain.Models.Tests
             Console.WriteLine(result);
             Assert.AreEqual("A1BC21E701CF0C70995D3B5360F581D0", result);
         }
+
+        [TestMethod]
+        public void IsLockedTest()
+        {
+            var userName = "JeffreySU";
+            var pwd = "JeffreySu@Pwd";
+            var salt = "SenparcSALTmustGreaterThan16digit";
+            var isLocked = true;
+            var adminUserInfo = new AdminUserInfo(ref userName, ref pwd, "Jeffrey", "4000318816", "TestAccount");
+
+            var result = adminUserInfo.CheckIsLocked();
+            Assert.AreEqual(false,result);
+        }
     }
 }

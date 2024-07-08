@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Enums;
+using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.Installer.Domain.Dto;
 using Senparc.Xncf.Installer.Domain.Services;
@@ -17,7 +19,7 @@ using System.Threading.Tasks;
 namespace Senparc.Xncf.Installer
 {
     [XncfRegister]
-    public partial class Register : XncfRegisterBase, IXncfRegister, IAreaRegister
+    public partial class Register : XncfRegisterBase, IXncfRegister, IAreaRegister/*, IXncfDatabase*/
     {
         #region IXncfRegister 接口
 
@@ -32,6 +34,10 @@ namespace Senparc.Xncf.Installer
         public override string Icon => "fa fa-download";
 
         public override string Description => "NCF 初始化安装模块，安装完成后可卸载或移除";
+
+        public string DatabaseUniquePrefix => throw new NotImplementedException();
+
+        public Type TryGetXncfDatabaseDbContextType => throw new NotImplementedException();
 
         public override async Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
         {
@@ -60,5 +66,17 @@ namespace Senparc.Xncf.Installer
 
             return base.UseXncfModule(app, registerService);
         }
+
+        //#region Database
+
+        //public void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //}
+
+        //public void AddXncfDatabaseModule(IServiceCollection services)
+        //{
+        //}
+
+        //#endregion
     }
 }

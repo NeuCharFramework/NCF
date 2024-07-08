@@ -24,7 +24,7 @@ namespace Senparc.Areas.Admin.Domain
     {
 
         private readonly Lazy<IHttpContextAccessor> _contextAccessor;
-        public AdminUserInfoService(AdminUserInfoRepository repository, Lazy<IHttpContextAccessor> httpContextAccessor, IServiceProvider serviceProvider)
+        public AdminUserInfoService(IAdminUserInfoRepository repository, Lazy<IHttpContextAccessor> httpContextAccessor, IServiceProvider serviceProvider)
             : base(repository, serviceProvider)
         {
             _contextAccessor = httpContextAccessor;
@@ -48,10 +48,9 @@ namespace Senparc.Areas.Admin.Domain
         ////TODO：放到 OHS 的 Service
         ////[ApiBind]
         ////[Core.BackendJwtAuthorize]
-        public async Task<AdminUserInfo> GetUserInfo(string userName)
+        public async Task<AdminUserInfo> GetUserInfoAsync(string userName)
         {
-            await Task.CompletedTask;
-            var obj = GetObject(z => z.UserName.Equals(userName.Trim()));
+            var obj = await base.GetObjectAsync(z => z.UserName.Equals(userName.Trim()));
             return obj;
         }
 
