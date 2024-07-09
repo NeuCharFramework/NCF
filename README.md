@@ -4,9 +4,10 @@
 # NCF - NeuCharFramework
 NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含了基础的缓存、数据库、模型、验证及配套管理后台，高度模块化，严格遵循 DDD 设计模式，具有高度的可扩展性。
 
-当前 NCF 核心版本：`0.16.6`
+NCF Web 项目模板：[![Senparc.NCF.Template](https://img.shields.io/nuget/vpre/Senparc.NCF.Template?label=Senparc.NCF.Template)](https://www.nuget.org/packages/Senparc.NCF.Template/)
 
-当前 NCF 模板版本：`0.9.6`
+XNCF 模块模板：[![Senparc.Xncf.XncfBuilder.Template](https://img.shields.io/nuget/vpre/Senparc.Xncf.XncfBuilder.Template?label=Senparc.Xncf.XncfBuilder.Template)](https://www.nuget.org/packages/Senparc.Xncf.XncfBuilder.Template/)
+
 
 [![Build Status](https://mysenparc.visualstudio.com/NCF%20and%20Senparc.AI%20Cummunity%20Projects/_apis/build/status%2FNeuCharFramework.NCF?branchName=master)](https://mysenparc.visualstudio.com/NCF%20and%20Senparc.AI%20Cummunity%20Projects/_build/latest?definitionId=65&branchName=master)
 
@@ -55,20 +56,19 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 
 下载或同步本项目代码到本地后，打开 `/src/NCF.sln` 解决方案文件，即可看到 NCF 完整的模板项目：
 
-<img src="https://gitee.com/NeuCharFramework/NcfDocs/raw/master/cn/docs/doc/start/start-develop/images/run-ncf-01.png" />
-
+![run-ncf-01](https://github.com/NeuCharFramework/NCF/assets/2281927/3a150daf-d2a2-438d-a131-6ed98097bc8c)
 
 ### 第二步：确认 Senparc.Web 为启动项目
 
 `Senparc.Web` 项目是用于启动 Web 站点的项目，确认已经为启动项目（加粗），如果没有，则点击右键，选择【设为启动项目】。
 
-<img src="https://gitee.com/NeuCharFramework/NcfDocs/raw/master/cn/docs/doc/start/start-develop/images/run-ncf-02.png" />
+![run-ncf-02](https://github.com/NeuCharFramework/NCF/assets/2281927/a60ffe04-cdad-470f-96bf-732bb410a2fb)
 
 ### 第三步：运行
 
 点击顶部菜单【编译】>【开始执行（不调试）】，或快捷键 <kbd>Ctrl/Command</kbd> + <kbd>F5</kbd>
 
-> 注意：默认运行的数据库为 SQL Server，如需更换其他数据库，请查看《使用多数据库》。
+> 注意：为方便初次运行，默认运行的数据库为 SQLite，如需更换其他数据库，请修改 `Senparc.Web/appsettings.json` 文件中的 `DatabaseType` 值，如 `SqlServer`。
 
 ### 完成启动
 
@@ -76,23 +76,32 @@ NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含�
 
 ## 首次运行
 
+#### 自动安装
+
 首次运行项目时，系统会对数据库等“基础设施”进行自动安装：
 
 > 注意：默认运行的数据库为 SQL Server，如需更换其他数据库，请查看《使用多数据库》。
 
-<img src="https://gitee.com/NeuCharFramework/NcfDocs/raw/master/cn/docs/doc/start/start-develop/images/install-01.png" />
+<img width="926" alt="install-01" src="https://github.com/NeuCharFramework/NCF/assets/2281927/81e1160c-0171-420c-9457-d5eeffda701d">
 
 点击【立即安装】按钮：
-<img src="https://gitee.com/NeuCharFramework/NcfDocs/raw/master/cn/docs/doc/start/start-develop/images/install-02.png" />
+<img width="199" alt="install-02-2" src="https://github.com/NeuCharFramework/NCF/assets/2281927/bb55e18c-76f3-4dc1-ac04-d295960fc541">
+
+#### 高级选项
+> 提示：您也可以点击【高级选项】按钮，对数据库、系统名称、默认管理员登录名等进行自定义：<br>
+> <img width="827" alt="install-04" src="https://github.com/NeuCharFramework/NCF/assets/2281927/e9763b7c-1a0a-49c7-aa1b-161b3932d15e">
 
 
+#### 安装成功
 阅读提示并点击确认，随后，即可看到安装成功的界面：
 
-<img src="https://gitee.com/NeuCharFramework/NcfDocs/raw/master/cn/docs/doc/start/start-develop/images/install-03.png" />
+![install-03](https://github.com/NeuCharFramework/NCF/assets/2281927/66270938-9248-4808-bcca-d115d387658b)
 
-登录后即可进入管理员后台
+#### 登录后台
 
-<img src="https://gitee.com/NeuCharFramework/NcfDocs/raw/master/cn/docs/doc/start/start-develop/images/admin-background-01-homepage.png" />
+登录后即可进入管理员后台：
+
+![admin-background-01-homepage](https://github.com/NeuCharFramework/NCF/assets/2281927/a72e9e6a-d038-4b8b-bdfd-5c0bb484c49e)
 
 
 ## 待办事项：
