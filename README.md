@@ -20,6 +20,8 @@ XNCF 模块模板：[![Senparc.Xncf.XncfBuilder.Template](https://img.shields.io
 
 > 当前快速更新分支：[Developer](https://github.com/NeuCharFramework/NCF/tree/Developer)
 
+> 已支持数据库：SQLite、MySQL、SQL Server、PostgreSQL、Oracle、DM（达梦），已提供 EFCore 扩展支持，可自行添加更多数据库，只需按照规则添加 1 个文件即可。
+
 > 我们欢迎第三方开源组件提供自己的解决方案，我们将会测试并集成到 NCF 中。
 
 
@@ -44,7 +46,7 @@ XNCF 模块模板：[![Senparc.Xncf.XncfBuilder.Template](https://img.shields.io
 
 - 如需查看或修改基础包源代码，请看此项目：https://github.com/NeuCharFramework/NcfPackageSources
 
-> - NCF 默认支持 SQLite、MySQL、SQL Server、PostgreSQL、Oracle、DM（达梦） 等数据库，也可自行实现更多数据库类型。<br>
+> - NCF 默认支持 SQLite、MySQL、SQL Server、PostgreSQL、Oracle、DM（达梦）等数据库，也可自行实现更多数据库类型。<br>
 > - 如使用 SQL Server，最低支持版本为 2012
 
 
