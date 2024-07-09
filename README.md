@@ -40,13 +40,11 @@ XNCF 模块模板：[![Senparc.Xncf.XncfBuilder.Template](https://img.shields.io
 
 - Visual Studio 2019+（建议 2022）或 VS Code 最新版本
 
-> 友情提示：2020年11月发布的 Visual Stuido 2019 v16.8 存在部分bug，暂时不建议升级到此版本。
-
-- [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1)+ 或 [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0) 
+- [.NET 8](https://dotnet.microsoft.com/download/dotnet/8.0) 
 
 - 如需查看或修改基础包源代码，请看此项目：https://github.com/NeuCharFramework/NcfPackageSources
 
-> - NCF 默认支持 SQLite、MySQL、SQL Server 等数据库，也可自行实现更多数据库类型。<br>
+> - NCF 默认支持 SQLite、MySQL、SQL Server、PostgreSQL、Oracle、DM（达梦） 等数据库，也可自行实现更多数据库类型。<br>
 > - 如使用 SQL Server，最低支持版本为 2012
 
 
