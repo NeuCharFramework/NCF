@@ -14,6 +14,9 @@ namespace Senparc.Areas.Admin.Tests
         protected Mock<IAdminUserInfoRepository> mockAdminUserInfoRepository;
         protected List<AdminUserInfo> _adminUserInfoList = new List<AdminUserInfo>();
 
+        /// <summary>
+        /// 创建种子数据
+        /// </summary>
         protected void CreateSeedData()
         {
             string[] userNames = new string[] { "Admin", "User1", "User2", "User3" };
@@ -35,8 +38,9 @@ namespace Senparc.Areas.Admin.Tests
 
         public TestBase(Action<IServiceCollection> servicesRegister = null, Action<Dictionary<Type, List<object>>> initSeedData = null) : base(servicesRegister, initSeedData)
         {
-            CreateSeedData();
+            CreateSeedData();//创建种子数据
 
+            //由于 IAdminUserInfoRepository 继承了 IClientRepositoryBase<AdminUserInfo>，需要做一个转换获取
             var adminUserInfoRepositoryBase = base.GetRespository<AdminUserInfo>();
             mockAdminUserInfoRepository = base.CreateMockForExtendedInterface<IAdminUserInfoRepository, IClientRepositoryBase<AdminUserInfo>>(adminUserInfoRepositoryBase.MockRepository);
         }
