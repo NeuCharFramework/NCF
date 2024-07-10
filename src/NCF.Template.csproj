@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.9.10</PackageVersion>
+		<PackageVersion>0.9.11</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -28,10 +28,11 @@
 			v0.8.2 升级基础库，完成 AI 等项目升级
 			v0.9.0 升级基础库，清理模板
 			v0.9.1 更新 PromptRange，可导出和导入最新格式 Prompt 文件
-		    v0.9.2 提供全数据库 Prompt 自动管理
+			v0.9.2 提供全数据库 Prompt 自动管理
 			v0.9.4 支持全站数据库 0 代码运行 AI 代码生成。自动调用系统初始化 Prompt
 			v0.9.5 支持 AgentsManager 模块，升级 PromptRange
 			v0.9.6 升级基础库
+			v0.9.11 更新基础库，升级 ServiceBase，提供回调方法
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
