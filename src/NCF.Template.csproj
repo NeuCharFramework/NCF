@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.9.11</PackageVersion>
+		<PackageVersion>0.9.13</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -33,6 +33,8 @@
 			v0.9.5 支持 AgentsManager 模块，升级 PromptRange
 			v0.9.6 升级基础库
 			v0.9.11 更新基础库，升级 ServiceBase，提供回调方法
+			v0.9.12 添加更多单元测试演示
+			v0.9.13 更新 appsettings.json
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
