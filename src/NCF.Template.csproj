@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.9.13</PackageVersion>
+		<PackageVersion>0.9.14</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -35,6 +35,7 @@
 			v0.9.11 更新基础库，升级 ServiceBase，提供回调方法
 			v0.9.12 添加更多单元测试演示
 			v0.9.13 更新 appsettings.json
+			v0.9.14 更新 PromptRange
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
