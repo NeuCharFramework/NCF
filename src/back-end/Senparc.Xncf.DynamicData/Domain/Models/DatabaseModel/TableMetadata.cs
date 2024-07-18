@@ -28,13 +28,13 @@ namespace Senparc.Xncf.DynamicData
         /// <summary>  
         /// 关联的列元数据集合。  
         /// </summary>  
-        [InverseProperty(nameof(ColumnMetadata.TableMetadata))]
+        //[InverseProperty(nameof(ColumnMetadata.TableMetadata))]
         public ICollection<ColumnMetadata> ColumnMetadatas { get; set; }
 
         /// <summary>  
         /// 关联的数据集合。  
         /// </summary>  
-        [InverseProperty(nameof(TableData.TableMetadata))]
+        //[InverseProperty(nameof(TableData.TableMetadata))]
         public ICollection<TableData> TableDatas { get; set; }
     }
 }

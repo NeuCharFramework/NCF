@@ -30,10 +30,10 @@
     <PackageReference Include="Senparc.CO2NET.WebApi" Version="1.5.2.1" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.15.4-preview1" />
+    <PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.18.3-preview1" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.19.3-preview1+4fb6853b62a340dc6ce06424a45bb2d19c2ef8d3" />
+    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.19.3-preview1.1" />
     <PackageReference Include="Senparc.Ncf.AreaBase" Version="0.17.3-preview1+4fb6853b62a340dc6ce06424a45bb2d19c2ef8d3" />
     <None Include="App_Data\SenparcTraceLog\*" />
   </ItemGroup>

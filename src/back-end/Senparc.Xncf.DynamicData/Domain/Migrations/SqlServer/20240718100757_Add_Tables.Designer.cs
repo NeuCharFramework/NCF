@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Senparc.Xncf.DynamicData.Models;
 
@@ -11,9 +12,11 @@ using Senparc.Xncf.DynamicData.Models;
 namespace Senparc.Xncf.DynamicData.Domain.Migrations.SqlServer
 {
     [DbContext(typeof(DynamicDataSenparcEntities_SqlServer))]
-    partial class DynamicDataSenparcEntities_SqlServerModelSnapshot : ModelSnapshot
+    [Migration("20240718100757_Add_Tables")]
+    partial class Add_Tables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
