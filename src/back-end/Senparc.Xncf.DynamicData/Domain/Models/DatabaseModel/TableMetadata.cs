@@ -18,12 +18,12 @@ namespace Senparc.Xncf.DynamicData
         /// </summary>  
         [Required]
         [MaxLength(255)]
-        public string TableName { get; set; }
+        public string TableName { get; private set; }
 
         /// <summary>  
         /// 表格描述。  
         /// </summary>  
-        public string Description { get; set; }
+        public string Description { get; private set; }
 
         /// <summary>  
         /// 关联的列元数据集合。  
@@ -36,5 +36,14 @@ namespace Senparc.Xncf.DynamicData
         /// </summary>  
         //[InverseProperty(nameof(TableData.TableMetadata))]
         public ICollection<TableData> TableDatas { get; set; }
+
+        private TableMetadata() { }
+
+        public TableMetadata(string tableName, string description)
+        {
+            TableName = tableName;
+            Description = description;
+        }
+
     }
 }

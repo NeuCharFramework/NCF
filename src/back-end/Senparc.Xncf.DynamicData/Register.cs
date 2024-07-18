@@ -26,7 +26,7 @@ namespace Senparc.Xncf.DynamicData
 
         public override string Uid => "9448D9BA-5DF5-4AF1-8419-1BAB85BE589E";//必须确保全局唯一，生成后必须固定，已自动生成，也可自行修改
 
-        public override string Version => "0.2.12";//必须填写版本号
+        public override string Version => "0.1.0";//必须填写版本号
 
         public override string MenuName => "动态数据基础模块";
 
@@ -87,8 +87,6 @@ namespace Senparc.Xncf.DynamicData
         }
     }
 }
-
-
 
 
 
