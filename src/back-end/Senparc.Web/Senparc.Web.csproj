@@ -46,5 +46,6 @@
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
+		<ProjectReference Include="..\Senparc.Xncf.DynamicData\Senparc.Xncf.DynamicData.csproj" />
 	</ItemGroup>
 </Project>

@@ -1,0 +1,38 @@
+﻿using Senparc.Ncf.Core.Models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Senparc.Xncf.DynamicData
+{
+    /// <summary>  
+    /// TableMetadata 实体类，用于存储表格的基本信息。  
+    /// </summary>  
+    [Table(Register.DATABASE_PREFIX + nameof(TableMetadata))]
+    [Serializable]
+    public class TableMetadata : EntityBase<int>
+    {
+        /// <summary>  
+        /// 表格名称。  
+        /// </summary>  
+        [Required]
+        [MaxLength(255)]
+        public string TableName { get; set; }
+
+        /// <summary>  
+        /// 表格描述。  
+        /// </summary>  
+        public string Description { get; set; }
+
+        /// <summary>  
+        /// 关联的列元数据集合。  
+        /// </summary>  
+        public ICollection<ColumnMetadata> ColumnMetadata { get; set; }
+
+        /// <summary>  
+        /// 关联的数据集合。  
+        /// </summary>  
+        public ICollection<TableData> TableData { get; set; }
+    }
+}

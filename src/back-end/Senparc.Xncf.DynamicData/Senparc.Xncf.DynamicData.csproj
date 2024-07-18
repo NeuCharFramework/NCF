@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Version>0.1.0</Version>
+    <AssemblyName>Senparc.Xncf.DynamicData</AssemblyName>
+    <RootNamespace>Senparc.Xncf.DynamicData</RootNamespace>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+    <Description>动态数据基础模块，用于创建和管理动态数据</Description>
+    <Copyright>Senparc</Copyright>
+    <PackageTags>Senparc,NeuCharFramework,NCF,Senparc.Xncf.DynamicData</PackageTags>
+    <Authors>Senparc</Authors>
+    <Owners>Senparc</Owners>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <Title>动态数据基础模块</Title>
+    <!--<ProjectUrl> https://github.com/NeuCharFramework/NCF</ProjectUrl>
+    <PackageProjectUrl>https://github.com/NeuCharFramework/NcfPackageSources</PackageProjectUrl>-->
+    <PackageIcon>icon.jpg</PackageIcon>
+    <PackageReleaseNotes>
+			v0.1.0 创世
+</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/NeuCharFramework/NcfPackageSources</RepositoryUrl>
+    <Configurations>Debug;Release;Test;TemplateRelease</Configurations>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\..\..\BuildOutPut</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Senparc.CO2NET.WebApi" Version="1.5.2.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.15.4-preview1" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Senparc.Ncf.XncfBase" Version="0.19.3-preview1+4fb6853b62a340dc6ce06424a45bb2d19c2ef8d3" />
+    <PackageReference Include="Senparc.Ncf.AreaBase" Version="0.17.3-preview1+4fb6853b62a340dc6ce06424a45bb2d19c2ef8d3" />
+    <None Include="App_Data\SenparcTraceLog\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\icon.jpg" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="App_Data\Database\SenparcConfig.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App_Data\Database\SenparcConfig.config" />
+  </ItemGroup>
+</Project>
