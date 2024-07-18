@@ -16,13 +16,13 @@ namespace Senparc.Xncf.DynamicData
         /// 关联的表格ID。  
         /// </summary>  
         [ForeignKey(nameof(TableMetadata))]
-        public int TableId { get; set; }
+        public int TableMetadataId { get; set; }
 
         /// <summary>  
         /// 关联的列ID。  
         /// </summary>  
         [ForeignKey(nameof(ColumnMetadata))]
-        public int ColumnId { get; set; }
+        public int ColumnMetadataId { get; set; }
 
         /// <summary>  
         /// 单元格的值。  
@@ -32,11 +32,14 @@ namespace Senparc.Xncf.DynamicData
         /// <summary>  
         /// 关联的表格元数据。  
         /// </summary>  
+       
+        [InverseProperty(nameof(TableMetadata.TableDatas))]
         public TableMetadata TableMetadata { get; set; }
 
         /// <summary>  
         /// 关联的列元数据。  
         /// </summary>  
+        [InverseProperty(nameof(ColumnMetadata.TableDatas))]
         public ColumnMetadata ColumnMetadata { get; set; }
     }
 }

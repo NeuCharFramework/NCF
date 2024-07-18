@@ -14,9 +14,9 @@ namespace Senparc.Xncf.DynamicData.Models
 
         public DbSet<Color> Colors { get; set; }
 
-        public DbSet<TableMetadata> TableMetadata { get; set; }
-        public DbSet<ColumnMetadata> ColumnMetadata { get; set; }
-        public DbSet<TableData> TableData { get; set; }
+        public DbSet<TableMetadata> TableMetadatas { get; set; }
+        public DbSet<ColumnMetadata> ColumnMetadatas { get; set; }
+        public DbSet<TableData> TableDatas { get; set; }
 
         //DOT REMOVE OR MODIFY THIS LINE 请勿移除或修改本行 - Entities Point
         //ex. public DbSet<Color> Colors { get; set; }

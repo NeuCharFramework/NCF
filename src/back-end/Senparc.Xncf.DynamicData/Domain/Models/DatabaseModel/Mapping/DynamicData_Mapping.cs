@@ -18,26 +18,26 @@ namespace Senparc.Xncf.DynamicData.Domain.Models.DatabaseModel.Mapping
         public override void Configure(EntityTypeBuilder<TableData> builder)
         {
             // 配置索引  
-            builder.HasIndex(td => td.TableId)
+            builder.HasIndex(td => td.TableMetadataId)
                    .HasDatabaseName("idx_table_id");
 
-            builder.HasIndex(td => td.ColumnId)
+            builder.HasIndex(td => td.ColumnMetadataId)
                    .HasDatabaseName("idx_column_id");
 
-            builder.HasIndex(td => new { td.TableId, td.ColumnId })
+            builder.HasIndex(td => new { td.TableMetadataId, td.ColumnMetadataId })
                    .HasDatabaseName("idx_table_column");
 
-            builder
-          .HasOne(td => td.TableMetadata)
-          .WithMany(tm => tm.TableData)
-          .HasForeignKey(td => td.TableId)
-          .OnDelete(DeleteBehavior.NoAction);  // Specify NO ACTION  
 
-            builder
-                .HasOne(td => td.ColumnMetadata)
-                .WithMany()
-                .HasForeignKey(td => td.ColumnId)
-                .OnDelete(DeleteBehavior.NoAction);  // Specify NO ACTION  
+            builder.HasOne(td => td.TableMetadata)
+                   .WithMany(tm => tm.TableDatas)
+                   .HasForeignKey(td => td.TableMetadataId)
+                   .OnDelete(DeleteBehavior.NoAction);  // Specify NO ACTION
+
+
+            builder.HasOne(td => td.ColumnMetadata)
+                   .WithMany(tm=>tm.TableDatas)
+                   .HasForeignKey(td => td.ColumnMetadataId)
+                   .OnDelete(DeleteBehavior.NoAction);  // Specify NO ACTION
 
         }
     }
@@ -47,12 +47,10 @@ namespace Senparc.Xncf.DynamicData.Domain.Models.DatabaseModel.Mapping
     {
         public override void Configure(EntityTypeBuilder<ColumnMetadata> builder)
         {
-
-            builder
-                .HasOne(cm => cm.TableMetadata)
-                .WithMany(tm => tm.ColumnMetadata)
-                .HasForeignKey(cm => cm.TableId)
-                .OnDelete(DeleteBehavior.NoAction);  // Specify NO ACTION  
+            builder.HasOne(cm => cm.TableMetadata)
+                   .WithMany(tm => tm.ColumnMetadatas)
+                   .HasForeignKey(cm => cm.TableMetadataId)
+                   .OnDelete(DeleteBehavior.NoAction);  // Specify NO ACTION  
         }
     }
 }

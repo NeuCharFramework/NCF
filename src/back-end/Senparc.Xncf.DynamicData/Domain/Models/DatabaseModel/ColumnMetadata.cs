@@ -1,5 +1,7 @@
-﻿using Senparc.Ncf.Core.Models;
+﻿using Microsoft.VisualBasic;
+using Senparc.Ncf.Core.Models;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,7 +18,7 @@ namespace Senparc.Xncf.DynamicData
         /// 关联的表格ID。  
         /// </summary>  
         [ForeignKey(nameof(TableMetadata))]
-        public int TableId { get; set; }
+        public int TableMetadataId { get; set; }
 
         /// <summary>  
         /// 列名称。  
@@ -46,6 +48,13 @@ namespace Senparc.Xncf.DynamicData
         /// <summary>  
         /// 关联的表格元数据。  
         /// </summary>  
+        [InverseProperty(nameof(TableMetadata.ColumnMetadatas))]
         public TableMetadata TableMetadata { get; set; }
+
+        /// <summary>  
+        /// 关联的表格元数据。  
+        /// </summary>  
+        [InverseProperty(nameof(TableData.ColumnMetadata))]
+        public ICollection<TableData> TableDatas { get; set; }
     }
 }
