@@ -33,7 +33,7 @@ namespace Senparc.Web.FirefoxDriverTest
         /// <summary>
         /// NCF项目地址
         /// </summary>
-        const string webSite = "https://localhost:44311/Admin/Login";
+        const string webSite = "https://localhost:5001/Admin/Login";
 
         [TestInitialize]
         public virtual void EdgeDriverInitialize()
@@ -84,8 +84,8 @@ namespace Senparc.Web.FirefoxDriverTest
         /// </summary>
         public void _verifyLogin()
         {
-            string userName = "SenparcCoreAdmin36";//登录名
-            string pwd = "123456";//登陆密码
+            string userName = "NCFAISys";//登录名
+            string pwd = "fa41658ca004419c";//登陆密码
             IWebElement loginInput = _driver.FindElementByCssSelector("div.el-form-item:nth-child(1) > div:nth-child(1) > div:nth-child(1) > input:nth-child(1)");//用户名输入框
             IWebElement pwdInput = _driver.FindElementByCssSelector("div.el-form-item:nth-child(2) > div:nth-child(1) > div:nth-child(1) > input:nth-child(1)");//密码输入框
             IWebElement loginBtn = _driver.FindElementByCssSelector(".el-button");//登录按钮
