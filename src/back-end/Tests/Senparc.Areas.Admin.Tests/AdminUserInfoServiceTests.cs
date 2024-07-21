@@ -45,12 +45,7 @@ namespace Senparc.Areas.Admin.Tests
 
         public AdminUserInfoServiceTests() : base(null, InitSeedData)
         {
-            //创建 Repository 基类的 Mock 对象
-            var mockBaseRepo = base.GetRespository<AdminUserInfo>().MockRepository;
-            //由于 AdminUserInfoService 创建了专门的接口，从基类自动映射相关扩展接口
-            var mockAdminUserInfoRepo = base.CreateMockForExtendedInterface<IAdminUserInfoRepository, IClientRepositoryBase<AdminUserInfo>>(mockBaseRepo);
-            //生成 AdminUserInfoService 类
-            adminUserInfoService = new AdminUserInfoService(mockAdminUserInfoRepo.Object, null, base._serviceProvider);
+            adminUserInfoService = base._serviceProvider.GetRequiredService<AdminUserInfoService>();
         }
 
         [TestMethod]
@@ -77,8 +72,9 @@ namespace Senparc.Areas.Admin.Tests
             var obj = await adminUserInfoService.GetUserInfoAsync("Admin-600");
             Assert.IsNotNull(obj);
 
-            var dataset = base.dataLists[typeof(AdminUserInfo)];
-            Assert.AreEqual(dataset.Skip(600).Take(1).First() as AdminUserInfo, obj);
+            var dataset = base.dataLists.GetDataList<AdminUserInfo>();
+            var data = dataset.Skip(600).Take(1).First();
+            Assert.AreEqual(data.UserName, obj.UserName);
         }
     }
 }

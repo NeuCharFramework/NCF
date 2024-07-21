@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.Areas.Admin.Domain.Models;
 using Senparc.Areas.Admin.Tests;
@@ -12,26 +13,28 @@ namespace Senparc.Areas.Admin.Domain.Tests
 
         public AdminUserInfoServiceTests()
         {
-           _adminUserInfoService = new AdminUserInfoService(mockAdminUserInfoRepository.Object, null, base._serviceProvider);
+            _adminUserInfoService = base._serviceProvider.GetRequiredService<AdminUserInfoService>();
         }
-
 
         [TestMethod()]
         public async Task GetUserInfoAsyncTest()
         {
             var userName = "Admin";
 
+            var dataList = base.dataLists.GetDataList<AdminUserInfo>();
+            var expected = dataList.FirstOrDefault(z => z.UserName == "Admin");
+
             var result = await _adminUserInfoService.GetUserInfoAsync(userName);
-            Assert.AreEqual(_adminUserInfoList[0], result);
+            Assert.AreEqual(expected.UserName, result.UserName);
 
             result = await _adminUserInfoService.GetUserInfoAsync(userName + "  ");
-            Assert.AreEqual(_adminUserInfoList[0], result);
+            Assert.AreEqual(expected.UserName, result.UserName);
 
             result = await _adminUserInfoService.GetUserInfoAsync(" " + userName);
-            Assert.AreEqual(_adminUserInfoList[0], result);
+            Assert.AreEqual(expected.UserName, result.UserName);
 
             result = await _adminUserInfoService.GetUserInfoAsync(" " + userName + "  ");
-            Assert.AreEqual(_adminUserInfoList[0], result);
+            Assert.AreEqual(expected.UserName, result.UserName);
 
             result = await _adminUserInfoService.GetUserInfoAsync("admin");
             Assert.IsNull(result);
