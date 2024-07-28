@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<!--<TargetFramework>net5.0</TargetFramework>-->
-		<Version>0.11.0</Version>
+		<Version>0.11.1</Version>
 		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
 		<TypeScriptToolsVersion>4.1</TypeScriptToolsVersion>
 		<UserSecretsId>d2144151-af7a-4d50-896d-4a306e594f7b</UserSecretsId>
@@ -17,30 +17,30 @@
 
 	<ItemGroup>
 		<PackageReference Include="DM.Microsoft.EntityFrameworkCore" Version="7.0.0.20986" />
-		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.4.1-preview1" />
+		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.4.1.3-preview1" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<!--<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
 		<PackageReference Include="Dapr.Client" Version="1.12.0" />-->
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0" />
 
-		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.3.3" />
-		<PackageReference Include="Senparc.CO2NET" Version="2.4.2" />
-		<PackageReference Include="Senparc.Ncf.Database.Sqlite" Version="0.18.1-preview1" />
-		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.18.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.8.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.9.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.9.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.22.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.Menu" Version="0.10.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.14.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.10.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.10.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.10.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.11.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.19.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.28.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.11.1-preview1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.19.1-preview1" />
+		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.4.0-beta1" />
+		<PackageReference Include="Senparc.CO2NET" Version="2.4.3" />
+		<PackageReference Include="Senparc.Ncf.Database.Sqlite" Version="0.18.1.2-preview1" />
+		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.18.1.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.8.1.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.9.1.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.9.1.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.23.0.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.Menu" Version="0.10.1.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.14.1.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.10.1.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.10.1.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.10.1.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.11.1.3-preview1" />
+		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.19.1.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.28.1.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.11.1.2-preview1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.19.1.2-preview1" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
