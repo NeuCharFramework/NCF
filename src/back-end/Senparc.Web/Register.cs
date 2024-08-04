@@ -134,9 +134,6 @@ namespace Senparc.Web
             Senparc.Ncf.Core.VersionManager.ShowSuccessTip($"\t\t启动工作准备就绪\r\n\t\t用时：{SystemTime.NowDiff(StartTime).TotalSeconds} s");
         }
 
-
-        private 
-
         /// <summary>
         /// 判断当前配置是否满足使用 Redis（根据是否已经修改了默认配置字符串判断）
         /// </summary>
