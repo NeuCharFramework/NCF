@@ -1,9 +1,4 @@
 ﻿using Senparc.Xncf.Tenant.Domain.DataBaseModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Senparc.Xncf.Installer.Domain.Dto
 {

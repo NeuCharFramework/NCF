@@ -14,6 +14,8 @@ using Senparc.Xncf.SystemManager.Domain.Service;
 using Senparc.Xncf.Tenant.Domain.Services;
 using Senparc.Xncf.XncfModuleManager.Domain.Services;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Senparc.Xncf.Installer.Domain.Services
@@ -163,7 +165,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
             try
             {
                 //开始安装模块（创建数据库相关表）
-            await register.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
+                await register.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
             }
             catch (Exception ex)
             {
@@ -171,7 +173,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
 
                 throw;
             }
-          
+
 
             XncfModule xncfModule = null;
 
@@ -192,7 +194,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
                         SenparcTrace.BaseExceptionLog(ex);
                         throw;
                     }
-                   
+
                 }
 
                 //启用模块
@@ -247,7 +249,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
             this._installOptionsService = installOptionsService;
         }
 
-        public GetDefaultInstallOptionsResponseDto GetDefaultInstallOptions()
+        public async Task<GetDefaultInstallOptionsResponseDto> GetDefaultInstallOptionsAsync()
         {
             var result = new GetDefaultInstallOptionsResponseDto();
 
@@ -256,6 +258,27 @@ namespace Senparc.Xncf.Installer.Domain.Services
             result.SystemName = _installOptionsService.GetDefaultSystemName();
             result.AdminUserName = _installOptionsService.GetDefaultAdminUserName();
 
+            //获取所有已安装的模块
+            //var oldXncfModules = await _xncfModuleService.GetObjectListAsync(0, 0, z => true, z => z.AddTime, Ncf.Core.Enums.OrderingType.Descending);
+            //获取未安装或版本已更新（不同）的模块
+            var newXncfRegisters = XncfRegisterManager.RegisterList.ToList();
+            //_xncfModuleService.GetUnInstallXncfModule(oldXncfModules);
+            var needXncfRegisters = new List<XncfRegister>();
+            foreach (var item in newXncfRegisters)
+            {
+                var needXncfRegister = new XncfRegister()
+                {
+                    IgnoreInstall = item.IgnoreInstall,
+                    Uid = item.Uid,
+                    Icon = item.Icon,
+                    MenuName = item.MenuName,
+                    Name = item.Name,
+                    Version = item.Version,
+                    Description = item.Description
+                };
+                needXncfRegisters.Add(needXncfRegister);
+            }
+            result.IXncfRegisterModelList = needXncfRegisters;
             return result;
         }
 
