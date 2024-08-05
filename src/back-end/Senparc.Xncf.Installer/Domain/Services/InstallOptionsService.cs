@@ -1,21 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Senparc.Areas.Admin.Domain;
-using Senparc.CO2NET;
-using Senparc.CO2NET.Cache;
+﻿using Microsoft.Extensions.Options;
 using Senparc.Ncf.Core.Cache;
 using Senparc.Ncf.Core.Config;
-using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Utility;
 using Senparc.Ncf.Log;
+using Senparc.Ncf.XncfBase;
+using Senparc.Xncf.Installer.Domain.Dto;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
 
 namespace Senparc.Xncf.Installer.Domain.Services
 {
@@ -58,6 +52,30 @@ namespace Senparc.Xncf.Installer.Domain.Services
         {
             //string dbConfigName = SenparcDatabaseConnectionConfigs.GetFullDatabaseName(_senparcCoreSetting.DatabaseName);
             return SenparcDatabaseConnectionConfigs.ClientConnectionString;
+        }
+        /// <summary>
+        /// 读取模块名称
+        /// </summary>
+        /// <returns></returns>
+        public List<XncfRegisterDto> GetModules()
+        {
+            var newXncfRegisters = XncfRegisterManager.RegisterList.ToList();
+            var needXncfRegisters = new List<XncfRegisterDto>();
+            foreach (var item in newXncfRegisters)
+            {
+                var needXncfRegister = new XncfRegisterDto()
+                {
+                    IgnoreInstall = item.IgnoreInstall,
+                    Uid = item.Uid,
+                    Icon = item.Icon,
+                    MenuName = item.MenuName,
+                    Name = item.Name,
+                    Version = item.Version,
+                    Description = item.Description
+                };
+                needXncfRegisters.Add(needXncfRegister);
+            }
+            return needXncfRegisters;
         }
 
         /// <summary>

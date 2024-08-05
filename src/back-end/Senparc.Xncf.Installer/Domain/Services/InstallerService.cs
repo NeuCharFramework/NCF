@@ -14,6 +14,8 @@ using Senparc.Xncf.SystemManager.Domain.Service;
 using Senparc.Xncf.Tenant.Domain.Services;
 using Senparc.Xncf.XncfModuleManager.Domain.Services;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Senparc.Xncf.Installer.Domain.Services
@@ -163,7 +165,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
             try
             {
                 //开始安装模块（创建数据库相关表）
-            await register.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
+                await register.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
             }
             catch (Exception ex)
             {
@@ -171,7 +173,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
 
                 throw;
             }
-          
+
 
             XncfModule xncfModule = null;
 
@@ -192,7 +194,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
                         SenparcTrace.BaseExceptionLog(ex);
                         throw;
                     }
-                   
+
                 }
 
                 //启用模块
@@ -247,15 +249,15 @@ namespace Senparc.Xncf.Installer.Domain.Services
             this._installOptionsService = installOptionsService;
         }
 
-        public GetDefaultInstallOptionsResponseDto GetDefaultInstallOptions()
+        public async Task<GetDefaultInstallOptionsResponseDto> GetDefaultInstallOptionsAsync()
         {
             var result = new GetDefaultInstallOptionsResponseDto();
 
             //读取现有配置的默认值
             result.DbConnectionString = _installOptionsService.GetDbConnectionString();
             result.SystemName = _installOptionsService.GetDefaultSystemName();
-            result.AdminUserName = _installOptionsService.GetDefaultAdminUserName();
-
+            result.AdminUserName = _installOptionsService.GetDefaultAdminUserName();        
+            result.NeedModelList = _installOptionsService.GetModules();
             return result;
         }
 
