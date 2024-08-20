@@ -10,3 +10,19 @@ NCF.Template.csproj        | 模板项目文件，此文件用于项目维护团
 ## 分支说明
 
 当前最新代码请见分支：[Developer](https://github.com/NeuCharFramework/NCF/tree/Developer)。
+
+## 远程安装模板
+
+```bash
+X:\NCF\src\> dotnet new install Senparc.NCF.Template
+```
+
+## 本地安装模板
+
+1. 使用 Release 编译当前项目
+
+2. 使用命令行进入 BuildOutPut 文件夹，运行（以当前版本为 v0.12.0 为例）：
+
+```bash
+X:\NCF\src\BuildOutPut> dotnet new install .\Senparc.NCF.Template.0.12.0.nupkg
+```
