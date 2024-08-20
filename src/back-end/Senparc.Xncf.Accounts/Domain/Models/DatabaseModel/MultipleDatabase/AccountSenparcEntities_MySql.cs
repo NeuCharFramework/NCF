@@ -7,6 +7,7 @@ using Senparc.Ncf.XncfBase.Database;
 using System;
 using System.IO;
 using Senparc.Ncf.Core.Models;
+using Microsoft.AspNetCore.Builder;
 
 namespace Senparc.Xncf.Accounts.Models
 {
@@ -25,10 +26,10 @@ namespace Senparc.Xncf.Accounts.Models
     /// </summary>
     public class SenparcDbContextFactory_MySql : SenparcDesignTimeDbContextFactoryBase<AccountSenparcEntities_MySql, Register>
     {
-        protected override Action<IServiceCollection> ServicesAction => services =>
+        protected override Action<IApplicationBuilder> AppAction => app =>
         {
             //指定其他数据库
-            services.AddDatabase("Senparc.Ncf.Database.MySql", "Senparc.Ncf.Database.MySql", "MySqlDatabaseConfiguration");
+            app.UseNcfDatabase("Senparc.Ncf.Database.MySql", "Senparc.Ncf.Database.MySql", "MySqlDatabaseConfiguration");
         };
 
         public SenparcDbContextFactory_MySql() : base(SenparcDbContextFactoryConfig.RootDictionaryPath)

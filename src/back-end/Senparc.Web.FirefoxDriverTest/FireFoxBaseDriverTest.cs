@@ -18,7 +18,7 @@ namespace Senparc.Web.FirefoxDriverTest
         // please follow the instructions from https://github.com/mozilla/geckodriver/releases
         // to install Firefox WebDriver.
 
-        protected RemoteWebDriver _driver;
+        protected /*RemoteWebDriver*/ RemoteWebDriver _driver;
 
         /// <summary>
         /// ½ØÍ¼Â·¾¶
@@ -33,7 +33,7 @@ namespace Senparc.Web.FirefoxDriverTest
         /// <summary>
         /// NCFÏîÄ¿µØÖ·
         /// </summary>
-        const string webSite = "https://localhost:44311/Admin/Login";
+        const string webSite = "https://localhost:5001/Admin/Login";
 
         [TestInitialize]
         public virtual void EdgeDriverInitialize()
@@ -51,7 +51,7 @@ namespace Senparc.Web.FirefoxDriverTest
             {
                 System.IO.Directory.CreateDirectory(screenShotPath);
             }
-            _driver = new FirefoxDriver(options);
+            _driver = new RemoteWebDriver /*new FirefoxDriver*/(options);
             loadPage();
         }
 
@@ -84,8 +84,8 @@ namespace Senparc.Web.FirefoxDriverTest
         /// </summary>
         public void _verifyLogin()
         {
-            string userName = "SenparcCoreAdmin36";//µÇÂ¼Ãû
-            string pwd = "123456";//µÇÂ½ÃÜÂë
+            string userName = "NCFAISys";//µÇÂ¼Ãû
+            string pwd = "fa41658ca004419c";//µÇÂ½ÃÜÂë
             IWebElement loginInput = _driver.FindElementByCssSelector("div.el-form-item:nth-child(1) > div:nth-child(1) > div:nth-child(1) > input:nth-child(1)");//ÓÃ»§ÃûÊäÈë¿ò
             IWebElement pwdInput = _driver.FindElementByCssSelector("div.el-form-item:nth-child(2) > div:nth-child(1) > div:nth-child(1) > input:nth-child(1)");//ÃÜÂëÊäÈë¿ò
             IWebElement loginBtn = _driver.FindElementByCssSelector(".el-button");//µÇÂ¼°´Å¥
@@ -111,7 +111,7 @@ namespace Senparc.Web.FirefoxDriverTest
         {
             Screenshot screenShot = _driver.GetScreenshot();
             Interlocked.Increment(ref step);
-            screenShot.SaveAsFile(string.Concat(screenShotPath, "\\step_", step, '_', stepName, ".png"), ScreenshotImageFormat.Png);
+            screenShot.SaveAsFile(string.Concat(screenShotPath, "\\step_", step, '_', stepName, ".png")/*, ScreenshotImageFormat.Png*/);
         }
     }
 }

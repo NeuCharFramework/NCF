@@ -15,16 +15,14 @@ namespace Senparc.Areas.Admin.Domain.Models
         {
         }
 
-        //public AdminSenparcEntities(DbContextOptions/*<BasePoolEntities>*/ dbContextOptions, IServiceProvider serviceProvider) : base(dbContextOptions, serviceProvider)
-        //{
-        //}
-
         #region 系统表（无特殊情况不要修改）
 
         /// <summary>
         /// 系统设置
         /// </summary>
         public DbSet<AdminUserInfo> SystemConfigs { get; set; }
+
+        //DOT REMOVE OR MODIFY THIS LINE 请勿移除或修改本行 - Entities Point
 
         #endregion
     }

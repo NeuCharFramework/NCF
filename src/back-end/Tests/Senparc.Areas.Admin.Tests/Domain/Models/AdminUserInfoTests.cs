@@ -38,5 +38,6 @@ namespace Senparc.Areas.Admin.Domain.Models.Tests
             Console.WriteLine(result);
             Assert.AreEqual("A1BC21E701CF0C70995D3B5360F581D0", result);
         }
+
     }
 }

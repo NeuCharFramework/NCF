@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Senparc.AI.Kernel;
 using Senparc.Areas.Admin.Domain;
+using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Models;
@@ -96,6 +98,11 @@ namespace Senparc.Xncf.Instraller.Pages
             catch (Exception)
             {
                 Console.WriteLine("开始初始化");
+
+                //var database = _accountInfoService.BaseClientRepository.BaseDB.BaseDataContext.Database;
+                //var created = await database.EnsureCreatedAsync();//尝试创建数据库
+
+                //await Console.Out.WriteLineAsync("尝试创建数据库：" + (created ? "成功创建" : "已存在，无需创建"));
 
                 //初始化页面显示的配置项的默认值
                 var result = await _installAppService.GetInstallOptionsAsync();

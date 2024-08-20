@@ -4,7 +4,7 @@
  */
 // 创建一个axios实例
 var service = axios.create({
-    timeout: 100000 // request timeout
+    timeout: 1000000 // request timeout
 });
 // 请求拦截
 service.interceptors.request.use(
@@ -32,11 +32,13 @@ service.interceptors.response.use(
                 if (response.config.url.includes('HideManager') || response.config.url.includes('ChangeState')) {
                     return;
                 }
-                app.$message({
-                    message: response.data.msg|| response.data.errorMessage || 'Error',
-                    type: 'error',
-                    duration: 5 * 1000
-                });
+                if (!response.config.customAlert){
+                    app.$message({
+                        message: response.data.msg||response.data.exception|| 'Error',
+                        type: 'error',
+                        duration: 5 * 1000
+                    });
+                }
                 return Promise.resolve(response);
             }
         } else {

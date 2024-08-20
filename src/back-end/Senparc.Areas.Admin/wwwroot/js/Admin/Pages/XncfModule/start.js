@@ -206,26 +206,30 @@
             const data = {
                 xncfUid: this.data.xncfModule.uid, xncfFunctionName: this.run.data.key.name, xncfFunctionParams: JSON.stringify(xncfFunctionParams)
             };
-            const res = await service.post(`/Admin/XncfModule/Start?handler=RunFunction`, data);
+            const res = await service.post(`/Admin/XncfModule/Start?handler=RunFunction`, data,{customAlert:true});
             this.runResult.tempId = res.data.tempId;
             if ((res.data.log || '').length > 0 && (res.data.tempId || '').length > 0) {
                 this.runResult.hasLog = true;
             }
+            // purify dom, prevent attack
+            const msg = DOMPurify.sanitize(res.data.msg);
+            
             if (!res.data.success) {
                 this.runResult.tit = '遇到错误';
                 this.runResult.tip = '错误信息';
-                this.runResult.msg = res.data.msg;
+                this.runResult.msg = (msg || DOMPurify.sanitize(res.data.exception)).replace(/&lt;br \/&gt;/g, '<br />').replace('\r\n', '<br />').replace('\n', '<br />').replace('\r', '<br />');
+                this.runResult.visible = true;
                 return;
             }
-            if (res.data.msg && (res.data.msg.indexOf('http://') !== -1 || res.data.msg.indexOf('https://') !== -1)) {
+            if (msg && (msg.indexOf('http://') === 0 || msg.indexOf('https://') === 0)) {
                 this.runResult.tit = '执行成功';
                 this.runResult.tip = '收到网址，点击下方打开<br />（此链接由第三方提供，请注意安全）：';
-                this.runResult.msg = '<i class="fa fa-external-link"></i> <a href="' + res.data.msg + '" target="_blank">' + res.data.msg + '</a>';
+                this.runResult.msg = '<i class="fa fa-external-link"></i> <a href="' + msg + '" target="_blank">' + msg + '</a>';
             }
             else {
                 this.runResult.tit = '执行成功';
                 this.runResult.tip = '返回信息';
-                this.runResult.msg = res.data.msg;
+                this.runResult.msg = msg.replace(/&lt;br \/&gt;/g, '<br />').replace('\r\n', '<br />').replace('\n', '<br />').replace('\r','<br />');
             }
             // 打开执行结果弹窗
             this.runResult.visible = true;

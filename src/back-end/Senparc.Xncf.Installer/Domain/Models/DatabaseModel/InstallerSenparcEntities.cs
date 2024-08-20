@@ -3,7 +3,7 @@ using Senparc.Ncf.Database;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.XncfBase.Database;
 
-namespace Senparc.Xncf.Installer.Models
+namespace Senparc.Xncf.Installer.Models.DatabaseModel
 {
     public class InstallerSenparcEntities : XncfDatabaseDbContext
     {

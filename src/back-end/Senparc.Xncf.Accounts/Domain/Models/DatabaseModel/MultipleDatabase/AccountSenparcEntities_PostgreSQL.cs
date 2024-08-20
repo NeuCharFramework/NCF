@@ -1,12 +1,10 @@
 ﻿
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
-using Senparc.Xncf.Accounts.Domain.Models;
 using Senparc.Ncf.XncfBase.Database;
 using System;
-using System.IO;
-using Senparc.Ncf.Core.Models;
 
 namespace Senparc.Xncf.Accounts.Models
 {
@@ -17,7 +15,7 @@ namespace Senparc.Xncf.Accounts.Models
         {
         }
     }
-    
+
 
     /// <summary>
     /// 设计时 DbContext 创建（仅在开发时创建 Code-First 的数据库 Migration 使用，在生产环境不会执行）
@@ -26,10 +24,10 @@ namespace Senparc.Xncf.Accounts.Models
     /// </summary>
     public class SenparcDbContextFactory_PostgreSQL : SenparcDesignTimeDbContextFactoryBase<AccountSenparcEntities_PostgreSQL, Register>
     {
-        protected override Action<IServiceCollection> ServicesAction => services =>
+        protected override Action<IApplicationBuilder> AppAction => app =>
         {
             //指定其他数据库
-            services.AddDatabase("Senparc.Ncf.Database.PostgreSQL", "Senparc.Ncf.Database.PostgreSQL", "PostgreSQLDatabaseConfiguration");
+            app.UseNcfDatabase("Senparc.Ncf.Database.PostgreSQL", "Senparc.Ncf.Database.PostgreSQL", "PostgreSQLDatabaseConfiguration");
         };
 
         public SenparcDbContextFactory_PostgreSQL() : base(SenparcDbContextFactoryConfig.RootDictionaryPath)

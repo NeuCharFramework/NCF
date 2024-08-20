@@ -13,12 +13,12 @@ namespace Senparc.Areas.Admin.Models
         {
             builder.Property(e => e.LastLoginIp)
                 //.HasColumnName("LastLoginIP")
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .IsUnicode(false);
 
             //builder.Property(e => e.LastLoginTime).HasColumnType("datetime");
 
-            builder.Property(e => e.Password).HasMaxLength(50);
+            builder.Property(e => e.Password).HasMaxLength(250);
 
             builder.Property(e => e.PasswordSalt)
                 .HasMaxLength(100)

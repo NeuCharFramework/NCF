@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
@@ -28,10 +29,10 @@ namespace Senparc.Areas.Admin.Domain.Models
     /// </summary> 
     public class SenparcDbContextFactory_SqlServer : SenparcDesignTimeDbContextFactoryBase<AdminSenparcEntities_SqlServer, Register>
     {
-        protected override Action<IServiceCollection> ServicesAction => services =>
+        protected override Action<IApplicationBuilder> AppAction => app =>
         {
             //指定其他数据库
-            services.AddDatabase("Senparc.Ncf.Database.SqlServer", "Senparc.Ncf.Database.SqlServer", "SQLServerDatabaseConfiguration");
+            app.UseNcfDatabase("Senparc.Ncf.Database.SqlServer", "Senparc.Ncf.Database.SqlServer", "SQLServerDatabaseConfiguration");
         };
 
         public SenparcDbContextFactory_SqlServer()

@@ -2,9 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
+using Senparc.Ncf.XncfBase.Attributes;
 
 namespace Senparc.Xncf.Accounts.Domain.Models
 {
+    [XncfAutoConfigurationMapping]
     public class AccountPayLogConfigurationMapping : ConfigurationMappingWithIdBase<AccountPayLog, int>
     {
         public override void Configure(EntityTypeBuilder<AccountPayLog> builder)

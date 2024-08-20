@@ -7,6 +7,7 @@ using Senparc.Ncf.XncfBase.Database;
 using System;
 using System.IO;
 using Senparc.Xncf.Installer.Models.DatabaseModel;
+using Microsoft.AspNetCore.Builder;
 
 namespace Senparc.Xncf.Installer.Models
 {
@@ -26,11 +27,12 @@ namespace Senparc.Xncf.Installer.Models
     /// </summary>
     public class SenparcDbContextFactory_PostgreSQL : SenparcDesignTimeDbContextFactoryBase<InstallerSenparcEntities_PostgreSQL, Register>
     {
-        protected override Action<IServiceCollection> ServicesAction => services =>
+        protected override Action<IApplicationBuilder> AppAction => app =>
         {
             //指定其他数据库
-            services.AddDatabase("Senparc.Ncf.Database.PostgreSQL", "Senparc.Ncf.Database.PostgreSQL", "PostgreSQLDatabaseConfiguration");
+            app.UseNcfDatabase("Senparc.Ncf.Database.PostgreSQL", "Senparc.Ncf.Database.PostgreSQL", "PostgreSQLDatabaseConfiguration");
         };
+       
 
         public SenparcDbContextFactory_PostgreSQL() : base(SenparcDbContextFactoryConfig.RootDictionaryPath)
         {

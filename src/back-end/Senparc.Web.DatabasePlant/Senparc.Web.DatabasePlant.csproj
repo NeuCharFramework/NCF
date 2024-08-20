@@ -1,18 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
-	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<Configurations>Debug;Release;Debug-Dapr;NcfDebugForPromptRange</Configurations>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.13.5-beta1" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.8.1.1-beta1" />
-		<!--<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />-->
-	</ItemGroup>
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Configurations>Debug;Release;Debug-Dapr;NcfDebugForPromptRange</Configurations>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.19.1.2-preview1" />
+    <PackageReference Include="Senparc.Xncf.Swagger" Version="0.14.1.2-preview1" />
+    <!--<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />-->
+    <ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
+  </ItemGroup>
+  <ItemGroup />
 </Project>

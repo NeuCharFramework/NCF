@@ -6,6 +6,7 @@ using Senparc.CO2NET;
 using Senparc.CO2NET.AspNet;
 using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Database;
 using Senparc.Ncf.Database.SqlServer;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.AreasBase;
@@ -16,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddDapr();
 
 //激活 Xncf 扩展引擎（必须）
-var logMsg = builder.StartWebEngine<SQLServerDatabaseConfiguration>();
+var logMsg = builder.StartWebEngine(new[] { "Senparc.Areas.Admin" });
 //如果不需要启用 Areas，可以只使用 services.StartEngine() 方法
 
 Console.WriteLine("============ logMsg =============");
@@ -45,7 +46,8 @@ var registerService = app
 
 
 //XncfModules（必须）
-app.UseXncfModules(registerService, senparcCoreSetting.Value);
+app.UseXncfModules(registerService, senparcCoreSetting.Value)
+   .UseNcfDatabase<SqlServerDatabaseConfiguration>();
 //using (var scope = app.Services.CreateScope())
 //{
 

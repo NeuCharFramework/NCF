@@ -225,11 +225,11 @@
     <el-dialog :title="runResult.tit"
                :visible.sync="runResult.visible"
                :close-on-click-modal="false"
-               width="30%">
+               width="40%">
         <p v-html="runResult.tip"></p>
         <p v-html="runResult.msg"></p>
         <span slot="footer" class="dialog-footer">
-            <a :href="'?handler=Log&tempId='+ runResult.tempId" v-if="runResult.hasLog" style="display:block"><i class="fa fa-cloud-download"></i> 下载日志（5分钟内1次有效）</a>
+            <a :href="'?handler=Log&tempId='+ runResult.tempId" v-if="runResult.hasLog" style="display:block" target="_blank"><i class="fa fa-cloud-download"></i> 下载日志（5分钟内1次有效）</a>
             <el-button type="primary" @@click="runResult.visible = false">关 闭</el-button>
         </span>
     </el-dialog>
@@ -272,4 +272,5 @@
 @section scripts{
 
     <script src="~/js/Admin/Pages/XncfModule/Start.js"></script>
+    <script src="~/js/Admin/dompurify.min.js"></script>
 }
