@@ -1,0 +1,181 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Jeffrey Su",
+  "classifications": [ "NCF", "NcfTemplate" ],
+  "name": "Custom NCF Base Project Template",
+  "identity": "NCF.Template",
+  "groupIdentity": "Custom NCF",
+  "shortName": "NCF",
+  "description": "Template for NCF Base Project Template.",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "preferNameDirectory": true,
+  "symbols": {
+    "PasswordSaltToken": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "密码加密加强选项，此值在首个账号生成后不修改，否则会导致所有密码失效",
+      "replaces": "YourPasswordSaltToken",
+      "isRequired": false,
+      "onlyIf": [
+        {
+          "after": "\"PasswordSaltToken\": \""
+        }
+      ],
+      "defaultValue": "YourPasswordSaltToken"
+    },
+    "DB": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "Database Config. Default: NCF",
+      "replaces": "NCF",
+      "isRequired": false,
+      "onlyIf": [
+        {
+          "after": "Database="
+        }
+      ],
+      "defaultValue": "NCF"
+    },
+    "ncfSlnRename": {
+      "type": "derived",
+      "valueSource": "name",
+      "valueTransform": "RenameSlnFile",
+      "fileRename": "NCF",
+      "description": "rename NCF.sln file."
+    },
+
+    //服务器端口（IIS + SSL）——已经可用
+    "IISPortGeneratedSsl": {
+      "type": "generated",
+      "generator": "random",
+      "parameters": {
+        "low": 44312,
+        "high": 45999
+      },
+      "replaces": "44311",
+      "onlyIf": [
+        {
+          "after": "\"sslPort\": "
+        }
+      ]
+    },
+    //服务器端口（IIS）——已经可用
+    "IISPortGenerated": {
+      "type": "generated",
+      "generator": "random",
+      "parameters": {
+        "low": 61127,
+        "high": 61999
+      },
+      "replaces": "61126",
+      "onlyIf": [
+        {
+          "after": "\"applicationUrl\": \"http://localhost:"
+        }
+      ]
+    }
+    //"replacePort": {
+    //  "type": "generated",
+    //  "generator": "constant",
+    //  "valueSource": "KestrelPortGenerated",
+    //  //"valueTransform": "ResetKestrelPortSsl",
+    //  "replaces": "44311",
+    //  "description": "",
+    //  "forms": {
+    //    "global": [ "ResetKestrelPortSsl" ]
+    //  },
+    //  "onlyIf": [
+    //    {
+    //      "after": "\"sslPort\": "
+    //    }
+    //  ]
+    //}
+
+    //"replacePort": {
+    //  "type": "generated",
+    //  "generator": "constant",
+    //  "description": "",
+    //  "valueSource": "KestrelPortGenerated",
+    //  "replaces": "44311",
+    //  "isRequired": false,
+    //  "onlyIf": [
+    //    {
+    //      "after": "\"sslPort\": "
+    //    }
+    //  ],
+    //  "defaultValue": "44311"
+    //}
+
+
+    //"ResetKestrelPortSslPara": {
+    //  "type": "derived",
+    //  "valueSource": "KestrelPortGeneratedSsl",
+    //  "valueTransform": "ResetKestrelPortSsl",
+    //  "description": "host post for SSL."
+    //}
+
+    //"hostSslRandomNumber": {
+    //  "type": "generated",
+    //  "generator": "random",
+    //  "parameters": {
+    //    "low": 45000,
+    //    "high": 49999
+    //  },
+    //  "replaces": "44311"
+    //},
+    //"isMatch": {
+    //  "type": "generated",
+    //  "generator": "regex",
+    //  "dataType": "string",
+    //  "replaces": "localhost:5001",
+    //  "parameters": {
+    //    "source": "KestrelPortGenerated",
+    //    "steps": [
+    //      {
+    //        "regex": "(?<=localhost:)5001",
+    //        "replacement": ""
+    //      },
+    //      {
+    //        "regex": "(?<=localhost:)5000",
+    //        "replacement": ""
+    //      }
+    //    ]
+    //  }
+    //}
+  },
+  "forms": {
+    "RenameSlnFile": {
+      "identifier": "replace",
+      "pattern": "^NCF.(?=sln)$", // regex to match everything up to and including the final "."
+      "replacement": "" // replace it with empty string
+    }
+  },
+  "sourceName": "SenparcNcfTemplate",
+  "sources": [
+    {
+      "modifiers": [
+
+      ],
+      "exclude": [
+        "**/bin",
+        "**/bower_components",
+        "**/jspm_packages",
+        "**/node_modules",
+        "**/obj",
+        "**/platforms",
+        "**/SenparcTraceLog",
+        "**/*.DS_Store",
+        "**/SenparcConfig.Development.config",
+        "**/appsettings.Development.json",
+        "**/{Senparc.AI.Dalle-*.jpg}",
+        "**/JeffreyMpMessageHandler.cs",
+        "**/{NCF.sln-backup-*.sln}",
+        "**/Senparc.Xncf.NewYearBless",
+        ".template.config/**"
+      ]
+    }
+  ]
+}
