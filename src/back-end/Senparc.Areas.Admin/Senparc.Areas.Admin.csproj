@@ -47,12 +47,16 @@
 
 		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.9.1.2-preview1" />
 
-		<PackageReference Include="Senparc.Xncf.DynamicData" Version="0.1.4-preview1" />
+		<!--<PackageReference Include="Senparc.Xncf.DynamicData" Version="0.1.4-preview1" />-->
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.10.1.2-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.10.1.2-preview1" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.11.1.2-preview1" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.11.1.3-preview1" />
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.16.1-preview1" />
 
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.DynamicData\Senparc.Xncf.DynamicData.ForNcf.csproj" />
 	</ItemGroup>
 </Project>
