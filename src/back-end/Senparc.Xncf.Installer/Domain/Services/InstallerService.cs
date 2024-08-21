@@ -278,17 +278,15 @@ namespace Senparc.Xncf.Installer.Domain.Services
                     _installOptionsService.ResetDbConnectionString(installRequestDto.DbConnectionString);
                 }
 
-                //var database = _accountInfoService.BaseClientRepository.BaseDB.BaseDataContext.Database;
+                #region 请勿使用 EnsureCreatedAsync() 方法，系统将自动通过 database update 过程创建数据库
+                //重新建立 Service 
+                //var adminService = sope.ServiceProvider.GetService<AdminUserInfoService>();
+
+                //var database = adminService.BaseClientRepository.BaseDB.BaseDataContext.Database;
                 //var created = await database.EnsureCreatedAsync();//尝试创建数据库
 
-                //重新建立 Service 
-
-                var adminService = sope.ServiceProvider.GetService<AdminUserInfoService>();
-
-                var database = adminService.BaseClientRepository.BaseDB.BaseDataContext.Database;
-                var created = await database.EnsureCreatedAsync();//尝试创建数据库
-
-                await Console.Out.WriteLineAsync("尝试创建数据库：" + (created ? "成功创建" : "已存在，无需创建"));
+                //await Console.Out.WriteLineAsync("尝试创建数据库：" + (created ? "成功创建" : "已存在，无需创建"));
+                #endregion
 
                 //原 Get 请求
                 {
