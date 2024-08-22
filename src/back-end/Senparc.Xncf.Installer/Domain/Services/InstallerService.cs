@@ -23,7 +23,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
 {
     public class InstallerService
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceProvider serviceProvider;
         private readonly XncfModuleServiceExtension _xncfModuleService;
         private readonly SysMenuService _sysMenuService;
         private readonly SystemConfigService _systemConfigService;
@@ -60,7 +60,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
             Senparc.Xncf.Menu.Register menuRegister = new Senparc.Xncf.Menu.Register();
 
             {
-                await InitDatabaseAsync(() => systemCoreRegister.InitDatabase(_serviceProvider));//TODO：目前实际已无效，不会构建任何数据库代码，此处仅作占位
+                await InitDatabaseAsync(() => systemCoreRegister.InitDatabase(serviceProvider));//TODO：目前实际已无效，不会构建任何数据库代码，此处仅作占位
 
                 //await InitDatabaseAsync(() => systemManagerRegister.InitDatabase(_serviceProvider));
                 //await InitDatabaseAsync(() => systemPermissionRegister.InitDatabase(_serviceProvider));
@@ -189,7 +189,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
             try
             {
                 //开始安装模块（创建数据库相关表）
-                await register.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
+                await register.InstallOrUpdateAsync(serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
             }
             catch (Exception ex)
             {
@@ -264,7 +264,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
             SysMenuService sysMenuService, SystemConfigService systemConfigService, TenantInfoService tenantInfoService,
             AdminUserInfoService accountInfoService, InstallOptionsService installOptionsService)
         {
-            this._serviceProvider = serviceProvider;
+            this.serviceProvider = serviceProvider;
             this._xncfModuleService = xncfModuleService;
             this._sysMenuService = sysMenuService;
             this._systemConfigService = systemConfigService;
@@ -318,7 +318,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
 
                         //安装多租户
                         Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
-                        await tenantRegister.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
+                        await tenantRegister.InstallOrUpdateAsync(serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
                     }
                     catch (Exception ex)
                     {
