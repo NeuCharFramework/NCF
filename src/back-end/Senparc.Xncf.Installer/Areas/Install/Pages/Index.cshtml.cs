@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Senparc.AI.Kernel;
 using Senparc.Areas.Admin.Domain;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.Config;
