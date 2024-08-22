@@ -366,7 +366,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
                             installResponseDto.Step = 1;
 
                             //进行系统初始化安装
-                            await InitSystemAsync(installRequestDto.SystemName, sope.ServiceProvider, installRequestDto.NeedModelList);
+                            await InitSystemAsync(installRequestDto.SystemName, sope.ServiceProvider);
 
                             //IXncfRegister systemRegister = XncfRegisterManager.RegisterList.First(z => z.GetType() == typeof(Senparc.Areas.Admin.Register));
                             //await _xncfModuleService.InstallMenuAsync(systemRegister, Ncf.Core.Enums.InstallOrUpdate.Install);//安装菜单
