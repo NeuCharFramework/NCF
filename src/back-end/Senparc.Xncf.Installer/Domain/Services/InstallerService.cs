@@ -326,19 +326,19 @@ namespace Senparc.Xncf.Installer.Domain.Services
 
                             //var (initDbSuccess, initDbMsg) = await systemCoreRegister.InitDatabase(_serviceProvider/*, _tenantInfoService, *//*_httpContextAccessor.Value.HttpContext*/);
 
-                        //安装多租户
-                        Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
-                        await tenantRegister.InstallOrUpdateAsync(sope.ServiceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
-                    }
-                    catch (Exception ex)
-                    {
-                        //如果已经安装过，则不处理
-                        //TODO:特定的Exception
-                        Console.WriteLine(ex.Message);
-                        throw;
-                    }
-                    finally
-                    {
+                            //安装多租户
+                            Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
+                            await tenantRegister.InstallOrUpdateAsync(sope.ServiceProvider, Ncf.Core.Enums.InstallOrUpdate.Install);
+                        }
+                        catch (Exception ex)
+                        {
+                            //如果已经安装过，则不处理
+                            //TODO:特定的Exception
+                            Console.WriteLine(ex.Message);
+                            throw;
+                        }
+                        finally
+                        {
 
                         }
                     }
