@@ -36,7 +36,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
         /// 初始化安装系统
         /// </summary>
         /// <returns></returns>
-        private async Task InitSystemAsync(string systemName, IServiceProvider serviceProvider, List<string> needModelList)
+        private async Task InitSystemAsync(string systemName, IServiceProvider serviceProvider)
         {
             Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
 
