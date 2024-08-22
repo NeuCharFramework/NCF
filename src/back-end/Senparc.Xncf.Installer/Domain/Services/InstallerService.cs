@@ -16,6 +16,7 @@ using Senparc.Xncf.SystemManager.Domain.Service;
 using Senparc.Xncf.Tenant.Domain.Services;
 using Senparc.Xncf.XncfModuleManager.Domain.Services;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Senparc.Xncf.Installer.Domain.Services
@@ -113,6 +114,31 @@ namespace Senparc.Xncf.Installer.Domain.Services
             }
 
             //TODO:选择性安装用户自定义模块
+            {
+                List<string> installedList = new List<string> { "00000000-0000-0000-0001-000000000001", "00000000-0000-0000-0001-000000000002", "00000000-0000-0000-0001-000000000003", "00000000-0000-0000-0001-000000000004"
+                , "00000000-0000-0000-0001-000000000005", "00000000-0000-0000-0001-000000000006","00000000-0000-0001-0001-000000000001", "62FBB022-B04E-423F-82FE-926D418A0815"};
+                var _xncfModuleService = serviceProvider.GetService<XncfModuleServiceExtension>();
+                foreach (var needModelId in needModelList)
+                {
+                    if (!installedList.Contains(needModelId))
+                    {
+                        //var docRegister = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == needModel);
+                        var docModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == needModelId);
+                        if (docModule == null)
+                        {
+                            await _xncfModuleService.InstallModuleAsync(needModelId);
+                            docModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == needModelId);
+                        }
+                        //开启模块
+                        if (docModule.State != Ncf.Core.Enums.XncfModules_State.开放)
+                        {
+                            docModule.UpdateState(Ncf.Core.Enums.XncfModules_State.开放);
+                            await _xncfModuleService.SaveObjectAsync(docModule);
+                        }
+                    }
+                }
+            }
+
 
             {
                 var _xncfModuleService = serviceProvider.GetService<XncfModuleServiceExtension>();
@@ -252,6 +278,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
             result.DbConnectionString = _installOptionsService.GetDbConnectionString();
             result.SystemName = _installOptionsService.GetDefaultSystemName();
             result.AdminUserName = _installOptionsService.GetDefaultAdminUserName();
+            result.NeedModelList = _installOptionsService.GetModules();
 
             return result;
         }
