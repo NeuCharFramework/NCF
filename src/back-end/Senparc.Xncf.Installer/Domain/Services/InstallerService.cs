@@ -36,7 +36,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
         /// 初始化安装系统
         /// </summary>
         /// <returns></returns>
-        private async Task InitSystemAsync(string systemName, IServiceProvider serviceProvider)
+        private async Task InitSystemAsync(string systemName, IServiceProvider serviceProvider, List<string> needModelList)
         {
             Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
 
@@ -366,7 +366,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
                             installResponseDto.Step = 1;
 
                             //进行系统初始化安装
-                            await InitSystemAsync(installRequestDto.SystemName, sope.ServiceProvider);
+                            await InitSystemAsync(installRequestDto.SystemName, sope.ServiceProvider, installRequestDto.NeedModelList);
 
                             //IXncfRegister systemRegister = XncfRegisterManager.RegisterList.First(z => z.GetType() == typeof(Senparc.Areas.Admin.Register));
                             //await _xncfModuleService.InstallMenuAsync(systemRegister, Ncf.Core.Enums.InstallOrUpdate.Install);//安装菜单
