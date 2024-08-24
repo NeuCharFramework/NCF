@@ -7,6 +7,7 @@ using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Extensions;
 using Senparc.Ncf.Core.Cache;
 using Senparc.Ncf.Core.Config;
+using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Utility;
 using Senparc.Ncf.Log;
