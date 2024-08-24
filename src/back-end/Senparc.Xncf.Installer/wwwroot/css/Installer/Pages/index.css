@@ -12,8 +12,8 @@ body, html {
     height: 100%;
 }
 
-#install_start{
-    height:100%;
+#install_start {
+    height: 100%;
 }
 
 #install_start_main {
@@ -24,6 +24,10 @@ body, html {
 #install_start_expand {
     width: 300px;
     padding: 20px;
+}
+
+.el-select-dropdown__wrap {
+    max-height: 500px;
 }
 
 #install_success {

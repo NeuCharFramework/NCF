@@ -62,7 +62,7 @@
                             <el-form-item label="数据库连接字符串(修改后需重启项目)" :disabled="installStarted" required>
                                 <el-input type="textarea" v-model="installOptions.dbConnectionString" :autosize="{ minRows: 2, maxRows: 6}"></el-input>
                             </el-form-item>
-                            <el-form-item label="默认需要的安装模块" :disabled="installStarted" required>
+                            <el-form-item label="默认需要的安装模块(安装完成后可以继续安装或卸载)" :disabled="installStarted" required>
                                 <el-select v-model="installOptions.needModelList" multiple placeholder="请选择">
                                     <el-option v-for="item in optionsModelList"
                                                :key="item.uid"
