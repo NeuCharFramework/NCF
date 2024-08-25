@@ -4,13 +4,15 @@
         return {
             xncfStat: {},
             xncfOpeningList: {},
-            chartData: []
+            chartData: [],
+            todayLogData: [] // 新增用于存储今日日志数据  
         };
     },
     mounted() {
         this.getXncfStat();
         this.getXncfOpening();
         this.fetchChartData();
+        this.fetchTodayLogData(); // 新增调用获取今日日志数据的方法  
     },
     methods: {
         async fetchChartData() {
@@ -24,6 +26,19 @@
                 }
             } catch (error) {
                 console.error('Error fetching chart data:', error);
+            }
+        },
+        async fetchTodayLogData() { // 新增获取今日日志数据的方法  
+            try {
+                let response = await service.get('/api/Senparc.Areas.Admin/StatAppService/Areas.Admin_StatAppService.GetTodayLog');
+                if (response.data && response.data.data && response.data.data.items) {
+                    this.todayLogData = response.data.data.items;
+                    this.initChart(); // 确保图表在获取到数据后更新  
+                } else {
+                    console.error('Invalid API response:', response);
+                }
+            } catch (error) {
+                console.error('Error fetching today log data:', error);
             }
         },
         initChart() {
@@ -55,15 +70,17 @@
                 series: [
                     {
                         name: '常规日志',
-                        type: 'bar',
+                        type: 'line',
                         stack: '总量',
+                        areaStyle: {},
                         data: this.chartData.map(item => item.normalLogCount),
                         color: '#91c7ae'
                     },
                     {
                         name: '异常日志',
-                        type: 'bar',
+                        type: 'line',
                         stack: '总量',
+                        areaStyle: {},
                         data: this.chartData.map(item => item.exceptionLogCount),
                         color: '#d48265'
                     }
@@ -80,18 +97,22 @@
                 }
             });
 
+            // 准备今日日志数据  
+            let todayLogCategories = this.todayLogData.map(item => item.senparcTraceType);
+            let todayLogCounts = this.todayLogData.map(item => item.count);
+
             let chart2 = document.getElementById('secondChart');
             let chartOption2 = {
                 title: {
-                    text: '数量统计',
+                    text: '今日日志统计',
                     subtext: '动态数据'
                 },
                 legend: {
-                    data: ['日志数量']
+                    data: todayLogCategories // 自动输出所有类别  
                 },
                 xAxis: {
                     type: 'category',
-                    data: this.chartData.map(item => item.date)
+                    data: todayLogCategories
                 },
                 yAxis: {
                     type: 'value',
@@ -105,9 +126,10 @@
                     }
                 },
                 series: [{
-                    data: this.chartData.map(item => item.totalLogCount),
+                    data: todayLogCounts,
                     name: '日志数量',
-                    type: 'line'
+                    type: 'bar',
+                    color: '#73c0de'
                 }]
             };
             let chartInstance2 = echarts.init(chart2);
