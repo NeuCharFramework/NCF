@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Senparc.Areas.Admin.SenparcTraceManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,4 +19,17 @@ namespace Senparc.Areas.Admin.OHS.Local.PL
         public int NormalLogCount { get; set; }
         public int ExceptionLogCount { get; set; }
     }
+
+    public class Stat_GetTodayLogResponse
+    {
+        public List<Stat_GetTodayLogResponse_Item> Items { get; set; } = new List<Stat_GetTodayLogResponse_Item>();
+    }
+
+    public class Stat_GetTodayLogResponse_Item
+    {
+        public string SenparcTraceType { get; set; }
+        public int Count { get; set; }
+    }
+
+
 }

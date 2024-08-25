@@ -40,24 +40,51 @@
                 yAxis: {
                     type: 'value',
                     axisLabel: {
-                        formatter: '{value} 条'
+                        formatter: '{value} 件'
                     }
                 },
-                tooltip: {},
-                series: [{
-                    data: this.chartData.map(item => item.logCount),
-                    type: 'bar',
-                    color: '#91c7ae'
-                }]
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['常规日志', '异常日志']
+                },
+                series: [
+                    {
+                        name: '常规日志',
+                        type: 'bar',
+                        stack: '总量',
+                        data: this.chartData.map(item => item.normalLogCount),
+                        color: '#91c7ae'
+                    },
+                    {
+                        name: '异常日志',
+                        type: 'bar',
+                        stack: '总量',
+                        data: this.chartData.map(item => item.exceptionLogCount),
+                        color: '#d48265'
+                    }
+                ]
             };
             let chartInstance1 = echarts.init(chart1);
             chartInstance1.setOption(chartOption1);
 
+            // 添加点击事件监听器  
+            chartInstance1.on('click', params => {
+                if (params.componentType === 'series') {
+                    let date = params.name;
+                    window.location.href = `/Admin/SenparcTrace/DateLog?date=${date}`;
+                }
+            });
+
             let chart2 = document.getElementById('secondChart');
             let chartOption2 = {
                 title: {
-                    text: '日志统计',
-                    subtext: '近 14 天'
+                    text: '数量统计',
+                    subtext: '动态数据'
                 },
                 legend: {
                     data: ['日志数量']
@@ -69,16 +96,16 @@
                 yAxis: {
                     type: 'value',
                     axisLabel: {
-                        formatter: '{value} 条'
+                        formatter: '{value} 件'
                     }
                 },
                 tooltip: {
                     formatter: function (data, ticket, callback) {
-                        return data.seriesName + ':' + data.value + '条';
+                        return data.seriesName + ':' + data.value + '件';
                     }
                 },
                 series: [{
-                    data: this.chartData.map(item => item.logCount),
+                    data: this.chartData.map(item => item.totalLogCount),
                     name: '日志数量',
                     type: 'line'
                 }]

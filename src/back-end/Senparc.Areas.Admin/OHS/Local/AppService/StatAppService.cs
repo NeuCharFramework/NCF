@@ -1,4 +1,5 @@
-﻿using Senparc.Areas.Admin.Domain.Dto;
+﻿using Microsoft.Extensions.Azure;
+using Senparc.Areas.Admin.Domain.Dto;
 using Senparc.Areas.Admin.OHS.Local.PL;
 using Senparc.Areas.Admin.SenparcTraceManager;
 using Senparc.CO2NET;
@@ -27,7 +28,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             return await this.GetResponseAsync<Stat_GetLogsResponse>(async (response, logger) =>
             {
                 var result = new Stat_GetLogsResponse();
-                var dates = SenparcTraceHelper.GetLogDate().Take(14).ToList();
+                var dates = SenparcTraceHelper.GetLogDate().Take(14).OrderBy(z => z).ToList();
                 foreach (var date in dates)
                 {
                     var traceItemList = SenparcTraceHelper.GetAllLogs(date);
@@ -40,6 +41,27 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                         TotalLogCount = traceItemList.Count
                     });
                 }
+                return result;
+            });
+        }
+
+        [ApiBind]
+        public async Task<AppResponseBase<Stat_GetTodayLogResponse>> GetTodayLog()
+        {
+            return await this.GetResponseAsync<Stat_GetTodayLogResponse>(async (response, logger) =>
+            {
+                var result = new Stat_GetTodayLogResponse();
+                var dateLog = SenparcTraceHelper.GetAllLogs(SystemTime.Now.ToString("yyyyMMdd"));
+                var groupedLogs = dateLog.GroupBy(z => z.SenparcTraceType);
+                foreach (var item in groupedLogs)
+                {
+                    result.Items.Add(new Stat_GetTodayLogResponse_Item()
+                    {
+                        SenparcTraceType = item.Key.ToString(),
+                        Count = item.Count()
+                    });
+                }
+
                 return result;
             });
         }
