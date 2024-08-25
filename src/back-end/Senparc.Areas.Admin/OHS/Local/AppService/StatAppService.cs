@@ -31,10 +31,13 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 foreach (var date in dates)
                 {
                     var traceItemList = SenparcTraceHelper.GetAllLogs(date);
+                    var exceptionCount = traceItemList.Count(z => z.IsException);
                     result.Logs.Add(new Stat_GetLogsResponse_Item()
                     {
                         Date = date,
-                        LogCount = traceItemList.Count
+                        ExceptionLogCount = exceptionCount,
+                        NormalLogCount = traceItemList.Count - exceptionCount,
+                        TotalLogCount = traceItemList.Count
                     });
                 }
                 return result;

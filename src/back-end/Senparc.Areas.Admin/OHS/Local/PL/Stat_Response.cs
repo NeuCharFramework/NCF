@@ -14,6 +14,8 @@ namespace Senparc.Areas.Admin.OHS.Local.PL
     public class Stat_GetLogsResponse_Item
     {
         public string Date { get; set; }
-        public int LogCount { get; set; }
+        public int TotalLogCount { get; set; }
+        public int NormalLogCount { get; set; }
+        public int ExceptionLogCount { get; set; }
     }
 }
