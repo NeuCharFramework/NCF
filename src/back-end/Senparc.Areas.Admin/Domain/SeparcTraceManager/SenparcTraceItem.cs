@@ -26,7 +26,7 @@ namespace Senparc.Areas.Admin.SenparcTraceManager
         /// <summary>
         /// 日志类型
         /// </summary>
-        public SenparcTraceType weixinTraceType { get; set; } = SenparcTraceType.Normal;
+        public SenparcTraceType SenparcTraceType { get; set; } = SenparcTraceType.Normal;
         /// <summary>
         /// 是否是一条异常日志
         /// </summary>
