@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.15.0</PackageVersion>
+		<PackageVersion>0.16.0</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -41,6 +41,8 @@
 			v0.11.0 解决数据库初始化过程中过早且全量创建表格的问题
 			v0.12.0 支持 Ollama 本地模型 API
 			v0.12.5 支持最新 Senparc.Xncf.DynamicData 模块
+			v0.15.0 安装过程支持选择默认安装模块
+			v0.16.0 管理后台首页添加日志统计
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>

@@ -22,6 +22,7 @@ namespace Senparc.Areas.Admin.OHS.Local.PL
 
     public class Stat_GetTodayLogResponse
     {
+        public string Date { get; set; }
         public List<Stat_GetTodayLogResponse_Item> Items { get; set; } = new List<Stat_GetTodayLogResponse_Item>();
     }
 

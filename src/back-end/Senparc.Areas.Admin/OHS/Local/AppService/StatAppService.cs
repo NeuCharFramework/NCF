@@ -50,8 +50,11 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         {
             return await this.GetResponseAsync<Stat_GetTodayLogResponse>(async (response, logger) =>
             {
-                var result = new Stat_GetTodayLogResponse();
-                var dateLog = SenparcTraceHelper.GetAllLogs(SystemTime.Now.ToString("yyyyMMdd"));
+                var result = new Stat_GetTodayLogResponse()
+                {
+                    Date = SystemTime.Now.ToString("yyyyMMdd")
+                };
+                var dateLog = SenparcTraceHelper.GetAllLogs(result.Date);
                 var groupedLogs = dateLog.GroupBy(z => z.SenparcTraceType);
                 foreach (var item in groupedLogs)
                 {

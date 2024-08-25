@@ -33,6 +33,7 @@
                 let response = await service.get('/api/Senparc.Areas.Admin/StatAppService/Areas.Admin_StatAppService.GetTodayLog');
                 if (response.data && response.data.data && response.data.data.items) {
                     this.todayLogData = response.data.data.items;
+                    this.todayDate = response.data.data.date;
                     this.initChart(); // 确保图表在获取到数据后更新  
                 } else {
                     console.error('Invalid API response:', response);
@@ -55,7 +56,7 @@
                 yAxis: {
                     type: 'value',
                     axisLabel: {
-                        formatter: '{value} 件'
+                        formatter: '{value} 条'
                     }
                 },
                 tooltip: {
@@ -72,7 +73,7 @@
                         name: '常规日志',
                         type: 'line',
                         stack: '总量',
-                        areaStyle: {},
+                        areaStyle: { color: '#91c7ae' }, // 添加区域填充颜色  
                         data: this.chartData.map(item => item.normalLogCount),
                         color: '#91c7ae'
                     },
@@ -80,7 +81,7 @@
                         name: '异常日志',
                         type: 'line',
                         stack: '总量',
-                        areaStyle: {},
+                        areaStyle: { color: '#d48265' }, // 添加区域填充颜色  
                         data: this.chartData.map(item => item.exceptionLogCount),
                         color: '#d48265'
                     }
@@ -98,42 +99,50 @@
             });
 
             // 准备今日日志数据  
-            let todayLogCategories = this.todayLogData.map(item => item.senparcTraceType);
-            let todayLogCounts = this.todayLogData.map(item => item.count);
+            let todayLogData = this.todayLogData.map(item => ({
+                name: item.senparcTraceType,
+                value: item.count
+            }));
 
             let chart2 = document.getElementById('secondChart');
             let chartOption2 = {
                 title: {
                     text: '今日日志统计',
-                    subtext: '动态数据'
-                },
-                legend: {
-                    data: todayLogCategories // 自动输出所有类别  
-                },
-                xAxis: {
-                    type: 'category',
-                    data: todayLogCategories
-                },
-                yAxis: {
-                    type: 'value',
-                    axisLabel: {
-                        formatter: '{value} 件'
-                    }
+                    subtext: '动态数据',
+                    left: 'center'
                 },
                 tooltip: {
-                    formatter: function (data, ticket, callback) {
-                        return data.seriesName + ':' + data.value + '件';
-                    }
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b}: {c} ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data: this.todayLogData.map(item => item.senparcTraceType) // 自动输出所有类别  
                 },
                 series: [{
-                    data: todayLogCounts,
-                    name: '日志数量',
-                    type: 'bar',
-                    color: '#73c0de'
+                    name: '日志类型',
+                    type: 'pie',
+                    radius: '50%',
+                    data: todayLogData,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
                 }]
             };
             let chartInstance2 = echarts.init(chart2);
             chartInstance2.setOption(chartOption2);
+            // 添加点击事件监听器    
+            chartInstance2.on('click', params => {
+                if (params.componentType === 'series') {
+                    window.location.href = `/Admin/SenparcTrace/DateLog?date=${this.todayDate}`;
+                }
+            });  
+
         },
         //XNCF 统计状态  
         async getXncfStat() {
