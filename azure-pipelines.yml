@@ -19,6 +19,92 @@ steps:
 - task: NuGetToolInstaller@1
 
     
+- task: UseDotNet@2
+  displayName: 'Use .NET SDK 8'
+  inputs:
+    version: '8.0.100'
+    packageType: 'sdk'
+    performMultiLevelLookup: true
+    includePreviewVersions: true
+
+- task: NuGetToolInstaller@1
+  displayName: 'Use NuGet 6.3.0'
+  inputs:
+    versionSpec: '6.3.0'
+    checkLatest: true
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(templateBuild)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(templateBuild)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: NuGetCommand@2
+  displayName: Senparc.Ncf.Template
+  inputs:
+    command: push
+    packagesToPush: '**/Senparc.NCF.Template.*.nupkg'
+    nuGetFeedType: external
+    publishFeedCredentials: 'nuget-jeffrey-full-key'
+  continueOnError: true
+  condition: succeededOrFailed()
+
+
+# - task: UseDotNet@2
+#   inputs:
+#     packageType: 'sdk'
+#     useGlobalJson: true
+#     workingDirectory: 'src/Senparc.Web'
+
+# - task: DotNetCoreCLI@2
+#   inputs:
+#     command: 'publish'
+#     publishWebProjects: true
+#     workingDirectory: 'src/Senparc.Web'
+#   displayName: 'publish'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'sample'
+=======
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/NCF.sln'
+  templateBuild: '**/NCF.Template.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@1
+
+    
 # - task: UseDotNet@2
 #   displayName: 'Use .NET SDK 8'
 #   inputs:
@@ -83,4 +169,3 @@ steps:
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'sample'
-    publishLocation: 'Container'

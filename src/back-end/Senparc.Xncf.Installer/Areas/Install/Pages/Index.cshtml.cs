@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Senparc.AI.Kernel;
@@ -77,11 +78,27 @@ namespace Senparc.Xncf.Instraller.Pages
             TenantRule = SiteConfig.SenparcCoreSetting.TenantRule;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(string forceUpdateModule)
         {
             try
             {
                 Console.WriteLine("进入安装程序，检测是否需要初始化");
+
+                if (Request.IsLocal())
+                {
+                    if (!forceUpdateModule.IsNullOrEmpty())
+                    {
+                        //强制本地安装
+                        Console.WriteLine("强制升级模块：" + forceUpdateModule);
+
+                        SenparcTrace.SendCustomLog("强制更新模块", $"开始：{forceUpdateModule}");
+                        var register = Senparc.CO2NET.Helpers.ReflectionHelper.CreateInstance<IXncfRegister>(forceUpdateModule + ".Register", forceUpdateModule);
+                        await register.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Update);
+                        SenparcTrace.SendCustomLog("强制更新模块", $"完成：{forceUpdateModule}");
+
+                        return Content($"强制手动升级已完成：{forceUpdateModule}，请继续更新其他模块，或重新打开首页。");
+                    }
+                }
 
                 MultipleDatabaseType = DatabaseConfigurationFactory.Instance.Current.MultipleDatabaseType;
                 var adminUserInfo = await _accountInfoService.GetObjectAsync(z => true);//检查是否已初始化
