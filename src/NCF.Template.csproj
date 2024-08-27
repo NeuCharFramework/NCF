@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.17.0</PackageVersion>
+		<PackageVersion>0.18.0</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -44,6 +44,7 @@
 			v0.15.0 安装过程支持选择默认安装模块
 			v0.16.0 管理后台首页添加日志统计
 			v0.17.0 添加手动强制更新模块数据库（Migration）,用于底层更新后导致系统无法正常启动的情况。运行地址：https://localhost:5001/Install?forceUpdateModule=Senparc.Xncf.SystemManager，Senparc.Xncf.SystemManager 替换成需要强制升级的模块名称。出于安全考虑，此方法只能在本地运行。
+			v0.18.0 添加 NeuChar 云端用户接入，为将来云端算力输入做好准备
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
