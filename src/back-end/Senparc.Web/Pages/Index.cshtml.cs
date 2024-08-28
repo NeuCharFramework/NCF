@@ -35,24 +35,6 @@ namespace Senparc.Web.Pages
             }
             return Page();
         }
-
-        public override async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
-        {
-            if (Request.IsLocal())
-            {
-                var forceUpdateModule = context.HttpContext.Request.Query["forceUpdateModule"].ToString();
-                if (!forceUpdateModule.IsNullOrEmpty())
-                {
-                    //强制本地安装
-                    SenparcTrace.SendCustomLog("强制更新模块", $"开始：{forceUpdateModule}");
-                    var register = new Senparc.Xncf.SystemManager.Register();
-                    await register.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Update);
-                    SenparcTrace.SendCustomLog("强制更新模块", $"完成：{forceUpdateModule}");
-                }
-
-                await base.OnPageHandlerExecutionAsync(context, next);
-            }
-        }
     }
 
     //public class PowerShellHelper
