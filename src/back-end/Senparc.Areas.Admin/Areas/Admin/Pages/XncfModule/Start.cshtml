@@ -193,7 +193,10 @@
         <h4><i class="fa fa-newspaper-o"></i>&nbsp;{{run.data.key.description}}</h4>
         <el-form :label-position="'left'" @@submit.native.prevent>
             <el-form-item v-for="item in run.data.value" :label="item.title" label-width="200px" :required="item.isRequired">
-                <el-input v-if="item.parameterType===0" v-model="runData[item.name].value" maxlength="500"></el-input>
+                <el-input v-if="item.parameterType===0 || item.parameterType===3"
+                          v-model="runData[item.name].value" 
+                          :maxlength="item.maxLength===0 ? 500 : item.maxLength"
+                          :type="item.parameterType===3 ? 'password' : 'text'"></el-input>
                 <el-select v-if="item.parameterType===1" v-model="runData[item.name].value">
                     <template v-if="item.selectionList.items" v-for="selectionItem in item.selectionList.items">
                         <el-option :label="selectionItem.text" :value="selectionItem.value"></el-option>

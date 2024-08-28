@@ -115,7 +115,7 @@
                     }
                 }
                 // 输入框
-                if (res.parameterType === 0) {
+                if (res.parameterType === 0 || res.parameterType === 3) {
                     this.runData[res.name] = {};
                     this.runData[res.name].item = res;
                     this.runData[res.name].value = res.value || '';
@@ -190,7 +190,7 @@
                     }
                 }
                 // 输入框
-                if (this.runData[i].item.parameterType === 0) {
+                if (this.runData[i].item.parameterType === 0 || this.runData[i].item.parameterType === 3) {
                     if (this.runData[i].item.isRequired && this.runData[i].value.length === 0) {
                         this.$notify({
                             title: '提示',
