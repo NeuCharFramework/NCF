@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <!--<TargetFramework>net5.0</TargetFramework>-->
-        <Version>0.18.1</Version>
+        <Version>0.18.2</Version>
         <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
         <TypeScriptToolsVersion>4.1</TypeScriptToolsVersion>
         <UserSecretsId>d2144151-af7a-4d50-896d-4a306e594f7b</UserSecretsId>
@@ -25,8 +25,8 @@
         <PackageReference Include="Senparc.CO2NET" Version="2.5.1" />
         <PackageReference Include="Senparc.Ncf.Database.Sqlite" Version="0.18.3-preview1" />
         <PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.18.3-preview1" />
-        <PackageReference Include="Senparc.Xncf.AIKernel" Version="0.9.0-preview1" />
-        <PackageReference Include="Senparc.Xncf.PromptRange" Version="0.10.0-preview1" />
+        <PackageReference Include="Senparc.Xncf.AIKernel" Version="0.9.1-preview1" />
+        <PackageReference Include="Senparc.Xncf.PromptRange" Version="0.10.1-preview1" />
         <PackageReference Include="Senparc.Xncf.AreasBase" Version="0.9.3-preview1" />
         <PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.23.2-preview1" />
         <PackageReference Include="Senparc.Xncf.Menu" Version="0.10.3-preview1" />
@@ -36,7 +36,7 @@
         <PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.10.3-preview1" />
         <PackageReference Include="Senparc.Xncf.Tenant" Version="0.11.3-preview1" />
         <PackageReference Include="Senparc.Xncf.Terminal" Version="0.19.3-preview1" />
-        <PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.30.0-preview1" />
+        <PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.30.2-preview1" />
         <PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.11.3-preview1" />
         <PackageReference Include="Senparc.Ncf.Core" Version="0.20.3-preview1" />
     </ItemGroup>

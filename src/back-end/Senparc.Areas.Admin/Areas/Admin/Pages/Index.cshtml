@@ -5,7 +5,7 @@
     ViewData["Title"] = "管理员后台首页";
     Layout = "_Layout_Vue";
 }
-@section style{
+@section style {
     <style>
         .xncf-stat-item {
             position: relative;
@@ -61,16 +61,28 @@
             }
 
         .box-card {
-            margin-top:20px
+            margin-top: 20px
         }
 
-        #xncf-modules-area{margin-bottom:50px;}
-         #xncf-modules-area .xncf-item{
-             
-         }
+            .box-card:hover {
+                border-color: purple; /* 外框颜色 */
+                box-shadow: 0 0 10px rgba(128, 0, 128, 0.5); /* 发光阴影颜色 */
+            }
 
-         #xncf-modules-area .xncf-item .version{ float:right;}
-         #xncf-modules-area .xncf-item .icon{ float:left;}
+        #xncf-modules-area {
+            margin-bottom: 50px;
+        }
+
+            #xncf-modules-area .xncf-item {
+            }
+
+                #xncf-modules-area .xncf-item .version {
+                    float: right;
+                }
+
+                #xncf-modules-area .xncf-item .icon {
+                    float: left;
+                }
     </style>
 }
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
@@ -86,46 +98,46 @@
     <el-row :gutter="20">
         <el-col :span="6">
             <a href="~/Admin/XncfModule/Index">
-            <div class="grid-content xncf-stat-item">
-                <span class="count">{{xncfStat.installedXncfCount || 0}}</span>
-                <div class="icon">
-                    <i class="fa fa-caret-square-o-right"></i>
+                <div class="grid-content xncf-stat-item">
+                    <span class="count">{{xncfStat.installedXncfCount || 0}}</span>
+                    <div class="icon">
+                        <i class="fa fa-caret-square-o-right"></i>
+                    </div>
+                    <p class="tit">已安装模块</p>
                 </div>
-                <p class="tit">已安装模块</p>
-            </div>
             </a>
         </el-col>
         <el-col :span="6">
             <a href="~/Admin/XncfModule/Index">
-            <div class="grid-content bg-purple xncf-stat-item">
-                <span class="count">{{xncfStat.updateVersionXncfCount || 0}}</span>
-                <div class="icon">
-                    <i class="fa fa-comments-o"></i>
+                <div class="grid-content bg-purple xncf-stat-item">
+                    <span class="count">{{xncfStat.updateVersionXncfCount || 0}}</span>
+                    <div class="icon">
+                        <i class="fa fa-comments-o"></i>
+                    </div>
+                    <p class="tit">待更新模块</p>
                 </div>
-                <p class="tit">待更新模块</p>
-            </div>
-            </a>
-        </el-col>
-        <el-col :span="6">
-                        <a href="~/Admin/XncfModule/Index">
-            <div class="grid-content bg-purple xncf-stat-item">
-                <span class="count">{{xncfStat.newXncfCount || 0}}</span>
-                <div class="icon">
-                    <i class="fa fa-sort-amount-desc"></i>
-                </div>
-                <p class="tit">发现新模块</p>
-            </div>
             </a>
         </el-col>
         <el-col :span="6">
             <a href="~/Admin/XncfModule/Index">
-            <div class="grid-content bg-purple xncf-stat-item">
-                <span class="count">{{xncfStat.missingXncfCount || 0}}</span>
-                <div class="icon">
-                    <i class="fa fa-check-square-o"></i>
+                <div class="grid-content bg-purple xncf-stat-item">
+                    <span class="count">{{xncfStat.newXncfCount || 0}}</span>
+                    <div class="icon">
+                        <i class="fa fa-sort-amount-desc"></i>
+                    </div>
+                    <p class="tit">发现新模块</p>
                 </div>
-                <p class="tit">模块异常</p>
-            </div>
+            </a>
+        </el-col>
+        <el-col :span="6">
+            <a href="~/Admin/XncfModule/Index">
+                <div class="grid-content bg-purple xncf-stat-item">
+                    <span class="count">{{xncfStat.missingXncfCount || 0}}</span>
+                    <div class="icon">
+                        <i class="fa fa-check-square-o"></i>
+                    </div>
+                    <p class="tit">模块异常</p>
+                </div>
             </a>
         </el-col>
     </el-row>
@@ -148,32 +160,33 @@
 <!-- 功能模块 -->
 <div>
     <el-row>
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>功能模块</span>
-        </div>
-        <div id="xncf-modules-area">
-            <el-row :gutter="20">
-                <el-col :span="6" class="xncf-item" v-for="item in xncfOpeningList" v-key="item.Id">
-                    <el-card class="box-card">
-                      <div slot="header" class="clearfix">
-                        <span>{{item.menuName}}</span> <small class="version">v{{item.version}}</small>
-                      </div>
-                      <a class="component-item" v-bind:href="'/Admin/XncfModule/Start/?uid='+item.uid">
-                        <span class=""><i v-bind:class="[item.icon,'icon']"></i></span>
-                          
+        <el-card class="box-card">
+            <div slot="header" class="clearfix">
+                <span>功能模块</span>
+            </div>
+            <div id="xncf-modules-area">
+                <el-row :gutter="20">
+                    <el-col :span="6" class="xncf-item" v-for="item in xncfOpeningList" v-key="item.Id">
+                        <a v-bind:href="'/Admin/XncfModule/Start/?uid='+item.uid">
+                            <el-card class="box-card" @* @@click="navigateTo(item.uid)" *@>
+                                <div slot="header" class="clearfix">
+                                    <span>{{item.menuName}}</span>
+                                    <small class="version">v{{item.version}}</small>
+                                </div>
+                                <div class="component-item">
+                                    <span class=""><i :class="[item.icon, 'icon']"></i></span>
+                                </div>
+                            </el-card>
+                        </a>
+                    </el-col>
+                </el-row>
+            </div>
 
-                        @*<a v-bind:href="'/Admin/XncfModule/Start/?uid='+item.uid">{{item.menuName}}</a>*@
-                      </a>
-                    </el-card>
-              </el-col>
-            </el-row>
-        </div>
-      </el-card>
+        </el-card>
     </el-row>
 </div>
 
-@section scripts{
+@section scripts {
     <script src="~/lib/echarts/dist/echarts.js"></script>
     <script src="~/js/Admin/Pages/Index/Index.js"></script>
 }

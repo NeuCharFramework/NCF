@@ -153,6 +153,10 @@
         async getXncfOpening() {
             let xncfOpeningList = await service.get('/Admin/Index?handler=XncfOpening');
             this.xncfOpeningList = xncfOpeningList.data.data;
+        },
+        //点击打开模块
+        navigateTo(uid) {
+            window.location.href = '/Admin/XncfModule/Start/?uid=' + uid;
         }
     }
 });  
