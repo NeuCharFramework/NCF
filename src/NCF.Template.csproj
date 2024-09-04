@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.18.2</PackageVersion>
+		<PackageVersion>0.18.3</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -46,7 +46,8 @@
 			v0.17.0 添加手动强制更新模块数据库（Migration）,用于底层更新后导致系统无法正常启动的情况。运行地址：https://localhost:5001/Install?forceUpdateModule=Senparc.Xncf.SystemManager，Senparc.Xncf.SystemManager 替换成需要强制升级的模块名称。出于安全考虑，此方法只能在本地运行。
 			v0.18.0 添加 NeuChar 云端用户接入，为将来云端算力输入做好准备
 			v0.18.1 PromptRange 支持 Markdown 格式输出
-			v0.18.2 Prompt Range，提供打靶结果“复制”功能
+			v0.18.2 PromptRange，提供打靶结果“复制”功能
+			v0.18.3 PromptRange 完善样式
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
