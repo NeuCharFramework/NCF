@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<!--<TargetFramework>net5.0</TargetFramework>-->
-		<Version>0.18.3</Version>
+		<Version>0.18.4</Version>
 		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
 		<TypeScriptToolsVersion>4.1</TypeScriptToolsVersion>
 		<UserSecretsId>d2144151-af7a-4d50-896d-4a306e594f7b</UserSecretsId>
@@ -36,7 +36,7 @@
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.11.3-preview1" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.20.3-preview1" />
 		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.9.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.10.2.7-preview1" />
+		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.10.2.9-preview1" />
 		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.30.3-preview1" />
 		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.5.2-preview1" />
 	</ItemGroup>
