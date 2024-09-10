@@ -1,15 +1,20 @@
 ﻿using Senparc.Areas.Admin.Domain.Dto;
 using Senparc.CO2NET;
+using Senparc.CO2NET.Cache;
+using Senparc.CO2NET.Extensions;
 using Senparc.Ncf.Core.AppServices;
 using Senparc.Ncf.Core.Cache;
+using Senparc.Ncf.Core.Cache.Extensions;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Utility;
 using Senparc.Xncf.SystemManager.Domain.Service;
 using System;
 using System.Collections.Generic;
+using System.DirectoryServices.Protocols;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin.OHS.Local.AppService
@@ -19,10 +24,13 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
     {
         private readonly SystemConfigService _systemConfigService;
         private readonly FullSystemConfigCache _fullSystemConfigCache;
-        public SystemInfoAppService(IServiceProvider serviceProvider, SystemConfigService systemConfigService, FullSystemConfigCache fullSystemConfigCache) : base(serviceProvider)
+        private readonly IBaseObjectCacheStrategy _cacheStrategy;
+
+        public SystemInfoAppService(IServiceProvider serviceProvider, SystemConfigService systemConfigService, FullSystemConfigCache fullSystemConfigCache, IBaseObjectCacheStrategy cacheStrategy) : base(serviceProvider)
         {
             _systemConfigService = systemConfigService;
             _fullSystemConfigCache = fullSystemConfigCache;
+            this._cacheStrategy = cacheStrategy;
         }
 
 
@@ -108,6 +116,86 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 return systemConfigDto;
             });
             return response;
+        }
+
+        [FunctionRender("缓存测试", "测试当前缓存类型及分布式锁", typeof(Register))]
+        public async Task<StringAppResponse> CacheTest()
+        {
+            var response = await this.GetStringResponseAsync(async (response, logger) =>
+            {
+                logger.Append("当前缓存：" + _cacheStrategy.GetType().Name);
+                var key = "NCF.CacheTest";
+                var dt1 = SystemTime.Now;
+
+
+                await _cacheStrategy.SetAsync(key, Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting, TimeSpan.FromSeconds(1));
+                var dt2 = SystemTime.Now;
+                logger.Append($"写入耗时：{(dt2 - dt1).TotalMilliseconds}ms");
+
+                var settingFromCache = await _cacheStrategy.GetAsync<SenparcCoreSetting>(key);
+                var dt3 = SystemTime.Now;
+                logger.Append($"写入耗时：{(dt3 - dt2).TotalMilliseconds}ms");
+
+                Thread.Sleep(2000);
+                var settingFromCache2 = await _cacheStrategy.GetAsync<SenparcCoreSetting>(key);
+                logger.Append($"缓存自动过期：{settingFromCache2 == null}");
+                var index = 0;
+                logger.Append($"缓存锁测试开始");
+
+                //清理缓存
+                await _cacheStrategy.RemoveFromCacheAsync("NcfLockTest");
+
+                Parallel.For(0, 10, async i =>
+                    {
+
+                        using (var cacheLock = await _cacheStrategy.BeginCacheLockAsync("SystemInfoAppService", "CacheTest", 100, TimeSpan.FromMilliseconds(100)))
+                        {
+
+                            var cacheObjects = await _cacheStrategy.GetAsync<List<LockCacheTest>>("NcfLockTest");
+                            if (cacheObjects == null)
+                            {
+                                cacheObjects = new List<LockCacheTest>();
+                            }
+
+                            cacheObjects.Add(new LockCacheTest(index, SystemTime.Now.DateTime, i));
+
+                            await _cacheStrategy.SetAsync("NcfLockTest", cacheObjects, TimeSpan.FromMinutes(10));
+                            logger.Append($"缓存已写入，i:{i}, index:{index}");
+                            //Thread.Sleep(1500);
+                            index++;
+                        }
+                    });
+                var cacheObjects = await _cacheStrategy.GetAsync<List<LockCacheTest>>("NcfLockTest");
+                logger.Append($"缓存锁测试结束，lastLockCache:{cacheObjects.ToJson(true)}");
+
+                //分级缓存测试
+                await _cacheStrategy.RemoveFromCacheAsync("NcfLockTestLevels");
+                for (int i = 0; i < 10; i++)
+                {
+                    var cacheKey = $"NcfLockTestLevels:{i}";
+                    await _cacheStrategy.SetAsync(cacheKey, i, TimeSpan.FromMinutes(10));
+                }
+                var cacheObjectLevels = await _cacheStrategy.GetAllByPrefixAsync<dynamic>("NcfLockTestLevels");
+                logger.Append($"分层索引，NcfLockTestLevels:{cacheObjectLevels.ToJson(true)}");
+
+                logger.SaveLogs("缓存测试");
+                return logger.GetLogs();
+            });
+            return response;
+        }
+
+        class LockCacheTest
+        {
+            public LockCacheTest(int index, DateTime dateTime, int i)
+            {
+                Index = index;
+                DateTime = dateTime;
+                I = i;
+            }
+
+            public int Index { get; set; }
+            public DateTime DateTime { get; set; }
+            public int I { get; set; }
         }
     }
 }
