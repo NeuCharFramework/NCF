@@ -11,12 +11,12 @@ using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Utility;
 using Senparc.Ncf.Log;
+using Senparc.Ncf.XncfBase;
+using Senparc.Xncf.Installer.Domain.Dto;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
 
 namespace Senparc.Xncf.Installer.Domain.Services
 {
@@ -59,6 +59,47 @@ namespace Senparc.Xncf.Installer.Domain.Services
         {
             //string dbConfigName = SenparcDatabaseConnectionConfigs.GetFullDatabaseName(_senparcCoreSetting.DatabaseName);
             return SenparcDatabaseConnectionConfigs.ClientConnectionString;
+        }
+        /// <summary>
+        /// 读取模块名称
+        /// </summary>
+        /// <returns></returns>
+        public List<XncfRegisterDto> GetModules()
+        {
+
+            Senparc.Xncf.Tenant.Register tenantRegister = new Senparc.Xncf.Tenant.Register();
+
+            Senparc.Xncf.SystemCore.Register systemCoreRegister = new Senparc.Xncf.SystemCore.Register();
+
+            Senparc.Xncf.SystemManager.Register systemManagerRegister = new Senparc.Xncf.SystemManager.Register();
+
+            Senparc.Xncf.SystemPermission.Register systemPermissionRegister = new Senparc.Xncf.SystemPermission.Register();
+
+            Senparc.Xncf.XncfModuleManager.Register xncfModuleManagerRegister = new Senparc.Xncf.XncfModuleManager.Register();
+
+            Senparc.Xncf.AreasBase.Register areasBaseRegister = new Senparc.Xncf.AreasBase.Register();
+
+            Senparc.Xncf.Installer.Register installerRegister = new Senparc.Xncf.Installer.Register();
+
+            Senparc.Xncf.Menu.Register menuRegister = new Senparc.Xncf.Menu.Register();
+            var newXncfRegisters = XncfRegisterManager.RegisterList.Where(s => s.Uid!= tenantRegister.Uid && s.Uid!= systemCoreRegister.Uid && s.Uid!= systemManagerRegister.Uid
+            && s.Uid!= systemPermissionRegister.Uid && s.Uid!= xncfModuleManagerRegister.Uid && s.Uid!= areasBaseRegister.Uid && s.Uid!= installerRegister.Uid && s.Uid != menuRegister.Uid).ToList();
+            var needXncfRegisters = new List<XncfRegisterDto>();
+            foreach (var item in newXncfRegisters)
+            {
+                var needXncfRegister = new XncfRegisterDto()
+                {
+                    IgnoreInstall = item.IgnoreInstall,
+                    Uid = item.Uid,
+                    Icon = item.Icon,
+                    MenuName = item.MenuName,
+                    Name = item.Name,
+                    Version = item.Version,
+                    Description = item.Description
+                };
+                needXncfRegisters.Add(needXncfRegister);
+            }
+            return needXncfRegisters;
         }
 
         /// <summary>

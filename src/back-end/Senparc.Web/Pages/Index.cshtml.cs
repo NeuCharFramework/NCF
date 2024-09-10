@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Senparc.CO2NET.Extensions;
+using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Web.Models.VD;
 using System;
@@ -20,11 +23,14 @@ namespace Senparc.Web.Pages
             RequestTenantInfo = requestTenantInfo;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(string forceUpdateModule)
         {
+
+
             //判断是否需要自动进入到安装程序
             if (base.FullSystemConfig == null)
             {
+
                 return new RedirectResult("/Install");
             }
             return Page();

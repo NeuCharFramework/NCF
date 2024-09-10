@@ -3,10 +3,12 @@ var app = new Vue({
     data: {
         isExpanded: false,
         installStarted: false,
+        optionsModelList: [],
         installOptions: {
             systemName: "",
             adminUserName: "",
-            dbConnectionString: ""
+            dbConnectionString: "",
+            needModelList:null  //模型名称列表
         }
     },
     methods: {
@@ -18,9 +20,10 @@ var app = new Vue({
                 .then(response => {
                     var data = response.data.result.data;
                     this.installOptions.systemName = data.systemName;
-                    console.log(data)
+                    console.log(data);
                     this.installOptions.adminUserName = data.adminUserName;
                     this.installOptions.dbConnectionString = data.dbConnectionString;
+                    this.optionsModelList = data.needModelList;
                 })
                 .catch(error => {
                     console.error("获取配置发生错误:", error);

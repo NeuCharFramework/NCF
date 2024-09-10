@@ -34,7 +34,6 @@ BuildOutPut/
 /src/back-end/TestResults
 /src/back-end/Senparc.Web/wwwroot/docs
 
-/src/back-end/.template.config
 /src/front-end/admin-module/dist
 /src/front-end/admin-main/public/dist
 /src/front-end/admin-main/node_modules
@@ -61,8 +60,11 @@ App_Data/SenparcTraceLog
 /src/back-end/Senparc.Web/App_Data/Database/*.DB-wal
 /src/back-end/Senparc.Web/Senparc.AI.Dalle-*.jpg
 Thumbs.db
-/tools/AutoUpgrade/src/BuildOutput/net8.0/AutoUpgrade.pdb
 /tools/AutoUpgrade/src/BuildOutput
 /tools/Build
 /tools/NcfTemplateBuild/nuget_key.txt
 /tools/NcfTemplateBuild/nuget.exe
+/src/back-end/outdatedPackagesOutput.txt
+/src/back-end/Tools/nuget.exe
+/src/back-end/Tools/UpdatePackages.ps1
+/src/back-end/UpdateSenparcPackages.bat

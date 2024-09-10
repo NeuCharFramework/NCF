@@ -67,7 +67,7 @@ namespace Senparc.Areas.Admin.SenparcTraceManager
                         log.Title = "【{0}Exception】异常！".FormatWith(startExceptionRegex.Value);//记录标题
                         log.Line = line;
                         log.IsException = true;
-                        log.weixinTraceType = SenparcTraceType.Exception;
+                        log.SenparcTraceType = SenparcTraceType.Exception;
 
                         readPostData = false;
                         readResult = false;
@@ -124,15 +124,15 @@ namespace Senparc.Areas.Admin.SenparcTraceManager
                     {
                         log.Result.Url = lineText.Replace("URL：", "");
 
-                        if (SenparcTraceType.Normal ==  log.weixinTraceType)
+                        if (SenparcTraceType.Normal ==  log.SenparcTraceType)
                         {
-                            log.weixinTraceType = SenparcTraceType.API;
+                            log.SenparcTraceType = SenparcTraceType.API;
                         }
                         //log.weixinTraceType = log.weixinTraceType | WeixinTraceType.API;
                     }
                     else if (lineText == "Post Data：")
                     {
-                        log.weixinTraceType = SenparcTraceType.PostRequest;//POST请求
+                        log.SenparcTraceType = SenparcTraceType.PostRequest;//POST请求
                         readPostData = true;
                     }
                     else if (lineText == "Result：" || readResult)
@@ -140,9 +140,9 @@ namespace Senparc.Areas.Admin.SenparcTraceManager
                         log.Result.Result += lineText.Replace("Result：", "") + "\r\n";
                         readResult = true;
 
-                        if (SenparcTraceType.PostRequest != log.weixinTraceType)
+                        if (SenparcTraceType.PostRequest != log.SenparcTraceType)
                         {
-                            log.weixinTraceType = SenparcTraceType.GetRequest;//GET请求
+                            log.SenparcTraceType = SenparcTraceType.GetRequest;//GET请求
                         }
                     }
 

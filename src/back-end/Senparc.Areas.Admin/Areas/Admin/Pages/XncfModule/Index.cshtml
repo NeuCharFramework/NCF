@@ -3,10 +3,10 @@
 @using Senparc.Ncf.Core.Areas;
 @using Senparc.Ncf.XncfBase;
 @{
-    ViewData["Title"] = "模块管理"; 
+    ViewData["Title"] = "模块管理";
     Layout = "_Layout_Vue";
 }
-@section Style{
+@section Style {
     <link href="~/css/Admin/XncfModule/XncfModule.css" rel="stylesheet" />
 }
 @section breadcrumbs {
@@ -104,23 +104,29 @@
                     <template slot-scope="scope">
                         <el-button size="mini"
                                    icon="el-icon-s-tools"
-                                   type="primary" 
-                                    v-if="scope.row.xncfRegister!==null"
+                                   type="primary"
+                                   v-if="scope.row.xncfRegister!==null"
                                    @@click="handleHandle(scope.$index, scope.row)">操作</el-button>
                         <el-button size="mini"
                                    v-if="scope.row.xncfRegister!==null&&scope.row.xncfRegister.homeUrl"
                                    icon="el-icon-s-home"
                                    type="primary"
                                    @@click="handleIndex(scope.$index, scope.row)">主页</el-button>
-                        <span v-if="scope.row.xncfRegister===null">
-                            此模块已被删除~
-                        </span>
+                        <div v-if="scope.row.xncfRegister===null">
+                            <span>此模块未被部署或程序集文件已丢失</span>
+                           @*  <span>
+                                <el-button size="mini"
+                                           icon="el-icon-s-home"
+                                           type="primary"
+                                           @@click="remove(scope.$index, scope.row)">主页</el-button>
+                            </span> *@
+                        </div>
                     </template>
                 </el-table-column>
             </el-table>
         </el-main>
     </el-container>
 </div>
-@section scripts{
+@section scripts {
     <script src="~/js/Admin/Pages/XncfModule/Index.js"></script>
 }
