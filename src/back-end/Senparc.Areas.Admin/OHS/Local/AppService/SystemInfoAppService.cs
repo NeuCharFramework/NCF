@@ -169,10 +169,10 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 logger.Append($"缓存锁测试结束，lastLockCache:{cacheObjects.ToJson(true)}");
 
                 //分级缓存测试
-                await _cacheStrategy.RemoveFromCacheAsync("NcfLockTestLevels");
                 for (int i = 0; i < 10; i++)
                 {
                     var cacheKey = $"NcfLockTestLevels:{i}";
+                    await _cacheStrategy.RemoveFromCacheAsync(cacheKey);
                     await _cacheStrategy.SetAsync(cacheKey, i, TimeSpan.FromMinutes(10));
                 }
                 var cacheObjectLevels = await _cacheStrategy.GetAllByPrefixAsync<dynamic>("NcfLockTestLevels");
