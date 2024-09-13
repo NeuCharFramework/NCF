@@ -47,7 +47,7 @@
 
 		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.9.4.1-preview1" />
 
-		<PackageReference Include="Senparc.Xncf.DynamicData" Version="0.2.3.1-preview1.7" />
+		<PackageReference Include="Senparc.Xncf.DynamicData" Version="0.2.3.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.10.4.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.11.3.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.11.4.1-preview1" />

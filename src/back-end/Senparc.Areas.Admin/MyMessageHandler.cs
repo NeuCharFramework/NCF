@@ -35,7 +35,7 @@ namespace Senparc.Web
 
         protected override async Task AfterRunBotAsync(IServiceProvider serviceProvider, RequestMessageText requestMessage, MpAccountDto mpAccountDto, SenparcAiResult senparcAiResult, DateTimeOffset startTime)
         {
-            var aiResultContent = senparcAiResult.Output;
+            var aiResultContent = senparcAiResult.OutputString;
             if (aiResultContent == "Img=True")
             {
                 _ = await Senparc.Weixin.MP.AdvancedAPIs.CustomApi.SendTextAsync(mpAccountDto.AppId, requestMessage.FromUserName, $"我开始画画啦！");
@@ -50,10 +50,12 @@ namespace Senparc.Web
                                     .BuildKernel();
 
 #pragma warning disable SKEXP0002 // 类型仅用于评估，在将来的更新中可能会被更改或删除。取消此诊断以继续。
+#pragma warning disable SKEXP0001 // 类型仅用于评估，在将来的更新中可能会被更改或删除。取消此诊断以继续。
                 var dallE = iWantTo.GetRequiredService<ITextToImageService>();
 
 
                 var imageUrl = await dallE.GenerateImageAsync(requestMessage.Content, 1024, 1024);
+#pragma warning restore SKEXP0001 // 类型仅用于评估，在将来的更新中可能会被更改或删除。取消此诊断以继续。
 
                 _ = await Senparc.Weixin.MP.AdvancedAPIs.CustomApi.SendTextAsync(mpAccountDto.AppId, requestMessage.FromUserName, $"图片已生成，正在保存并推送（{imageUrl}）");
 
