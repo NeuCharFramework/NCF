@@ -25,7 +25,7 @@
 		<PackageReference Include="Senparc.Ncf.Database.Sqlite" Version="0.18.4.1-preview1" />
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.18.4.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.9.4.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.23.4.1-preview1" />
+		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.23.7-preview1" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.10.4.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.14.4.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.10.4.1-preview1" />
