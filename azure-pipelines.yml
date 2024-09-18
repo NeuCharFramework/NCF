@@ -1,8 +1,3 @@
-# ASP.NET Core (.NET Framework)
-# Build and test ASP.NET Core projects targeting the full .NET Framework.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
 - master
 
@@ -19,13 +14,13 @@ steps:
 - task: NuGetToolInstaller@1
 
     
-- task: UseDotNet@2
-  displayName: 'Use .NET SDK 8'
-  inputs:
-    version: '8.0.100'
-    packageType: 'sdk'
-    performMultiLevelLookup: true
-    includePreviewVersions: true
+# - task: UseDotNet@2
+#   displayName: 'Use .NET SDK 8'
+#   inputs:
+#     version: '8.0.100'
+#     packageType: 'sdk'
+#     performMultiLevelLookup: true
+#     includePreviewVersions: true
 
 - task: NuGetToolInstaller@1
   displayName: 'Use NuGet 6.3.0'
@@ -83,4 +78,3 @@ steps:
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'sample'
-    publishLocation: 'Container'
