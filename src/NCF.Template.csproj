@@ -53,7 +53,7 @@
 			v0.18.7 升级基础库，优化 XNCF 模块
 			v0.18.8 升级 DatabaseToolkit 模块
 			v0.18.9 升级 WeixinManager 模块
-			v0.18.10 添加新 Doc 模块（V2）
+			v0.18.10 添加新 Doc 模块（V2）、完善 Docker 文件配置
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
