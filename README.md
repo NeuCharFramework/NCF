@@ -8,8 +8,12 @@ NCF Web 项目模板：[![Senparc.NCF.Template](https://img.shields.io/nuget/vpr
 
 XNCF 模块模板：[![Senparc.Xncf.XncfBuilder.Template](https://img.shields.io/nuget/vpre/Senparc.Xncf.XncfBuilder.Template?label=Senparc.Xncf.XncfBuilder.Template)](https://www.nuget.org/packages/Senparc.Xncf.XncfBuilder.Template/)
 
-
+<!--
 [![Build Status](https://mysenparc.visualstudio.com/NCF%20and%20Senparc.AI%20Cummunity%20Projects/_apis/build/status%2FNeuCharFramework.NCF?branchName=master)](https://mysenparc.visualstudio.com/NCF%20and%20Senparc.AI%20Cummunity%20Projects/_build/latest?definitionId=65&branchName=master)
+-->
+
+📚 官方文档：[https://doc.ncf.pub](https://doc.ncf.pub)
+💡 在线示例：[https://ww.ncf.pub](https://www.ncf.pub)
 
 > **Notice**<br>
 > 1. NCF 由盛派（Senparc）团队经过多年优化迭代的自用系统底层框架 SenparcCore 升级而来，经历了 .NET 3.5/4.5 众多系统的实战检验，并最终移植到 .NET Core（同时支持 .NET 6 / .NET 8），目前已在众多系统中稳定运行。感谢大家一直以来的支持！<br>
