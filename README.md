@@ -32,7 +32,7 @@ XNCF 模块模板：[![Senparc.Xncf.XncfBuilder.Template](https://img.shields.io
 
 ## 在线文档
 
-[https://www.ncf.pub/Docs](https://www.ncf.pub/Docs)
+[https://doc.ncf.pub](https://doc.ncf.pub)
 
 ## 当前项目在线 Demo
 
@@ -113,7 +113,7 @@ XNCF 模块模板：[![Senparc.Xncf.XncfBuilder.Template](https://img.shields.io
 
 - [x] 定制命名空间
 - [x] 提供交流社区，包括但不仅限于[问答网站](https://weixin.senparc.com/QA)、[QQ群](#qq-技术交流群)、微信群、直播群。
-- [ ] 进一步完善的示例代码和文档。
+- [x] 进一步完善的示例代码和文档。
 - [ ] 提供博客和视频教程（也欢迎开发者参与或发起）。
 - [ ] 完善 DDD 实践
 - [ ] 添加应用商店
