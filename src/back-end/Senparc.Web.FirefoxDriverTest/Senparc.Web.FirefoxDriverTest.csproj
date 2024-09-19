@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<IsPackable>false</IsPackable>
-		<Configurations>Debug;Release;Debug-Dapr;NcfDebugForPromptRange</Configurations>
+		<Configurations>Debug;Release;Debug-Dapr;NcfDebugForPromptRange;ModifyPublish</Configurations>
 	</PropertyGroup>
 
 	<ItemGroup>

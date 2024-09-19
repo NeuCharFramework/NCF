@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Senparc.Web.Pages
 {
-    public class Index1Model : PageModel
+    public class DocModel : PageModel
     {
         public IActionResult OnGet()
         {

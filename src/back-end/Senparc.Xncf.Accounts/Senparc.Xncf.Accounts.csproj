@@ -5,6 +5,7 @@
 		<AssemblyName>Senparc.Xncf.Accounts</AssemblyName>
 		<RootNamespace>Senparc.Xncf.Accounts</RootNamespace>
 		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+		<GeneratePackageOnBuild Condition="'$(Configuration)'=='ModifyPublish'">true</GeneratePackageOnBuild>
 		<Description>注册用户管理</Description>
 		<Copyright>Senparc</Copyright>
 		<PackageTags>Senparc,NeuCharFramework,NCF,Senparc.Xncf.Accounts</PackageTags>
@@ -19,7 +20,7 @@
 			v0.1 创世
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NcfPackageSources</RepositoryUrl>
-		<Configurations>Debug;Release;Test;TemplateRelease;Debug-Dapr;NcfDebugForPromptRange</Configurations>
+		<Configurations>Debug;Release;Test;TemplateRelease;Debug-Dapr;NcfDebugForPromptRange;ModifyPublish</Configurations>
 		<UserSecretsId>09f08471-c710-42f1-9f6b-936794838320</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
@@ -33,6 +34,10 @@
 		<DebugType>pdbonly</DebugType>
 		<ErrorReport>prompt</ErrorReport>
 		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>-->
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)'=='ModifyPublish'">
+	  <OutputPath>..\..\..\BuildOutPut</OutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

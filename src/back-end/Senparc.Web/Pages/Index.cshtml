@@ -2,7 +2,7 @@
 @model IndexModel
 @using Senparc.Ncf.XncfBase
 @inject IServiceProvider _serviceProvider
-@functions{
+@functions {
     protected async Task<bool> CheckXncfModuleValiable(string xncfName)
     {
         XncfRegisterManager xncfRegisterManager = new XncfRegisterManager(_serviceProvider);
@@ -69,19 +69,81 @@
                 </p>
             </div>
         </div>
-
         <div class="col-lg-4 col-md-4">
-            <h3 class="index-special-title">DDD 模式</h3>
+            <h3 class="index-special-title">
+                AI 原生框架
+            </h3>
             <div class="index-special-point">
-                <p>DDD 模式开发，灵活应对变化。</p>
+                <p>
+                    使用 AI 构建系统，提供智能化的开发体验。同时集成 AI 基础能力，轻松开发 AI 应用。
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <h3 class="index-special-title">模块化设计</h3>
+            <div class="index-special-point">
+                <p>
+                    高度模块化设计，自由组合、自行扩展。每个功能模块都可以独立开发、测试、集成、部署。
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <h3 class="index-special-title">
+                多数据库支持
+            </h3>
+            <div class="index-special-point">
+                <p>
+                    支持 SQL Server、MySQL、SQLite、PostgreSQL、Oracle、DM（达梦）等多种数据库，并可轻松扩展。
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <h3 class="index-special-title">高性能</h3>
+            <div class="index-special-point">
+                <p>
+                    10 余年的企业级系统优化经验，高性能、高可用。大量日均 500 万 PV 以上系统正在使用。
+                </p>
             </div>
         </div>
 
         <div class="col-lg-4 col-md-4">
-            <h3 class="index-special-title">模块化</h3>
+            <h3 class="index-special-title">DDD 模式</h3>
             <div class="index-special-point">
                 <p>
-                    高度模块化设计，自由组合、自行扩展。
+                    基于严格的 DDD（Domain-Driven Deisgn）模式开发，灵活应对变化。
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-4">
+            <h3 class="index-special-title">
+                Dapr 支持
+            </h3>
+            <div class="index-special-point">
+                <p>
+                    支持 Dapr 微服务框架，可快速实现微服务化。
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <h3 class="index-special-title">
+                向下兼容
+            </h3>
+            <div class="index-special-point">
+                <p>
+                    除微服务、分布式外，支持传统开发和单机部署模式，无额外学习成本。
+                    基于模块化原理，框架支持无缝升级，随时保持最新状态。
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-4">
+            <h3 class="index-special-title">
+                社区支持
+            </h3>
+            <div class="index-special-point">
+                <p>
+                    由盛派开发者社区核心主创团队提供维护支持，常年升级维护。
                 </p>
             </div>
         </div>
@@ -89,77 +151,77 @@
 
     <hr class="mt-6r" />
     @*<div class="row">
-            <div class="col-sm-6 col-md-4 col-lg-3 ">
-                <div class="index-module place-hover">
-                    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
-                    <div class="caption">
-                        <p class="caption-tit">AbcDefg<br></p>
-                        <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4 col-lg-3 ">
-                <div class="index-module place-hover">
-                    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
-                    <div class="caption">
-                        <p class="caption-tit">AbcDefg<br></p>
-                        <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4 col-lg-3 ">
-                <div class="index-module place-hover">
-                    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
-                    <div class="caption">
-                        <p class="caption-tit">AbcDefg<br></p>
-                        <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4 col-lg-3 ">
-                <div class="index-module place-hover">
-                    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
-                    <div class="caption">
-                        <p class="caption-tit">AbcDefg<br></p>
-                        <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4 col-lg-3 ">
-                <div class="index-module place-hover">
-                    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
-                    <div class="caption">
-                        <p class="caption-tit">AbcDefg<br></p>
-                        <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4 col-lg-3 ">
-                <div class="index-module place-hover">
-                    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
-                    <div class="caption">
-                        <p class="caption-tit">AbcDefg<br></p>
-                        <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4 col-lg-3 ">
-                <div class="index-module place-hover">
-                    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
-                    <div class="caption">
-                        <p class="caption-tit">AbcDefg<br></p>
-                        <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4 col-lg-3 ">
-                <div class="index-module place-hover">
-                    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
-                    <div class="caption">
-                        <p class="caption-tit">AbcDefg<br></p>
-                        <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
-                    </div>
-                </div>
-            </div>
-        </div>*@
+    <div class="col-sm-6 col-md-4 col-lg-3 ">
+    <div class="index-module place-hover">
+    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
+    <div class="caption">
+    <p class="caption-tit">AbcDefg<br></p>
+    <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
+    </div>
+    </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 ">
+    <div class="index-module place-hover">
+    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
+    <div class="caption">
+    <p class="caption-tit">AbcDefg<br></p>
+    <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
+    </div>
+    </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 ">
+    <div class="index-module place-hover">
+    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
+    <div class="caption">
+    <p class="caption-tit">AbcDefg<br></p>
+    <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
+    </div>
+    </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 ">
+    <div class="index-module place-hover">
+    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
+    <div class="caption">
+    <p class="caption-tit">AbcDefg<br></p>
+    <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
+    </div>
+    </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 ">
+    <div class="index-module place-hover">
+    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
+    <div class="caption">
+    <p class="caption-tit">AbcDefg<br></p>
+    <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
+    </div>
+    </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 ">
+    <div class="index-module place-hover">
+    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
+    <div class="caption">
+    <p class="caption-tit">AbcDefg<br></p>
+    <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
+    </div>
+    </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 ">
+    <div class="index-module place-hover">
+    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
+    <div class="caption">
+    <p class="caption-tit">AbcDefg<br></p>
+    <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
+    </div>
+    </div>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 ">
+    <div class="index-module place-hover">
+    <img class="lazy" src="https://weixin.senparc.com/Content/Images/2019/logo-community-two-lines.png" width="300" height="150">
+    <div class="caption">
+    <p class="caption-tit">AbcDefg<br></p>
+    <p class="caption-info">待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字待填写文字</p>
+    </div>
+    </div>
+    </div>
+    </div>*@
 </div>
