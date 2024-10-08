@@ -45,6 +45,7 @@ li {
     text-align: right;
     color: #5A738E
 }
+
     .footer a:hover {
         color: #23527c;
     }
@@ -76,6 +77,11 @@ li {
 .el-aside .el-menu-item i {
     color: inherit;
 }
+
+.el-scrollbar__wrap {
+    overflow-x: hidden;
+}
+
 
 .el-menu {
     border: none;

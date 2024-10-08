@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.18.13</PackageVersion>
+		<PackageVersion>0.19.0</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -57,6 +57,7 @@
 			v0.18.11 优化模板
 			v0.18.12 升级 PromptRange、DynamicData
 			v0.18.13 升级基础库和 Utility 库
+			v0.19.0 优化左侧滚动条样式，可滚动到最下方 #256
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
