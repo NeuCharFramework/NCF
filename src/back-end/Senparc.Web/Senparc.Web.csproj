@@ -20,27 +20,28 @@
 		<!--<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
 		<PackageReference Include="Dapr.Client" Version="1.12.0" />-->
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0" />
-		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.4.3" />
+		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.5.0" />
 		<PackageReference Include="Senparc.CO2NET" Version="2.5.2" />
-		<PackageReference Include="Senparc.Ncf.Database.Sqlite" Version="0.18.4.1-preview1" />
-		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.18.4.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.9.4.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.23.7-preview1" />
-		<PackageReference Include="Senparc.Xncf.Menu" Version="0.10.4.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.14.4.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.10.4.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.11.3.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.10.4.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.11.4.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.19.4.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.11.4.1-preview1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.20.4.2-preview1" />
-		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.9.3.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.10.4.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.30.6.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.5.6.1-preview1" />
+		<PackageReference Include="Senparc.Ncf.Database.Sqlite" Version="0.18.5-preview1" />
+		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.18.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.9.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.23.8-preview1" />
+		<PackageReference Include="Senparc.Xncf.Menu" Version="0.10.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.14.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.10.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.11.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.10.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.11.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.19.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.11.5-preview1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.20.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.9.4-preview1" />
+		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.10.6-preview1" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.30.7-preview1" />
+		<!--<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.5.6.1-preview1" />-->
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.AgentsManager\Senparc.Xncf.AgentsManager.ForNcf.csproj" />
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
