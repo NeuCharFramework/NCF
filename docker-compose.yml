@@ -19,6 +19,8 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - /app/data/mysql:/var/lib/mysql
+    networks:
+      - aspnetapp-net
 
   senparc.ncf.web:
     image: docker.cnb.cool/senparc/neucharframework/ncf:latest
@@ -36,6 +38,8 @@ services:
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=123456
       - TZ=Asia/Shanghai
+    volumes:
+      - /app/App_Data/SenparcTraceLog:/app/App_Data/SenparcTraceLog
     networks:
       - aspnetapp-net
 
