@@ -21,7 +21,7 @@ services:
       - /app/data/mysql:/var/lib/mysql
 
   senparc.ncf.web:
-    image: docker.cnb.cool/senparc/neucharframeworkteam/ncf:latest
+    image: docker.cnb.cool/senparc/neucharframework/ncf:latest
     container_name: senparc.ncf.web
     ports:
       - "8080:5000"
