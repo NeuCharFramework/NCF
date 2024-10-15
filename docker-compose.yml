@@ -1,13 +1,43 @@
 services:
 
   redis:
-    image: redis:latest
+    container_name: redis
+    ports:
+      - 6379:6379
+    networks:
+      - aspnetapp-net
 
   mysql:
-     image: mysql:5.7
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - TZ=Asia/Shanghai
+    volumes:
+      - /app/data/mysql:/var/lib/mysql
 
   senparc.ncf.web:
-    image: ${DOCKER_REGISTRY-}ncf-web
-    build:
-      context: .
-      dockerfile: src/back-end/Senparc.Web/Dockerfile
+    image: docker.cnb.cool/senparc/neucharframeworkteam/ncf:latest
+    container_name: senparc.ncf.web
+    ports:
+      - "8080:5000"
+      - "8443:5001"
+    restart: always
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - MYSQL_ADDRESS=mysql:3306
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=123456
+      - TZ=Asia/Shanghai
+    networks:
+      - aspnetapp-net
+
+networks:
+  aspnetapp-net:
+    driver: bridge
