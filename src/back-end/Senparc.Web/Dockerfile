@@ -28,6 +28,12 @@ RUN dotnet publish "./Senparc.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publis
 
 # 此阶段在生产中使用，或在常规模式下从 VS 运行时使用(在不使用调试配置时为默认值)
 FROM base AS final
+
+# 设置时区和安装证书
+RUN apk add --no-cache tzdata ca-certificates && \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo Asia/Shanghai > /etc/timezone
+
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Senparc.Web.dll"]
