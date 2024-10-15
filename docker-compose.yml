@@ -37,7 +37,6 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - /app/App_Data/SenparcTraceLog:/app/App_Data/SenparcTraceLog
-      - /app/App_Data/Database:/workspace/src/back-end/Senparc.Web/App_Data/Database
     networks:
       - aspnetapp-net
 
