@@ -34,9 +34,6 @@ services:
       - redis
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - MYSQL_ADDRESS=mysql:3306
-      - MYSQL_USERNAME=root
-      - MYSQL_PASSWORD=123456
       - TZ=Asia/Shanghai
     volumes:
       - /app/App_Data/SenparcTraceLog:/app/App_Data/SenparcTraceLog
