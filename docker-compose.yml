@@ -1,0 +1,13 @@
+services:
+
+  redis:
+    image: redis:latest
+
+  mysql:
+     image: mysql:5.7
+
+  senparc.ncf.web:
+    image: ${DOCKER_REGISTRY-}ncf-web
+    build:
+      context: .
+      dockerfile: src/back-end/Senparc.Web/Dockerfile

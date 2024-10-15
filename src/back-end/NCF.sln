@@ -30,6 +30,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Xncf.Installer.Inte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Areas.Admin.Tests", "Tests\Senparc.Areas.Admin.Tests\Senparc.Areas.Admin.Tests.csproj", "{6228437D-3EF6-43D9-A75C-255C883F293B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{CB2C0C2D-07D4-4254-AD5D-F2FF9742A815}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "..\..\docker-compose.dcproj", "{45004002-64DA-47F6-95F6-C6A0583E2666}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -142,6 +146,20 @@ Global
 		{6228437D-3EF6-43D9-A75C-255C883F293B}.TemplateRelease|Any CPU.Build.0 = Release|Any CPU
 		{6228437D-3EF6-43D9-A75C-255C883F293B}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{6228437D-3EF6-43D9-A75C-255C883F293B}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{45004002-64DA-47F6-95F6-C6A0583E2666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45004002-64DA-47F6-95F6-C6A0583E2666}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45004002-64DA-47F6-95F6-C6A0583E2666}.Debug-Dapr|Any CPU.ActiveCfg = Debug|Any CPU
+		{45004002-64DA-47F6-95F6-C6A0583E2666}.Debug-Dapr|Any CPU.Build.0 = Debug|Any CPU
+		{45004002-64DA-47F6-95F6-C6A0583E2666}.ModifyPublish|Any CPU.ActiveCfg = Release|Any CPU
+		{45004002-64DA-47F6-95F6-C6A0583E2666}.ModifyPublish|Any CPU.Build.0 = Release|Any CPU
+		{45004002-64DA-47F6-95F6-C6A0583E2666}.NcfDebugForPromptRange|Any CPU.ActiveCfg = Debug|Any CPU
+		{45004002-64DA-47F6-95F6-C6A0583E2666}.NcfDebugForPromptRange|Any CPU.Build.0 = Debug|Any CPU
+		{45004002-64DA-47F6-95F6-C6A0583E2666}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45004002-64DA-47F6-95F6-C6A0583E2666}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45004002-64DA-47F6-95F6-C6A0583E2666}.TemplateRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{45004002-64DA-47F6-95F6-C6A0583E2666}.TemplateRelease|Any CPU.Build.0 = Release|Any CPU
+		{45004002-64DA-47F6-95F6-C6A0583E2666}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{45004002-64DA-47F6-95F6-C6A0583E2666}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
