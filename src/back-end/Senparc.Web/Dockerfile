@@ -40,6 +40,9 @@ RUN dotnet publish "Senparc.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish 
 FROM base AS final
 WORKDIR /app
 
+# 创建所需目录并设置权限
+RUN mkdir -p /app/App_Data/SenparcTraceLog
+
 # 切换到应用程序用户
 USER $APP_UID
 
