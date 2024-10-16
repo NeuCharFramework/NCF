@@ -22,21 +22,17 @@ services:
     networks:
       - aspnetapp-net
 
-  senparc.ncf.web:
+  ncf:
     image: docker.cnb.cool/senparc/neucharframework/ncf:latest
-    container_name: senparc.ncf.web
+    container_name: ncf
     ports:
-      - "8080:5000"
-      - "8443:5001"
+      - "5000:8080"
+      - "5001:5001"
     restart: always
     depends_on:
       - mysql
-      - redis
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
       - TZ=Asia/Shanghai
-    volumes:
-      - /app/App_Data/SenparcTraceLog:/app/App_Data/SenparcTraceLog
     networks:
       - aspnetapp-net
 
