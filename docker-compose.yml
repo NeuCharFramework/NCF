@@ -22,12 +22,14 @@ services:
     networks:
       - aspnetapp-net
 
-  ncf:
+  senparc.ncf.web:
     image: docker.cnb.cool/senparc/neucharframework/ncf:latest
-    container_name: ncf
+    build:
+      context: .
+      dockerfile: src/back-end/Senparc.Web/Dockerfile
+    container_name: senparc.ncf.web
     ports:
       - "5000:8080"
-      - "5001:5001"
     restart: always
     depends_on:
       - mysql
