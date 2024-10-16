@@ -19,6 +19,8 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - /app/data/mysql:/var/lib/mysql
+      - ./.ide/mysql-init:/docker-entrypoint-initdb.d
+      - ./.ide/mysql-config/my.cnf:/etc/mysql/my.cnf
     networks:
       - aspnetapp-net
 
