@@ -6,7 +6,7 @@
     <ProjectGuid>45004002-64da-47f6-95f6-c6a0583e2666</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
-    <DockerServiceName>senparc.ncf.web.services</DockerServiceName>
+    <DockerServiceName>senparc.ncf.web</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.yml" />
