@@ -1,4 +1,4 @@
-main:
+Developer-CNB:
   push:
     # 上传 cloud-native-run-dotnet 的 aspnetapp 应用示例镜像到 CNB 制品库
     - services:
