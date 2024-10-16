@@ -5,7 +5,7 @@
 		<!--<RazorLangVersion>2.0</RazorLangVersion>-->
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-		<DocumentationFile>../Senparc.Web/App_Data/ApiDocXML/Senparc.Areas.Admin.XML</DocumentationFile>
+		<DocumentationFile>../Senparc.Web/App_Data/ApiDocXml/Senparc.Areas.Admin.XML</DocumentationFile>
 		<Configurations>Debug;Release;Debug-Dapr;ModifyPublish;ModifyPublish</Configurations>
 	</PropertyGroup>
 

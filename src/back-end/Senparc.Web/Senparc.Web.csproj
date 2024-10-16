@@ -56,4 +56,12 @@
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
 		</Content>
 	</ItemGroup>
+	<!--<ItemGroup>
+	  <None Update="App_Data\ApiDocXML\Senparc.Areas.Admin.XML">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="App_Data\ApiDocXML\Senparc.Xncf.AgentsManager.XML">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>-->
 </Project>
