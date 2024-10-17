@@ -29,7 +29,7 @@ getNavMenu();
 
 // 菜单栏数据递归
 function myfunctionMain(list) {
-    if (!list && list.length === 0) {
+    if (!list || list.length === 0) {
         return;
     }
     for (var i in list) {
