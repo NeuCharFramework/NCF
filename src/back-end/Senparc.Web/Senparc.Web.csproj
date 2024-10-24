@@ -23,10 +23,10 @@
 		<PackageReference Include="Senparc.CO2NET" Version="2.5.2" />
 		<PackageReference Include="Senparc.Ncf.Database.Sqlite" Version="0.18.5-preview1" />
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.18.5-preview1" />
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.9.7-preview1" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.9.8.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.23.9-preview1" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.10.7-preview1" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.14.8-preview1" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.14.9.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.10.7-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.11.8-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.11.0-preview1" />
