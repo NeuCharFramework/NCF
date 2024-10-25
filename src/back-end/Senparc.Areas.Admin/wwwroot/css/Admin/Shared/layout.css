@@ -78,9 +78,9 @@ li {
     color: inherit;
 }
 
-.el-scrollbar__wrap {
+/*.el-scrollbar__wrap {
     overflow-x: hidden;
-}
+}*/
 
 
 .el-menu {
