@@ -23,7 +23,7 @@
 		<PackageReference Include="Senparc.Ncf.Database.Sqlite" Version="0.18.6-preview1" />
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.18.6-preview1" />
 		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.9.9.2-preview1" />
-		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.23.9-preview1" />
+		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.23.10-preview1" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.10.8-preview1" />
 		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.14.10.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.10.8-preview1" />
@@ -34,13 +34,13 @@
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.11.9-preview1" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.21.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.9.7-preview1" />
-		<!--<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.10.8-preview1" />-->
+		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.10.9-preview1" />
 		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.30.10-preview1" />
-		<!--<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.5.6.1-preview1" />-->
+		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.5.14-preview1" />
 	</ItemGroup>
 	<ItemGroup>
 		<!--<ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.AgentsManager\Senparc.Xncf.AgentsManager.ForNcf.csproj" />-->
-		<ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.PromptRange\Senparc.Xncf.PromptRange.ForNcf.csproj" />
+		<!--<ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.PromptRange\Senparc.Xncf.PromptRange.ForNcf.csproj" />-->
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
