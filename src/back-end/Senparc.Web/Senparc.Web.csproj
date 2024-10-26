@@ -36,7 +36,7 @@
 		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.9.7-preview1" />
 		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.10.9-preview1" />
 		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.30.10-preview1" />
-		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.5.14-preview1" />
+		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.5.15.2-preview1" />
 	</ItemGroup>
 	<ItemGroup>
 		<!--<ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.AgentsManager\Senparc.Xncf.AgentsManager.ForNcf.csproj" />-->
