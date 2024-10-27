@@ -17,7 +17,8 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
     {
         private readonly SysRoleService _sysRoleService;
 
-        public RoleEditModel(SysRoleService sysRoleService)
+        public RoleEditModel(IServiceProvider serviceProvider, SysRoleService sysRoleService)
+            : base(serviceProvider)
         {
             CurrentMenu = "Role";
             _sysRoleService = sysRoleService;

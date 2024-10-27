@@ -12,6 +12,10 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
     [IgnoreAuth]
     public class SenparcTrace_DateLogModel : BaseAdminPageModel
     {
+        public SenparcTrace_DateLogModel(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
+
         public string Date { get; private set; }
         public List<SenparcTraceItem> WeixinTraceItemList { get; private set; }
 
@@ -19,13 +23,13 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         {
             await Task.CompletedTask;
             Date = date;
-            WeixinTraceItemList = SenparcTraceHelper.GetAllLogs(date);
+            WeixinTraceItemList = await SenparcTraceHelper.GetAllLogsAsync(base._serviceProvider, date);
         }
 
         public async Task<IActionResult> OnGetDetailAsync(string date)
         {
             await Task.CompletedTask;
-            var weixinTraceItemList = SenparcTraceHelper.GetAllLogs(date);
+            var weixinTraceItemList = await SenparcTraceHelper.GetAllLogsAsync(base._serviceProvider, date);
             return Ok(weixinTraceItemList);
         }
     }

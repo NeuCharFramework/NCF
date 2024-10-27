@@ -26,14 +26,15 @@ using System.Threading.Tasks;
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
     [IgnoreAuth]
-    public class XncfModuleStartModel : BaseAdminPageModel
+    public class XncfModuleStartModel(IServiceProvider serviceProvider, XncfModuleService xncfModuleService, 
+        SysMenuService sysMenuService) : BaseAdminPageModel(serviceProvider)
     {
-        private readonly SysMenuService _sysMenuService;
+        private readonly SysMenuService _sysMenuService = sysMenuService;
         public Senparc.Ncf.Core.Models.DataBaseModel.XncfModule XncfModule { get; set; }
         //public Dictionary<IXncfFunction, List<FunctionParameterInfo>> FunctionParameterInfoCollection { get; set; } = new Dictionary<IXncfFunction, List<FunctionParameterInfo>>();
 
-        XncfModuleService _xncfModuleService;
-        IServiceProvider _serviceProvider;
+        XncfModuleService _xncfModuleService = xncfModuleService;
+        IServiceProvider _serviceProvider = serviceProvider;
 
         public List<string> XncfModuleUpdateLog { get; set; }
 
@@ -49,13 +50,6 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
         public string Msg { get; set; }
         public object Obj { get; set; }
-
-        public XncfModuleStartModel(IServiceProvider serviceProvider, XncfModuleService xncfModuleService, SysMenuService sysMenuService)
-        {
-            _serviceProvider = serviceProvider;
-            _xncfModuleService = xncfModuleService;
-            _sysMenuService = sysMenuService;
-        }
 
         public async Task OnGetAsync()
         {

@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.21.2</PackageVersion>
+		<PackageVersion>0.21.3</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -61,6 +61,7 @@
 			v0.20.0 提供新版本 AgentsManager 模块
 			v0.21.0 提供新版本 AgentsManager、PromotRange 模块
 			v0.21.2 更新启动字幕，开始提供国际版英文
+			v0.21.3 优化 Admin 后台，为 Log 读取提供同步锁
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>

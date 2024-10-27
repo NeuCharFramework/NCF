@@ -7,6 +7,7 @@ using Senparc.Ncf.Core;
 using Senparc.Ncf.Core.Models.VD;
 using Senparc.Ncf.Core.WorkContext;
 using Senparc.Ncf.XncfBase;
+using Senparc.Weixin.WxOpen.AdvancedAPIs.DataCube;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,8 @@ namespace Senparc.Areas.Admin
     public class BaseAdminPageModel : AdminPageModelBase, IBaseAdminPageModel
     {
         public Senparc.Areas.Admin.Register _xncfRegister;
+        protected readonly IServiceProvider _serviceProvider;
+
         public Senparc.Areas.Admin.Register XncfRegister
         {
             get
@@ -33,6 +36,13 @@ namespace Senparc.Areas.Admin
                 return _xncfRegister;
             }
         }
+
+
+        public BaseAdminPageModel(IServiceProvider serviceProvider)
+        {
+            this._serviceProvider = serviceProvider;
+        }
+
         /// <summary>
         /// 
         /// </summary>
