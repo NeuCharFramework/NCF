@@ -58,7 +58,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
         public string GetDbConnectionString()
         {
             //string dbConfigName = SenparcDatabaseConnectionConfigs.GetFullDatabaseName(_senparcCoreSetting.DatabaseName);
-            return SenparcDatabaseConnectionConfigs.ClientConnectionString;
+            return SenparcDatabaseConnectionConfigs.GetClientConnectionString();
         }
         /// <summary>
         /// 读取模块名称

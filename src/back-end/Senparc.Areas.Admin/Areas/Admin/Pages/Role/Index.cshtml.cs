@@ -16,7 +16,8 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
     {
         private readonly SysRoleService _sysRoleService;
 
-        public RoleIndexModel(SysRoleService sysRoleService)
+        public RoleIndexModel(IServiceProvider serviceProvider, SysRoleService sysRoleService)
+            : base(serviceProvider)
         {
             CurrentMenu = "Role";
             this._sysRoleService = sysRoleService;
@@ -77,7 +78,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// <param name="ids"></param>
         /// <returns></returns>
         [Ncf.AreaBase.Admin.Filters.CustomerResource("role-delete")]
-        public IActionResult OnPostDelete([FromBody]string[] ids)
+        public IActionResult OnPostDelete([FromBody] string[] ids)
         {
             foreach (var id in ids)
             {

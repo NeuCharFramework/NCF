@@ -13,25 +13,11 @@ using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
-    public class TenantInfo_IndexModel : BaseAdminPageModel
+    public class TenantInfo_IndexModel(IServiceProvider serviceProvider, TenantInfoService tenantInfoService
+            /*, FullSystemConfigCache fullSystemConfigCache*/) : BaseAdminPageModel(serviceProvider)
     {
-        private readonly IServiceProvider _serviceProvider;
-        private readonly TenantInfoService _tenantInfoService;
-        //private readonly FullSystemConfigCache _fullSystemConfigCache;
-
-        //[BindProperty]
-        //private FullSystemConfig FullSystemConfig { get; set; }
-
-
-        public TenantInfo_IndexModel(IServiceProvider serviceProvider, TenantInfoService tenantInfoService
-            /*, FullSystemConfigCache fullSystemConfigCache*/)
-        {
-            this._serviceProvider = serviceProvider;
-            this._tenantInfoService = tenantInfoService;
-            //this._fullSystemConfigCache = fullSystemConfigCache;
-
-            //FullSystemConfig = _fullSystemConfigCache.Data;
-        }
+        private readonly IServiceProvider _serviceProvider = serviceProvider;
+        private readonly TenantInfoService _tenantInfoService = tenantInfoService;
 
         public async Task<IActionResult> OnGetAsync()
         {

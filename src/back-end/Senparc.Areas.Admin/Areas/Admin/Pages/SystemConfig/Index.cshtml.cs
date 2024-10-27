@@ -15,22 +15,11 @@ using Senparc.Xncf.SystemManager.Domain.Service;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
-    public class SystemConfig_IndexModel : BaseAdminPageModel
+    public class SystemConfig_IndexModel(IServiceProvider serviceProvider, SystemConfigService systemConfigService, FullSystemConfigCache fullSystemConfigCache)
+        : BaseAdminPageModel(serviceProvider)
     {
-        private readonly SystemConfigService _systemConfigService;
-        private readonly FullSystemConfigCache _fullSystemConfigCache;
-
-        //[BindProperty]
-        //private FullSystemConfig FullSystemConfig { get; set; }
-
-
-        public SystemConfig_IndexModel(SystemConfigService systemConfigService, FullSystemConfigCache fullSystemConfigCache)
-        {
-            this._systemConfigService = systemConfigService;
-            this._fullSystemConfigCache = fullSystemConfigCache;
-
-            //FullSystemConfig = _fullSystemConfigCache.Data;
-        }
+        private readonly SystemConfigService _systemConfigService = systemConfigService;
+        private readonly FullSystemConfigCache _fullSystemConfigCache = fullSystemConfigCache;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -55,7 +44,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// 编辑 SystemConfig 信息
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> OnPostEditAsync([FromBody]FullSystemConfig  fullSystemConfig)
+        public async Task<IActionResult> OnPostEditAsync([FromBody] FullSystemConfig fullSystemConfig)
         {
             var val = this.Validator(fullSystemConfig.SystemName, "系统名称", "SystemName", false);
 

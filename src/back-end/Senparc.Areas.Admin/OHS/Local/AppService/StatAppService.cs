@@ -31,7 +31,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 var dates = SenparcTraceHelper.GetLogDate().Take(14).OrderBy(z => z).ToList();
                 foreach (var date in dates)
                 {
-                    var traceItemList = SenparcTraceHelper.GetAllLogs(date);
+                    var traceItemList = await SenparcTraceHelper.GetAllLogsAsync(base.ServiceProvider,date);
                     var exceptionCount = traceItemList.Count(z => z.IsException);
                     result.Logs.Add(new Stat_GetLogsResponse_Item()
                     {
@@ -54,7 +54,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 {
                     Date = SystemTime.Now.ToString("yyyyMMdd")
                 };
-                var dateLog = SenparcTraceHelper.GetAllLogs(result.Date);
+                var dateLog = await SenparcTraceHelper.GetAllLogsAsync(base.ServiceProvider,result.Date);
                 var groupedLogs = dateLog.GroupBy(z => z.SenparcTraceType);
                 foreach (var item in groupedLogs)
                 {

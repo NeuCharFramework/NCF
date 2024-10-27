@@ -14,7 +14,8 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
     {
         private readonly SysMenuService _sysMenuService;
 
-        public MenuIndexModel(SysMenuService _sysMenuService)
+        public MenuIndexModel(IServiceProvider serviceProvider, SysMenuService _sysMenuService)
+            : base(serviceProvider)
         {
             CurrentMenu = "Menu";
             this._sysMenuService = _sysMenuService;

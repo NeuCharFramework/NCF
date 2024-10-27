@@ -24,6 +24,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
         public XncfModuleIndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleServiceEx,
             SysMenuService sysMenuService, Lazy<SystemConfigService> systemConfigService)
+            : base(serviceProvider)
         {
             CurrentMenu = "XncfModule";
 
