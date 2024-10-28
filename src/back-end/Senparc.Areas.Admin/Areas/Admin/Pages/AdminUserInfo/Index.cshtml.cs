@@ -15,9 +15,10 @@ using Senparc.Areas.Admin.Domain;
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
     [IgnoreAntiforgeryToken]
-    public class AdminUserInfo_IndexModel : BaseAdminPageModel
+    public class AdminUserInfo_IndexModel(IServiceProvider serviceProvider, AdminUserInfoService adminUserInfoService) 
+        : BaseAdminPageModel(serviceProvider)
     {
-        private readonly AdminUserInfoService _adminUserInfoService;
+        private readonly AdminUserInfoService _adminUserInfoService = adminUserInfoService;
         public PagedList<AdminUserInfo> AdminUserInfoList { get; set; }
 
         /// <summary>
@@ -31,11 +32,6 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// </summary>
         [BindProperty(SupportsGet = true)]
         public string OrderField { get; set; } = "AddTime Desc,Id";
-
-        public AdminUserInfo_IndexModel(AdminUserInfoService adminUserInfoService)
-        {
-            _adminUserInfoService = adminUserInfoService;
-        }
 
         public async Task<IActionResult> OnGetAsync()
         {

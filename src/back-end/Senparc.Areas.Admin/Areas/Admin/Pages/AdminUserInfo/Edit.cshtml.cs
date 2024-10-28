@@ -10,7 +10,8 @@ using System;
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
     //[IgnoreAntiforgeryToken]
-    public class AdminUserInfo_EditModel : BaseAdminPageModel, IValidatorEnvironment
+    public class AdminUserInfo_EditModel(IServiceProvider serviceProvider, AdminUserInfoService adminUserInfoService) 
+        : BaseAdminPageModel(serviceProvider), IValidatorEnvironment
     {
         /// <summary>
         /// Id
@@ -25,14 +26,8 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         public CreateOrUpdate_AdminUserInfoDto AdminUserInfo { get; set; } = new CreateOrUpdate_AdminUserInfoDto();
         //public CreateUpdate_AdminUserInfoDto AdminUserInfo { get; set; }
 
-        private readonly IServiceProvider _serviceProvider;
-        private readonly AdminUserInfoService _adminUserInfoService;
-
-        public AdminUserInfo_EditModel(IServiceProvider serviceProvider, AdminUserInfoService adminUserInfoService)
-        {
-            _serviceProvider = serviceProvider;
-            _adminUserInfoService = adminUserInfoService;
-        }
+        private readonly IServiceProvider _serviceProvider = serviceProvider;
+        private readonly AdminUserInfoService _adminUserInfoService = adminUserInfoService;
 
         public IActionResult OnGet(int id)
         {
