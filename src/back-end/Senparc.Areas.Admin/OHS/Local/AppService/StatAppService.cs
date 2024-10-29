@@ -45,6 +45,10 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             });
         }
 
+        /// <summary>
+        /// 获取当天日志信息
+        /// </summary>
+        /// <returns></returns>
         [ApiBind]
         public async Task<AppResponseBase<Stat_GetTodayLogResponse>> GetTodayLog()
         {
@@ -54,6 +58,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 {
                     Date = SystemTime.Now.ToString("yyyyMMdd")
                 };
+
                 var dateLog = await SenparcTraceHelper.GetAllLogsAsync(base.ServiceProvider,result.Date);
                 var groupedLogs = dateLog.GroupBy(z => z.SenparcTraceType);
                 foreach (var item in groupedLogs)
