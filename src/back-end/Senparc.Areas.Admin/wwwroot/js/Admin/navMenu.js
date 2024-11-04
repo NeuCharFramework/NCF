@@ -32,6 +32,9 @@ function myfunctionMain(list) {
     if (!list || list.length === 0) {
         return;
     }
+    //if (!list && list.length === 0) {
+    //    return;
+    //}
     for (var i in list) {
         let setNavMenuActive = window.sessionStorage.getItem('setNavMenuActive');
         // 如果有需要单独设置的导航 （例如安装、卸载后激活特定的导航）
