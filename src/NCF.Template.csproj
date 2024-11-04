@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.21.4</PackageVersion>
+		<PackageVersion>0.22.0</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -63,6 +63,7 @@
 			v0.21.2 更新启动字幕，开始提供国际版英文
 			v0.21.3 优化 Admin 后台，为 Log 读取提供同步锁
 			v0.21.4 统一 MacOS 中 SQLite 数据库的路径
+			v0.22.0 加载新版本 PromptRange 和 AgentsManager
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
