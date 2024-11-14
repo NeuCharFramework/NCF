@@ -38,6 +38,7 @@ services:
       - redis
     environment:
       - TZ=Asia/Shanghai
+      - ASPNETCORE_ENVIRONMENT=Development
     networks:
       - aspnetapp-net
 
