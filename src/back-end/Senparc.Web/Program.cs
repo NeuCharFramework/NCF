@@ -22,8 +22,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
-//注入DI对象
-app.UseSenparcMvcDI();
+
 //Use NCF（必须）
 app.UseNcf<BySettingDatabaseConfiguration>();
 /*  UseNcf<TDatabaseConfiguration>() 泛型类型说明
