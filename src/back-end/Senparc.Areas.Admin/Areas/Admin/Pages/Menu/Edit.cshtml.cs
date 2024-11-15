@@ -15,7 +15,8 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         private readonly SysMenuService _sysMenuService;
         private readonly SysButtonService _sysButtonService;
 
-        public MenuEditModel(SysMenuService _sysMenuService, SysButtonService _sysButtonService)
+        public MenuEditModel(IServiceProvider serviceProvider, SysMenuService _sysMenuService, SysButtonService _sysButtonService)
+            : base(serviceProvider)
         {
             CurrentMenu = "Menu";
             this._sysMenuService = _sysMenuService;
@@ -50,7 +51,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             var entity = await _sysMenuService.GetObjectAsync(_ => _.Id == Id);
             var sysMenuDto = _sysMenuService.Mapper.Map<SysMenuDto>(entity);
             var sysButtons = await _sysButtonService.GetFullListAsync(_ => _.MenuId == Id);
-            return Ok( new{ sysMenuDto, sysButtons });
+            return Ok(new { sysMenuDto, sysButtons });
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             return Ok(true);
         }
 
-        public async Task<IActionResult> OnPostDeleteAsync([FromBody]string[] ids)
+        public async Task<IActionResult> OnPostDeleteAsync([FromBody] string[] ids)
         {
             var entity = await _sysMenuService.GetFullListAsync(_ => ids.Contains(_.Id) && _.IsLocked == false);
             var buttons = await _sysButtonService.GetFullListAsync(_ => ids.Contains(_.MenuId));
@@ -94,7 +95,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             return Ok(unDeleteIds);
         }
 
-        public async Task<IActionResult> OnPostAddMenuAsync([FromBody]SysMenuDto sysMenu)
+        public async Task<IActionResult> OnPostAddMenuAsync([FromBody] SysMenuDto sysMenu)
         {
             if (string.IsNullOrEmpty(sysMenu.MenuName))
             {
@@ -104,7 +105,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             return Ok(entity.Id);
         }
 
-        public async Task<IActionResult> OnPostAsync([FromBody]SysMenuDto sysMenuDto)
+        public async Task<IActionResult> OnPostAsync([FromBody] SysMenuDto sysMenuDto)
         {
             if (!ModelState.IsValid)
             {

@@ -11,18 +11,13 @@ using System.Threading.Tasks;
 namespace Senparc.Areas.Admin.Pages
 {
     [Ncf.AreaBase.Admin.Filters.IgnoreAuth]
-    public class IndexModel : BaseAdminPageModel
+    public class IndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleServiceEx) 
+        : BaseAdminPageModel(serviceProvider)
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceProvider _serviceProvider = serviceProvider;
 
         //TODO:从其他模块获得
-        private readonly XncfModuleServiceExtension _xncfModuleServiceEx;
-
-        public IndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleServiceEx)
-        {
-            this._serviceProvider = serviceProvider;
-            this._xncfModuleServiceEx = xncfModuleServiceEx;
-        }
+        private readonly XncfModuleServiceExtension _xncfModuleServiceEx = xncfModuleServiceEx;
 
         public IActionResult OnGet()
         {

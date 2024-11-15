@@ -44,16 +44,15 @@
 		<PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.14.0" />
 		<!--<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />-->
-		<PackageReference Include="Senparc.CO2NET.AspNet" Version="1.5.0" />
-		<PackageReference Include="Senparc.CO2NET.WebApi" Version="1.7.0" />
+		<PackageReference Include="Senparc.CO2NET.AspNet" Version="2.0.0-beta1" />
+		<PackageReference Include="Senparc.CO2NET.WebApi" Version="2.0.0-beta1" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
 		<!--为了兼容部分数据库迁移文件仍然有依赖的情况-->
-		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.19.5-preview1" />
+		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.19.6-preview1" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.21.10-preview1" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.18.5-preview1" />
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.9.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.9.9.2-preview1" />
 		<None Include="App_Data\SenparcTraceLog\*" />
 	</ItemGroup>
 
@@ -81,11 +80,15 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.10" />
+<<<<<<< HEAD
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
+=======
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+>>>>>>> Developer
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
 
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.10.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.10.8-preview1" />
 	</ItemGroup>
 </Project>

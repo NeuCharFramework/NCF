@@ -1,10 +1,13 @@
-﻿using Senparc.CO2NET.Extensions;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Senparc.CO2NET.Cache;
+using Senparc.CO2NET.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin.SenparcTraceManager
 {
@@ -26,7 +29,7 @@ namespace Senparc.Areas.Admin.SenparcTraceManager
         /// 获取指定日期的日志
         /// </summary>
         /// <returns></returns>
-        public static List<SenparcTraceItem> GetAllLogs(string date)
+        public static async Task<List<SenparcTraceItem>> GetAllLogsAsync(IServiceProvider serviceProvider, string date)
         {
             var logFile = Path.Combine(DefaultLogPath, string.Format("SenparcTrace-{0}.log", date));
 
@@ -35,142 +38,145 @@ namespace Senparc.Areas.Admin.SenparcTraceManager
                 throw new Exception("微信日志文件不存在：" + logFile);
             }
 
-            string bakFilename = logFile + ".bak";//备份文件名
-            System.IO.File.Delete(bakFilename);
-            System.IO.File.Copy(logFile, bakFilename, true);//读取备份文件，以免资源占用
-
             var logList = new List<SenparcTraceItem>();
+            var cache = serviceProvider.GetService<IBaseObjectCacheStrategy>();
 
-            using (StreamReader sr = new StreamReader(bakFilename, Encoding.UTF8))
+            using (var cacheLock = await cache.BeginCacheLockAsync("GetAllLogsAsync", logFile, 100, TimeSpan.FromMilliseconds(100)))
             {
-                string lineText = null;
-                int line = 0;
-                var readPostData = false;
-                var readResult = false;
-                var readExceptionStackTrace = false;
+                string bakFilename = logFile + ".bak";//备份文件名
+                System.IO.File.Delete(bakFilename);
+                System.IO.File.Copy(logFile, bakFilename, true);//读取备份文件，以免资源占用
 
-                SenparcTraceItem log = new SenparcTraceItem();
-                while ((lineText = sr.ReadLine()) != null)
+                using (StreamReader sr = new StreamReader(bakFilename, Encoding.UTF8))
                 {
-                    line++;
+                    string lineText = null;
+                    int line = 0;
+                    var readPostData = false;
+                    var readResult = false;
+                    var readExceptionStackTrace = false;
 
-                    lineText = lineText.Trim();
-
-
-                    var startExceptionRegex = Regex.Match(lineText, @"(?<=\[{3})(\S+)(?=Exception(\]{3}))");
-
-                    if (startExceptionRegex.Success)
+                    SenparcTraceItem log = new SenparcTraceItem();
+                    while ((lineText = await sr.ReadLineAsync()) != null)
                     {
-                        //一个片段的开始（异常）
-                        log = new SenparcTraceItem();
-                        logList.Add(log);
-                        log.Title = "【{0}Exception】异常！".FormatWith(startExceptionRegex.Value);//记录标题
-                        log.Line = line;
-                        log.IsException = true;
-                        log.SenparcTraceType = SenparcTraceType.Exception;
+                        line++;
 
-                        readPostData = false;
-                        readResult = false;
-                        readExceptionStackTrace = false;
-                        continue;
-                    }
-
-                    //其他自定义类型
-                    var startRegex = Regex.Match(lineText, @"(?<=\[{3})([^\]\n\r]+)(?=\]{3})");
-                    if (startRegex.Success)
-                    {
-                        //一个片段的开始
-                        log = new SenparcTraceItem();
-                        logList.Add(log);
-                        log.Title = startRegex.Value;//记录标题
-                        log.Line = line;
-
-                        readPostData = false;
-                        readResult = false;
-                        readExceptionStackTrace = false;
-                        continue;
-                    }
+                        lineText = lineText.Trim();
 
 
+                        var startExceptionRegex = Regex.Match(lineText, @"(?<=\[{3})(\S+)(?=Exception(\]{3}))");
 
-                    var threadRegex = Regex.Match(lineText, @"(?<=\[{1}线程：)(\d+)(?=\]{1})");
-                    if (threadRegex.Success)
-                    {
-                        //线程
-                        log.ThreadId = int.Parse(threadRegex.Value);
-                        continue;
-                    }
-
-                    var timeRegex = Regex.Match(lineText, @"(?<=\[{1})([\s\S]{8,30})(?=\]{1})");
-                    if (timeRegex.Success && string.IsNullOrEmpty(log.DateTime))
-                    {
-                        //时间
-                        log.DateTime = timeRegex.Value;
-                        continue;
-                    }
-
-
-                    //内容
-                    log.Result.TotalResult += lineText + "\r\n";
-
-                    if (readPostData)
-                    {
-                        log.Result.PostData += lineText + "\r\n";
-                        continue;//一直读到底
-                    }
-
-
-                    if (lineText.StartsWith("URL："))
-                    {
-                        log.Result.Url = lineText.Replace("URL：", "");
-
-                        if (SenparcTraceType.Normal ==  log.SenparcTraceType)
+                        if (startExceptionRegex.Success)
                         {
-                            log.SenparcTraceType = SenparcTraceType.API;
+                            //一个片段的开始（异常）
+                            log = new SenparcTraceItem();
+                            logList.Add(log);
+                            log.Title = "【{0}Exception】异常！".FormatWith(startExceptionRegex.Value);//记录标题
+                            log.Line = line;
+                            log.IsException = true;
+                            log.SenparcTraceType = SenparcTraceType.Exception;
+
+                            readPostData = false;
+                            readResult = false;
+                            readExceptionStackTrace = false;
+                            continue;
                         }
-                        //log.weixinTraceType = log.weixinTraceType | WeixinTraceType.API;
-                    }
-                    else if (lineText == "Post Data：")
-                    {
-                        log.SenparcTraceType = SenparcTraceType.PostRequest;//POST请求
-                        readPostData = true;
-                    }
-                    else if (lineText == "Result：" || readResult)
-                    {
-                        log.Result.Result += lineText.Replace("Result：", "") + "\r\n";
-                        readResult = true;
 
-                        if (SenparcTraceType.PostRequest != log.SenparcTraceType)
+                        //其他自定义类型
+                        var startRegex = Regex.Match(lineText, @"(?<=\[{3})([^\]\n\r]+)(?=\]{3})");
+                        if (startRegex.Success)
                         {
-                            log.SenparcTraceType = SenparcTraceType.GetRequest;//GET请求
-                        }
-                    }
+                            //一个片段的开始
+                            log = new SenparcTraceItem();
+                            logList.Add(log);
+                            log.Title = startRegex.Value;//记录标题
+                            log.Line = line;
 
-                    if (log.IsException)
-                    {
-                        //异常信息处理
-                        if (lineText.StartsWith("AccessTokenOrAppId："))
-                        {
-                            log.Result.ExceptionAccessTokenOrAppId = lineText.Replace("AccessTokenOrAppId：", "");
+                            readPostData = false;
+                            readResult = false;
+                            readExceptionStackTrace = false;
+                            continue;
                         }
-                        else if (lineText.StartsWith("Message：") || lineText.StartsWith("errcode："))
+
+
+                        var threadRegex = Regex.Match(lineText, @"(?<=\[{1}线程：)(\d+)(?=\]{1})");
+                        if (threadRegex.Success)
                         {
-                            log.Result.ExceptionMessage = lineText.Replace("Message：", "");//“errcode：”保留
+                            //线程
+                            log.ThreadId = int.Parse(threadRegex.Value);
+                            continue;
                         }
-                        else if (lineText.StartsWith("StackTrace："))
+
+                        var timeRegex = Regex.Match(lineText, @"(?<=\[{1})([\s\S]{8,30})(?=\]{1})");
+                        if (timeRegex.Success && string.IsNullOrEmpty(log.DateTime))
                         {
-                            log.Result.ExceptionStackTrace = lineText.Replace("StackTrace：", "");
-                            readExceptionStackTrace = true;
+                            //时间
+                            log.DateTime = timeRegex.Value;
+                            continue;
                         }
-                        else if (readExceptionStackTrace)
+
+
+                        //内容
+                        log.Result.TotalResult += lineText + Environment.NewLine;
+
+                        if (readPostData)
                         {
-                            log.Result.ExceptionStackTrace = "\r\n" + lineText;
+                            log.Result.PostData += lineText + Environment.NewLine;
+                            continue;//一直读到底
+                        }
+
+
+                        if (lineText.StartsWith("URL："))
+                        {
+                            log.Result.Url = lineText.Replace("URL：", "");
+
+                            if (SenparcTraceType.Normal == log.SenparcTraceType)
+                            {
+                                log.SenparcTraceType = SenparcTraceType.API;
+                            }
+                            //log.weixinTraceType = log.weixinTraceType | WeixinTraceType.API;
+                        }
+                        else if (lineText == "Post Data：")
+                        {
+                            log.SenparcTraceType = SenparcTraceType.PostRequest;//POST请求
+                            readPostData = true;
+                        }
+                        else if (lineText == "Result：" || readResult)
+                        {
+                            log.Result.Result += lineText.Replace("Result：", "") + "\r\n";
+                            readResult = true;
+
+                            if (SenparcTraceType.PostRequest != log.SenparcTraceType)
+                            {
+                                log.SenparcTraceType = SenparcTraceType.GetRequest;//GET请求
+                            }
+                        }
+
+                        if (log.IsException)
+                        {
+                            //异常信息处理
+                            if (lineText.StartsWith("AccessTokenOrAppId："))
+                            {
+                                log.Result.ExceptionAccessTokenOrAppId = lineText.Replace("AccessTokenOrAppId：", "");
+                            }
+                            else if (lineText.StartsWith("Message：") || lineText.StartsWith("errcode："))
+                            {
+                                log.Result.ExceptionMessage = lineText.Replace("Message：", "");//“errcode：”保留
+                            }
+                            else if (lineText.StartsWith("StackTrace："))
+                            {
+                                log.Result.ExceptionStackTrace = lineText.Replace("StackTrace：", "");
+                                readExceptionStackTrace = true;
+                            }
+                            else if (readExceptionStackTrace)
+                            {
+                                log.Result.ExceptionStackTrace = "\r\n" + lineText;
+                            }
                         }
                     }
                 }
-            }
 
-            System.IO.File.Delete(bakFilename);//删除备份文件
+                System.IO.File.Delete(bakFilename);//删除备份文件
+            }
 
             logList.Reverse();//翻转序列
             return logList;

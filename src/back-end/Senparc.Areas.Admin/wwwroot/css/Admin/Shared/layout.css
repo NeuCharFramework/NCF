@@ -79,9 +79,9 @@ li {
 }
 
 .el-scrollbar__wrap {
-    overflow-x: hidden;
+    overflow-x: hidden !important;
+    margin-bottom: 0px !important;
 }
-
 
 .el-menu {
     border: none;

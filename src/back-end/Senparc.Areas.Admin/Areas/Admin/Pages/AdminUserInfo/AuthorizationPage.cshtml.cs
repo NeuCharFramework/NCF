@@ -11,16 +11,11 @@ using Senparc.Ncf.Service;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
-    public class AdminUserInfoAuthorizationPageModel : BaseAdminPageModel
+    public class AdminUserInfoAuthorizationPageModel(IServiceProvider serviceProvider, SysRoleAdminUserInfoService sysRoleAdminUserInfoService) 
+        : BaseAdminPageModel(serviceProvider)
     {
-        private readonly IServiceProvider _serviceProvider;
-        private readonly SysRoleAdminUserInfoService sysRoleAdminUserInfoService;
-
-        public AdminUserInfoAuthorizationPageModel(IServiceProvider _serviceProvider, SysRoleAdminUserInfoService sysRoleAdminUserInfoService)
-        {
-            this._serviceProvider = _serviceProvider;
-            this.sysRoleAdminUserInfoService = sysRoleAdminUserInfoService;
-        }
+        private readonly IServiceProvider _serviceProvider = serviceProvider;
+        private readonly SysRoleAdminUserInfoService sysRoleAdminUserInfoService = sysRoleAdminUserInfoService;
 
         public IEnumerable<SysRoleAdminUserInfoDto> RoleAdminUserInfoDtos { get; set; }
 

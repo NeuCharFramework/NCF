@@ -243,7 +243,7 @@ namespace Senparc.Xncf.Accounts.Domain.Services
                 WeixinOpenId = openId,
                 Password = GetPassword(password, salt, true),
                 AddTime = DateTime.Now,
-                Sex = (int)Sex.未设置,
+                Sex = (int)Sex.Unset,
                 ThisLoginTime = DateTime.Now,
                 LastLoginTime = DateTime.Now,
                 Balance = 0,

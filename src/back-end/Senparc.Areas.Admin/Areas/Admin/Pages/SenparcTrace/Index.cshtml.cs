@@ -10,8 +10,9 @@ using Senparc.Ncf.AreaBase.Admin.Filters;
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
     [IgnoreAuth]
-    public class SenparcTrace_IndexModel : BaseAdminPageModel
+    public class SenparcTrace_IndexModel(IServiceProvider serviceProvider) : BaseAdminPageModel(serviceProvider)
     {
+
         //public List<string> DateList { get; private set; }
 
         public void OnGet()
