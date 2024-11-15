@@ -11,7 +11,7 @@
 		<PackageTags>Senparc,NeuCharFramework,NCF,Senparc.Xncf.Accounts</PackageTags>
 		<Authors>Senparc</Authors>
 		<Owners>Senparc</Owners>
-		 <PackageLicenseUrl>https://github.com/NeuCharFramework/NcfPackageSources/blob/master/LICENSE</PackageLicenseUrl>
+		<PackageLicenseUrl>https://github.com/NeuCharFramework/NcfPackageSources/blob/master/LICENSE</PackageLicenseUrl>
 		<Title>用户管理</Title>
 		<!--<ProjectUrl> https://github.com/NeuCharFramework/NCF</ProjectUrl>
     <PackageProjectUrl>https://github.com/NeuCharFramework/NcfPackageSources</PackageProjectUrl>
@@ -37,7 +37,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)'=='ModifyPublish'">
-	  <OutputPath>..\..\..\BuildOutPut</OutputPath>
+		<OutputPath>..\..\..\BuildOutPut</OutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -57,34 +57,30 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Domain\Migrations\Oracle\**" />
-	  <Content Remove="Domain\Migrations\Oracle\**" />
-	  <EmbeddedResource Remove="Domain\Migrations\Oracle\**" />
-	  <None Remove="Domain\Migrations\Oracle\**" />
+		<Compile Remove="Domain\Migrations\Oracle\**" />
+		<Content Remove="Domain\Migrations\Oracle\**" />
+		<EmbeddedResource Remove="Domain\Migrations\Oracle\**" />
+		<None Remove="Domain\Migrations\Oracle\**" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Remove="appsettings.json" />
-	  <Content Remove="App_Data\Database\SenparcConfig.config" />
+		<Content Remove="appsettings.json" />
+		<Content Remove="App_Data\Database\SenparcConfig.config" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="appsettings.json">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </None>
-	  <None Include="App_Data\Database\SenparcConfig.config">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </None>
+		<None Include="appsettings.json">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+		<None Include="App_Data\Database\SenparcConfig.config">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.10" />
-<<<<<<< HEAD
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
-=======
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
->>>>>>> Developer
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
