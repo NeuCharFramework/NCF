@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.22.1.1</PackageVersion>
+		<PackageVersion>0.23.1</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -65,6 +65,7 @@
 			v0.21.4 统一 MacOS 中 SQLite 数据库的路径
 			v0.22.0 加载新版本 PromptRange 和 AgentsManager
 			v0.22.1 修复菜单栏横向滚动条样式问题
+			v0.23.0 升级 AIKernel和 AgentsManager 模块
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>

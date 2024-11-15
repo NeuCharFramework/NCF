@@ -59,6 +59,9 @@ namespace Senparc.Web
         public static void UseNcf<TDatabaseConfiguration>(this WebApplication app)
             where TDatabaseConfiguration : IDatabaseConfiguration, new()
         {
+            //注入DI对象
+            app.UseSenparcMvcDI();
+
             IWebHostEnvironment env = app.Environment;
             IOptions<SenparcSetting> senparcSetting = app.Services.GetService<IOptions<SenparcSetting>>();
             IOptions<SenparcCoreSetting> senparcCoreSetting = app.Services.GetService<IOptions<SenparcCoreSetting>>();
