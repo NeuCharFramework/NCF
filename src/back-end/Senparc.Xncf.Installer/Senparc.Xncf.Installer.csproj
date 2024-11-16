@@ -56,7 +56,6 @@
 		<None Include="App_Data\SenparcTraceLog\*" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Content Remove="appsettings.json" />
 	  <Content Remove="App_Data\Database\SenparcConfig.config" />
 	</ItemGroup>
 	<ItemGroup>
