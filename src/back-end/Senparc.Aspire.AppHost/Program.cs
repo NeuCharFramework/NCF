@@ -2,14 +2,13 @@ using System.Text;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var ncfWeb = builder.AddProject<Projects.Senparc_Web>("ncf-web", "Senparc.Web");
+var ncfWeb = builder.AddProject<Projects.Senparc_Web>("ncf-web")
+           .WithExternalHttpEndpoints();
 
 if (builder.ExecutionContext.IsRunMode)
 {
-    builder.AddProject("install", "../Senparc.Xncf.Installer/Senparc.Xncf.Installer.csproj", opt =>
-    {
-        opt.LaunchProfileName = "Senparc.Xncf.Installer";
-    });
+    builder.AddProject("installer", "../Senparc.Xncf.Installer/Senparc.Xncf.Installer.csproj")
+           .WithExternalHttpEndpoints();
 
     //builder.AddContainer("my-redis", "redis", "5.0.14");
 }
