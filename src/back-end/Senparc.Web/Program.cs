@@ -10,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 //添加（注册） NCF 服务（必须）
 builder.AddNcf();
 
+//添加 ServiceDefaults
+builder.AddServiceDefaults();
+
 System.Net.ServicePointManager.ServerCertificateValidationCallback =
     ((sender, certificate, chain, sslPolicyErrors) => true);
 
@@ -17,6 +20,8 @@ System.Net.ServicePointManager.ServerCertificateValidationCallback =
 builder.Services.AddDaprClient();
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 if (app.Environment.IsDevelopment())
 {
