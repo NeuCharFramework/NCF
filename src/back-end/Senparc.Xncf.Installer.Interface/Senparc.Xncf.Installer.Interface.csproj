@@ -28,10 +28,11 @@
 		<OutputPath>..\..\..\BuildOutPut</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
-	  <Folder Include="OHS\Remote\" />
+	  <PackageReference Include="Senparc.Xncf.Tenant.Interface" Version="0.8.6-preview1" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="Senparc.Xncf.Tenant.Interface" Version="0.8.6-preview1" />
+	  <Folder Include="OHS\PL\" />
+	  <Folder Include="OHS\AppService\" />
 	</ItemGroup>
 
 

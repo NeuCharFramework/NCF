@@ -19,7 +19,7 @@
 		<PackageReference Include="Dapr.Client" Version="1.12.0" />-->
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.10" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="2.0.0-beta1" />
-		<PackageReference Include="Senparc.CO2NET" Version="3.0.0-beta1" />
+		<PackageReference Include="Senparc.CO2NET" Version="3.0.0-beta2" />
 		<PackageReference Include="Senparc.Ncf.Database.Sqlite" Version="0.18.7.4-preview1" />
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.18.6-preview1" />
 		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.10.0-preview1" />

@@ -5,7 +5,18 @@
 //using Senparc.Ncf.Database.Oracle;        //使用需要引用包： Senparc.Ncf.Database.Oracle
 //using Senparc.Ncf.Database.SqlServer;       //使用需要引用包： Senparc.Ncf.Database.SqlServer
 
+using Senparc.CO2NET;
+using Senparc.CO2NET.HttpUtility;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHttpClient<SenparcWebClient>(client =>
+{
+    // This URL uses "https+http://" to indicate HTTPS is preferred over HTTP.
+    // Learn more about service discovery scheme resolution at https://aka.ms/dotnet/sdschemes.
+    client.BaseAddress = new("https+http://installer");
+});
 
 //添加（注册） NCF 服务（必须）
 builder.AddNcf();
@@ -58,5 +69,20 @@ app.MapRazorPages();
 app.MapControllers();
 
 app.ShowSuccessTip();//显示系统准备成功提示
+
+app.MapGet("/test", async httpContext =>
+{
+    //var senparcWebClient = httpContext.RequestServices.GetService<SenparcWebClient>();
+    //var result = await senparcWebClient.GetHtml();
+    //await httpContext.Response.WriteAsync(result);
+
+    var apiClientHelper = httpContext.RequestServices.GetService<ApiClientHelper>();
+    var apiClient = apiClientHelper.ConnectApiClient("installer");
+
+    var url = "/api/Senparc.Xncf.Installer/InstallAppService/Xncf.Installer_InstallAppService.KeepAlive";
+    var result2 = await RequestUtility.HttpGetAsync(null, url, Encoding.UTF8, apiClient);
+    await httpContext.Response.WriteAsync(result2);
+
+});
 
 app.Run();
