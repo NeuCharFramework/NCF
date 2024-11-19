@@ -45,7 +45,7 @@
 		<PackageReference Include="Dapr.AspNetCore" Version="1.14.0" />
 		<!--<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />-->
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="2.0.0-beta1" />
-		<PackageReference Include="Senparc.CO2NET.WebApi" Version="2.0.0-beta1" />
+		<PackageReference Include="Senparc.CO2NET.WebApi" Version="2.0.0-beta2" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
 		<!--为了兼容部分数据库迁移文件仍然有依赖的情况-->
 		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.19.6-preview1" />
