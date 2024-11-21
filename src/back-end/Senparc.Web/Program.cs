@@ -7,16 +7,10 @@
 
 using Senparc.CO2NET;
 using Senparc.CO2NET.HttpUtility;
+using Senparc.CO2NET.WebApi;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddHttpClient<SenparcWebClient>(client =>
-{
-    // This URL uses "https+http://" to indicate HTTPS is preferred over HTTP.
-    // Learn more about service discovery scheme resolution at https://aka.ms/dotnet/sdschemes.
-    client.BaseAddress = new("https+http://installer");
-});
 
 //添加（注册） NCF 服务（必须）
 builder.AddNcf();
@@ -70,6 +64,19 @@ app.MapControllers();
 
 app.ShowSuccessTip();//显示系统准备成功提示
 
+string GetNcfApiClientPath(string xncfName,string appServiceName, string methodName,string showStaticApiState=null)
+{
+    var globalName = ApiBindAttribute.GetGlobalName(xncfName,$"{appServiceName}.{methodName}");
+
+    var indexOfApiGroupDot = globalName.IndexOf(".");
+    var apiName = globalName.Substring(indexOfApiGroupDot + 1, globalName.Length - indexOfApiGroupDot - 1);
+    //var apiBindGlobalName = globalName.Split('.')[0];
+    
+    var apiPath = WebApiEngine.GetApiPath(xncfName, appServiceName, apiName, showStaticApiState);
+    Console.WriteLine(apiPath);
+    return apiPath;
+}
+
 app.MapGet("/test", async httpContext =>
 {
     //var senparcWebClient = httpContext.RequestServices.GetService<SenparcWebClient>();
@@ -79,10 +86,16 @@ app.MapGet("/test", async httpContext =>
     var apiClientHelper = httpContext.RequestServices.GetService<ApiClientHelper>();
     var apiClient = apiClientHelper.ConnectApiClient("installer");
 
-    var url = "/api/Senparc.Xncf.Installer/InstallAppService/Xncf.Installer_InstallAppService.KeepAlive";
-    var result2 = await RequestUtility.HttpGetAsync(null, url, Encoding.UTF8, apiClient);
-    await httpContext.Response.WriteAsync(result2);
+    var xncfName = "Senparc.Xncf.Installer";//Assembly name / catalog
+    var apiBindName = "InstallAppService";
+    var methodName = "KeepAlive";
+    var apiPath = GetNcfApiClientPath(xncfName, apiBindName, methodName, null);
 
+    //var apiPath = $"/api/{keyName}/{apiBindGroupNamePath}/{apiNamePath}{showStaticApiState}";
+    var url = apiPath; //"/api/Senparc.Xncf.Installer/InstallAppService/Xncf.Installer_InstallAppService.KeepAlive";
+    var result2 = await RequestUtility.HttpGetAsync(null, url, Encoding.UTF8, apiClient);
+
+    await httpContext.Response.WriteAsync(result2);
 });
 
 app.Run();
