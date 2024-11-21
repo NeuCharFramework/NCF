@@ -32,9 +32,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Areas.Admin.Tests",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aspire", "Aspire", "{39EB8D6C-4E16-457F-A4C8-8EA7A091BFF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Senparc.Aspire.ServiceDefaults", "Senparc.Aspire.ServiceDefaults\Senparc.Aspire.ServiceDefaults.csproj", "{68394F92-F85A-44E8-BF88-B3BB3D8EAD4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Aspire.ServiceDefaults", "Senparc.Aspire.ServiceDefaults\Senparc.Aspire.ServiceDefaults.csproj", "{68394F92-F85A-44E8-BF88-B3BB3D8EAD4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Senparc.Aspire.AppHost", "Senparc.Aspire.AppHost\Senparc.Aspire.AppHost.csproj", "{B42A871D-ACBD-4445-B5B7-B201C7FD9F0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Senparc.Aspire.AppHost", "Senparc.Aspire.AppHost\Senparc.Aspire.AppHost.csproj", "{B42A871D-ACBD-4445-B5B7-B201C7FD9F0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
