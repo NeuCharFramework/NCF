@@ -1,16 +1,12 @@
-﻿using log4net;
-using log4net.Config;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
 using Senparc.CO2NET.AspNet;
-using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
-using Senparc.Ncf.Database.MySql;
 using Senparc.Ncf.Database.SqlServer;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.Accounts.Domain.Models;
@@ -21,6 +17,13 @@ using System.IO;
 using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add service defaults & Aspire components.
+builder.AddServiceDefaults();
+
+// Add services to the container.
+builder.Services.AddProblemDetails();
+
 builder.Services.AddDaprClient();
 builder.Services.AddControllers().AddDapr();
 
@@ -105,11 +108,9 @@ app.Map("/TestDB", _app =>
     });
 });
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapRazorPages();
-    endpoints.MapControllers();
-});
+app.MapRazorPages();
+app.MapControllers();
 
+app.MapDefaultEndpoints();
 
 app.Run();
