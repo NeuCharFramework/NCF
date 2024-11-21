@@ -13,6 +13,8 @@ var installer = builder.AddProject<Projects.Senparc_Xncf_Installer>(NcfWebApiHel
         .WithReference(accounts)
         .WithExternalHttpEndpoints();
 
+installer.WithReference(installer);
+
 var ncfWeb = builder.AddProject<Projects.Senparc_Web>(NcfWebApiHelper.GetXncfProjectName<Senparc_Web>())
         .WithReference(accounts)
         .WithReference(installer)

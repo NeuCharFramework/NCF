@@ -64,14 +64,10 @@
 
 	<ItemGroup>
 	  <Content Remove="appsettings.json" />
-	  <Content Remove="App_Data\Database\SenparcConfig.config" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <None Include="appsettings.json">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </None>
-	  <None Include="App_Data\Database\SenparcConfig.config">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
