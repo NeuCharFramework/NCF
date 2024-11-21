@@ -83,7 +83,12 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.15.0-preview1" />
 
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.11.0-preview1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Senparc.Aspire.ServiceDefaults\Senparc.Aspire.ServiceDefaults.csproj" />
 	</ItemGroup>
 </Project>
