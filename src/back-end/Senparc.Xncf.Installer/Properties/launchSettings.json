@@ -15,13 +15,23 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Senparc.Xncf.Installer": {
+    "https": {
       "commandName": "Project",
       "launchBrowser": true,
+      "dotnetRunMessages": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:5001;http://localhost:5000"
+      "applicationUrl": "https://localhost:5021"
+    },
+    "http": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5020"
     },
     "Docker": {
       "commandName": "Docker",
