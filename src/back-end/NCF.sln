@@ -171,7 +171,6 @@ Global
 		{B42A871D-ACBD-4445-B5B7-B201C7FD9F0B}.NcfDebugForPromptRange|Any CPU.ActiveCfg = Debug|Any CPU
 		{B42A871D-ACBD-4445-B5B7-B201C7FD9F0B}.NcfDebugForPromptRange|Any CPU.Build.0 = Debug|Any CPU
 		{B42A871D-ACBD-4445-B5B7-B201C7FD9F0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B42A871D-ACBD-4445-B5B7-B201C7FD9F0B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B42A871D-ACBD-4445-B5B7-B201C7FD9F0B}.TemplateRelease|Any CPU.ActiveCfg = Release|Any CPU
 		{B42A871D-ACBD-4445-B5B7-B201C7FD9F0B}.TemplateRelease|Any CPU.Build.0 = Release|Any CPU
 		{B42A871D-ACBD-4445-B5B7-B201C7FD9F0B}.Test|Any CPU.ActiveCfg = Debug|Any CPU
