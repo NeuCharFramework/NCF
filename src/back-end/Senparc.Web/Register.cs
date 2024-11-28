@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Senparc.AI.Interfaces;
 using Senparc.AI.Kernel;
 using Senparc.Areas.Admin.Domain.Services;
@@ -36,7 +37,17 @@ namespace Senparc.Web
 
             //var services = builder.Services;
             //var mvcBuilder = services.AddMvcCore();
-            //services.AddAndInitDynamicApi(mvcBuilder, options => { });
+            //services.AddAndInitDynamicApi(mvcBuilder, options =>
+            //{
+            //    options.DefaultRequestMethod = ApiRequestMethod.Get;
+            //    options.BaseApiControllerType = null;
+            //    options.CopyCustomAttributes = true;
+            //    options.TaskCount = Environment.ProcessorCount * 10;
+            //    options.ShowDetailApiLog = true;
+            //    options.AdditionalAttributeFunc = null;
+            //    options.ForbiddenExternalAccess = false;
+            //    options.UseLowerCaseApiName = true;
+            //});
 
             #endregion
 
