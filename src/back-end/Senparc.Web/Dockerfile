@@ -17,16 +17,18 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 # 将项目文件单独复制，便于缓存
-COPY ["Senparc.Web/Senparc.Web.csproj", "Senparc.Web/"]
-COPY ["Senparc.Areas.Admin/Senparc.Areas.Admin.csproj", "Senparc.Areas.Admin/"]
-COPY ["Senparc.Xncf.Accounts/Senparc.Xncf.Accounts.csproj", "Senparc.Xncf.Accounts/"]
-COPY ["Senparc.Xncf.Installer/Senparc.Xncf.Installer.csproj", "Senparc.Xncf.Installer/"]
-COPY ["Senparc.Xncf.Installer.Interface/Senparc.Xncf.Installer.Interface.csproj", "Senparc.Xncf.Installer.Interface/"]
+COPY ["src/back-end/Senparc.Web/Senparc.Web.csproj", "Senparc.Web/"]
+COPY ["src/back-end/Senparc.Areas.Admin/Senparc.Areas.Admin.csproj", "Senparc.Areas.Admin/"]
+COPY ["src/back-end/Senparc.Xncf.Accounts/Senparc.Xncf.Accounts.csproj", "Senparc.Xncf.Accounts/"]
+COPY ["src/back-end/Senparc.Xncf.Installer/Senparc.Xncf.Installer.csproj", "Senparc.Xncf.Installer/"]
+COPY ["src/back-end/Senparc.Xncf.Installer.Interface/Senparc.Xncf.Installer.Interface.csproj", "Senparc.Xncf.Installer.Interface/"]
+COPY ["src/back-end/Senparc.Aspire.AppHost/Senparc.Aspire.AppHost.csproj", "Senparc.Aspire.AppHost/"]
+COPY ["src/back-end/Senparc.Aspire.ServiceDefaults/Senparc.Aspire.ServiceDefaults.csproj", "Senparc.Aspire.ServiceDefaults/"]
 
 # 恢复依赖项
 RUN dotnet restore "Senparc.Web/Senparc.Web.csproj"
 
-# 复制其余文件并构建
+# 复制文件并构建
 COPY . .
 WORKDIR "/src/Senparc.Web"
 RUN dotnet build "Senparc.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
@@ -41,7 +43,8 @@ FROM base AS final
 WORKDIR /app
 
 # 创建所需目录并设置权限
-RUN mkdir -p /app/App_Data/SenparcTraceLog
+RUN mkdir -p /app/App_Data/SenparcTraceLog && \
+    chmod -R 755 /app/App_Data/SenparcTraceLog
 
 # 切换到应用程序用户
 USER $APP_UID
