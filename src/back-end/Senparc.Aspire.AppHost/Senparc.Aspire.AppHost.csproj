@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" Version="8.1.0" />
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="8.2.0" />
     <PackageReference Include="Senparc.Ncf.Core" Version="0.23.4-preview1" />
   </ItemGroup>
 
