@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # 此阶段用于生成服务项目
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 # 将项目文件单独复制，便于缓存
@@ -31,12 +30,11 @@ RUN dotnet restore "Senparc.Web/Senparc.Web.csproj"
 # 复制文件并构建
 COPY . .
 WORKDIR "/src/Senparc.Web"
-RUN dotnet build "Senparc.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "Senparc.Web.csproj" -c Release -o /app/build
 
 # 此阶段用于发布要复制到最终阶段的服务项目
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "Senparc.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Senparc.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # 最终阶段，准备运行应用
 FROM base AS final
