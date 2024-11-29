@@ -16,13 +16,13 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # 将项目文件单独复制，便于缓存
-COPY ["src/back-end/Senparc.Web/Senparc.Web.csproj", "Senparc.Web/"]
-COPY ["src/back-end/Senparc.Areas.Admin/Senparc.Areas.Admin.csproj", "Senparc.Areas.Admin/"]
-COPY ["src/back-end/Senparc.Xncf.Accounts/Senparc.Xncf.Accounts.csproj", "Senparc.Xncf.Accounts/"]
-COPY ["src/back-end/Senparc.Xncf.Installer/Senparc.Xncf.Installer.csproj", "Senparc.Xncf.Installer/"]
-COPY ["src/back-end/Senparc.Xncf.Installer.Interface/Senparc.Xncf.Installer.Interface.csproj", "Senparc.Xncf.Installer.Interface/"]
-COPY ["src/back-end/Senparc.Aspire.AppHost/Senparc.Aspire.AppHost.csproj", "Senparc.Aspire.AppHost/"]
-COPY ["src/back-end/Senparc.Aspire.ServiceDefaults/Senparc.Aspire.ServiceDefaults.csproj", "Senparc.Aspire.ServiceDefaults/"]
+COPY ["Senparc.Web/Senparc.Web.csproj", "Senparc.Web/"]
+COPY ["Senparc.Areas.Admin/Senparc.Areas.Admin.csproj", "Senparc.Areas.Admin/"]
+COPY ["Senparc.Xncf.Accounts/Senparc.Xncf.Accounts.csproj", "Senparc.Xncf.Accounts/"]
+COPY ["Senparc.Xncf.Installer/Senparc.Xncf.Installer.csproj", "Senparc.Xncf.Installer/"]
+COPY ["Senparc.Xncf.Installer.Interface/Senparc.Xncf.Installer.Interface.csproj", "Senparc.Xncf.Installer.Interface/"]
+COPY ["Senparc.Aspire.AppHost/Senparc.Aspire.AppHost.csproj", "Senparc.Aspire.AppHost/"]
+COPY ["Senparc.Aspire.ServiceDefaults/Senparc.Aspire.ServiceDefaults.csproj", "Senparc.Aspire.ServiceDefaults/"]
 
 # 恢复依赖项
 RUN dotnet restore "Senparc.Web/Senparc.Web.csproj"
