@@ -96,4 +96,12 @@
 	  <Folder Include="Domain\Models\DatabaseModel\" />
 	  <Folder Include="Domain\Models\MultipleDatabase\" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Content Update="appsettings.json">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="App_Data\Database\SenparcConfig.config">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
 </Project>
