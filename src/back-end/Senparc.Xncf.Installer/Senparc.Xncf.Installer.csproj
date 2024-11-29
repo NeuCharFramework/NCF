@@ -68,6 +68,8 @@
 		<Compile Remove="Domain\Models\MultipleDatabase\InstallerSenparcEntities_SQLite.cs" />
 		<Compile Remove="Domain\Models\MultipleDatabase\InstallerSenparcEntities_SqlServer.cs" />
 		<Compile Remove="Domain\Models\MultipleDatabase\SenparcDbContextFactoryConfig.cs" />
+		<Content Remove="appsettings.json" />
+		<Content Remove="App_Data\Database\SenparcConfig.config" />
 		<!--<Compile Remove="Domain\Dto\**" />
 		<Compile Remove="Domain\Models\DatabaseModel\Mapping\**" />
 		<Content Remove="Domain\Dto\**" />
@@ -97,11 +99,11 @@
 	  <Folder Include="Domain\Models\MultipleDatabase\" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Content Update="appsettings.json">
+	  <None Include="appsettings.json">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Content>
-	  <Content Update="App_Data\Database\SenparcConfig.config">
+	  </None>
+	  <None Include="App_Data\Database\SenparcConfig.config">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Content>
+	  </None>
 	</ItemGroup>
 </Project>
