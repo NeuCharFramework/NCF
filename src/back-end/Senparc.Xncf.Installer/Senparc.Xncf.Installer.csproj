@@ -35,6 +35,10 @@
 
 		<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.10" />
+		<PackageReference Include="Senparc.CO2NET" Version="3.0.1-beta3" />
+		<PackageReference Include="Senparc.CO2NET.AspNet" Version="2.0.1-beta1" />
+		<PackageReference Include="Senparc.CO2NET.WebApi" Version="2.0.2-beta3" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.23.5-preview1" />
 		<!--<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />-->
 		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.22.1-preview1" />
 		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.20.3-preview1" />
@@ -46,7 +50,7 @@
 
 		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.11.3-preview1" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.12.3-preview1" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.16.3-preview1" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.16.3.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.3-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.13.3-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.13.3-preview1" />
@@ -65,6 +69,8 @@
 		<Compile Remove="Domain\Models\MultipleDatabase\InstallerSenparcEntities_SQLite.cs" />
 		<Compile Remove="Domain\Models\MultipleDatabase\InstallerSenparcEntities_SqlServer.cs" />
 		<Compile Remove="Domain\Models\MultipleDatabase\SenparcDbContextFactoryConfig.cs" />
+		<Content Remove="appsettings.json" />
+		<Content Remove="App_Data\Database\SenparcConfig.config" />
 		<!--<Compile Remove="Domain\Dto\**" />
 		<Compile Remove="Domain\Models\DatabaseModel\Mapping\**" />
 		<Content Remove="Domain\Dto\**" />
@@ -92,5 +98,13 @@
 	<ItemGroup>
 	  <Folder Include="Domain\Models\DatabaseModel\" />
 	  <Folder Include="Domain\Models\MultipleDatabase\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="appsettings.json">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	  <None Include="App_Data\Database\SenparcConfig.config">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 </Project>
