@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<OutputType>Exe</OutputType>
+		<!--<OutputType>Exe</OutputType>-->
 		<!--<TargetFramework>net5.0</TargetFramework>-->
 		<Version>0.26.0</Version>
 		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
@@ -45,7 +45,7 @@
 		<ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(Configuration)'=='ModifyPublish'">
+	<!--<ItemGroup Condition="'$(Configuration)'=='ModifyPublish'">
 		<Content Update="App_Data\**\*.*">
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
 		</Content>
@@ -55,7 +55,7 @@
 		<Content Update="appsettings*.json">
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
 		</Content>
-	</ItemGroup>
+	</ItemGroup>-->
 	<!--<ItemGroup>
 	  <None Update="App_Data\ApiDocXML\Senparc.Areas.Admin.XML">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
