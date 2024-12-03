@@ -31,7 +31,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Senparc.Ncf.UnitTestExtension" Version="0.3.1-preview1" />
+    <PackageReference Include="Senparc.CO2NET" Version="3.0.1-beta3" />
+    <PackageReference Include="Senparc.CO2NET.AspNet" Version="2.0.1-beta1" />
+    <PackageReference Include="Senparc.CO2NET.WebApi" Version="2.0.2-beta3" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.23.5-preview1" />
+    <PackageReference Include="Senparc.Ncf.UnitTestExtension" Version="0.3.2-preview1" />
+    <PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.3-preview1" />
   </ItemGroup>
 
   <ItemGroup>
