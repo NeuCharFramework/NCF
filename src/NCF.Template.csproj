@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.26.0</PackageVersion>
+		<PackageVersion>0.27.0</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -69,6 +69,7 @@
 			v0.24.0 添加 Aspire 模块
 			v0.25.0 添加 Aspire 模块 Sample
 			v0.26.0 添加 CNB 容器部署示例
+			v0.27.0 更新 Swagger 包及 CO2NET 基础库，支持 ApiBind 的接口大小写设置
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
