@@ -23,3 +23,56 @@
         font-size: 16px;
         margin-top: 10px;
     }
+
+/* 树形菜单固定行样式 */
+.sticky-parent {
+    position: relative;
+}
+
+.sticky-clone {
+    position: fixed !important;
+    background-color: #fff !important;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+}
+
+/* 隐藏克隆行中的操作按钮 */
+.sticky-clone .el-table_1_column_6 {
+    visibility: hidden;
+}
+
+/* 确保表格可以显示固定元素 */
+.el-table__body-wrapper {
+    overflow: visible !important;
+}
+
+.el-table {
+    overflow: visible !important;
+}
+
+/* 克隆元素样式调整 */
+.sticky-clone td {
+    background-color: #fff !important;
+    border-bottom: 1px solid #EBEEF5;
+    padding: 12px 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sticky-clone:hover td {
+    background-color: #F5F7FA !important;
+}
+
+/* 确保展开图标的样式一致 */
+.sticky-clone .el-table__expand-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    margin-right: 8px;
+}
