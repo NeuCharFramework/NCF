@@ -26,14 +26,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Remove="wwwroot\css\Admin\TenantInfo\Index.css" />
-		<Content Remove="wwwroot\css\Admin\SystemConfig\Index.css" />
-		<Content Remove="wwwroot\js\Admin\Pages\SystemConfig\Index.js" />
-		<Content Remove="wwwroot\js\Admin\Pages\TenantInfo\Index.js" />
-		<Content Remove="wwwroot\js\Admin\Pages\XncfModule\start.js" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
 		<PackageReference Include="Senparc.CO2NET" Version="3.1.0-beta3" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.0-beta1" />
