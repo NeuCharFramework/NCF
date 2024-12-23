@@ -10,38 +10,38 @@ using System.Linq.Expressions;
 
 namespace Senparc.Areas.Admin.Tests
 {
+    public class AdminSeedData : UnitTestSeedDataBuilder
+    {
+        public override async Task ExecuteAsync(IServiceProvider serviceProvider, DataList dataList)
+        {
+            var seedData = new List<AdminUserInfo>();
+            Random rand = new Random();
+            for (int i = 0; i < 1000; i++)
+            {
+                var username = $"Admin-{i}";
+                var password = $"pWd-{i}";
+                var realName = $"Admin{rand.Next(10000)}";
+                var adminUserInfo = new AdminUserInfo(ref username, ref password, realName, "", "");
+                seedData.Add(adminUserInfo);
+            }
+            dataList.Add(seedData);
+        }
+
+        public override async Task OnExecutedAsync(IServiceProvider serviceProvider, DataList dataList)
+        {
+        }
+    }
+
     public class TestBase : BaseNcfUnitTest
     {
         private static bool initSeedDataFinish = false;
 
-        /// <summary>
-        /// 创建种子数据
-        /// </summary>
-        private static Action<DataList> InitSeedData = dataList =>
-        {
-            if (initSeedDataFinish)
-            {
-                return;
-            }
-
-            List<AdminUserInfo> users = new List<AdminUserInfo>();
-            string[] userNames = new string[] { "Admin", "User1", "User2", "User3" };
-            foreach (string user in userNames)
-            {
-                var userName = user;
-                var pwd = user + "@";
-                var adminUserInfo = new AdminUserInfo(ref userName, ref pwd, user, "", "");
-                users.Add(adminUserInfo);
-            }
-
-            dataList[typeof(AdminUserInfo)] = users.Cast<object>().ToList();
-        };
-
-        public TestBase() : this(null, InitSeedData)
+        public TestBase() : this(null, null)
         {
         }
 
-        public TestBase(Action<IServiceCollection> servicesRegister = null, Action<DataList> initSeedData = null) : base(servicesRegister, initSeedData)
+        public TestBase(Action<IServiceCollection> servicesRegister = null, UnitTestSeedDataBuilder seedDataBuilder = null)
+            : base(servicesRegister, seedDataBuilder ?? new AdminSeedData())
         {
 
         }

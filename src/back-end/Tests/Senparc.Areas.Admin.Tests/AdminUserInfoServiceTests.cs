@@ -9,6 +9,7 @@ using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Repository;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.UnitTestExtension;
+using Senparc.Ncf.UnitTestExtension.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,30 +21,10 @@ namespace Senparc.Areas.Admin.Tests
     [TestClass]
     public class AdminUserInfoServiceTests : BaseNcfUnitTest
     {
-
-        #region 生成 Seed Data（种子数据）
-
-        private static Action<Dictionary<Type, List<object>>> InitSeedData = seedData =>
-        {
-            var list = new List<object>();
-            Random rand = new Random();
-            for (int i = 0; i < 1000; i++)
-            {
-                var username = $"Admin-{i}";
-                var password = $"pWd-{i}";
-                var realName = $"Admin{rand.Next(10000)}";
-                var adminUserInfo = new AdminUserInfo(ref username, ref password, realName, "", "");
-                list.Add(adminUserInfo);
-            }
-            seedData.Add(typeof(AdminUserInfo), list);
-        };
-
-        #endregion
-
         AdminUserInfoService adminUserInfoService;
 
 
-        public AdminUserInfoServiceTests() : base(null, InitSeedData)
+        public AdminUserInfoServiceTests() : base(null, null)
         {
             adminUserInfoService = base._serviceProvider.GetRequiredService<AdminUserInfoService>();
         }
