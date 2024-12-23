@@ -45,6 +45,9 @@ namespace Senparc.Areas.Admin.Tests
 
             var storedPassword = obj.GetSHA512Password(adminUserInfoDto.Password, obj.PasswordSalt);
             Assert.AreEqual(storedPassword, obj.Password);
+
+            Assert.IsTrue(obj.Id > 0);
+            Console.WriteLine("OBJ ID:" + obj.Id);
         }
 
         [TestMethod]
