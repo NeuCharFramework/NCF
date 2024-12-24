@@ -12,8 +12,9 @@ namespace Senparc.Areas.Admin.Tests
 {
     public class AdminSeedData : UnitTestSeedDataBuilder
     {
-        public override async Task ExecuteAsync(IServiceProvider serviceProvider, DataList dataList)
+        public override async Task<DataList> ExecuteAsync(IServiceProvider serviceProvider)
         {
+            DataList dataList = new DataList(nameof(AdminSeedData));
             var seedData = new List<AdminUserInfo>();
             Random rand = new Random();
             for (int i = 0; i < 1000; i++)
@@ -25,6 +26,7 @@ namespace Senparc.Areas.Admin.Tests
                 seedData.Add(adminUserInfo);
             }
             dataList.Add(seedData);
+            return dataList;
         }
 
         public override async Task OnExecutedAsync(IServiceProvider serviceProvider, DataList dataList)
@@ -34,8 +36,6 @@ namespace Senparc.Areas.Admin.Tests
 
     public class TestBase : BaseNcfUnitTest
     {
-        private static bool initSeedDataFinish = false;
-
         public TestBase() : this(null, null)
         {
         }

@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 namespace Senparc.Areas.Admin.Tests
 {
     [TestClass]
-    public class AdminUserInfoServiceTests : BaseNcfUnitTest
+    public class AdminUserInfoServiceTests : TestBase
     {
         AdminUserInfoService adminUserInfoService;
 
@@ -45,6 +45,9 @@ namespace Senparc.Areas.Admin.Tests
 
             var storedPassword = obj.GetSHA512Password(adminUserInfoDto.Password, obj.PasswordSalt);
             Assert.AreEqual(storedPassword, obj.Password);
+
+            Assert.IsTrue(obj.Id > 0);
+            Console.WriteLine("OBJ ID:" + obj.Id);
         }
 
         [TestMethod]
@@ -53,7 +56,7 @@ namespace Senparc.Areas.Admin.Tests
             var obj = await adminUserInfoService.GetUserInfoAsync("Admin-600");
             Assert.IsNotNull(obj);
 
-            var dataset = base.dataLists.GetDataList<AdminUserInfo>();
+            var dataset = BaseNcfUnitTest.GlobalDataList.GetDataList<AdminUserInfo>();
             var data = dataset.Skip(600).Take(1).First();
             Assert.AreEqual(data.UserName, obj.UserName);
         }

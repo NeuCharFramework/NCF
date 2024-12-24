@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.Areas.Admin.Domain.Models;
 using Senparc.Areas.Admin.Tests;
+using Senparc.Ncf.UnitTestExtension;
 
 namespace Senparc.Areas.Admin.Domain.Tests
 {
@@ -20,7 +21,7 @@ namespace Senparc.Areas.Admin.Domain.Tests
         public async Task GetUserInfoAsyncTest()
         {
 
-            var dataList = base.dataLists.GetDataList<AdminUserInfo>();
+            var dataList = BaseNcfUnitTest.GlobalDataList.GetDataList<AdminUserInfo>();
             Console.WriteLine("dataList Count:" + dataList.Count);
             var expected = dataList.FirstOrDefault(z => z.UserName.StartsWith("Admin"));
 
@@ -47,7 +48,7 @@ namespace Senparc.Areas.Admin.Domain.Tests
             var result = await _adminUserInfoService.GetObjectListAsync(0, 0, z => true, z => z.Id, Ncf.Core.Enums.OrderingType.Descending, null);
             Assert.IsNotNull(result);
 
-            var dataKeys = base.dataLists.Keys;
+            var dataKeys = BaseNcfUnitTest.GlobalDataList.Keys;
             Assert.IsTrue(dataKeys.ToList().Exists(z => z == typeof(AdminUserInfo)));
             Assert.AreEqual(1000, result.Count);
         }
