@@ -31,12 +31,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Senparc.CO2NET" Version="3.1.0" />
-    <PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.0" />
-    <PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.0" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.23.5.1-preview1" />
+    <PackageReference Include="Senparc.CO2NET" Version="3.1.1" />
+    <PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.0.1" />
+    <PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.0.1" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.23.6-preview1" />
     <PackageReference Include="Senparc.Ncf.UnitTestExtension" Version="0.3.9-preview1" />
-    <PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.4-preview1" />
+    <PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.5-preview1" />
   </ItemGroup>
 
   <ItemGroup>
