@@ -221,7 +221,9 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @@click="run.visible = false">取 消</el-button>
-            <el-button type="primary" @@click="handleRun">执 行</el-button>
+            <el-button type="primary" @@click="handleRun" :loading="run.loading" :disabled="run.loading">
+                {{ run.loading ? '执行中' : '执 行' }}
+            </el-button>
         </div>
     </el-dialog>
     @*运行结果*@
