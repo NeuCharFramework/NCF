@@ -45,7 +45,7 @@
 		<PackageReference Include="Senparc.Xncf.DynamicData" Version="0.4.5-pre-alpha" />
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.5-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.13.5-preview1" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.13.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.13.6-preview1" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.13.5-preview1" />
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.16.6-preview1" />
 
