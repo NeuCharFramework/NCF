@@ -47,7 +47,7 @@
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.13.5-preview1" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.13.6-preview1" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.13.5-preview1" />
-		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.16.6-preview1" />
+		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.17.0-preview1" />
 
 	</ItemGroup>
 </Project>
