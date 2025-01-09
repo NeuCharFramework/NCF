@@ -45,17 +45,6 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(templateBuild)'
-
-- task: VSBuild@1
-  inputs:
-    solution: '$(templateBuild)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-
-- task: NuGetCommand@2
   displayName: Senparc.Ncf.Template
   inputs:
     command: push
