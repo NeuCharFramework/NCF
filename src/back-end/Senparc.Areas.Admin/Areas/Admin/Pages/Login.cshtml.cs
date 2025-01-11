@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication;
+ï»¿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Senparc.Areas.Admin.Domain;
@@ -11,6 +11,9 @@ using Senparc.Ncf.Service;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Senparc.Areas.Admin.Domain.Models;
+using System;
+using Senparc.Ncf.Core.Exceptions;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -21,15 +24,15 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
     {
         //[BindProperty]
         //[FromBody]
-        //[Required(ErrorMessage = "ÇëÊäÈëÓÃ»§Ãû")]
+        //[Required(ErrorMessage = "è¯·è¾“å…¥ç”¨æˆ·å")]
         //public string Name { get; set; }
 
         //[BindProperty]
         //[FromBody]
-        //[Required(ErrorMessage = "ÇëÊäÈëÃÜÂë")]
+        //[Required(ErrorMessage = "è¯·è¾“å…¥å¯†ç ")]
         //public string Password { get; set; }
 
-        //°ó¶¨²ÎÊı
+        //ç»‘å®šå‚æ•°
         //[BindProperty(SupportsGet = true)]
         //public string ReturnUrl { get; set; }
 
@@ -45,8 +48,8 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         public async Task<IActionResult> OnGetAsync(string ReturnUrl)
         {
             await Task.CompletedTask;
-            //ÊÇ·ñÒÑ¾­µÇÂ¼
-            //var logined = await base.CheckLoginedAsync(AdminAuthorizeAttribute.AuthenticationScheme);//ÅĞ¶ÏµÇÂ¼
+            //æ˜¯å¦å·²ç»ç™»å½•
+            //var logined = await base.CheckLoginedAsync(AdminAuthorizeAttribute.AuthenticationScheme);//åˆ¤æ–­ç™»å½•
 
             //if (logined)
             //{
@@ -71,13 +74,13 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         //    var userInfo = await _userInfoService.GetUserInfo(this.Name);
         //    if (userInfo == null)
         //    {
-        //        //errorMsg = "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º101¡£";
-        //        ModelState.AddModelError(nameof(this.Password), "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º101¡£");
+        //        //errorMsg = "è´¦å·æˆ–å¯†ç é”™è¯¯ï¼é”™è¯¯ä»£ç ï¼š101ã€‚";
+        //        ModelState.AddModelError(nameof(this.Password), "è´¦å·æˆ–å¯†ç é”™è¯¯ï¼é”™è¯¯ä»£ç ï¼š101ã€‚");
         //    }
         //    else if (_userInfoService.TryLogin(this.Name, this.Password, true) == null)
         //    {
-        //        //errorMsg = "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º102¡£";
-        //        ModelState.AddModelError(nameof(this.Password), "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º102¡£");
+        //        //errorMsg = "è´¦å·æˆ–å¯†ç é”™è¯¯ï¼é”™è¯¯ä»£ç ï¼š102ã€‚";
+        //        ModelState.AddModelError(nameof(this.Password), "è´¦å·æˆ–å¯†ç é”™è¯¯ï¼é”™è¯¯ä»£ç ï¼š102ã€‚");
         //    }
 
         //    if (!errorMsg.IsNullOrEmpty() || !ModelState.IsValid)
@@ -96,38 +99,66 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         //    return LocalRedirect(this.ReturnUrl.UrlDecode());
         //}
 
-        public async Task<IActionResult> OnPostLoginAsync([FromBody]LoginInDto loginInDto/*[Required]string name,string password*/)
+        public async Task<IActionResult> OnPostLoginAsync([FromBody] LoginInDto loginInDto/*[Required]string name,string password*/)
         {
             if (!ModelState.IsValid)
             {
                 return Ok(new { loginInDto.Name, loginInDto.Password });
             }
 
-            var userInfo = await _userInfoService.GetUserInfoAsync(loginInDto.Name);
-            if (userInfo == null)
+            AdminUserInfo userInfo = null;
+            try
             {
-                //errorMsg = "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º101¡£";
-                return Ok("pwd", false, "ÕËºÅ»òÃÜÂë´íÎó£¡");
-                //ModelState.AddModelError(nameof(this.Password), "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º101¡£");
+                userInfo = await _userInfoService.GetUserInfoAsync(loginInDto.Name);
             }
-            else if (_userInfoService.TryLogin(userInfo, loginInDto.Password, true) == null)
+            catch (Exception ex)
             {
-                //errorMsg = "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º102¡£";
-                //ModelState.AddModelError(nameof(this.Password), "ÕËºÅ»òÃÜÂë´íÎó£¡´íÎó´úÂë£º102¡£");
-                return Ok("pwd", false, "ÕËºÅ»òÃÜÂë´íÎó£¡");
+                return Ok("pwd", false, ex.Message);
             }
 
-            return Ok(true);
+            if (userInfo == null)
+            {
+                SenparcTrace.SendCustomLog("ç™»å½•å¤±è´¥", $"ç”¨æˆ·åï¼š{loginInDto.Name}, é”™è¯¯ï¼šè´¦å·æˆ–å¯†ç é”™è¯¯ï¼101");
+                return Ok("pwd", false, "è´¦å·æˆ–å¯†ç é”™è¯¯ï¼");
+                //ModelState.AddModelError(nameof(this.Password), "è´¦å·æˆ–å¯†ç é”™è¯¯ï¼");
+            }
+
+            try
+            {
+                //TODO éœ€è¦æŠŠ userInfo è·å–è¿‡ç¨‹å°è£…åˆ°ä¸‹é¢çš„æ–¹æ³•ä¸­ï¼Œç»Ÿä¸€å¤„ç†è´¦å·é”å®š
+                if (await _userInfoService.TryLoginAsync(userInfo, loginInDto.Password, true) == null)
+                {
+                    //ModelState.AddModelError(nameof(this.Password), "è´¦å·æˆ–å¯†ç é”™è¯¯ï¼");
+                    SenparcTrace.SendCustomLog("ç™»å½•å¤±è´¥", $"ç”¨æˆ·åï¼š{loginInDto.Name}, é”™è¯¯ï¼šè´¦å·æˆ–å¯†ç é”™è¯¯ï¼102");
+                    return Ok("pwd", false, "è´¦å·æˆ–å¯†ç é”™è¯¯ï¼");
+                }   
+                return Ok(true);
+            }
+            catch (LoginLockException ex)
+            {
+                SenparcTrace.SendCustomLog("ç™»å½•å¤±è´¥", $"ç”¨æˆ·åï¼š{loginInDto.Name}, é”™è¯¯ï¼š{ex.Message}");
+                return Ok("pwd", false, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                SenparcTrace.SendCustomLog("ç™»å½•å¤±è´¥", $"ç”¨æˆ·åï¼š{loginInDto.Name}, é”™è¯¯ï¼š{ex.Message}");
+                //å…¶ä»–å¼‚å¸¸ï¼Œä¸è¿”å›é”™è¯¯ä¿¡æ¯
+                return Ok("pwd", false, "è´¦å·æˆ–å¯†ç é”™è¯¯ï¼");
+            }
         }
 
         public async Task<IActionResult> OnGetLogoutAsync(string ReturnUrl)
         {
-            SenparcTrace.SendCustomLog("¹ÜÀíÔ±ÍË³öµÇÂ¼", $"ÓÃ»§Ãû£º{base.UserName}");
+            SenparcTrace.SendCustomLog("ç®¡ç†å‘˜é€€å‡ºç™»å½•", $"ç”¨æˆ·åï¼š{base.UserName}");
             await _userInfoService.LogoutAsync();
             if (string.IsNullOrEmpty(ReturnUrl))
+            {
                 return RedirectToPage(new { area = "Admin" });
+            }
             else
+            {
                 return LocalRedirect(ReturnUrl.UrlDecode());
+            }
         }
     }
 
