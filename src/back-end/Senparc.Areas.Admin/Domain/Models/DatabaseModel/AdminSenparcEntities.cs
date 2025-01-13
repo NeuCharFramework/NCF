@@ -20,7 +20,7 @@ namespace Senparc.Areas.Admin.Domain.Models
         /// <summary>
         /// 系统设置
         /// </summary>
-        public DbSet<AdminUserInfo> AdminUserInfos { get; set; }
+        public DbSet<AdminUserInfo> SystemConfigs { get; set; }
 
         //DOT REMOVE OR MODIFY THIS LINE 请勿移除或修改本行 - Entities Point
 
