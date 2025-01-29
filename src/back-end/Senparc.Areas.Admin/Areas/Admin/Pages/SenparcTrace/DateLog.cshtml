@@ -64,17 +64,86 @@
         /*table.el-table__body tbody tr td:nth-of-type(1) {
             display: none;
         }*/
+        .highlight-keyword {
+            background-color: yellow;
+            font-weight: bold;
+        }
+        .filter-container {
+            margin-bottom: 20px;
+        }
+        .filter-item {
+            margin-bottom: 10px;
+        }
     </style>
 }
 
 <el-row :gutter="20">
     <el-row :gutter="20" class="filter-container">
-        <el-col :span="4">
+        <el-col :span="24" class="filter-item">
             <el-button type="primary" @@click="showAll()">显示所有完整结果</el-button>
-        </el-col>
-        <el-col :span="12">
             <el-button type="danger" @@click="showException()">只显示所有异常信息</el-button>
             <span>异常信息 <span>{{tableData.filter(_ => _.isException).length}}</span> / {{tableData.length}}</span>
+        </el-col>
+        
+        <el-col :span="8" class="filter-item">
+            <el-input
+                v-model="filterConditions.keyword"
+                placeholder="请输入关键字"
+                @@input="fetchData"
+                clearable>
+            </el-input>
+        </el-col>
+        
+        <el-col :span="8" class="filter-item">
+            <el-date-picker
+                v-model="filterConditions.timeRange"
+                type="datetimerange"
+                :picker-options="pickerOptions"
+                range-separator="至"
+                start-placeholder="开始时间"
+                end-placeholder="结束时间"
+                @@change="fetchData"
+                align="right">
+            </el-date-picker>
+        </el-col>
+        
+        <el-col :span="4" class="filter-item">
+            <el-select v-model="filterConditions.threadId" 
+                      placeholder="选择线程" 
+                      clearable 
+                      @@change="fetchData">
+                <el-option
+                    v-for="thread in filterConditions.availableThreads"
+                    :key="thread"
+                    :label="thread"
+                    :value="thread">
+                </el-option>
+            </el-select>
+        </el-col>
+        
+        <el-col :span="4" class="filter-item">
+            <el-select v-model="filterConditions.traceType" 
+                      placeholder="选择类型" 
+                      clearable 
+                      @@change="fetchData">
+                <el-option
+                    v-for="(desc, type) in weixinTraceTypeDesc"
+                    :key="type"
+                    :label="desc"
+                    :value="type">
+                </el-option>
+            </el-select>
+        </el-col>
+        
+        <el-col :span="4" class="filter-item">
+            <el-select v-model="filterConditions.exceptionStatus" 
+                      placeholder="异常状态" 
+                      clearable 
+                      @@change="fetchData">
+                <el-option label="全部" value=""></el-option>
+                <el-option label="是" value="true"></el-option>
+                <el-option label="否" value="false"></el-option>
+            </el-select>
         </el-col>
     </el-row>
 
@@ -131,7 +200,7 @@
             <el-table-column align="center"
                              label="标题">
                 <template slot-scope="scope">
-                    {{ scope.row.title }}
+                    <span v-html="highlightKeyword(scope.row.title)"></span>
                 </template>
             </el-table-column>
             <el-table-column align="center"
@@ -162,8 +231,7 @@
                         {{scope.row.result.exceptionMessage}}
                     </template>
                     <template v-if="!scope.row.showMessage">
-                        <!--显示所有结果-->
-                        {{scope.row.resultStr}}
+                        <span v-html="highlightKeyword(scope.row.resultStr)"></span>
                     </template>
                 </template>
             </el-table-column>

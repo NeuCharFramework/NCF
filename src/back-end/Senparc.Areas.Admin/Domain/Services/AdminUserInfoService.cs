@@ -8,6 +8,7 @@ using Senparc.Areas.Admin.ACL;
 using Senparc.Areas.Admin.Domain.Models;
 using Senparc.Areas.Admin.Domain.Models.Dto;
 using Senparc.Ncf.Core.Config;
+using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Log;
 using Senparc.Ncf.Service;
@@ -24,6 +25,7 @@ namespace Senparc.Areas.Admin.Domain
     {
 
         private readonly Lazy<IHttpContextAccessor> _contextAccessor;
+
         public AdminUserInfoService(IAdminUserInfoRepository repository, Lazy<IHttpContextAccessor> httpContextAccessor, IServiceProvider serviceProvider)
             : base(repository, serviceProvider)
         {
@@ -67,7 +69,13 @@ namespace Senparc.Areas.Admin.Domain
             }
         }
 
-        public virtual void Login(AdminUserInfo userInfo, bool rememberMe)
+        /// <summary>
+        /// Performs the login operation for the specified admin user
+        /// </summary>
+        /// <param name="userInfo">The admin user information</param>
+        /// <param name="rememberMe">Whether to persist the login</param>
+        /// <returns>A task representing the asynchronous operation</returns>
+        public virtual async Task LoginAsync(AdminUserInfo userInfo, bool rememberMe)
         {
             #region 使用 .net core 的方法写入 cookie 验证信息
 
@@ -86,8 +94,8 @@ namespace Senparc.Areas.Admin.Domain
                 IsPersistent = false,
             };
 
-            LogoutAsync().ConfigureAwait(false).GetAwaiter().GetResult(); //退出登录
-            _contextAccessor.Value.HttpContext.SignInAsync(SiteConfig.NcfAdminAuthorizeScheme, new ClaimsPrincipal(identity), authProperties);
+            await LogoutAsync(); //退出登录
+            await _contextAccessor.Value.HttpContext.SignInAsync(SiteConfig.NcfAdminAuthorizeScheme, new ClaimsPrincipal(identity), authProperties);
 
             #endregion
         }
@@ -110,16 +118,64 @@ namespace Senparc.Areas.Admin.Domain
         /// <param name="password"></param>
         /// <param name="rememberMe"></param>
         /// <returns></returns>
-        public AdminUserInfo TryLogin(AdminUserInfo adminUserInfo, string password, bool rememberMe)
+        public async Task<AdminUserInfo> TryLoginAsync(AdminUserInfo adminUserInfo, string password, bool rememberMe)
         {
-            if (adminUserInfo.CheckPassword(password))
+            var cache = CO2NET.Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
+            var lockTimeKey = $"LockTime:{adminUserInfo.UserName}";
+            var failedLoginKey = $"FailedLogin:{adminUserInfo.UserName}";
+            using (var cacheLock = await cache.BeginCacheLockAsync("LoginLock-Admin", adminUserInfo.UserName))
             {
-                Login(adminUserInfo, rememberMe);
-                return adminUserInfo;
-            }
-            else
-            {
-                return null;
+                // 先检查是否在锁定期，避免不必要的数据库查询
+                var lockEndTime = await cache.GetAsync<DateTime?>(lockTimeKey);
+                if (lockEndTime.HasValue && lockEndTime.Value > DateTime.Now)
+                {
+                    throw new LoginLockException(lockEndTime.Value);
+                }
+
+                if (adminUserInfo.CheckPassword(password))
+                {
+                    // 登录成功，清除失败记录
+                    await cache.RemoveFromCacheAsync(failedLoginKey);
+                    await cache.RemoveFromCacheAsync(lockTimeKey);
+
+                    // 登录
+                    await LoginAsync(adminUserInfo, rememberMe);
+                    return adminUserInfo;
+                }
+                else
+                {
+                    // 记录失败次数，即使锁定期已过，也要累加之前的失败次数
+                    var failedCount = await cache.GetAsync<int>(failedLoginKey);
+                    failedCount++;
+
+                    // 设置锁定时间
+                    DateTime? lockTime = null;
+                    if (failedCount >= 20)
+                    {
+                        lockTime = DateTime.Now.AddHours(failedCount * 2);
+                    }
+                    else if (failedCount >= 10)
+                    {
+                        lockTime = DateTime.Now.AddHours(2);
+                    }
+                    else if (failedCount >= 7)
+                    {
+                        lockTime = DateTime.Now.AddMinutes(30);
+                    }
+                    else if (failedCount >= 5)
+                    {
+                        lockTime = DateTime.Now.AddMinutes(5);
+                    }
+
+                    // 更新缓存，失败次数在24小时内有效
+                    await cache.SetAsync(failedLoginKey, failedCount, TimeSpan.FromHours(24));
+                    if (lockTime.HasValue)
+                    {
+                        await cache.SetAsync(lockTimeKey, lockTime.Value, TimeSpan.FromHours(24));
+                        throw new LoginLockException(lockTime.Value, showWrongLoginMessage: true);
+                    }
+                    return null;
+                }
             }
         }
 
@@ -263,26 +319,31 @@ namespace Senparc.Areas.Admin.Domain
             var userInfo = await GetObjectAsync(z => z.UserName == loginDto.UserName);
             if (userInfo == null)
             {
-                throw new Ncf.Core.Exceptions.NcfExceptionBase($"用户名不存在或密码不正确：{loginDto.UserName}！");
+                throw new NcfExceptionBase($"用户名不存在或密码不正确：{loginDto.UserName}！");
             }
-            var adminUserInfo = TryLogin(userInfo, loginDto.Password, false);
-            if (adminUserInfo == null)
+            try
             {
-                throw new Ncf.Core.Exceptions.NcfExceptionBase("用户名不存在或密码不正确！");
-            }
-            else
-            {
+                var adminUserInfo = await TryLoginAsync(userInfo, loginDto.Password, false);
+                if (adminUserInfo == null)
+                {
+                    throw new NcfExceptionBase("用户名不存在或密码不正确！");
+                }
                 token = GenerateToken(adminUserInfo.Id);
+                var roles = await _serviceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == adminUserInfo.Id);
+                var roleCodes = roles
+                    .Select(o => o.RoleCode).Distinct().ToList();
+                result.Token = token;
+                var permissions = await _serviceProvider.GetService<SysPermissionService>().GetFullListAsync(p => roles.Select(o => o.RoleId).Contains(p.RoleId));
+                result.MenuTree = await _serviceProvider.GetService<Domain.Services.SysMenuService>().GetAllMenusTreeAsync(false);
+                result.UserName = adminUserInfo.UserName;
+                result.RoleCodes = roleCodes;
+                result.PermissionCodes = permissions.Select(o => o.ResourceCode);
             }
-            var roles = await _serviceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == adminUserInfo.Id);
-            var roleCodes = roles
-                .Select(o => o.RoleCode).Distinct().ToList();
-            result.Token = token;
-            var permissions = await _serviceProvider.GetService<SysPermissionService>().GetFullListAsync(p => roles.Select(o => o.RoleId).Contains(p.RoleId));
-            result.MenuTree = await _serviceProvider.GetService<Domain.Services.SysMenuService>().GetAllMenusTreeAsync(false);
-            result.UserName = adminUserInfo.UserName;
-            result.RoleCodes = roleCodes;
-            result.PermissionCodes = permissions.Select(o => o.ResourceCode);
+            catch (LoginLockException)
+            {
+                throw; // 直接向上层抛出登录锁定异常
+            }
+
             return result;
         }
 

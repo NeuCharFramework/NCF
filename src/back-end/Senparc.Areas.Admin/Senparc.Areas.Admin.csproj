@@ -13,14 +13,6 @@
 		<!--<FrameworkReference Include="Microsoft.AspNetCore.App" />-->
 
 		<EmbeddedResource Include="wwwroot\**\*" />
-
-		<Compile Remove="Domain\Migrations\Oracle\**" />
-
-		<Content Remove="Domain\Migrations\Oracle\**" />
-
-		<EmbeddedResource Remove="Domain\Migrations\Oracle\**" />
-
-		<None Remove="Domain\Migrations\Oracle\**" />
 		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.10" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.10" />
 	</ItemGroup>
@@ -33,10 +25,10 @@
 		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="5.2.0.1" />
 		<PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.0.1" />
 		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.20.5-preview1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.23.7-preview1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.23.8-preview1" />
 		<PackageReference Include="Senparc.Ncf.Log" Version="0.19.3-preview1" />
 		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.20.5-preview1" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.22.3-preview1" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.22.4-preview1" />
 		<PackageReference Include="Senparc.Ncf.Utility" Version="0.19.3-preview1" />
 		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.22.4-preview1" />
 
@@ -49,5 +41,9 @@
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.13.6-preview1" />
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.17.0-preview1" />
 
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Areas\Admin\Pages\Dto\" />
 	</ItemGroup>
 </Project>
