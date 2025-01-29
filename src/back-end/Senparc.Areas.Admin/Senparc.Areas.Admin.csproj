@@ -42,4 +42,8 @@
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.17.0-preview1" />
 
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Areas\Admin\Pages\Dto\" />
+	</ItemGroup>
 </Project>

@@ -5,14 +5,19 @@
             xncfStat: {},
             xncfOpeningList: {},
             chartData: [],
-            todayLogData: [] // 新增用于存储今日日志数据  
+            todayLogData: [],
+            // 添加动画控制变量
+            shakeAllModules: false,
+            glowUpgradeableModules: false
         };
     },
     mounted() {
         this.getXncfStat();
         this.getXncfOpening();
         this.fetchChartData();
-        this.fetchTodayLogData(); // 新增调用获取今日日志数据的方法  
+        this.fetchTodayLogData();
+        // 添加鼠标事件监听
+        this.initializeHoverEffects();
     },
     methods: {
         async fetchChartData() {
@@ -157,6 +162,77 @@
         //点击打开模块
         navigateTo(uid) {
             window.location.href = '/Admin/XncfModule/Start/?uid=' + uid;
+        },
+        // 添加新方法处理悬停效果
+        initializeHoverEffects() {
+            // 获取统计项元素 - 修正选择器
+            const installedModulesStat = document.querySelector('.xncf-stat-item');
+            const updateModulesStat = document.querySelectorAll('.xncf-stat-item')[1];
+
+            // 已安装模块统计项的鼠标事件
+            if (installedModulesStat) {
+                installedModulesStat.addEventListener('mouseenter', () => {
+                    this.triggerShakeAnimation();
+                });
+            }
+
+            // 待更新模块统计项的鼠标事件
+            if (updateModulesStat) {
+                updateModulesStat.addEventListener('mouseenter', () => {
+                    this.triggerGlowAnimation();
+                });
+            }
+        },
+
+        // 触发抖动动画
+        triggerShakeAnimation() {
+            const moduleCards = document.querySelectorAll('#xncf-modules-area .box-card');
+            moduleCards.forEach(card => {
+                // 添加随机延迟
+                const delay = Math.random() * 200; // 0-200ms的随机延迟
+                setTimeout(() => {
+                    card.classList.add('shake-animation');
+                    // 动画结束后移除类
+                    setTimeout(() => {
+                        card.classList.remove('shake-animation');
+                    }, 800); // 与动画持续时间匹配
+                }, delay);
+            });
+        },
+
+        // 触发发光/淡化动画
+        triggerGlowAnimation() {
+            const allCards = document.querySelectorAll('#xncf-modules-area .box-card');
+            const upgradeableVersions = document.querySelectorAll('#xncf-modules-area .version-upgradeable');
+            
+            // 为所有可更新的模块添加发光效果
+            upgradeableVersions.forEach(version => {
+                const card = version.closest('.box-card');
+                if (card) {
+                    // 添加随机延迟
+                    const delay = Math.random() * 200;
+                    setTimeout(() => {
+                        card.classList.add('glow-animation');
+                        setTimeout(() => {
+                            card.classList.remove('glow-animation');
+                        }, 1200); // 与动画持续时间匹配
+                    }, delay);
+                }
+            });
+
+            // 为不可更新的模块添加淡化效果
+            allCards.forEach(card => {
+                if (!card.querySelector('.version-upgradeable')) {
+                    // 添加随机延迟
+                    const delay = Math.random() * 200;
+                    setTimeout(() => {
+                        card.classList.add('fade-animation');
+                        setTimeout(() => {
+                            card.classList.remove('fade-animation');
+                        }, 1200); // 与动画持续时间匹配
+                    }, delay);
+                }
+            });
         }
     }
 });  
