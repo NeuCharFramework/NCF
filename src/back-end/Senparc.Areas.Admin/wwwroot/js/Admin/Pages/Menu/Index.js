@@ -661,6 +661,17 @@
     created: function () {
         this.getList();
     },
+    mounted() {
+        window.addEventListener('scroll', this.handleScroll);
+        window.addEventListener('resize', this.handleResize);
+        this.$nextTick(() => {
+            this.initStickyParents();
+        });
+    },
+    beforeDestroy() {
+        window.removeEventListener('scroll', this.handleScroll);
+        window.removeEventListener('resize', this.handleResize);
+    },
     watch: {
         'dialog.visible': function (val, old) {
             // 关闭dialog，清空
@@ -713,6 +724,11 @@
             let allMenu = [];
             this.ddd(b, null, allMenu);
             this.tableData = allMenu;
+            
+            // 数据加载完成后初始化固定效果
+            this.$nextTick(() => {
+                this.initStickyParents();
+            });
         },
         // 数据处理
         ddd(source, parentId, dest) {
@@ -819,6 +835,73 @@
                     });
                 }
             });
+        },
+        // 初始化父节点固定效果
+        initStickyParents() {
+            const rows = document.querySelectorAll('.el-table__row');
+            const table = document.querySelector('.el-table');
+            
+            rows.forEach(row => {
+                const expandIcon = row.querySelector('.el-table__expand-icon');
+                if (expandIcon && !expandIcon.classList.contains('el-table__expand-icon--leaf')) {
+                    row.classList.add('sticky-parent');
+                    
+                    // 创建克隆行并保持列宽
+                    const clone = row.cloneNode(true);
+                    clone.classList.add('sticky-clone');
+                    clone.style.display = 'none';
+                    
+                    // 复制每列的宽度
+                    const originalCells = row.querySelectorAll('td');
+                    const cloneCells = clone.querySelectorAll('td');
+                    originalCells.forEach((cell, index) => {
+                        const width = window.getComputedStyle(cell).width;
+                        cloneCells[index].style.width = width;
+                        cloneCells[index].style.minWidth = width;
+                        cloneCells[index].style.maxWidth = width;
+                    });
+                    
+                    // 设置克隆行的总宽度
+                    clone.style.width = window.getComputedStyle(row).width;
+                    
+                    row.parentNode.insertBefore(clone, row.nextSibling);
+                }
+            });
+        },
+        // 处理滚动事件
+        handleScroll() {
+            const stickyRows = document.querySelectorAll('.sticky-parent');
+            const headerHeight = document.querySelector('.el-table__header-wrapper').offsetHeight;
+            const table = document.querySelector('.el-table');
+            const tableRect = table.getBoundingClientRect();
+
+            stickyRows.forEach(row => {
+                const clone = row.nextElementSibling;
+                if (!clone || !clone.classList.contains('sticky-clone')) return;
+
+                const rect = row.getBoundingClientRect();
+                
+                if (rect.top <= headerHeight) {
+                    clone.style.display = 'table-row';
+                    clone.style.position = 'fixed';
+                    clone.style.top = `${headerHeight}px`;
+                    clone.style.left = `${tableRect.left}px`;
+                    
+                    // 确保克隆行的列宽与原行保持一致
+                    const originalCells = row.querySelectorAll('td');
+                    const cloneCells = clone.querySelectorAll('td');
+                    originalCells.forEach((cell, index) => {
+                        const width = window.getComputedStyle(cell).width;
+                        cloneCells[index].style.width = width;
+                    });
+                } else {
+                    clone.style.display = 'none';
+                }
+            });
+        },
+        // 在窗口大小改变时重新计算列宽
+        handleResize() {
+            this.initStickyParents();
         }
     }
 

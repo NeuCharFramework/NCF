@@ -21,38 +21,33 @@
 		<EmbeddedResource Remove="Domain\Migrations\Oracle\**" />
 
 		<None Remove="Domain\Migrations\Oracle\**" />
-		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.10" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.10" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Remove="wwwroot\css\Admin\TenantInfo\Index.css" />
-		<Content Remove="wwwroot\css\Admin\SystemConfig\Index.css" />
-		<Content Remove="wwwroot\js\Admin\Pages\SystemConfig\Index.js" />
-		<Content Remove="wwwroot\js\Admin\Pages\TenantInfo\Index.js" />
-		<Content Remove="wwwroot\js\Admin\Pages\XncfModule\start.js" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
-		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="2.1.0-beta1" />
-		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="5.1.0-beta1" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.20.2-preview1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.23.4-preview1" />
-		<PackageReference Include="Senparc.Ncf.Log" Version="0.19.1-preview1" />
-		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.20.2-preview1" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.22.1-preview1" />
-		<PackageReference Include="Senparc.Ncf.Utility" Version="0.19.1-preview1" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.22.1-preview1" />
+		<PackageReference Include="Senparc.CO2NET" Version="3.1.0-beta3" />
+		<PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.0-beta1" />
+		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="2.2.0-beta1" />
+		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="5.2.0-beta1" />
+		<PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.0-beta3" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.20.3.1-preview1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.23.5.1-preview1" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.19.1.1-preview1" />
+		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.20.3.1-preview1" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.22.1.1-preview1" />
+		<PackageReference Include="Senparc.Ncf.Utility" Version="0.19.1.1-preview1" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.22.1.2-preview1" />
 
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.11.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.11.3.1-preview1" />
 
-		<PackageReference Include="Senparc.Xncf.DynamicData" Version="0.4.2-pre-alpha" />
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.2-preview1" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.13.2-preview1" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.13.2-preview1" />
-		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.13.2-preview1" />
-		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.16.4-preview1" />
+		<PackageReference Include="Senparc.Xncf.DynamicData" Version="0.4.3-pre-alpha" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.3.1-preview1" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.13.3-preview1" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.13.3.1-preview1" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.13.3.1-preview1" />
+		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.16.6-preview1" />
 
 	</ItemGroup>
 </Project>
