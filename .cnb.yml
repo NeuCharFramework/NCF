@@ -13,6 +13,8 @@ Developer-CNB:
 $:
   # vscode 事件：专供页面中启动远程开发用
   vscode:
+    - runner:
+          cpus: 64
     - docker:
         build: .ide/Dockerfile
       services:
