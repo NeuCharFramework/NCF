@@ -44,6 +44,11 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(templateBuild)'
+
 - task: VSBuild@1
   inputs:
     solution: '$(templateBuild)'
