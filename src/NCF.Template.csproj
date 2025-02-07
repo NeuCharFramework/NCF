@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<PackageType>Template</PackageType>
 		<PackageVersion>0.28.1</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
