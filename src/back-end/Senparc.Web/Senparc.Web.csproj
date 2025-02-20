@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<Version>0.28.1</Version>
+		<Version>0.28.2</Version>
 		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
 		<TypeScriptToolsVersion>4.1</TypeScriptToolsVersion>
 		<UserSecretsId>d2144151-af7a-4d50-896d-4a306e594f7b</UserSecretsId>
@@ -32,10 +32,10 @@
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.13.8-preview1" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.20.5-preview1" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.13.9-preview1" />
-		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.12.9-preview1" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.34.4-preview1" />
-		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.13.9-preview1" />
-		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.9.6-preview1" />
+		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.12.12-preview1" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.34.5-preview1" />
+		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.13.10-preview1" />
+		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.9.7-preview1" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
