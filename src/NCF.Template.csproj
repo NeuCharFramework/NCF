@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.28.4</PackageVersion>
+		<PackageVersion>0.28.5</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -81,6 +81,7 @@
 			v0.27.10 更新基础模块，重构 XncfBuilder XNCF 生成过程
 			v0.28.0 更新 Admin 后台布局
 			v0.28.4 更新 DeepSeek 接入
+			v0.28.5 更新 PromptRange
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
