@@ -7,10 +7,10 @@
 }
 @section style {
     <style>
-        #home-header .el-main{
+        #home-header .el-main {
             padding: 20px 10px 0px 10px;
         }
-        
+
         .xncf-stat-item {
             position: relative;
             display: block;
@@ -99,169 +99,176 @@
                 }
 
                 /* 模块卡片样式优化 */
-#xncf-modules-area .xncf-item .box-card {
-    height: 160px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
+                #xncf-modules-area .xncf-item .box-card {
+                    height: 160px;
+                    transition: all 0.3s ease;
+                    cursor: pointer;
+                }
 
-#xncf-modules-area .xncf-item .box-card:hover {
-    transform: translateY(-5px);
-    border-color: #8c52ff;
-    box-shadow: 0 5px 15px rgba(140, 82, 255, 0.2);
-}
+                    #xncf-modules-area .xncf-item .box-card:hover {
+                        transform: translateY(-5px);
+                        border-color: #8c52ff;
+                        box-shadow: 0 5px 15px rgba(140, 82, 255, 0.2);
+                    }
 
-/* 模块图标样式优化 */
-.component-item {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    height: 100%;
-}
+        /* 模块图标样式优化 */
+        .component-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            height: 100%;
+        }
 
-.component-item .icon {
-    font-size: 40px;
-    color: #8c52ff;
-    transition: all 0.3s ease;
-    margin-right: 15px;
-    flex-shrink: 0;
-}
+            .component-item .icon {
+                font-size: 40px;
+                color: #8c52ff;
+                transition: all 0.3s ease;
+                margin-right: 15px;
+                flex-shrink: 0;
+            }
 
-.component-item .description {
-    flex: 1;
-    font-size: 13px;
-    color: #666;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    line-height: 1.5;
-}
-
-
-
-#xncf-modules-area .xncf-item .box-card:hover .icon {
-    transform: scale(1.1);
-}
+            .component-item .description {
+                flex: 1;
+                font-size: 13px;
+                color: #666;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                line-height: 1.5;
+            }
 
 
 
-/* 版本号样式优化 */
-#xncf-modules-area .xncf-item .version {
-    background: #f0f2f5;
-    padding: 2px 6px;
-    border-radius: 10px;
-    font-size: 12px;
-    color: #666;
-    display: flex;
-    align-items: center;
-    transition: all 0.3s ease;
-}
+        #xncf-modules-area .xncf-item .box-card:hover .icon {
+            transform: scale(1.1);
+        }
 
-/* 可升级版本的样式 */
-#xncf-modules-area .xncf-item .version.version-upgradeable {
-    background: #e6f1fc;
-    color: #409EFF;
-    border: 1px solid #b3d8ff;
-}
 
-.version-upgrade-icon {
-    color: #409EFF;
-    margin-left: 4px;
-    font-size: 14px;
-}
 
-/* 模块名称样式 */
-.xncf-item .el-card__header {
-    padding: 10px 15px;
-}
+        /* 版本号样式优化 */
+        #xncf-modules-area .xncf-item .version {
+            background: #f0f2f5;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
 
-/* 响应式布局优化 */
-@@media screen and (max-width: 1200px) {
-    #xncf-modules-area .el-col-6 {
-        width: 33.33%;
-    }
-}
+            /* 可升级版本的样式 */
+            #xncf-modules-area .xncf-item .version.version-upgradeable {
+                background: #e6f1fc;
+                color: #409EFF;
+                border: 1px solid #b3d8ff;
+            }
 
-@@media screen and (max-width: 768px) {
-    #xncf-modules-area .el-col-6 {
-        width: 50%;
-    }
-}
+        .version-upgrade-icon {
+            color: #409EFF;
+            margin-left: 4px;
+            font-size: 14px;
+        }
 
-@@media screen and (max-width: 480px) {
-    #xncf-modules-area .el-col-6 {
-        width: 100%;
-    }
-}
+        /* 模块名称样式 */
+        .xncf-item .el-card__header {
+            padding: 10px 15px;
+        }
 
-/* 图表容器样式 */
-.charts-container {
-    height: 260px;
-}
+        /* 响应式布局优化 */
+        @@media screen and (max-width: 1200px) {
+            #xncf-modules-area .el-col-6 {
+                width: 33.33%;
+            }
+        }
 
-/* 针对包含charts-container的卡片内容区域移除内边距 */
-.el-card__body .charts-container {
-    margin-bottom: -40px;  /* 抵消父元素的padding，底部有足够留白 */
-}
+        @@media screen and (max-width: 768px) {
+            #xncf-modules-area .el-col-6 {
+                width: 50%;
+            }
+        }
 
-/* 添加更强烈的抖动动画关键帧 */
-@@keyframes shake {
-    0%, 100% { 
-        transform: translateX(0) rotate(0deg); 
-    }
-    15% { 
-        transform: translateX(-8px) rotate(-2deg); 
-    }
-    30% { 
-        transform: translateX(6px) rotate(1.5deg); 
-    }
-    45% { 
-        transform: translateX(-4px) rotate(-0.5deg); 
-    }
-    60% { 
-        transform: translateX(2px) rotate(0.25deg); 
-    }
-    75% { 
-        transform: translateX(-1px) rotate(-0.125deg); 
-    }
-}
+        @@media screen and (max-width: 480px) {
+            #xncf-modules-area .el-col-6 {
+                width: 100%;
+            }
+        }
 
-/* 添加发光动画关键帧 */
-@@keyframes glow {
-    0%, 100% { 
-        box-shadow: 0 0 5px rgba(140, 82, 255, 0.2);
-        transform: scale(1);
-    }
-    50% { 
-        box-shadow: 0 0 20px rgba(140, 82, 255, 0.6);
-        transform: scale(1.02);
-    }
-}
+        /* 图表容器样式 */
+        .charts-container {
+            height: 260px;
+        }
 
-/* 添加淡化效果动画 */
-@@keyframes fade {
-    0%, 100% { 
-        opacity: 1;
-    }
-    50% { 
-        opacity: 0.6;
-    }
-}
+        /* 针对包含charts-container的卡片内容区域移除内边距 */
+        .el-card__body .charts-container {
+            margin-bottom: -40px; /* 抵消父元素的padding，底部有足够留白 */
+        }
 
-/* 动画类 */
-.shake-animation {
-    animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both;
-}
+        /* 添加更强烈的抖动动画关键帧 */
+        @@keyframes shake {
+            0%, 100% {
+                transform: translateX(0) rotate(0deg);
+            }
 
-.glow-animation {
-    animation: glow 1.2s ease-in-out;
-}
+            15% {
+                transform: translateX(-8px) rotate(-2deg);
+            }
 
-.fade-animation {
-    animation: fade 1.2s ease-in-out;
-}
+            30% {
+                transform: translateX(6px) rotate(1.5deg);
+            }
+
+            45% {
+                transform: translateX(-4px) rotate(-0.5deg);
+            }
+
+            60% {
+                transform: translateX(2px) rotate(0.25deg);
+            }
+
+            75% {
+                transform: translateX(-1px) rotate(-0.125deg);
+            }
+        }
+
+        /* 添加发光动画关键帧 */
+        @@keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(140, 82, 255, 0.2);
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(140, 82, 255, 0.6);
+                transform: scale(1.02);
+            }
+        }
+
+        /* 添加淡化效果动画 */
+        @@keyframes fade {
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        /* 动画类 */
+        .shake-animation {
+            animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        .glow-animation {
+            animation: glow 1.2s ease-in-out;
+        }
+
+        .fade-animation {
+            animation: fade 1.2s ease-in-out;
+        }
     </style>
 }
 
@@ -326,7 +333,7 @@
                         </el-col>
                     </el-row>
                 </el-col>
-                
+
                 <!-- 右侧图表区域 -->
                 <el-col :span="16">
                     <el-row :gutter="20">
@@ -357,26 +364,53 @@
             <div id="xncf-modules-area">
                 <el-row :gutter="20">
                     <el-col :span="6" class="xncf-item" v-for="item in xncfOpeningList" :key="item.uid">
-                        <a v-bind:href="'/Admin/XncfModule/Start/?uid='+item.uid">
-                            <el-card class="box-card">
-                                <div slot="header" class="clearfix">
-                                    <span>{{item.menuName}}</span>
-                                    <span class="version version-container" :class="{ 'version-upgradeable': item.hasNewVersion }">
-                                        v{{item.version}}
-                                        <el-tooltip v-if="item.hasNewVersion" 
-                                                   class="version-tooltip" 
-                                                   effect="light" 
-                                                   :content="`当前版本: v${item.version} -> 可更新至: v${item.newVersion}`">
-                                            <i class="fa fa-level-up version-upgrade-icon"></i>
-                                        </el-tooltip>
-                                    </span>
-                                </div>
+
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <span>{{item.menuName}}</span>
+                                <span class="version version-container" :class="{ 'version-upgradeable': item.hasNewVersion }">
+                                    v{{item.version}}
+                                    <el-tooltip v-if="item.hasNewVersion"
+                                                class="version-tooltip"
+                                                effect="light"
+                                                :content="`当前版本: v${item.version} -> 可更新至: v${item.newVersion}`">
+                                        <i class="fa fa-level-up version-upgrade-icon"></i>
+                                    </el-tooltip>
+                                </span>
+                                <span>
+                                    <el-popover placement="right"
+                                                width="400"
+                                                trigger="click">
+                                        <el-table v-if="refreshTable"
+                                                  v-loading="loading"
+                                                  :data="item.menus"
+                                                  row-key="id"
+                                                  :default-expand-all="isExpandAll"
+                                                  :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+                                                  max-height="250">
+                                            <el-table-column prop="name" label="菜单名称" width="260"></el-table-column>
+                                            <el-table-column fixed="right"
+                                                             label="操作"
+                                                             width="120">
+                                                <template slot-scope="scope">
+                                                    <el-button @@click.native.prevent="getOpenDetail(scope.$index, item.menus)" type="text" size="small">
+                                                        打开
+                                                    </el-button>
+                                                </template>
+                                            </el-table-column>
+                                        </el-table>
+                                        <el-button slot="reference" size="mini" icon="el-icon-s-fold"></el-button>
+                                    </el-popover>
+                                </span>
+                            </div>
+                            <a v-bind:href="'/Admin/XncfModule/Start/?uid='+item.uid">
                                 <div class="component-item">
                                     <i :class="[item.icon, 'icon']"></i>
                                     <div class="description">{{item.description || '暂无描述'}}</div>
                                 </div>
-                            </el-card>
-                        </a>
+                            </a>
+                        </el-card>
+
                     </el-col>
                 </el-row>
             </div>
