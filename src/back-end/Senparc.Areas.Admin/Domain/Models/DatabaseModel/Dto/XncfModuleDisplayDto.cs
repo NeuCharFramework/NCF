@@ -30,10 +30,12 @@ namespace Senparc.Areas.Admin.Domain
         /// </summary>
         public string NewVersion { get; set; }
 
+        public object Menus { get; set; }
+
         private XncfModuleDisplayDto() { }
  
 
-        public XncfModuleDisplayDto(int id, string name, string uid, string menuName, string version, string description, string updateLog, bool allowRemove, string menuId, string icon, XncfModules_State state, bool hasNewVersion, string newVersion)
+        public XncfModuleDisplayDto(int id, string name, string uid, string menuName, string version, string description, string updateLog, bool allowRemove, string menuId, string icon, XncfModules_State state, bool hasNewVersion, string newVersion, object menus)
         {
             Id = id;
             Name = name;
@@ -48,6 +50,7 @@ namespace Senparc.Areas.Admin.Domain
             State = state;
             HasNewVersion = hasNewVersion;
             NewVersion = newVersion;
+            Menus = menus;
         }
 
     }
