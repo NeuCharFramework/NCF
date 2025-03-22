@@ -8,6 +8,7 @@
 using Senparc.CO2NET;
 using Senparc.CO2NET.HttpUtility;
 using Senparc.CO2NET.WebApi;
+using Senparc.Ncf.Database.SqlServer;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);

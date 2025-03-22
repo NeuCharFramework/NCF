@@ -29,7 +29,6 @@ namespace Senparc.Areas.Admin.Domain
         /// 新版本号
         /// </summary>
         public string NewVersion { get; set; }
-
         public object Menus { get; set; }
 
         private XncfModuleDisplayDto() { }
