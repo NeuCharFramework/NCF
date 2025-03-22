@@ -83,7 +83,7 @@
 			v0.28.4 更新 DeepSeek 接入
 			v0.28.5 更新 PromptRange
 			v0.28.6 更新 AgentsManager 及基础库
-			v0.28.7 优化管理后台首页显示
+			v0.28.7 优化管理后台首页显示；升级 PromotRange
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
