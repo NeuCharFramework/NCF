@@ -21,11 +21,9 @@ using Senparc.Areas.Admin.Domain;
 using Senparc.Areas.Admin.Domain.Dto;
 //using Senparc.Areas.Admin.Authorization;
 using Senparc.Areas.Admin.Domain.Models;
-using Senparc.Areas.Admin.Domain.Services.AiPlugins;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.AreaBase.Admin.Filters;
-using Senparc.Ncf.Core;
 using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Enums;
@@ -58,7 +56,7 @@ namespace Senparc.Areas.Admin
 
         public override string Uid => SiteConfig.SYSTEM_XNCF_MODULE_AREAS_ADMIN_UID;// "00000000-0000-0001-0001-000000000001";
 
-        public override string Version => "0.4.1-beta4";
+        public override string Version => "0.4.0-beta4";
 
         public override string MenuName => "NCF 系统管理员后台";
 
@@ -134,9 +132,6 @@ namespace Senparc.Areas.Admin
             AddJwtAuthentication(services, configuration);
 
             services.AddScoped<IAdminUserInfoRepository, AdminUserInfoRepository>();
-
-            var aiPlugins = AIPluginHub.Instance;
-            aiPlugins.Add(typeof(SmsSender));
 
             return base.AddXncfModule(services, configuration, env);
         }
