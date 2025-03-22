@@ -43,7 +43,8 @@ li {
 
 .footer {
     text-align: right;
-    color: #5A738E
+    color: #5A738E;
+    line-height: 60px;
 }
 
     .footer a:hover {

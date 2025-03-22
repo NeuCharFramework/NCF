@@ -56,7 +56,7 @@ namespace Senparc.Areas.Admin
 
         public override string Uid => SiteConfig.SYSTEM_XNCF_MODULE_AREAS_ADMIN_UID;// "00000000-0000-0001-0001-000000000001";
 
-        public override string Version => "0.4.1-beta4";
+        public override string Version => "0.4.0-beta4";
 
         public override string MenuName => "NCF 系统管理员后台";
 

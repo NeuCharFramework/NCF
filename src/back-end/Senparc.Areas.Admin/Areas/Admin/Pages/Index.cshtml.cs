@@ -78,7 +78,16 @@ namespace Senparc.Areas.Admin.Pages
             var xncfModuleDtos = installedXncfModules.Select(z =>
             {
                 var data = _xncfModuleServiceEx.Mapper.Map<XncfModuleDisplayDto>(z);
-                
+
+                //TODO:去获取模块下的所有的菜单信息
+                IXncfRegister xncfRegister = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == data.Uid);
+                // if (xncfRegister == null)
+                // {
+                //     throw new Exception($"模块丢失或未加载（{XncfRegisterManager.RegisterList.Count}）！");
+                // }
+                data.Menus = (xncfRegister as Ncf.Core.Areas.IAreaRegister)?.AreaPageMenuItems ?? new List<Ncf.Core.Areas.AreaPageMenuItem>();
+
+
                 //查找对应的更新版本
                 var register = updateXncfRegisters.FirstOrDefault(r => r.Uid == z.Uid);
                 if (register != null)

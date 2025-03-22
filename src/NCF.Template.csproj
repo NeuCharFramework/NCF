@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.28.5</PackageVersion>
+		<PackageVersion>0.28.6</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -82,6 +82,8 @@
 			v0.28.0 更新 Admin 后台布局
 			v0.28.4 更新 DeepSeek 接入
 			v0.28.5 更新 PromptRange
+			v0.28.6 更新 AgentsManager 及基础库
+			v0.28.7 优化管理后台首页显示；升级 PromotRange
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
