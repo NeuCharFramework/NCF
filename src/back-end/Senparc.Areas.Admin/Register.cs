@@ -17,6 +17,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Senparc.Areas.Admin.ACL;
 using Senparc.Areas.Admin.ACL.Repository;
+using Senparc.Areas.Admin.Domain;
 using Senparc.Areas.Admin.Domain.Dto;
 //using Senparc.Areas.Admin.Authorization;
 using Senparc.Areas.Admin.Domain.Models;
@@ -122,12 +123,10 @@ namespace Senparc.Areas.Admin
             base.AddAutoMapMapping(profile =>
             {
                 profile.CreateMap<AdminUserInfo, CreateOrUpdate_AdminUserInfoDto>();
-                profile.CreateMap<SystemConfig, SystemConfigDto>();
-                profile.CreateMap<SystemConfigDto, SystemConfig>();
-                profile.CreateMap<SystemConfig_CreateOrUpdateDto, SystemConfig>();
-                profile.CreateMap<SystemConfig, SystemConfig_CreateOrUpdateDto>();
-                profile.CreateMap<XncfModule, XncfModuleDto>();
-                profile.CreateMap<XncfModuleDto, XncfModule>();
+                profile.CreateMap<SystemConfig, SystemConfigDto>().ReverseMap();
+                profile.CreateMap<SystemConfig_CreateOrUpdateDto, SystemConfig>().ReverseMap();
+                profile.CreateMap<XncfModule, XncfModuleDto>().ReverseMap();
+                profile.CreateMap<XncfModuleDisplayDto, XncfModule>().ReverseMap();
             });
 
             AddJwtAuthentication(services, configuration);

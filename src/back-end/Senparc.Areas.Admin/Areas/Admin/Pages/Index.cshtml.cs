@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Senparc.Areas.Admin.Domain;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
@@ -66,13 +67,42 @@ namespace Senparc.Areas.Admin.Pages
         public async Task<IActionResult> OnGetXncfOpeningAsync()
         {
             //所有已安装模块
-            var installedXncfModules = await _xncfModuleServiceEx.GetObjectListAsync(0, 0, z => z.State == Ncf.Core.Enums.XncfModules_State.开放, z => z.Id, Ncf.Core.Enums.OrderingType.Descending);
+            var installedXncfModules = await _xncfModuleServiceEx.GetObjectListAsync(0, 0, 
+                z => z.State == Ncf.Core.Enums.XncfModules_State.开放, 
+                z => z.Id, 
+                Ncf.Core.Enums.OrderingType.Descending);
+
+            //获取未安装或待升级模块
+            var updateXncfRegisters = _xncfModuleServiceEx.GetUnInstallXncfModule(installedXncfModules);
+
             var xncfModuleDtos = installedXncfModules.Select(z =>
             {
-                var data = _xncfModuleServiceEx.Mapper.Map<XncfModuleDto>(z);
-                //data.Icon = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == z.Uid)?.Icon;
+                var data = _xncfModuleServiceEx.Mapper.Map<XncfModuleDisplayDto>(z);
+
+                //TODO:去获取模块下的所有的菜单信息
+                IXncfRegister xncfRegister = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == data.Uid);
+                // if (xncfRegister == null)
+                // {
+                //     throw new Exception($"模块丢失或未加载（{XncfRegisterManager.RegisterList.Count}）！");
+                // }
+                data.Menus = (xncfRegister as Ncf.Core.Areas.IAreaRegister)?.AreaPageMenuItems ?? new List<Ncf.Core.Areas.AreaPageMenuItem>();
+
+
+                //查找对应的更新版本
+                var register = updateXncfRegisters.FirstOrDefault(r => r.Uid == z.Uid);
+                if (register != null)
+                {
+                    var versionDisplay = _xncfModuleServiceEx.GetVersionDisplayName(installedXncfModules, register);
+                    if (versionDisplay.Contains("->"))
+                    {
+                        data.HasNewVersion = true;
+                        data.NewVersion = versionDisplay.Split("->")[1].Trim();
+                    }
+                }
+
                 return data;
             });
+
             return new JsonResult(new
             {
                 success = true,

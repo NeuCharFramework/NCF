@@ -13,46 +13,37 @@
 		<!--<FrameworkReference Include="Microsoft.AspNetCore.App" />-->
 
 		<EmbeddedResource Include="wwwroot\**\*" />
-
-		<Compile Remove="Domain\Migrations\Oracle\**" />
-
-		<Content Remove="Domain\Migrations\Oracle\**" />
-
-		<EmbeddedResource Remove="Domain\Migrations\Oracle\**" />
-
-		<None Remove="Domain\Migrations\Oracle\**" />
-		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.10" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.10" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Remove="wwwroot\css\Admin\TenantInfo\Index.css" />
-		<Content Remove="wwwroot\css\Admin\SystemConfig\Index.css" />
-		<Content Remove="wwwroot\js\Admin\Pages\SystemConfig\Index.js" />
-		<Content Remove="wwwroot\js\Admin\Pages\TenantInfo\Index.js" />
-		<Content Remove="wwwroot\js\Admin\Pages\XncfModule\start.js" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+		<PackageReference Include="Senparc.CO2NET" Version="3.1.2" />
+		<PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.0.1" />
+		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="2.2.0.1" />
+		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="5.2.0.1" />
+		<PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.0.1" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.20.7.2-preview1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.23.10.2-preview1" />
+		<PackageReference Include="Senparc.Ncf.Log" Version="0.19.4.3-preview1" />
+		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.20.7.2-preview1" />
+		<PackageReference Include="Senparc.Ncf.Service" Version="0.22.6.2-preview1" />
+		<PackageReference Include="Senparc.Ncf.Utility" Version="0.19.4.3-preview1" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.22.6.3-preview1" />
+
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.11.7.2-preview1" />
+
+		<PackageReference Include="Senparc.Xncf.DynamicData" Version="0.4.8.2-pre-alpha" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.8.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.13.8.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.13.9.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.13.8.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.17.0-preview1" />
+
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
-		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="2.0.1-beta1" />
-		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="5.0.1-beta1" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.18.7-preview1" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.21.3.2-preview1" />
-		<PackageReference Include="Senparc.Ncf.Log" Version="0.18.5-preview1" />
-		<PackageReference Include="Senparc.Ncf.Mvc.UI" Version="0.18.7-preview1" />
-		<PackageReference Include="Senparc.Ncf.Service" Version="0.21.1-preview1" />
-		<PackageReference Include="Senparc.Ncf.Utility" Version="0.18.7-preview1" />
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.21.12-preview1" />
-
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.9.9.2-preview1" />
-
-		<PackageReference Include="Senparc.Xncf.DynamicData" Version="0.2.8-pre-alpha" />
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.10.8-preview1" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.11.9-preview1" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.11.9-preview1" />
-		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.11.8-preview1" />
-		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.16.4-preview1" />
-
+	  <Folder Include="Areas\Admin\Pages\Dto\" />
 	</ItemGroup>
 </Project>

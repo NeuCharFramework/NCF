@@ -25,7 +25,8 @@
             // 执行弹窗
             run: {
                 data: {},
-                visible: false
+                visible: false,
+                loading: false
             },
             runData: {
                 // 绑定数据
@@ -154,86 +155,104 @@
                 });
                 return;
             }
-            // 关闭执行弹窗
-            // this.run.visible = false;
-            let xncfFunctionParams = {};
-            for (var i in this.runData) {
-                // 多选
-                if (this.runData[i].item.parameterType === 2) {
-                    if (this.runData[i].item.isRequired && this.runData[i].value.length === 0) {
-                        this.$notify({
-                            title: '提示',
-                            message: this.runData[i].item.title + '  为必选项',
-                            type: 'warning'
-                        });
-                        return;
-                    } else {
-                        xncfFunctionParams[i] = {};
-                        xncfFunctionParams[i].SelectedValues = [];
-                        xncfFunctionParams[i].SelectedValues = this.runData[i].value;
 
+            // 设置 loading 状态
+            this.run.loading = true;
+
+            try {
+                let xncfFunctionParams = {};
+                for (var i in this.runData) {
+                    // 多选
+                    if (this.runData[i].item.parameterType === 2) {
+                        if (this.runData[i].item.isRequired && this.runData[i].value.length === 0) {
+                            this.$notify({
+                                title: '提示',
+                                message: this.runData[i].item.title + '  为必选项',
+                                type: 'warning'
+                            });
+                            return;
+                        } else {
+                            xncfFunctionParams[i] = {};
+                            xncfFunctionParams[i].SelectedValues = [];
+                            xncfFunctionParams[i].SelectedValues = this.runData[i].value;
+
+                        }
+                    }
+                    // 下拉框value为字符串，但接口要数组
+                    if (this.runData[i].item.parameterType === 1) {
+                        if (this.runData[i].item.isRequired && this.runData[i].value.length === 0) {
+                            this.$notify({
+                                title: '提示',
+                                message: this.runData[i].item.title + '  为必填项',
+                                type: 'warning'
+                            });
+                            return;
+                        } else {
+                            xncfFunctionParams[i] = {};
+                            xncfFunctionParams[i].SelectedValues = [];
+                            xncfFunctionParams[i].SelectedValues[0] = this.runData[i].value;
+                        }
+                    }
+                    // 输入框
+                    if (this.runData[i].item.parameterType === 0 || this.runData[i].item.parameterType === 3) {
+                        if (this.runData[i].item.isRequired && this.runData[i].value.length === 0) {
+                            this.$notify({
+                                title: '提示',
+                                message: this.runData[i].item.title + '  为必填项',
+                                type: 'warning'
+                            });
+                            return;
+                        } else {
+                            xncfFunctionParams[i] = this.runData[i].value;
+                        }
                     }
                 }
-                // 下拉框value为字符串，但接口要数组
-                if (this.runData[i].item.parameterType === 1) {
-                    if (this.runData[i].item.isRequired && this.runData[i].value.length === 0) {
-                        this.$notify({
-                            title: '提示',
-                            message: this.runData[i].item.title + '  为必填项',
-                            type: 'warning'
-                        });
-                        return;
-                    } else {
-                        xncfFunctionParams[i] = {};
-                        xncfFunctionParams[i].SelectedValues = [];
-                        xncfFunctionParams[i].SelectedValues[0] = this.runData[i].value;
-                    }
+                const data = {
+                    xncfUid: this.data.xncfModule.uid,
+                    xncfFunctionName: this.run.data.key.name,
+                    xncfFunctionParams: JSON.stringify(xncfFunctionParams)
+                };
+
+                const res = await service.post(`/Admin/XncfModule/Start?handler=RunFunction`, data, { customAlert: true });
+                
+                this.runResult.tempId = res.data.tempId;
+                if ((res.data.log || '').length > 0 && (res.data.tempId || '').length > 0) {
+                    this.runResult.hasLog = true;
                 }
-                // 输入框
-                if (this.runData[i].item.parameterType === 0 || this.runData[i].item.parameterType === 3) {
-                    if (this.runData[i].item.isRequired && this.runData[i].value.length === 0) {
-                        this.$notify({
-                            title: '提示',
-                            message: this.runData[i].item.title + '  为必填项',
-                            type: 'warning'
-                        });
-                        return;
-                    } else {
-                        xncfFunctionParams[i] = this.runData[i].value;
-                    }
+
+                const msg = DOMPurify.sanitize(res.data.msg);
+
+                if (!res.data.success) {
+                    this.runResult.tit = '遇到错误';
+                    this.runResult.tip = '错误信息';
+                    this.runResult.msg = (msg || DOMPurify.sanitize(res.data.exception)).replace(/&lt;br \/&gt;/g, '<br />').replace('\r\n', '<br />').replace('\n', '<br />').replace('\r', '<br />');
+                    this.runResult.visible = true;
+                    return;
                 }
-            }
-            const data = {
-                xncfUid: this.data.xncfModule.uid, xncfFunctionName: this.run.data.key.name, xncfFunctionParams: JSON.stringify(xncfFunctionParams)
-            };
-            const res = await service.post(`/Admin/XncfModule/Start?handler=RunFunction`, data,{customAlert:true});
-            this.runResult.tempId = res.data.tempId;
-            if ((res.data.log || '').length > 0 && (res.data.tempId || '').length > 0) {
-                this.runResult.hasLog = true;
-            }
-            // purify dom, prevent attack
-            const msg = DOMPurify.sanitize(res.data.msg);
-            
-            if (!res.data.success) {
-                this.runResult.tit = '遇到错误';
-                this.runResult.tip = '错误信息';
-                this.runResult.msg = (msg || DOMPurify.sanitize(res.data.exception)).replace(/&lt;br \/&gt;/g, '<br />').replace('\r\n', '<br />').replace('\n', '<br />').replace('\r', '<br />');
+                if (msg && (msg.indexOf('http://') === 0 || msg.indexOf('https://') === 0)) {
+                    this.runResult.tit = '执行成功';
+                    this.runResult.tip = '收到网址，点击下方打开<br />（此链接由第三方提供，请注意安全）：';
+                    this.runResult.msg = '<i class="fa fa-external-link"></i> <a href="' + msg + '" target="_blank">' + msg + '</a>';
+                }
+                else {
+                    this.runResult.tit = '执行成功';
+                    this.runResult.tip = '返回信息';
+                    this.runResult.msg = msg.replace(/&lt;br \/&gt;/g, '<br />').replace('\r\n', '<br />').replace('\n', '<br />').replace('\r','<br />');
+                }
+                // 打开执行结果弹窗
                 this.runResult.visible = true;
-                return;
+                this.getList();
+            } catch (error) {
+                console.error('执行出错:', error);
+                this.$notify({
+                    title: '错误',
+                    message: '执行过程中发生错误',
+                    type: 'error'
+                });
+            } finally {
+                // 无论成功失败都取消 loading 状态
+                this.run.loading = false;
             }
-            if (msg && (msg.indexOf('http://') === 0 || msg.indexOf('https://') === 0)) {
-                this.runResult.tit = '执行成功';
-                this.runResult.tip = '收到网址，点击下方打开<br />（此链接由第三方提供，请注意安全）：';
-                this.runResult.msg = '<i class="fa fa-external-link"></i> <a href="' + msg + '" target="_blank">' + msg + '</a>';
-            }
-            else {
-                this.runResult.tit = '执行成功';
-                this.runResult.tip = '返回信息';
-                this.runResult.msg = msg.replace(/&lt;br \/&gt;/g, '<br />').replace('\r\n', '<br />').replace('\n', '<br />').replace('\r','<br />');
-            }
-            // 打开执行结果弹窗
-            this.runResult.visible = true;
-            this.getList();
         },
         // 关闭和开启
         async updataState(state) {

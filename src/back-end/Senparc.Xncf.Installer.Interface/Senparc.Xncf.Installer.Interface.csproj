@@ -28,10 +28,15 @@
 		<OutputPath>..\..\..\BuildOutPut</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
-	  <Folder Include="OHS\Remote\" />
+	  <PackageReference Include="Senparc.CO2NET" Version="3.1.2" />
+	  <PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.0.1" />
+	  <PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.0.1" />
+	  <PackageReference Include="Senparc.Ncf.Core" Version="0.23.10.2-preview1" />
+	  <PackageReference Include="Senparc.Xncf.Tenant.Interface" Version="0.9.5.2-preview1" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="Senparc.Xncf.Tenant.Interface" Version="0.8.6-preview1" />
+	  <Folder Include="OHS\PL\" />
+	  <Folder Include="OHS\AppService\" />
 	</ItemGroup>
 
 

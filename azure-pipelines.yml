@@ -22,6 +22,11 @@ steps:
 #     performMultiLevelLookup: true
 #     includePreviewVersions: true
 
+  
+- script: |  
+    dotnet workload install aspire  
+  displayName: 'Install Aspire Workload'  
+  
 - task: NuGetToolInstaller@1
   displayName: 'Use NuGet 6.3.0'
   inputs:
@@ -39,6 +44,7 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(templateBuild)'
@@ -46,7 +52,7 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: '$(templateBuild)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    msbuildArgs: ''
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 

@@ -18,7 +18,7 @@ body {
 }
 
     body:before {
-        background-image: url('/images/admin/base/adminlogin/admin_login.jpg');
+        background-image: url('/images/Admin/base/AdminLogin/admin_login.jpg');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;

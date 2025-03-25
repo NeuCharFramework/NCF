@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.21.4</PackageVersion>
+		<PackageVersion>0.28.6</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -63,6 +63,27 @@
 			v0.21.2 更新启动字幕，开始提供国际版英文
 			v0.21.3 优化 Admin 后台，为 Log 读取提供同步锁
 			v0.21.4 统一 MacOS 中 SQLite 数据库的路径
+			v0.22.0 加载新版本 PromptRange 和 AgentsManager
+			v0.22.1 修复菜单栏横向滚动条样式问题
+			v0.23.0 升级 AIKernel和 AgentsManager 模块
+			v0.24.0 添加 Aspire 模块
+			v0.25.0 添加 Aspire 模块 Sample
+			v0.26.0 添加 CNB 容器部署示例
+			v0.27.1 更新 Swagger 包及 CO2NET 基础库，支持 ApiBind 的接口大小写设置
+			v0.27.2 优化“菜单”列表，提供父节点信息置顶
+			v0.27.3 优化单元测试，提供最新的种子数据（Seed Data）注入方法演示，实现无外部数据库支持下的数据读写和操作测试
+			v0.27.4 重构单元测试种子数据（Seed Data）注入方法，提供自动防止单元测试实例重复注入数据的机制
+			v0.27.5 优化单元测试模块
+			v0.27.6 升级基础库
+			v0.27.7 更新单元测试模块
+			v0.27.8 更新基础模块
+			v0.27.9 更新基础模块，全面支持达梦数据库迁移
+			v0.27.10 更新基础模块，重构 XncfBuilder XNCF 生成过程
+			v0.28.0 更新 Admin 后台布局
+			v0.28.4 更新 DeepSeek 接入
+			v0.28.5 更新 PromptRange
+			v0.28.6 更新 AgentsManager 及基础库
+			v0.28.7 优化管理后台首页显示；升级 PromotRange
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>

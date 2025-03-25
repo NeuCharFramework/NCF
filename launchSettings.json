@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "senparc.ncf.web",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}",
+      "serviceActions": {
+        "mysql": "StartWithoutDebugging",
+        "redis": "StartWithoutDebugging",
+        "senparc.ncf.web": "StartDebugging"
+      }
+    }
+  }
+}

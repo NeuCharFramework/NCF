@@ -43,7 +43,8 @@ li {
 
 .footer {
     text-align: right;
-    color: #5A738E
+    color: #5A738E;
+    line-height: 60px;
 }
 
     .footer a:hover {
@@ -78,10 +79,10 @@ li {
     color: inherit;
 }
 
-/*.el-scrollbar__wrap {
-    overflow-x: hidden;
-}*/
-
+.el-scrollbar__wrap {
+    overflow-x: hidden !important;
+    margin-bottom: 0px !important;
+}
 
 .el-menu {
     border: none;

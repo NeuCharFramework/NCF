@@ -24,14 +24,19 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0-preview-23577-04" />
-    <PackageReference Include="Moq" Version="4.20.70" />
+    <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.6.1" />
     <PackageReference Include="coverlet.collector" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Senparc.Ncf.UnitTestExtension" Version="0.2.4-preview1" />
+    <PackageReference Include="Senparc.CO2NET" Version="3.1.2" />
+    <PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.0.1" />
+    <PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.0.1" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.23.10.2-preview1" />
+    <PackageReference Include="Senparc.Ncf.UnitTestExtension" Version="0.3.11-preview1" />
+    <PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.8.2-preview1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,23 @@
+Developer-CNB:
+  push:
+    # 上传 cloud-native-run-dotnet 的 aspnetapp 应用示例镜像到 CNB 制品库
+    - services:
+        - docker
+      stages:
+        - name: docker login
+          script: docker login -u ${CNB_TOKEN_USER_NAME} -p "${CNB_TOKEN}" ${CNB_DOCKER_REGISTRY}
+        - name: docker build
+          script: docker build -f ./src/back-end/Senparc.Web/Dockerfile -t ${CNB_DOCKER_REGISTRY}/${CNB_REPO_SLUG_LOWERCASE}:latest ./src/back-end
+        - name: docker push
+          script: docker push ${CNB_DOCKER_REGISTRY}/${CNB_REPO_SLUG_LOWERCASE}:latest
+$:
+  # vscode 事件：专供页面中启动远程开发用
+  vscode:
+    - docker:
+        build: .ide/Dockerfile
+      services:
+        - vscode
+        - docker
+      stages:
+        - name: start docker compose
+          script: docker compose up -d

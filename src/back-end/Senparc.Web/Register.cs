@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Senparc.AI.Interfaces;
 using Senparc.AI.Kernel;
 using Senparc.Areas.Admin.Domain.Services;
@@ -36,7 +37,17 @@ namespace Senparc.Web
 
             //var services = builder.Services;
             //var mvcBuilder = services.AddMvcCore();
-            //services.AddAndInitDynamicApi(mvcBuilder, options => { });
+            //services.AddAndInitDynamicApi(mvcBuilder, options =>
+            //{
+            //    options.DefaultRequestMethod = ApiRequestMethod.Get;
+            //    options.BaseApiControllerType = null;
+            //    options.CopyCustomAttributes = true;
+            //    options.TaskCount = Environment.ProcessorCount * 10;
+            //    options.ShowDetailApiLog = true;
+            //    options.AdditionalAttributeFunc = null;
+            //    options.ForbiddenExternalAccess = false;
+            //    options.UseLowerCaseApiName = true;
+            //});
 
             #endregion
 
@@ -59,6 +70,9 @@ namespace Senparc.Web
         public static void UseNcf<TDatabaseConfiguration>(this WebApplication app)
             where TDatabaseConfiguration : IDatabaseConfiguration, new()
         {
+            //注入DI对象
+            app.UseSenparcMvcDI();
+
             IWebHostEnvironment env = app.Environment;
             IOptions<SenparcSetting> senparcSetting = app.Services.GetService<IOptions<SenparcSetting>>();
             IOptions<SenparcCoreSetting> senparcCoreSetting = app.Services.GetService<IOptions<SenparcCoreSetting>>();
@@ -94,6 +108,7 @@ namespace Senparc.Web
              *  UseNcf<PostgreSQLDatabaseConfiguration>()       |  使用 PostgreSQL 数据库
              *  UseNcf<OracleDatabaseConfiguration>()           |  使用 Oracle 数据库（V12+）
              *  UseNcf<OracleDatabaseConfigurationForV11>()     |  使用 Oracle 数据库（V11+）
+             *  UseNcf<DmDatabaseConfiguration>()               |  使用 达梦 数据库
              *  更多数据库可扩展，依次类推……
              *  
              */
