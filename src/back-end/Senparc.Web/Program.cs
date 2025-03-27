@@ -54,7 +54,7 @@ app.UseNcf<BySettingDatabaseConfiguration>();
 
 //app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseFileServer();//为了访问 docs/ 目录，非必须
+app.UseFileServer();//非必须
 
 app.UseCookiePolicy();
 
@@ -100,4 +100,4 @@ app.MapGet("/test", async httpContext =>
     await httpContext.Response.WriteAsync(result2);
 });
 
-app.Run();
+await app.RunAsync();
