@@ -13,20 +13,20 @@ variables:
 steps:
 - task: NuGetToolInstaller@1
 
-    
-# - task: UseDotNet@2
-#   displayName: 'Use .NET SDK 8'
-#   inputs:
-#     version: '8.0.100'
-#     packageType: 'sdk'
-#     performMultiLevelLookup: true
-#     includePreviewVersions: true
+# 缓存 Aspire Workload
+- task: Cache@2
+  inputs:
+    key: 'aspire-workload | "$(Agent.OS)"'  # 根据操作系统缓存 Aspire Workload
+    path: '~/.dotnet'  # 缓存 .NET SDK 及其 workload
+    restoreKeys: 'aspire-workload'
+  displayName: 'Cache Aspire Workload'
 
-  
-- script: |  
-    dotnet workload install aspire  
-  displayName: 'Install Aspire Workload'  
-  
+# 仅在缓存未命中时安装 Aspire Workload
+- script: |
+    dotnet workload list | findstr /C:"aspire" || dotnet workload install aspire
+  displayName: 'Check & Install Aspire Workload'
+  condition: ne(variables['CACHE_RESTORED'], 'true')
+
 - task: NuGetToolInstaller@1
   displayName: 'Use NuGet 6.3.0'
   inputs:
@@ -43,7 +43,6 @@ steps:
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-
 
 - task: NuGetCommand@2
   inputs:
@@ -65,20 +64,6 @@ steps:
     publishFeedCredentials: 'nuget-jeffrey-full-key'
   continueOnError: true
   condition: succeededOrFailed()
-
-
-# - task: UseDotNet@2
-#   inputs:
-#     packageType: 'sdk'
-#     useGlobalJson: true
-#     workingDirectory: 'src/Senparc.Web'
-
-# - task: DotNetCoreCLI@2
-#   inputs:
-#     command: 'publish'
-#     publishWebProjects: true
-#     workingDirectory: 'src/Senparc.Web'
-#   displayName: 'publish'
 
 - task: PublishBuildArtifacts@1
   inputs:
