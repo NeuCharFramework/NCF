@@ -5,7 +5,7 @@ trigger:
 pool:
   name: 'SenparcOpenSource'  # 这里填你的自托管 Agent Pool 名称
   demands:
-    - Agent.OS -equals Windows
+    - Agent.OS -equals Windows_NT
 
 variables:
   solution: '**/NCF.sln'
