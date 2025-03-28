@@ -1,42 +1,63 @@
 trigger:
 - master
 
+# 🎯 使用自托管代理池，加快 CI/CD 速度
 pool:
-  vmImage: 'windows-latest'
+  name: 'SenparcOpenSource'  # 这里填你的自托管 Agent Pool 名称
+  demands:
+    - Agent.OS -equals Windows
 
 variables:
   solution: '**/NCF.sln'
   templateBuild: '**/NCF.Template.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  NUGET_PACKAGES: $(Agent.ToolsDirectory)/nuget/packages  # NuGet 缓存路径
 
 steps:
-- task: NuGetToolInstaller@1
 
-# 缓存 Aspire Workload
+# 🟢 缓存 NuGet 及依赖项
 - task: Cache@2
   inputs:
-    key: 'aspire-workload | "$(Agent.OS)"'  # 根据操作系统缓存 Aspire Workload
-    path: '~/.dotnet'  # 缓存 .NET SDK 及其 workload
+    key: 'nuget | "$(Agent.OS)" | **/*.csproj'  # NuGet 缓存 Key
+    path: '$(NUGET_PACKAGES)'  # NuGet 包的存储路径
+    restoreKeys: 'nuget'
+  displayName: 'Cache NuGet Packages'
+
+# 🟢 缓存 Aspire Workload
+- task: Cache@2
+  inputs:
+    key: 'aspire-workload | "$(Agent.OS)"'
+    path: '~/.dotnet'  # .NET SDK 及 workload 缓存目录
     restoreKeys: 'aspire-workload'
   displayName: 'Cache Aspire Workload'
 
-# 仅在缓存未命中时安装 Aspire Workload
+# 🟢 缓存 NuGet 工具（减少安装时间）
+- task: Cache@2
+  inputs:
+    key: 'nuget-tool | "$(Agent.OS)"'
+    path: 'C:\ProgramData\nuget'  # NuGetTool 的全局存储位置
+    restoreKeys: 'nuget-tool'
+  displayName: 'Cache NuGet Tool'
+
+# ✅ 仅当缓存未命中时安装 Aspire Workload
 - script: |
     dotnet workload list | findstr /C:"aspire" || dotnet workload install aspire
   displayName: 'Check & Install Aspire Workload'
   condition: ne(variables['CACHE_RESTORED'], 'true')
 
+# ✅ 使用缓存的 NuGet 版本，避免重复安装
 - task: NuGetToolInstaller@1
-  displayName: 'Use NuGet 6.3.0'
+  displayName: 'Use Cached NuGet 6.3.0'
   inputs:
     versionSpec: '6.3.0'
-    checkLatest: true
 
+# ✅ 恢复 NuGet 依赖（使用缓存）
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
 
+# ✅ 解决方案构建
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
@@ -44,10 +65,12 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+# ✅ 恢复 Template 依赖
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(templateBuild)'
 
+# ✅ 构建 Template 解决方案
 - task: VSBuild@1
   inputs:
     solution: '$(templateBuild)'
@@ -55,6 +78,7 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+# ✅ 推送 NuGet 包（支持失败继续）
 - task: NuGetCommand@2
   displayName: Senparc.Ncf.Template
   inputs:
@@ -65,6 +89,7 @@ steps:
   continueOnError: true
   condition: succeededOrFailed()
 
+# ✅ 发布构建产物
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
