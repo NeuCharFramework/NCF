@@ -44,6 +44,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Areas\Admin\Pages\Dto\" />
+		<Folder Include="Areas\Admin\Pages\Dto\" />
 	</ItemGroup>
 </Project>

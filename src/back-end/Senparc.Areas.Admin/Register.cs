@@ -84,8 +84,7 @@ namespace Senparc.Areas.Admin
 
         public override async Task UninstallAsync(IServiceProvider serviceProvider, Func<Task> unsinstallFunc)
         {
-            //TODO：应该提供一个 BeforeUninstall 方法，阻止卸载。
-
+            //TODO：可以提供一个 BeforeUninstall 方法，阻止卸载。
 
             #region 删除数据库（演示）
 
@@ -177,15 +176,14 @@ namespace Senparc.Areas.Admin
             ;
 
         }
-
-
-
         public override IApplicationBuilder UseXncfModule(IApplicationBuilder app, IRegisterService registerService)
         {
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly(), "wwwroot")
             });
+
+           
 
             return base.UseXncfModule(app, registerService);
         }
