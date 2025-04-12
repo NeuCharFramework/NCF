@@ -52,6 +52,15 @@ steps:
   inputs:
     versionSpec: '6.3.0'
 
+
+- script: |  
+    nuget sources remove -name nuget.org  
+  displayName: 'Remove Existing NuGet Source'  
+- script: |  
+    dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org  
+  displayName: 'Add NuGet Source'  
+    
+
 # ✅ 恢复 NuGet 依赖（使用缓存）
 - task: NuGetCommand@2
   inputs:
