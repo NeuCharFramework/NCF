@@ -9,6 +9,7 @@
     <style>
         #home-header .el-main {
             padding: 20px 10px 0px 10px;
+            height: auto;
         }
 
         .xncf-stat-item {
@@ -377,7 +378,7 @@
                                         <i class="fa fa-level-up version-upgrade-icon"></i>
                                     </el-tooltip>
                                 </span>
-                                <span>
+                                <span v-if="item.menus.length > 0">
                                     <el-popover placement="right"
                                                 width="270"
                                                 trigger="click">
@@ -387,7 +388,8 @@
                                                   row-key="id"
                                                   :default-expand-all="isExpandAll"
                                                   :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-                                                  max-height="250">
+                                                  max-height="250"
+                                                  :show-header="false">
                                             <el-table-column prop="name" label="菜单名称" width="260">
                                                 <template slot-scope="scope">
                                                     <a :href="scope.row.url">{{scope.row.name}}</a>
