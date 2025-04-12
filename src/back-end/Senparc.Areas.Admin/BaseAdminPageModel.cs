@@ -22,9 +22,9 @@ namespace Senparc.Areas.Admin
 
     //暂时取消权限验证
     [ServiceFilter(typeof(AuthenticationResultFilterAttribute))]
-    [AdminAuthorize("AdminOnly")]
-    public class BaseAdminPageModel : AdminPageModelBase, IBaseAdminPageModel
-    {
+[AdminAuthorize("AdminOnly")]
+public class BaseAdminPageModel : AdminPageModelBase, IBaseAdminPageModel
+{
         public Senparc.Areas.Admin.Register _xncfRegister;
         protected readonly IServiceProvider _serviceProvider;
 

@@ -4862,7 +4862,7 @@
 .el-tabs__header {
     padding: 0;
     position: relative;
-    margin: 0 0 15px
+    margin: 0 0 5px
 }
 
 .el-tabs__active-bar {
@@ -12907,7 +12907,7 @@
     flex-basis: auto;
     overflow: auto;
     box-sizing: border-box;
-    padding: 20px
+    padding: 5px;
 }
 
 .el-footer {
