@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.28.8</PackageVersion>
+		<PackageVersion>0.28.9</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -85,6 +85,7 @@
 			v0.28.6 更新 AgentsManager 及基础库
 			v0.28.7 优化管理后台首页显示；升级 PromptRange、AgentsManagers；添加达梦数据库连接配置示例
 			v0.28.8 支持 MCP AccessToken
+			v0.28.9 更新基础库，升级 AIKernel
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
