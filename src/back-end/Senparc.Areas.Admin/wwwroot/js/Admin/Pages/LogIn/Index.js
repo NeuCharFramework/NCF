@@ -17,8 +17,10 @@ var app = new Vue({
     data: {
         ruleForm: {
             user: '',
-            pass: ''
+            pass: '',
+            tenant: ''
         },
+        enableMultiTenant: false,
         rules: {
             user: [
                 { validator: validateUser, trigger: 'blur' }
@@ -29,6 +31,10 @@ var app = new Vue({
         }, loading: false
     },
     mounted() {
+        // 检查是否启用多租户
+        service.get('/Admin/Login?handler=CheckMultiTenant').then(res => {
+            this.enableMultiTenant = res.data;
+        });
     },
     methods: {
         submitForm(formName) {
@@ -37,7 +43,8 @@ var app = new Vue({
                 var url = "/Admin/Login?handler=Login";
                 let data = {
                     Name: this.ruleForm.user+'',
-                    Password: this.ruleForm.pass
+                    Password: this.ruleForm.pass,
+                    Tenant: this.ruleForm.tenant
                 };
                 if (valid) {
                     service.post(url, data).then(res => {

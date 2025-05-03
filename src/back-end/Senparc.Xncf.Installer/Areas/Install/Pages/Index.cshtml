@@ -81,7 +81,7 @@
                     <h2>NeuCharFramework<br />初始化安装成功！</h2>
                     <div id="install_success_info">
                         <div>
-                            @if (Model.MultiTenantEnable)
+                            @if (Model.MultiTenantEnable && Model.InstallingTenant)
                             {
                                 <p>
                                     当前租户已创建，名称：<strong>@Model.TenantInfoDto.Name</strong>，

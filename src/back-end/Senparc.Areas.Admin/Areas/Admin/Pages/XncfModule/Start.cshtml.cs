@@ -271,7 +271,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             Func<Task> uninstall = async () =>
             {
                 //删除菜单
-                SysPermissionService sysPermissionService = _serviceProvider.GetService<SysPermissionService>();
+                SysRolePermissionService sysPermissionService = _serviceProvider.GetService<SysRolePermissionService>();
                 var menu = await _sysMenuService.GetObjectAsync(z => z.Id == module.MenuId).ConfigureAwait(false);
                 if (menu != null)
                 {

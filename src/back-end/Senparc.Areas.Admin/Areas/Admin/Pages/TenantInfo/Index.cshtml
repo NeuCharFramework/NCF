@@ -34,6 +34,10 @@
 
         <h2 class="current-tenant-info">多租户信息</h2>
 
+        <div class="operation-bar">
+            <el-button type="primary" v-has="['admin-add']" @@click="handleAdd">新增租户</el-button>
+        </div>
+
         <el-table :data="tableData"
                   border
                   style="width: 100%">
@@ -81,6 +85,9 @@
                                type="primary"
                                v-has="['admin-edit']"
                                @@click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                    <el-button size="mini"
+                               type="warning"
+                               @@click="handleInitialize(scope.row)">初始化</el-button>
                 </template>
                 <template v-has="['admin-delete']">
                     <el-popconfirm placement="top" title="确认删除此租户吗？删除后所有租户信息将处于游离状态，请谨慎操作！" @@on-confirm="handleDelete(scope.$index, scope.row)">
@@ -89,10 +96,10 @@
                 </template>
             </el-table-column>
         </el-table>
-        @*<pagination :total="paginationQuery.total"
-            :page.sync="listQuery.pageIndex"
-            :limit.sync="listQuery.pageSize"
-            @@pagination="getList"></pagination>*@
+        <pagination :total="paginationQuery.total"
+                    :page.sync="listQuery.pageIndex"
+                    :limit.sync="listQuery.pageSize"
+                    @@pagination="getList"></pagination>
         <!--编辑、新增 -->
         <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :close-on-click-modal="false">
             <el-form ref="dataForm"
@@ -118,6 +125,51 @@
             <div slot="footer" class="dialog-footer">
                 <el-button @@click="dialog.visible = false">取 消</el-button>
                 <el-button :loading="dialog.updateLoading" type="primary" @@click="updateData">确 认</el-button>
+            </div>
+        </el-dialog>
+
+        <!--初始化 -->
+        <el-dialog title="租户初始化" :visible.sync="initializeDialog.visible" :close-on-click-modal="false">
+            <el-form ref="initializeForm"
+                     :rules="initializeDialog.rules"
+                     :model="initializeDialog.data"
+                     label-position="left"
+                     label-width="120px"
+                     style="max-width: 400px; margin-left:50px;">
+                <el-form-item label="系统名称" prop="systemName">
+                    <el-input v-model="initializeDialog.data.systemName" clearable placeholder="请输入系统名称" />
+                </el-form-item>
+                <el-form-item label="默认管理员账号" prop="adminAccount">
+                    <el-input v-model="initializeDialog.data.adminAccount" clearable placeholder="请输入默认管理员账号" />
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @@click="initializeDialog.visible = false">取 消</el-button>
+                <el-button :loading="initializeDialog.loading" type="primary" @@click="submitInitialize">确 认</el-button>
+            </div>
+        </el-dialog>
+
+        <!--初始化结果 -->
+        <el-dialog title="初始化结果" :visible.sync="resultDialog.visible" :close-on-click-modal="false" :show-close="true">
+            <div class="result-content">
+                <div class="warning-message">
+                    <i class="el-icon-warning"></i>
+                    <span>请妥善保管以下信息，密码将无法再次查看！</span>
+                </div>
+                <div class="info-section">
+                    <h3>租户信息</h3>
+                    <p>ID：{{resultDialog.data.tenantInfo.id}}</p>
+                    <p>名称：{{resultDialog.data.tenantInfo.name}}</p>
+                    <p>匹配关键字：{{resultDialog.data.tenantInfo.tenantKey}}</p>
+                </div>
+                <div class="info-section">
+                    <h3>管理员账号</h3>
+                    <p>用户名：{{resultDialog.data.adminAccount.username}}</p>
+                    <p>密码：{{resultDialog.data.adminAccount.password}}</p>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @@click="resultDialog.visible = false">我已记录，关闭</el-button>
             </div>
         </el-dialog>
        

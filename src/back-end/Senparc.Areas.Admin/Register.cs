@@ -21,6 +21,7 @@ using Senparc.Areas.Admin.Domain;
 using Senparc.Areas.Admin.Domain.Dto;
 //using Senparc.Areas.Admin.Authorization;
 using Senparc.Areas.Admin.Domain.Models;
+using Senparc.Areas.Admin.Domain.Services;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.AreaBase.Admin.Filters;
@@ -131,6 +132,7 @@ namespace Senparc.Areas.Admin
             AddJwtAuthentication(services, configuration);
 
             services.AddScoped<IAdminUserInfoRepository, AdminUserInfoRepository>();
+            services.AddScoped<InstallerService>();
 
             return base.AddXncfModule(services, configuration, env);
         }
