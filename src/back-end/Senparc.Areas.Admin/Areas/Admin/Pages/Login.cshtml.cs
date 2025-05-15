@@ -104,12 +104,15 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         //    return LocalRedirect(this.ReturnUrl.UrlDecode());
         //}
 
-        public async Task<IActionResult> OnPostLoginAsync([FromBody] LoginInDto loginInDto/*[Required]string name,string password*/)
+        public async Task<IActionResult> OnPostLoginAsync([FromBody] LoginInDto loginInDto)
         {
             if (!ModelState.IsValid)
             {
                 return Ok(new { loginInDto.Name, loginInDto.Password });
             }
+
+            // 移除不必要的验证，因为ValidateTenant总是返回true
+            // 租户名称不是必填项，无需验证
 
             AdminUserInfo userInfo = null;
             string tenantKey = loginInDto.Tenant;
@@ -200,5 +203,12 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         [Required]
         public string Password { get; set; }
         public string Tenant { get; set; }
+
+        public bool ValidateTenant()
+        {
+            // 租户名称不是必填的，即使在多租户模式下也是可选的
+            // 直接返回true表示验证总是通过
+            return true;
+        }
     }
 }

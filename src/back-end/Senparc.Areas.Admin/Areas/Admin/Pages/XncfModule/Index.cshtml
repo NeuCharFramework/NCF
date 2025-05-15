@@ -19,10 +19,10 @@
             <el-button size="mini" type="danger" slot="reference">{{handlerText}}</el-button>
         </el-popconfirm>
     </div>
-    <el-container v-if="newTableData.length>0">
+    <el-container v-if="newTableData.length>0" class="h380 mb5">
         <el-header class="module-header">  <span class="start-title">发现 {{newTableData.length}} 个新模块！</span></el-header>
         <el-main>
-            <el-table :data="newTableData"
+            <el-table :data="newTableData.filter(data => !newTableSearch || data.name.includes(newTableSearch))"
                       style="width: 100%;margin-bottom: 20px;">
                 <el-table-column align="left" label="模块名称">
                     <template slot-scope="scope">
@@ -50,6 +50,11 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="120">
+                    <template slot="header" slot-scope="scope">
+                        <el-input v-model="newTableSearch"
+                                  size="mini"
+                                  placeholder="输入关键字搜索" />
+                    </template>
                     <template slot-scope="scope">
                         <el-button size="mini"
                                    type="primary"
@@ -60,10 +65,10 @@
             </el-table>
         </el-main>
     </el-container>
-    <el-container v-if="oldTableData.length>0">
+    <el-container v-if="oldTableData.length>0" class="h380">
         <el-header class="module-header">  <span class="start-title">已安装模块</span></el-header>
         <el-main>
-            <el-table :data="oldTableData"
+            <el-table :data="oldTableData.filter(data => !oldTableSearch || data.xncfModule.name.includes(oldTableSearch))"
                       v-if="oldTableData.length>0"
                       style="width: 100%;margin-bottom: 20px;">
                 <el-table-column align="left" label="菜单名称/版本号">
@@ -101,6 +106,11 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="250">
+                    <template slot="header" slot-scope="scope">
+                        <el-input v-model="oldTableSearch"
+                                  size="mini"
+                                  placeholder="输入关键字搜索" />
+                    </template>
                     <template slot-scope="scope">
                         <el-button size="mini"
                                    icon="el-icon-s-tools"

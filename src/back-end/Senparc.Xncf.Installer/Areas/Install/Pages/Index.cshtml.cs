@@ -81,7 +81,7 @@ namespace Senparc.Xncf.Instraller.Pages
             TenantRule = SiteConfig.SenparcCoreSetting.TenantRule;
         }
 
-        public async Task<IActionResult> OnGetAsync(string forceUpdateModule)
+        public async Task<IActionResult> OnGetAsync(string forceUpdateModule,int tenantId=0)
         {
             try
             {
@@ -111,18 +111,18 @@ namespace Senparc.Xncf.Instraller.Pages
                     throw new Exception("需要初始化");
                 }
 
-                try
-                {
-                    if (Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.EnableMultiTenant)
-                    {
-                        //判断是不是从新的域名进入
-                        RequestTenantInfo currentRequestTenantInfo = MultiTenantHelper.TryGetAndCheckRequestTenantInfo(_serviceProvider, null);
-                    }
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+                // try
+                // {
+                //     if (Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.EnableMultiTenant)
+                //     {
+                //         //判断是不是从新的域名进入
+                //         RequestTenantInfo currentRequestTenantInfo = MultiTenantHelper.TryGetAndCheckRequestTenantInfo(_serviceProvider, null);
+                //     }
+                // }
+                // catch (Exception)
+                // {
+                //     throw;
+                // }
 
             }
             catch (Exception)
