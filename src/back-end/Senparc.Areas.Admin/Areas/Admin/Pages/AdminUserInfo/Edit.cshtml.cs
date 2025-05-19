@@ -6,11 +6,12 @@ using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Validator;
 using System;
+using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
     //[IgnoreAntiforgeryToken]
-    public class AdminUserInfo_EditModel(IServiceProvider serviceProvider, AdminUserInfoService adminUserInfoService) 
+    public class AdminUserInfo_EditModel(IServiceProvider serviceProvider, AdminUserInfoService adminUserInfoService)
         : BaseAdminPageModel(serviceProvider), IValidatorEnvironment
     {
         /// <summary>
@@ -54,7 +55,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// <param name="dto"></param>
         /// <returns></returns>
         [CustomerResource("admin-add", "admin-edit")]
-        public IActionResult OnPostSave([FromBody] CreateOrUpdate_AdminUserInfoDto dto)
+        public async Task<IActionResult> OnPostSave([FromBody] CreateOrUpdate_AdminUserInfoDto dto)
         {
             if (!ModelState.IsValid)
             {
@@ -72,12 +73,12 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             }
             else
             {
-                _adminUserInfoService.CreateAdminUserInfo(dto);
+                await _adminUserInfoService.CreateAdminUserInfoAsync(dto);
             }
             return Ok(true);
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
             IsEdit = Id > 0;
             this.Validator(AdminUserInfo.UserName, "用户名", "UserName", false)
@@ -107,7 +108,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             }
             else
             {
-                _adminUserInfoService.CreateAdminUserInfo(AdminUserInfo);
+                await _adminUserInfoService.CreateAdminUserInfoAsync(AdminUserInfo);
             }
 
             base.SetMessager(MessageType.success, $"{(IsEdit ? "修改" : "新增")}成功！");

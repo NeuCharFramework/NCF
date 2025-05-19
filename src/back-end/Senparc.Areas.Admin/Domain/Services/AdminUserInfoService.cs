@@ -76,7 +76,7 @@ namespace Senparc.Areas.Admin.Domain
         /// <param name="rememberMe">Whether to persist the login</param>
         /// <param name="tenantKey"></param>
         /// <returns>A task representing the asynchronous operation</returns>
-        public virtual async Task LoginAsync(AdminUserInfo userInfo, bool rememberMe,string tenantKey = null)
+        public virtual async Task LoginAsync(AdminUserInfo userInfo, bool rememberMe, string tenantKey = null)
         {
             #region 使用 .net core 的方法写入 cookie 验证信息
 
@@ -126,7 +126,7 @@ namespace Senparc.Areas.Admin.Domain
         /// <param name="rememberMe"></param>
         /// <param name="tenantKey"></param>
         /// <returns></returns>
-        public async Task<AdminUserInfo> TryLoginAsync(AdminUserInfo adminUserInfo, string password, 
+        public async Task<AdminUserInfo> TryLoginAsync(AdminUserInfo adminUserInfo, string password,
             bool rememberMe, string tenantKey = null)
         {
             var cache = CO2NET.Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
@@ -189,27 +189,13 @@ namespace Senparc.Areas.Admin.Domain
         }
 
         /// <summary>
-        /// 添加用户信息
-        /// </summary>
-        /// <param name="objDto"></param>
-        public void CreateAdminUserInfo(CreateOrUpdate_AdminUserInfoDto objDto)
-        {
-            string userName = objDto.UserName;
-            string password = objDto.Password;
-            var obj = new AdminUserInfo(ref userName, ref password, null, null, objDto.Note);
-            SaveObject(obj);
-        }
-
-        /// <summary>
         /// 创建管理员
         /// </summary>
         /// <param name="objDto"></param>
         /// <returns></returns>
         public async Task<AdminUserInfo> CreateAdminUserInfoAsync(CreateOrUpdate_AdminUserInfoDto objDto)
         {
-            string userName = objDto.UserName;
-            string password = objDto.Password;
-            var obj = new AdminUserInfo(ref userName, ref password, null, null, objDto.Note);
+            var obj = new AdminUserInfo(objDto);
             await SaveObjectAsync(obj);
             return obj;
         }
@@ -287,7 +273,15 @@ namespace Senparc.Areas.Admin.Domain
             {
                 return null;
             }
-            var adminUserInfo = new AdminUserInfo(ref userName, ref password, null, null, "初始化数据");
+
+            var adminUserInfoDto = new CreateOrUpdate_AdminUserInfoDto()
+            {
+                UserName = userName.Trim(),
+                Password = password,
+                Note = "系统初始化账号"
+            };
+
+            var adminUserInfo = new AdminUserInfo(adminUserInfoDto);
             SaveObject(adminUserInfo);
             return adminUserInfo;
         }

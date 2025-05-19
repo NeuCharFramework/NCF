@@ -25,6 +25,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly InstallOptionsService _installOptionsService;
+        private readonly XncfModuleServiceExtension _xncfModuleServiceExtension;
 
         /// <summary>
         /// 新创建的 RequestTenantInfo
@@ -117,7 +118,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
             {
                 List<string> installedList = new List<string> { "00000000-0000-0000-0001-000000000001", "00000000-0000-0000-0001-000000000002", "00000000-0000-0000-0001-000000000003", "00000000-0000-0000-0001-000000000004"
                 , "00000000-0000-0000-0001-000000000005", "00000000-0000-0000-0001-000000000006","00000000-0000-0001-0001-000000000001", "62FBB022-B04E-423F-82FE-926D418A0815"};
-                var _xncfModuleService = serviceProvider.GetService<XncfModuleServiceExtension>();
+                var _xncfModuleService = _xncfModuleServiceExtension;// serviceProvider.GetService<XncfModuleServiceExtension>();
                 if (needModelList != null)
                 {
                     foreach (var needModelId in needModelList)
@@ -144,7 +145,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
 
 
             {
-                var _xncfModuleService = serviceProvider.GetService<XncfModuleServiceExtension>();
+                var _xncfModuleService = _xncfModuleServiceExtension; // serviceProvider.GetService<XncfModuleServiceExtension>();
 
                 //开始安装并启用系统模块（Admin）
                 Senparc.Areas.Admin.Register adminRegister = new Senparc.Areas.Admin.Register();
@@ -153,7 +154,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
                 adminModule ??= await _xncfModuleService.GetObjectAsync(z => z.Uid == adminRegister.Uid);
 
                 //一次性保存（所有）修改
-                await _xncfModuleService.SaveObjectAsync(adminModule).ConfigureAwait(false);
+                await _xncfModuleService.SaveObjectAsync(adminModule);//.ConfigureAwait(false);
 
                 var _systemConfigService = serviceProvider.GetService<SystemConfigService>();
                 _systemConfigService.Init(systemName);//初始化系统信息
@@ -209,7 +210,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
             //安装模块
             if (installNow)
             {
-                var _xncfModuleService = serviceProvider.GetService<XncfModuleServiceExtension>();
+                var _xncfModuleService = _xncfModuleServiceExtension; //serviceProvider.GetService<XncfModuleServiceExtension>();
 
                 xncfModule = _xncfModuleService.GetObject(z => z.Uid == register.Uid);
                 if (xncfModule == null)
@@ -267,10 +268,11 @@ namespace Senparc.Xncf.Installer.Domain.Services
         }
 
 
-        public InstallerService(IServiceProvider serviceProvider, InstallOptionsService installOptionsService)
+        public InstallerService(IServiceProvider serviceProvider, InstallOptionsService installOptionsService, XncfModuleServiceExtension xncfModuleServiceExtension)
         {
             this._serviceProvider = serviceProvider;
             this._installOptionsService = installOptionsService;
+            this._xncfModuleServiceExtension = xncfModuleServiceExtension;
         }
 
         public GetDefaultInstallOptionsResponseDto GetDefaultInstallOptions()
