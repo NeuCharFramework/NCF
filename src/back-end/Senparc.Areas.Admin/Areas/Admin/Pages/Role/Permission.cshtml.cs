@@ -13,13 +13,13 @@ namespace Senparc.Areas.Admin.Areas.Admin
     public class PagesRolePermissionModel : BaseAdminPageModel
     {
         private readonly SysRoleService _sysRoleService;
-        private readonly SysPermissionService _sysPermissionService;
+        private readonly SysRolePermissionService _sysPermissionService;
 
         //private readonly SysRoleMenuService _sysRoleMenuService;
         private readonly SysMenuService _sysMenuService;
 
         public PagesRolePermissionModel(IServiceProvider serviceProvider, SysMenuService sysMenuService,
-            SysRoleService sysRoleService, SysPermissionService sysPermissionService)
+            SysRoleService sysRoleService, SysRolePermissionService sysPermissionService)
             : base(serviceProvider)
         {
             CurrentMenu = "Role";

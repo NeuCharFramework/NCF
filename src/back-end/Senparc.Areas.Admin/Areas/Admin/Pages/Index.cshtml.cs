@@ -118,7 +118,7 @@ namespace Senparc.Areas.Admin.Pages
         /// </summary>
         /// <param name="sysPermissionService"></param>
         /// <returns></returns>
-        public async Task<IActionResult> OnGetMenuTreeAsync([FromServices] SysPermissionService sysPermissionService)
+        public async Task<IActionResult> OnGetMenuTreeAsync([FromServices] SysRolePermissionService sysPermissionService)
         {
             IEnumerable<SysMenuDto> sysMenus = await sysPermissionService.GetCurrentUserMenuDtoAsync();
             var results = await GetSysMenuTreesMainRecursiveAsync(sysMenus);
@@ -130,7 +130,7 @@ namespace Senparc.Areas.Admin.Pages
         /// </summary>
         /// <param name="sysPermissionService"></param>
         /// <returns></returns>
-        public async Task<IActionResult> OnGetMenuResourceAsync([FromServices] SysPermissionService sysPermissionService)
+        public async Task<IActionResult> OnGetMenuResourceAsync([FromServices] SysRolePermissionService sysPermissionService)
         {
             IEnumerable<SysMenuDto> sysMenus = await sysPermissionService.GetCurrentUserMenuDtoAsync();
             var results = await GetSysMenuTreesMainRecursiveAsync(sysMenus);

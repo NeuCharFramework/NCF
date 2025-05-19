@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 using Senparc.Areas.Admin.Domain.Models;
 using System;
 using Senparc.Ncf.Core.Exceptions;
+using Senparc.Ncf.Core.Config;
+using Senparc.Xncf.Tenant.Domain.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -39,9 +42,11 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
 
         private readonly AdminUserInfoService _userInfoService;
-        public LoginModel(AdminUserInfoService userInfoService)
+        private readonly TenantInfoService _tenantInfoService;
+        public LoginModel(AdminUserInfoService userInfoService, TenantInfoService tenantInfoService)
         {
             this._userInfoService = userInfoService;
+            this._tenantInfoService = tenantInfoService;
         }
 
 
@@ -99,16 +104,39 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         //    return LocalRedirect(this.ReturnUrl.UrlDecode());
         //}
 
-        public async Task<IActionResult> OnPostLoginAsync([FromBody] LoginInDto loginInDto/*[Required]string name,string password*/)
+        public async Task<IActionResult> OnPostLoginAsync([FromBody] LoginInDto loginInDto)
         {
             if (!ModelState.IsValid)
             {
                 return Ok(new { loginInDto.Name, loginInDto.Password });
             }
 
+            // 移除不必要的验证，因为ValidateTenant总是返回true
+            // 租户名称不是必填项，无需验证
+
             AdminUserInfo userInfo = null;
+            string tenantKey = loginInDto.Tenant;
             try
             {
+                if (SiteConfig.SenparcCoreSetting.EnableMultiTenant && !tenantKey.IsNullOrEmpty())
+                {
+                    var tenantInfo = await this._tenantInfoService.GetObjectAsync(z => z.TenantKey.ToUpper() == tenantKey.ToUpper());
+                    if (tenantInfo == null)
+                    {
+                        SenparcTrace.SendCustomLog("登录失败", $", 错误：租户名称错误：" + tenantKey);
+                        return Ok("pwd", false, $"用户名：{loginInDto.Name}, 错误：账号或密码错误！");
+                    }
+
+                    var requestTenantInfo = this._tenantInfoService.GetRequestTenantInfo(tenantInfo);
+                    if (!_userInfoService.SetTenantInfo(requestTenantInfo))
+                    {
+                        SenparcTrace.SendCustomLog("租户配置失败", $", 错误：租户名配置错误：" + tenantKey);
+                        return Ok("pwd", false, $"用户名：{loginInDto.Name}, 错误：账号或密码错误！");
+                    }
+
+                    tenantKey = tenantInfo.TenantKey;
+                }
+
                 userInfo = await _userInfoService.GetUserInfoAsync(loginInDto.Name);
             }
             catch (Exception ex)
@@ -126,12 +154,13 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             try
             {
                 //TODO 需要把 userInfo 获取过程封装到下面的方法中，统一处理账号锁定
-                if (await _userInfoService.TryLoginAsync(userInfo, loginInDto.Password, true) == null)
+                if (await _userInfoService.TryLoginAsync(userInfo, loginInDto.Password, true, tenantKey) == null)
                 {
                     //ModelState.AddModelError(nameof(this.Password), "账号或密码错误！");
                     SenparcTrace.SendCustomLog("登录失败", $"用户名：{loginInDto.Name}, 错误：账号或密码错误！102");
                     return Ok("pwd", false, "账号或密码错误！");
-                }   
+                }
+
                 return Ok(true);
             }
             catch (LoginLockException ex)
@@ -160,6 +189,11 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 return LocalRedirect(ReturnUrl.UrlDecode());
             }
         }
+
+        public IActionResult OnGetCheckMultiTenant()
+        {
+            return Ok(SiteConfig.SenparcCoreSetting.EnableMultiTenant);
+        }
     }
 
     public class LoginInDto
@@ -168,5 +202,13 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         public string Name { get; set; }
         [Required]
         public string Password { get; set; }
+        public string Tenant { get; set; }
+
+        public bool ValidateTenant()
+        {
+            // 租户名称不是必填的，即使在多租户模式下也是可选的
+            // 直接返回true表示验证总是通过
+            return true;
+        }
     }
 }

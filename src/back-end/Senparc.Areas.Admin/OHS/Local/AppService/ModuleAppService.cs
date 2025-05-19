@@ -336,7 +336,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 Func<Task> uninstall = async () =>
                 {
                     //删除菜单
-                    SysPermissionService sysPermissionService = base.ServiceProvider.GetService<SysPermissionService>();
+                    Ncf.Service.SysRolePermissionService sysPermissionService = base.ServiceProvider.GetService<Ncf.Service.SysRolePermissionService>();
                     Ncf.Service.SysMenuService sysMenuService = base.ServiceProvider.GetService<Ncf.Service.SysMenuService>();
                     var menu = await sysMenuService.GetObjectAsync(z => z.Id == module.MenuId).ConfigureAwait(false);
                     if (menu != null)

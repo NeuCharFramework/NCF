@@ -21,6 +21,9 @@ namespace Senparc.Areas.Admin.Domain.Models.Dto
         [Required]
         public string Password { get; set; }
 
+        [MaxLength(100)]
+        public string TenantKey { get; set; }
+
         /// <summary>
         /// 验证码
         /// </summary>

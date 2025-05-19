@@ -3,12 +3,14 @@ using Senparc.CO2NET.Helpers;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Utility;
+using Senparc.NeuChar.App.AppStore;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Unicode;
+using static Dm.net.buffer.ByteArrayBuffer;
 
 namespace Senparc.Areas.Admin.Domain.Models
 {
@@ -47,25 +49,31 @@ namespace Senparc.Areas.Admin.Domain.Models
 
         private AdminUserInfo() { }
 
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="userName">用户名为空时会按照SenparcCoreAdmin+两位数字的格式随机生成</param>
+        ///// <param name="password"></param>
+        ///// <param name="realName">真实姓名</param>
+        ///// <param name="phone">电话号码</param>
+        ///// <param name="note">备注</param>
         /// <summary>
-        /// 
+        /// <para>创建管理员账号</para>
+        /// <para>用户名为空时会按照SenparcCoreAdmin+两位数字的格式随机生成</para>
+        /// <para>密码为空时会生成16字符长度的随机字符串作为密码</para>
         /// </summary>
-        /// <param name="userName">用户名为空时会按照SenparcCoreAdmin+两位数字的格式随机生成</param>
-        /// <param name="password">密码为空时会生成16字符长度的随机字符串作为密码</param>
-        /// <param name="realName">真实姓名</param>
-        /// <param name="phone">电话号码</param>
-        /// <param name="note">备注</param>
-        public AdminUserInfo(ref string userName, ref string password, string realName, string phone, string note)
+        /// <param name="objDto"></param>
+        public AdminUserInfo(CreateOrUpdate_AdminUserInfoDto objDto)
         {
-            userName ??= GenerateUserName();//记录用户名
-            password ??= GeneratePassword();//记录明文密码
+            objDto.UserName ??= GenerateUserName();//记录用户名
+            objDto.Password ??= GeneratePassword();//记录明文密码
 
-            UserName = userName;
+            UserName = objDto.UserName;
             PasswordSalt = GeneratePasswordSalt();//生成密码盐
-            Password = GetSHA512Password(password, PasswordSalt, true);//生成密码
-            RealName = realName;
-            Phone = phone;
-            Note = note;
+            Password = GetSHA512Password(objDto.Password, PasswordSalt, true);//生成密码
+            RealName = objDto.RealName;
+            Phone = objDto.Phone;
+            Note = objDto.Note;
 
             var now = SystemTime.Now.LocalDateTime;
             AddTime = now;

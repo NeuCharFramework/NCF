@@ -74,8 +74,9 @@ namespace Senparc.Areas.Admin.Domain
         /// </summary>
         /// <param name="userInfo">The admin user information</param>
         /// <param name="rememberMe">Whether to persist the login</param>
+        /// <param name="tenantKey"></param>
         /// <returns>A task representing the asynchronous operation</returns>
-        public virtual async Task LoginAsync(AdminUserInfo userInfo, bool rememberMe)
+        public virtual async Task LoginAsync(AdminUserInfo userInfo, bool rememberMe, string tenantKey = null)
         {
             #region 使用 .net core 的方法写入 cookie 验证信息
 
@@ -85,6 +86,12 @@ namespace Senparc.Areas.Admin.Domain
                 new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString(), ClaimValueTypes.Integer),
                 new Claim("AdminMember", "", ClaimValueTypes.String)
             };
+
+            if (userInfo.TenantId > 0)
+            {
+                claims.Add(new Claim("TenantKey", tenantKey, ClaimValueTypes.String));
+            }
+
             var identity = new ClaimsIdentity(SiteConfig.NcfAdminAuthorizeScheme);
             identity.AddClaims(claims);
             var authProperties = new AuthenticationProperties
@@ -117,8 +124,10 @@ namespace Senparc.Areas.Admin.Domain
         /// <param name="adminUserInfo"></param>
         /// <param name="password"></param>
         /// <param name="rememberMe"></param>
+        /// <param name="tenantKey"></param>
         /// <returns></returns>
-        public async Task<AdminUserInfo> TryLoginAsync(AdminUserInfo adminUserInfo, string password, bool rememberMe)
+        public async Task<AdminUserInfo> TryLoginAsync(AdminUserInfo adminUserInfo, string password,
+            bool rememberMe, string tenantKey = null)
         {
             var cache = CO2NET.Cache.CacheStrategyFactory.GetObjectCacheStrategyInstance();
             var lockTimeKey = $"LockTime:{adminUserInfo.UserName}";
@@ -139,7 +148,7 @@ namespace Senparc.Areas.Admin.Domain
                     await cache.RemoveFromCacheAsync(lockTimeKey);
 
                     // 登录
-                    await LoginAsync(adminUserInfo, rememberMe);
+                    await LoginAsync(adminUserInfo, rememberMe, tenantKey);
                     return adminUserInfo;
                 }
                 else
@@ -180,27 +189,13 @@ namespace Senparc.Areas.Admin.Domain
         }
 
         /// <summary>
-        /// 添加用户信息
-        /// </summary>
-        /// <param name="objDto"></param>
-        public void CreateAdminUserInfo(CreateOrUpdate_AdminUserInfoDto objDto)
-        {
-            string userName = objDto.UserName;
-            string password = objDto.Password;
-            var obj = new AdminUserInfo(ref userName, ref password, null, null, objDto.Note);
-            SaveObject(obj);
-        }
-
-        /// <summary>
         /// 创建管理员
         /// </summary>
         /// <param name="objDto"></param>
         /// <returns></returns>
         public async Task<AdminUserInfo> CreateAdminUserInfoAsync(CreateOrUpdate_AdminUserInfoDto objDto)
         {
-            string userName = objDto.UserName;
-            string password = objDto.Password;
-            var obj = new AdminUserInfo(ref userName, ref password, null, null, objDto.Note);
+            var obj = new AdminUserInfo(objDto);
             await SaveObjectAsync(obj);
             return obj;
         }
@@ -278,7 +273,15 @@ namespace Senparc.Areas.Admin.Domain
             {
                 return null;
             }
-            var adminUserInfo = new AdminUserInfo(ref userName, ref password, null, null, "初始化数据");
+
+            var adminUserInfoDto = new CreateOrUpdate_AdminUserInfoDto()
+            {
+                UserName = userName.Trim(),
+                Password = password,
+                Note = "系统初始化账号"
+            };
+
+            var adminUserInfo = new AdminUserInfo(adminUserInfoDto);
             SaveObject(adminUserInfo);
             return adminUserInfo;
         }
@@ -323,7 +326,7 @@ namespace Senparc.Areas.Admin.Domain
             }
             try
             {
-                var adminUserInfo = await TryLoginAsync(userInfo, loginDto.Password, false);
+                var adminUserInfo = await TryLoginAsync(userInfo, loginDto.Password, false, loginDto.TenantKey);
                 if (adminUserInfo == null)
                 {
                     throw new NcfExceptionBase("用户名不存在或密码不正确！");
@@ -333,7 +336,7 @@ namespace Senparc.Areas.Admin.Domain
                 var roleCodes = roles
                     .Select(o => o.RoleCode).Distinct().ToList();
                 result.Token = token;
-                var permissions = await _serviceProvider.GetService<SysPermissionService>().GetFullListAsync(p => roles.Select(o => o.RoleId).Contains(p.RoleId));
+                var permissions = await _serviceProvider.GetService<SysRolePermissionService>().GetFullListAsync(p => roles.Select(o => o.RoleId).Contains(p.RoleId));
                 result.MenuTree = await _serviceProvider.GetService<Domain.Services.SysMenuService>().GetAllMenusTreeAsync(false);
                 result.UserName = adminUserInfo.UserName;
                 result.RoleCodes = roleCodes;
@@ -359,7 +362,7 @@ namespace Senparc.Areas.Admin.Domain
             var roles = await _serviceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == adminUserInfo.Id);
             var roleCodes = roles
                 .Select(o => o.RoleCode).Distinct().ToList();
-            var permissions = await _serviceProvider.GetService<SysPermissionService>().GetFullListAsync(p => roles.Select(o => o.RoleId).Contains(p.RoleId));
+            var permissions = await _serviceProvider.GetService<SysRolePermissionService>().GetFullListAsync(p => roles.Select(o => o.RoleId).Contains(p.RoleId));
             result.MenuTree = await _serviceProvider.GetService<Domain.Services.SysMenuService>().GetAllMenusTreeAsync(false);
             result.UserName = adminUserInfo.UserName;
             result.RealName = adminUserInfo.RealName;

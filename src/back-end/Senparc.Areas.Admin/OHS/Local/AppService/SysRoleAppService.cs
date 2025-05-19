@@ -17,10 +17,10 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
     public class SysRoleAppService : AppServiceBase
     {
         private readonly SysRoleService _sysRoleService;
-        private readonly SysPermissionService _sysPermissionService;
+        private readonly SysRolePermissionService _sysPermissionService;
         private readonly AutoMapper.IMapper _mapper;
 
-        public SysRoleAppService(SysRoleService sysRoleService, IServiceProvider serviceProvider, AutoMapper.IMapper mapper, SysPermissionService sysPermissionService) : base(serviceProvider)
+        public SysRoleAppService(SysRoleService sysRoleService, IServiceProvider serviceProvider, AutoMapper.IMapper mapper, SysRolePermissionService sysPermissionService) : base(serviceProvider)
         {
             _sysRoleService = sysRoleService;
             _mapper = mapper;

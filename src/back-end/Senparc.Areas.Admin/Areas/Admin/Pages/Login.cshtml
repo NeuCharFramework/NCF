@@ -36,6 +36,9 @@
                             <el-form-item prop="user">
                                 <el-input v-model.number="ruleForm.user" placeholder="请输入用户名"></el-input>
                             </el-form-item>
+                            <el-form-item prop="tenant" v-if="enableMultiTenant">
+                                <el-input v-model="ruleForm.tenant" placeholder="请输入租户名称"></el-input>
+                            </el-form-item>
                             <el-form-item prop="pass">
                                 <el-input type="password" v-model="ruleForm.pass" placeholder="请输入密码" autocomplete="off"></el-input>
                             </el-form-item>

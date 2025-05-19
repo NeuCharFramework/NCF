@@ -13,6 +13,7 @@ using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.Installer.Domain.Dto;
 using Senparc.Xncf.Installer.OHS.Local.AppService;
 using Senparc.Xncf.Tenant.Domain.DataBaseModel;
+using Senparc.Xncf.Tenant.OHS.Remote;
 using Senparc.Xncf.XncfModuleManager.Domain.Services;
 using System;
 using System.Collections.Generic;
@@ -61,6 +62,8 @@ namespace Senparc.Xncf.Instraller.Pages
         /// 新创建的 RequestTenantInfo
         /// </summary>
         public RequestTenantInfo CreatedRequestTenantInfo { get; set; }
+
+        public bool InstallingTenant { get; private set; }
         public TenantInfoDto TenantInfoDto { get; private set; }
         public TenantRule TenantRule { get; set; }
         public bool MultiTenantEnable { get; set; }
@@ -78,7 +81,7 @@ namespace Senparc.Xncf.Instraller.Pages
             TenantRule = SiteConfig.SenparcCoreSetting.TenantRule;
         }
 
-        public async Task<IActionResult> OnGetAsync(string forceUpdateModule)
+        public async Task<IActionResult> OnGetAsync(string forceUpdateModule,int tenantId=0)
         {
             try
             {
@@ -108,22 +111,24 @@ namespace Senparc.Xncf.Instraller.Pages
                     throw new Exception("需要初始化");
                 }
 
-                try
-                {
-                    if (Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.EnableMultiTenant)
-                    {
-                        //判断是不是从新的域名进入
-                        RequestTenantInfo currentRequestTenantInfo = MultiTenantHelper.TryGetAndCheckRequestTenantInfo(_serviceProvider, null);
-                    }
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+                // try
+                // {
+                //     if (Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.EnableMultiTenant)
+                //     {
+                //         //判断是不是从新的域名进入
+                //         RequestTenantInfo currentRequestTenantInfo = MultiTenantHelper.TryGetAndCheckRequestTenantInfo(_serviceProvider, null);
+                //     }
+                // }
+                // catch (Exception)
+                // {
+                //     throw;
+                // }
 
             }
             catch (Exception)
             {
+                SiteConfig.IsInstalling = true;
+
                 Console.WriteLine("开始初始化");
 
                 //var database = _accountInfoService.BaseClientRepository.BaseDB.BaseDataContext.Database;
@@ -173,6 +178,12 @@ namespace Senparc.Xncf.Instraller.Pages
                 var tenantReulst = await _installAppService.GetTenantInfoAsync();
                 TenantInfoDto = tenantReulst.Data;
             }
+
+            //撤销安装状态
+            SiteConfig.IsInstalling = false;
+            SiteConfig.SetInstallFinished();
+            TenantMiddleware.FirstRunAndInstalling = false;
+
             return Page();
         }
 

@@ -188,3 +188,28 @@
     font-size: 22px;
     color: #1f2d3d;
 }
+
+.h300{
+    height:300px;
+}
+
+.h350 {
+    height: 350px;
+}
+
+.h380{
+    height:380px;
+}
+
+.h400{
+    height:400px;
+}
+
+.h500{
+    height:500px;
+}
+
+.mb5{
+    margin-bottom:5px;
+}
+
