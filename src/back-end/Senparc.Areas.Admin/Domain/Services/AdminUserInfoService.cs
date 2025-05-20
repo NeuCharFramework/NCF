@@ -245,18 +245,6 @@ namespace Senparc.Areas.Admin.Domain
         {
             return GetFullList(z => ids.Contains(z.Id), z => z.Id, Ncf.Core.Enums.OrderingType.Ascending, includes: includes);
         }
-        //TODO: 统一此处初始化方法为一个方法
-        /// <summary>
-        /// 初始化，随机生成用户名和密码
-        /// </summary>
-        /// <param name="userName"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public AdminUserInfo Init(out string userName, out string password)
-        {
-            userName = null;
-            return Init(userName, out password);
-        }
 
         /// <summary>
         /// 初始化，随机生成密码
@@ -264,26 +252,26 @@ namespace Senparc.Areas.Admin.Domain
         /// <param name="userName">用户名</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        public AdminUserInfo Init(string userName, out string password)
+        public async Task<(AdminUserInfo AdminUserInfo, string Password)> InitAsync(string userName)
         {
-            password = null;
-
             var oldAdminUserInfo = GetObject(z => true);
             if (oldAdminUserInfo != null)
             {
-                return null;
+                return (null, null);
             }
 
             var adminUserInfoDto = new CreateOrUpdate_AdminUserInfoDto()
             {
-                UserName = userName.Trim(),
-                Password = password,
+                UserName = userName?.Trim(),
+                Password = null,
                 Note = "系统初始化账号"
             };
 
+
             var adminUserInfo = new AdminUserInfo(adminUserInfoDto);
             SaveObject(adminUserInfo);
-            return adminUserInfo;
+
+            return (adminUserInfo, adminUserInfoDto.Password);
         }
 
         public void DeleteObject(int id)
