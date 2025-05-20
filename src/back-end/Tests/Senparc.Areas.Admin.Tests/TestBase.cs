@@ -22,7 +22,14 @@ namespace Senparc.Areas.Admin.Tests
                 var username = $"Admin-{i}";
                 var password = $"pWd-{i}";
                 var realName = $"Admin{rand.Next(10000)}";
-                var adminUserInfo = new AdminUserInfo(ref username, ref password, realName, "", "");
+
+                var dto = new CreateOrUpdate_AdminUserInfoDto()
+                {
+                    UserName = username,
+                    Password = password,
+                    RealName = realName
+                };
+                var adminUserInfo = new AdminUserInfo(dto);
                 seedData.Add(adminUserInfo);
             }
             dataList.Add(seedData);
