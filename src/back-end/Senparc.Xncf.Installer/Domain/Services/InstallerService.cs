@@ -359,8 +359,9 @@ namespace Senparc.Xncf.Installer.Domain.Services
                     {
                         var _accountInfoService = sope.ServiceProvider.GetService<AdminUserInfoService>();
 
-                        var adminUserInfo = _accountInfoService.Init(installRequestDto.AdminUserName, out string password);//初始化管理员信息
+                        var adminUserInfoResult = await _accountInfoService.InitAsync(installRequestDto.AdminUserName);//初始化管理员信息
 
+                        var adminUserInfo = adminUserInfoResult.AdminUserInfo;
                         if (adminUserInfo == null)
                         {
                             installResponseDto.StatCode = 404;
@@ -377,7 +378,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
                             //await _xncfModuleService.InstallMenuAsync(systemRegister, Ncf.Core.Enums.InstallOrUpdate.Install);//安装菜单
 
                             installResponseDto.AdminUserName = installRequestDto.AdminUserName;
-                            installResponseDto.AdminPassword = password;//这里不可以使用 adminUserInfo.Password，因为此参数已经是加密信息
+                            installResponseDto.AdminPassword = adminUserInfoResult.Password;//这里不可以使用 adminUserInfo.Password，因为此参数已经是加密信息
                             installResponseDto.StatCode = 0;
                         }
                     }

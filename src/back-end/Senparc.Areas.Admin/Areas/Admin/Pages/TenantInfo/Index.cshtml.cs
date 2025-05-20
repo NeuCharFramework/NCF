@@ -58,8 +58,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         public async Task<IActionResult> OnGetListAsync(int pageIndex, int pageSize)
         {
             var tenantInfo = await _tenantInfoService.GetObjectListAsync(pageIndex, pageSize, z => true, z => z.Id, OrderingType.Ascending);
-            return Ok(new
-            {
+            return Ok(new { 
                 List = tenantInfo.AsEnumerable(),
                 TotalCount = tenantInfo.TotalCount,
                 PageIndex = tenantInfo.PageIndex
@@ -140,10 +139,11 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 };
                 senparcDB.TenantInfo.TryMatch(true);
 
-                var adminUserInfo = _adminUserInfoService.Init(dto.AdminAccount, out string password);
+                var adminUserInfoResult = await _adminUserInfoService.InitAsync(dto.AdminAccount);
+
+                var adminUserInfo = adminUserInfoResult.AdminUserInfo;
 
                 await installerService.InitSystemAsync(dto.SystemName, adminUserInfo.Id, tenantInfo);
-
 
                 return Ok(new
                 {
@@ -156,7 +156,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                     adminAccount = new
                     {
                         username = dto.AdminAccount,
-                        password = password
+                        password = adminUserInfoResult.Password
                     }
                 }, true, "初始化成功");
             }
