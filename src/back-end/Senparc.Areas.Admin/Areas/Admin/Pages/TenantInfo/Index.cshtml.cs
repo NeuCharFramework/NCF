@@ -58,7 +58,8 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         public async Task<IActionResult> OnGetListAsync(int pageIndex, int pageSize)
         {
             var tenantInfo = await _tenantInfoService.GetObjectListAsync(pageIndex, pageSize, z => true, z => z.Id, OrderingType.Ascending);
-            return Ok(new { 
+            return Ok(new
+            {
                 List = tenantInfo.AsEnumerable(),
                 TotalCount = tenantInfo.TotalCount,
                 PageIndex = tenantInfo.PageIndex
