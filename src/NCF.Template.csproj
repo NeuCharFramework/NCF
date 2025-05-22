@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.29.2</PackageVersion>
+		<PackageVersion>0.29.3</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -89,6 +89,7 @@
 			v0.28.12 更新基础库，升级 AIKernel、AgentsManager
 			v0.29.0 升级多租户，升级 AdminUserInfo、升级安装程序
 			v0.29.1 升级 Senparc.Ncf.Core 核心模块
+			v0.29.3 升级 XncfBuilder 模块
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
