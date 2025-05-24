@@ -51,9 +51,10 @@ li {
         color: #23527c;
     }
 
-.el-main {
+.el-main
+{
     background-color: #e3e3e3;
-    height:700px;
+    height: 730px;
 }
 
 /*侧边栏*/
