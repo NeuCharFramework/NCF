@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<Version>0.29.2</Version>
+		<Version>0.29.4</Version>
 		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
 		<TypeScriptToolsVersion>4.1</TypeScriptToolsVersion>
 		<UserSecretsId>d2144151-af7a-4d50-896d-4a306e594f7b</UserSecretsId>
