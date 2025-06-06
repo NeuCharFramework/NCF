@@ -114,7 +114,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         }
 
         /// <summary>
-        /// 获取已安装模块模块 handler=Mofules
+        /// 获取已安装模块 handler=Modules
         /// </summary>
         /// <returns></returns>
         public async Task<IActionResult> OnGetMofulesAsync(int pageIndex = 0, int pageSize = 0)
@@ -137,7 +137,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         }
 
         /// <summary>
-        /// 获取未安装模块模块 handler=UnMofules
+        /// 获取未安装模块 handler=UnModules
         /// </summary>
         /// <returns></returns>
         public async Task<IActionResult> OnGetUnMofulesAsync()
@@ -145,7 +145,29 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             //所有已安装的模块
             var oldXncfModules = await _xncfModuleServiceEx.GetObjectListAsync(0, 0, z => true, z => z.AddTime, Ncf.Core.Enums.OrderingType.Descending);
             //未安装或版本已更新（不同）的模块
-            var newXncfRegisters = _xncfModuleServiceEx.GetUnInstallXncfModule(oldXncfModules);
+            //var newXncfRegisters = _xncfModuleServiceEx.GetUnInstallXncfModule(oldXncfModules);
+            var newXncfRegisters = _xncfModuleServiceEx.GetOnlyUnInstallXncfModule(oldXncfModules);
+
+            return Ok(newXncfRegisters.Select(z => new
+            {
+                z.MenuName,
+                z.Name,
+                z.Uid,
+                Version = _xncfModuleServiceEx.GetVersionDisplayName(oldXncfModules, z),
+                z.Icon
+            })); ;
+        }
+
+        /// <summary>
+        /// 获取待更新模块 handler=UpdatedModules
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> OnGetUpdatedMofulesAsync()
+        {
+            //所有已安装的模块
+            var oldXncfModules = await _xncfModuleServiceEx.GetObjectListAsync(0, 0, z => true, z => z.AddTime, Ncf.Core.Enums.OrderingType.Descending);
+            //未安装或版本已更新（不同）的模块
+            var newXncfRegisters = _xncfModuleServiceEx.GetUpdatedInstallXncfModule(oldXncfModules);
 
             return Ok(newXncfRegisters.Select(z => new
             {
