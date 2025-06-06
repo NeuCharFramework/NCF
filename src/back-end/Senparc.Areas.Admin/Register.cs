@@ -185,8 +185,6 @@ namespace Senparc.Areas.Admin
                 FileProvider = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly(), "wwwroot")
             });
 
-           
-
             return base.UseXncfModule(app, registerService);
         }
 

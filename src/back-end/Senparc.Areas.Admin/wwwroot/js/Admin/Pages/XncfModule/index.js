@@ -4,6 +4,7 @@
     return {
       newTableData: [], // 新模块数据
       oldTableData: [], // 已安装模块
+      updatedTableData: [], // 待更新模块
       isExtend: false, //是否切换状态
       handlerText: "",
       handlerTips: "",
@@ -41,6 +42,9 @@
       this.isExtend = oldTableData.data.data.hideModuleManager;
       const newTableData = await service.get('/Admin/XncfModule/Index?handler=UnMofules');
       this.newTableData = newTableData.data.data;
+
+      const updatedTableData = await service.get('/Admin/XncfModule/Index?handler=UpdatedMofules');
+      this.updatedTableData = updatedTableData.data.data;
     },
     // 切换状态
     async handleSwitch() {
