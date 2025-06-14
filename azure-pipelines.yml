@@ -21,9 +21,10 @@ jobs:
     name: 'SenparcOpenSource'
   steps:
 
-    # 验证 GitHub CLI 安装是否可用
+    # 确保 gh CLI 的路径已经添加到系统 PATH 变量中
     - script: |
-        echo Verify GitHub CLI Installation
+        echo Setting PATH for GitHub CLI
+        set "PATH=%PATH%;C:\Program Files\GitHub CLI"
         gh --version
       displayName: 'Verify GitHub CLI Installation'
 
@@ -120,6 +121,7 @@ jobs:
         dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-x64 --output $(Build.ArtifactStagingDirectory)/mac
 
         echo Creating GitHub Release
+        set "PATH=%PATH%;C:\Program Files\GitHub CLI"
         gh release create "$(version)" \
           "$(Build.ArtifactStagingDirectory)/x86/*" \
           "$(Build.ArtifactStagingDirectory)/arm/*" \
