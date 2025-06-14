@@ -10,22 +10,22 @@ pool:
 variables:
   solution: '**/NCF.sln'
   templateBuild: '**/NCF.Template.sln'
-  webProject: '**/Senparc.Web/Senparc.Web.csproj'
+  webProject: 'src/back-end/Senparc.Web/Senparc.Web.csproj'  # 请确保路径正确
   buildConfiguration: 'Release'
   NUGET_PACKAGES: $(Agent.ToolsDirectory)/nuget/packages  # NuGet 缓存路径
-  version: '$(Build.BuildId)'  # 使用 Build ID 作为版本号示例
+  version: '$(Build.BuildId)'
 
 jobs:
 - job: BuildAndRelease
   pool:
-    name: 'SenparcOpenSource'  # 这里填你的自托管 Agent Pool 名称
+    name: 'SenparcOpenSource'
   steps:
 
     # 🟢 缓存 NuGet 及依赖项
     - task: Cache@2
       inputs:
-        key: 'nuget | "$(Agent.OS)" | **/*.csproj'  # NuGet 缓存 Key
-        path: '$(NUGET_PACKAGES)'  # NuGet 包的存储路径
+        key: 'nuget | "$(Agent.OS)" | **/*.csproj'
+        path: '$(NUGET_PACKAGES)'
         restoreKeys: 'nuget'
       displayName: 'Cache NuGet Packages'
 
@@ -33,15 +33,15 @@ jobs:
     - task: Cache@2
       inputs:
         key: 'aspire-workload | "$(Agent.OS)"'
-        path: '~/.dotnet'  # .NET SDK 及 workload 缓存目录
+        path: '~/.dotnet'
         restoreKeys: 'aspire-workload'
       displayName: 'Cache Aspire Workload'
 
-    # 🟢 缓存 NuGet 工具（减少安装时间）
+    # 🟢 缓存 NuGet 工具
     - task: Cache@2
       inputs:
         key: 'nuget-tool | "$(Agent.OS)"'
-        path: 'C:\ProgramData\nuget'  # NuGetTool 的全局存储位置
+        path: 'C:\ProgramData\nuget'
         restoreKeys: 'nuget-tool'
       displayName: 'Cache NuGet Tool'
 
@@ -51,21 +51,21 @@ jobs:
       displayName: 'Check & Install Aspire Workload'
       condition: ne(variables['CACHE_RESTORED'], 'true')
 
-    # ✅ 使用缓存的 NuGet 版本，避免重复安装
+    # ✅ 使用缓存的 NuGet 版本
     - task: NuGetToolInstaller@1
       displayName: 'Use Cached NuGet 6.3.0'
       inputs:
         versionSpec: '6.3.0'
 
-    - script: |  
-        nuget sources remove -name nuget.org  
+    - script: |
+        nuget sources remove -name nuget.org
       displayName: 'Remove Existing NuGet Source'
 
-    - script: |  
-        dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org  
+    - script: |
+        dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
       displayName: 'Add NuGet Source'
 
-    # ✅ 恢复 NuGet 依赖（使用缓存）
+    # ✅ 恢复 NuGet 依赖
     - task: NuGetCommand@2
       inputs:
         restoreSolution: '$(solution)'
@@ -102,7 +102,15 @@ jobs:
       continueOnError: true
       condition: succeededOrFailed()
 
-    # 发布到不同平台并创建单一 GitHub Release
+    # ✅ 安装 gh CLI
+    - script: |
+        echo Installing GitHub CLI
+        Invoke-WebRequest -Uri https://github.com/cli/cli/releases/latest/download/gh_2.0.0_windows_amd64.msi -OutFile gh.msi
+        Start-Process msiexec.exe -ArgumentList '/i gh.msi /quiet /qn' -Wait
+        Remove-Item gh.msi
+      displayName: 'Install GitHub CLI'
+
+    # ✅ 发布到不同平台并创建单一 GitHub Release
     - script: |
         echo Publishing x86 platform
         dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-x86 --output $(Build.ArtifactStagingDirectory)/x86
@@ -115,9 +123,9 @@ jobs:
 
         echo Creating GitHub Release
         gh release create "$(version)" \
-          "$(Build.ArtifactStagingDirectory)/x86/*" \
-          "$(Build.ArtifactStagingDirectory)/arm/*" \
-          "$(Build.ArtifactStagingDirectory)/mac/*" \
+          $(Build.ArtifactStagingDirectory)/x86/* \
+          $(Build.ArtifactStagingDirectory)/arm/* \
+          $(Build.ArtifactStagingDirectory)/mac/* \
           --title "Release $(version)" \
           --notes "Automatic release for version $(version)"
       displayName: 'Publish all Release to GitHub'
