@@ -6,13 +6,15 @@ pool:
   name: 'SenparcOpenSource'
 
 variables:
-  - group: 'NCF GitHub Token variable group 14-06月'  # 引用变量组
+  - group: 'NcfGitHubTokenVariableGroup'  # 引用变量组
+
+  # 定义自定义变量
   - name: solution
     value: '**/NCF.sln'
   - name: templateBuild
     value: '**/NCF.Template.sln'
   - name: webProject
-    value: 'src/back-end/Senparc.Web/Senparc.Web.csproj'  # 请确保路径正确
+    value: 'src/back-end/Senparc.Web/Senparc.Web.csproj'
   - name: buildConfiguration
     value: 'Release'
   - name: NUGET_PACKAGES
@@ -138,5 +140,5 @@ jobs:
     # 发布构建产物
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'sample'
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'sample'
