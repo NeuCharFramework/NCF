@@ -1,18 +1,17 @@
 trigger:
 - master
 
-# 🎯 使用自托管代理池，加快 CI/CD 速度
+# 使用自托管代理池，加快 CI/CD 速度
 pool:
-  name: 'SenparcOpenSource'  # 这里填你的自托管 Agent Pool 名称
-  demands:
-    - Agent.OS -equals Windows_NT
+  name: 'SenparcOpenSource' 
 
 variables:
+  GH_TOKEN: $(GH_TOKEN)
   solution: '**/NCF.sln'
   templateBuild: '**/NCF.Template.sln'
-  webProject: 'src/back-end/Senparc.Web/Senparc.Web.csproj'  # 请确保路径正确
+  webProject: 'src/back-end/Senparc.Web/Senparc.Web.csproj' 
   buildConfiguration: 'Release'
-  NUGET_PACKAGES: $(Agent.ToolsDirectory)/nuget/packages  # NuGet 缓存路径
+  NUGET_PACKAGES: $(Agent.ToolsDirectory)/nuget/packages 
   version: '$(Build.BuildId)'
 
 jobs:
@@ -21,14 +20,14 @@ jobs:
     name: 'SenparcOpenSource'
   steps:
 
-    # 确保 gh CLI 的路径已经添加到系统 PATH 变量中
+    # 确保 gh CLI 路径已添加到系统 PATH 变量中
     - script: |
         echo Setting PATH for GitHub CLI
         set "PATH=%PATH%;C:\Program Files\GitHub CLI"
         gh --version
       displayName: 'Verify GitHub CLI Installation'
 
-    # 🟢 缓存 NuGet 及依赖项
+    # 缓存 NuGet 及依赖项
     - task: Cache@2
       inputs:
         key: 'nuget | "$(Agent.OS)" | **/*.csproj'
@@ -36,7 +35,7 @@ jobs:
         restoreKeys: 'nuget'
       displayName: 'Cache NuGet Packages'
 
-    # 🟢 缓存 Aspire Workload
+    # 缓存 Aspire Workload
     - task: Cache@2
       inputs:
         key: 'aspire-workload | "$(Agent.OS)"'
@@ -44,7 +43,7 @@ jobs:
         restoreKeys: 'aspire-workload'
       displayName: 'Cache Aspire Workload'
 
-    # 🟢 缓存 NuGet 工具
+    # 缓存 NuGet 工具
     - task: Cache@2
       inputs:
         key: 'nuget-tool | "$(Agent.OS)"'
@@ -52,13 +51,13 @@ jobs:
         restoreKeys: 'nuget-tool'
       displayName: 'Cache NuGet Tool'
 
-    # ✅ 仅当缓存未命中时安装 Aspire Workload
+    # 仅当缓存未命中时安装 Aspire Workload
     - script: |
         dotnet workload list | findstr /C:"aspire" || dotnet workload install aspire
       displayName: 'Check & Install Aspire Workload'
       condition: ne(variables['CACHE_RESTORED'], 'true')
 
-    # ✅ 使用缓存的 NuGet 版本
+    # 使用缓存的 NuGet 版本
     - task: NuGetToolInstaller@1
       displayName: 'Use Cached NuGet 6.3.0'
       inputs:
@@ -72,12 +71,12 @@ jobs:
         dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
       displayName: 'Add NuGet Source'
 
-    # ✅ 恢复 NuGet 依赖
+    # 恢复 NuGet 依赖
     - task: NuGetCommand@2
       inputs:
         restoreSolution: '$(solution)'
 
-    # ✅ 解决方案构建
+    # 解决方案构建
     - task: VSBuild@1
       inputs:
         solution: '$(solution)'
@@ -85,12 +84,12 @@ jobs:
         platform: 'Any CPU'
         configuration: '$(buildConfiguration)'
 
-    # ✅ 恢复 Template 依赖
+    # 恢复 Template 依赖
     - task: NuGetCommand@2
       inputs:
         restoreSolution: '$(templateBuild)'
 
-    # ✅ 构建 Template 解决方案
+    # 构建 Template 解决方案
     - task: VSBuild@1
       inputs:
         solution: '$(templateBuild)'
@@ -98,7 +97,7 @@ jobs:
         platform: 'Any CPU'
         configuration: '$(buildConfiguration)'
 
-    # ✅ 推送 NuGet 包（支持失败继续）
+    # 推送 NuGet 包（支持失败继续）
     - task: NuGetCommand@2
       displayName: Senparc.Ncf.Template
       inputs:
@@ -109,7 +108,7 @@ jobs:
       continueOnError: true
       condition: succeededOrFailed()
 
-    # ✅ 发布到不同平台并创建单一 GitHub Release
+    # 设置 GH_TOKEN 和发布到不同平台并创建单一 GitHub Release
     - script: |
         echo Publishing x86 platform
         dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-x86 --output $(Build.ArtifactStagingDirectory)/x86
@@ -121,7 +120,9 @@ jobs:
         dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-x64 --output $(Build.ArtifactStagingDirectory)/mac
 
         echo Creating GitHub Release
+        set GH_TOKEN=$(GH_TOKEN)
         set "PATH=%PATH%;C:\Program Files\GitHub CLI"
+        gh auth status
         gh release create "$(version)" \
           "$(Build.ArtifactStagingDirectory)/x86/*" \
           "$(Build.ArtifactStagingDirectory)/arm/*" \
@@ -130,7 +131,7 @@ jobs:
           --notes "Automatic release for version $(version)"
       displayName: 'Publish all Release to GitHub'
 
-    # ✅ 发布构建产物
+    # 发布构建产物
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
