@@ -3,16 +3,22 @@ trigger:
 
 # 使用自托管代理池，加快 CI/CD 速度
 pool:
-  name: 'SenparcOpenSource' 
+  name: 'SenparcOpenSource'
 
 variables:
-  GH_TOKEN: $(GH_TOKEN)
-  solution: '**/NCF.sln'
-  templateBuild: '**/NCF.Template.sln'
-  webProject: 'src/back-end/Senparc.Web/Senparc.Web.csproj' 
-  buildConfiguration: 'Release'
-  NUGET_PACKAGES: $(Agent.ToolsDirectory)/nuget/packages 
-  version: '$(Build.BuildId)'
+  - group: 'NCF GitHub Token variable group 14-06月'  # 引用变量组
+  - name: solution
+    value: '**/NCF.sln'
+  - name: templateBuild
+    value: '**/NCF.Template.sln'
+  - name: webProject
+    value: 'src/back-end/Senparc.Web/Senparc.Web.csproj'  # 请确保路径正确
+  - name: buildConfiguration
+    value: 'Release'
+  - name: NUGET_PACKAGES
+    value: '$(Agent.ToolsDirectory)/nuget/packages'
+  - name: version
+    value: '$(Build.BuildId)'
 
 jobs:
 - job: BuildAndRelease
@@ -20,9 +26,8 @@ jobs:
     name: 'SenparcOpenSource'
   steps:
 
-    # 确保 gh CLI 路径已添加到系统 PATH 变量中
+    # 验证 GitHub CLI 安装是否可用
     - script: |
-        echo Setting PATH for GitHub CLI
         set "PATH=%PATH%;C:\Program Files\GitHub CLI"
         gh --version
       displayName: 'Verify GitHub CLI Installation'
@@ -80,7 +85,7 @@ jobs:
     - task: VSBuild@1
       inputs:
         solution: '$(solution)'
-        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)/WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
         platform: 'Any CPU'
         configuration: '$(buildConfiguration)'
 
@@ -121,12 +126,11 @@ jobs:
 
         echo Creating GitHub Release
         set GH_TOKEN=$(GH_TOKEN)
-        set "PATH=%PATH%;C:\Program Files\GitHub CLI"
         gh auth status
         gh release create "$(version)" \
-          "$(Build.ArtifactStagingDirectory)/x86/*" \
-          "$(Build.ArtifactStagingDirectory)/arm/*" \
-          "$(Build.ArtifactStagingDirectory)/mac/*" \
+          "$(Build.ArtifactStagingDirectory)\x86\*" \
+          "$(Build.ArtifactStagingDirectory)\arm\*" \
+          "$(Build.ArtifactStagingDirectory)\mac\*" \
           --title "Release $(version)" \
           --notes "Automatic release for version $(version)"
       displayName: 'Publish all Release to GitHub'
