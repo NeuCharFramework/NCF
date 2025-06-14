@@ -21,6 +21,11 @@ jobs:
     name: 'SenparcOpenSource'
   steps:
 
+    # 验证 GitHub CLI 安装是否可用
+    - script: |
+        gh --version
+      displayName: 'Verify GitHub CLI Installation'
+
     # 🟢 缓存 NuGet 及依赖项
     - task: Cache@2
       inputs:
@@ -115,9 +120,9 @@ jobs:
 
         echo Creating GitHub Release
         gh release create "$(version)" \
-          $(Build.ArtifactStagingDirectory)/x86/* \
-          $(Build.ArtifactStagingDirectory)/arm/* \
-          $(Build.ArtifactStagingDirectory)/mac/* \
+          "$(Build.ArtifactStagingDirectory)/x86/*" \
+          "$(Build.ArtifactStagingDirectory)/arm/*" \
+          "$(Build.ArtifactStagingDirectory)/mac/*" \
           --title "Release $(version)" \
           --notes "Automatic release for version $(version)"
       displayName: 'Publish all Release to GitHub'
