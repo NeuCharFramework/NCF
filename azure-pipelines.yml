@@ -3,24 +3,16 @@ trigger:
 
 # 使用自托管代理池，加快 CI/CD 速度
 pool:
-  name: 'SenparcOpenSource'
+  name: 'SenparcOpenSource' 
 
 variables:
-  - group: 'NcfGitHubTokenVariableGroup'  # 引用新的变量组名称
-
-  # 定义自定义变量
-  - name: solution
-    value: '**/NCF.sln'
-  - name: templateBuild
-    value: '**/NCF.Template.sln'
-  - name: webProject
-    value: 'src/back-end/Senparc.Web/Senparc.Web.csproj'
-  - name: buildConfiguration
-    value: 'Release'
-  - name: NUGET_PACKAGES
-    value: '$(Agent.ToolsDirectory)/nuget/packages'
-  - name: version
-    value: '$(Build.BuildId)'
+  GH_TOKEN: $(GH_TOKEN)
+  solution: '**/NCF.sln'
+  templateBuild: '**/NCF.Template.sln'
+  webProject: 'src/back-end/Senparc.Web/Senparc.Web.csproj' 
+  buildConfiguration: 'Release'
+  NUGET_PACKAGES: $(Agent.ToolsDirectory)/nuget/packages 
+  version: '$(Build.BuildId)'
 
 jobs:
 - job: BuildAndRelease
@@ -28,13 +20,14 @@ jobs:
     name: 'SenparcOpenSource'
   steps:
 
-    # 验证 GitHub CLI 安装是否可用
+    # 验证 gh CLI 安装
     - script: |
+        echo Setting PATH for GitHub CLI
         set "PATH=%PATH%;C:\Program Files\GitHub CLI"
         gh --version
       displayName: 'Verify GitHub CLI Installation'
 
-    # 缓存 NuGet 及依赖项
+    # 🟢 缓存 NuGet 及依赖项
     - task: Cache@2
       inputs:
         key: 'nuget | "$(Agent.OS)" | **/*.csproj'
@@ -42,7 +35,7 @@ jobs:
         restoreKeys: 'nuget'
       displayName: 'Cache NuGet Packages'
 
-    # 缓存 Aspire Workload
+    # 🟢 缓存 Aspire Workload
     - task: Cache@2
       inputs:
         key: 'aspire-workload | "$(Agent.OS)"'
@@ -50,7 +43,7 @@ jobs:
         restoreKeys: 'aspire-workload'
       displayName: 'Cache Aspire Workload'
 
-    # 缓存 NuGet 工具
+    # 🟢 缓存 NuGet 工具
     - task: Cache@2
       inputs:
         key: 'nuget-tool | "$(Agent.OS)"'
@@ -58,13 +51,13 @@ jobs:
         restoreKeys: 'nuget-tool'
       displayName: 'Cache NuGet Tool'
 
-    # 仅当缓存未命中时安装 Aspire Workload
+    # ✅ 仅当缓存未命中时安装 Aspire Workload
     - script: |
         dotnet workload list | findstr /C:"aspire" || dotnet workload install aspire
       displayName: 'Check & Install Aspire Workload'
       condition: ne(variables['CACHE_RESTORED'], 'true')
 
-    # 使用缓存的 NuGet 版本
+    # ✅ 使用缓存的 NuGet 版本
     - task: NuGetToolInstaller@1
       displayName: 'Use Cached NuGet 6.3.0'
       inputs:
@@ -78,25 +71,25 @@ jobs:
         dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
       displayName: 'Add NuGet Source'
 
-    # 恢复 NuGet 依赖
+    # ✅ 恢复 NuGet 依赖
     - task: NuGetCommand@2
       inputs:
         restoreSolution: '$(solution)'
 
-    # 解决方案构建
+    # ✅ 解决方案构建
     - task: VSBuild@1
       inputs:
         solution: '$(solution)'
-        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)/WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
         platform: 'Any CPU'
         configuration: '$(buildConfiguration)'
 
-    # 恢复 Template 依赖
+    # ✅ 恢复 Template 依赖
     - task: NuGetCommand@2
       inputs:
         restoreSolution: '$(templateBuild)'
 
-    # 构建 Template 解决方案
+    # ✅ 构建 Template 解决方案
     - task: VSBuild@1
       inputs:
         solution: '$(templateBuild)'
@@ -104,9 +97,9 @@ jobs:
         platform: 'Any CPU'
         configuration: '$(buildConfiguration)'
 
-    # 推送 NuGet 包（支持失败继续）
+    # ✅ 推送 NuGet 包（支持失败继续）
     - task: NuGetCommand@2
-      displayName: 'Senparc.Ncf.Template'
+      displayName: Senparc.Ncf.Template
       inputs:
         command: push
         packagesToPush: '**/Senparc.NCF.Template.*.nupkg'
@@ -115,7 +108,7 @@ jobs:
       continueOnError: true
       condition: succeededOrFailed()
 
-    # 设置 GH_TOKEN 和发布到不同平台并创建单一 GitHub Release
+    # ✅ 设置 GH_TOKEN 和发布到不同平台并创建单一 GitHub Release
     - script: |
         echo Publishing x86 platform
         dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-x86 --output $(Build.ArtifactStagingDirectory)/x86
@@ -127,19 +120,21 @@ jobs:
         dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-x64 --output $(Build.ArtifactStagingDirectory)/mac
 
         echo Creating GitHub Release
-        set "PATH=%PATH%;C:\Program Files\GitHub CLI"
         set GH_TOKEN=$(GH_TOKEN)
+        set "PATH=%PATH%;C:\Program Files\GitHub CLI"
         gh auth status
         gh release create "$(version)" \
-          "$(Build.ArtifactStagingDirectory)\x86\*" \
-          "$(Build.ArtifactStagingDirectory)\arm\*" \
-          "$(Build.ArtifactStagingDirectory)\mac\*" \
-          --title "Release $(version)" \
-          --notes "Automatic release for version $(version)"
+          --clobber \
+          --target $(Build.SourceVersion) \
+          -n "Automatic release for version $(version)" \
+          -t "Release $(version)" \
+          -F "$(Build.ArtifactStagingDirectory)/x86/*" \
+          -F "$(Build.ArtifactStagingDirectory)/arm/*" \
+          -F "$(Build.ArtifactStagingDirectory)/mac/*"
       displayName: 'Publish all Release to GitHub'
 
-    # 发布构建产物
+    # ✅ 发布构建产物
     - task: PublishBuildArtifacts@1
       inputs:
-        pathToPublish: '$(Build.ArtifactStagingDirectory)'
-        artifactName: 'sample'
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'sample'
