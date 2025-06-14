@@ -6,7 +6,7 @@ pool:
   name: 'SenparcOpenSource'
 
 variables:
-  - group: 'NcfGitHubTokenVariableGroup'  # 引用变量组
+  - group: 'NcfGitHubTokenVariableGroup'  # 引用新的变量组名称
 
   # 定义自定义变量
   - name: solution
@@ -131,9 +131,9 @@ jobs:
         set GH_TOKEN=$(GH_TOKEN)
         gh auth status
         gh release create "$(version)" \
-          '$(Build.ArtifactStagingDirectory)\x86\*' \
-          '$(Build.ArtifactStagingDirectory)\arm\*' \
-          '$(Build.ArtifactStagingDirectory)\mac\*' \
+          "$(Build.ArtifactStagingDirectory)\x86\*" \
+          "$(Build.ArtifactStagingDirectory)\arm\*" \
+          "$(Build.ArtifactStagingDirectory)\mac\*" \
           --title "Release $(version)" \
           --notes "Automatic release for version $(version)"
       displayName: 'Publish all Release to GitHub'
