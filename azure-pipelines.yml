@@ -102,14 +102,6 @@ jobs:
       continueOnError: true
       condition: succeededOrFailed()
 
-    # ✅ 安装 gh CLI
-    - script: |
-        echo Installing GitHub CLI
-        Invoke-WebRequest -Uri https://github.com/cli/cli/releases/latest/download/gh_2.0.0_windows_amd64.msi -OutFile gh.msi
-        Start-Process msiexec.exe -ArgumentList '/i gh.msi /quiet /qn' -Wait
-        Remove-Item gh.msi
-      displayName: 'Install GitHub CLI'
-
     # ✅ 发布到不同平台并创建单一 GitHub Release
     - script: |
         echo Publishing x86 platform
