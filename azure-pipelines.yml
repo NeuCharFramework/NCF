@@ -23,6 +23,7 @@ jobs:
 
     # 验证 GitHub CLI 安装是否可用
     - script: |
+        echo Verify GitHub CLI Installation
         gh --version
       displayName: 'Verify GitHub CLI Installation'
 
