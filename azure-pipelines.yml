@@ -106,7 +106,7 @@ jobs:
 
     # 推送 NuGet 包（支持失败继续）
     - task: NuGetCommand@2
-      displayName: Senparc.Ncf.Template
+      displayName: 'Senparc.Ncf.Template'
       inputs:
         command: push
         packagesToPush: '**/Senparc.NCF.Template.*.nupkg'
@@ -127,12 +127,13 @@ jobs:
         dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-x64 --output $(Build.ArtifactStagingDirectory)/mac
 
         echo Creating GitHub Release
+        set "PATH=%PATH%;C:\Program Files\GitHub CLI"
         set GH_TOKEN=$(GH_TOKEN)
         gh auth status
         gh release create "$(version)" \
-          "$(Build.ArtifactStagingDirectory)\x86\*" \
-          "$(Build.ArtifactStagingDirectory)\arm\*" \
-          "$(Build.ArtifactStagingDirectory)\mac\*" \
+          '$(Build.ArtifactStagingDirectory)\x86\*' \
+          '$(Build.ArtifactStagingDirectory)\arm\*' \
+          '$(Build.ArtifactStagingDirectory)\mac\*' \
           --title "Release $(version)" \
           --notes "Automatic release for version $(version)"
       displayName: 'Publish all Release to GitHub'
