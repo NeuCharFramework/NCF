@@ -10,96 +10,120 @@ pool:
 variables:
   solution: '**/NCF.sln'
   templateBuild: '**/NCF.Template.sln'
-  buildPlatform: 'Any CPU'
+  webProject: '**/Senparc.Web/Senparc.Web.csproj'
   buildConfiguration: 'Release'
   NUGET_PACKAGES: $(Agent.ToolsDirectory)/nuget/packages  # NuGet 缓存路径
+  version: '$(Build.BuildId)'  # 使用 Build ID 作为版本号示例
 
-steps:
+jobs:
+- job: BuildAndRelease
+  pool:
+    name: 'SenparcOpenSource'  # 这里填你的自托管 Agent Pool 名称
+  steps:
 
-# 🟢 缓存 NuGet 及依赖项
-- task: Cache@2
-  inputs:
-    key: 'nuget | "$(Agent.OS)" | **/*.csproj'  # NuGet 缓存 Key
-    path: '$(NUGET_PACKAGES)'  # NuGet 包的存储路径
-    restoreKeys: 'nuget'
-  displayName: 'Cache NuGet Packages'
+    # 🟢 缓存 NuGet 及依赖项
+    - task: Cache@2
+      inputs:
+        key: 'nuget | "$(Agent.OS)" | **/*.csproj'  # NuGet 缓存 Key
+        path: '$(NUGET_PACKAGES)'  # NuGet 包的存储路径
+        restoreKeys: 'nuget'
+      displayName: 'Cache NuGet Packages'
 
-# 🟢 缓存 Aspire Workload
-- task: Cache@2
-  inputs:
-    key: 'aspire-workload | "$(Agent.OS)"'
-    path: '~/.dotnet'  # .NET SDK 及 workload 缓存目录
-    restoreKeys: 'aspire-workload'
-  displayName: 'Cache Aspire Workload'
+    # 🟢 缓存 Aspire Workload
+    - task: Cache@2
+      inputs:
+        key: 'aspire-workload | "$(Agent.OS)"'
+        path: '~/.dotnet'  # .NET SDK 及 workload 缓存目录
+        restoreKeys: 'aspire-workload'
+      displayName: 'Cache Aspire Workload'
 
-# 🟢 缓存 NuGet 工具（减少安装时间）
-- task: Cache@2
-  inputs:
-    key: 'nuget-tool | "$(Agent.OS)"'
-    path: 'C:\ProgramData\nuget'  # NuGetTool 的全局存储位置
-    restoreKeys: 'nuget-tool'
-  displayName: 'Cache NuGet Tool'
+    # 🟢 缓存 NuGet 工具（减少安装时间）
+    - task: Cache@2
+      inputs:
+        key: 'nuget-tool | "$(Agent.OS)"'
+        path: 'C:\ProgramData\nuget'  # NuGetTool 的全局存储位置
+        restoreKeys: 'nuget-tool'
+      displayName: 'Cache NuGet Tool'
 
-# ✅ 仅当缓存未命中时安装 Aspire Workload
-- script: |
-    dotnet workload list | findstr /C:"aspire" || dotnet workload install aspire
-  displayName: 'Check & Install Aspire Workload'
-  condition: ne(variables['CACHE_RESTORED'], 'true')
+    # ✅ 仅当缓存未命中时安装 Aspire Workload
+    - script: |
+        dotnet workload list | findstr /C:"aspire" || dotnet workload install aspire
+      displayName: 'Check & Install Aspire Workload'
+      condition: ne(variables['CACHE_RESTORED'], 'true')
 
-# ✅ 使用缓存的 NuGet 版本，避免重复安装
-- task: NuGetToolInstaller@1
-  displayName: 'Use Cached NuGet 6.3.0'
-  inputs:
-    versionSpec: '6.3.0'
+    # ✅ 使用缓存的 NuGet 版本，避免重复安装
+    - task: NuGetToolInstaller@1
+      displayName: 'Use Cached NuGet 6.3.0'
+      inputs:
+        versionSpec: '6.3.0'
 
+    - script: |  
+        nuget sources remove -name nuget.org  
+      displayName: 'Remove Existing NuGet Source'
 
-- script: |  
-    nuget sources remove -name nuget.org  
-  displayName: 'Remove Existing NuGet Source'  
-- script: |  
-    dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org  
-  displayName: 'Add NuGet Source'  
-    
+    - script: |  
+        dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org  
+      displayName: 'Add NuGet Source'
 
-# ✅ 恢复 NuGet 依赖（使用缓存）
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+    # ✅ 恢复 NuGet 依赖（使用缓存）
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
 
-# ✅ 解决方案构建
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    # ✅ 解决方案构建
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+        platform: 'Any CPU'
+        configuration: '$(buildConfiguration)'
 
-# ✅ 恢复 Template 依赖
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(templateBuild)'
+    # ✅ 恢复 Template 依赖
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(templateBuild)'
 
-# ✅ 构建 Template 解决方案
-- task: VSBuild@1
-  inputs:
-    solution: '$(templateBuild)'
-    msbuildArgs: ''
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    # ✅ 构建 Template 解决方案
+    - task: VSBuild@1
+      inputs:
+        solution: '$(templateBuild)'
+        msbuildArgs: ''
+        platform: 'Any CPU'
+        configuration: '$(buildConfiguration)'
 
-# ✅ 推送 NuGet 包（支持失败继续）
-- task: NuGetCommand@2
-  displayName: Senparc.Ncf.Template
-  inputs:
-    command: push
-    packagesToPush: '**/Senparc.NCF.Template.*.nupkg'
-    nuGetFeedType: external
-    publishFeedCredentials: 'nuget-jeffrey-full-key'
-  continueOnError: true
-  condition: succeededOrFailed()
+    # ✅ 推送 NuGet 包（支持失败继续）
+    - task: NuGetCommand@2
+      displayName: Senparc.Ncf.Template
+      inputs:
+        command: push
+        packagesToPush: '**/Senparc.NCF.Template.*.nupkg'
+        nuGetFeedType: external
+        publishFeedCredentials: 'nuget-jeffrey-full-key'
+      continueOnError: true
+      condition: succeededOrFailed()
 
-# ✅ 发布构建产物
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'sample'
+    # 发布到不同平台并创建单一 GitHub Release
+    - script: |
+        echo Publishing x86 platform
+        dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-x86 --output $(Build.ArtifactStagingDirectory)/x86
+
+        echo Publishing ARM platform
+        dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime linux-arm --output $(Build.ArtifactStagingDirectory)/arm
+
+        echo Publishing macOS platform
+        dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-x64 --output $(Build.ArtifactStagingDirectory)/mac
+
+        echo Creating GitHub Release
+        gh release create "$(version)" \
+          "$(Build.ArtifactStagingDirectory)/x86/*" \
+          "$(Build.ArtifactStagingDirectory)/arm/*" \
+          "$(Build.ArtifactStagingDirectory)/mac/*" \
+          --title "Release $(version)" \
+          --notes "Automatic release for version $(version)"
+      displayName: 'Publish all Release to GitHub'
+
+    # ✅ 发布构建产物
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'sample'
