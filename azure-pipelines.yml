@@ -6,13 +6,19 @@ pool:
   name: 'SenparcOpenSource' 
 
 variables:
-  GH_TOKEN_Store: $(GH_TOKEN)
-  solution: '**/NCF.sln'
-  templateBuild: '**/NCF.Template.sln'
-  webProject: 'src/back-end/Senparc.Web/Senparc.Web.csproj' 
-  buildConfiguration: 'Release'
-  NUGET_PACKAGES: $(Agent.ToolsDirectory)/nuget/packages 
-  version: '$(Build.BuildId)'
+  - group: NcfGitHubTokenVariableGroup
+  - name: solution
+    value: '**/NCF.sln'
+  - name: templateBuild
+    value: '**/NCF.Template.sln'
+  - name: webProject
+    value: 'src/back-end/Senparc.Web/Senparc.Web.csproj'
+  - name: buildConfiguration
+    value: 'Release'
+  - name: NUGET_PACKAGES
+    value: $(Agent.ToolsDirectory)/nuget/packages
+  - name: version
+    value: '$(Build.BuildId)'
 
 jobs:
 - job: BuildAndRelease
@@ -120,7 +126,7 @@ jobs:
         dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-x64 --output $(Build.ArtifactStagingDirectory)/mac
 
         echo Creating GitHub Release
-        set GH_TOKEN=$(GH_TOKEN_Store)
+        set GH_TOKEN=$(GH_TOKEN)
         set "PATH=%PATH%;C:\Program Files\GitHub CLI"
         gh auth status
         gh release create "$(version)" \
