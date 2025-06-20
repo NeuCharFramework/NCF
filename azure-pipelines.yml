@@ -3,7 +3,7 @@ trigger:
 
 # 使用自托管代理池，加快 CI/CD 速度
 pool:
-  name: 'SenparcOpenSource' 
+  name: 'SenparcOpenSource'
 
 variables:
   - group: NcfGitHubTokenVariableGroup
@@ -25,7 +25,26 @@ jobs:
   pool:
     name: 'SenparcOpenSource'
   steps:
+    # ✅ 设置 GH_TOKEN 和发布到不同平台并创建单一 GitHub Release
+    - task: CmdLine@2
+      displayName: 'Publish all Release to GitHub'
+      inputs:
+        script: |
+          echo Publishing x86 platform
+          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-x86 --output $(Build.ArtifactStagingDirectory)/x86
 
+          echo Publishing ARM platform
+          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime linux-arm --output $(Build.ArtifactStagingDirectory)/arm
+
+          echo Publishing macOS platform
+          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-x64 --output $(Build.ArtifactStagingDirectory)/mac
+
+          echo Creating GitHub Release
+          set GH_TOKEN=$(GH_TOKEN)
+          set PATH="%PATH%;C:\Program Files\GitHub CLI"
+          gh auth status
+          gh release create $(version) --clobber --target $(Build.SourceVersion) --notes "Automatic release for version $(version)" --title "Release $(version)" --assets "$(Build.ArtifactStagingDirectory)/x86/*" --assets "$(Build.ArtifactStagingDirectory)/arm/*" --assets "$(Build.ArtifactStagingDirectory)/mac/*"
+    
     # 验证 gh CLI 安装
     - script: |
         echo Setting PATH for GitHub CLI
@@ -113,33 +132,6 @@ jobs:
         publishFeedCredentials: 'nuget-jeffrey-full-key'
       continueOnError: true
       condition: succeededOrFailed()
-
-    # ✅ 设置 GH_TOKEN 和发布到不同平台并创建单一 GitHub Release
-    - task: CmdLine@2
-      displayName: 'Publish all Release to GitHub'
-      inputs:
-        script: |
-          echo Publishing x86 platform
-          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-x86 --output $(Build.ArtifactStagingDirectory)/x86
-
-          echo Publishing ARM platform
-          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime linux-arm --output $(Build.ArtifactStagingDirectory)/arm
-
-          echo Publishing macOS platform
-          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-x64 --output $(Build.ArtifactStagingDirectory)/mac
-
-          echo Creating GitHub Release
-          set GH_TOKEN=$(GH_TOKEN)
-          set "PATH=%PATH%;C:\Program Files\GitHub CLI"
-          gh auth status
-          gh release create "$(version)" `
-            --clobber `
-            --target $(Build.SourceVersion) `
-            --notes "Automatic release for version $(version)" `
-            --title "Release $(version)" `
-            --assets "$(Build.ArtifactStagingDirectory)/x86/*" `
-            --assets "$(Build.ArtifactStagingDirectory)/arm/*" `
-            --assets "$(Build.ArtifactStagingDirectory)/mac/*"
 
     # ✅ 发布构建产物
     - task: PublishBuildArtifacts@1
