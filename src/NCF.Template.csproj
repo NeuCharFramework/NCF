@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.29.6</PackageVersion>
+		<PackageVersion>0.29.7</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -93,6 +93,7 @@
 			v0.29.4 优化 UI
 			v0.29.5 更新 XncfBuilder 及 XNCF 模板
 			v0.29.6 更新 WeixinManager 模板
+			v0.29.7 更新 XncfBuilder，升级 MCP
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
