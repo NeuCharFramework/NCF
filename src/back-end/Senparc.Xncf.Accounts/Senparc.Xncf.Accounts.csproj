@@ -54,7 +54,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.11.10.1-preview1" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.11.11-preview1" />
 		<None Include="App_Data\SenparcTraceLog\*" />
 	</ItemGroup>
 
@@ -88,7 +88,7 @@
 		</PackageReference>
 		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.16.11.1-preview1" />
 
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.11.1-preview1" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.12-preview1" />
 	</ItemGroup>
 
 	<ItemGroup>

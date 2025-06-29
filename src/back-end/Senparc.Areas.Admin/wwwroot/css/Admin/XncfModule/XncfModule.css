@@ -129,6 +129,10 @@
     white-space: normal;
 }
 
+.run-dialog .el-select {
+    width: 400px;
+}
+
 .run-dialog .icon-note {
     color: #606266;
 }
