@@ -39,8 +39,9 @@ namespace Senparc.Xncf.Installer
 
         public Type TryGetXncfDatabaseDbContextType => throw new NotImplementedException();
 
-        public override async Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
+        public override Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
         {
+            return Task.CompletedTask;
         }
 
         public override async Task UninstallAsync(IServiceProvider serviceProvider, Func<Task> unsinstallFunc)

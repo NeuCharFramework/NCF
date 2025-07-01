@@ -25,32 +25,58 @@ jobs:
   pool:
     name: 'SenparcOpenSource'
   steps:
-    # ✅ 设置 GH_TOKEN 和发布到不同平台并创建单一 GitHub Release
-    - task: CmdLine@2
-      displayName: 'Publish all Release to GitHub'
+    # 🔧 安装或验证 GitHub CLI
+    - task: PowerShell@2
+      displayName: 'Install GitHub CLI'
       inputs:
+        targetType: 'inline'
         script: |
-          echo Publishing x86 platform
+          # 检查是否已安装 GitHub CLI
+          $ghPath = where.exe gh 2>$null
+          if ($ghPath) {
+              Write-Host "GitHub CLI already installed at: $ghPath"
+              gh --version
+          } else {
+              Write-Host "Installing GitHub CLI via winget..."
+              try {
+                  winget install --id GitHub.cli --silent --accept-package-agreements --accept-source-agreements
+                  Write-Host "GitHub CLI installed successfully"
+              } catch {
+                  Write-Host "Winget installation failed, trying chocolatey..."
+                  choco install gh -y
+              }
+          }
+          
+          # 验证安装
+          gh --version
+
+    # 🔧 设置环境变量
+    - task: PowerShell@2
+      displayName: 'Setup Environment'
+      inputs:
+        targetType: 'inline'
+        script: |
+          # 设置 GitHub token
+          $env:GH_TOKEN = "$(GH_TOKEN)"
+          Write-Host "##vso[task.setvariable variable=GH_TOKEN;issecret=true]$(GH_TOKEN)"
+          
+          # 验证 GitHub 认证
+          gh auth status
+
+    # ✅ 发布到不同平台
+    - task: PowerShell@2
+      displayName: 'Publish to Multiple Platforms'
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Publishing x86 platform"
           dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-x86 --output $(Build.ArtifactStagingDirectory)/x86
 
-          echo Publishing ARM platform
+          Write-Host "Publishing ARM platform"
           dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime linux-arm --output $(Build.ArtifactStagingDirectory)/arm
 
-          echo Publishing macOS platform
+          Write-Host "Publishing macOS platform"
           dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-x64 --output $(Build.ArtifactStagingDirectory)/mac
-
-          echo Creating GitHub Release
-          set GH_TOKEN=$(GH_TOKEN)
-          set PATH="%PATH%;C:\Program Files\GitHub CLI"
-          gh auth status
-          gh release create $(version) --clobber --target $(Build.SourceVersion) --notes "Automatic release for version $(version)" --title "Release $(version)" --assets "$(Build.ArtifactStagingDirectory)/x86/*" --assets "$(Build.ArtifactStagingDirectory)/arm/*" --assets "$(Build.ArtifactStagingDirectory)/mac/*"
-    
-    # 验证 gh CLI 安装
-    - script: |
-        echo Setting PATH for GitHub CLI
-        set "PATH=%PATH%;C:\Program Files\GitHub CLI"
-        gh --version
-      displayName: 'Verify GitHub CLI Installation'
 
     # 🟢 缓存 NuGet 及依赖项
     - task: Cache@2
@@ -132,6 +158,56 @@ jobs:
         publishFeedCredentials: 'nuget-jeffrey-full-key'
       continueOnError: true
       condition: succeededOrFailed()
+
+    # 🚀 创建 GitHub Release
+    - task: PowerShell@2
+      displayName: 'Create GitHub Release'
+      inputs:
+        targetType: 'inline'
+        script: |
+          try {
+              Write-Host "Creating GitHub Release version $(version)"
+              
+              # 压缩发布文件以减少asset数量
+              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/x86/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-win-x86-$(version).zip" -Force
+              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/arm/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-linux-arm-$(version).zip" -Force  
+              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/mac/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(version).zip" -Force
+              
+              # 创建 release
+              $releaseNotes = @"
+          ## 🚀 NCF Release $(version)
+          
+          ### 📦 平台支持
+          - Windows x86
+          - Linux ARM
+          - macOS x64
+          
+          ### 📅 构建信息
+          - 构建号: $(Build.BuildNumber)
+          - 源分支: $(Build.SourceBranchName)
+          - 提交: $(Build.SourceVersion)
+          - 发布时间: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss UTC')
+          
+          ### 📋 变更
+          本版本为自动构建发布，详细变更请查看提交历史。
+          "@
+              
+              gh release create "v$(version)" `
+                  --target "$(Build.SourceVersion)" `
+                  --title "NCF Release v$(version)" `
+                  --notes $releaseNotes `
+                  "$(Build.ArtifactStagingDirectory)/ncf-win-x86-$(version).zip" `
+                  "$(Build.ArtifactStagingDirectory)/ncf-linux-arm-$(version).zip" `
+                  "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(version).zip"
+                  
+              Write-Host "✅ GitHub Release created successfully"
+          } catch {
+              Write-Host "❌ Failed to create GitHub Release: $_"
+              Write-Host "##vso[task.logissue type=warning]GitHub Release creation failed but build continues"
+          }
+      env:
+        GH_TOKEN: $(GH_TOKEN)
+      condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
     # ✅ 发布构建产物
     - task: PublishBuildArtifacts@1

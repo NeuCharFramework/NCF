@@ -2,7 +2,7 @@
 @using Senparc.Ncf.XncfBase
 @inject IServiceProvider _serviceProvider
 @functions{
-    protected async Task<bool> CheckXncfModuleValiable(string xncfName)
+    private async Task<bool> CheckXncfModuleValiable(string xncfName)
     {
         XncfRegisterManager xncfRegisterManager = new XncfRegisterManager(_serviceProvider);
         return await xncfRegisterManager.CheckXncfValiable(xncfName).ConfigureAwait(false);
