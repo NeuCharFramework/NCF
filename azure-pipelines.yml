@@ -25,30 +25,60 @@ jobs:
   pool:
     name: 'SenparcOpenSource'
   steps:
-    # 🔧 安装或验证 GitHub CLI
+    # 🔧 验证 GitHub CLI
     - task: PowerShell@2
-      displayName: 'Install GitHub CLI'
+      displayName: 'Verify GitHub CLI'
       inputs:
         targetType: 'inline'
         script: |
-          # 检查是否已安装 GitHub CLI
-          $ghPath = where.exe gh 2>$null
-          if ($ghPath) {
-              Write-Host "GitHub CLI already installed at: $ghPath"
-              gh --version
-          } else {
-              Write-Host "Installing GitHub CLI via winget..."
+          # 尝试多种方式查找和验证 GitHub CLI
+          try {
+              Write-Host "Attempting to verify GitHub CLI installation..."
+              
+              # 方法1: 直接调用 gh
+              $ghVersion = gh --version 2>$null
+              if ($ghVersion) {
+                  Write-Host "✅ GitHub CLI found and working:"
+                  Write-Host $ghVersion
+              } else {
+                  throw "Direct gh command failed"
+              }
+          } catch {
               try {
-                  winget install --id GitHub.cli --silent --accept-package-agreements --accept-source-agreements
-                  Write-Host "GitHub CLI installed successfully"
+                  # 方法2: 尝试常见安装路径
+                  $commonPaths = @(
+                      "${env:ProgramFiles}\GitHub CLI\gh.exe",
+                      "${env:ProgramFiles(x86)}\GitHub CLI\gh.exe",
+                      "${env:LOCALAPPDATA}\Programs\GitHub CLI\gh.exe",
+                      "C:\Program Files\GitHub CLI\gh.exe",
+                      "C:\Program Files (x86)\GitHub CLI\gh.exe"
+                  )
+                  
+                  $foundPath = $null
+                  foreach ($path in $commonPaths) {
+                      if (Test-Path $path) {
+                          $foundPath = $path
+                          break
+                      }
+                  }
+                  
+                  if ($foundPath) {
+                      Write-Host "✅ Found GitHub CLI at: $foundPath"
+                      & "$foundPath" --version
+                      # 添加到 PATH
+                      $dirPath = Split-Path $foundPath -Parent
+                      Write-Host "##vso[task.setvariable variable=PATH]${env:PATH};$dirPath"
+                  } else {
+                      Write-Host "❌ GitHub CLI not found in common locations"
+                      Write-Host "Available paths checked:"
+                      $commonPaths | ForEach-Object { Write-Host "  - $_" }
+                      throw "GitHub CLI not found"
+                  }
               } catch {
-                  Write-Host "Winget installation failed, trying chocolatey..."
-                  choco install gh -y
+                  Write-Host "⚠️  GitHub CLI verification failed, but continuing..."
+                  Write-Host "##vso[task.logissue type=warning]GitHub CLI verification failed but build continues"
               }
           }
-          
-          # 验证安装
-          gh --version
 
     # 🔧 设置环境变量
     - task: PowerShell@2
@@ -168,10 +198,59 @@ jobs:
           try {
               Write-Host "Creating GitHub Release version $(version)"
               
+              # 确保 GitHub CLI 可用
+              try {
+                  $ghVersion = gh --version 2>$null
+                  if ($ghVersion) {
+                      Write-Host "Using GitHub CLI: $ghVersion"
+                  } else {
+                      throw "GitHub CLI not accessible"
+                  }
+              } catch {
+                  Write-Host "⚠️ GitHub CLI not found, attempting to locate..."
+                  $commonPaths = @(
+                      "${env:ProgramFiles}\GitHub CLI\gh.exe",
+                      "${env:ProgramFiles(x86)}\GitHub CLI\gh.exe",
+                      "C:\Program Files\GitHub CLI\gh.exe"
+                  )
+                  
+                  $ghPath = $null
+                  foreach ($path in $commonPaths) {
+                      if (Test-Path $path) {
+                          $ghPath = $path
+                          break
+                      }
+                  }
+                  
+                  if ($ghPath) {
+                      Write-Host "Found GitHub CLI at: $ghPath"
+                      Set-Alias -Name gh -Value $ghPath -Scope Global
+                  } else {
+                      throw "GitHub CLI not found in any common location"
+                  }
+              }
+              
               # 压缩发布文件以减少asset数量
+              Write-Host "Compressing release files..."
               Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/x86/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-win-x86-$(version).zip" -Force
               Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/arm/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-linux-arm-$(version).zip" -Force  
               Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/mac/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(version).zip" -Force
+              
+              # 验证文件存在
+              $assetFiles = @(
+                  "$(Build.ArtifactStagingDirectory)/ncf-win-x86-$(version).zip",
+                  "$(Build.ArtifactStagingDirectory)/ncf-linux-arm-$(version).zip",
+                  "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(version).zip"
+              )
+              
+              foreach ($file in $assetFiles) {
+                  if (Test-Path $file) {
+                      $size = (Get-Item $file).Length / 1MB
+                      Write-Host "✅ Asset ready: $(Split-Path $file -Leaf) ($([math]::Round($size, 2)) MB)"
+                  } else {
+                      Write-Host "❌ Missing asset: $file"
+                  }
+              }
               
               # 创建 release
               $releaseNotes = @"
@@ -192,6 +271,7 @@ jobs:
           本版本为自动构建发布，详细变更请查看提交历史。
           "@
               
+              Write-Host "Creating GitHub Release..."
               gh release create "v$(version)" `
                   --target "$(Build.SourceVersion)" `
                   --title "NCF Release v$(version)" `
