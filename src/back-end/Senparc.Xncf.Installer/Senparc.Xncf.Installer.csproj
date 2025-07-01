@@ -5,6 +5,7 @@
 		<AssemblyName>Senparc.Xncf.Installer</AssemblyName>
 		<RootNamespace>Senparc.Xncf.Installer</RootNamespace>
 		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+		<IsPackable>true</IsPackable>
 
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 		<Description>NCF 初始化安装模块，安装完成后可卸载或移除</Description>

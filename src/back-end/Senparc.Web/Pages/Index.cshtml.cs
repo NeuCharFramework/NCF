@@ -23,17 +23,14 @@ namespace Senparc.Web.Pages
             RequestTenantInfo = requestTenantInfo;
         }
 
-        public async Task<IActionResult> OnGetAsync(string forceUpdateModule)
+        public Task<IActionResult> OnGetAsync(string forceUpdateModule)
         {
-
-
             //判断是否需要自动进入到安装程序
             if (base.FullSystemConfig == null)
             {
-
-                return new RedirectResult("/Install");
+                return Task.FromResult<IActionResult>(new RedirectResult("/Install"));
             }
-            return Page();
+            return Task.FromResult<IActionResult>(Page());
         }
     }
 

@@ -33,14 +33,14 @@ namespace Senparc.Web
         public JeffreyMpMessageHandler(Stream inputStream, PostModel postModel, int maxRecordCount = 0, bool onlyAllowEncryptMessage = false, DeveloperInfo developerInfo = null, IServiceProvider serviceProvider = null) : base(inputStream, postModel, maxRecordCount, onlyAllowEncryptMessage, developerInfo, serviceProvider)
         { 
         }
-        public override async Task<IResponseMessageBase> OnTextRequestAsync(RequestMessageText requestMessage)
+        public override Task<IResponseMessageBase> OnTextRequestAsync(RequestMessageText requestMessage)
         {
             var requestContent = requestMessage.Content;
             var responseMessage = this.CreateResponseMessage<ResponseMessageText>();
 
             responseMessage.Content = requestContent.Replace("?", "!").Replace("？", "！").Replace("吗", "");
 
-            return responseMessage;
+            return Task.FromResult<IResponseMessageBase>(responseMessage);
         }
 
 
