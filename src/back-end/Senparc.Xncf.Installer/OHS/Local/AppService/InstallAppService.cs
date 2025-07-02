@@ -54,9 +54,9 @@ namespace Senparc.Xncf.Installer.OHS.Local.AppService
             //重置租户状态
             var createdRequestTenantInfo = await _tenantInfoService.SetScopedRequestTenantInfoAsync(httpContext);
 
-            return await this.GetResponseAsync<AppResponseBase<TenantInfoDto>, TenantInfoDto>(async (response, logger) =>
+            return await this.GetResponseAsync<AppResponseBase<GetDefaultInstallOptionsResponseDto>, GetDefaultInstallOptionsResponseDto>(async (response, logger) =>
             {
-                return _tenantInfoService.Mapper.Map<TenantInfoDto>(await _tenantInfoService.GetObjectAsync(z => z.Id == createdRequestTenantInfo.Id));
+                return await Task.FromResult(_installerService.GetDefaultInstallOptions());
             });
         }
     }

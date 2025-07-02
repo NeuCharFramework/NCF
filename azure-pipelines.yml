@@ -17,7 +17,7 @@ variables:
     value: 'Release'
   - name: NUGET_PACKAGES
     value: $(Agent.ToolsDirectory)/nuget/packages
-  - name: version
+  - name: buildId
     value: '$(Build.BuildId)'
 
 jobs:
@@ -25,6 +25,60 @@ jobs:
   pool:
     name: 'SenparcOpenSource'
   steps:
+    # 🔧 设置版本号 (读取 PackageVersion + BuildId)
+    - task: PowerShell@2
+      displayName: 'Set Version from PackageVersion'
+      inputs:
+        targetType: 'inline'
+        script: |
+          # 读取 NCF.Template.csproj 中的 PackageVersion
+          $csprojPath = "src/NCF.Template.csproj"
+          
+          if (Test-Path $csprojPath) {
+              Write-Host "Reading PackageVersion from: $csprojPath"
+              [xml]$csproj = Get-Content $csprojPath
+              $packageVersion = $csproj.Project.PropertyGroup.PackageVersion
+              
+              if ($packageVersion) {
+                  Write-Host "Found PackageVersion: $packageVersion"
+                  $fullVersion = "v$packageVersion-build$(buildId)"
+                  Write-Host "Setting full version: $fullVersion"
+                  
+                  # 设置 pipeline 变量
+                  $fileVersion = "$packageVersion-build$(buildId)"  # 用于文件名，不含 'v' 前缀
+                  Write-Host "##vso[task.setvariable variable=version]$fullVersion"
+                  Write-Host "##vso[task.setvariable variable=fileVersion]$fileVersion"
+                  Write-Host "##vso[task.setvariable variable=packageVersion]$packageVersion"
+              } else {
+                  Write-Host "❌ PackageVersion not found in $csprojPath"
+                  # 备用方案：使用构建ID
+                  $fallbackVersion = "v1.0.0-build$(buildId)"
+                  $fallbackFileVersion = "1.0.0-build$(buildId)"
+                  Write-Host "Using fallback version: $fallbackVersion"
+                  Write-Host "##vso[task.setvariable variable=version]$fallbackVersion"
+                  Write-Host "##vso[task.setvariable variable=fileVersion]$fallbackFileVersion"
+                  Write-Host "##vso[task.setvariable variable=packageVersion]1.0.0"
+              }
+          } else {
+              Write-Host "❌ File not found: $csprojPath"
+              # 备用方案：使用构建ID
+              $fallbackVersion = "v1.0.0-build$(buildId)"
+              $fallbackFileVersion = "1.0.0-build$(buildId)"
+              Write-Host "Using fallback version: $fallbackVersion"
+              Write-Host "##vso[task.setvariable variable=version]$fallbackVersion"
+              Write-Host "##vso[task.setvariable variable=fileVersion]$fallbackFileVersion"
+              Write-Host "##vso[task.setvariable variable=packageVersion]1.0.0"
+          }
+          
+          # 显示最终设置的变量
+          Write-Host ""
+          Write-Host "=== Version Information ==="
+          Write-Host "Build ID: $(buildId)"
+          Write-Host "Package Version: $(packageVersion)"
+          Write-Host "Full Version Tag: $(version)"
+          Write-Host "File Version: $(fileVersion)"
+          Write-Host "=========================="
+
     # 🔧 验证 GitHub CLI
     - task: PowerShell@2
       displayName: 'Verify GitHub CLI'
@@ -241,21 +295,21 @@ jobs:
               
               # 压缩发布文件以减少asset数量
               Write-Host "Compressing release files..."
-              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/win-x64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-win-x64-$(version).zip" -Force
-              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/win-arm64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-win-arm64-$(version).zip" -Force
-              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/linux-x64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-linux-x64-$(version).zip" -Force
-              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/linux-arm64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-linux-arm64-$(version).zip" -Force
-              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/osx-x64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(version).zip" -Force
-              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/osx-arm64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-osx-arm64-$(version).zip" -Force
+              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/win-x64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-win-x64-$(fileVersion).zip" -Force
+              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/win-arm64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-win-arm64-$(fileVersion).zip" -Force
+              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/linux-x64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-linux-x64-$(fileVersion).zip" -Force
+              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/linux-arm64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-linux-arm64-$(fileVersion).zip" -Force
+              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/osx-x64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(fileVersion).zip" -Force
+              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/osx-arm64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-osx-arm64-$(fileVersion).zip" -Force
               
               # 验证文件存在
               $assetFiles = @(
-                  "$(Build.ArtifactStagingDirectory)/ncf-win-x64-$(version).zip",
-                  "$(Build.ArtifactStagingDirectory)/ncf-win-arm64-$(version).zip",
-                  "$(Build.ArtifactStagingDirectory)/ncf-linux-x64-$(version).zip",
-                  "$(Build.ArtifactStagingDirectory)/ncf-linux-arm64-$(version).zip",
-                  "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(version).zip",
-                  "$(Build.ArtifactStagingDirectory)/ncf-osx-arm64-$(version).zip"
+                  "$(Build.ArtifactStagingDirectory)/ncf-win-x64-$(fileVersion).zip",
+                  "$(Build.ArtifactStagingDirectory)/ncf-win-arm64-$(fileVersion).zip",
+                  "$(Build.ArtifactStagingDirectory)/ncf-linux-x64-$(fileVersion).zip",
+                  "$(Build.ArtifactStagingDirectory)/ncf-linux-arm64-$(fileVersion).zip",
+                  "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(fileVersion).zip",
+                  "$(Build.ArtifactStagingDirectory)/ncf-osx-arm64-$(fileVersion).zip"
               )
               
               foreach ($file in $assetFiles) {
@@ -271,6 +325,11 @@ jobs:
               $releaseNotes = @"
           ## 🚀 NCF Release $(version)
           
+          ### 📋 版本信息
+          - **Package Version**: $(packageVersion)
+          - **Build ID**: $(buildId)
+          - **Full Version**: $(version)
+          
           ### 📦 平台支持
           - **Windows x64** - 适用于传统 Windows 10/11 (Intel/AMD 64位)
           - **Windows ARM64** - 适用于 Surface Pro X, Surface Laptop 5/6 等 ARM 架构设备
@@ -281,12 +340,12 @@ jobs:
           
           ### 📋 使用指南
           **Windows 用户请注意**：
-          - 大部分 Windows 设备使用 \`ncf-win-x64-$(version).zip\`
-          - Surface Pro X 等 ARM 设备使用 \`ncf-win-arm64-$(version).zip\`
+          - 大部分 Windows 设备使用 \`ncf-win-x64-$(fileVersion).zip\`
+          - Surface Pro X 等 ARM 设备使用 \`ncf-win-arm64-$(fileVersion).zip\`
           
           **macOS 用户请注意**：
-          - M1/M2/M3/M4 Mac 用户推荐下载 \`ncf-osx-arm64-$(version).zip\` (原生性能更好)
-          - Intel Mac 用户下载 \`ncf-osx-x64-$(version).zip\`
+          - M1/M2/M3/M4 Mac 用户推荐下载 \`ncf-osx-arm64-$(fileVersion).zip\` (原生性能更好)
+          - Intel Mac 用户下载 \`ncf-osx-x64-$(fileVersion).zip\`
           - 解压后需要给予执行权限：\`chmod +x Senparc.Web\`
           
           ### 📅 构建信息
@@ -296,20 +355,22 @@ jobs:
           - 发布时间: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss UTC')
           
           ### 📋 变更
-          本版本为自动构建发布，详细变更请查看提交历史。
+          本版本基于 NCF Template v$(packageVersion)，详细变更请查看：
+          - [PackageReleaseNotes](https://github.com/NeuCharFramework/NCF/blob/master/src/NCF.Template.csproj)
+          - [提交历史](https://github.com/NeuCharFramework/NCF/commits/$(Build.SourceBranchName))
           "@
               
               Write-Host "Creating GitHub Release..."
-              gh release create "v$(version)" `
+              gh release create "$(version)" `
                   --target "$(Build.SourceVersion)" `
-                  --title "NCF Release v$(version)" `
+                  --title "NCF Release $(version)" `
                   --notes $releaseNotes `
-                  "$(Build.ArtifactStagingDirectory)/ncf-win-x64-$(version).zip" `
-                  "$(Build.ArtifactStagingDirectory)/ncf-win-arm64-$(version).zip" `
-                  "$(Build.ArtifactStagingDirectory)/ncf-linux-x64-$(version).zip" `
-                  "$(Build.ArtifactStagingDirectory)/ncf-linux-arm64-$(version).zip" `
-                  "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(version).zip" `
-                  "$(Build.ArtifactStagingDirectory)/ncf-osx-arm64-$(version).zip"
+                  "$(Build.ArtifactStagingDirectory)/ncf-win-x64-$(fileVersion).zip" `
+                  "$(Build.ArtifactStagingDirectory)/ncf-win-arm64-$(fileVersion).zip" `
+                  "$(Build.ArtifactStagingDirectory)/ncf-linux-x64-$(fileVersion).zip" `
+                  "$(Build.ArtifactStagingDirectory)/ncf-linux-arm64-$(fileVersion).zip" `
+                  "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(fileVersion).zip" `
+                  "$(Build.ArtifactStagingDirectory)/ncf-osx-arm64-$(fileVersion).zip"
                   
               Write-Host "✅ GitHub Release created successfully"
           } catch {
