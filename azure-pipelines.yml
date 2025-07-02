@@ -42,11 +42,12 @@ jobs:
           if (Test-Path $csprojPath) {
               Write-Host "Reading PackageVersion from: $csprojPath"
               [xml]$csproj = Get-Content $csprojPath
-              $packageVersionRaw = $csproj.Project.PropertyGroup.PackageVersion
               
-              # 安全地转换为字符串并清理
-              if ($packageVersionRaw -and $packageVersionRaw.ToString().Trim()) {
-                  $packageVersion = $packageVersionRaw.ToString().Trim()
+              # 使用 XPath 选择第一个 PackageVersion 节点，避免数组问题
+              $packageVersionNode = $csproj.SelectSingleNode("//PackageVersion")
+              
+              if ($packageVersionNode -and $packageVersionNode.InnerText) {
+                  $packageVersion = $packageVersionNode.InnerText.Trim()
                   Write-Host "Found PackageVersion: $packageVersion"
                   
                   # 构建版本字符串
@@ -54,6 +55,8 @@ jobs:
                   $fullVersion = "v$packageVersion-build$buildId"
                   $fileVersion = "$packageVersion-build$buildId"  # 用于文件名，不含 'v' 前缀
                   
+                  Write-Host "Debug: packageVersion = '$packageVersion'"
+                  Write-Host "Debug: buildId = '$buildId'"
                   Write-Host "Setting full version: $fullVersion"
                   Write-Host "Setting file version: $fileVersion"
                   
@@ -310,6 +313,12 @@ jobs:
         targetType: 'inline'
         script: |
           try {
+              Write-Host "=== GitHub Release Debug ==="
+              Write-Host "githubReleaseTag: $(githubReleaseTag)"
+              Write-Host "githubFileVersion: $(githubFileVersion)"
+              Write-Host "ncfPackageVersion: $(ncfPackageVersion)"
+              Write-Host "=========================="
+              
               Write-Host "Creating GitHub Release version $(githubReleaseTag)"
               
               # 确保 GitHub CLI 可用
