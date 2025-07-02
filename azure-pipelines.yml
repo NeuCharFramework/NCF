@@ -347,6 +347,23 @@ jobs:
                   }
               }
               
+              # 添加 macOS 启动脚本到发布包
+              Write-Host "Adding macOS startup script to release packages..."
+              if (Test-Path "start-ncf-macos.sh") {
+                  Copy-Item "start-ncf-macos.sh" -Destination "$(Build.ArtifactStagingDirectory)/osx-x64/start-ncf-macos.sh" -Force
+                  Copy-Item "start-ncf-macos.sh" -Destination "$(Build.ArtifactStagingDirectory)/osx-arm64/start-ncf-macos.sh" -Force
+                  Write-Host "✅ macOS startup script added to both macOS packages"
+              } else {
+                  Write-Host "⚠️  Warning: start-ncf-macos.sh not found in source directory"
+              }
+
+              # 添加 macOS 使用指南
+              if (Test-Path "MACOS_USAGE_GUIDE.md") {
+                  Copy-Item "MACOS_USAGE_GUIDE.md" -Destination "$(Build.ArtifactStagingDirectory)/osx-x64/MACOS_USAGE_GUIDE.md" -Force
+                  Copy-Item "MACOS_USAGE_GUIDE.md" -Destination "$(Build.ArtifactStagingDirectory)/osx-arm64/MACOS_USAGE_GUIDE.md" -Force
+                  Write-Host "✅ macOS usage guide added to both macOS packages"
+              }
+
               # 压缩发布文件以减少asset数量
               Write-Host "Compressing release files..."
               Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/win-x64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-win-x64-$(githubFileVersion).zip" -Force
@@ -400,7 +417,12 @@ jobs:
           **macOS 用户请注意**：
           - M1/M2/M3/M4 Mac 用户推荐下载 \`ncf-osx-arm64-$(githubFileVersion).zip\` (原生性能更好)
           - Intel Mac 用户下载 \`ncf-osx-x64-$(githubFileVersion).zip\`
-          - 解压后需要给予执行权限：\`chmod +x Senparc.Web\`
+          - **🆕 新功能**：包含自动化启动脚本 \`start-ncf-macos.sh\`
+            - 自动处理 macOS 安全权限问题
+            - 自动创建数据库目录
+            - 一键启动：\`./start-ncf-macos.sh\`
+          - 手动启动：解压后需要给予执行权限：\`chmod +x Senparc.Web\`
+          - 详细说明请查看 \`MACOS_USAGE_GUIDE.md\`
           
           ### 📅 构建信息
           - 构建号: $(Build.BuildNumber)
