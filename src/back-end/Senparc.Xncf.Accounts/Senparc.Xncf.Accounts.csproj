@@ -7,6 +7,8 @@
 		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
 		<GeneratePackageOnBuild Condition="'$(Configuration)'=='ModifyPublish'">true</GeneratePackageOnBuild>
 		<IsPackable>true</IsPackable>
+		<!-- 忽略稳定版本依赖预发布版本的警告 -->
+		<NoWarn>$(NoWarn);NU5104</NoWarn>
 		<Description>注册用户管理</Description>
 		<Copyright>Senparc</Copyright>
 		<PackageTags>Senparc,NeuCharFramework,NCF,Senparc.Xncf.Accounts</PackageTags>
