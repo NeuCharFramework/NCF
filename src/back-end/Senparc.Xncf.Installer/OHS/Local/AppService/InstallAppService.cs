@@ -40,9 +40,9 @@ namespace Senparc.Xncf.Installer.OHS.Local.AppService
 
         public async Task<AppResponseBase<GetDefaultInstallOptionsResponseDto>> GetInstallOptionsAsync()
         {
-            return await this.GetResponseAsync<AppResponseBase<GetDefaultInstallOptionsResponseDto>, GetDefaultInstallOptionsResponseDto>((response, logger) =>
+            return await this.GetResponseAsync<AppResponseBase<GetDefaultInstallOptionsResponseDto>, GetDefaultInstallOptionsResponseDto>(async (response, logger) =>
             {
-                return _installerService.GetDefaultInstallOptions();
+                return await Task.FromResult(_installerService.GetDefaultInstallOptions());
             });
         }
 
@@ -54,9 +54,9 @@ namespace Senparc.Xncf.Installer.OHS.Local.AppService
             //重置租户状态
             var createdRequestTenantInfo = await _tenantInfoService.SetScopedRequestTenantInfoAsync(httpContext);
 
-            return await this.GetResponseAsync<AppResponseBase<GetDefaultInstallOptionsResponseDto>, GetDefaultInstallOptionsResponseDto>(async (response, logger) =>
+            return await this.GetResponseAsync<AppResponseBase<TenantInfoDto>, TenantInfoDto>(async (response, logger) =>
             {
-                return await Task.FromResult(_installerService.GetDefaultInstallOptions());
+                return await Task.FromResult(tenantInfo);
             });
         }
     }
