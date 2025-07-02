@@ -40,9 +40,9 @@ namespace Senparc.Xncf.Installer.OHS.Local.AppService
 
         public async Task<AppResponseBase<GetDefaultInstallOptionsResponseDto>> GetInstallOptionsAsync()
         {
-            return await this.GetResponseAsync<AppResponseBase<GetDefaultInstallOptionsResponseDto>, GetDefaultInstallOptionsResponseDto>(async (response, logger) =>
+            return await this.GetResponseAsync<AppResponseBase<GetDefaultInstallOptionsResponseDto>, GetDefaultInstallOptionsResponseDto>((response, logger) =>
             {
-                return await Task.FromResult(_installerService.GetDefaultInstallOptions());
+                return _installerService.GetDefaultInstallOptions();
             });
         }
 
