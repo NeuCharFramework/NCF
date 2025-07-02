@@ -298,6 +298,7 @@ jobs:
           Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
           Write-Host "System.PullRequest.SourceBranch: $(System.PullRequest.SourceBranch)"
           Write-Host "System.PullRequest.PullRequestId: $(System.PullRequest.PullRequestId)"
+          Write-Host "System.PullRequest.PullRequestTitle: $(System.PullRequest.PullRequestTitle)"
           Write-Host "=============================="
 
     # 🚀 创建 GitHub Release (发布流程第2步：优先执行，在 Web 站点发布之前)
@@ -311,7 +312,23 @@ jobs:
               Write-Host "githubReleaseTag: $(githubReleaseTag)"
               Write-Host "githubFileVersion: $(githubFileVersion)"
               Write-Host "ncfPackageVersion: $(ncfPackageVersion)"
-              Write-Host "=========================="
+              Write-Host "=============================="
+              
+              # 检查PR标题是否包含[Release]（不区分大小写）
+              $prTitle = "$(System.PullRequest.PullRequestTitle)"
+              Write-Host "PR Title: '$prTitle'"
+              
+              if ([string]::IsNullOrEmpty($prTitle)) {
+                  Write-Host "⚠️  Warning: No PR title found (might not be a Pull Request build)"
+              } elseif ($prTitle -inotmatch '\[Release\]') {
+                  Write-Host "⏭️  Skipping GitHub Release: PR title does not contain [Release]"
+                  Write-Host "   Current title: '$prTitle'"
+                  Write-Host "   Required: PR title must contain [Release] (case insensitive)"
+                  Write-Host "   Examples: '[Release] v0.29.7', 'Fix bugs [Release]', '[RELEASE] New features'"
+                  return
+              } else {
+                  Write-Host "✅ PR title contains [Release] - proceeding with GitHub Release"
+              }
               
               Write-Host "Creating GitHub Release version $(githubReleaseTag)"
               
@@ -442,11 +459,17 @@ jobs:
           - 源分支: $(Build.SourceBranchName)
           - 提交: $(Build.SourceVersion)
           - 发布时间: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss UTC')
+          - PR 标题: $(System.PullRequest.PullRequestTitle)
           
           ### 📋 变更
           本版本基于 NCF Template v$(ncfPackageVersion)，详细变更请查看：
           - [PackageReleaseNotes](https://github.com/NeuCharFramework/NCF/blob/master/src/NCF.Template.csproj)
           - [提交历史](https://github.com/NeuCharFramework/NCF/commits/$(Build.SourceBranchName))
+          
+          ---
+          
+          > **📋 开发者提示**: 此Release通过包含 \`[Release]\` 标签的PR自动创建。
+          > 要创建新的Release，请确保PR标题包含 \`[Release]\` (不区分大小写)。
           "@
               
               Write-Host "Creating GitHub Release..."
@@ -470,6 +493,7 @@ jobs:
         GH_TOKEN: $(GH_TOKEN)
       # 只在 Pull Request 到 master 分支时创建 GitHub Release  
       # 支持: PullRequest 或 手动触发的 PR 构建 (IndividualCI)
+      # 额外要求: PR标题必须包含[Release]（不区分大小写）- 在脚本内部检查
       condition: and(succeeded(), or(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.Reason'], 'IndividualCI')))
 
     # ✅ 推送 NuGet 包 (发布流程第3步：在 GitHub Release 之后执行)
