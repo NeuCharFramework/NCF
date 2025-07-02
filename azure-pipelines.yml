@@ -99,14 +99,23 @@ jobs:
       inputs:
         targetType: 'inline'
         script: |
-          Write-Host "Publishing x86 platform"
-          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-x86 --output $(Build.ArtifactStagingDirectory)/x86
+          Write-Host "Publishing Windows x64 platform"
+          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-x64 --output $(Build.ArtifactStagingDirectory)/win-x64
 
-          Write-Host "Publishing ARM platform"
-          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime linux-arm --output $(Build.ArtifactStagingDirectory)/arm
+          Write-Host "Publishing Windows ARM64 platform (Surface Pro X, etc.)"
+          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-arm64 --output $(Build.ArtifactStagingDirectory)/win-arm64
 
-          Write-Host "Publishing macOS platform"
-          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-x64 --output $(Build.ArtifactStagingDirectory)/mac
+          Write-Host "Publishing Linux x64 platform"
+          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime linux-x64 --output $(Build.ArtifactStagingDirectory)/linux-x64
+
+          Write-Host "Publishing Linux ARM64 platform"
+          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime linux-arm64 --output $(Build.ArtifactStagingDirectory)/linux-arm64
+
+          Write-Host "Publishing macOS x64 platform (Intel/Rosetta)"
+          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-x64 --output $(Build.ArtifactStagingDirectory)/osx-x64
+
+          Write-Host "Publishing macOS ARM64 platform (Apple Silicon)"
+          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-arm64 --output $(Build.ArtifactStagingDirectory)/osx-arm64
 
     # 🟢 缓存 NuGet 及依赖项
     - task: Cache@2
@@ -232,15 +241,21 @@ jobs:
               
               # 压缩发布文件以减少asset数量
               Write-Host "Compressing release files..."
-              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/x86/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-win-x86-$(version).zip" -Force
-              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/arm/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-linux-arm-$(version).zip" -Force  
-              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/mac/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(version).zip" -Force
+              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/win-x64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-win-x64-$(version).zip" -Force
+              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/win-arm64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-win-arm64-$(version).zip" -Force
+              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/linux-x64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-linux-x64-$(version).zip" -Force
+              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/linux-arm64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-linux-arm64-$(version).zip" -Force
+              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/osx-x64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(version).zip" -Force
+              Compress-Archive -Path "$(Build.ArtifactStagingDirectory)/osx-arm64/*" -DestinationPath "$(Build.ArtifactStagingDirectory)/ncf-osx-arm64-$(version).zip" -Force
               
               # 验证文件存在
               $assetFiles = @(
-                  "$(Build.ArtifactStagingDirectory)/ncf-win-x86-$(version).zip",
-                  "$(Build.ArtifactStagingDirectory)/ncf-linux-arm-$(version).zip",
-                  "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(version).zip"
+                  "$(Build.ArtifactStagingDirectory)/ncf-win-x64-$(version).zip",
+                  "$(Build.ArtifactStagingDirectory)/ncf-win-arm64-$(version).zip",
+                  "$(Build.ArtifactStagingDirectory)/ncf-linux-x64-$(version).zip",
+                  "$(Build.ArtifactStagingDirectory)/ncf-linux-arm64-$(version).zip",
+                  "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(version).zip",
+                  "$(Build.ArtifactStagingDirectory)/ncf-osx-arm64-$(version).zip"
               )
               
               foreach ($file in $assetFiles) {
@@ -257,9 +272,22 @@ jobs:
           ## 🚀 NCF Release $(version)
           
           ### 📦 平台支持
-          - Windows x86
-          - Linux ARM
-          - macOS x64
+          - **Windows x64** - 适用于传统 Windows 10/11 (Intel/AMD 64位)
+          - **Windows ARM64** - 适用于 Surface Pro X, Surface Laptop 5/6 等 ARM 架构设备
+          - **Linux x64** - 适用于 Linux (Intel/AMD 64位)
+          - **Linux ARM64** - 适用于 Linux (ARM64，如树莓派4+)
+          - **macOS x64** - 适用于 Intel Mac 或 Apple Silicon Mac (通过 Rosetta 2)
+          - **macOS ARM64** - 适用于 Apple Silicon Mac (M1/M2/M3/M4 原生)
+          
+          ### 📋 使用指南
+          **Windows 用户请注意**：
+          - 大部分 Windows 设备使用 \`ncf-win-x64-$(version).zip\`
+          - Surface Pro X 等 ARM 设备使用 \`ncf-win-arm64-$(version).zip\`
+          
+          **macOS 用户请注意**：
+          - M1/M2/M3/M4 Mac 用户推荐下载 \`ncf-osx-arm64-$(version).zip\` (原生性能更好)
+          - Intel Mac 用户下载 \`ncf-osx-x64-$(version).zip\`
+          - 解压后需要给予执行权限：\`chmod +x Senparc.Web\`
           
           ### 📅 构建信息
           - 构建号: $(Build.BuildNumber)
@@ -276,9 +304,12 @@ jobs:
                   --target "$(Build.SourceVersion)" `
                   --title "NCF Release v$(version)" `
                   --notes $releaseNotes `
-                  "$(Build.ArtifactStagingDirectory)/ncf-win-x86-$(version).zip" `
-                  "$(Build.ArtifactStagingDirectory)/ncf-linux-arm-$(version).zip" `
-                  "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(version).zip"
+                  "$(Build.ArtifactStagingDirectory)/ncf-win-x64-$(version).zip" `
+                  "$(Build.ArtifactStagingDirectory)/ncf-win-arm64-$(version).zip" `
+                  "$(Build.ArtifactStagingDirectory)/ncf-linux-x64-$(version).zip" `
+                  "$(Build.ArtifactStagingDirectory)/ncf-linux-arm64-$(version).zip" `
+                  "$(Build.ArtifactStagingDirectory)/ncf-osx-x64-$(version).zip" `
+                  "$(Build.ArtifactStagingDirectory)/ncf-osx-arm64-$(version).zip"
                   
               Write-Host "✅ GitHub Release created successfully"
           } catch {
