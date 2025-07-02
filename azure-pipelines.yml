@@ -289,6 +289,20 @@ jobs:
       continueOnError: true
       condition: succeededOrFailed()
 
+    # 🔍 调试构建信息
+    - task: PowerShell@2
+      displayName: 'Debug Build Information'
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "=== Build Debug Information ==="
+          Write-Host "Build.Reason: $(Build.Reason)"
+          Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
+          Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
+          Write-Host "System.PullRequest.SourceBranch: $(System.PullRequest.SourceBranch)"
+          Write-Host "System.PullRequest.PullRequestId: $(System.PullRequest.PullRequestId)"
+          Write-Host "=============================="
+
     # 🚀 创建 GitHub Release
     - task: PowerShell@2
       displayName: 'Create GitHub Release'
@@ -416,8 +430,9 @@ jobs:
           }
       env:
         GH_TOKEN: $(GH_TOKEN)
-      # 只在 Pull Request 到 master 分支时创建 GitHub Release
-      condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/master'))
+      # 只在 Pull Request 到 master 分支时创建 GitHub Release  
+      # 支持: PullRequest 或 手动触发的 PR 构建 (IndividualCI)
+      condition: and(succeeded(), or(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.Reason'], 'IndividualCI')))
 
     # ✅ 发布构建产物
     - task: PublishBuildArtifacts@1
