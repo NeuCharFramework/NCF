@@ -1,4 +1,9 @@
+# 触发器：只在推送到 master 分支时自动构建
 trigger:
+- master
+
+# PR 触发：只有 PR 到 master 分支时才构建和创建 GitHub Release
+pr:
 - master
 
 # 使用自托管代理池，加快 CI/CD 速度
@@ -411,7 +416,8 @@ jobs:
           }
       env:
         GH_TOKEN: $(GH_TOKEN)
-      condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+      # 只在 Pull Request 到 master 分支时创建 GitHub Release
+      condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/master'))
 
     # ✅ 发布构建产物
     - task: PublishBuildArtifacts@1
