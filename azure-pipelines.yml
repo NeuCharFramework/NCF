@@ -187,9 +187,14 @@ jobs:
           # 验证 GitHub 认证
           gh auth status
 
-    # ✅ 发布到不同平台
+    # ===================================================================
+    # 🚀 发布流程开始 (优先级顺序执行)
+    # 1️⃣ 多平台构建 → 2️⃣ GitHub Release → 3️⃣ NuGet 发布 → 4️⃣ Web 站点发布
+    # ===================================================================
+
+    # ✅ 多平台构建 (为 GitHub Release 准备构建产物)
     - task: PowerShell@2
-      displayName: 'Publish to Multiple Platforms'
+      displayName: '🔨 Build Multiple Platforms (Prepare for Release)'
       inputs:
         targetType: 'inline'
         script: |
@@ -281,17 +286,6 @@ jobs:
         platform: 'Any CPU'
         configuration: '$(buildConfiguration)'
 
-    # ✅ 推送 NuGet 包（支持失败继续）
-    - task: NuGetCommand@2
-      displayName: Senparc.Ncf.Template
-      inputs:
-        command: push
-        packagesToPush: '**/Senparc.NCF.Template.*.nupkg'
-        nuGetFeedType: external
-        publishFeedCredentials: 'nuget-jeffrey-full-key'
-      continueOnError: true
-      condition: succeededOrFailed()
-
     # 🔍 调试构建信息
     - task: PowerShell@2
       displayName: 'Debug Build Information'
@@ -306,9 +300,9 @@ jobs:
           Write-Host "System.PullRequest.PullRequestId: $(System.PullRequest.PullRequestId)"
           Write-Host "=============================="
 
-    # 🚀 创建 GitHub Release
+    # 🚀 创建 GitHub Release (发布流程第2步：优先执行，在 Web 站点发布之前)
     - task: PowerShell@2
-      displayName: 'Create GitHub Release'
+      displayName: '🚀 Create GitHub Release (Priority Step)'
       inputs:
         targetType: 'inline'
         script: |
@@ -443,8 +437,20 @@ jobs:
       # 支持: PullRequest 或 手动触发的 PR 构建 (IndividualCI)
       condition: and(succeeded(), or(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.Reason'], 'IndividualCI')))
 
-    # ✅ 发布构建产物
+    # ✅ 推送 NuGet 包 (发布流程第3步：在 GitHub Release 之后执行)
+    - task: NuGetCommand@2
+      displayName: '📦 Push NuGet Package (Step 3)'
+      inputs:
+        command: push
+        packagesToPush: '**/Senparc.NCF.Template.*.nupkg'
+        nuGetFeedType: external
+        publishFeedCredentials: 'nuget-jeffrey-full-key'
+      continueOnError: true
+      condition: succeededOrFailed()
+
+    # ✅ 发布构建产物 (发布流程第4步：Web 站点发布 - 最终步骤)
     - task: PublishBuildArtifacts@1
+      displayName: '🌐 Publish Web Artifacts (Step 4 - Final)'
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'sample'
