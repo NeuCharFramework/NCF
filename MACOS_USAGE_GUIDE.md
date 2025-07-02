@@ -69,27 +69,36 @@ dotnet --version
 
 #### 方法1：使用自动化脚本（推荐）
 
-1. 将 `start-ncf-macos.sh` 脚本复制到你的 NCF 应用目录
+1. 脚本文件已包含在发布包中，位于应用根目录
 2. 在终端中运行：
 
 ```bash
-cd ncf-macos-x64-v*    # 或 ncf-macos-arm64-v*
+cd "ncf-macos-x64-v*"    # 或 "ncf-macos-arm64-v*"（注意引号处理空格）
+
+# 给脚本添加执行权限
 chmod +x start-ncf-macos.sh
+
+# 运行脚本（注意：macOS 使用 ./ 不是 .\）
 ./start-ncf-macos.sh
 ```
 
 **脚本会自动：**
+- ✅ 设置正确的字符编码（避免乱码）
 - ✅ 移除 macOS 隔离属性
 - ✅ 创建数据库目录
 - ✅ 检查 .NET 运行时
 - ✅ 设置最佳环境变量
 - ✅ 启动应用
 
+> **注意1**：从 v0.29.7+ 版本开始，脚本文件已在CI/CD中自动转换为正确的Unix格式，不会再出现 `bad interpreter` 或行结束符问题。
+> 
+> **注意2**：脚本输出已改为英文，避免终端中文乱码问题。
+
 #### 方法2：手动启动
 
 ##### Intel Mac (x64)
 ```bash
-cd ncf-macos-x64-v*
+cd "ncf-macos-x64-v*"
 
 # 首次运行前，移除隔离属性（避免安全警告）
 sudo xattr -rd com.apple.quarantine .
@@ -100,7 +109,7 @@ dotnet Senparc.Web.dll
 
 ##### Apple Silicon Mac (ARM64)
 ```bash
-cd ncf-macos-arm64-v*
+cd "ncf-macos-arm64-v*"
 
 # 首次运行前，移除隔离属性（避免安全警告）
 sudo xattr -rd com.apple.quarantine .
@@ -138,6 +147,50 @@ tail -f App_Data/SenparcTraceLog/*.log
    - 支持 Intel 和 Apple Silicon 处理器
 
 ### 🆘 故障排除
+
+#### 问题：脚本执行错误 (`bad interpreter`)
+如果遇到 `./start-ncf-macos.sh: bad interpreter: /bin/bash^M: no such file or directory` 错误：
+
+```bash
+# 这是行结束符问题，转换文件格式
+sed -i '' 's/\r$//' start-ncf-macos.sh
+
+# 然后重新运行
+./start-ncf-macos.sh
+```
+
+> **注意**：v0.29.7+ 版本的官方发布包已修复此问题，仅在使用旧版本或自定义构建时可能遇到。
+
+#### 问题：终端中文显示乱码
+如果启动脚本显示乱码（如：`ðŸŽ NCF macOS å¯åŠåè„šæœ¬`），这是字符编码问题：
+
+**解决方案1：设置终端编码（推荐）**
+```bash
+# 临时设置 UTF-8 编码
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# 然后运行脚本
+./start-ncf-macos.sh
+```
+
+**解决方案2：永久设置编码**
+```bash
+# 添加到你的 shell 配置文件 (.zshrc 或 .bash_profile)
+echo 'export LC_ALL=en_US.UTF-8' >> ~/.zshrc
+echo 'export LANG=en_US.UTF-8' >> ~/.zshrc
+
+# 重新加载配置
+source ~/.zshrc
+```
+
+**解决方案3：终端应用设置**
+1. 打开 **终端** → **偏好设置** → **描述文件**
+2. 选择当前使用的描述文件
+3. 点击 **高级** 标签
+4. 确保 **字符编码** 设置为 **UTF-8**
+
+> **注意**：从较新版本开始，启动脚本已改为英文输出，避免中文乱码问题。
 
 #### 问题：应用无法启动
 ```bash
