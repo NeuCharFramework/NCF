@@ -89,6 +89,8 @@ chmod +x start-ncf-macos.sh
 - ✅ 设置最佳环境变量
 - ✅ 启动应用
 
+> **注意**：从 v0.29.7+ 版本开始，脚本文件已在CI/CD中自动转换为正确的Unix格式，不会再出现 `bad interpreter` 或行结束符问题。
+
 #### 方法2：手动启动
 
 ##### Intel Mac (x64)
@@ -142,6 +144,19 @@ tail -f App_Data/SenparcTraceLog/*.log
    - 支持 Intel 和 Apple Silicon 处理器
 
 ### 🆘 故障排除
+
+#### 问题：脚本执行错误 (`bad interpreter`)
+如果遇到 `./start-ncf-macos.sh: bad interpreter: /bin/bash^M: no such file or directory` 错误：
+
+```bash
+# 这是行结束符问题，转换文件格式
+sed -i '' 's/\r$//' start-ncf-macos.sh
+
+# 然后重新运行
+./start-ncf-macos.sh
+```
+
+> **注意**：v0.29.7+ 版本的官方发布包已修复此问题，仅在使用旧版本或自定义构建时可能遇到。
 
 #### 问题：应用无法启动
 ```bash
