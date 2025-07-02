@@ -21,7 +21,9 @@ XNCF 模块模板：[![Senparc.Xncf.XncfBuilder.Template](https://img.shields.io
 > 2. 源码中已经附带文档模块，运行 NCF 并安装即可。
 
 
-<center><img src="https://weixin.senparc.com/images/NCF/login.jpg" /></center>
+<center>
+  ![image](https://github.com/user-attachments/assets/9481aa19-7151-4b23-8ae9-435f2aa83d07) 
+ </center>
 
 > 当前快速更新分支：[Developer](https://github.com/NeuCharFramework/NCF/tree/Developer)
 
@@ -41,7 +43,7 @@ XNCF 模块模板：[![Senparc.Xncf.XncfBuilder.Template](https://img.shields.io
 
 ## QQ 技术交流群
 
-<img src="https://sdk.weixin.senparc.com/images/QQ_Group_Avatar/NCF/QQ-Group.jpg" width="380" />
+<img src="[https://sdk.weixin.senparc.com/images/QQ_Group_Avatar/NCF/QQ-Group.jpg](https://github.com/user-attachments/assets/e3a3bcb7-efde-4e13-86aa-b39c42e75a7d)" width="380" />
 
 ## 环境要求
 
