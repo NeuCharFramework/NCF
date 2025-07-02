@@ -37,15 +37,17 @@ jobs:
           if (Test-Path $csprojPath) {
               Write-Host "Reading PackageVersion from: $csprojPath"
               [xml]$csproj = Get-Content $csprojPath
-              $packageVersion = $csproj.Project.PropertyGroup.PackageVersion
+              $packageVersionRaw = $csproj.Project.PropertyGroup.PackageVersion
               
-              if ($packageVersion) {
+              # 安全地转换为字符串并清理
+              if ($packageVersionRaw -and $packageVersionRaw.ToString().Trim()) {
+                  $packageVersion = $packageVersionRaw.ToString().Trim()
                   Write-Host "Found PackageVersion: $packageVersion"
-                  # 确保没有空格，使用 Trim() 清理
-                  $cleanPackageVersion = $packageVersion.Trim()
-                  $cleanBuildId = "$(buildId)".Trim()
-                  $fullVersion = "v$cleanPackageVersion-build$cleanBuildId"
-                  $fileVersion = "$cleanPackageVersion-build$cleanBuildId"  # 用于文件名，不含 'v' 前缀
+                  
+                  # 构建版本字符串
+                  $buildId = "$(buildId)".Trim()
+                  $fullVersion = "v$packageVersion-build$buildId"
+                  $fileVersion = "$packageVersion-build$buildId"  # 用于文件名，不含 'v' 前缀
                   
                   Write-Host "Setting full version: $fullVersion"
                   Write-Host "Setting file version: $fileVersion"
@@ -58,7 +60,7 @@ jobs:
                   # 显示版本信息
                   Write-Host ""
                   Write-Host "=== Version Information ==="
-                  Write-Host "Build ID: $(buildId)"
+                  Write-Host "Build ID: $buildId"
                   Write-Host "Package Version: $packageVersion"
                   Write-Host "Full Version Tag: $fullVersion"
                   Write-Host "File Version: $fileVersion"
@@ -66,9 +68,9 @@ jobs:
               } else {
                   Write-Host "❌ PackageVersion not found in $csprojPath"
                   # 备用方案：使用构建ID
-                  $cleanBuildId = "$(buildId)".Trim()
-                  $fallbackVersion = "v1.0.0-build$cleanBuildId"
-                  $fallbackFileVersion = "1.0.0-build$cleanBuildId"
+                  $buildId = "$(buildId)".Trim()
+                  $fallbackVersion = "v1.0.0-build$buildId"
+                  $fallbackFileVersion = "1.0.0-build$buildId"
                   $fallbackPackageVersion = "1.0.0"
                   
                   Write-Host "Using fallback version: $fallbackVersion"
@@ -79,7 +81,7 @@ jobs:
                   # 显示版本信息
                   Write-Host ""
                   Write-Host "=== Version Information (Fallback) ==="
-                  Write-Host "Build ID: $(buildId)"
+                  Write-Host "Build ID: $buildId"
                   Write-Host "Package Version: $fallbackPackageVersion"
                   Write-Host "Full Version Tag: $fallbackVersion"
                   Write-Host "File Version: $fallbackFileVersion"
@@ -88,9 +90,9 @@ jobs:
           } else {
               Write-Host "❌ File not found: $csprojPath"
               # 备用方案：使用构建ID
-              $cleanBuildId = "$(buildId)".Trim()
-              $fallbackVersion = "v1.0.0-build$cleanBuildId"
-              $fallbackFileVersion = "1.0.0-build$cleanBuildId"
+              $buildId = "$(buildId)".Trim()
+              $fallbackVersion = "v1.0.0-build$buildId"
+              $fallbackFileVersion = "1.0.0-build$buildId"
               $fallbackPackageVersion = "1.0.0"
               
               Write-Host "Using fallback version: $fallbackVersion"
@@ -101,7 +103,7 @@ jobs:
               # 显示版本信息
               Write-Host ""
               Write-Host "=== Version Information (File Not Found) ==="
-              Write-Host "Build ID: $(buildId)"
+              Write-Host "Build ID: $buildId"
               Write-Host "Package Version: $fallbackPackageVersion"
               Write-Host "Full Version Tag: $fallbackVersion"
               Write-Host "File Version: $fallbackFileVersion"
