@@ -74,7 +74,11 @@ dotnet --version
 
 ```bash
 cd ncf-macos-x64-v*    # 或 ncf-macos-arm64-v*
+
+# 给脚本添加执行权限
 chmod +x start-ncf-macos.sh
+
+# 运行脚本（注意：macOS 使用 ./ 不是 .\）
 ./start-ncf-macos.sh
 ```
 
