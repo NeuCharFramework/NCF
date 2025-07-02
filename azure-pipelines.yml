@@ -42,42 +42,67 @@ jobs:
               if ($packageVersion) {
                   Write-Host "Found PackageVersion: $packageVersion"
                   $fullVersion = "v$packageVersion-build$(buildId)"
+                  $fileVersion = "$packageVersion-build$(buildId)"  # 用于文件名，不含 'v' 前缀
+                  
                   Write-Host "Setting full version: $fullVersion"
+                  Write-Host "Setting file version: $fileVersion"
                   
                   # 设置 pipeline 变量
-                  $fileVersion = "$packageVersion-build$(buildId)"  # 用于文件名，不含 'v' 前缀
                   Write-Host "##vso[task.setvariable variable=version]$fullVersion"
                   Write-Host "##vso[task.setvariable variable=fileVersion]$fileVersion"
                   Write-Host "##vso[task.setvariable variable=packageVersion]$packageVersion"
+                  
+                  # 显示版本信息
+                  Write-Host ""
+                  Write-Host "=== Version Information ==="
+                  Write-Host "Build ID: $(buildId)"
+                  Write-Host "Package Version: $packageVersion"
+                  Write-Host "Full Version Tag: $fullVersion"
+                  Write-Host "File Version: $fileVersion"
+                  Write-Host "=========================="
               } else {
                   Write-Host "❌ PackageVersion not found in $csprojPath"
                   # 备用方案：使用构建ID
                   $fallbackVersion = "v1.0.0-build$(buildId)"
                   $fallbackFileVersion = "1.0.0-build$(buildId)"
+                  $fallbackPackageVersion = "1.0.0"
+                  
                   Write-Host "Using fallback version: $fallbackVersion"
                   Write-Host "##vso[task.setvariable variable=version]$fallbackVersion"
                   Write-Host "##vso[task.setvariable variable=fileVersion]$fallbackFileVersion"
-                  Write-Host "##vso[task.setvariable variable=packageVersion]1.0.0"
+                  Write-Host "##vso[task.setvariable variable=packageVersion]$fallbackPackageVersion"
+                  
+                  # 显示版本信息
+                  Write-Host ""
+                  Write-Host "=== Version Information (Fallback) ==="
+                  Write-Host "Build ID: $(buildId)"
+                  Write-Host "Package Version: $fallbackPackageVersion"
+                  Write-Host "Full Version Tag: $fallbackVersion"
+                  Write-Host "File Version: $fallbackFileVersion"
+                  Write-Host "=========================="
               }
           } else {
               Write-Host "❌ File not found: $csprojPath"
               # 备用方案：使用构建ID
               $fallbackVersion = "v1.0.0-build$(buildId)"
               $fallbackFileVersion = "1.0.0-build$(buildId)"
+              $fallbackPackageVersion = "1.0.0"
+              
               Write-Host "Using fallback version: $fallbackVersion"
               Write-Host "##vso[task.setvariable variable=version]$fallbackVersion"
               Write-Host "##vso[task.setvariable variable=fileVersion]$fallbackFileVersion"
-              Write-Host "##vso[task.setvariable variable=packageVersion]1.0.0"
+              Write-Host "##vso[task.setvariable variable=packageVersion]$fallbackPackageVersion"
+              
+              # 显示版本信息
+              Write-Host ""
+              Write-Host "=== Version Information (File Not Found) ==="
+              Write-Host "Build ID: $(buildId)"
+              Write-Host "Package Version: $fallbackPackageVersion"
+              Write-Host "Full Version Tag: $fallbackVersion"
+              Write-Host "File Version: $fallbackFileVersion"
+              Write-Host "=========================="
           }
-          
-          # 显示最终设置的变量
-          Write-Host ""
-          Write-Host "=== Version Information ==="
-          Write-Host "Build ID: $(buildId)"
-          Write-Host "Package Version: $(packageVersion)"
-          Write-Host "Full Version Tag: $(version)"
-          Write-Host "File Version: $(fileVersion)"
-          Write-Host "=========================="
+
 
     # 🔧 验证 GitHub CLI
     - task: PowerShell@2
