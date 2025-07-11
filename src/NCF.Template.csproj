@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.30.0</PackageVersion>
+		<PackageVersion>0.30.1</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -95,6 +95,7 @@
 			v0.29.6 更新 WeixinManager 模板
 			v0.29.7 更新 XncfBuilder，升级 MCP
 			v0.30.0 增加 CI/CD 自动发布功能；升级 MCP
+			v0.30.1 更新 WeixinManager 库
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
