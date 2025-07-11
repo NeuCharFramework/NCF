@@ -2,21 +2,16 @@
 
 ## 🍎 NCF 在 macOS 上的快速启动
 
-### 三步启动流程
+### 两步启动流程
 
 下载并解压 NCF 发布（如：`ncf-macos-x64-v0.29.7.zip`）包后，在终端中执行以下三个命令：
 
-#### 第一步：移除 MacOS 安全限制
-```bash
-sudo xattr -rd com.apple.quarantine .
-```
-
-#### 第二步：给启动脚本添加执行权限
+#### 第一步：给启动脚本添加执行权限
 ```bash
 chmod +x start-ncf-macos.sh
 ```
 
-#### 第三步：运行启动脚本
+#### 第二步：运行启动脚本
 ```bash
 ./start-ncf-macos.sh
 ```
@@ -46,7 +41,7 @@ Press Ctrl+C to stop the application
 
 打开浏览器访问：
 - **HTTP**: http://localhost:5000（默认启动） 
-- **HTTPS**: https://localhost:5001 
+- **HTTPS**: https://localhost:5001（默认不启动） 
 
 ### 停止应用
 
