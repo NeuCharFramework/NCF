@@ -22,6 +22,11 @@ namespace Senparc.Web
 
         }
 
+        protected override Action RunBot(IServiceProvider services, RequestMessageText requestMessage)
+        {
+            return base.RunBot(services, requestMessage);
+        }
+
         public override async Task<IResponseMessageBase> OnVoiceRequestAsync(RequestMessageVoice requestMessage)
         {
             var content = requestMessage.Recognition;
