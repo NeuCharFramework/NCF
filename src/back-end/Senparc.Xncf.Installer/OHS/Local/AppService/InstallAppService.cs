@@ -42,7 +42,7 @@ namespace Senparc.Xncf.Installer.OHS.Local.AppService
         {
             return await this.GetResponseAsync<AppResponseBase<GetDefaultInstallOptionsResponseDto>, GetDefaultInstallOptionsResponseDto>(async (response, logger) =>
             {
-                return await Task.FromResult(_installerService.GetDefaultInstallOptions());
+                return  _installerService.GetDefaultInstallOptions();
             });
         }
 
@@ -56,7 +56,7 @@ namespace Senparc.Xncf.Installer.OHS.Local.AppService
 
             return await this.GetResponseAsync<AppResponseBase<TenantInfoDto>, TenantInfoDto>(async (response, logger) =>
             {
-                return await Task.FromResult(tenantInfo);
+                return _tenantInfoService.Mapper.Map<TenantInfoDto>(await _tenantInfoService.GetObjectAsync(z => z.Id == createdRequestTenantInfo.Id));
             });
         }
     }
