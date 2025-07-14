@@ -354,103 +354,66 @@ jobs:
           # 验证 GitHub 认证
           gh auth status
 
-    # ===================================================================
-    # 🚀 发布流程开始 (优化顺序：先检查Release条件，再构建)
-    # 1️⃣ Release条件检查 → 2️⃣ 多平台构建 → 3️⃣ GitHub Release → 4️⃣ NuGet 发布 → 5️⃣ Web 站点发布
-    # ===================================================================
+          # ===================================================================
+      # 🚀 发布流程开始 (简化逻辑：所有检查在Release步骤内部完成)
+      # 1️⃣ 构建信息预览 → 2️⃣ 多平台构建 → 3️⃣ GitHub Release (内置条件检查) → 4️⃣ NuGet 发布 → 5️⃣ Web 站点发布
+      # ===================================================================
 
-    # 🔍 提前检查Release条件 (避免不必要的构建)
+        # 🔍 构建信息预览 (快速了解构建上下文)
     - task: PowerShell@2
-      name: 'ReleaseCheck'
-      displayName: '🔍 Pre-check Release Conditions (Early Gate)'
+      name: 'BuildInfo'
+      displayName: '🔍 Build Information Preview'
       inputs:
         targetType: 'inline'
         script: |
           Write-Host "========================================"
-          Write-Host "🔍 EARLY RELEASE CONDITIONS CHECK"
+          Write-Host "🔍 BUILD INFORMATION PREVIEW"
           Write-Host "========================================"
           Write-Host ""
-          Write-Host "📋 目标：提前验证Release条件，避免不必要的构建"
-          Write-Host ""
           
-          # 初始化变量
+          # 显示基本构建信息
           $buildReason = $env:BUILD_REASON
           $buildRequestedFor = $env:BUILD_REQUESTEDFOR
           $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
-          $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
           
-          Write-Host "=== 用户权限检查 ==="
+          Write-Host "=== Build Context ==="
+          Write-Host "Build.Reason: $buildReason"
           Write-Host "Build.RequestedFor: '$buildRequestedFor'"
           Write-Host "Build.SourceVersionAuthor: '$sourceVersionAuthor'"
-          Write-Host "Is Authorized User: $isAuthorizedUser"
+          Write-Host "Build.SourceBranch: $env:BUILD_SOURCEBRANCH"
+          Write-Host ""
           
-          if (-not $isAuthorizedUser) {
-              Write-Host ""
-              Write-Host "❌ EARLY GATE DECISION: 用户权限不足"
-              Write-Host "   当前用户: '$buildRequestedFor' / '$sourceVersionAuthor'"
-              Write-Host "   要求用户: 'JeffreySu'"
-              Write-Host ""
-                             Write-Host "⏭️  允许继续构建，但跳过Release创建"
-               Write-Host "   Note: 构建产物仍会生成，但不会创建GitHub Release"
-               Write-Host "##vso[task.setvariable variable=shouldCreateRelease;isOutput=true]false"
-               Write-Host "##vso[task.setvariable variable=skipReleaseReason;isOutput=true]用户权限不足"
+          # 显示Release相关信息（仅供参考）
+          Write-Host "=== Release Information Preview ==="
+          $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
+          Write-Host "Is Authorized for Release: $isAuthorizedUser"
+          
+          if ($buildReason -eq "PullRequest") {
+              $releaseKeyword = $env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE
+              Write-Host "PR Title: '$releaseKeyword'"
           } else {
-              Write-Host ""
-              Write-Host "✅ 用户权限检查通过"
-              
-              # 检查Release关键字
-              if ($buildReason -eq "PullRequest") {
-                  $releaseKeyword = $env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE
-                  $releaseKeywordSource = "PR标题"
-              } else {
-                  try {
-                      $releaseKeyword = git log -1 --pretty=format:"%s"
-                      $releaseKeywordSource = "Commit Message"
-                  } catch {
-                      $releaseKeyword = ""
-                      $releaseKeywordSource = "Commit Message"
-                  }
-              }
-              
-              Write-Host ""
-              Write-Host "=== Release关键字检查 ==="
-              Write-Host "${releaseKeywordSource}: '$releaseKeyword'"
-              
-              if ([string]::IsNullOrEmpty($releaseKeyword)) {
-                                     Write-Host "⚠️  WARNING: 无法获取${releaseKeywordSource}"
-                   Write-Host "##vso[task.setvariable variable=shouldCreateRelease;isOutput=true]true"
-                   Write-Host "##vso[task.setvariable variable=skipReleaseReason;isOutput=true]手动验证需要"
-                   Write-Host "   将在后续步骤中尝试更详细的检查"
-              } elseif (-not ($releaseKeyword.ToLower().Contains("[release]"))) {
-                  Write-Host ""
-                  Write-Host "❌ EARLY GATE DECISION: ${releaseKeywordSource}不包含[Release]关键字"
-                  Write-Host "   Current ${releaseKeywordSource}: '$releaseKeyword'"
-                  Write-Host "   Required: 必须包含 '[Release]' (不区分大小写)"
-                  Write-Host "   Examples: '[Release] v1.0', 'Bug fixes [RELEASE]', '[release] New features'"
-                  Write-Host ""
-                                     Write-Host "⏭️  允许继续构建，但跳过Release创建"
-                   Write-Host "   Note: 构建产物仍会生成，但不会创建GitHub Release"
-                   Write-Host "##vso[task.setvariable variable=shouldCreateRelease;isOutput=true]false"
-                   Write-Host "##vso[task.setvariable variable=skipReleaseReason;isOutput=true]缺少[Release]关键字"
-              } else {
-                  Write-Host ""
-                  Write-Host "🎉 EARLY GATE PASSED: 所有Release条件满足"
-                  Write-Host "   ✅ 用户权限: JeffreySu"
-                  Write-Host "   ✅ Release关键字: 包含[Release]"
-                  Write-Host "   ✅ 构建类型: $buildReason"
-                  Write-Host ""
-                                     Write-Host "🚀 将进行完整构建并创建GitHub Release"
-                   Write-Host "##vso[task.setvariable variable=shouldCreateRelease;isOutput=true]true"
-                   Write-Host "##vso[task.setvariable variable=skipReleaseReason;isOutput=true]"
+              try {
+                  $releaseKeyword = git log -1 --pretty=format:"%s"
+                  Write-Host "Latest Commit Message: '$releaseKeyword'"
+              } catch {
+                  Write-Host "Latest Commit Message: <Could not retrieve>"
               }
           }
           
+          if (-not [string]::IsNullOrEmpty($releaseKeyword)) {
+              $hasReleaseKeyword = $releaseKeyword.ToLower().Contains("[release]")
+              Write-Host "Contains [Release] keyword: $hasReleaseKeyword"
+          }
+          
+          Write-Host ""
+          Write-Host "ℹ️  Note: Final release decision will be made in the GitHub Release step"
           Write-Host "========================================"
       env:
         BUILD_REASON: $(Build.Reason)
         BUILD_REQUESTEDFOR: $(Build.RequestedFor)
         BUILD_SOURCEVERSIONAUTHOR: $(Build.SourceVersionAuthor)
         SYSTEM_PULLREQUEST_PULLREQUESTTITLE: $(System.PullRequest.PullRequestTitle)
+        BUILD_SOURCEBRANCH: $(Build.SourceBranch)
       # 支持两种构建类型：PR构建 或 master分支的合并后构建
       condition: or(eq(variables['Build.Reason'], 'PullRequest'), and(eq(variables['Build.Reason'], 'IndividualCI'), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
 
@@ -507,19 +470,17 @@ jobs:
               Write-Host "❌ User is NOT authorized to create releases (only JeffreySu can create releases)"
           }
           
-          # 显示早期检查结果
+          # 显示构建预览结果
           Write-Host ""
-          Write-Host "=== Early Release Check Results ==="
-          Write-Host "Should Create Release: $(ReleaseCheck.shouldCreateRelease)"
-          if ("$(ReleaseCheck.skipReleaseReason)" -ne "") {
-              Write-Host "Skip Release Reason: $(ReleaseCheck.skipReleaseReason)"
-          }
+          Write-Host "=== Build Preview Results ==="
+          Write-Host "Build information has been displayed in the previous step"
+          Write-Host "Final release decision will be made in the GitHub Release step"
           
           Write-Host "=============================="
 
-    # ✅ 多平台构建 (在Release条件检查后执行，优化资源使用)
+    # ✅ 多平台构建 (为潜在的Release或常规使用生成产物)
     - task: PowerShell@2
-      displayName: '🔨 Build Multiple Platforms (Smart Build based on Early Check)'
+      displayName: '🔨 Build Multiple Platforms (Generate All Artifacts)'
       inputs:
         targetType: 'inline'
         script: |
@@ -528,24 +489,14 @@ jobs:
           Write-Host "========================================"
           Write-Host ""
           
-          # 显示早期检查结果
-          $shouldCreateRelease = "$(ReleaseCheck.shouldCreateRelease)"
-          $skipReleaseReason = "$(ReleaseCheck.skipReleaseReason)"
-          
-          Write-Host "=== Build Strategy Based on Early Check ==="
-          Write-Host "Should Create Release: $shouldCreateRelease"
-          if ($skipReleaseReason -ne "") {
-              Write-Host "Skip Release Reason: $skipReleaseReason"
-          }
+          Write-Host "=== Build Strategy ==="
+          Write-Host "Building all platforms for potential release or standard use"
           Write-Host ""
           
-          if ($shouldCreateRelease -eq "true") {
-              Write-Host "🎯 FULL RELEASE BUILD: 构建所有平台 (为GitHub Release准备)"
-              $buildPurpose = "GitHub Release"
-          } else {
-              Write-Host "📦 STANDARD BUILD: 构建所有平台 (常规构建产物)"
-              $buildPurpose = "Standard Artifacts"
-          }
+          Write-Host "🏗️  MULTI-PLATFORM BUILD: 构建所有平台"
+          Write-Host "   Purpose: 生成完整的构建产物"
+          Write-Host "   Release decision: 将在GitHub Release步骤中确定"
+          $buildPurpose = "Multi-Platform Artifacts"
           
           Write-Host "Build Purpose: $buildPurpose"
           Write-Host "Target Project: $(webProject)"
@@ -661,31 +612,84 @@ jobs:
               Write-Host "========================================"
               Write-Host ""
               
-              # 检查早期检查的结果
-              $shouldCreateRelease = "$(ReleaseCheck.shouldCreateRelease)"
-              $skipReleaseReason = "$(ReleaseCheck.skipReleaseReason)"
+              # 重新执行Release条件检查（避免Azure DevOps条件评估问题）
+              Write-Host "=== Release Condition Verification ==="
               
-              Write-Host "=== Early Check Results ==="
-              Write-Host "Should Create Release: $shouldCreateRelease"
-              if ($skipReleaseReason -ne "") {
-                  Write-Host "Skip Release Reason: $skipReleaseReason"
-              }
+              # 1. 用户权限检查
+              $buildReason = $env:BUILD_REASON
+              $buildRequestedFor = $env:BUILD_REQUESTEDFOR
+              $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
+              $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
               
-              if ($shouldCreateRelease -ne "true") {
+              Write-Host "Build.RequestedFor: '$buildRequestedFor'"
+              Write-Host "Build.SourceVersionAuthor: '$sourceVersionAuthor'"
+              Write-Host "Is Authorized User: $isAuthorizedUser"
+              
+              if (-not $isAuthorizedUser) {
+                  Write-Host ""
+                  Write-Host "❌ AUTHORIZATION FAILED: Only JeffreySu can create releases"
+                  Write-Host "   Current user: '$buildRequestedFor' / '$sourceVersionAuthor'"
+                  Write-Host "   Required user: 'JeffreySu'"
                   Write-Host ""
                   Write-Host "⏭️  SKIPPING GITHUB RELEASE CREATION"
-                  Write-Host "   Reason: $skipReleaseReason"
-                  Write-Host "   Early check determined that release conditions are not met"
-                  Write-Host ""
                   Write-Host "ℹ️  Build will continue with other steps (artifacts, NuGet, etc.)"
-                  Write-Host "   Only GitHub Release creation is skipped"
                   Write-Host "========================================"
                   return
               }
               
+              Write-Host "✅ User authorization passed"
+              
+              # 2. Release关键字检查
               Write-Host ""
-              Write-Host "✅ All release conditions satisfied by early check"
-              Write-Host "   Proceeding with GitHub Release creation..."
+              Write-Host "=== Release Keyword Check ==="
+              if ($buildReason -eq "PullRequest") {
+                  $releaseKeyword = $env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE
+                  $releaseKeywordSource = "PR标题"
+              } else {
+                  try {
+                      $releaseKeyword = git log -1 --pretty=format:"%s"
+                      $releaseKeywordSource = "Commit Message"
+                  } catch {
+                      $releaseKeyword = ""
+                      $releaseKeywordSource = "Commit Message"
+                  }
+              }
+              
+              Write-Host "${releaseKeywordSource}: '$releaseKeyword'"
+              
+              if ([string]::IsNullOrEmpty($releaseKeyword)) {
+                  Write-Host ""
+                  Write-Host "❌ RELEASE KEYWORD CHECK FAILED: 无法获取${releaseKeywordSource}"
+                  Write-Host ""
+                  Write-Host "⏭️  SKIPPING GITHUB RELEASE CREATION"
+                  Write-Host "ℹ️  Build will continue with other steps (artifacts, NuGet, etc.)"
+                  Write-Host "========================================"
+                  return
+              }
+              
+              if (-not ($releaseKeyword.ToLower().Contains("[release]"))) {
+                  Write-Host ""
+                  Write-Host "❌ RELEASE KEYWORD CHECK FAILED: ${releaseKeywordSource} does not contain [Release]"
+                  Write-Host "   Current ${releaseKeywordSource}: '$releaseKeyword'"
+                  Write-Host "   Required: Must contain '[Release]' (case insensitive)"
+                  Write-Host "   Examples: '[Release] v1.0', 'Bug fixes [RELEASE]', '[release] New features'"
+                  Write-Host ""
+                  Write-Host "⏭️  SKIPPING GITHUB RELEASE CREATION"
+                  Write-Host "ℹ️  Build will continue with other steps (artifacts, NuGet, etc.)"
+                  Write-Host "========================================"
+                  return
+              }
+              
+              Write-Host "✅ ${releaseKeywordSource} contains [Release] keyword"
+              
+              # 3. 所有条件满足
+              Write-Host ""
+              Write-Host "🎉 ALL RELEASE CONDITIONS SATISFIED!"
+              Write-Host "   ✅ User: JeffreySu"
+              Write-Host "   ✅ Keyword: [Release] found in ${releaseKeywordSource}"
+              Write-Host "   ✅ Build Type: $buildReason"
+              Write-Host ""
+              Write-Host "🚀 Proceeding with GitHub Release creation..."
               Write-Host ""
               Write-Host "=== Release Information ==="
               Write-Host "Release Tag: $(githubReleaseTag)"
@@ -855,10 +859,13 @@ jobs:
       env:
         GH_TOKEN: $(GH_TOKEN)
         SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-      # 简化条件：只有早期检查通过才执行GitHub Release创建
-      # 早期检查已经验证了所有必要条件（用户权限、Release关键字、构建类型）
-      # 在同一job内使用输出变量：eq(variables['stepName.variableName'], 'value')
-      condition: and(succeeded(), eq(variables['ReleaseCheck.shouldCreateRelease'], 'true'), or(eq(variables['Build.Reason'], 'PullRequest'), and(eq(variables['Build.Reason'], 'IndividualCI'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))))
+        BUILD_REASON: $(Build.Reason)
+        BUILD_REQUESTEDFOR: $(Build.RequestedFor)
+        BUILD_SOURCEVERSIONAUTHOR: $(Build.SourceVersionAuthor)
+        SYSTEM_PULLREQUEST_PULLREQUESTTITLE: $(System.PullRequest.PullRequestTitle)
+      # 简化条件：只检查基本构建类型，具体逻辑在脚本内部处理
+      # 这样避免Azure DevOps条件评估的复杂性问题
+      condition: and(succeeded(), or(eq(variables['Build.Reason'], 'PullRequest'), and(eq(variables['Build.Reason'], 'IndividualCI'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))))
 
     # ✅ 推送 NuGet 包 (发布流程第3步：在 GitHub Release 之后执行)
     - task: NuGetCommand@2
