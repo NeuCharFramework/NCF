@@ -392,11 +392,43 @@ jobs:
               $releaseKeyword = $env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE
               Write-Host "PR Title: '$releaseKeyword'"
           } else {
+              # IndividualCI构建：需要从commit消息中提取PR信息
               try {
-                  $releaseKeyword = git log -1 --pretty=format:"%s"
-                  Write-Host "Latest Commit Message: '$releaseKeyword'"
+                  $commitMessage = git log -1 --pretty=format:"%s"
+                  Write-Host "最新 Commit 消息: '$commitMessage'"
+                  
+                  # 检查是否是GitHub自动生成的合并commit消息
+                  if ($commitMessage -match "^Merge pull request #(\d+) from") {
+                      $prNumber = $matches[1]
+                      Write-Host "🔍 检测到合并PR，编号: #$prNumber"
+                      Write-Host "📡 正在获取PR标题进行预览..."
+                      
+                      # 通过GitHub API获取PR标题
+                      try {
+                          $apiUrl = "https://api.github.com/repos/NeuCharFramework/NCF/pulls/$prNumber"
+                          $headers = @{
+                              "Authorization" = "token $($env:GH_TOKEN)"
+                              "Accept" = "application/vnd.github.v3+json"
+                              "User-Agent" = "Azure-DevOps-Pipeline"
+                          }
+                          
+                          $prResponse = Invoke-RestMethod -Uri $apiUrl -Headers $headers -Method GET
+                          $releaseKeyword = $prResponse.title
+                          
+                          Write-Host "✅ 成功获取PR #$prNumber 标题: '$releaseKeyword'"
+                      } catch {
+                          Write-Host "⚠️  无法通过API获取PR标题，使用commit消息作为备选"
+                          Write-Host "   错误: $($_.Exception.Message)"
+                          $releaseKeyword = $commitMessage
+                      }
+                  } else {
+                      # 非合并commit，直接使用commit消息
+                      Write-Host "Latest Commit Message: '$commitMessage'"
+                      $releaseKeyword = $commitMessage
+                  }
               } catch {
                   Write-Host "Latest Commit Message: <Could not retrieve>"
+                  $releaseKeyword = ""
               }
           }
           
@@ -414,6 +446,7 @@ jobs:
         BUILD_SOURCEVERSIONAUTHOR: $(Build.SourceVersionAuthor)
         SYSTEM_PULLREQUEST_PULLREQUESTTITLE: $(System.PullRequest.PullRequestTitle)
         BUILD_SOURCEBRANCH: $(Build.SourceBranch)
+        GH_TOKEN: $(GH_TOKEN)
       # 支持两种构建类型：PR构建 或 master分支的合并后构建
       condition: or(eq(variables['Build.Reason'], 'PullRequest'), and(eq(variables['Build.Reason'], 'IndividualCI'), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
 
@@ -646,9 +679,42 @@ jobs:
                   $releaseKeyword = $env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE
                   $releaseKeywordSource = "PR标题"
               } else {
+                  # IndividualCI构建：需要从commit消息中提取PR信息
                   try {
-                      $releaseKeyword = git log -1 --pretty=format:"%s"
-                      $releaseKeywordSource = "Commit Message"
+                      $commitMessage = git log -1 --pretty=format:"%s"
+                      Write-Host "最新 Commit 消息: '$commitMessage'"
+                      
+                      # 检查是否是GitHub自动生成的合并commit消息
+                      if ($commitMessage -match "^Merge pull request #(\d+) from") {
+                          $prNumber = $matches[1]
+                          Write-Host "🔍 检测到合并PR，编号: #$prNumber"
+                          Write-Host "📡 正在获取PR标题..."
+                          
+                          # 通过GitHub API获取PR标题
+                          try {
+                              $apiUrl = "https://api.github.com/repos/NeuCharFramework/NCF/pulls/$prNumber"
+                              $headers = @{
+                                  "Authorization" = "token $($env:GH_TOKEN)"
+                                  "Accept" = "application/vnd.github.v3+json"
+                                  "User-Agent" = "Azure-DevOps-Pipeline"
+                              }
+                              
+                              $prResponse = Invoke-RestMethod -Uri $apiUrl -Headers $headers -Method GET
+                              $releaseKeyword = $prResponse.title
+                              $releaseKeywordSource = "PR #$prNumber 标题"
+                              
+                              Write-Host "✅ 成功获取PR标题: '$releaseKeyword'"
+                          } catch {
+                              Write-Host "⚠️  无法通过API获取PR标题，使用commit消息作为备选"
+                              Write-Host "   错误: $($_.Exception.Message)"
+                              $releaseKeyword = $commitMessage
+                              $releaseKeywordSource = "Commit Message (API失败备选)"
+                          }
+                      } else {
+                          # 非合并commit，直接使用commit消息
+                          $releaseKeyword = $commitMessage
+                          $releaseKeywordSource = "Commit Message"
+                      }
                   } catch {
                       $releaseKeyword = ""
                       $releaseKeywordSource = "Commit Message"
