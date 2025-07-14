@@ -79,72 +79,98 @@ jobs:
           Write-Host "   ✓ PR ID: $prId"
           Write-Host ""
           
-          # 使用Azure DevOps REST API检查PR状态
-          Write-Host "🔍 正在检查PR合并状态..."
+          # 使用GitHub REST API检查PR状态 (因为代码托管在GitHub，不是Azure DevOps)
+          Write-Host "🔍 正在检查GitHub PR合并状态..."
           try {
-              $apiUrl = "$($env:SYSTEM_COLLECTIONURI)_apis/git/repositories/$($env:BUILD_REPOSITORY_ID)/pullRequests/$prId?api-version=7.0"
-              Write-Host "   API URL: $apiUrl"
+              # 获取GitHub PR编号 (不同于Azure DevOps PR ID)
+              $githubPrNumber = $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
+              if ([string]::IsNullOrEmpty($githubPrNumber)) {
+                  Write-Host "❌ GATE FAILED: 无法获取GitHub PR编号"
+                  Write-Host "   SYSTEM_PULLREQUEST_PULLREQUESTNUMBER: '$githubPrNumber'"
+                  Write-Host ""
+                  Write-Host "🚫 停止执行：GitHub PR信息不完整"
+                  Write-Host "##vso[task.logissue type=error]Pipeline stopped: GitHub PR number not available"
+                  Write-Host "##vso[task.complete result=Failed]"
+                  exit 1
+              }
+              
+              # GitHub API端点
+              $apiUrl = "https://api.github.com/repos/NeuCharFramework/NCF/pulls/$githubPrNumber"
+              Write-Host "   GitHub API URL: $apiUrl"
+              Write-Host "   GitHub PR Number: $githubPrNumber"
               
               $headers = @{
-                  "Authorization" = "Bearer $($env:SYSTEM_ACCESSTOKEN)"
-                  "Content-Type" = "application/json"
+                  "Authorization" = "token $($env:GH_TOKEN)"
+                  "Accept" = "application/vnd.github.v3+json"
+                  "User-Agent" = "Azure-DevOps-Pipeline"
               }
               
               $response = Invoke-RestMethod -Uri $apiUrl -Headers $headers -Method GET
               
-              $prStatus = $response.status
-              $mergeStatus = $response.mergeStatus
+              $prState = $response.state
+              $prMerged = $response.merged
               $prTitle = $response.title
+              $prMergedAt = $response.merged_at
               
               Write-Host ""
-              Write-Host "📊 PR详细信息："
+              Write-Host "📊 GitHub PR详细信息："
               Write-Host "   PR标题: '$prTitle'"
-              Write-Host "   PR状态: '$prStatus'"
-              Write-Host "   合并状态: '$mergeStatus'"
+              Write-Host "   PR状态: '$prState'"
+              Write-Host "   是否已合并: $prMerged"
+              if ($prMergedAt) {
+                  Write-Host "   合并时间: $prMergedAt"
+              }
               Write-Host ""
               
-              # 检查PR是否已完成并成功合并
-              if ($prStatus -ne "completed") {
-                  Write-Host "❌ GATE FAILED: PR尚未完成"
-                  Write-Host "   当前状态: '$prStatus'"
-                  Write-Host "   要求状态: 'completed'"
+              # 检查PR是否已关闭并成功合并
+              if ($prState -ne "closed") {
+                  Write-Host "❌ GATE FAILED: PR尚未关闭"
+                  Write-Host "   当前状态: '$prState'"
+                  Write-Host "   要求状态: 'closed'"
                   Write-Host ""
-                  Write-Host "🚫 停止执行：只有已合并的PR才能触发Release构建"
+                  Write-Host "🚫 停止执行：只有已关闭的PR才能触发Release构建"
                   Write-Host "   请等待PR被合并后再重新触发构建"
-                  Write-Host "##vso[task.logissue type=error]Pipeline stopped: PR is not completed"
+                  Write-Host "##vso[task.logissue type=error]Pipeline stopped: PR is not closed"
                   Write-Host "##vso[task.complete result=Failed]"
                   exit 1
               }
               
-              if ($mergeStatus -ne "succeeded") {
-                  Write-Host "❌ GATE FAILED: PR合并未成功"
-                  Write-Host "   当前合并状态: '$mergeStatus'"
-                  Write-Host "   要求状态: 'succeeded'"
+              if (-not $prMerged) {
+                  Write-Host "❌ GATE FAILED: PR已关闭但未合并"
+                  Write-Host "   PR状态: closed"
+                  Write-Host "   合并状态: $prMerged"
                   Write-Host ""
                   Write-Host "🚫 停止执行：只有成功合并的PR才能触发Release构建"
-                  Write-Host "##vso[task.logissue type=error]Pipeline stopped: PR merge was not successful"
+                  Write-Host "   该PR可能被拒绝或手动关闭，而非合并"
+                  Write-Host "##vso[task.logissue type=error]Pipeline stopped: PR was closed but not merged"
                   Write-Host "##vso[task.complete result=Failed]"
                   exit 1
               }
               
-              Write-Host "🎉 PR合并状态检查通过！"
-              Write-Host "   ✅ PR状态: completed"
-              Write-Host "   ✅ 合并状态: succeeded"
+              Write-Host "🎉 GitHub PR合并状态检查通过！"
+              Write-Host "   ✅ PR状态: closed"
+              Write-Host "   ✅ 合并状态: merged = $prMerged"
+              Write-Host "   ✅ 合并时间: $prMergedAt"
               Write-Host ""
               Write-Host "✨ 允许继续执行构建和Release流程..."
               Write-Host "========================================"
               
           } catch {
-              Write-Host "❌ GATE FAILED: 无法检查PR状态"
+              Write-Host "❌ GATE FAILED: 无法检查GitHub PR状态"
               Write-Host "   错误信息: $($_.Exception.Message)"
               Write-Host ""
+              Write-Host "💡 故障排除建议："
+              Write-Host "   1. 检查 GH_TOKEN 是否正确配置"
+              Write-Host "   2. 检查 GitHub PR编号是否有效: $githubPrNumber"
+              Write-Host "   3. 检查网络连接到 api.github.com"
+              Write-Host ""
               Write-Host "🚫 停止执行：无法验证PR合并状态"
-              Write-Host "##vso[task.logissue type=error]Pipeline stopped: Cannot verify PR merge status"
+              Write-Host "##vso[task.logissue type=error]Pipeline stopped: Cannot verify GitHub PR merge status"
               Write-Host "##vso[task.complete result=Failed]"
               exit 1
           }
       env:
-        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+        GH_TOKEN: $(GH_TOKEN)
       # 只在PR构建时执行这个检查
       condition: eq(variables['Build.Reason'], 'PullRequest')
 
