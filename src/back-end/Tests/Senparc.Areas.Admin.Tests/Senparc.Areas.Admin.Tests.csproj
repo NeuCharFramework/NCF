@@ -34,9 +34,9 @@
     <PackageReference Include="Senparc.CO2NET" Version="3.1.3" />
     <PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.0.1" />
     <PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.0.1" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.23.14.4-preview" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.23.14.5-preview" />
     <PackageReference Include="Senparc.Ncf.UnitTestExtension" Version="0.3.14-preview1" />
-    <PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.12.2-preview1" />
+    <PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.12.3-preview1" />
   </ItemGroup>
 
   <ItemGroup>

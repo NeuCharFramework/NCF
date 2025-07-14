@@ -2,10 +2,10 @@
 @using Senparc.Ncf.XncfBase
 @inject IServiceProvider _serviceProvider
 @functions{
-    protected async Task<bool> CheckXncfModuleAvailable(string xncfName)
+    protected async Task<bool> CheckXncfModuleValiable(string xncfName)
     {
         XncfRegisterManager xncfRegisterManager = new XncfRegisterManager(_serviceProvider);
-        return await xncfRegisterManager.CheckXncfValiable(xncfName).ConfigureAwait(false);
+        return await xncfRegisterManager.CheckXncfAvailable(xncfName).ConfigureAwait(false);
     }
 }
 
@@ -45,7 +45,7 @@
                                 </li>
 
                         @{
-                            if (await CheckXncfModuleAvailable("Senparc.Xncf.Swagger"))
+                            if (await CheckXncfModuleValiable("Senparc.Xncf.Swagger"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" href="/swagger" target="_blank">API Swagger</a>
