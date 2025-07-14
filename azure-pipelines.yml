@@ -344,6 +344,12 @@ jobs:
               $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
               $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
               
+              Write-Host "=== GitHub Release Condition Check ==="
+              Write-Host "检查GitHub Release创建的3个必要条件："
+              Write-Host "1. 必须为PR构建（而不是普通commit）"
+              Write-Host "2. PR标题必须包含[Release]关键字（不区分大小写）"
+              Write-Host "3. 提交人必须是JeffreySu用户"
+              Write-Host ""
               Write-Host "=== GitHub Release Debug ==="
               Write-Host "githubReleaseTag: $(githubReleaseTag)"
               Write-Host "githubFileVersion: $(githubFileVersion)"
@@ -367,25 +373,43 @@ jobs:
                   Write-Host "✅ Authorization passed: User is authorized to create releases"
               }
               
-              # 检查PR标题是否包含[Release]（不区分大小写）
+              # 检查是否为PR构建以及PR标题是否包含[Release]（不区分大小写）
               Write-Host ""
-              Write-Host "=== PR Title Check ==="
+              Write-Host "=== PR Build & Title Check ==="
+              Write-Host "Build.Reason: $(Build.Reason)"
               Write-Host "PR Title: '$prTitle'"
               Write-Host "PR Title Source: Azure DevOps environment variable SYSTEM_PULLREQUEST_PULLREQUESTTITLE"
               Write-Host "Original GitHub PR Title: This variable is automatically populated by Azure DevOps from GitHub PR information"
               
+              # 严格检查：必须是PR构建
               if ([string]::IsNullOrEmpty($prTitle)) {
-                  Write-Host "⚠️  Warning: No PR title found (might not be a Pull Request build)"
+                  Write-Host "❌ PR CHECK FAILED: No PR title found - this is not a valid Pull Request build"
                   Write-Host "   This usually means the build was not triggered by a GitHub Pull Request"
-              } elseif ($prTitle -inotmatch '\[Release\]') {
-                  Write-Host "⏭️  Skipping GitHub Release: PR title does not contain [Release]"
+                  Write-Host "   Required: Build must be triggered by a GitHub Pull Request"
+                  Write-Host "⏭️  Skipping GitHub Release creation due to non-PR build"
+                  return
+              }
+              
+              # 严格检查：PR标题必须包含[Release]
+              if ($prTitle -inotmatch '\[Release\]') {
+                  Write-Host "❌ PR TITLE CHECK FAILED: PR title does not contain [Release]"
                   Write-Host "   Current title: '$prTitle'"
                   Write-Host "   Required: PR title must contain [Release] (case insensitive)"
                   Write-Host "   Examples: '[Release] v0.29.7', 'Fix bugs [Release]', '[RELEASE] New features'"
+                  Write-Host "⏭️  Skipping GitHub Release creation due to invalid PR title"
                   return
-              } else {
-                  Write-Host "✅ PR title contains [Release] - proceeding with GitHub Release"
               }
+              
+              Write-Host "✅ PR Build Check passed: Valid PR with [Release] in title"
+              
+              Write-Host ""
+              Write-Host "=== Final Condition Summary ==="
+              Write-Host "✅ 条件1: PR构建检查通过 - 这是一个有效的Pull Request构建"
+              Write-Host "✅ 条件2: PR标题检查通过 - 标题包含[Release]关键字"
+              Write-Host "✅ 条件3: 用户权限检查通过 - 提交人是JeffreySu"
+              Write-Host ""
+              Write-Host "🎉 所有条件都满足！开始创建GitHub Release..."
+              Write-Host "=============================="
               
               Write-Host "Creating GitHub Release version $(githubReleaseTag)"
               
@@ -548,10 +572,12 @@ jobs:
           }
       env:
         GH_TOKEN: $(GH_TOKEN)
-      # 只在 Pull Request 到 master 分支时创建 GitHub Release  
-      # 支持: PullRequest 或 手动触发的 PR 构建 (IndividualCI)
-      # 额外要求: PR标题必须包含[Release]（不区分大小写）- 在脚本内部检查
-      condition: and(succeeded(), or(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.Reason'], 'IndividualCI')))
+      # 严格条件：只在 Pull Request 构建时创建 GitHub Release
+      # 额外要求（在PowerShell脚本内部检查）：
+      # 1. PR标题必须包含[Release]（不区分大小写）
+      # 2. 提交人必须是JeffreySu
+      # 3. 必须是有效的PR构建（有PR标题）
+      condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
 
     # ✅ 推送 NuGet 包 (发布流程第3步：在 GitHub Release 之后执行)
     - task: NuGetCommand@2
