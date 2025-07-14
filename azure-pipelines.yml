@@ -654,6 +654,8 @@ jobs:
               $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
               $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
               
+              Write-Host "🔍 Build Context:"
+              Write-Host "Build.Reason: '$buildReason'"
               Write-Host "Build.RequestedFor: '$buildRequestedFor'"
               Write-Host "Build.SourceVersionAuthor: '$sourceVersionAuthor'"
               Write-Host "Is Authorized User: $isAuthorizedUser"
@@ -675,10 +677,31 @@ jobs:
               # 2. Release关键字检查
               Write-Host ""
               Write-Host "=== Release Keyword Check ==="
+              
+              # 统一处理两种构建类型的关键词获取逻辑
+              Write-Host "🎯 检查构建类型：'$buildReason'"
+              
+              $shouldUsePRLogic = $false
               if ($buildReason -eq "PullRequest") {
+                  # PR构建：尝试获取PR标题
                   $releaseKeyword = $env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE
-                  $releaseKeywordSource = "PR标题"
+                  Write-Host "📋 PR标题环境变量原始值: '$releaseKeyword'"
+                  
+                  if ($releaseKeyword -and $releaseKeyword -ne '$(System.PullRequest.PullRequestTitle)' -and $releaseKeyword -ne '') {
+                      $releaseKeywordSource = "PR标题"
+                      $shouldUsePRLogic = $true
+                      Write-Host "📄 从PR环境变量获取标题: '$releaseKeyword'"
+                  } else {
+                      Write-Host "⚠️  PR标题环境变量不可用或未解析，切换到commit消息处理..."
+                      Write-Host "   原始值: '$releaseKeyword'"
+                      $shouldUsePRLogic = $false
+                  }
               } else {
+                  Write-Host "📝 这是IndividualCI构建，将从commit消息获取PR信息"
+                  $shouldUsePRLogic = $false
+              }
+              
+              if (-not $shouldUsePRLogic) {
                   # IndividualCI构建：需要从commit消息中提取PR信息
                   try {
                       $commitMessage = git log -1 --pretty=format:"%s"
@@ -712,10 +735,12 @@ jobs:
                           }
                       } else {
                           # 非合并commit，直接使用commit消息
+                          Write-Host "📝 使用commit消息: '$commitMessage'"
                           $releaseKeyword = $commitMessage
                           $releaseKeywordSource = "Commit Message"
                       }
                   } catch {
+                      Write-Host "❌ 无法获取commit消息"
                       $releaseKeyword = ""
                       $releaseKeywordSource = "Commit Message"
                   }
