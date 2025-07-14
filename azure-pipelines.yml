@@ -298,7 +298,15 @@ jobs:
           Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
           Write-Host "System.PullRequest.SourceBranch: $(System.PullRequest.SourceBranch)"
           Write-Host "System.PullRequest.PullRequestId: $(System.PullRequest.PullRequestId)"
-          Write-Host "System.PullRequest.PullRequestTitle: $(System.PullRequest.PullRequestTitle)"
+          
+          # 获取PR标题 - 使用环境变量格式，并处理可能为空的情况
+          $prTitle = $env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE
+          if ([string]::IsNullOrEmpty($prTitle)) {
+              Write-Host "System.PullRequest.PullRequestTitle: <NOT AVAILABLE - Not a PR build>"
+          } else {
+              Write-Host "System.PullRequest.PullRequestTitle: '$prTitle'"
+          }
+          
           Write-Host "=============================="
 
     # 🚀 创建 GitHub Release (发布流程第2步：优先执行，在 Web 站点发布之前)
@@ -315,11 +323,14 @@ jobs:
               Write-Host "=============================="
               
               # 检查PR标题是否包含[Release]（不区分大小写）
-              $prTitle = "$(System.PullRequest.PullRequestTitle)"
+              $prTitle = "$env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE"
               Write-Host "PR Title: '$prTitle'"
+              Write-Host "PR Title Source: Azure DevOps environment variable SYSTEM_PULLREQUEST_PULLREQUESTTITLE"
+              Write-Host "Original GitHub PR Title: This variable is automatically populated by Azure DevOps from GitHub PR information"
               
               if ([string]::IsNullOrEmpty($prTitle)) {
                   Write-Host "⚠️  Warning: No PR title found (might not be a Pull Request build)"
+                  Write-Host "   This usually means the build was not triggered by a GitHub Pull Request"
               } elseif ($prTitle -inotmatch '\[Release\]') {
                   Write-Host "⏭️  Skipping GitHub Release: PR title does not contain [Release]"
                   Write-Host "   Current title: '$prTitle'"
@@ -459,7 +470,7 @@ jobs:
           - 源分支: $(Build.SourceBranchName)
           - 提交: $(Build.SourceVersion)
           - 发布时间: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss UTC')
-          - PR 标题: $(System.PullRequest.PullRequestTitle)
+          - PR 标题: $env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE
           
           ### 📋 变更
           本版本基于 NCF Template v$(ncfPackageVersion)，详细变更请查看：
