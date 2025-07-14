@@ -420,11 +420,12 @@ jobs:
                   Write-Host "##vso[task.setvariable variable=shouldCreateRelease]true"
                   Write-Host "##vso[task.setvariable variable=skipReleaseReason]手动验证需要"
                   Write-Host "   将在后续步骤中尝试更详细的检查"
-              } elseif ($releaseKeyword -inotmatch '\[Release\]') {
+              } elseif (-not ($releaseKeyword.ToLower().Contains("[release]"))) {
                   Write-Host ""
                   Write-Host "❌ EARLY GATE DECISION: ${releaseKeywordSource}不包含[Release]关键字"
                   Write-Host "   Current ${releaseKeywordSource}: '$releaseKeyword'"
                   Write-Host "   Required: 必须包含 '[Release]' (不区分大小写)"
+                  Write-Host "   Examples: '[Release] v1.0', 'Bug fixes [RELEASE]', '[release] New features'"
                   Write-Host ""
                   Write-Host "⏭️  允许继续构建，但跳过Release创建"
                   Write-Host "   Note: 构建产物仍会生成，但不会创建GitHub Release"
