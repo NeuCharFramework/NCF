@@ -355,33 +355,225 @@ jobs:
           gh auth status
 
     # ===================================================================
-    # 🚀 发布流程开始 (优先级顺序执行)
-    # 1️⃣ 多平台构建 → 2️⃣ GitHub Release → 3️⃣ NuGet 发布 → 4️⃣ Web 站点发布
+    # 🚀 发布流程开始 (优化顺序：先检查Release条件，再构建)
+    # 1️⃣ Release条件检查 → 2️⃣ 多平台构建 → 3️⃣ GitHub Release → 4️⃣ NuGet 发布 → 5️⃣ Web 站点发布
     # ===================================================================
 
-    # ✅ 多平台构建 (为 GitHub Release 准备构建产物)
+    # 🔍 提前检查Release条件 (避免不必要的构建)
     - task: PowerShell@2
-      displayName: '🔨 Build Multiple Platforms (Prepare for Release)'
+      displayName: '🔍 Pre-check Release Conditions (Early Gate)'
       inputs:
         targetType: 'inline'
         script: |
-          Write-Host "Publishing Windows x64 platform"
+          Write-Host "========================================"
+          Write-Host "🔍 EARLY RELEASE CONDITIONS CHECK"
+          Write-Host "========================================"
+          Write-Host ""
+          Write-Host "📋 目标：提前验证Release条件，避免不必要的构建"
+          Write-Host ""
+          
+          # 初始化变量
+          $buildReason = $env:BUILD_REASON
+          $buildRequestedFor = $env:BUILD_REQUESTEDFOR
+          $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
+          $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
+          
+          Write-Host "=== 用户权限检查 ==="
+          Write-Host "Build.RequestedFor: '$buildRequestedFor'"
+          Write-Host "Build.SourceVersionAuthor: '$sourceVersionAuthor'"
+          Write-Host "Is Authorized User: $isAuthorizedUser"
+          
+          if (-not $isAuthorizedUser) {
+              Write-Host ""
+              Write-Host "❌ EARLY GATE DECISION: 用户权限不足"
+              Write-Host "   当前用户: '$buildRequestedFor' / '$sourceVersionAuthor'"
+              Write-Host "   要求用户: 'JeffreySu'"
+              Write-Host ""
+              Write-Host "⏭️  允许继续构建，但跳过Release创建"
+              Write-Host "   Note: 构建产物仍会生成，但不会创建GitHub Release"
+              Write-Host "##vso[task.setvariable variable=shouldCreateRelease]false"
+              Write-Host "##vso[task.setvariable variable=skipReleaseReason]用户权限不足"
+          } else {
+              Write-Host ""
+              Write-Host "✅ 用户权限检查通过"
+              
+              # 检查Release关键字
+              if ($buildReason -eq "PullRequest") {
+                  $releaseKeyword = $env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE
+                  $releaseKeywordSource = "PR标题"
+              } else {
+                  try {
+                      $releaseKeyword = git log -1 --pretty=format:"%s"
+                      $releaseKeywordSource = "Commit Message"
+                  } catch {
+                      $releaseKeyword = ""
+                      $releaseKeywordSource = "Commit Message"
+                  }
+              }
+              
+              Write-Host ""
+              Write-Host "=== Release关键字检查 ==="
+              Write-Host "${releaseKeywordSource}: '$releaseKeyword'"
+              
+              if ([string]::IsNullOrEmpty($releaseKeyword)) {
+                  Write-Host "⚠️  WARNING: 无法获取${releaseKeywordSource}"
+                  Write-Host "##vso[task.setvariable variable=shouldCreateRelease]true"
+                  Write-Host "##vso[task.setvariable variable=skipReleaseReason]手动验证需要"
+                  Write-Host "   将在后续步骤中尝试更详细的检查"
+              } elseif ($releaseKeyword -inotmatch '\[Release\]') {
+                  Write-Host ""
+                  Write-Host "❌ EARLY GATE DECISION: ${releaseKeywordSource}不包含[Release]关键字"
+                  Write-Host "   Current ${releaseKeywordSource}: '$releaseKeyword'"
+                  Write-Host "   Required: 必须包含 '[Release]' (不区分大小写)"
+                  Write-Host ""
+                  Write-Host "⏭️  允许继续构建，但跳过Release创建"
+                  Write-Host "   Note: 构建产物仍会生成，但不会创建GitHub Release"
+                  Write-Host "##vso[task.setvariable variable=shouldCreateRelease]false"
+                  Write-Host "##vso[task.setvariable variable=skipReleaseReason]缺少[Release]关键字"
+              } else {
+                  Write-Host ""
+                  Write-Host "🎉 EARLY GATE PASSED: 所有Release条件满足"
+                  Write-Host "   ✅ 用户权限: JeffreySu"
+                  Write-Host "   ✅ Release关键字: 包含[Release]"
+                  Write-Host "   ✅ 构建类型: $buildReason"
+                  Write-Host ""
+                  Write-Host "🚀 将进行完整构建并创建GitHub Release"
+                  Write-Host "##vso[task.setvariable variable=shouldCreateRelease]true"
+                  Write-Host "##vso[task.setvariable variable=skipReleaseReason]"
+              }
+          }
+          
+          Write-Host "========================================"
+      env:
+        BUILD_REASON: $(Build.Reason)
+        BUILD_REQUESTEDFOR: $(Build.RequestedFor)
+        BUILD_SOURCEVERSIONAUTHOR: $(Build.SourceVersionAuthor)
+        SYSTEM_PULLREQUEST_PULLREQUESTTITLE: $(System.PullRequest.PullRequestTitle)
+      # 支持两种构建类型：PR构建 或 master分支的合并后构建
+      condition: or(eq(variables['Build.Reason'], 'PullRequest'), and(eq(variables['Build.Reason'], 'IndividualCI'), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
+
+    # 🔍 调试构建信息 (早期信息收集)
+    - task: PowerShell@2
+      displayName: 'Debug Build Information'
+      inputs:
+        targetType: 'inline'
+        script: |
+          # 初始化变量 - 在脚本顶部定义一次
+          $prTitle = $env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE
+          $buildRequestedFor = $env:BUILD_REQUESTEDFOR
+          $buildRequestedForId = $env:BUILD_REQUESTEDFORID
+          $buildRequestedForEmail = $env:BUILD_REQUESTEDFOREMAIL
+          $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
+          $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
+          
+          # 调试：显示所有PR相关环境变量
+          Write-Host ""
+          Write-Host "=== PR Environment Variables Debug ==="
+          Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTTITLE: '$env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE'"
+          Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTID: '$env:SYSTEM_PULLREQUEST_PULLREQUESTID'"
+          Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTNUMBER: '$env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER'"
+          Write-Host "SYSTEM_PULLREQUEST_SOURCEBRANCH: '$env:SYSTEM_PULLREQUEST_SOURCEBRANCH'"
+          Write-Host "SYSTEM_PULLREQUEST_TARGETBRANCH: '$env:SYSTEM_PULLREQUEST_TARGETBRANCH'"
+          Write-Host "BUILD_REASON: '$env:BUILD_REASON'"
+          Write-Host "BUILD_SOURCEBRANCH: '$env:BUILD_SOURCEBRANCH'"
+          
+          Write-Host "=== Build Debug Information ==="
+          Write-Host "Build.Reason: $(Build.Reason)"
+          Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
+          Write-Host "BUILD_REASON: '$env:BUILD_REASON'"
+          Write-Host "BUILD_SOURCEBRANCH: '$env:BUILD_SOURCEBRANCH'"
+          
+          # 显示PR标题 - 重用预定义的变量
+          if ([string]::IsNullOrEmpty($prTitle)) {
+              Write-Host "System.PullRequest.PullRequestTitle: <NOT AVAILABLE - Not a PR build>"
+          } else {
+              Write-Host "System.PullRequest.PullRequestTitle: '$prTitle'"
+          }
+          
+          Write-Host ""
+          Write-Host "=== Commit Author Information ==="
+          Write-Host "Build.RequestedFor: '$buildRequestedFor'"
+          Write-Host "Build.RequestedForId: '$buildRequestedForId'"
+          Write-Host "Build.RequestedForEmail: '$buildRequestedForEmail'"
+          Write-Host "Build.SourceVersionAuthor: '$sourceVersionAuthor'"
+          
+          # 显示Release权限检查结果 - 重用预定义的变量
+          Write-Host "Is Authorized for Release: $isAuthorizedUser"
+          if ($isAuthorizedUser) {
+              Write-Host "✅ User is authorized to create releases"
+          } else {
+              Write-Host "❌ User is NOT authorized to create releases (only JeffreySu can create releases)"
+          }
+          
+          # 显示早期检查结果
+          Write-Host ""
+          Write-Host "=== Early Release Check Results ==="
+          Write-Host "Should Create Release: $(shouldCreateRelease)"
+          if ("$(skipReleaseReason)" -ne "") {
+              Write-Host "Skip Release Reason: $(skipReleaseReason)"
+          }
+          
+          Write-Host "=============================="
+
+    # ✅ 多平台构建 (在Release条件检查后执行，优化资源使用)
+    - task: PowerShell@2
+      displayName: '🔨 Build Multiple Platforms (Smart Build based on Early Check)'
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "========================================"
+          Write-Host "🔨 MULTI-PLATFORM BUILD"
+          Write-Host "========================================"
+          Write-Host ""
+          
+          # 显示早期检查结果
+          $shouldCreateRelease = "$(shouldCreateRelease)"
+          $skipReleaseReason = "$(skipReleaseReason)"
+          
+          Write-Host "=== Build Strategy Based on Early Check ==="
+          Write-Host "Should Create Release: $shouldCreateRelease"
+          if ($skipReleaseReason -ne "") {
+              Write-Host "Skip Release Reason: $skipReleaseReason"
+          }
+          Write-Host ""
+          
+          if ($shouldCreateRelease -eq "true") {
+              Write-Host "🎯 FULL RELEASE BUILD: 构建所有平台 (为GitHub Release准备)"
+              $buildPurpose = "GitHub Release"
+          } else {
+              Write-Host "📦 STANDARD BUILD: 构建所有平台 (常规构建产物)"
+              $buildPurpose = "Standard Artifacts"
+          }
+          
+          Write-Host "Build Purpose: $buildPurpose"
+          Write-Host "Target Project: $(webProject)"
+          Write-Host "Build Configuration: $(buildConfiguration)"
+          Write-Host ""
+          
+          Write-Host "=== Multi-Platform Publishing ==="
+          Write-Host "🖥️  Publishing Windows x64 platform..."
           dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-x64 --output $(Build.ArtifactStagingDirectory)/win-x64
 
-          Write-Host "Publishing Windows ARM64 platform (Surface Pro X, etc.)"
+          Write-Host "💻 Publishing Windows ARM64 platform (Surface Pro X, etc.)..."
           dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-arm64 --output $(Build.ArtifactStagingDirectory)/win-arm64
 
-          Write-Host "Publishing Linux x64 platform"
+          Write-Host "🐧 Publishing Linux x64 platform..."
           dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime linux-x64 --output $(Build.ArtifactStagingDirectory)/linux-x64
 
-          Write-Host "Publishing Linux ARM64 platform"
+          Write-Host "🔧 Publishing Linux ARM64 platform..."
           dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime linux-arm64 --output $(Build.ArtifactStagingDirectory)/linux-arm64
 
-          Write-Host "Publishing macOS x64 platform (Intel/Rosetta)"
+          Write-Host "🍎 Publishing macOS x64 platform (Intel/Rosetta)..."
           dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-x64 --output $(Build.ArtifactStagingDirectory)/osx-x64
 
-          Write-Host "Publishing macOS ARM64 platform (Apple Silicon)"
+          Write-Host "🚀 Publishing macOS ARM64 platform (Apple Silicon)..."
           dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-arm64 --output $(Build.ArtifactStagingDirectory)/osx-arm64
+          
+          Write-Host ""
+          Write-Host "✅ All platform builds completed successfully"
+          Write-Host "   Output Directory: $(Build.ArtifactStagingDirectory)"
+          Write-Host "   Build Purpose: $buildPurpose"
+          Write-Host "========================================"
 
     # 🟢 缓存 NuGet 及依赖项
     - task: Cache@2
@@ -453,249 +645,51 @@ jobs:
         platform: 'Any CPU'
         configuration: '$(buildConfiguration)'
 
-    # 🔍 调试构建信息
-    - task: PowerShell@2
-      displayName: 'Debug Build Information'
-      inputs:
-        targetType: 'inline'
-        script: |
-          # 初始化变量 - 在脚本顶部定义一次
-          $prTitle = $env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE
-          $buildRequestedFor = $env:BUILD_REQUESTEDFOR
-          $buildRequestedForId = $env:BUILD_REQUESTEDFORID
-          $buildRequestedForEmail = $env:BUILD_REQUESTEDFOREMAIL
-          $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
-          $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
-          
-          # 调试：显示所有PR相关环境变量
-          Write-Host ""
-          Write-Host "=== PR Environment Variables Debug ==="
-          Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTTITLE: '$env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE'"
-          Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTID: '$env:SYSTEM_PULLREQUEST_PULLREQUESTID'"
-          Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTNUMBER: '$env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER'"
-          Write-Host "SYSTEM_PULLREQUEST_SOURCEBRANCH: '$env:SYSTEM_PULLREQUEST_SOURCEBRANCH'"
-          Write-Host "SYSTEM_PULLREQUEST_TARGETBRANCH: '$env:SYSTEM_PULLREQUEST_TARGETBRANCH'"
-          Write-Host "BUILD_REASON: '$env:BUILD_REASON'"
-          Write-Host "BUILD_SOURCEBRANCH: '$env:BUILD_SOURCEBRANCH'"
-          
-          Write-Host "=== Build Debug Information ==="
-          Write-Host "Build.Reason: $(Build.Reason)"
-          Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
-          Write-Host "BUILD_REASON: '$env:BUILD_REASON'"
-          Write-Host "BUILD_SOURCEBRANCH: '$env:BUILD_SOURCEBRANCH'"
-          
-          # 显示PR标题 - 重用预定义的变量
-          if ([string]::IsNullOrEmpty($prTitle)) {
-              Write-Host "System.PullRequest.PullRequestTitle: <NOT AVAILABLE - Not a PR build>"
-          } else {
-              Write-Host "System.PullRequest.PullRequestTitle: '$prTitle'"
-          }
-          
-          Write-Host ""
-          Write-Host "=== Commit Author Information ==="
-          Write-Host "Build.RequestedFor: '$buildRequestedFor'"
-          Write-Host "Build.RequestedForId: '$buildRequestedForId'"
-          Write-Host "Build.RequestedForEmail: '$buildRequestedForEmail'"
-          Write-Host "Build.SourceVersionAuthor: '$sourceVersionAuthor'"
-          
-          # 显示Release权限检查结果 - 重用预定义的变量
-          Write-Host "Is Authorized for Release: $isAuthorizedUser"
-          if ($isAuthorizedUser) {
-              Write-Host "✅ User is authorized to create releases"
-          } else {
-              Write-Host "❌ User is NOT authorized to create releases (only JeffreySu can create releases)"
-          }
-          
-          Write-Host "=============================="
 
-    # 🚀 创建 GitHub Release (发布流程第2步：优先执行，在 Web 站点发布之前)
+
+    # 🚀 创建 GitHub Release (基于早期检查结果)
     - task: PowerShell@2
-      displayName: '🚀 Create GitHub Release (Priority Step)'
+      displayName: '🚀 Create GitHub Release (Conditional on Early Check)'
       inputs:
         targetType: 'inline'
         script: |
           try {
-              # 初始化变量 - 在脚本顶部定义一次以避免重复
-              $prTitle = $env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE
-              $buildRequestedFor = $env:BUILD_REQUESTEDFOR
-              $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
-              $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
-              
-              # 调试：显示所有PR相关环境变量
-              Write-Host "=== GitHub Release Environment Debug ==="
-              Write-Host "BUILD_REASON: '$env:BUILD_REASON'"
-              Write-Host "BUILD_SOURCEBRANCH: '$env:BUILD_SOURCEBRANCH'"
-              Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTTITLE: '$env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE'"
-              Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTID: '$env:SYSTEM_PULLREQUEST_PULLREQUESTID'"
-              Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTNUMBER: '$env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER'"
-              
-              $buildReason = $env:BUILD_REASON
+              Write-Host "========================================"
+              Write-Host "🚀 GITHUB RELEASE CREATION"
+              Write-Host "========================================"
               Write-Host ""
-              Write-Host "=== GitHub Release Condition Check ==="
-              Write-Host "检查GitHub Release创建的必要条件："
-              Write-Host "✅ 1. 构建类型 - 已在第一步验证通过"
-              if ($buildReason -eq "PullRequest") {
-                  Write-Host "🔍 2. PR标题必须包含[Release]关键字（不区分大小写）"
-              } else {
-                  Write-Host "🔍 2. Commit Message必须包含[Release]关键字（不区分大小写）"
-              }
-              Write-Host "🔍 3. 提交人必须是JeffreySu用户"
-              Write-Host ""
-              Write-Host "=== GitHub Release Debug ==="
-              Write-Host "githubReleaseTag: $(githubReleaseTag)"
-              Write-Host "githubFileVersion: $(githubFileVersion)"
-              Write-Host "ncfPackageVersion: $(ncfPackageVersion)"
-              Write-Host "=============================="
               
-              # 检查提交人是否有权限创建Release（必须是JeffreySu）
-              Write-Host ""
-              Write-Host "=== Release Authorization Check ==="
-              Write-Host "Build.RequestedFor: '$buildRequestedFor'"
-              Write-Host "Build.SourceVersionAuthor: '$sourceVersionAuthor'"
-              Write-Host "Is Authorized User: $isAuthorizedUser"
+              # 检查早期检查的结果
+              $shouldCreateRelease = "$(shouldCreateRelease)"
+              $skipReleaseReason = "$(skipReleaseReason)"
               
-              if (-not $isAuthorizedUser) {
-                  Write-Host "❌ AUTHORIZATION FAILED: Only JeffreySu can create releases"
-                  Write-Host "   Current user: '$buildRequestedFor' (RequestedFor) / '$sourceVersionAuthor' (SourceVersionAuthor)"
-                  Write-Host "   Required user: 'JeffreySu'"
-                  Write-Host "⏭️  Skipping GitHub Release creation due to authorization failure"
-                  return
-              } else {
-                  Write-Host "✅ Authorization passed: User is authorized to create releases"
+              Write-Host "=== Early Check Results ==="
+              Write-Host "Should Create Release: $shouldCreateRelease"
+              if ($skipReleaseReason -ne "") {
+                  Write-Host "Skip Release Reason: $skipReleaseReason"
               }
               
-              # 根据构建类型检查不同的内容
-              Write-Host ""
-              if ($buildReason -eq "PullRequest") {
-                  Write-Host "=== PR Title Check ==="
-                  Write-Host "Build.Reason: $buildReason"
-                  Write-Host "PR Title: '$prTitle'"
-                  Write-Host "PR ID: '$env:SYSTEM_PULLREQUEST_PULLREQUESTID'"
-                  Write-Host "PR Source Branch: '$env:SYSTEM_PULLREQUEST_SOURCEBRANCH'"
-                  Write-Host "PR Target Branch: '$env:SYSTEM_PULLREQUEST_TARGETBRANCH'"
+              if ($shouldCreateRelease -ne "true") {
                   Write-Host ""
-                  Write-Host "✅ PR Build & Merge Check: 已在第一步验证通过（PR已成功合并）"
-                  
-                  $releaseKeyword = $prTitle
-                  $releaseKeywordSource = "PR标题"
-              } else {
-                  Write-Host "=== Commit Message Check ==="
-                  Write-Host "Build.Reason: $buildReason"
-                  Write-Host "Build.SourceBranch: $env:BUILD_SOURCEBRANCH"
+                  Write-Host "⏭️  SKIPPING GITHUB RELEASE CREATION"
+                  Write-Host "   Reason: $skipReleaseReason"
+                  Write-Host "   Early check determined that release conditions are not met"
                   Write-Host ""
-                  Write-Host "✅ IndividualCI Build: 已在第一步验证通过（合并后构建）"
-                  
-                  # 获取最新的commit message
-                  try {
-                      $commitMessage = git log -1 --pretty=format:"%s"
-                      Write-Host "Latest Commit Message: '$commitMessage'"
-                      $releaseKeyword = $commitMessage
-                      $releaseKeywordSource = "Commit Message"
-                  } catch {
-                      Write-Host "❌ FAILED: 无法获取Commit Message"
-                      Write-Host "   Error: $($_.Exception.Message)"
-                      $releaseKeyword = ""
-                      $releaseKeywordSource = "Commit Message"
-                  }
-              }
-              
-              # 检查Release关键字（PR标题或Commit Message）
-              if ([string]::IsNullOrEmpty($releaseKeyword)) {
-                  if ($buildReason -eq "PullRequest") {
-                      Write-Host ""
-                      Write-Host "⚠️  WARNING: PR title could not be retrieved from environment variables"
-                      Write-Host "   Attempting to retrieve PR title via Azure DevOps REST API..."
-                      
-                      try {
-                          # 使用Azure DevOps REST API获取PR标题
-                          $apiUrl = "$($env:SYSTEM_COLLECTIONURI)_apis/git/repositories/$($env:BUILD_REPOSITORY_ID)/pullRequests/$($env:SYSTEM_PULLREQUEST_PULLREQUESTID)?api-version=4.0"
-                          Write-Host "   API URL: $apiUrl"
-                          
-                          $headers = @{
-                              "Authorization" = "Bearer $($env:SYSTEM_ACCESSTOKEN)"
-                              "Content-Type" = "application/json"
-                          }
-                          
-                          $response = Invoke-RestMethod -Uri $apiUrl -Headers $headers -Method GET
-                          $releaseKeyword = $response.title
-                          
-                          if (-not [string]::IsNullOrEmpty($releaseKeyword)) {
-                              Write-Host "✅ SUCCESS: PR title retrieved via REST API"
-                              Write-Host "   PR Title: '$releaseKeyword'"
-                          } else {
-                              Write-Host "❌ FAILED: PR title is empty even via REST API"
-                              $releaseKeyword = ""
-                          }
-                      } catch {
-                          Write-Host "❌ FAILED: Could not retrieve PR title via REST API"
-                          Write-Host "   Error: $($_.Exception.Message)"
-                          $releaseKeyword = ""
-                      }
-                      
-                      # 如果REST API也失败，提供手动验证选项
-                      if ([string]::IsNullOrEmpty($releaseKeyword)) {
-                          # 使用SYSTEM_PULLREQUEST_PULLREQUESTNUMBER获取GitHub PR编号
-                          $githubPRNumber = $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
-                          if ([string]::IsNullOrEmpty($githubPRNumber)) {
-                              # 备选方案：从Build.SourceBranch提取 (格式: refs/pull/359/merge)
-                              if ($env:BUILD_SOURCEBRANCH -match "refs/pull/(\d+)/merge") {
-                                  $githubPRNumber = $matches[1]
-                              }
-                          }
-                          
-                          Write-Host ""
-                          Write-Host "🔍 MANUAL VERIFICATION REQUIRED:"
-                          Write-Host "   All automatic methods failed to retrieve PR title"
-                          Write-Host "   Please manually verify that the PR title contains [Release]"
-                          if (-not [string]::IsNullOrEmpty($githubPRNumber)) {
-                              Write-Host "   GitHub PR URL: https://github.com/NeuCharFramework/NCF/pull/$githubPRNumber"
-                          } else {
-                              Write-Host "   GitHub PR URL: Could not extract PR number"
-                          }
-                          Write-Host ""
-                          Write-Host "⚠️  PROCEEDING WITH RELEASE CREATION (manual verification assumed)"
-                          Write-Host "   If the PR title does not contain [Release], please cancel this build"
-                          Write-Host ""
-                      }
-                  } else {
-                      Write-Host ""
-                      Write-Host "❌ RELEASE CHECK FAILED: 无法获取Commit Message"
-                      Write-Host "   ${releaseKeywordSource}: 为空或无法获取"
-                      Write-Host ""
-                      Write-Host "⏭️  跳过GitHub Release创建：Commit Message检查失败"
-                      return
-                  }
-              }
-              
-              # 检查是否包含[Release]关键字（不区分大小写）
-              if ($releaseKeyword -inotmatch '\[Release\]') {
-                  Write-Host "❌ RELEASE KEYWORD CHECK FAILED: ${releaseKeywordSource} does not contain [Release]"
-                  Write-Host "   Current ${releaseKeywordSource}: '$releaseKeyword'"
-                  Write-Host "   Required: ${releaseKeywordSource} must contain [Release] (case insensitive)"
-                  Write-Host "   Examples: '[Release] v0.29.7', 'Fix bugs [Release]', '[RELEASE] New features'"
-                  Write-Host "⏭️  Skipping GitHub Release creation due to invalid ${releaseKeywordSource}"
+                  Write-Host "ℹ️  Build will continue with other steps (artifacts, NuGet, etc.)"
+                  Write-Host "   Only GitHub Release creation is skipped"
+                  Write-Host "========================================"
                   return
               }
               
-              Write-Host "✅ ${releaseKeywordSource} Check passed: contains [Release]"
-              
               Write-Host ""
-              Write-Host "=== Final Condition Summary ==="
-              if ($buildReason -eq "PullRequest") {
-                  Write-Host "✅ 前置条件: PR已成功合并 - 已在第一步验证通过"
-              } else {
-                  Write-Host "✅ 前置条件: IndividualCI构建 - 已在第一步验证通过"
-              }
-              
-              if ([string]::IsNullOrEmpty($releaseKeyword)) {
-                  Write-Host "⚠️  条件1: ${releaseKeywordSource}检查 - 无法自动验证，需要手动确认包含[Release]关键字"
-              } else {
-                  Write-Host "✅ 条件1: ${releaseKeywordSource}检查通过 - 包含[Release]关键字"
-              }
-              Write-Host "✅ 条件2: 用户权限检查通过 - 提交人是JeffreySu"
+              Write-Host "✅ All release conditions satisfied by early check"
+              Write-Host "   Proceeding with GitHub Release creation..."
               Write-Host ""
-              Write-Host "🎉 所有条件满足！开始创建GitHub Release..."
-              Write-Host "=============================="
+              Write-Host "=== Release Information ==="
+              Write-Host "Release Tag: $(githubReleaseTag)"
+              Write-Host "File Version: $(githubFileVersion)"
+              Write-Host "Package Version: $(ncfPackageVersion)"
+              Write-Host "Build ID: $(buildId)"
               
               Write-Host "Creating GitHub Release version $(githubReleaseTag)"
               
@@ -859,15 +853,9 @@ jobs:
       env:
         GH_TOKEN: $(GH_TOKEN)
         SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-      # 支持两种Release构建类型：
-      # 1. PullRequest: PR构建 - 需要PR标题包含[Release]且用户是JeffreySu
-      # 2. IndividualCI: 合并后构建 - 需要用户是JeffreySu且Commit Message包含[Release]
-      # 前置条件（在第一步已验证）：
-      # ✅ 构建类型已验证（PullRequest 或 IndividualCI+master）
-      # 额外要求（在PowerShell脚本内部检查）：
-      # - PR构建: PR标题必须包含[Release] + 用户是JeffreySu
-      # - CI构建: Commit Message必须包含[Release] + 用户是JeffreySu
-      condition: and(succeeded(), or(eq(variables['Build.Reason'], 'PullRequest'), and(eq(variables['Build.Reason'], 'IndividualCI'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))))
+      # 简化条件：只有早期检查通过才执行GitHub Release创建
+      # 早期检查已经验证了所有必要条件（用户权限、Release关键字、构建类型）
+      condition: and(succeeded(), eq(variables['shouldCreateRelease'], 'true'), or(eq(variables['Build.Reason'], 'PullRequest'), and(eq(variables['Build.Reason'], 'IndividualCI'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))))
 
     # ✅ 推送 NuGet 包 (发布流程第3步：在 GitHub Release 之后执行)
     - task: NuGetCommand@2
