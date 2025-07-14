@@ -37,27 +37,50 @@ jobs:
     - name: System.AccessToken
       value: $(System.AccessToken)
   steps:
-    # 🔒 第一步：检查PR合并状态 (如果不是已合并的PR，立即停止整个Pipeline)
+    # 🔒 第一步：检查构建类型和授权 (支持 PR 构建和合并后构建)
     - task: PowerShell@2
-      displayName: '🔒 Check PR Merge Status (Critical Gate)'
+      displayName: '🔒 Check Build Type and Authorization (Critical Gate)'
       inputs:
         targetType: 'inline'
         script: |
           Write-Host "========================================"
-          Write-Host "🔒 CRITICAL GATE: PR MERGE STATUS CHECK"
+          Write-Host "🔒 CRITICAL GATE: BUILD TYPE & AUTH CHECK"
           Write-Host "========================================"
           Write-Host ""
-          Write-Host "📋 检查条件：只有PR被合并后才允许继续执行构建和Release"
+          Write-Host "📋 检查条件：支持2种构建类型"
+          Write-Host "   1. PullRequest: PR 构建（合并前）"
+          Write-Host "   2. IndividualCI: 合并后构建（推送到 master）"
           Write-Host ""
           
-          # 检查是否为PR构建
-          if ("$(Build.Reason)" -ne "PullRequest") {
-              Write-Host "❌ GATE FAILED: 这不是一个Pull Request构建"
-              Write-Host "   Build.Reason: $(Build.Reason)"
-              Write-Host "   Required: Build.Reason must be 'PullRequest'"
+          $buildReason = "$(Build.Reason)"
+          $sourceBranch = "$(Build.SourceBranch)"
+          
+          Write-Host "=== 构建信息 ==="
+          Write-Host "Build.Reason: $buildReason"
+          Write-Host "Build.SourceBranch: $sourceBranch"
+          Write-Host ""
+          
+          # 检查构建类型：支持 PullRequest 或 IndividualCI (master分支)
+          if ($buildReason -eq "PullRequest") {
+              Write-Host "🔍 检测到 PR 构建，准备检查 GitHub PR 状态..."
+              # 对于 PR 构建，继续原有的 GitHub API 检查逻辑
+          } elseif ($buildReason -eq "IndividualCI" -and $sourceBranch -eq "refs/heads/master") {
+              Write-Host "✅ 检测到 master 分支的合并后构建"
+              Write-Host "   这是 PR 合并后触发的构建，允许继续"
               Write-Host ""
-              Write-Host "🚫 停止执行：只允许PR触发的构建"
-              Write-Host "##vso[task.logissue type=error]Pipeline stopped: Not a Pull Request build"
+              Write-Host "✨ 跳过 PR 状态检查，直接进入构建流程..."
+              Write-Host "========================================"
+              return  # 直接通过，不需要额外检查
+          } else {
+              Write-Host "❌ GATE FAILED: 不支持的构建类型"
+              Write-Host "   Build.Reason: $buildReason"
+              Write-Host "   Build.SourceBranch: $sourceBranch"
+              Write-Host "   支持的类型:"
+              Write-Host "   - PullRequest (任何目标分支的 PR)"
+              Write-Host "   - IndividualCI + refs/heads/master (合并到 master 后的构建)"
+              Write-Host ""
+              Write-Host "🚫 停止执行：只允许支持的构建类型"
+              Write-Host "##vso[task.logissue type=error]Pipeline stopped: Unsupported build type"
               Write-Host "##vso[task.complete result=Failed]"
               exit 1
           }
@@ -171,8 +194,8 @@ jobs:
           }
       env:
         GH_TOKEN: $(GH_TOKEN)
-      # 只在PR构建时执行这个检查
-      condition: eq(variables['Build.Reason'], 'PullRequest')
+      # 支持两种构建类型：PR构建 或 master分支的合并后构建
+      condition: or(eq(variables['Build.Reason'], 'PullRequest'), and(eq(variables['Build.Reason'], 'IndividualCI'), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
 
     # 🔧 设置版本号 (读取 PackageVersion + BuildId)
     - task: PowerShell@2
@@ -458,9 +481,8 @@ jobs:
           Write-Host "=== Build Debug Information ==="
           Write-Host "Build.Reason: $(Build.Reason)"
           Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
-          Write-Host "System.PullRequest.TargetBranch: $(System.PullRequest.TargetBranch)"
-          Write-Host "System.PullRequest.SourceBranch: $(System.PullRequest.SourceBranch)"
-          Write-Host "System.PullRequest.PullRequestId: $(System.PullRequest.PullRequestId)"
+          Write-Host "BUILD_REASON: '$env:BUILD_REASON'"
+          Write-Host "BUILD_SOURCEBRANCH: '$env:BUILD_SOURCEBRANCH'"
           
           # 显示PR标题 - 重用预定义的变量
           if ([string]::IsNullOrEmpty($prTitle)) {
@@ -501,17 +523,22 @@ jobs:
               
               # 调试：显示所有PR相关环境变量
               Write-Host "=== GitHub Release Environment Debug ==="
+              Write-Host "BUILD_REASON: '$env:BUILD_REASON'"
+              Write-Host "BUILD_SOURCEBRANCH: '$env:BUILD_SOURCEBRANCH'"
               Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTTITLE: '$env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE'"
               Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTID: '$env:SYSTEM_PULLREQUEST_PULLREQUESTID'"
               Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTNUMBER: '$env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER'"
-              Write-Host "BUILD_REASON: '$env:BUILD_REASON'"
-              Write-Host "BUILD_SOURCEBRANCH: '$env:BUILD_SOURCEBRANCH'"
               
+              $buildReason = $env:BUILD_REASON
               Write-Host ""
               Write-Host "=== GitHub Release Condition Check ==="
               Write-Host "检查GitHub Release创建的必要条件："
-              Write-Host "✅ 1. PR已合并状态 - 已在第一步验证通过"
-              Write-Host "🔍 2. PR标题必须包含[Release]关键字（不区分大小写）"
+              Write-Host "✅ 1. 构建类型 - 已在第一步验证通过"
+              if ($buildReason -eq "PullRequest") {
+                  Write-Host "🔍 2. PR标题必须包含[Release]关键字（不区分大小写）"
+              } else {
+                  Write-Host "🔍 2. Commit Message必须包含[Release]关键字（不区分大小写）"
+              }
               Write-Host "🔍 3. 提交人必须是JeffreySu用户"
               Write-Host ""
               Write-Host "=== GitHub Release Debug ==="
@@ -537,96 +564,133 @@ jobs:
                   Write-Host "✅ Authorization passed: User is authorized to create releases"
               }
               
-              # 检查PR标题是否包含[Release]（不区分大小写）
-              # 注意：PR合并状态已在第一步验证通过
+              # 根据构建类型检查不同的内容
               Write-Host ""
-              Write-Host "=== PR Title Check ==="
-              Write-Host "Build.Reason: $(Build.Reason)"
-              Write-Host "PR Title: '$prTitle'"
-              Write-Host "PR ID: '$env:SYSTEM_PULLREQUEST_PULLREQUESTID'"
-              Write-Host "PR Source Branch: '$env:SYSTEM_PULLREQUEST_SOURCEBRANCH'"
-              Write-Host "PR Target Branch: '$env:SYSTEM_PULLREQUEST_TARGETBRANCH'"
-              Write-Host ""
-              Write-Host "✅ PR Build & Merge Check: 已在第一步验证通过（PR已成功合并）"
-              
-              # 处理PR标题检查：如果PR标题为空，尝试通过REST API获取
-              if ([string]::IsNullOrEmpty($prTitle)) {
+              if ($buildReason -eq "PullRequest") {
+                  Write-Host "=== PR Title Check ==="
+                  Write-Host "Build.Reason: $buildReason"
+                  Write-Host "PR Title: '$prTitle'"
+                  Write-Host "PR ID: '$env:SYSTEM_PULLREQUEST_PULLREQUESTID'"
+                  Write-Host "PR Source Branch: '$env:SYSTEM_PULLREQUEST_SOURCEBRANCH'"
+                  Write-Host "PR Target Branch: '$env:SYSTEM_PULLREQUEST_TARGETBRANCH'"
                   Write-Host ""
-                  Write-Host "⚠️  WARNING: PR title could not be retrieved from environment variables"
-                  Write-Host "   Attempting to retrieve PR title via Azure DevOps REST API..."
+                  Write-Host "✅ PR Build & Merge Check: 已在第一步验证通过（PR已成功合并）"
                   
-                  try {
-                      # 使用Azure DevOps REST API获取PR标题
-                      $apiUrl = "$($env:SYSTEM_COLLECTIONURI)_apis/git/repositories/$($env:BUILD_REPOSITORY_ID)/pullRequests/$($env:SYSTEM_PULLREQUEST_PULLREQUESTID)?api-version=4.0"
-                      Write-Host "   API URL: $apiUrl"
-                      
-                      $headers = @{
-                          "Authorization" = "Bearer $($env:SYSTEM_ACCESSTOKEN)"
-                          "Content-Type" = "application/json"
-                      }
-                      
-                      $response = Invoke-RestMethod -Uri $apiUrl -Headers $headers -Method GET
-                      $prTitle = $response.title
-                      
-                      if (-not [string]::IsNullOrEmpty($prTitle)) {
-                          Write-Host "✅ SUCCESS: PR title retrieved via REST API"
-                          Write-Host "   PR Title: '$prTitle'"
-                      } else {
-                          Write-Host "❌ FAILED: PR title is empty even via REST API"
-                          $prTitle = ""
-                      }
-                  } catch {
-                      Write-Host "❌ FAILED: Could not retrieve PR title via REST API"
-                      Write-Host "   Error: $($_.Exception.Message)"
-                      $prTitle = ""
-                  }
-                  
-                  # 如果REST API也失败，提供手动验证选项
-                  if ([string]::IsNullOrEmpty($prTitle)) {
-                      # 使用SYSTEM_PULLREQUEST_PULLREQUESTNUMBER获取GitHub PR编号
-                      $githubPRNumber = $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
-                      if ([string]::IsNullOrEmpty($githubPRNumber)) {
-                          # 备选方案：从Build.SourceBranch提取 (格式: refs/pull/359/merge)
-                          if ($env:BUILD_SOURCEBRANCH -match "refs/pull/(\d+)/merge") {
-                              $githubPRNumber = $matches[1]
-                          }
-                      }
-                      
-                      Write-Host ""
-                      Write-Host "🔍 MANUAL VERIFICATION REQUIRED:"
-                      Write-Host "   All automatic methods failed to retrieve PR title"
-                      Write-Host "   Please manually verify that the PR title contains [Release]"
-                      if (-not [string]::IsNullOrEmpty($githubPRNumber)) {
-                          Write-Host "   GitHub PR URL: https://github.com/NeuCharFramework/NCF/pull/$githubPRNumber"
-                      } else {
-                          Write-Host "   GitHub PR URL: Could not extract PR number"
-                      }
-                      Write-Host ""
-                      Write-Host "⚠️  PROCEEDING WITH RELEASE CREATION (manual verification assumed)"
-                      Write-Host "   If the PR title does not contain [Release], please cancel this build"
-                      Write-Host ""
-                  }
+                  $releaseKeyword = $prTitle
+                  $releaseKeywordSource = "PR标题"
               } else {
-                  # 正常的PR标题检查
-                  if ($prTitle -inotmatch '\[Release\]') {
-                      Write-Host "❌ PR TITLE CHECK FAILED: PR title does not contain [Release]"
-                      Write-Host "   Current title: '$prTitle'"
-                      Write-Host "   Required: PR title must contain [Release] (case insensitive)"
-                      Write-Host "   Examples: '[Release] v0.29.7', 'Fix bugs [Release]', '[RELEASE] New features'"
-                      Write-Host "⏭️  Skipping GitHub Release creation due to invalid PR title"
+                  Write-Host "=== Commit Message Check ==="
+                  Write-Host "Build.Reason: $buildReason"
+                  Write-Host "Build.SourceBranch: $env:BUILD_SOURCEBRANCH"
+                  Write-Host ""
+                  Write-Host "✅ IndividualCI Build: 已在第一步验证通过（合并后构建）"
+                  
+                  # 获取最新的commit message
+                  try {
+                      $commitMessage = git log -1 --pretty=format:"%s"
+                      Write-Host "Latest Commit Message: '$commitMessage'"
+                      $releaseKeyword = $commitMessage
+                      $releaseKeywordSource = "Commit Message"
+                  } catch {
+                      Write-Host "❌ FAILED: 无法获取Commit Message"
+                      Write-Host "   Error: $($_.Exception.Message)"
+                      $releaseKeyword = ""
+                      $releaseKeywordSource = "Commit Message"
+                  }
+              }
+              
+              # 检查Release关键字（PR标题或Commit Message）
+              if ([string]::IsNullOrEmpty($releaseKeyword)) {
+                  if ($buildReason -eq "PullRequest") {
+                      Write-Host ""
+                      Write-Host "⚠️  WARNING: PR title could not be retrieved from environment variables"
+                      Write-Host "   Attempting to retrieve PR title via Azure DevOps REST API..."
+                      
+                      try {
+                          # 使用Azure DevOps REST API获取PR标题
+                          $apiUrl = "$($env:SYSTEM_COLLECTIONURI)_apis/git/repositories/$($env:BUILD_REPOSITORY_ID)/pullRequests/$($env:SYSTEM_PULLREQUEST_PULLREQUESTID)?api-version=4.0"
+                          Write-Host "   API URL: $apiUrl"
+                          
+                          $headers = @{
+                              "Authorization" = "Bearer $($env:SYSTEM_ACCESSTOKEN)"
+                              "Content-Type" = "application/json"
+                          }
+                          
+                          $response = Invoke-RestMethod -Uri $apiUrl -Headers $headers -Method GET
+                          $releaseKeyword = $response.title
+                          
+                          if (-not [string]::IsNullOrEmpty($releaseKeyword)) {
+                              Write-Host "✅ SUCCESS: PR title retrieved via REST API"
+                              Write-Host "   PR Title: '$releaseKeyword'"
+                          } else {
+                              Write-Host "❌ FAILED: PR title is empty even via REST API"
+                              $releaseKeyword = ""
+                          }
+                      } catch {
+                          Write-Host "❌ FAILED: Could not retrieve PR title via REST API"
+                          Write-Host "   Error: $($_.Exception.Message)"
+                          $releaseKeyword = ""
+                      }
+                      
+                      # 如果REST API也失败，提供手动验证选项
+                      if ([string]::IsNullOrEmpty($releaseKeyword)) {
+                          # 使用SYSTEM_PULLREQUEST_PULLREQUESTNUMBER获取GitHub PR编号
+                          $githubPRNumber = $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
+                          if ([string]::IsNullOrEmpty($githubPRNumber)) {
+                              # 备选方案：从Build.SourceBranch提取 (格式: refs/pull/359/merge)
+                              if ($env:BUILD_SOURCEBRANCH -match "refs/pull/(\d+)/merge") {
+                                  $githubPRNumber = $matches[1]
+                              }
+                          }
+                          
+                          Write-Host ""
+                          Write-Host "🔍 MANUAL VERIFICATION REQUIRED:"
+                          Write-Host "   All automatic methods failed to retrieve PR title"
+                          Write-Host "   Please manually verify that the PR title contains [Release]"
+                          if (-not [string]::IsNullOrEmpty($githubPRNumber)) {
+                              Write-Host "   GitHub PR URL: https://github.com/NeuCharFramework/NCF/pull/$githubPRNumber"
+                          } else {
+                              Write-Host "   GitHub PR URL: Could not extract PR number"
+                          }
+                          Write-Host ""
+                          Write-Host "⚠️  PROCEEDING WITH RELEASE CREATION (manual verification assumed)"
+                          Write-Host "   If the PR title does not contain [Release], please cancel this build"
+                          Write-Host ""
+                      }
+                  } else {
+                      Write-Host ""
+                      Write-Host "❌ RELEASE CHECK FAILED: 无法获取Commit Message"
+                      Write-Host "   ${releaseKeywordSource}: 为空或无法获取"
+                      Write-Host ""
+                      Write-Host "⏭️  跳过GitHub Release创建：Commit Message检查失败"
                       return
                   }
-                  
-                  Write-Host "✅ PR Title Check passed: PR title contains [Release]"
               }
+              
+              # 检查是否包含[Release]关键字（不区分大小写）
+              if ($releaseKeyword -inotmatch '\[Release\]') {
+                  Write-Host "❌ RELEASE KEYWORD CHECK FAILED: ${releaseKeywordSource} does not contain [Release]"
+                  Write-Host "   Current ${releaseKeywordSource}: '$releaseKeyword'"
+                  Write-Host "   Required: ${releaseKeywordSource} must contain [Release] (case insensitive)"
+                  Write-Host "   Examples: '[Release] v0.29.7', 'Fix bugs [Release]', '[RELEASE] New features'"
+                  Write-Host "⏭️  Skipping GitHub Release creation due to invalid ${releaseKeywordSource}"
+                  return
+              }
+              
+              Write-Host "✅ ${releaseKeywordSource} Check passed: contains [Release]"
               
               Write-Host ""
               Write-Host "=== Final Condition Summary ==="
-              Write-Host "✅ 前置条件: PR已成功合并 - 已在第一步验证通过"
-              if ([string]::IsNullOrEmpty($prTitle)) {
-                  Write-Host "⚠️  条件1: PR标题检查 - 无法自动验证，需要手动确认包含[Release]关键字"
+              if ($buildReason -eq "PullRequest") {
+                  Write-Host "✅ 前置条件: PR已成功合并 - 已在第一步验证通过"
               } else {
-                  Write-Host "✅ 条件1: PR标题检查通过 - 标题包含[Release]关键字"
+                  Write-Host "✅ 前置条件: IndividualCI构建 - 已在第一步验证通过"
+              }
+              
+              if ([string]::IsNullOrEmpty($releaseKeyword)) {
+                  Write-Host "⚠️  条件1: ${releaseKeywordSource}检查 - 无法自动验证，需要手动确认包含[Release]关键字"
+              } else {
+                  Write-Host "✅ 条件1: ${releaseKeywordSource}检查通过 - 包含[Release]关键字"
               }
               Write-Host "✅ 条件2: 用户权限检查通过 - 提交人是JeffreySu"
               Write-Host ""
@@ -795,13 +859,15 @@ jobs:
       env:
         GH_TOKEN: $(GH_TOKEN)
         SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-      # 严格条件：只在已合并的 Pull Request 构建时创建 GitHub Release
+      # 支持两种Release构建类型：
+      # 1. PullRequest: PR构建 - 需要PR标题包含[Release]且用户是JeffreySu
+      # 2. IndividualCI: 合并后构建 - 需要用户是JeffreySu且Commit Message包含[Release]
       # 前置条件（在第一步已验证）：
-      # ✅ PR必须已成功合并（status=completed, mergeStatus=succeeded）
+      # ✅ 构建类型已验证（PullRequest 或 IndividualCI+master）
       # 额外要求（在PowerShell脚本内部检查）：
-      # 1. PR标题必须包含[Release]（不区分大小写）
-      # 2. 提交人必须是JeffreySu
-      condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+      # - PR构建: PR标题必须包含[Release] + 用户是JeffreySu
+      # - CI构建: Commit Message必须包含[Release] + 用户是JeffreySu
+      condition: and(succeeded(), or(eq(variables['Build.Reason'], 'PullRequest'), and(eq(variables['Build.Reason'], 'IndividualCI'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))))
 
     # ✅ 推送 NuGet 包 (发布流程第3步：在 GitHub Release 之后执行)
     - task: NuGetCommand@2
