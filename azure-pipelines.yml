@@ -292,6 +292,14 @@ jobs:
       inputs:
         targetType: 'inline'
         script: |
+          # 初始化变量 - 在脚本顶部定义一次
+          $prTitle = $env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE
+          $buildRequestedFor = $env:BUILD_REQUESTEDFOR
+          $buildRequestedForId = $env:BUILD_REQUESTEDFORID
+          $buildRequestedForEmail = $env:BUILD_REQUESTEDFOREMAIL
+          $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
+          $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
+          
           Write-Host "=== Build Debug Information ==="
           Write-Host "Build.Reason: $(Build.Reason)"
           Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
@@ -299,19 +307,12 @@ jobs:
           Write-Host "System.PullRequest.SourceBranch: $(System.PullRequest.SourceBranch)"
           Write-Host "System.PullRequest.PullRequestId: $(System.PullRequest.PullRequestId)"
           
-          # 获取PR标题 - 使用环境变量格式，并处理可能为空的情况
-          $prTitle = $env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE
+          # 显示PR标题 - 重用预定义的变量
           if ([string]::IsNullOrEmpty($prTitle)) {
               Write-Host "System.PullRequest.PullRequestTitle: <NOT AVAILABLE - Not a PR build>"
           } else {
               Write-Host "System.PullRequest.PullRequestTitle: '$prTitle'"
           }
-          
-          # 获取提交人信息 - 用于Release权限检查
-          $buildRequestedFor = $env:BUILD_REQUESTEDFOR
-          $buildRequestedForId = $env:BUILD_REQUESTEDFORID
-          $buildRequestedForEmail = $env:BUILD_REQUESTEDFOREMAIL
-          $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
           
           Write-Host ""
           Write-Host "=== Commit Author Information ==="
@@ -320,8 +321,7 @@ jobs:
           Write-Host "Build.RequestedForEmail: '$buildRequestedForEmail'"
           Write-Host "Build.SourceVersionAuthor: '$sourceVersionAuthor'"
           
-          # 检查是否符合Release发布条件（JeffreySu用户）
-          $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
+          # 显示Release权限检查结果 - 重用预定义的变量
           Write-Host "Is Authorized for Release: $isAuthorizedUser"
           if ($isAuthorizedUser) {
               Write-Host "✅ User is authorized to create releases"
@@ -338,6 +338,12 @@ jobs:
         targetType: 'inline'
         script: |
           try {
+              # 初始化变量 - 在脚本顶部定义一次以避免重复
+              $prTitle = $env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE
+              $buildRequestedFor = $env:BUILD_REQUESTEDFOR
+              $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
+              $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
+              
               Write-Host "=== GitHub Release Debug ==="
               Write-Host "githubReleaseTag: $(githubReleaseTag)"
               Write-Host "githubFileVersion: $(githubFileVersion)"
@@ -345,10 +351,6 @@ jobs:
               Write-Host "=============================="
               
               # 检查提交人是否有权限创建Release（必须是JeffreySu）
-              $buildRequestedFor = $env:BUILD_REQUESTEDFOR
-              $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
-              $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
-              
               Write-Host ""
               Write-Host "=== Release Authorization Check ==="
               Write-Host "Build.RequestedFor: '$buildRequestedFor'"
@@ -366,7 +368,6 @@ jobs:
               }
               
               # 检查PR标题是否包含[Release]（不区分大小写）
-              $prTitle = "$env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE"
               Write-Host ""
               Write-Host "=== PR Title Check ==="
               Write-Host "PR Title: '$prTitle'"
