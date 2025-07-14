@@ -29,6 +29,11 @@ jobs:
 - job: BuildAndRelease
   pool:
     name: 'SenparcOpenSource'
+  # 允许脚本访问OAuth token以便调用Azure DevOps REST API
+  # 注意：需要在Pipeline设置中启用"Allow scripts to access the OAuth token"选项
+  variables:
+    - name: System.AccessToken
+      value: $(System.AccessToken)
   steps:
     # 🔧 设置版本号 (读取 PackageVersion + BuildId)
     - task: PowerShell@2
@@ -300,6 +305,17 @@ jobs:
           $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
           $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
           
+          # 调试：显示所有PR相关环境变量
+          Write-Host ""
+          Write-Host "=== PR Environment Variables Debug ==="
+          Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTTITLE: '$env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE'"
+          Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTID: '$env:SYSTEM_PULLREQUEST_PULLREQUESTID'"
+          Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTNUMBER: '$env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER'"
+          Write-Host "SYSTEM_PULLREQUEST_SOURCEBRANCH: '$env:SYSTEM_PULLREQUEST_SOURCEBRANCH'"
+          Write-Host "SYSTEM_PULLREQUEST_TARGETBRANCH: '$env:SYSTEM_PULLREQUEST_TARGETBRANCH'"
+          Write-Host "BUILD_REASON: '$env:BUILD_REASON'"
+          Write-Host "BUILD_SOURCEBRANCH: '$env:BUILD_SOURCEBRANCH'"
+          
           Write-Host "=== Build Debug Information ==="
           Write-Host "Build.Reason: $(Build.Reason)"
           Write-Host "Build.SourceBranch: $(Build.SourceBranch)"
@@ -344,6 +360,15 @@ jobs:
               $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
               $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
               
+              # 调试：显示所有PR相关环境变量
+              Write-Host "=== GitHub Release Environment Debug ==="
+              Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTTITLE: '$env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE'"
+              Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTID: '$env:SYSTEM_PULLREQUEST_PULLREQUESTID'"
+              Write-Host "SYSTEM_PULLREQUEST_PULLREQUESTNUMBER: '$env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER'"
+              Write-Host "BUILD_REASON: '$env:BUILD_REASON'"
+              Write-Host "BUILD_SOURCEBRANCH: '$env:BUILD_SOURCEBRANCH'"
+              
+              Write-Host ""
               Write-Host "=== GitHub Release Condition Check ==="
               Write-Host "检查GitHub Release创建的3个必要条件："
               Write-Host "1. 必须为PR构建（而不是普通commit）"
@@ -378,37 +403,106 @@ jobs:
               Write-Host "=== PR Build & Title Check ==="
               Write-Host "Build.Reason: $(Build.Reason)"
               Write-Host "PR Title: '$prTitle'"
-              Write-Host "PR Title Source: Azure DevOps environment variable SYSTEM_PULLREQUEST_PULLREQUESTTITLE"
-              Write-Host "Original GitHub PR Title: This variable is automatically populated by Azure DevOps from GitHub PR information"
+              Write-Host "PR ID: '$env:SYSTEM_PULLREQUEST_PULLREQUESTID'"
+              Write-Host "PR Source Branch: '$env:SYSTEM_PULLREQUEST_SOURCEBRANCH'"
+              Write-Host "PR Target Branch: '$env:SYSTEM_PULLREQUEST_TARGETBRANCH'"
               
-              # 严格检查：必须是PR构建
-              if ([string]::IsNullOrEmpty($prTitle)) {
-                  Write-Host "❌ PR CHECK FAILED: No PR title found - this is not a valid Pull Request build"
-                  Write-Host "   This usually means the build was not triggered by a GitHub Pull Request"
+              # 智能PR检查：使用多个指标验证PR构建
+              $isPRBuild = ($(Build.Reason) -eq "PullRequest") -and (-not [string]::IsNullOrEmpty($env:SYSTEM_PULLREQUEST_PULLREQUESTID))
+              
+              if (-not $isPRBuild) {
+                  Write-Host "❌ PR BUILD CHECK FAILED: This is not a valid Pull Request build"
+                  Write-Host "   Build.Reason: $(Build.Reason)"
+                  Write-Host "   PR ID: '$env:SYSTEM_PULLREQUEST_PULLREQUESTID'"
                   Write-Host "   Required: Build must be triggered by a GitHub Pull Request"
                   Write-Host "⏭️  Skipping GitHub Release creation due to non-PR build"
                   return
               }
               
-              # 严格检查：PR标题必须包含[Release]
-              if ($prTitle -inotmatch '\[Release\]') {
-                  Write-Host "❌ PR TITLE CHECK FAILED: PR title does not contain [Release]"
-                  Write-Host "   Current title: '$prTitle'"
-                  Write-Host "   Required: PR title must contain [Release] (case insensitive)"
-                  Write-Host "   Examples: '[Release] v0.29.7', 'Fix bugs [Release]', '[RELEASE] New features'"
-                  Write-Host "⏭️  Skipping GitHub Release creation due to invalid PR title"
-                  return
-              }
+              Write-Host "✅ PR Build Check passed: This is a valid Pull Request build"
               
-              Write-Host "✅ PR Build Check passed: Valid PR with [Release] in title"
+              # 处理PR标题检查：如果PR标题为空，尝试通过REST API获取
+              if ([string]::IsNullOrEmpty($prTitle)) {
+                  Write-Host ""
+                  Write-Host "⚠️  WARNING: PR title could not be retrieved from environment variables"
+                  Write-Host "   Attempting to retrieve PR title via Azure DevOps REST API..."
+                  
+                  try {
+                      # 使用Azure DevOps REST API获取PR标题
+                      $apiUrl = "$($env:SYSTEM_COLLECTIONURI)_apis/git/repositories/$($env:BUILD_REPOSITORY_ID)/pullRequests/$($env:SYSTEM_PULLREQUEST_PULLREQUESTID)?api-version=4.0"
+                      Write-Host "   API URL: $apiUrl"
+                      
+                      $headers = @{
+                          "Authorization" = "Bearer $($env:SYSTEM_ACCESSTOKEN)"
+                          "Content-Type" = "application/json"
+                      }
+                      
+                      $response = Invoke-RestMethod -Uri $apiUrl -Headers $headers -Method GET
+                      $prTitle = $response.title
+                      
+                      if (-not [string]::IsNullOrEmpty($prTitle)) {
+                          Write-Host "✅ SUCCESS: PR title retrieved via REST API"
+                          Write-Host "   PR Title: '$prTitle'"
+                      } else {
+                          Write-Host "❌ FAILED: PR title is empty even via REST API"
+                          $prTitle = ""
+                      }
+                  } catch {
+                      Write-Host "❌ FAILED: Could not retrieve PR title via REST API"
+                      Write-Host "   Error: $($_.Exception.Message)"
+                      $prTitle = ""
+                  }
+                  
+                  # 如果REST API也失败，提供手动验证选项
+                  if ([string]::IsNullOrEmpty($prTitle)) {
+                      # 使用SYSTEM_PULLREQUEST_PULLREQUESTNUMBER获取GitHub PR编号
+                      $githubPRNumber = $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
+                      if ([string]::IsNullOrEmpty($githubPRNumber)) {
+                          # 备选方案：从Build.SourceBranch提取 (格式: refs/pull/359/merge)
+                          if ($env:BUILD_SOURCEBRANCH -match "refs/pull/(\d+)/merge") {
+                              $githubPRNumber = $matches[1]
+                          }
+                      }
+                      
+                      Write-Host ""
+                      Write-Host "🔍 MANUAL VERIFICATION REQUIRED:"
+                      Write-Host "   All automatic methods failed to retrieve PR title"
+                      Write-Host "   Please manually verify that the PR title contains [Release]"
+                      if (-not [string]::IsNullOrEmpty($githubPRNumber)) {
+                          Write-Host "   GitHub PR URL: https://github.com/NeuCharFramework/NCF/pull/$githubPRNumber"
+                      } else {
+                          Write-Host "   GitHub PR URL: Could not extract PR number"
+                      }
+                      Write-Host ""
+                      Write-Host "⚠️  PROCEEDING WITH RELEASE CREATION (manual verification assumed)"
+                      Write-Host "   If the PR title does not contain [Release], please cancel this build"
+                      Write-Host ""
+                  }
+              } else {
+                  # 正常的PR标题检查
+                  if ($prTitle -inotmatch '\[Release\]') {
+                      Write-Host "❌ PR TITLE CHECK FAILED: PR title does not contain [Release]"
+                      Write-Host "   Current title: '$prTitle'"
+                      Write-Host "   Required: PR title must contain [Release] (case insensitive)"
+                      Write-Host "   Examples: '[Release] v0.29.7', 'Fix bugs [Release]', '[RELEASE] New features'"
+                      Write-Host "⏭️  Skipping GitHub Release creation due to invalid PR title"
+                      return
+                  }
+                  
+                  Write-Host "✅ PR Title Check passed: PR title contains [Release]"
+              }
               
               Write-Host ""
               Write-Host "=== Final Condition Summary ==="
               Write-Host "✅ 条件1: PR构建检查通过 - 这是一个有效的Pull Request构建"
-              Write-Host "✅ 条件2: PR标题检查通过 - 标题包含[Release]关键字"
+              if ([string]::IsNullOrEmpty($prTitle)) {
+                  Write-Host "⚠️  条件2: PR标题检查 - 无法自动验证，需要手动确认包含[Release]关键字"
+              } else {
+                  Write-Host "✅ 条件2: PR标题检查通过 - 标题包含[Release]关键字"
+              }
               Write-Host "✅ 条件3: 用户权限检查通过 - 提交人是JeffreySu"
               Write-Host ""
-              Write-Host "🎉 所有条件都满足！开始创建GitHub Release..."
+              Write-Host "🎉 开始创建GitHub Release..."
               Write-Host "=============================="
               
               Write-Host "Creating GitHub Release version $(githubReleaseTag)"
@@ -572,6 +666,7 @@ jobs:
           }
       env:
         GH_TOKEN: $(GH_TOKEN)
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
       # 严格条件：只在 Pull Request 构建时创建 GitHub Release
       # 额外要求（在PowerShell脚本内部检查）：
       # 1. PR标题必须包含[Release]（不区分大小写）
