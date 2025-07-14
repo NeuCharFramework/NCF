@@ -910,7 +910,7 @@ jobs:
             - ✅ 已修复行结束符问题，确保在所有 macOS 版本上正常运行
             - 一键启动：解压后运行 `./start-ncf-macos.sh`
           - 手动启动：`dotnet Senparc.Web.dll`
-          - 完整使用指南请查看 `[MACOS_USAGE_GUIDE.md](https://github.com/NeuCharFramework/NCF/blob/master/MACOS_USAGE_GUIDE.md)`
+          - 完整使用指南请查看 `[MACOS_USAGE_GUIDE.md](https://github.com/NeuCharFramework/NCF/blob/master/%E8%A7%84%E8%8C%83/MACOS_USAGE_GUIDE.md)`
           
           ### 📅 构建信息
           - 构建号: $(Build.BuildNumber)
