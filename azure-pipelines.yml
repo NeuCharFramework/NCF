@@ -307,6 +307,28 @@ jobs:
               Write-Host "System.PullRequest.PullRequestTitle: '$prTitle'"
           }
           
+          # 获取提交人信息 - 用于Release权限检查
+          $buildRequestedFor = $env:BUILD_REQUESTEDFOR
+          $buildRequestedForId = $env:BUILD_REQUESTEDFORID
+          $buildRequestedForEmail = $env:BUILD_REQUESTEDFOREMAIL
+          $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
+          
+          Write-Host ""
+          Write-Host "=== Commit Author Information ==="
+          Write-Host "Build.RequestedFor: '$buildRequestedFor'"
+          Write-Host "Build.RequestedForId: '$buildRequestedForId'"
+          Write-Host "Build.RequestedForEmail: '$buildRequestedForEmail'"
+          Write-Host "Build.SourceVersionAuthor: '$sourceVersionAuthor'"
+          
+          # 检查是否符合Release发布条件（JeffreySu用户）
+          $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
+          Write-Host "Is Authorized for Release: $isAuthorizedUser"
+          if ($isAuthorizedUser) {
+              Write-Host "✅ User is authorized to create releases"
+          } else {
+              Write-Host "❌ User is NOT authorized to create releases (only JeffreySu can create releases)"
+          }
+          
           Write-Host "=============================="
 
     # 🚀 创建 GitHub Release (发布流程第2步：优先执行，在 Web 站点发布之前)
@@ -322,8 +344,31 @@ jobs:
               Write-Host "ncfPackageVersion: $(ncfPackageVersion)"
               Write-Host "=============================="
               
+              # 检查提交人是否有权限创建Release（必须是JeffreySu）
+              $buildRequestedFor = $env:BUILD_REQUESTEDFOR
+              $sourceVersionAuthor = $env:BUILD_SOURCEVERSIONAUTHOR
+              $isAuthorizedUser = ($buildRequestedFor -eq "JeffreySu") -or ($sourceVersionAuthor -eq "JeffreySu")
+              
+              Write-Host ""
+              Write-Host "=== Release Authorization Check ==="
+              Write-Host "Build.RequestedFor: '$buildRequestedFor'"
+              Write-Host "Build.SourceVersionAuthor: '$sourceVersionAuthor'"
+              Write-Host "Is Authorized User: $isAuthorizedUser"
+              
+              if (-not $isAuthorizedUser) {
+                  Write-Host "❌ AUTHORIZATION FAILED: Only JeffreySu can create releases"
+                  Write-Host "   Current user: '$buildRequestedFor' (RequestedFor) / '$sourceVersionAuthor' (SourceVersionAuthor)"
+                  Write-Host "   Required user: 'JeffreySu'"
+                  Write-Host "⏭️  Skipping GitHub Release creation due to authorization failure"
+                  return
+              } else {
+                  Write-Host "✅ Authorization passed: User is authorized to create releases"
+              }
+              
               # 检查PR标题是否包含[Release]（不区分大小写）
               $prTitle = "$env:SYSTEM_PULLREQUEST_PULLREQUESTTITLE"
+              Write-Host ""
+              Write-Host "=== PR Title Check ==="
               Write-Host "PR Title: '$prTitle'"
               Write-Host "PR Title Source: Azure DevOps environment variable SYSTEM_PULLREQUEST_PULLREQUESTTITLE"
               Write-Host "Original GitHub PR Title: This variable is automatically populated by Azure DevOps from GitHub PR information"
