@@ -217,8 +217,8 @@ namespace Senparc.Areas.Admin.Pages
                     }
                     else
                     {
-                        var checkXncfAvailable = await xncfRegisterManager.CheckXncfAvailable(xncfRegister);
-                        if (!checkXncfAvailable)
+                        var CheckXncfAvailable = await xncfRegisterManager.CheckXncfAvailable(xncfRegister);
+                        if (!CheckXncfAvailable)
                         {
                             if (hideModuleManager)
                             {
