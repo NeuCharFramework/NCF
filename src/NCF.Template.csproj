@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.30.4</PackageVersion>
+		<PackageVersion>0.30.5</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -98,6 +98,7 @@
 			v0.30.1 更新 WeixinManager 库
 			v0.30.2 更新基础库、WeixinManager 库
 			v0.30.4 更新基础库、WeixinManager、FileManager、KnowledgeBase、AgentsManager 等库
+			v0.30.5 更新安装界面提供模块版本号
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
