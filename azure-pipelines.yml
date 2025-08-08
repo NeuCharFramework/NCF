@@ -538,22 +538,22 @@ jobs:
           
           Write-Host "=== Multi-Platform Publishing ==="
           Write-Host "🖥️  Publishing Windows x64 platform..."
-          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-x64 --output $(Build.ArtifactStagingDirectory)/win-x64
+           dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-x64 --self-contained true --output $(Build.ArtifactStagingDirectory)/win-x64
 
           Write-Host "💻 Publishing Windows ARM64 platform (Surface Pro X, etc.)..."
-          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-arm64 --output $(Build.ArtifactStagingDirectory)/win-arm64
+           dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime win-arm64 --self-contained true --output $(Build.ArtifactStagingDirectory)/win-arm64
 
           Write-Host "🐧 Publishing Linux x64 platform..."
-          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime linux-x64 --output $(Build.ArtifactStagingDirectory)/linux-x64
+           dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime linux-x64 --self-contained true --output $(Build.ArtifactStagingDirectory)/linux-x64
 
           Write-Host "🔧 Publishing Linux ARM64 platform..."
-          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime linux-arm64 --output $(Build.ArtifactStagingDirectory)/linux-arm64
+           dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime linux-arm64 --self-contained true --output $(Build.ArtifactStagingDirectory)/linux-arm64
 
           Write-Host "🍎 Publishing macOS x64 platform (Intel/Rosetta)..."
-          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-x64 --output $(Build.ArtifactStagingDirectory)/osx-x64
+           dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-x64 --self-contained true --output $(Build.ArtifactStagingDirectory)/osx-x64
 
           Write-Host "🚀 Publishing macOS ARM64 platform (Apple Silicon)..."
-          dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-arm64 --output $(Build.ArtifactStagingDirectory)/osx-arm64
+           dotnet publish $(webProject) --configuration $(buildConfiguration) --runtime osx-arm64 --self-contained true --output $(Build.ArtifactStagingDirectory)/osx-arm64
           
           Write-Host ""
           Write-Host "✅ All platform builds completed successfully"
