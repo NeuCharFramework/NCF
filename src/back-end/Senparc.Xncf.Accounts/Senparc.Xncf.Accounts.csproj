@@ -49,15 +49,15 @@
 		<PackageReference Include="Senparc.CO2NET" Version="3.1.3" />
 		<!--<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />-->
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.0.1" />
-		<PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.0.1" />
+		<PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.2.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.23.14.5-preview" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.23.14.8-preview" />
 		<!--为了兼容部分数据库迁移文件仍然有依赖的情况-->
-		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.20.10.3-preview1" />
+		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.20.10.6-preview1" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.11.11.3-preview1" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.11.11.6-preview1" />
 		<None Include="App_Data\SenparcTraceLog\*" />
 	</ItemGroup>
 
@@ -89,9 +89,9 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.16.12.3-preview1" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.16.12.6-preview1" />
 
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.12.3-preview1" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.12.6-preview1" />
 	</ItemGroup>
 
 	<ItemGroup>
