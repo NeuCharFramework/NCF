@@ -1,5 +1,4 @@
-<img src="https://weixin.senparc.com/images/NCF/logo.png" width="300" />
-
+<img src="https://github.com/user-attachments/assets/b7d0607a-900d-41e0-a50e-0d33e0df5df0" width="300" />
 
 # NCF - NeuCharFramework
 NeuCharFramework(NCF) 是一整套可用于构建基础项目的框架，包含了基础的缓存、数据库、模型、验证及配套管理后台，高度模块化，严格遵循 DDD 设计模式，具有高度的可扩展性。
@@ -21,7 +20,11 @@ XNCF 模块模板：[![Senparc.Xncf.XncfBuilder.Template](https://img.shields.io
 > 2. 源码中已经附带文档模块，运行 NCF 并安装即可。
 
 
-<center><img src="https://weixin.senparc.com/images/NCF/login.jpg" /></center>
+<center>
+  
+  ![image](https://github.com/user-attachments/assets/9481aa19-7151-4b23-8ae9-435f2aa83d07) 
+  
+ </center>
 
 > 当前快速更新分支：[Developer](https://github.com/NeuCharFramework/NCF/tree/Developer)
 
@@ -41,7 +44,7 @@ XNCF 模块模板：[![Senparc.Xncf.XncfBuilder.Template](https://img.shields.io
 
 ## QQ 技术交流群
 
-<img src="https://sdk.weixin.senparc.com/images/QQ_Group_Avatar/NCF/QQ-Group.jpg" width="380" />
+<img src="https://github.com/user-attachments/assets/e3a3bcb7-efde-4e13-86aa-b39c42e75a7d" width="380" />
 
 ## 环境要求
 
