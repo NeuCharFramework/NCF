@@ -71,3 +71,4 @@ Thumbs.db
 /src/back-end/Senparc.Aspire.AppHost/appsettings.Development.json
 src/back-end/Senparc.Web/App_Data/install-finished.txt
 /src/back-end/Senparc.Web/.config
+/src/back-end/Senparc.Web/App_Data/Database/backup
