@@ -19,7 +19,7 @@
 		<PackageReference Include="Dapr.Client" Version="1.12.0" />-->
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.10" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.0.1" />
-		<PackageReference Include="Senparc.CO2NET" Version="3.1.3" />
+		<PackageReference Include="Senparc.CO2NET" Version="3.1.4" />
 		<PackageReference Include="Senparc.Ncf.Database.Sqlite" Version="0.19.8.7-preview1" />
 		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.19.8.7-preview1" />
 		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.11.11.6-preview1" />
@@ -35,7 +35,7 @@
 		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.12.20.6-preview" />
 		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.35.3.16-preview" />
 		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.13.17.3-preview" />
-		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.9.14.4-preview" />
+		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.9.14.5-preview.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
