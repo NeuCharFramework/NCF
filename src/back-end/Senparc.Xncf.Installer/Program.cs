@@ -19,7 +19,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire components.
-builder.AddServiceDefaults();
+//builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
@@ -80,7 +80,7 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers();
 
-app.MapDefaultEndpoints();
+//app.MapDefaultEndpoints();
 
 app.MapGet("/aspire-test1", async httpContext =>
 {

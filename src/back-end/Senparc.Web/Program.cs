@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddNcf();
 
 //添加 ServiceDefaults
-builder.AddServiceDefaults();
+//builder.AddServiceDefaults();
 
 System.Net.ServicePointManager.ServerCertificateValidationCallback =
     ((sender, certificate, chain, sslPolicyErrors) => true);
@@ -27,7 +27,7 @@ builder.Services.AddDaprClient();
 
 var app = builder.Build();
 
-app.MapDefaultEndpoints();
+//app.MapDefaultEndpoints();
 
 if (app.Environment.IsDevelopment())
 {

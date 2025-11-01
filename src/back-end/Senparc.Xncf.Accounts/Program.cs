@@ -19,7 +19,7 @@ using System.Linq;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire components.
-builder.AddServiceDefaults();
+//builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
@@ -111,6 +111,6 @@ app.Map("/TestDB", _app =>
 app.MapRazorPages();
 app.MapControllers();
 
-app.MapDefaultEndpoints();
+//app.MapDefaultEndpoints();
 
 app.Run();
