@@ -81,6 +81,7 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers();
 
+// TODO: Re-enable app.MapDefaultEndpoints() when Aspire functionality is restored or required.
 //app.MapDefaultEndpoints();
 
 app.MapGet("/aspire-test1", async httpContext =>
