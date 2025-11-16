@@ -112,6 +112,4 @@ app.Map("/TestDB", _app =>
 app.MapRazorPages();
 app.MapControllers();
 
-//app.MapDefaultEndpoints();
-
 app.Run();
