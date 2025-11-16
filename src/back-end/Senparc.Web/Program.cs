@@ -28,7 +28,6 @@ builder.Services.AddDaprClient();
 
 var app = builder.Build();
 
-//app.MapDefaultEndpoints();
 
 if (app.Environment.IsDevelopment())
 {
