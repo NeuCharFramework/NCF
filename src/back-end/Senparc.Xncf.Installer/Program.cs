@@ -19,6 +19,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire components.
+// TODO: Aspire functionality is temporarily disabled. Re-enable builder.AddServiceDefaults() when Aspire support is restored.
 //builder.AddServiceDefaults();
 
 // Add services to the container.
