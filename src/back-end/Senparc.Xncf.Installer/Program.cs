@@ -19,7 +19,8 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire components.
-builder.AddServiceDefaults();
+// TODO: Aspire functionality is temporarily disabled. Re-enable builder.AddServiceDefaults() when Aspire support is restored.
+//builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
@@ -80,7 +81,8 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers();
 
-app.MapDefaultEndpoints();
+// TODO: Re-enable app.MapDefaultEndpoints() when Aspire functionality is restored or required.
+//app.MapDefaultEndpoints();
 
 app.MapGet("/aspire-test1", async httpContext =>
 {

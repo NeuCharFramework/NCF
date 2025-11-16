@@ -17,7 +17,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddNcf();
 
 //添加 ServiceDefaults
-builder.AddServiceDefaults();
+// TODO: Re-enable AddServiceDefaults() when service default configuration is required.
+//builder.AddServiceDefaults();
 
 System.Net.ServicePointManager.ServerCertificateValidationCallback =
     ((sender, certificate, chain, sslPolicyErrors) => true);
@@ -27,7 +28,6 @@ builder.Services.AddDaprClient();
 
 var app = builder.Build();
 
-app.MapDefaultEndpoints();
 
 if (app.Environment.IsDevelopment())
 {
