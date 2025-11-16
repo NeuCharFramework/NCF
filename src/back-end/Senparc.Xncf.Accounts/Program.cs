@@ -19,6 +19,7 @@ using System.Linq;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire components.
+// TODO: Re-enable builder.AddServiceDefaults() when Aspire functionality is required.
 //builder.AddServiceDefaults();
 
 // Add services to the container.
