@@ -23,7 +23,7 @@
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.1" />
 		<PackageReference Include="Senparc.CO2NET.Cache.CsRedis" Version="2.3.1" />
 		<PackageReference Include="Senparc.CO2NET.Cache.Redis" Version="5.2.1" />
-		<PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.4" />
+		<PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.6-preview.1" />
 		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.20.13-preview.1" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.23.16-preview" />
 		<PackageReference Include="Senparc.Ncf.Log" Version="0.19.7-preview.1" />

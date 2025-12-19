@@ -49,7 +49,7 @@
 		<PackageReference Include="Senparc.CO2NET" Version="3.1.5" />
 		<!--<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />-->
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.1" />
-		<PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.4" />
+		<PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.6-preview.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.23.16-preview" />
 		<!--为了兼容部分数据库迁移文件仍然有依赖的情况-->
