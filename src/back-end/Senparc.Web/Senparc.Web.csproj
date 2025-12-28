@@ -26,7 +26,7 @@
 		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.11.13-preview.1" />
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.24.12-preview.1" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.12.14-preview.1" />
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.17.0-preview.1" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.16.12.6-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.14-preview.1" />
 		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.13.14-preview.1" />
 		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.13.14-preview.1" />

@@ -11,7 +11,7 @@
     </PackageReference>
     <PackageReference Include="Senparc.Ncf.Core" Version="0.23.16-preview" />
     <PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.20.12-preview.1" />
-    <PackageReference Include="Senparc.Xncf.Swagger" Version="0.17.0-preview.1" />
+    <PackageReference Include="Senparc.Xncf.Swagger" Version="0.16.12.6-preview1" />
     <PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.14-preview.1" />
     <!--<ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.AgentsManager\Senparc.Xncf.AgentsManager.ForNcf.csproj" />-->
     <!--<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />-->

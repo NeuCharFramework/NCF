@@ -89,7 +89,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.17.0-preview.1" />
+		<PackageReference Include="Senparc.Xncf.Swagger" Version="0.16.12.6-preview1" />
 
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.12.14-preview.1" />
 	</ItemGroup>
