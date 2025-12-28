@@ -17,7 +17,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddNcf();
 
 //添加 ServiceDefaults
-// TODO: Re-enable AddServiceDefaults() when service default configuration is required.
 //builder.AddServiceDefaults();
 
 System.Net.ServicePointManager.ServerCertificateValidationCallback =
@@ -28,6 +27,7 @@ builder.Services.AddDaprClient();
 
 var app = builder.Build();
 
+//app.MapDefaultEndpoints();
 
 if (app.Environment.IsDevelopment())
 {
@@ -66,14 +66,14 @@ app.MapControllers();
 
 app.ShowSuccessTip();//显示系统准备成功提示
 
-string GetNcfApiClientPath(string xncfName,string appServiceName, string methodName,string showStaticApiState=null)
+string GetNcfApiClientPath(string xncfName, string appServiceName, string methodName, string showStaticApiState = null)
 {
-    var globalName = ApiBindAttribute.GetGlobalName(xncfName,$"{appServiceName}.{methodName}");
+    var globalName = ApiBindAttribute.GetGlobalName(xncfName, $"{appServiceName}.{methodName}");
 
     var indexOfApiGroupDot = globalName.IndexOf(".");
     var apiName = globalName.Substring(indexOfApiGroupDot + 1, globalName.Length - indexOfApiGroupDot - 1);
     //var apiBindGlobalName = globalName.Split('.')[0];
-    
+
     var apiPath = WebApiEngine.GetApiPath(xncfName, appServiceName, apiName, showStaticApiState);
     Console.WriteLine(apiPath);
     return apiPath;
