@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.31.4</PackageVersion>
+		<PackageVersion>0.31.5</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -103,6 +103,7 @@
 			v0.31.2 更新 MCP 相关功能
 			v0.31.3 更新 PromptRange 模块，升级 UI 和功能
 			v0.31.4 更新 PromptRange 模块
+			v0.31.5 更新 PromptRange 模块，提供 3D 靶场和对话模式
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
