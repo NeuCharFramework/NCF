@@ -16,8 +16,6 @@
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.23.16.3-preview" />
 		<PackageReference Include="Senparc.Xncf.MCP" Version="0.2.5.4-preview" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
-		<!--<PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
-		<PackageReference Include="Dapr.Client" Version="1.12.0" />-->
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.10" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.1" />
 		<PackageReference Include="Senparc.CO2NET" Version="3.1.5" />
@@ -43,23 +41,4 @@
 		<!--<ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />-->
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
 	</ItemGroup>
-	<!--<ItemGroup Condition="'$(Configuration)'=='ModifyPublish'">
-		<Content Update="App_Data\**\*.*">
-			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
-		</Content>
-		<Content Update="web.config">
-			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
-		</Content>
-		<Content Update="appsettings*.json">
-			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
-		</Content>
-	</ItemGroup>-->
-	<!--<ItemGroup>
-	  <None Update="App_Data\ApiDocXML\Senparc.Areas.Admin.XML">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="App_Data\ApiDocXML\Senparc.Xncf.AgentsManager.XML">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>-->
 </Project>
