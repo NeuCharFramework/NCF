@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Senparc.Areas.Admin.Domain;
 using Senparc.Ncf.Core.Models.DataBaseModel;
+using Senparc.Ncf.Core.WorkContext.Provider;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.XncfModuleManager.Domain.Services;
@@ -12,16 +13,26 @@ using System.Threading.Tasks;
 namespace Senparc.Areas.Admin.Pages
 {
     [Ncf.AreaBase.Admin.Filters.IgnoreAuth]
-    public class IndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleServiceEx) 
+    public class IndexModel(
+        IServiceProvider serviceProvider,
+        XncfModuleServiceExtension xncfModuleServiceEx,
+        IAdminWorkContextProvider adminWorkContextProvider)
         : BaseAdminPageModel(serviceProvider)
     {
         private readonly IServiceProvider _serviceProvider = serviceProvider;
+        private readonly IAdminWorkContextProvider _adminWorkContextProvider = adminWorkContextProvider;
 
         //TODO:从其他模块获得
         private readonly XncfModuleServiceExtension _xncfModuleServiceEx = xncfModuleServiceEx;
 
+        /// <summary>
+        /// 当前用户ID（可选，用于前端获取）
+        /// </summary>
+        public int CurrentUserId { get; set; }
+
         public IActionResult OnGet()
         {
+            CurrentUserId = _adminWorkContextProvider.GetAdminWorkContext().AdminUserId;
             return null;
             //return RedirectToPage("/Home/Index");
         }
@@ -79,7 +90,7 @@ namespace Senparc.Areas.Admin.Pages
             {
                 var data = _xncfModuleServiceEx.Mapper.Map<XncfModuleDisplayDto>(z);
 
-                //TODO:去获取模块下的所有的菜单信息
+                //获取模块的菜单信息
                 IXncfRegister xncfRegister = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == data.Uid);
                 // if (xncfRegister == null)
                 // {
@@ -87,6 +98,24 @@ namespace Senparc.Areas.Admin.Pages
                 // }
                 data.Menus = (xncfRegister as Ncf.Core.Areas.IAreaRegister)?.AreaPageMenuItems ?? new List<Ncf.Core.Areas.AreaPageMenuItem>();
 
+                //获取模块的Functions信息
+                if (xncfRegister != null)
+                {
+                    var registerType = xncfRegister.GetType();
+                    var functionsByModule = Senparc.Ncf.XncfBase.Register.FunctionRenderCollection?.TryGetValue(registerType, out var funcs) == true ? funcs : null;
+                    if (functionsByModule != null && functionsByModule.Count > 0)
+                    {
+                        data.Functions = functionsByModule.Values.Select(f => new
+                        {
+                            f.FunctionRenderAttribute.Name,
+                            f.FunctionRenderAttribute.Description
+                        }).ToList();
+                    }
+                    else
+                    {
+                        data.Functions = new List<object>();
+                    }
+                }
 
                 //查找对应的更新版本
                 var register = updateXncfRegisters.FirstOrDefault(r => r.Uid == z.Uid);
@@ -236,6 +265,30 @@ namespace Senparc.Areas.Admin.Pages
 
                 dest.Add(item);
             }
+
+            var systemManagementMenu = dest.FirstOrDefault(z =>
+                z.ParentId == null &&
+                (string.Equals(z.MenuName, "系统管理", StringComparison.OrdinalIgnoreCase)
+                 || string.Equals(z.MenuName, "System Management", StringComparison.OrdinalIgnoreCase)))
+                ?? dest.FirstOrDefault(z =>
+                    z.ParentId == null &&
+                    dest.Any(child => child.ParentId == z.Id && string.Equals(child.MenuName, "管理员管理", StringComparison.OrdinalIgnoreCase)));
+
+            var adminChatParentId = systemManagementMenu?.Id;
+            var hasAdminChatMenu = dest.Any(z => string.Equals(z.Url, "/Admin/AdminChat/Chat", StringComparison.OrdinalIgnoreCase));
+
+            if (!hasAdminChatMenu)
+            {
+                dest.Insert(0,new SysMenuDto()
+                {
+                    MenuName = "AI 智能助手",
+                    Url = "/Admin/AdminChat/Chat",
+                    Icon = "fa fa-comments-o",
+                    Id = (index++).ToString(),
+                    ParentId = adminChatParentId
+                });
+            }
+
             GetSysMenuTreesRecursive(dest, sysMenuTrees, null);
             return sysMenuTrees;
         }

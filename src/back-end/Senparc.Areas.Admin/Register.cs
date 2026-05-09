@@ -36,8 +36,10 @@ using Senparc.Ncf.XncfBase;
 using Senparc.Ncf.XncfBase.Database;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Resources;
 using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin
@@ -50,6 +52,12 @@ namespace Senparc.Areas.Admin
         IXncfDatabase  //注册 XNCF 模块数据库（按需选用）
                        //IXncfRazorRuntimeCompilation  //需要使用 RazorRuntimeCompilation，在开发环境下实时更新 Razor Page
     {
+        private static readonly ResourceManager ResourceManager = new("Senparc.Areas.Admin.AdminResource", typeof(AdminResource).Assembly);
+
+        private static string T(string key, string fallback)
+        {
+            return ResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? fallback;
+        }
 
         #region IXncfRegister 接口
 
@@ -57,13 +65,13 @@ namespace Senparc.Areas.Admin
 
         public override string Uid => SiteConfig.SYSTEM_XNCF_MODULE_AREAS_ADMIN_UID;// "00000000-0000-0001-0001-000000000001";
 
-        public override string Version => "0.4.0-beta4";
+        public override string Version => "0.5.6-beta4";
 
-        public override string MenuName => "NCF 系统管理员后台";
+        public override string MenuName => T("Admin.Register.MenuName", "NCF 系统管理员后台");
 
         public override string Icon => "fa fa-university";
 
-        public override string Description => "这是管理员后台模块，用于 NCF 系统后台的自我管理，请勿删除此模块。如果你实在忍不住，请务必做好数据备份。";
+        public override string Description => T("Admin.Register.Description", "这是管理员后台模块，用于 NCF 系统后台的自我管理，请勿删除此模块。如果你实在忍不住，请务必做好数据备份。");
 
 
         public override async Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
@@ -134,6 +142,15 @@ namespace Senparc.Areas.Admin
             services.AddScoped<IAdminUserInfoRepository, AdminUserInfoRepository>();
             services.AddScoped<InstallerService>();
 
+            // 聊天功能相关服务注册
+            services.AddScoped<IAdminChatSessionRepository, AdminChatSessionRepository>();
+            services.AddScoped<IAdminChatMessageRepository, AdminChatMessageRepository>();
+            services.AddScoped<IAdminChatSessionModuleRepository, AdminChatSessionModuleRepository>();
+            services.AddScoped<AdminChatSessionService>();
+            services.AddScoped<AdminChatMessageService>();
+            services.AddScoped<AdminChatSessionModuleService>();
+            services.AddScoped<AdminChatAiService>();
+
             return base.AddXncfModule(services, configuration, env);
         }
 
@@ -196,8 +213,8 @@ namespace Senparc.Areas.Admin
 
         public List<AreaPageMenuItem> AreaPageMenuItems => new List<AreaPageMenuItem>()
         {
-            new AreaPageMenuItem(GetAreaUrl("/Admin/Menu/Index"),"菜单管理","fa fa-bug"),
-            new AreaPageMenuItem(GetAreaUrl("/Admin/SenparcTrace/Index"),"SenparcTrace 日志","fa fa-calendar-o"),
+            new AreaPageMenuItem(GetAreaUrl("/Admin/Menu/Index"), T("Admin.Area.MenuManagement", "菜单管理"),"fa fa-bug"),
+            new AreaPageMenuItem(GetAreaUrl("/Admin/SenparcTrace/Index"), T("Admin.Area.TraceLog", "SenparcTrace 日志"),"fa fa-calendar-o"),
         };//Admin比较特殊，不需要全部输出
 
 
@@ -253,6 +270,7 @@ namespace Senparc.Areas.Admin
 
 
                 options.Conventions.AuthorizePage("/", "AdminOnly");//必须登录
+                options.Conventions.AuthorizePage("/AdminChat/Chat", "AdminOnly");//聊天页面必须登录
                 options.Conventions.AllowAnonymousToPage("/Login");//允许匿名
 
                 //更多：https://learn.microsoft.com/en-us/aspnet/core/security/authorization/razor-pages-authorization?view=aspnetcore-8.0
@@ -368,3 +386,10 @@ namespace Senparc.Areas.Admin
     }
 
 }
+
+
+
+
+
+
+

@@ -32,16 +32,24 @@ namespace Senparc.Areas.Admin.Domain.Models
         protected override Action<IApplicationBuilder> AppAction => app =>
         {
             //指定其他数据库
-            app.UseNcfDatabase("Senparc.Ncf.Database.SqlServer", "Senparc.Ncf.Database.SqlServer", "SQLServerDatabaseConfiguration");
+            app.UseNcfDatabase("Senparc.Ncf.Database.SqlServer", "Senparc.Ncf.Database.SqlServer", "SqlServerDatabaseConfiguration");
         };
 
         public SenparcDbContextFactory_SqlServer()
-            : base(
+           : base(
                  /* Debug模式下项目根目录
                  /* 用于寻找 App_Data 文件夹，从而找到数据库连接字符串配置信息 */
-                 Path.Combine(AppContext.BaseDirectory, $"..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}Senparc.Web"))
+                 SenparcDbContextFactoryConfig.RootDirectoryPath)
         {
-
+            Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.DatabaseName = "Local";//默认配置
         }
+
+        //  : base(
+        //         /* Debug模式下项目根目录
+        //         /* 用于寻找 App_Data 文件夹，从而找到数据库连接字符串配置信息 */
+        //         Path.Combine(AppContext.BaseDirectory, $"..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}Senparc.Web"))
+        //{
+
+        //}
     }
 }

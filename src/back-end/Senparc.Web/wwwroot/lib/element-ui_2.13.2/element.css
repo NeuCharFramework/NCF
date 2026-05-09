@@ -12904,8 +12904,8 @@
     -ms-flex: 1;
     flex: 1;
     -ms-flex-preferred-size: auto;
-    flex-basis: auto;
-    overflow: auto;
+/*    flex-basis: auto;
+    overflow: auto;*/
     box-sizing: border-box;
     padding: 5px;
 }

@@ -2,10 +2,12 @@
 using Senparc.Ncf.XncfBase;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using System.Resources;
 
 using Senparc.Xncf.Accounts.Models;
 using Senparc.Xncf.Accounts.Domain.Models;
@@ -19,6 +21,13 @@ namespace Senparc.Xncf.Accounts
     [XncfRegister]
     public partial class Register : XncfRegisterBase, IXncfRegister
     {
+        private static readonly ResourceManager ResourceManager = new("Senparc.Xncf.Accounts.AccountsResource", typeof(AccountsResource).Assembly);
+
+        private static string T(string key, string fallback)
+        {
+            return ResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? fallback;
+        }
+
         #region IXncfRegister 接口
 
         public override string Name => "Senparc.Xncf.Accounts";
@@ -27,11 +36,11 @@ namespace Senparc.Xncf.Accounts
 
         public override string Version => "0.1";//必须填写版本号
 
-        public override string MenuName => "用户管理";
+        public override string MenuName => T("Accounts.Register.MenuName", "用户管理");
 
         public override string Icon => "fa fa-users";
 
-        public override string Description => "注册用户管理";
+        public override string Description => T("Accounts.Register.Description", "注册用户管理");
 
         public override async Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
         {

@@ -80,7 +80,7 @@
 		<EmbeddedResource Remove="Domain\Models\DatabaseModel\Mapping\**" />
 		<None Remove="Domain\Dto\**" />
 		<None Remove="Domain\Models\DatabaseModel\Mapping\**" />-->
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.10" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.2" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">

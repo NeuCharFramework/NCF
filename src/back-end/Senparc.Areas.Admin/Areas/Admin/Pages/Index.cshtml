@@ -1,4 +1,4 @@
-﻿@page
+@page
 
 @model Senparc.Areas.Admin.Pages.IndexModel
 @{
@@ -6,6 +6,7 @@
     Layout = "_Layout_Vue";
 }
 @section style {
+    <link rel="stylesheet" href="~/css/Admin/Pages/AdminChat/ChatLauncher.css" />
     <style>
         #home-header .el-main {
             padding: 20px 10px 0px 10px;
@@ -270,6 +271,192 @@
         .fade-animation {
             animation: fade 1.2s ease-in-out;
         }
+
+        /* AI 对话入口样式 */
+        #ai-chat-entrance .chat-entrance-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .chat-entrance-container {
+            color: #fff;
+        }
+
+        .chat-entrance-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chat-entrance-icon {
+            font-size: 50px;
+            margin-right: 20px;
+            opacity: 0.9;
+        }
+
+        .chat-entrance-content {
+            flex: 1;
+        }
+
+        .chat-entrance-title {
+            margin: 0 0 8px 0;
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+            .chat-entrance-title .fa {
+                margin-right: 8px;
+            }
+
+        .chat-entrance-subtitle {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .chat-entrance-input-wrapper {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-entrance-input .el-textarea__inner {
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 15px;
+            padding: 15px 20px;
+            font-size: 15px;
+            line-height: 1.6;
+            resize: none;
+        }
+
+            .chat-entrance-input .el-textarea__inner:focus {
+                background: rgba(255, 255, 255, 1);
+                box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+            }
+
+            .chat-entrance-input .el-textarea__inner::placeholder {
+                color: #999;
+                line-height: 1.6;
+            }
+
+        .chat-send-button {
+            align-self: flex-end;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #5e72e4 0%, #825ee4 100%);
+            border: none;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+            .chat-send-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(94, 114, 228, 0.4);
+            }
+
+            .chat-send-button:active {
+                transform: translateY(0);
+            }
+
+        .chat-entrance-tips {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .tip-item {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+            .tip-item .fa {
+                margin-right: 5px;
+            }
+
+        .chat-module-drop-zone {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            min-height: 100px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+            .chat-module-drop-zone.drag-over {
+                background: rgba(255, 255, 255, 0.2);
+                border-color: rgba(255, 255, 255, 0.8);
+                border-style: solid;
+                border-width: 3px;
+            }
+
+        .drop-zone-placeholder {
+            text-align: center;
+            opacity: 0.7;
+            color: #fff;
+        }
+
+            .drop-zone-placeholder .fa {
+                font-size: 28px;
+                margin-bottom: 8px;
+                display: block;
+            }
+
+            .drop-zone-placeholder p {
+                margin: 0;
+                font-size: 14px;
+            }
+
+        .selected-modules-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .module-tag {
+            font-size: 14px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+        }
+
+            .module-tag .fa {
+                margin-right: 5px;
+            }
+
+        #xncf-modules-area .xncf-item.dragging {
+            opacity: 0.5;
+        }
+
+        .chat-module-drop-zone.highlight {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.9);
+            border-style: solid;
+            border-width: 3px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+            transform: scale(1.02);
+        }
+        
+        /* 拖拽时的鼠标样式 */
+        #xncf-modules-area .xncf-item[draggable="true"] {
+            cursor: grab;
+        }
+        
+        #xncf-modules-area .xncf-item[draggable="true"]:active {
+            cursor: grabbing;
+        }
     </style>
 }
 
@@ -355,6 +542,79 @@
     </el-container>
 </div>
 
+<!-- AI 对话入口 -->
+<div id="ai-chat-entrance" style="margin-top: 30px; margin-bottom: 30px;">
+    <el-card class="box-card chat-entrance-card">
+        <div class="chat-entrance-container">
+            <div class="chat-entrance-header">
+                <div class="chat-entrance-icon">
+                    <i class="fa fa-comments"></i>
+                </div>
+                <div class="chat-entrance-content">
+                    <h3 class="chat-entrance-title">
+                        <i class="fa fa-magic"></i> AI 智能助手
+                    </h3>
+                    <p class="chat-entrance-subtitle">向我提问，我将帮助您更高效地管理系统</p>
+                </div>
+            </div>
+            
+            <div class="chat-entrance-input-wrapper">
+                <el-input
+                    type="textarea"
+                    v-model="chatInputText"
+                    placeholder="输入您的问题，例如：如何配置系统参数？&#10;&#10;提示：按 Ctrl+Enter 或 Cmd+Enter 发送消息"
+                    :rows="4"
+                    :autosize="{ minRows: 4, maxRows: 8 }"
+                    @@keydown.native="handleLauncherInputKeydown"
+                    class="chat-entrance-input"
+                    resize="none">
+                </el-input>
+                <el-button 
+                    type="primary"
+                    size="medium"
+                    icon="el-icon-s-promotion" 
+                    @@click="startChatSession"
+                    :disabled="!chatInputText || chatInputText.trim().length === 0"
+                    :loading="isCreatingSession"
+                    class="chat-send-button">
+                    开始对话
+                </el-button>
+            </div>
+
+            <div class="chat-entrance-tips">
+                <span class="tip-item"><i class="fa fa-lightbulb-o"></i> 支持多轮对话</span>
+                <span class="tip-item"><i class="fa fa-cube"></i> 可添加模块作为对话上下文</span>
+                <span class="tip-item"><i class="fa fa-history"></i> 自动保存历史记录</span>
+            </div>
+
+            <div class="chat-module-picker">
+                <div class="chat-module-picker-header">
+                    <span class="chat-module-picker-title">引用模块（可选）</span>
+                    <div class="chat-module-picker-actions">
+                        <el-button size="mini" type="primary" icon="el-icon-plus" @@click="openModuleSelector">添加引用模块</el-button>
+                        <el-button size="mini" @@click="clearSelectedModules" v-if="selectedModules.length > 0">清空</el-button>
+                    </div>
+                </div>
+
+                <div v-if="selectedModules.length > 0" class="chat-module-selected-list">
+                    <el-tag
+                        v-for="module in selectedModules"
+                        :key="module.uid"
+                        closable
+                        @@close="removeModule(module.uid)"
+                        type="info"
+                        class="module-tag">
+                        <i :class="module.icon"></i> {{module.name}}
+                    </el-tag>
+                </div>
+                <div v-else class="chat-module-selected-empty">点击“添加引用模块”可选择多个模块作为上下文</div>
+            </div>
+
+            @await Html.PartialAsync("~/Areas/Admin/Pages/Shared/_ChatModuleSelectorDialog.cshtml")
+        </div>
+    </el-card>
+</div>
+
 <!-- 功能模块 -->
 <div>
     <el-row>
@@ -417,5 +677,6 @@
 
 @section scripts {
     <script src="~/lib/echarts/dist/echarts.js"></script>
+    <script src="~/js/Admin/Pages/AdminChat/ChatLauncherMixin.js"></script>
     <script src="~/js/Admin/Pages/Index/Index.js"></script>
 }

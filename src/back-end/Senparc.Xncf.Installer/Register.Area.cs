@@ -8,18 +8,27 @@ using Senparc.Ncf.XncfBase;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.Hosting;
+using System.Globalization;
+using System.Resources;
 
 namespace Senparc.Xncf.Installer
 {
     public partial class Register : IAreaRegister, //注册 XNCF 页面接口（按需选用）
                                     IXncfRazorRuntimeCompilation  //赋能 RazorPage 运行时编译
     {
+        private static readonly ResourceManager AreaResourceManager = new("Senparc.Xncf.Installer.InstallerResource", typeof(InstallerResource).Assembly);
+
+        private static string AreaT(string key, string fallback)
+        {
+            return AreaResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? fallback;
+        }
+
         #region IAreaRegister 接口
 
         public string HomeUrl => "/Installer";
 
         public List<AreaPageMenuItem> AreaPageMenuItems => new List<AreaPageMenuItem>() {
-                         new AreaPageMenuItem(GetAreaHomeUrl(),"首页","fa fa-laptop"),
+                         new AreaPageMenuItem(GetAreaHomeUrl(), AreaT("Installer.Area.Home", "首页"),"fa fa-laptop"),
 			 		};
 
         public IMvcBuilder AuthorizeConfig(IMvcBuilder builder, IHostEnvironment env)

@@ -1,10 +1,12 @@
 ﻿@model Senparc.Ncf.AreaBase.Admin.IAdminPageModelBase
 @{
     var thisYear = DateTime.Now.Year;
+    var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
 }
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Senparc.Areas.Admin.AdminResource> AR
 
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="@currentCulture">
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"]</title>
@@ -54,18 +56,29 @@
                         @*面包屑*@
                         <div class="header-breadcrumb">
                             <el-breadcrumb separator="/">
-                                <el-breadcrumb-item><a href="/Admin/Index">首页</a></el-breadcrumb-item>
+                                <el-breadcrumb-item><a href="/Admin/Index">@AR["Admin.Nav.Home"]</a></el-breadcrumb-item>
                                 @RenderSection("breadcrumbs", false)
                             </el-breadcrumb>
                         </div>
+                        <div class="header-language">
+                            <label for="ncf-lang" class="header-language-label">@AR["Admin.Language.SelectLanguage"]</label>
+                            <select id="ncf-lang" class="header-language-select" onchange="ncfSwitchLanguage(this.value)">
+                                <option value="zh-CN" selected="@(currentCulture == "zh-CN" ? "selected" : null)">简体中文</option>
+                                <option value="en" selected="@(currentCulture.StartsWith("en") ? "selected" : null)">English</option>
+                                <option value="ja" selected="@(currentCulture.StartsWith("ja") ? "selected" : null)">日本語</option>
+                                <option value="fr" selected="@(currentCulture.StartsWith("fr") ? "selected" : null)">Français</option>
+                                <option value="es" selected="@(currentCulture.StartsWith("es") ? "selected" : null)">Español</option>
+                                <option value="ru" selected="@(currentCulture.StartsWith("ru") ? "selected" : null)">Русский</option>
+                            </select>
+                        </div>
                         @*退出*@
                         <div class="header-logout">
-                            <el-tooltip class="item" effect="dark" content="退出登录" placement="left">
-                                <el-popconfirm confirmButtonText='退出'
-                                               cancelButtonText='不用了'
+                            <el-tooltip class="item" effect="dark" content="@AR["Admin.Logout.Title"]" placement="left">
+                                <el-popconfirm confirmButtonText='@AR["Admin.Logout.Yes"]'
+                                               cancelButtonText='@AR["Admin.Logout.No"]'
                                                icon="el-icon-info"
                                                iconColor="red"
-                                               title="确定退出吗？"
+                                               title="@AR["Admin.Logout.Confirm"]"
                                                @@on-Confirm="loginout">
                                     <i slot="reference" style="cursor:pointer;" class="fa fa-sign-out" aria-hidden="true"></i>
                                 </el-popconfirm>
@@ -98,6 +111,12 @@
     <script src="~/js/Admin/navMenu.js"></script>
     <script src="~/js/Admin/vuePermission.js"></script>
     <script src="~/js/Admin/Pages/Components/Components.js"></script>
+    <script>
+        function ncfSwitchLanguage(culture) {
+            var returnUrl = window.location.pathname + window.location.search;
+            window.location.href = '/api/Language/Set?culture=' + encodeURIComponent(culture) + '&returnUrl=' + encodeURIComponent(returnUrl);
+        }
+    </script>
     <!--页面js-->
     @*<script src="~/js/Admin/Pages/Index/Index.js"></script>*@
     @RenderSection("scripts", false)

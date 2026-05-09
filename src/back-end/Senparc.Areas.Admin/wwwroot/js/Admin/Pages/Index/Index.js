@@ -1,5 +1,6 @@
-﻿var app = new Vue({
+var app = new Vue({
   el: '#app',
+  mixins: [window.ChatLauncherMixin],
   data() {
     return {
       isExpandAll: true,
@@ -157,7 +158,7 @@
       let xncfStatData = await service.get('/Admin/Index?handler=XncfStat');
       this.xncfStat = xncfStatData.data.data;
     },
-    //开放模块数据  
+    //开放模块数据
     async getXncfOpening() {
       let xncfOpeningList = await service.get('/Admin/Index?handler=XncfOpening');
       this.xncfOpeningList = xncfOpeningList.data.data;

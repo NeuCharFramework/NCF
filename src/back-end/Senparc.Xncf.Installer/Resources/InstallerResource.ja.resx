@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Install.Title" xml:space="preserve">
+    <value>NCF インストーラー</value>
+  </data>
+  <data name="Install.NotInit" xml:space="preserve">
+    <value>システムが初期化されていません。インストールを開始してください！</value>
+  </data>
+  <data name="Install.CurrentDatabase" xml:space="preserve">
+    <value>現在のデータベース：</value>
+  </data>
+  <data name="Install.MultiTenantStatus" xml:space="preserve">
+    <value>マルチテナント状態：</value>
+  </data>
+  <data name="Install.MultiTenantEnabled" xml:space="preserve">
+    <value>有効</value>
+  </data>
+  <data name="Install.MultiTenantDisabled" xml:space="preserve">
+    <value>無効</value>
+  </data>
+  <data name="Install.MultiTenantRule" xml:space="preserve">
+    <value>ルール：</value>
+  </data>
+  <data name="Install.StartButton" xml:space="preserve">
+    <value>今すぐインストール</value>
+  </data>
+  <data name="Install.AdvancedOptions" xml:space="preserve">
+    <value>詳細オプション</value>
+  </data>
+  <data name="Install.Warning" xml:space="preserve">
+    <value>注意：インストール後、このページは無効になります！</value>
+  </data>
+  <data name="Install.Form.SystemName" xml:space="preserve">
+    <value>システム名</value>
+  </data>
+  <data name="Install.Form.AdminUsername" xml:space="preserve">
+    <value>管理者ユーザー名</value>
+  </data>
+  <data name="Install.Form.DbConnectionString" xml:space="preserve">
+    <value>データベース接続文字列（変更後はプロジェクトの再起動が必要）</value>
+  </data>
+  <data name="Install.Form.ModuleList" xml:space="preserve">
+    <value>デフォルトでインストールするモジュール（インストール後に管理可能）</value>
+  </data>
+  <data name="Install.Form.ModulePlaceholder" xml:space="preserve">
+    <value>選択してください</value>
+  </data>
+  <data name="Install.Success.Title" xml:space="preserve">
+    <value>NeuCharFramework のインストールが成功しました！</value>
+  </data>
+  <data name="Install.Success.TenantCreated" xml:space="preserve">
+    <value>現在のテナントが作成されました、名前：</value>
+  </data>
+  <data name="Install.Success.TenantRule" xml:space="preserve">
+    <value>照合ルール：</value>
+  </data>
+  <data name="Install.Success.TenantKey" xml:space="preserve">
+    <value>主なマッチング条件：</value>
+  </data>
+  <data name="Install.Success.SaveInfo" xml:space="preserve">
+    <value>以下の情報を保存してください：</value>
+  </data>
+  <data name="Install.Success.AdminAccount" xml:space="preserve">
+    <value>管理者アカウント：</value>
+  </data>
+  <data name="Install.Success.AdminPassword" xml:space="preserve">
+    <value>管理者パスワード：</value>
+  </data>
+  <data name="Install.Success.PasswordWarning" xml:space="preserve">
+    <value>注意：このページは無効になりました。認証情報を保存してください。平文パスワードは取得できません！</value>
+  </data>
+  <data name="Install.Success.LoginLink" xml:space="preserve">
+    <value>ここをクリックして管理パネルにログイン</value>
+  </data>
+  <data name="Install.LanguageSelect" xml:space="preserve">
+    <value>言語選択</value>
+  </data>
+  <data name="Install.Footer.Copyright" xml:space="preserve">
+    <value>蘇州盛派ネットワーク科技有限公司 版権所有</value>
+  </data>
+  <data name="Install.ForceUpgrade.Completed" xml:space="preserve"><value>強制手動アップグレードが完了しました: {0}。他のモジュールの更新を続けるか、ホームページを再度開いてください。</value></data>
+  <data name="Install.InitRequired" xml:space="preserve"><value>初期化が必要です</value></data>
+  <data name="Installer.Register.MenuName" xml:space="preserve"><value>NCF インストーラー</value></data>
+  <data name="Installer.Register.Description" xml:space="preserve"><value>NCF 初期インストールモジュールです。インストール完了後にアンインストールまたは削除できます。</value></data>
+  <data name="Installer.Area.Home" xml:space="preserve"><value>ホーム</value></data>
+</root>

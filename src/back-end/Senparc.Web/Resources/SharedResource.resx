@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- ===== Language Selector ===== -->
+  <data name="Language.SelectLanguage" xml:space="preserve">
+    <value>选择语言</value>
+  </data>
+  <data name="Language.zh-CN" xml:space="preserve">
+    <value>简体中文</value>
+  </data>
+  <data name="Language.en" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Language.ja" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Language.fr" xml:space="preserve">
+    <value>Français</value>
+  </data>
+  <data name="Language.es" xml:space="preserve">
+    <value>Español</value>
+  </data>
+  <data name="Language.ru" xml:space="preserve">
+    <value>Русский</value>
+  </data>
+
+  <!-- ===== Common Buttons ===== -->
+  <data name="Button.Confirm" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="Button.Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Button.Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Button.Delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="Button.Edit" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="Button.Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="Button.Reset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="Button.Submit" xml:space="preserve">
+    <value>提交</value>
+  </data>
+  <data name="Button.Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Button.Back" xml:space="preserve">
+    <value>返回</value>
+  </data>
+  <data name="Button.Add" xml:space="preserve">
+    <value>添加</value>
+  </data>
+
+  <!-- ===== Common Messages ===== -->
+  <data name="Message.Success" xml:space="preserve">
+    <value>操作成功</value>
+  </data>
+  <data name="Message.Error" xml:space="preserve">
+    <value>操作失败</value>
+  </data>
+  <data name="Message.Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="Message.Loading" xml:space="preserve">
+    <value>加载中...</value>
+  </data>
+  <data name="Message.NoData" xml:space="preserve">
+    <value>暂无数据</value>
+  </data>
+  <data name="Message.ConfirmDelete" xml:space="preserve">
+    <value>确认要删除吗？</value>
+  </data>
+
+  <!-- ===== Footer ===== -->
+  <data name="Footer.PoweredBy" xml:space="preserve">
+    <value>技术支持：</value>
+  </data>
+  <data name="Footer.Copyright" xml:space="preserve">
+    <value>苏州盛派网络科技有限公司 版权所有</value>
+  </data>
+
+</root>

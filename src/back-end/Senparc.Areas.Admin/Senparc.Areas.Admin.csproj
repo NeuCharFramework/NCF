@@ -12,7 +12,7 @@
 	<ItemGroup>
 		<!--<FrameworkReference Include="Microsoft.AspNetCore.App" />-->
 		<EmbeddedResource Include="wwwroot\**\*" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.10" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
