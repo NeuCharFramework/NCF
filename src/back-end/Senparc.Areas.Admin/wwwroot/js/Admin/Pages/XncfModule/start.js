@@ -14,7 +14,8 @@
                 'Int32': '数字',
                 'Int64': '数字',
                 'DateTime': '日期',
-                'String[]': '选项'
+                'String[]': '选项',
+                'Boolean': '布尔'
             },
             xNcfModules_State: {
                 0: '关闭',
@@ -49,6 +50,20 @@
         this.getList();
     },
     methods: {
+        normalizeMultiValue(value) {
+            if (Array.isArray(value)) {
+                return value;
+            }
+
+            if (typeof value !== 'string' || value.length === 0) {
+                return [];
+            }
+
+            return value
+                .split(/[;,，；\n\r|]+/)
+                .map(item => item.trim())
+                .filter(item => item.length > 0);
+        },
         async  getList() {
             const uid = resizeUrl().uid;
             const res = await service.get(`/Admin/XncfModule/Start?handler=Detail&uid=${uid}`);
@@ -92,10 +107,10 @@
                 // 多选
                 if (res.parameterType === 2 && res.selectionList.items) {
                     this.runData[res.name] = {};
-                    this.runData[res.name].value = [];
+                    this.runData[res.name].value = this.normalizeMultiValue(res.value);
                     this.runData[res.name].item = res;
                     res.selectionList.items.map(ele => {
-                        if (ele.defaultSelected) {
+                        if (ele.defaultSelected && this.runData[res.name].value.indexOf(ele.value) < 0) {
                             this.runData[res.name].value.push(ele.value);
                         }
                     });
@@ -103,10 +118,10 @@
                 // 下拉框value
                 if (res.parameterType === 1 && res.selectionList.items) {
                     this.runData[res.name] = {};
-                    this.runData[res.name].value = '';
+                    this.runData[res.name].value = res.value || '';
                     this.runData[res.name].item = res;
                     res.selectionList.items.map(ele => {
-                        if (ele.defaultSelected) {
+                        if (!this.runData[res.name].value && ele.defaultSelected) {
                             this.runData[res.name].value = ele.value;
                         }
                     });
@@ -120,6 +135,12 @@
                     this.runData[res.name] = {};
                     this.runData[res.name].item = res;
                     this.runData[res.name].value = res.value || '';
+                }
+                // 布尔（单个复选框）
+                if (res.parameterType === 4) {
+                    this.runData[res.name] = {};
+                    this.runData[res.name].item = res;
+                    this.runData[res.name].value = res.value === true || res.value === 'true' || res.value === 'True';
                 }
             });
             this.runData = Object.assign({}, this.runData);
@@ -172,13 +193,10 @@
                             });
                             return;
                         } else {
-                            xncfFunctionParams[i] = {};
-                            xncfFunctionParams[i].SelectedValues = [];
-                            xncfFunctionParams[i].SelectedValues = this.runData[i].value;
-
+                            xncfFunctionParams[i] = this.runData[i].value;
                         }
                     }
-                    // 下拉框value为字符串，但接口要数组
+                    // 下拉框
                     if (this.runData[i].item.parameterType === 1) {
                         if (this.runData[i].item.isRequired && this.runData[i].value.length === 0) {
                             this.$notify({
@@ -188,9 +206,7 @@
                             });
                             return;
                         } else {
-                            xncfFunctionParams[i] = {};
-                            xncfFunctionParams[i].SelectedValues = [];
-                            xncfFunctionParams[i].SelectedValues[0] = this.runData[i].value;
+                            xncfFunctionParams[i] = this.runData[i].value;
                         }
                     }
                     // 输入框
@@ -205,6 +221,10 @@
                         } else {
                             xncfFunctionParams[i] = this.runData[i].value;
                         }
+                    }
+                    // 布尔
+                    if (this.runData[i].item.parameterType === 4) {
+                        xncfFunctionParams[i] = !!this.runData[i].value;
                     }
                 }
                 const data = {

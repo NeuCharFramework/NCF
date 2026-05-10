@@ -197,7 +197,12 @@
                           v-model="runData[item.name].value" 
                           :maxlength="item.maxLength===0 ? 500 : item.maxLength"
                           :type="item.parameterType===3 ? 'password' : 'text'"></el-input>
-                <el-select v-if="item.parameterType===1" v-model="runData[item.name].value">
+                <el-checkbox v-if="item.parameterType===4" v-model="runData[item.name].value"></el-checkbox>
+                <el-select v-if="item.parameterType===1"
+                           v-model="runData[item.name].value"
+                           :filterable="item.filterable"
+                           :allow-create="item.allowCreate"
+                           :default-first-option="item.allowCreate">
                     <template v-if="item.selectionList.items" v-for="selectionItem in item.selectionList.items">
                         <el-option :label="selectionItem.text" :value="selectionItem.value"></el-option>
                     </template>

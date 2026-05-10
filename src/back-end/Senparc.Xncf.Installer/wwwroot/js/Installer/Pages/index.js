@@ -31,24 +31,26 @@ var app = new Vue({
         },
         submit() {
             if (this.installStarted) {
-                alert('安装已经在进行中，请等待');
+                alert((window.ncfInstallI18n && window.ncfInstallI18n.started) || 'Installation is already running, please wait.');
                 return false;
             }
 
-            if (!confirm('确定要开始安装吗？安装完成后此页面将失效！')) {
+            var confirmText = ((window.ncfInstallI18n && window.ncfInstallI18n.startConfirm) || 'Start installation?') + '\n' +
+                ((window.ncfInstallI18n && window.ncfInstallI18n.startConfirmDetail) || 'This page will expire after installation.');
+            if (!confirm(confirmText)) {
                 return false;
             }
 
             this.installStarted = true;
 
             document.getElementById('btnInstall').setAttribute('disabled', true);
-            document.getElementById('btnInstall').innerHTML = '安装已启动，请稍后……';
+            document.getElementById('btnInstall').innerHTML = (window.ncfInstallI18n && window.ncfInstallI18n.startedWaiting) || 'Installation started, please wait...';
 
             axios.post("/Install/Index", this.installOptions, {
             }).then(res => {
                 document.getElementById('app').innerHTML = res.data;
             }).catch(error => {
-                document.getElementById('app').innerHTML = '安装失败:' + error;
+                document.getElementById('app').innerHTML = ((window.ncfInstallI18n && window.ncfInstallI18n.failedPrefix) || 'Install failed:') + error;
             });
             return true;
         }

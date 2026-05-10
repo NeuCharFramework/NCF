@@ -134,6 +134,31 @@ li {
     line-height: 60px;
 }
 
+.header-language {
+    height: 100%;
+    float: right;
+    line-height: 60px;
+    margin-right: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-language-label {
+    font-size: 12px;
+    color: #606266;
+}
+
+.header-language-select {
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #303133;
+    padding: 2px 8px;
+    height: 28px;
+    background: #fff;
+}
+
 
 
 /*分页*/

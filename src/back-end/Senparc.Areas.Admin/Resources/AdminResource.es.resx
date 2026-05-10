@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Admin.Title" xml:space="preserve">
+    <value>Panel de administración NCF</value>
+  </data>
+  <data name="Admin.Nav.Home" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="Admin.Logout.Title" xml:space="preserve">
+    <value>Cerrar sesión</value>
+  </data>
+  <data name="Admin.Logout.Confirm" xml:space="preserve">
+    <value>¿Está seguro de que desea cerrar sesión?</value>
+  </data>
+  <data name="Admin.Logout.Yes" xml:space="preserve">
+    <value>Cerrar sesión</value>
+  </data>
+  <data name="Admin.Logout.No" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Admin.Login.Title" xml:space="preserve">
+    <value>Inicio de sesión</value>
+  </data>
+  <data name="Admin.Login.Username" xml:space="preserve">
+    <value>Nombre de usuario</value>
+  </data>
+  <data name="Admin.Login.Password" xml:space="preserve">
+    <value>Contraseña</value>
+  </data>
+  <data name="Admin.Login.Tenant" xml:space="preserve">
+    <value>Nombre del inquilino</value>
+  </data>
+  <data name="Admin.Login.Submit" xml:space="preserve">
+    <value>Iniciar sesión</value>
+  </data>
+  <data name="Admin.Login.UsernamePlaceholder" xml:space="preserve">
+    <value>Ingrese el nombre de usuario</value>
+  </data>
+  <data name="Admin.Login.PasswordPlaceholder" xml:space="preserve">
+    <value>Ingrese la contraseña</value>
+  </data>
+  <data name="Admin.Login.TenantPlaceholder" xml:space="preserve">
+    <value>Ingrese el nombre del inquilino</value>
+  </data>
+  <data name="Admin.Login.Error.UsernameRequired" xml:space="preserve">
+    <value>El nombre de usuario es requerido</value>
+  </data>
+  <data name="Admin.Login.Error.PasswordRequired" xml:space="preserve">
+    <value>Se requiere contraseña</value>
+  </data>
+  <data name="Admin.Language.SelectLanguage" xml:space="preserve">
+    <value>Seleccionar idioma</value>
+  </data>
+  <data name="Admin.Login.Error.InvalidCredentials" xml:space="preserve"><value>Nombre de usuario o contraseña no válidos.</value></data>
+  <data name="Common.系统管理" xml:space="preserve"><value>Administración del sistema</value></data>
+  <data name="Common.增加" xml:space="preserve"><value>Agregar</value></data>
+  <data name="Common.排序" xml:space="preserve"><value>Ordenar</value></data>
+  <data name="Common.备注" xml:space="preserve"><value>Notas</value></data>
+  <data name="Common.说明" xml:space="preserve"><value>Descripción</value></data>
+  <data name="Common.添加时间" xml:space="preserve"><value>Fecha de creación</value></data>
+  <data name="Common.操作" xml:space="preserve"><value>Acciones</value></data>
+  <data name="Common.编辑" xml:space="preserve"><value>Editar</value></data>
+  <data name="Common.删除" xml:space="preserve"><value>Eliminar</value></data>
+  <data name="Common.取消" xml:space="preserve"><value>Cancelar</value></data>
+  <data name="Common.确认" xml:space="preserve"><value>Confirmar</value></data>
+  <data name="Common.请输入说明" xml:space="preserve"><value>Ingrese una descripción</value></data>
+  <data name="Common.请输入备注" xml:space="preserve"><value>Ingrese notas</value></data>
+  <data name="Common.返回" xml:space="preserve"><value>Volver</value></data>
+  <data name="Common.保存" xml:space="preserve"><value>Guardar</value></data>
+  <data name="Menu.管理" xml:space="preserve"><value>Gestión de menús</value></data>
+  <data name="Menu.列表" xml:space="preserve"><value>Lista de menús</value></data>
+  <data name="Menu.增加菜单" xml:space="preserve"><value>Agregar menú</value></data>
+  <data name="Menu.名称" xml:space="preserve"><value>Nombre del menú</value></data>
+  <data name="Menu.增加下级" xml:space="preserve"><value>Agregar submenú</value></data>
+  <data name="Menu.确认删除" xml:space="preserve"><value>¿Eliminar este menú?</value></data>
+  <data name="Menu.父级" xml:space="preserve"><value>Menú principal</value></data>
+  <data name="Menu.类型" xml:space="preserve"><value>Tipo</value></data>
+  <data name="Menu.菜单" xml:space="preserve"><value>Menú</value></data>
+  <data name="Menu.页面" xml:space="preserve"><value>Página</value></data>
+  <data name="Menu.按钮" xml:space="preserve"><value>Botón</value></data>
+  <data name="Menu.路径" xml:space="preserve"><value>Ruta</value></data>
+  <data name="Menu.操作代码" xml:space="preserve"><value>Código de acción</value></data>
+  <data name="Menu.是否锁定" xml:space="preserve"><value>Bloqueado</value></data>
+  <data name="Menu.是否显示" xml:space="preserve"><value>Visible</value></data>
+  <data name="Menu.图标" xml:space="preserve"><value>Icono</value></data>
+  <data name="Menu.选择图标" xml:space="preserve"><value>Seleccionar icono</value></data>
+  <data name="Menu.图标列表" xml:space="preserve"><value>Lista de iconos</value></data>
+  <data name="Role.管理" xml:space="preserve"><value>Gestión de roles</value></data>
+  <data name="Role.列表" xml:space="preserve"><value>Lista de roles</value></data>
+  <data name="Role.名称" xml:space="preserve"><value>Nombre del rol</value></data>
+  <data name="Role.代码" xml:space="preserve"><value>Código del rol</value></data>
+  <data name="Role.权限" xml:space="preserve"><value>Permisos</value></data>
+  <data name="Role.确认删除" xml:space="preserve"><value>¿Eliminar este rol?</value></data>
+  <data name="Role.请输入名称" xml:space="preserve"><value>Ingrese el nombre del rol</value></data>
+  <data name="Role.请输入代码" xml:space="preserve"><value>Ingrese el código del rol</value></data>
+  <data name="Role.是否启用" xml:space="preserve"><value>Habilitado</value></data>
+  <data name="Role.为角色授权" xml:space="preserve"><value>Asignar permisos al rol</value></data>
+  <data name="Trace.日志" xml:space="preserve"><value>Registros de SenparcTrace</value></data>
+  <data name="Trace.编号" xml:space="preserve"><value>N.º</value></data>
+  <data name="Trace.日期" xml:space="preserve"><value>Fecha</value></data>
+  <data name="AdminUserInfo.角色授予" xml:space="preserve"><value>Asignación de roles</value></data>
+  <data name="AdminUserInfo.管理员管理" xml:space="preserve"><value>Gestión de administradores</value></data>
+  <data name="Tenant.NameExists" xml:space="preserve"><value>El nombre del inquilino {0} ya existe</value></data>
+  <data name="Tenant.KeyExists" xml:space="preserve"><value>La regla de coincidencia del inquilino {0} ya existe</value></data>
+  <data name="Tenant.SaveSuccess.Edit" xml:space="preserve"><value>Inquilino actualizado correctamente</value></data>
+  <data name="Tenant.SaveSuccess.Create" xml:space="preserve"><value>Inquilino creado correctamente</value></data>
+  <data name="Tenant.NotFound" xml:space="preserve"><value>Inquilino no encontrado</value></data>
+  <data name="Tenant.SetInfoFailed" xml:space="preserve"><value>No se pudo establecer la información del inquilino</value></data>
+  <data name="Tenant.InitializeSuccess" xml:space="preserve"><value>Inicialización completada correctamente</value></data>
+  <data name="Xncf.ModuleNotAdded" xml:space="preserve"><value>El módulo no ha sido agregado.</value></data>
+  <data name="Xncf.StateChangedSuccess" xml:space="preserve"><value>Estado cambiado correctamente.</value></data>
+  <data name="Xncf.ModuleNotRegistered" xml:space="preserve"><value>El módulo no está registrado.</value></data>
+  <data name="Xncf.ModuleNotInstalled" xml:space="preserve"><value>El módulo actual no está instalado.</value></data>
+  <data name="Xncf.InvalidModuleState" xml:space="preserve"><value>El estado actual del módulo es [{0}]. Solo los módulos en estado [Abierto] pueden ejecutar esta acción.\r\nSi fuerza esta acción, el sistema seguirá ejecutando un ensamblado no verificado porque la versión instalada anteriormente puede haber sido reemplazada por una compilación más nueva.</value></data>
+  <data name="Xncf.FunctionNotMatched" xml:space="preserve"><value>No se encontró un método coincidente.</value></data>
+  <data name="Xncf.FunctionSingleParameterOnly" xml:space="preserve"><value>Los métodos FunctionRender solo pueden declarar un parámetro de entrada.</value></data>
+  <data name="Xncf.LogFileNotFoundOrDownloaded" xml:space="preserve"><value>El archivo de registro no existe o ya fue descargado.</value></data>
+  <data name="Xncf.ModuleIdNotProvided" xml:space="preserve"><value>No se proporcionó el identificador del módulo.</value></data>
+  <data name="Xncf.ModuleMissingOrNotLoaded" xml:space="preserve"><value>Falta el módulo o no se ha cargado ({0}).</value></data>
+  <data name="Xncf.FunctionLoadError" xml:space="preserve"><value>Error al cargar {0}. Revise los registros. Si acaba de agregar una migración de base de datos, complete primero la actualización del módulo.</value></data>
+  <data name="Xncf.Install.PublishModeEnabled" xml:space="preserve"><value>El modo de publicación está habilitado, por lo que esta acción no está disponible.</value></data>
+  <data name="Xncf.Install.ModuleNotFound" xml:space="preserve"><value>No se encontró el módulo de destino y no se puede instalar.</value></data>
+  <data name="Xncf.Install.Success" xml:space="preserve"><value>La instalación se completó correctamente.</value></data>
+  <data name="Xncf.Install.Failed" xml:space="preserve"><value>Error de instalación: {0}</value></data>
+  <data name="Admin.Register.MenuName" xml:space="preserve"><value>Panel de administración del sistema NCF</value></data>
+  <data name="Admin.Register.Description" xml:space="preserve"><value>Este es el módulo de administración del sistema NCF para la autogestión del backend. No elimine este módulo. Si realmente necesita hacerlo, haga una copia de seguridad de sus datos primero.</value></data>
+  <data name="Admin.Area.MenuManagement" xml:space="preserve"><value>Gestión de menús</value></data>
+  <data name="Admin.Area.TraceLog" xml:space="preserve"><value>Registros de SenparcTrace</value></data>
+  <data name="AdminChat.UserNotLoggedIn" xml:space="preserve"><value>El usuario no ha iniciado sesión</value></data>
+  <data name="AdminChat.NewConversation" xml:space="preserve"><value>Nueva conversación</value></data>
+  <data name="AdminChat.SessionNotFoundOrForbidden" xml:space="preserve"><value>La sesión no existe o el acceso está denegado</value></data>
+  <data name="AdminChat.SessionNotFoundOrNoDeletePermission" xml:space="preserve"><value>La sesión no existe o no puede eliminarse</value></data>
+  <data name="AdminChat.DeleteSessionSuccess" xml:space="preserve"><value>Eliminado correctamente</value></data>
+  <data name="AdminChat.MessageNotFound" xml:space="preserve"><value>Mensaje no encontrado</value></data>
+  <data name="AdminChat.SetFeedbackSuccess" xml:space="preserve"><value>Comentarios enviados correctamente</value></data>
+  <data name="AdminChat.SelectAtLeastOneMessage" xml:space="preserve"><value>Seleccione al menos un mensaje</value></data>
+  <data name="AdminChat.DeleteMessagesSuccess" xml:space="preserve"><value>Eliminado correctamente. Se quitaron {0} mensajes</value></data>
+  <data name="AdminChat.AddModulesSuccess" xml:space="preserve"><value>Módulos agregados correctamente</value></data>
+</root>

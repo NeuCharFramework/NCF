@@ -8,19 +8,28 @@ using Senparc.Ncf.XncfBase;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.Hosting;
+using System.Globalization;
+using System.Resources;
 
 namespace Senparc.Xncf.Accounts
 {
 	public partial class Register : IAreaRegister, //注册 XNCF 页面接口（按需选用）
 									IXncfRazorRuntimeCompilation  //赋能 RazorPage 运行时编译
 	{
+		private static readonly ResourceManager AreaResourceManager = new("Senparc.Xncf.Accounts.AccountsResource", typeof(AccountsResource).Assembly);
+
+		private static string AreaT(string key, string fallback)
+		{
+			return AreaResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? fallback;
+		}
+
 		#region IAreaRegister 接口
 
 		public string HomeUrl => "/Admin/Account/Index";
 
 		public List<AreaPageMenuItem> AreaPageMenuItems => new List<AreaPageMenuItem>() {
-						 new AreaPageMenuItem(GetAreaHomeUrl(),"首页","fa fa-laptop"),
-			 			 new AreaPageMenuItem(GetAreaUrl($"/Admin/Account/DatabaseSample"),"数据库操作示例","fa fa-bookmark-o")
+						 new AreaPageMenuItem(GetAreaHomeUrl(), AreaT("Accounts.Home", "首页"),"fa fa-laptop"),
+		 			 new AreaPageMenuItem(GetAreaUrl($"/Admin/Account/DatabaseSample"), AreaT("Accounts.DatabaseSample", "数据库操作示例"),"fa fa-bookmark-o")
 			 		};
 
 		public IMvcBuilder AuthorizeConfig(IMvcBuilder builder, IHostEnvironment env)

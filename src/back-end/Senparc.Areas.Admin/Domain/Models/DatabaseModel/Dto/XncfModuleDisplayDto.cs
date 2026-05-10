@@ -31,10 +31,15 @@ namespace Senparc.Areas.Admin.Domain
         public string NewVersion { get; set; }
         public object Menus { get; set; }
 
+        /// <summary>
+        /// 模块Functions
+        /// </summary>
+        public object Functions { get; set; }
+
         private XncfModuleDisplayDto() { }
  
 
-        public XncfModuleDisplayDto(int id, string name, string uid, string menuName, string version, string description, string updateLog, bool allowRemove, string menuId, string icon, XncfModules_State state, bool hasNewVersion, string newVersion, object menus)
+        public XncfModuleDisplayDto(int id, string name, string uid, string menuName, string version, string description, string updateLog, bool allowRemove, string menuId, string icon, XncfModules_State state, bool hasNewVersion, string newVersion, object menus, object functions = null)
         {
             Id = id;
             Name = name;
@@ -50,6 +55,7 @@ namespace Senparc.Areas.Admin.Domain
             HasNewVersion = hasNewVersion;
             NewVersion = newVersion;
             Menus = menus;
+            Functions = functions;
         }
 
     }

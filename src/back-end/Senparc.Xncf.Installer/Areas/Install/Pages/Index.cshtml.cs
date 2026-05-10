@@ -18,6 +18,8 @@ using Senparc.Xncf.XncfModuleManager.Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Localization;
+using Senparc.Xncf.Installer;
 
 namespace Senparc.Xncf.Instraller.Pages
 {
@@ -27,6 +29,7 @@ namespace Senparc.Xncf.Instraller.Pages
         private readonly AdminUserInfoService _accountInfoService;
         private readonly InstallAppService _installAppService;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IStringLocalizer<InstallerResource> _localizer;
 
         /// <summary>
         /// 系统名称
@@ -71,11 +74,13 @@ namespace Senparc.Xncf.Instraller.Pages
         public IndexModel(IServiceProvider serviceProvider,
             AdminUserInfoService accountService,
             XncfModuleServiceExtension xncfModuleServiceEx,
-            InstallAppService installAppService)
+            InstallAppService installAppService,
+            IStringLocalizer<InstallerResource> localizer)
         {
             _serviceProvider = serviceProvider;
             _accountInfoService = accountService;
             this._installAppService = installAppService;
+            _localizer = localizer;
 
             MultiTenantEnable = SiteConfig.SenparcCoreSetting.EnableMultiTenant;
             TenantRule = SiteConfig.SenparcCoreSetting.TenantRule;
@@ -99,7 +104,7 @@ namespace Senparc.Xncf.Instraller.Pages
                         await register.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Update);
                         SenparcTrace.SendCustomLog("强制更新模块", $"完成：{forceUpdateModule}");
 
-                        return Content($"强制手动升级已完成：{forceUpdateModule}，请继续更新其他模块，或重新打开首页。");
+                        return Content(_localizer["Install.ForceUpgrade.Completed", forceUpdateModule]);
                     }
                 }
 
@@ -108,7 +113,7 @@ namespace Senparc.Xncf.Instraller.Pages
                 if (adminUserInfo == null)
                 {
                     Console.WriteLine("需要初始化");
-                    throw new Exception("需要初始化");
+                    throw new Exception(_localizer["Install.InitRequired"]);
                 }
 
                 // try

@@ -1,19 +1,19 @@
 ﻿@page
 @model Senparc.Areas.Admin.Areas.Admin.Pages.MenuIndexModel
 @{
-    ViewData["Title"] = "菜单管理"; Layout = "_Layout_Vue";
+    ViewData["Title"] = AR["Menu.管理"]; Layout = "_Layout_Vue";
 }
 @section Style{
     <link href="~/css/Admin/Menu/Menu.css" rel="stylesheet" />
 }
 @section breadcrumbs {
-    <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-    <el-breadcrumb-item>菜单列表</el-breadcrumb-item>
+    <el-breadcrumb-item>@AR["Common.系统管理"]</el-breadcrumb-item>
+    <el-breadcrumb-item>@AR["Menu.列表"]</el-breadcrumb-item>
 }
 <div>
     <div class="admin-role">
         <div class="filter-container">
-            <el-button class="filter-item" type="primary" icon="el-icon-plus" @@click="handleEdit('','','add')">增加菜单</el-button>
+            <el-button class="filter-item" type="primary" icon="el-icon-plus" @@click="handleEdit('','','add')">@AR["Menu.增加菜单"]</el-button>
         </div>
         <el-table :data="tableData"
                   style="width: 100%;margin-bottom: 20px;"
@@ -22,35 +22,35 @@
                   default-expand-all
                   :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
             <el-table-column prop="menuName" align="left"
-                             label="菜单名称">
+                             label="@AR["Menu.名称"]">
             </el-table-column>
             <el-table-column prop="sort" align="center"
-                             label="排序"
+                             label="@AR["Common.排序"]"
                              sortable>
             </el-table-column>
             <el-table-column prop="adminRemark" align="center"
-                             label="备注">
+                             label="@AR["Common.备注"]">
             </el-table-column>
             <el-table-column prop="remark" align="center"
-                             label="说明">
+                             label="@AR["Common.说明"]">
             </el-table-column>
             <el-table-column align="center"
-                             label="添加时间">
+                             label="@AR["Common.添加时间"]">
                 <template slot-scope="scope">
                     {{formaTableTime(scope.row.addTime)}}
                 </template>
             </el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column label="@AR["Common.操作"]" align="center">
                 <template slot-scope="scope">
                     <el-button size="mini"
                                type="primary"
-                               @@click="handleEdit(scope.$index, scope.row,'edit')">编辑</el-button>
+                               @@click="handleEdit(scope.$index, scope.row,'edit')">@AR["Common.编辑"]</el-button>
                     <el-button size="mini"
                                type="primary"
                                v-if="scope.row.children"
-                               @@click="handleEdit(scope.$index, scope.row,'addNext')">增加下一级</el-button>
-                    <el-popconfirm placement="top" title="确认删除此菜单吗？" @@on-confirm="handleDelete(scope.$index, scope.row)">
-                        <el-button size="mini" type="danger" slot="reference">删除</el-button>
+                               @@click="handleEdit(scope.$index, scope.row,'addNext')">@AR["Menu.增加下级"]</el-button>
+                    <el-popconfirm placement="top" title="@AR["Menu.确认删除"]" @@on-confirm="handleDelete(scope.$index, scope.row)">
+                        <el-button size="mini" type="danger" slot="reference">@AR["Common.删除"]</el-button>
                     </el-popconfirm>
                 </template>
             </el-table-column>
@@ -64,50 +64,50 @@
                      label-position="left"
                      label-width="100px"
                      style="max-width: 400px; margin-left:50px;">
-                <el-form-item label="菜单名称" prop="menuName">
+                <el-form-item label="@AR["Menu.名称"]" prop="menuName">
                     <el-input v-model="dialog.data.menuName" clearable placeholder="" />
                 </el-form-item>
-                <el-form-item label="父级菜单">
+                <el-form-item label="@AR["Menu.父级"]">
                     <el-cascader v-model="dialog.data.parentId"
                                  :options="tableData"
                                  clearable
                                  :props="{ checkStrictly: dialog.checkStrictly,label: 'menuName',value:'id'}">
                     </el-cascader>
                 </el-form-item>
-                <el-form-item label="排序">
+                <el-form-item label="@AR["Common.排序"]">
                     <el-input type="number" v-model="dialog.data.sort" clearable placeholder="" />
                 </el-form-item>
-                <el-form-item label="类型" prop="menuType">
+                <el-form-item label="@AR["Menu.类型"]" prop="menuType">
                     <el-radio-group v-model="dialog.data.menuType">
-                        <el-radio :label="1">菜单</el-radio>
-                        <el-radio :label="2">页面</el-radio>
-                        <el-radio :label="3">按钮</el-radio>
+                        <el-radio :label="1">@AR["Menu.菜单"]</el-radio>
+                        <el-radio :label="2">@AR["Menu.页面"]</el-radio>
+                        <el-radio :label="3">@AR["Menu.按钮"]</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="路径">
+                <el-form-item label="@AR["Menu.路径"]">
                     <el-input v-model="dialog.data.url" clearable placeholder="" />
                 </el-form-item>
-                <el-form-item label="操作代码" prop="resourceCode">
+                <el-form-item label="@AR["Menu.操作代码"]" prop="resourceCode">
                     <el-input v-model="dialog.data.resourceCode" clearable placeholder="" />
                 </el-form-item>
-                <el-form-item label="是否锁定">
+                <el-form-item label="@AR["Menu.是否锁定"]">
                     <el-switch v-model="dialog.data.isLocked"></el-switch>
                 </el-form-item>
-                <el-form-item label="是否显示">
+                <el-form-item label="@AR["Menu.是否显示"]">
                     <el-switch v-model="dialog.data.visible"></el-switch>
                 </el-form-item>
-                <el-form-item label="图标">
+                <el-form-item label="@AR["Menu.图标"]">
                     <i v-if="dialog.data.icon" :class="'fa '+dialog.data.icon"></i>
-                    <el-button @@click="dialogIcon.visible=true" plain style="margin-left:15px;">选择图标</el-button>
+                    <el-button @@click="dialogIcon.visible=true" plain style="margin-left:15px;">@AR["Menu.选择图标"]</el-button>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @@click="dialog.visible = false">取 消</el-button>
-                <el-button :loading="dialog.updateLoading" :disabled="dialog.disabled" type="primary" @@click="updateData">确 认</el-button>
+                <el-button @@click="dialog.visible = false">@AR["Common.取消"]</el-button>
+                <el-button :loading="dialog.updateLoading" :disabled="dialog.disabled" type="primary" @@click="updateData">@AR["Common.确认"]</el-button>
             </div>
         </el-dialog>
         <!--选择图标-->
-        <el-dialog title="图标列表" :visible.sync="dialogIcon.visible">
+        <el-dialog title="@AR["Menu.图标列表"]" :visible.sync="dialogIcon.visible">
             <div class="menu-icons-grid">
                 <div v-for="item in dialogIcon.elementIcons" class="menu-icon-item" @@click="pickIcon(item)">
                     <i :class="'fa ' + item"></i>

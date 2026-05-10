@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Install.Title" xml:space="preserve">
+    <value>Instalador NCF</value>
+  </data>
+  <data name="Install.NotInit" xml:space="preserve">
+    <value>El sistema no está inicializado. ¡Proceda con la instalación!</value>
+  </data>
+  <data name="Install.CurrentDatabase" xml:space="preserve">
+    <value>Base de datos actual:</value>
+  </data>
+  <data name="Install.MultiTenantStatus" xml:space="preserve">
+    <value>Estado multi-inquilino:</value>
+  </data>
+  <data name="Install.MultiTenantEnabled" xml:space="preserve">
+    <value>Habilitado</value>
+  </data>
+  <data name="Install.MultiTenantDisabled" xml:space="preserve">
+    <value>Deshabilitado</value>
+  </data>
+  <data name="Install.MultiTenantRule" xml:space="preserve">
+    <value>Regla:</value>
+  </data>
+  <data name="Install.StartButton" xml:space="preserve">
+    <value>Instalar ahora</value>
+  </data>
+  <data name="Install.AdvancedOptions" xml:space="preserve">
+    <value>Opciones avanzadas</value>
+  </data>
+  <data name="Install.Warning" xml:space="preserve">
+    <value>Advertencia: ¡Esta página expirará después de la instalación!</value>
+  </data>
+  <data name="Install.Form.SystemName" xml:space="preserve">
+    <value>Nombre del sistema</value>
+  </data>
+  <data name="Install.Form.AdminUsername" xml:space="preserve">
+    <value>Nombre de usuario administrador</value>
+  </data>
+  <data name="Install.Form.DbConnectionString" xml:space="preserve">
+    <value>Cadena de conexión a la BD (reinicio requerido tras modificación)</value>
+  </data>
+  <data name="Install.Form.ModuleList" xml:space="preserve">
+    <value>Módulos predeterminados (gestionables tras la instalación)</value>
+  </data>
+  <data name="Install.Form.ModulePlaceholder" xml:space="preserve">
+    <value>Por favor seleccione</value>
+  </data>
+  <data name="Install.Success.Title" xml:space="preserve">
+    <value>¡Instalación de NeuCharFramework exitosa!</value>
+  </data>
+  <data name="Install.Success.TenantCreated" xml:space="preserve">
+    <value>Locatario actual creado, nombre:</value>
+  </data>
+  <data name="Install.Success.TenantRule" xml:space="preserve">
+    <value>Regla de coincidencia:</value>
+  </data>
+  <data name="Install.Success.TenantKey" xml:space="preserve">
+    <value>Condición clave:</value>
+  </data>
+  <data name="Install.Success.SaveInfo" xml:space="preserve">
+    <value>Por favor guarde la siguiente información:</value>
+  </data>
+  <data name="Install.Success.AdminAccount" xml:space="preserve">
+    <value>Cuenta de administrador:</value>
+  </data>
+  <data name="Install.Success.AdminPassword" xml:space="preserve">
+    <value>Contraseña de administrador:</value>
+  </data>
+  <data name="Install.Success.PasswordWarning" xml:space="preserve">
+    <value>Advertencia: Página expirada. Guarde las credenciales. ¡La contraseña en texto plano no puede recuperarse!</value>
+  </data>
+  <data name="Install.Success.LoginLink" xml:space="preserve">
+    <value>Haga clic aquí para iniciar sesión en el panel de administración</value>
+  </data>
+  <data name="Install.LanguageSelect" xml:space="preserve">
+    <value>Seleccionar idioma</value>
+  </data>
+  <data name="Install.Footer.Copyright" xml:space="preserve">
+    <value>Senparc Network Technology Co., Ltd. Todos los derechos reservados</value>
+  </data>
+  <data name="Install.ForceUpgrade.Completed" xml:space="preserve"><value>La actualización manual forzada se completó: {0}. Continúe actualizando otros módulos o vuelva a abrir la página de inicio.</value></data>
+  <data name="Install.InitRequired" xml:space="preserve"><value>Se requiere inicialización</value></data>
+  <data name="Installer.Register.MenuName" xml:space="preserve"><value>Instalador NCF</value></data>
+  <data name="Installer.Register.Description" xml:space="preserve"><value>Módulo de instalación inicial de NCF. Puede desinstalarse o eliminarse después de completar la instalación.</value></data>
+  <data name="Installer.Area.Home" xml:space="preserve"><value>Inicio</value></data>
+</root>

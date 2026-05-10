@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Localization;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -18,12 +19,14 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         private readonly IServiceProvider _serviceProvider;
         private readonly XncfModuleServiceExtension _xncfModuleServiceEx;
         private readonly SysMenuService _sysMenuService;
+        private readonly IStringLocalizer<AdminResource> _localizer;
 
         //TODO:从其他模块获得，或独立到对应模块的API
         private readonly Lazy<SystemConfigService> _systemConfigService;
 
         public XncfModuleIndexModel(IServiceProvider serviceProvider, XncfModuleServiceExtension xncfModuleServiceEx,
-            SysMenuService sysMenuService, Lazy<SystemConfigService> systemConfigService)
+            SysMenuService sysMenuService, Lazy<SystemConfigService> systemConfigService,
+            IStringLocalizer<AdminResource> localizer)
             : base(serviceProvider)
         {
             CurrentMenu = "XncfModule";
@@ -32,6 +35,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             this._xncfModuleServiceEx = xncfModuleServiceEx;
             this._sysMenuService = sysMenuService;
             this._systemConfigService = systemConfigService;
+            this._localizer = localizer;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -204,7 +208,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             if (base.FullSystemConfig.HideModuleManager == true)
             {
                 success = false;
-                message = "已经启用“发布模式”，无法进行此操作";
+                message = _localizer["Xncf.Install.PublishModeEnabled"];
             }
             else
             {
@@ -212,7 +216,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 if (docRegister == null)
                 {
                     success = false;
-                    message = "文档模块不存在，无法完成安装！";
+                    message = _localizer["Xncf.Install.ModuleNotFound"];
                 }
                 else
                 {
@@ -232,12 +236,12 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                             await _xncfModuleServiceEx.SaveObjectAsync(docModule);
                         }
 
-                        message = "安装成功！";
+                        message = _localizer["Xncf.Install.Success"];
                     }
                     catch (Exception ex)
                     {
                         success = false;
-                        message = "安装失败：" + ex.Message;
+                        message = _localizer["Xncf.Install.Failed", ex.Message];
                     }
                 }
             }

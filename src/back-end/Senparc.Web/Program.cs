@@ -1,4 +1,4 @@
-﻿//以下数据库模块的命名空间根据需要添加或删除
+//以下数据库模块的命名空间根据需要添加或删除
 //using Senparc.Ncf.Database.MySql;         //使用需要引用包： Senparc.Ncf.Database.MySql
 //using Senparc.Ncf.Database.Sqlite;        //使用需要引用包： Senparc.Ncf.Database.Sqlite
 //using Senparc.Ncf.Database.PostgreSQL;    //使用需要引用包： Senparc.Ncf.Database.PostgreSQL
@@ -10,6 +10,9 @@ using Senparc.CO2NET.HttpUtility;
 using Senparc.CO2NET.WebApi;
 using Senparc.Ncf.Database.SqlServer;
 using System.Text;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Localization;
+using Senparc.Web.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,12 +30,20 @@ builder.Services.AddDaprClient();
 
 var app = builder.Build();
 
-//app.MapDefaultEndpoints();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+
+// Configure request localization (cookie first, then query/header providers)
+var supportedCultures = LanguageController.SupportedCultures;
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture(supportedCultures[0])
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures)
+    .AddInitialRequestCultureProvider(new CookieRequestCultureProvider());
+
+app.UseRequestLocalization(localizationOptions);
 
 //Use NCF（必须）
 app.UseNcf<BySettingDatabaseConfiguration>();
@@ -66,18 +77,34 @@ app.MapControllers();
 
 app.ShowSuccessTip();//显示系统准备成功提示
 
-string GetNcfApiClientPath(string xncfName, string appServiceName, string methodName, string showStaticApiState = null)
+string GetNcfApiClientPath(string xncfName,string appServiceName, string methodName,string showStaticApiState=null)
 {
-    var globalName = ApiBindAttribute.GetGlobalName(xncfName, $"{appServiceName}.{methodName}");
+    var globalName = ApiBindAttribute.GetGlobalName(xncfName,$"{appServiceName}.{methodName}");
 
     var indexOfApiGroupDot = globalName.IndexOf(".");
     var apiName = globalName.Substring(indexOfApiGroupDot + 1, globalName.Length - indexOfApiGroupDot - 1);
     //var apiBindGlobalName = globalName.Split('.')[0];
-
+    
     var apiPath = WebApiEngine.GetApiPath(xncfName, appServiceName, apiName, showStaticApiState);
     Console.WriteLine(apiPath);
     return apiPath;
 }
+
+/*
+Console.WriteLine("============ logMsg =============");
+Console.WriteLine("DatabaseName: " + Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.DatabaseName);
+Console.WriteLine("DatabaseType: " + Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.DatabaseType);
+Console.WriteLine("CacheType: " + Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.CacheType);
+Console.WriteLine("EnableMultiTenant: " + Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.EnableMultiTenant);
+Console.WriteLine("TenantRule: " + Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.TenantRule);
+Console.WriteLine("RequestTempLogCacheMinutes: " + Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.RequestTempLogCacheMinutes);
+Console.WriteLine("PasswordSaltToken: " + Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.PasswordSaltToken);
+Console.WriteLine("McpAccessToken: " + Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.McpAccessToken);
+//output Database connection string
+Console.WriteLine("Database connection string: " + string.Join(", ", Senparc.Ncf.Database.Helpers.NcfDatabaseHelper.GetCurrentConnectionInfo().Select(z => $"{z.Key}: {z.Value}")));
+Console.WriteLine("Count of Database connection string: " + Senparc.Ncf.Database.Helpers.NcfDatabaseHelper.GetCurrentConnectionInfo().Count());
+Console.WriteLine("============ logMsg END =============");
+*/
 
 app.MapGet("/test", async httpContext =>
 {

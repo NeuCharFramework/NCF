@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Language.SelectLanguage" xml:space="preserve">
+    <value>Выбор языка</value>
+  </data>
+  <data name="Language.zh-CN" xml:space="preserve">
+    <value>简体中文</value>
+  </data>
+  <data name="Language.en" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Language.ja" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Language.fr" xml:space="preserve">
+    <value>Français</value>
+  </data>
+  <data name="Language.es" xml:space="preserve">
+    <value>Español</value>
+  </data>
+  <data name="Language.ru" xml:space="preserve">
+    <value>Русский</value>
+  </data>
+  <data name="Button.Confirm" xml:space="preserve">
+    <value>Подтвердить</value>
+  </data>
+  <data name="Button.Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Button.Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="Button.Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="Button.Edit" xml:space="preserve">
+    <value>Редактировать</value>
+  </data>
+  <data name="Button.Search" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="Button.Reset" xml:space="preserve">
+    <value>Сбросить</value>
+  </data>
+  <data name="Button.Submit" xml:space="preserve">
+    <value>Отправить</value>
+  </data>
+  <data name="Button.Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="Button.Back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="Button.Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="Message.Success" xml:space="preserve">
+    <value>Успешно</value>
+  </data>
+  <data name="Message.Error" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="Message.Warning" xml:space="preserve">
+    <value>Предупреждение</value>
+  </data>
+  <data name="Message.Loading" xml:space="preserve">
+    <value>Загрузка...</value>
+  </data>
+  <data name="Message.NoData" xml:space="preserve">
+    <value>Нет данных</value>
+  </data>
+  <data name="Message.ConfirmDelete" xml:space="preserve">
+    <value>Подтвердить удаление?</value>
+  </data>
+  <data name="Footer.PoweredBy" xml:space="preserve">
+    <value>Разработано:</value>
+  </data>
+  <data name="Footer.Copyright" xml:space="preserve">
+    <value>Suzhou Senparc Network Technology Co., Ltd. Все права защищены</value>
+  </data>
+</root>

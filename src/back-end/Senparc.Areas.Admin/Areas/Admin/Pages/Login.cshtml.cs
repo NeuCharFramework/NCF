@@ -17,6 +17,7 @@ using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Config;
 using Senparc.Xncf.Tenant.Domain.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -43,10 +44,13 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
         private readonly AdminUserInfoService _userInfoService;
         private readonly TenantInfoService _tenantInfoService;
-        public LoginModel(AdminUserInfoService userInfoService, TenantInfoService tenantInfoService)
+        private readonly IStringLocalizer<AdminResource> _localizer;
+        public LoginModel(AdminUserInfoService userInfoService, TenantInfoService tenantInfoService,
+            IStringLocalizer<AdminResource> localizer)
         {
             this._userInfoService = userInfoService;
             this._tenantInfoService = tenantInfoService;
+            this._localizer = localizer;
         }
 
 
@@ -124,14 +128,14 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                     if (tenantInfo == null)
                     {
                         SenparcTrace.SendCustomLog("登录失败", $", 错误：租户名称错误：" + tenantKey);
-                        return Ok("pwd", false, $"用户名：{loginInDto.Name}, 错误：账号或密码错误！");
+                        return Ok("pwd", false, _localizer["Admin.Login.Error.InvalidCredentials"]);
                     }
 
                     var requestTenantInfo = this._tenantInfoService.GetRequestTenantInfo(tenantInfo);
                     if (!_userInfoService.SetTenantInfo(requestTenantInfo))
                     {
                         SenparcTrace.SendCustomLog("租户配置失败", $", 错误：租户名配置错误：" + tenantKey);
-                        return Ok("pwd", false, $"用户名：{loginInDto.Name}, 错误：账号或密码错误！");
+                        return Ok("pwd", false, _localizer["Admin.Login.Error.InvalidCredentials"]);
                     }
 
                     tenantKey = tenantInfo.TenantKey;
@@ -147,7 +151,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             if (userInfo == null)
             {
                 SenparcTrace.SendCustomLog("登录失败", $"用户名：{loginInDto.Name}, 错误：账号或密码错误！101");
-                return Ok("pwd", false, "账号或密码错误！");
+                return Ok("pwd", false, _localizer["Admin.Login.Error.InvalidCredentials"]);
                 //ModelState.AddModelError(nameof(this.Password), "账号或密码错误！");
             }
 
@@ -158,7 +162,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 {
                     //ModelState.AddModelError(nameof(this.Password), "账号或密码错误！");
                     SenparcTrace.SendCustomLog("登录失败", $"用户名：{loginInDto.Name}, 错误：账号或密码错误！102");
-                    return Ok("pwd", false, "账号或密码错误！");
+                    return Ok("pwd", false, _localizer["Admin.Login.Error.InvalidCredentials"]);
                 }
 
                 return Ok(true);
@@ -172,7 +176,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             {
                 SenparcTrace.SendCustomLog("登录失败", $"用户名：{loginInDto.Name}, 错误：{ex.Message}");
                 //其他异常，不返回错误信息
-                return Ok("pwd", false, "账号或密码错误！");
+                return Ok("pwd", false, _localizer["Admin.Login.Error.InvalidCredentials"]);
             }
         }
 

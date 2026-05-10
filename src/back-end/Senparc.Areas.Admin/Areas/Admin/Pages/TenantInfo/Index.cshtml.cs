@@ -14,6 +14,7 @@ using Senparc.Xncf.Tenant.Domain.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Localization;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -25,6 +26,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         private readonly IServiceProvider _serviceProvider = serviceProvider;
         private readonly TenantInfoService _tenantInfoService = tenantInfoService;
         private readonly AdminUserInfoService _adminUserInfoService = adminUserInfoService;
+        private readonly IStringLocalizer<AdminResource> _localizer = serviceProvider.GetRequiredService<IStringLocalizer<AdminResource>>();
         public async Task<IActionResult> OnGetAsync()
         {
             return Page();
@@ -81,19 +83,19 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             bool isNameExists = await this._tenantInfoService.CheckNameExisted(dto.Id, dto.Name);
             if (isNameExists)
             {
-                return Ok(false, $"{dto.Name} 租户名称已存在");
+                return Ok(false, _localizer["Tenant.NameExists", dto.Name]);
             }
 
             bool isTenantKeyExists = await this._tenantInfoService.CheckTenantKeyExisted(dto.Id, dto.TenantKey);
             if (isTenantKeyExists)
             {
-                return Ok(false, $"{dto.TenantKey} 租户匹配规则已存在");
+                return Ok(false, _localizer["Tenant.KeyExists", dto.TenantKey]);
             }
 
             try
             {
                 await _tenantInfoService.CreateOrUpdateTenantInfoAsync(dto);
-                return Ok(true, $"{(dto.Id > 0 ? "编辑" : "新增")}租户成功");
+                return Ok(true, dto.Id > 0 ? _localizer["Tenant.SaveSuccess.Edit"] : _localizer["Tenant.SaveSuccess.Create"]);
             }
             catch (Exception ex)
             {
@@ -121,14 +123,14 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 var tenantInfo = await _tenantInfoService.GetObjectAsync(z => z.Id == tenantId);
                 if (tenantInfo == null)
                 {
-                    return Ok(false, "租户不存在");
+                    return Ok(false, _localizer["Tenant.NotFound"]);
                 }
 
                 //设置租户信息
                 ISenparcEntitiesDbContext senparcDB = _adminUserInfoService.BaseData.BaseDB.BaseDataContext as ISenparcEntitiesDbContext;
                 if (senparcDB == null)
                 {
-                    return Ok(false, "租户信息设置失败");
+                    return Ok(false, _localizer["Tenant.SetInfoFailed"]);
                 }
 
                 senparcDB.TenantInfo = new RequestTenantInfo()
@@ -158,7 +160,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                         username = dto.AdminAccount,
                         password = adminUserInfoResult.Password
                     }
-                }, true, "初始化成功");
+                }, true, _localizer["Tenant.InitializeSuccess"]);
             }
             catch (Exception ex)
             {

@@ -1,13 +1,13 @@
 ﻿var validatePass = (rule, value, callback) => {
     if (value === '') {
-        callback(new Error('请输入密码'));
+        callback(new Error((window.ncfLoginI18n && window.ncfLoginI18n.passwordRequired) || 'Password is required'));
     } else {
         callback();
     }
 };
 var validateUser = (rule, value, callback) => {
     if (value === '') {
-        callback(new Error('请输入用户名'));
+        callback(new Error((window.ncfLoginI18n && window.ncfLoginI18n.usernameRequired) || 'Username is required'));
     } else {
         callback();
     }
@@ -67,11 +67,11 @@ var app = new Vue({
                             const url = this.resizeUrl().ReturnUrl;
                             window.location.href = url ? unescape(url) : '/Admin/index';
                         } else {
-                            this.$message.error(res.data.message || '登录失败');
+                            this.$message.error(res.data.message || ((window.ncfLoginI18n && window.ncfLoginI18n.loginFailed) || 'Login failed'));
                             this.loading = false;
                         }
                     }).catch(error => {
-                        this.$message.error('登录失败，请重试');
+                        this.$message.error((window.ncfLoginI18n && window.ncfLoginI18n.loginRetry) || 'Login failed, please try again');
                         this.loading = false;
                     });
                 } else {

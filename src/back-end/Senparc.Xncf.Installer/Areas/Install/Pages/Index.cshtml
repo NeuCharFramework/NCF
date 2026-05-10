@@ -2,14 +2,16 @@
 @model Senparc.Xncf.Instraller.Pages.IndexModel
 @{
     Layout = null;
+    var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
 }
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Senparc.Xncf.Installer.InstallerResource> IR
 
 <!DOCTYPE html>
-<html>
+<html lang="@currentCulture">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>NCF 安装 v @Senparc.Ncf.Core.Config.SiteConfig.VERSION</title>
+    <title>@IR["Install.Title"] v @Senparc.Ncf.Core.Config.SiteConfig.VERSION</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -19,6 +21,17 @@
 </head>
 <body>
     <div id="app">
+        <div style="position: absolute; top: 16px; right: 16px; z-index: 9; background: rgba(255,255,255,.9); border-radius: 6px; padding: 8px 10px;">
+            <label for="ncf-install-lang" style="font-size: 12px; color: #606266; margin-right: 6px;">@IR["Install.LanguageSelect"]</label>
+            <select id="ncf-install-lang" onchange="ncfSwitchLanguage(this.value)">
+                <option value="zh-CN" selected="@(currentCulture == "zh-CN" ? "selected" : null)">简体中文</option>
+                <option value="en" selected="@(currentCulture.StartsWith("en") ? "selected" : null)">English</option>
+                <option value="ja" selected="@(currentCulture.StartsWith("ja") ? "selected" : null)">日本語</option>
+                <option value="fr" selected="@(currentCulture.StartsWith("fr") ? "selected" : null)">Français</option>
+                <option value="es" selected="@(currentCulture.StartsWith("es") ? "selected" : null)">Español</option>
+                <option value="ru" selected="@(currentCulture.StartsWith("ru") ? "selected" : null)">Русский</option>
+            </select>
+        </div>
         @switch (Model.Step)
         {
             case 0:
@@ -28,42 +41,42 @@
                         <div class="logo">
                             <img src="~/images/logo-login-ncf.png" />
                         </div>
-                        <p class="install_notice">检测到系统未初始化，请进行安装！</p>
-                        <p class="install_notice">当前数据库：@Model.MultipleDatabaseType</p>
+                        <p class="install_notice">@IR["Install.NotInit"]</p>
+                        <p class="install_notice">@IR["Install.CurrentDatabase"] @Model.MultipleDatabaseType</p>
                         <p class="install_notice">
-                            多租户状态：@(Model.MultiTenantEnable ? "开启" : "关闭")
+                            @IR["Install.MultiTenantStatus"] @(Model.MultiTenantEnable ? IR["Install.MultiTenantEnabled"] : IR["Install.MultiTenantDisabled"])
                             @if (Model.MultiTenantEnable)
                             {
-                                <text>，规则：@Model.TenantRule</text>
+                                <text>，@IR["Install.MultiTenantRule"] @Model.TenantRule</text>
                             }
                         </p>
                         <form method="post" id="install_main_form">
-                            <a v-on:click="submit" class="option_block" id="btnInstall">立即安装</a>
+                            <a v-on:click="submit" class="option_block" id="btnInstall">@IR["Install.StartButton"]</a>
                         </form>
                         <el-button type="text" v-on:click="toggleInfo" id="btnOptions">
-                            高级选项
+                            @IR["Install.AdvancedOptions"]
                             <i class="el-icon-arrow-right el-icon--right" v-if="!isExpanded"></i>
                             <i class="el-icon-arrow-left el-icon--left" v-if="isExpanded"></i>
                         </el-button>
 
-                        <p class="install_notice red">注意：安装完成后此页面将失效！</p>
+                        <p class="install_notice red">@IR["Install.Warning"]</p>
                     </div>
                     <!-- 展开高级选项时 -->
                     <div class="vertical-line" v-if="isExpanded">
                     </div>
                     <div id="install_start_expand" v-if="isExpanded">
                         <el-form label-width="300px" label-position="top" id="advanced_options">
-                            <el-form-item label="系统名称" :disabled="installStarted" required>
+                            <el-form-item label="@IR["Install.Form.SystemName"]" :disabled="installStarted" required>
                                 <el-input v-model="installOptions.systemName"></el-input>
                             </el-form-item>
-                            <el-form-item label="管理员名称" :disabled="installStarted" required>
+                            <el-form-item label="@IR["Install.Form.AdminUsername"]" :disabled="installStarted" required>
                                 <el-input v-model="installOptions.adminUserName"></el-input>
                             </el-form-item>
-                            <el-form-item label="数据库连接字符串(修改后需重启项目)" :disabled="installStarted" required>
+                            <el-form-item label="@IR["Install.Form.DbConnectionString"]" :disabled="installStarted" required>
                                 <el-input type="textarea" v-model="installOptions.dbConnectionString" :autosize="{ minRows: 2, maxRows: 6}"></el-input>
                             </el-form-item>
-                            <el-form-item label="默认需要的安装模块(安装完成后可以继续安装或卸载)" :disabled="installStarted" required>
-                                <el-select v-model="installOptions.needModelList" multiple placeholder="请选择" style="width: 500px;">
+                            <el-form-item label="@IR["Install.Form.ModuleList"]" :disabled="installStarted" required>
+                                <el-select v-model="installOptions.needModelList" multiple placeholder="@IR["Install.Form.ModulePlaceholder"]" style="width: 500px;">
                                     <el-option v-for="item in optionsModelList"
                                                :key="item.uid"
                                                :label="item.menuName"
@@ -80,24 +93,24 @@
             case 1:
                 <!-- 安装成功时 -->
                 <div id="install_success">
-                    <h2>NeuCharFramework<br />初始化安装成功！</h2>
+                    <h2>@IR["Install.Success.Title"]</h2>
                     <div id="install_success_info">
                         <div>
                             @if (Model.MultiTenantEnable && Model.InstallingTenant)
                             {
                                 <p>
-                                    当前租户已创建，名称：<strong>@Model.TenantInfoDto.Name</strong>，
-                                    匹配规则：<strong>@Model.TenantRule</strong>，
-                                    关键匹配条件：<strong>@Model.TenantInfoDto.TenantKey</strong>
+                                    @IR["Install.Success.TenantCreated"] <strong>@Model.TenantInfoDto.Name</strong>，
+                                    @IR["Install.Success.TenantRule"] <strong>@Model.TenantRule</strong>，
+                                    @IR["Install.Success.TenantKey"] <strong>@Model.TenantInfoDto.TenantKey</strong>
                                 </p>
                             }
                             <p>&nbsp;</p>
-                            <p>请保存好以下信息：</p>
-                            <p>管理员账号：<strong>@Model.AdminUserName</strong></p>
-                            <p>管理员密码：<strong>@Model.AdminPassword</strong></p>
+                            <p>@IR["Install.Success.SaveInfo"]</p>
+                            <p>@IR["Install.Success.AdminAccount"] <strong>@Model.AdminUserName</strong></p>
+                            <p>@IR["Install.Success.AdminPassword"] <strong>@Model.AdminPassword</strong></p>
 
-                            <p>注意：本页面已经失效，请保存好管理员账号及密码，密码无法找回明文！</p>
-                            <p class="center">&gt; <a @*asp-page="/Index" asp-area="Admin"*@ href="/Admin" target="_blank">点击这里登录管理员后台</a> &lt;</p>
+                            <p>@IR["Install.Success.PasswordWarning"]</p>
+                            <p class="center">&gt; <a @*asp-page="/Index" asp-area="Admin"*@ href="/Admin" target="_blank">@IR["Install.Success.LoginLink"]</a> &lt;</p>
                         </div>
                     </div>
                 </div>
@@ -106,13 +119,28 @@
                 break;
         }
         <div id="footer">
-            苏州盛派网络科技有限公司 版权所有
+            @IR["Install.Footer.Copyright"]
         </div>
     </div>
     <!--lib-->
     <script src="~/lib/vue/vue.js"></script>
     <script src="~/lib/element-ui_2.13.2/element.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
+    <script>
+        window.ncfInstallI18n = {
+            installing: '@IR["Install.StartButton"]',
+            started: '@IR["Install.Warning"]',
+            startConfirm: '@IR["Install.StartButton"]?',
+            startConfirmDetail: '@IR["Install.Warning"]',
+            startedWaiting: '@IR["Install.StartButton"]...',
+            failedPrefix: 'Install failed:'
+        };
+
+        function ncfSwitchLanguage(culture) {
+            var returnUrl = window.location.pathname + window.location.search;
+            window.location.href = '/api/Language/Set?culture=' + encodeURIComponent(culture) + '&returnUrl=' + encodeURIComponent(returnUrl);
+        }
+    </script>
     <!--js-->
     <script src="~/js/Installer/Pages/index.js"></script>
 </body>

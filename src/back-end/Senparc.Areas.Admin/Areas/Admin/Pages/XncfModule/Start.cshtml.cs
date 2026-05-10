@@ -22,6 +22,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Localization;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -35,6 +36,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
         XncfModuleService _xncfModuleService = xncfModuleService;
         IServiceProvider _serviceProvider = serviceProvider;
+        private readonly IStringLocalizer<AdminResource> _localizer = serviceProvider.GetRequiredService<IStringLocalizer<AdminResource>>();
 
         public List<string> XncfModuleUpdateLog { get; set; }
 
@@ -114,12 +116,12 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
             if (module == null)
             {
-                throw new Exception("模块未添加！");
+                throw new Exception(_localizer["Xncf.ModuleNotAdded"]);
             }
 
             module.UpdateState(toState);
             await _xncfModuleService.SaveObjectAsync(module).ConfigureAwait(false);
-            base.SetMessager(MessageType.success, "状态变更成功！");
+            base.SetMessager(MessageType.success, _localizer["Xncf.StateChangedSuccess"]);
             return RedirectToPage("Start", new { uid = module.Uid });
         }
 
@@ -136,18 +138,18 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
             if (xncfRegister == null)
             {
-                return new JsonResult(new { success = false, msg = "模块未注册！" });
+                return new JsonResult(new { success = false, msg = _localizer["Xncf.ModuleNotRegistered"] });
             }
 
             var xncfModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == xncfRegister.Uid).ConfigureAwait(false);
             if (xncfModule == null)
             {
-                return new JsonResult(new { success = false, msg = "当前模块未安装！" });
+                return new JsonResult(new { success = false, msg = _localizer["Xncf.ModuleNotInstalled"] });
             }
 
             if (xncfModule.State != XncfModules_State.开放)
             {
-                return new JsonResult(new { success = false, msg = $"当前模块状态为【{xncfModule.State}】,必须为【开放】状态的模块才可执行！\r\n此外，如果您强制执行此方法，也将按照未通过验证的程序集执行，因为您之前安装的版本可能已经被新的程序所覆盖。" });
+                return new JsonResult(new { success = false, msg = _localizer["Xncf.InvalidModuleState", xncfModule.State] });
             }
 
 
@@ -169,7 +171,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
             if (rightFunctionBag == null)
             {
-                return new JsonResult(new { success = false, msg = "方法未匹配上！" });
+                return new JsonResult(new { success = false, msg = _localizer["Xncf.FunctionNotMatched"] });
             }
 
             var functionParameterType = rightFunctionBag.Value.MethodInfo.GetParameters().FirstOrDefault()?.ParameterType;
@@ -183,14 +185,15 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             switch (paramCount)
             {
                 case 1:
-                    var requestPara = SerializerHelper.GetObject(executeFuncParamDto2.XncfFunctionParams, functionParameterType) as IAppRequest;
+                    var normalizedJson = FunctionRequestParameterNormalizer.NormalizeJson(executeFuncParamDto2.XncfFunctionParams, functionParameterType);
+                    var requestPara = SerializerHelper.GetObject(normalizedJson, functionParameterType) as IAppRequest;
                     paras = new[] { requestPara };
                     break;
                 case 0:
                     //不处理
                     break;
                 default:
-                    return new JsonResult(new { success = false, msg = "FunctionRender 只允许方法具有一个传入参数！" });
+                    return new JsonResult(new { success = false, msg = _localizer["Xncf.FunctionSingleParameterOnly"] });
             }
 
             var functionClass = _serviceProvider.GetService(rightFunctionBag.Value.MethodInfo.DeclaringType);
@@ -245,7 +248,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             var log = await cache.GetAsync<string>(tempId);
             if (log == null)
             {
-                return Content("日志文件不存在或已下载！");
+                return Content(_localizer["Xncf.LogFileNotFoundOrDownloaded"]);
             }
 
             await cache.RemoveFromCacheAsync(tempId);
@@ -264,7 +267,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
             if (module == null)
             {
-                throw new Exception("模块未添加！");
+                throw new Exception(_localizer["Xncf.ModuleNotAdded"]);
             }
 
             //删除菜单
@@ -312,7 +315,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             bool mustUpdate = false;
             if (uid.IsNullOrEmpty())
             {
-                throw new Exception("模块编号未提供！");
+                throw new Exception(_localizer["Xncf.ModuleIdNotProvided"]);
             }
 
 
@@ -320,7 +323,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
             if (xncfModule == null)
             {
-                throw new Exception("模块未添加！");
+                throw new Exception(_localizer["Xncf.ModuleNotAdded"]);
             }
             IEnumerable<string> xncfModuleUpdateLog = new List<string>();
             if (!xncfModule.UpdateLog.IsNullOrEmpty())
@@ -333,7 +336,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             IXncfRegister xncfRegister = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == uid);
             if (xncfRegister == null)
             {
-                throw new Exception($"模块丢失或未加载（{XncfRegisterManager.RegisterList.Count}）！");
+                throw new Exception(_localizer["Xncf.ModuleMissingOrNotLoaded", XncfRegisterManager.RegisterList.Count]);
             }
 
             IDictionary<(string key, string name, string description), List<FunctionParameterInfo>> functionParameterInfoCollection = new Dictionary<(string key, string name, string description), List<FunctionParameterInfo>>();
@@ -355,7 +358,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                         catch (Exception ex)
                         {
                             SenparcTrace.BaseExceptionLog(ex);
-                            throw new Exception($"载入 {functionBag.Key} 时出错，请查看日志！如果刚添加数据库迁移，请先完成模块升级！");
+                            throw new Exception(_localizer["Xncf.FunctionLoadError", functionBag.Key]);
                         }
                     }
                 }
@@ -440,7 +443,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
             if (module == null)
             {
-                throw new Exception("模块未添加！");
+                throw new Exception(_localizer["Xncf.ModuleNotAdded"]);
             }
 
             module.UpdateState(toState);
