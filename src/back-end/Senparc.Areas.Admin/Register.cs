@@ -1,4 +1,4 @@
-/* 
+﻿/* 
  * 特别注意：
  * 当前注册类是比较特殊的底层系统支持模块，
  * 其中加入了一系列特殊处理的代码，并不适合所有模块使用，
@@ -165,6 +165,19 @@ namespace Senparc.Areas.Admin
             configuration.Bind(JwtSettings.Position_Backend, backend);
             services.AddAuthentication()
                 .AddJwtBearer(BackendJwtAuthorizeAttribute.AuthenticationScheme, options =>
+                {
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                    {
+                        ValidIssuer = backend.Issuer,
+                        ValidAudience = backend.Audience,
+                        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(backend.SecretKey)),
+                        ValidateIssuer = true, //whether or not valid Issuer
+                        ValidateAudience = true, //whether or not valid Audience
+                        ValidateLifetime = true, //whether or not valid out-of-service time
+                        ValidateIssuerSigningKey = true, //whether or not valid SecurityKey　　　　　　　　　　　
+                        ClockSkew = System.TimeSpan.Zero//Allowed server time offset
+                    };
+                }).AddJwtBearer("Bearer", options =>
                 {
                     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
                     {
