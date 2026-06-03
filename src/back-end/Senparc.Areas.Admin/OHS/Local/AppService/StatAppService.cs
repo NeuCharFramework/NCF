@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin.OHS.Local.AppService
 {
-    //[BackendJwtAuthorize]
+    [BackendJwtAuthorize]
     [AdminAuthorize("AdminOnly")]
     public class StatAppService : LocalAppServiceBase
     {
