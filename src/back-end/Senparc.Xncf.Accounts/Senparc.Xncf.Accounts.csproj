@@ -56,7 +56,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.12.1-preview" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.12.1-preview1" />
 		<None Include="App_Data\SenparcTraceLog\*" />
 	</ItemGroup>
 
@@ -89,7 +89,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
 
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.13.1-preview" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.13.1-preview1" />
 	</ItemGroup>
 
 	<ItemGroup>
