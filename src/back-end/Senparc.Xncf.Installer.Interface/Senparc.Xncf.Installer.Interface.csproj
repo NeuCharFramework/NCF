@@ -31,8 +31,8 @@
 	  <PackageReference Include="Senparc.CO2NET" Version="3.1.5" />
 	  <PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.1" />
 	  <PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.6-preview.1" />
-	  <PackageReference Include="Senparc.Ncf.Core" Version="0.23.18.1-preview" />
-	  <PackageReference Include="Senparc.Xncf.Tenant.Interface" Version="0.9.11.1-preview" />
+	  <PackageReference Include="Senparc.Ncf.Core" Version="0.24.1-preview1" />
+	  <PackageReference Include="Senparc.Xncf.Tenant.Interface" Version="0.10.1-preview1" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="OHS\PL\" />
