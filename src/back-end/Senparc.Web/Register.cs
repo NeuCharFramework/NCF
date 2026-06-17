@@ -39,9 +39,14 @@ namespace Senparc.Web
             // 注册 EventBus 并自动扫描所有模块的 EventHandler
             // 必须在 StartWebEngine 之后，确保所有模块程序集已加载
             var assembliesToScan = AppDomain.CurrentDomain.GetAssemblies()
-                .Where(a => !a.IsDynamic && 
-                           (a.FullName.Contains("Senparc.Xncf.") || 
-                            a.FullName.Contains("Senparc.Areas.")))
+                .Where(a => !a.IsDynamic && !string.IsNullOrEmpty(a.FullName))
+                .Where(a =>
+                {
+                    var name = a.GetName().Name ?? string.Empty;
+                    return name.Contains("Senparc.Xncf.", StringComparison.Ordinal) ||
+                           name.Contains("Senparc.Areas.", StringComparison.Ordinal) ||
+                           name.Contains(".Xncf.", StringComparison.Ordinal);
+                })
                 .ToArray();
             
             Console.WriteLine($"EventBus 扫描程序集:");
