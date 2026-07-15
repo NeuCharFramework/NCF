@@ -22,12 +22,11 @@
                 },
                 rules: {
                     systemName: [
-                        { required: true, message: "用户名为必填项", trigger: "blur" }
+                        { required: true, message: "系统名称为必填项", trigger: "blur" }
                     ]
-                }
-            },
-            updateLoading: false,
-            updateLoadingSet: false, // 确认loading按钮
+                },
+                updateLoading: false
+            }
         };
     },
     created: function () {
@@ -44,7 +43,9 @@
                     systemName: ''
                 };
                 this.dialog.updateLoading = false;
-                this.$refs['dataForm'].resetFields();
+                if (this.$refs['dataForm']) {
+                    this.$refs['dataForm'].resetFields();
+                }
             }
         }
     },
@@ -52,7 +53,7 @@
         // 获取数据
         getList() {
             let { pageIndex, pageSize } = this.listQuery;
-            service.get(`/Admin/SystemConfig/index?handler=List&&pageIndex=${pageIndex}&pageSize=${pageSize}`).then(res => {
+            service.get(`/Admin/SystemConfig?handler=List&pageIndex=${pageIndex}&pageSize=${pageSize}`).then(res => {
                 this.tableData = res.data.data.list;
                 this.paginationQuery.total = res.data.data.totalCount;
             });
@@ -79,7 +80,7 @@
                         Id: this.dialog.data.id,
                         SystemName: this.dialog.data.systemName,
                     };
-                    service.post("/Admin/SystemConfig/Edit?handler=Save", data).then(res => {
+                    service.post("/Admin/SystemConfig?handler=Edit", data).then(res => {
                         if (res.data.success) {
                             this.getList();
                             this.$notify({
@@ -92,9 +93,9 @@
                             this.dialog.updateLoading = false;
                         } else {
                             this.$notify({
-                                title: "Faild",
+                                title: "Failed",
                                 message: "更新失败：" + res.data.msg,
-                                type: "success",
+                                type: "error",
                                 duration: 2000
                             });
                         }

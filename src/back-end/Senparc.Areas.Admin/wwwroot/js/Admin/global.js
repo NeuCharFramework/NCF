@@ -61,3 +61,185 @@ function formatCurrency(num) {
         num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
     return ((sign ? '' : '-') + num + '.' + cents);
 }
+
+(function () {
+    var started = false;
+    var promptVisible = false;
+    var checkTimer = null;
+    var remindTimer = null;
+    var currentExpiresAtMs = 0;
+
+    function getConfig() {
+        var cfg = window.NCF_SESSION_CONFIG || {};
+        return {
+            webLoginExpireMinutes: Number(cfg.webLoginExpireMinutes) > 0 ? Number(cfg.webLoginExpireMinutes) : 120,
+            jwtExpireMinutes: Number(cfg.jwtExpireMinutes) > 0 ? Number(cfg.jwtExpireMinutes) : 9000,
+            remindBeforeMinutes: Number(cfg.remindBeforeMinutes) > 0 ? Number(cfg.remindBeforeMinutes) : 5
+        };
+    }
+
+    function getI18n() {
+        return window.NCF_SESSION_I18N || {
+            title: '登录即将过期',
+            message: '检测到当前登录会话即将过期，您可以保持登录或立即退出。',
+            keepLogin: '保持登录',
+            logoutNow: '立即退出登录',
+            keepLoginSuccess: '已保持登录，会话已续期。'
+        };
+    }
+
+    function parseUtcToMs(utcValue) {
+        if (!utcValue) {
+            return 0;
+        }
+        var ms = new Date(utcValue).getTime();
+        return Number.isNaN(ms) ? 0 : ms;
+    }
+
+    function doLogout() {
+        if (typeof Vue !== 'undefined' && Vue.prototype && typeof Vue.prototype.loginout === 'function') {
+            Vue.prototype.loginout();
+        } else {
+            window.location.href = '/Admin/Login?url=' + escape(window.location.pathname + window.location.search);
+        }
+    }
+
+    function scheduleReminder() {
+        if (remindTimer) {
+            clearTimeout(remindTimer);
+            remindTimer = null;
+        }
+
+        if (!currentExpiresAtMs) {
+            return;
+        }
+
+        var remindMs = getConfig().remindBeforeMinutes * 60 * 1000;
+        var delayMs = currentExpiresAtMs - Date.now() - remindMs;
+        if (delayMs <= 0) {
+            showReminderDialog();
+            return;
+        }
+
+        remindTimer = setTimeout(function () {
+            showReminderDialog();
+        }, delayMs);
+    }
+
+    function applySessionStatus(statusData) {
+        if (!statusData) {
+            return;
+        }
+
+        if (statusData.token) {
+            window.ncfJwtToken = statusData.token;
+        }
+
+        currentExpiresAtMs = parseUtcToMs(statusData.expiresUtc);
+        scheduleReminder();
+    }
+
+    function fetchSessionStatus() {
+        if (!window.service) {
+            return Promise.resolve();
+        }
+
+        return service.get('/Admin/Session?handler=Status', { customAlert: true })
+            .then(function (res) {
+                if (res && res.data && res.data.success) {
+                    applySessionStatus(res.data.data);
+                    return;
+                }
+
+                currentExpiresAtMs = 0;
+            });
+    }
+
+    function keepAliveSession() {
+        if (!window.service) {
+            return Promise.reject(new Error('service not ready'));
+        }
+
+        return service.get('/Admin/Session?handler=KeepAlive', { customAlert: true })
+            .then(function (res) {
+                if (!(res && res.data && res.data.success)) {
+                    return Promise.reject(new Error('keep alive failed'));
+                }
+
+                applySessionStatus(res.data.data);
+                var i18n = getI18n();
+                if (typeof app !== 'undefined' && app.$message) {
+                    app.$message({
+                        message: i18n.keepLoginSuccess || '已保持登录，会话已续期。',
+                        type: 'success',
+                        duration: 1500
+                    });
+                }
+            });
+    }
+
+    function showReminderDialog() {
+        if (promptVisible) {
+            return;
+        }
+
+        if (!currentExpiresAtMs || currentExpiresAtMs <= Date.now()) {
+            return;
+        }
+
+        if (typeof app === 'undefined' || !app.$confirm) {
+            return;
+        }
+
+        promptVisible = true;
+        var i18n = getI18n();
+
+        app.$confirm(
+            i18n.message || '检测到当前登录会话即将过期，您可以保持登录或立即退出。',
+            i18n.title || '登录即将过期',
+            {
+                confirmButtonText: i18n.keepLogin || '保持登录',
+                cancelButtonText: i18n.logoutNow || '立即退出登录',
+                type: 'warning',
+                closeOnClickModal: false,
+                showClose: false,
+                distinguishCancelAndClose: true
+            })
+            .then(function () {
+                return keepAliveSession();
+            })
+            .catch(function () {
+                doLogout();
+            })
+            .finally(function () {
+                promptVisible = false;
+            });
+    }
+
+    function startMonitorWhenReady() {
+        if (started) {
+            return;
+        }
+
+        if (window.location.pathname.toLowerCase().indexOf('/admin/login') === 0) {
+            return;
+        }
+
+        var waitAndStart = function () {
+            if (!window.service || typeof app === 'undefined') {
+                setTimeout(waitAndStart, 800);
+                return;
+            }
+
+            started = true;
+            fetchSessionStatus().catch(function () { });
+            checkTimer = setInterval(function () {
+                fetchSessionStatus().catch(function () { });
+            }, 60 * 1000);
+        };
+
+        waitAndStart();
+    }
+
+    window.ncfStartSessionMonitor = startMonitorWhenReady;
+})();

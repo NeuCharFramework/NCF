@@ -476,22 +476,8 @@ var chatApp = new Vue({
 
     formatMessageContent(content) {
       if (!content) return '';
-      
-      let formatted = content
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#x27;')
-        .replace(/\//g, '&#x2F;');
-      
-      formatted = formatted
-        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.+?)\*/g, '<em>$1</em>')
-        .replace(/`(.+?)`/g, '<code>$1</code>')
-        .replace(/\n/g, '<br/>');
-      
-      return formatted;
+
+      return marked.parse(content);
     }
   }
 });

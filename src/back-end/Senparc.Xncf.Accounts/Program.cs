@@ -1,4 +1,18 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：Program.cs
+    文件功能描述：Program 相关实现
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260702
+    修改描述：v0.11.0-preview2 同步 master/main 基线范围内改动并完成递归依赖版本处理
+
+----------------------------------------------------------------*/
+
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,7 +33,7 @@ using System.Linq;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire components.
-//builder.AddServiceDefaults();
+builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
@@ -28,7 +42,7 @@ builder.Services.AddDaprClient();
 builder.Services.AddControllers().AddDapr();
 
 //激活 Xncf 扩展引擎（必须）
-var logMsg = builder.StartWebEngine(new[] { "Senparc.Areas.Admin" });
+var logMsg = builder.StartWebEngine(new[] { "Senparc.Xncf.Accounts" });
 //如果不需要启用 Areas，可以只使用 services.StartEngine() 方法
 
 Console.WriteLine("============ logMsg =============");
@@ -52,7 +66,7 @@ var registerService = app.UseSenparcGlobal(app.Environment);
 //XncfModules（必须）
 app.UseXncfModules(registerService, senparcCoreSetting.Value)
 //指定数据库（必须）
-   .UseNcfDatabase<SqlServerDatabaseConfiguration>();
+   .UseNcfDatabase<BySettingDatabaseConfiguration>();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -111,6 +125,6 @@ app.Map("/TestDB", _app =>
 app.MapRazorPages();
 app.MapControllers();
 
-//app.MapDefaultEndpoints();
+app.MapDefaultEndpoints();
 
 app.Run();

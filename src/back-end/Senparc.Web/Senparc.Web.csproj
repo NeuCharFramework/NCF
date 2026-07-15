@@ -13,8 +13,8 @@
 		<DefineConstants Condition="'$(Configuration)|$(Platform)'=='NcfDebugForPromptRange|AnyCPU'">$(DefineConstants);DEBUG</DefineConstants>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.24.1-preview" />
-		<PackageReference Include="Senparc.Xncf.MCP" Version="0.2.8.1-preview1" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.24.2-preview1" />
+		<PackageReference Include="Senparc.Xncf.MCP" Version="0.3.3-preview2" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.10" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.1" />
@@ -25,15 +25,15 @@
 		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.25.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.Menu" Version="0.13.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.13.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.14.1-preview1" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.14.2-preview2" />
 		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.14.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.14.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.21.1-preview1" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.14.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.13.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.36.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.16.1-preview1" />
-		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.10.1-preview1" />
+		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.13.5-preview4" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.36.5-preview4" />
+		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.16.5-preview4" />
+		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.11.3-preview5" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
