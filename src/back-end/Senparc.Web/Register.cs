@@ -1,7 +1,21 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：Register.cs
+    文件功能描述：模块注册与初始化逻辑
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260702
+    修改描述：v0.11.0-preview2 同步 master/main 基线范围内改动并完成递归依赖版本处理
+
+----------------------------------------------------------------*/
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Senparc.AI.Interfaces;
-using Senparc.AI.Kernel;
+using Senparc.AI.AgentKernel;
 using Senparc.Areas.Admin.Domain.Services;
 using Senparc.CO2NET;
 using Senparc.CO2NET.AspNet;
@@ -93,7 +107,6 @@ namespace Senparc.Web
             //});
 
             #endregion
-
 
             //如果运行在IIS中，需要添加IIS配置
             //https://docs.microsoft.com/zh-cn/aspnet/core/host-and-deploy/iis/index?view=aspnetcore-2.1&tabs=aspnetcore2x#supported-operating-systems

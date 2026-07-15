@@ -1,9 +1,23 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：AdminChatAiService.cs
+    文件功能描述：AdminChatAiService 服务逻辑
+    
+    
+    创建标识：Senparc - 20260327
+    
+    修改标识：Senparc - 20260702
+    修改描述：v0.11.0-preview2 同步 master/main 基线范围内改动并完成递归依赖版本处理
+
+----------------------------------------------------------------*/
+
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
 using Senparc.AI;
 using Senparc.AI.Entities;
-using Senparc.AI.Kernel;
-using Senparc.AI.Kernel.Handlers;
+using Senparc.AI.AgentKernel;
+using Senparc.AI.AgentKernel.Handlers;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
 using Senparc.Areas.Admin.Domain.Services.AIPlugins;
 using Senparc.CO2NET.Extensions;
@@ -20,6 +34,11 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Agents.AI;
+using Microsoft.AspNetCore.Routing.Constraints;
+using Microsoft.Extensions.AI;
+using Senparc.AI.AgentKernel.IWantToExtensions;
+using Senparc.AI.AgentKernel.Extensions;
 
 namespace Senparc.Areas.Admin.Domain.Services
 {
@@ -70,25 +89,12 @@ namespace Senparc.Areas.Admin.Domain.Services
             var (messages, _) = await _messageService.GetSessionMessagesAsync(sessionId);
             var modules = await _sessionModuleService.GetSessionModulesAsync(sessionId);
 
-            var semanticAiHandler = new SemanticAiHandler(setting);
-            var promptParameter = new PromptConfigParameter
-            {
-                MaxTokens = 2000,
-                Temperature = 0.6f,
-                TopP = 0.9f
-            };
+            var agentAiHandler = new AgentAiHandler(setting);
+
 
             var modulePlugin = new ModuleAssistantPlugin(modules);
+            var aiFunctions = agentAiHandler.GetAITools(modulePlugin);
 
-            var iWantToRun = semanticAiHandler.ChatConfig(
-                promptParameter,
-                userId: $"AdminChat-{userId}-{sessionId}",
-                maxHistoryStore: 20,
-                chatSystemMessage: BuildSystemMessage(modules),
-                senparcAiSetting: setting);
-
-            // 注册模块信息 Function Calling 插件
-            iWantToRun.ImportPluginFromObject(modulePlugin, "ModuleAssistant");
             var importedPluginNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "ModuleAssistant" };
 
             // 自动加载会话关联模块中的 FunctionRender（[#sym:FunctionRender]）插件对象
@@ -133,6 +139,12 @@ namespace Senparc.Areas.Admin.Domain.Services
 
                             var kernelFunction = KernelFunctionFactory.CreateFromMethod(functionBag.MethodInfo, plugin, options);
                             kernelFunctions.Add(kernelFunction);
+
+                            aiFunctions.Add(AIFunctionFactory.Create(
+                                method: functionBag.MethodInfo,
+                                target: null,
+                                name: options.FunctionName,
+                                description: options.Description));
                         }
                         catch (Exception ex)
                         {
@@ -149,7 +161,8 @@ namespace Senparc.Areas.Admin.Domain.Services
                         continue;
                     }
 
-                    var addedPlugin = iWantToRun.Kernel.Plugins.AddFromFunctions(pluginName, kernelFunctions);
+                    var addedPlugin = KernelPluginFactory.CreateFromFunctions(pluginName, kernelFunctions);
+
                     importedFunctionSignatures.AddRange(addedPlugin.Select(kernelFunction => $"{kernelFunction.Metadata.PluginName}.{kernelFunction.Metadata.Name}({kernelFunction.Metadata.Description ?? "N/A"})"));
                     loadedFunctionDebugLines.AddRange(BuildKernelPluginDebugLines(addedPlugin));
                     importedPluginNames.Add(pluginName);
@@ -160,6 +173,27 @@ namespace Senparc.Areas.Admin.Domain.Services
                     _logger.LogWarning(ex, "导入 FunctionRender 插件失败：{PluginType}", pluginGroup.Key?.FullName);
                 }
             }
+
+
+#pragma warning disable MEAI001 // 类型仅用于评估，在将来的更新中可能会被更改或删除。取消此诊断以继续。
+            var iWantToRun = await agentAiHandler.IWantTo(setting).ConfigChatModel($"AdminChat-{userId}-{sessionId}", new ChatClientAgentOptions()
+            {
+                ChatOptions = new ChatOptions()
+                {
+                    Instructions = BuildSystemMessage(modules),
+                    MaxOutputTokens = 2000,
+                    TopP = 0.9f,
+                    Temperature = 0.6f,
+                    Tools = aiFunctions.Select(z => z as AITool).ToList()
+                },
+                ChatHistoryProvider = new InMemoryChatHistoryProvider(new InMemoryChatHistoryProviderOptions
+                {
+                    ChatReducer = new MessageCountingChatReducer(20)
+                })
+            }
+                ).BuildKernelWithAgentSessionAsync();
+#pragma warning restore MEAI001 // 类型仅用于评估，在将来的更新中可能会被更改或删除。取消此诊断以继续。
+
 
             if (importedFunctionCount == 0)
             {
@@ -191,13 +225,15 @@ namespace Senparc.Areas.Admin.Domain.Services
             var prompt = BuildUserPrompt(messages, userMessage);
 
             // 使用 FunctionChoiceBehavior.Auto() 让 AI 根据需要自动调用 ModuleAssistantPlugin 函数
-            var executionSettings = new PromptExecutionSettings
-            {
-                FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
-            };
-            var skResult = await iWantToRun.Kernel.InvokePromptAsync(prompt, new KernelArguments(executionSettings));
+            //var executionSettings = new PromptExecutionSettings
+            //{
+            //    FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
+            //};
 
-            var result = skResult?.ToString()?.Trim();
+            //TODO: 测试 MAF 中是否自动开启工具调用
+            var skResult = await iWantToRun.RunChatAsync(prompt);
+
+            var result = skResult?.OutputString?.Trim();
             if (string.IsNullOrWhiteSpace(result))
             {
                 _logger.LogWarning("AI 返回空内容：SessionId={SessionId}, UserId={UserId}", sessionId, userId);

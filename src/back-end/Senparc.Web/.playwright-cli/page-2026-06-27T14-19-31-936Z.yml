@@ -1,0 +1,100 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - link "Alternate Text" [ref=e7] [cursor=pointer]:
+      - /url: /Admin/Index
+      - img "Alternate Text" [ref=e8]
+    - generic [ref=e10]:
+      - generic:
+        - menubar
+  - generic [ref=e13]:
+    - generic [ref=e14]:
+      - generic [ref=e16] [cursor=pointer]: 
+      - navigation "Breadcrumb" [ref=e18]:
+        - generic:
+          - link "首页":
+            - link "首页":
+              - /url: /Admin/Index
+      - generic [ref=e19]:
+        - generic [ref=e20]: 选择语言
+        - combobox "选择语言" [ref=e21]:
+          - option "简体中文" [selected]
+          - option "English"
+          - option "日本語"
+          - option "Français"
+          - option "Español"
+          - option "Русский"
+      - generic [ref=e23]:
+        - text: 
+        - generic [ref=e24] [cursor=pointer]: 
+    - main [ref=e25]:
+      - generic [ref=e26]:
+        - generic [ref=e28]:
+          - generic [ref=e30]: NeuCharFramework 管理员后台
+          - main [ref=e31]:
+            - generic [ref=e34]:
+              - link "0  已安装模块" [ref=e36] [cursor=pointer]:
+                - /url: /Admin/XncfModule/Index
+                - generic [ref=e37]:
+                  - generic [ref=e38]: "0"
+                  - generic [ref=e40]: 
+                  - paragraph [ref=e41]: 已安装模块
+              - link "0  待更新模块" [ref=e43] [cursor=pointer]:
+                - /url: /Admin/XncfModule/Index
+                - generic [ref=e44]:
+                  - generic [ref=e45]: "0"
+                  - generic [ref=e47]: 
+                  - paragraph [ref=e48]: 待更新模块
+              - link "0  发现新模块" [ref=e50] [cursor=pointer]:
+                - /url: /Admin/XncfModule/Index
+                - generic [ref=e51]:
+                  - generic [ref=e52]: "0"
+                  - generic [ref=e54]: 
+                  - paragraph [ref=e55]: 发现新模块
+              - link "0  模块异常" [ref=e57] [cursor=pointer]:
+                - /url: /Admin/XncfModule/Index
+                - generic [ref=e58]:
+                  - generic [ref=e59]: "0"
+                  - generic [ref=e61]: 
+                  - paragraph [ref=e62]: 模块异常
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - generic [ref=e79]: 
+            - generic [ref=e80]:
+              - heading " AI 智能助手" [level=3] [ref=e81]:
+                - generic [ref=e82]: 
+                - text: AI 智能助手
+              - paragraph [ref=e83]: 向我提问，我将帮助您更高效地管理系统
+          - generic [ref=e84]:
+            - textbox "输入您的问题，例如：如何配置系统参数？ 提示：按 Ctrl+Enter 或 Cmd+Enter 发送消息" [ref=e86]:
+              - /placeholder: "输入您的问题，例如：如何配置系统参数？\n\n提示：按 Ctrl+Enter 或 Cmd+Enter 发送消息"
+            - button " 开始对话" [disabled] [ref=e87]:
+              - generic [ref=e88]: 
+              - text: 开始对话
+          - generic [ref=e89]:
+            - generic [ref=e90]:
+              - generic [ref=e91]: 
+              - text: 支持多轮对话
+            - generic [ref=e92]:
+              - generic [ref=e93]: 
+              - text: 可添加模块作为对话上下文
+            - generic [ref=e94]:
+              - generic [ref=e95]: 
+              - text: 自动保存历史记录
+          - generic [ref=e96]:
+            - generic [ref=e97]:
+              - generic [ref=e98]: 引用模块（可选）
+              - button " 添加引用模块" [ref=e100] [cursor=pointer]:
+                - generic [ref=e101]: 
+                - text: 添加引用模块
+            - generic [ref=e102]: 点击“添加引用模块”可选择多个模块作为上下文
+          - text: 
+        - generic [ref=e108]:
+          - generic [ref=e109]: 
+          - text: 功能模块
+    - generic [ref=e111]:
+      - text: Powered by
+      - link "NeuCharFramework" [ref=e112] [cursor=pointer]:
+        - /url: https://www.ncf.pub
+      - text: © 2010-2026
+      - link "盛派网络" [ref=e113] [cursor=pointer]:
+        - /url: https://www.senparc.com

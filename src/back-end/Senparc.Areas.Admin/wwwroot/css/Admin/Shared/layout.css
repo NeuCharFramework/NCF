@@ -128,10 +128,38 @@ li {
         cursor: pointer;
     }
 
-.header-logout {
+.header-account {
     height: 100%;
     float: right;
     line-height: 60px;
+    margin-right: 6px;
+}
+
+.header-account .el-dropdown-link {
+    display: inline-flex;
+    align-items: center;
+    height: 60px;
+    font-size: 14px;
+    color: #303133;
+    cursor: pointer;
+}
+
+.header-account .el-dropdown-link .el-icon--right {
+    margin-left: 6px;
+    font-size: 12px;
+}
+
+.header-account-dropdown .el-dropdown-menu__item.is-disabled {
+    color: #606266;
+}
+
+.header-account-action {
+    display: block;
+    color: inherit;
+}
+
+.header-account-action:hover {
+    color: inherit;
 }
 
 .header-language {

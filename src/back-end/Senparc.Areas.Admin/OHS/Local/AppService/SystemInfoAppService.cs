@@ -1,4 +1,20 @@
-﻿using Senparc.Areas.Admin.Domain.Dto;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：SystemInfoAppService.cs
+    文件功能描述：SystemInfoAppService 相关功能实现
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260705
+    修改描述：v0.0.3 新增登录超时配置并补齐多数据库迁移支持
+
+    修改标识：Senparc - 20260705
+    修改描述：v0.0.4 新增登录超时配置并补齐多数据库迁移支持
+----------------------------------------------------------------*/
+
+using Senparc.Areas.Admin.Domain.Dto;
 using Senparc.CO2NET;
 using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.Extensions;
@@ -8,6 +24,8 @@ using Senparc.Ncf.Core.Cache.Extensions;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Utility;
+using Senparc.Areas.Admin.Domain.Services;
+using Senparc.Areas.Admin.OHS.PL;
 using Senparc.Xncf.SystemManager.Domain.Service;
 using System;
 using System.Collections.Generic;
@@ -23,13 +41,13 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
     public class SystemInfoAppService : LocalAppServiceBase
     {
         private readonly SystemConfigService _systemConfigService;
-        private readonly FullSystemConfigCache _fullSystemConfigCache;
+        private readonly AdminAuthConfigService _adminAuthConfigService;
         private readonly IBaseObjectCacheStrategy _cacheStrategy;
 
-        public SystemInfoAppService(IServiceProvider serviceProvider, SystemConfigService systemConfigService, FullSystemConfigCache fullSystemConfigCache, IBaseObjectCacheStrategy cacheStrategy) : base(serviceProvider)
+        public SystemInfoAppService(IServiceProvider serviceProvider, SystemConfigService systemConfigService, AdminAuthConfigService adminAuthConfigService, IBaseObjectCacheStrategy cacheStrategy) : base(serviceProvider)
         {
             _systemConfigService = systemConfigService;
-            _fullSystemConfigCache = fullSystemConfigCache;
+            _adminAuthConfigService = adminAuthConfigService;
             this._cacheStrategy = cacheStrategy;
         }
 
@@ -115,6 +133,47 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
                 return systemConfigDto;
             });
+            return response;
+        }
+
+        [FunctionRender("查看登录过期配置", "查看 Admin 模块中的网页登录过期与 JWT 过期配置", typeof(Register))]
+        public async Task<StringAppResponse> GetAuthExpireSettings()
+        {
+            var response = await this.GetStringResponseAsync(async (_, logger) =>
+            {
+                var settings = _adminAuthConfigService.GetEffectiveExpireSettings();
+                logger.Append($"网页登录持续时间：{settings.AdminWebLoginExpireMinutes} 分钟");
+                logger.Append($"JWT 过期时间：{settings.BackendJwtExpireMinutes} 分钟");
+                logger.Append($"配置来源：{settings.Source}");
+                logger.Append(settings.UsingDefault
+                    ? "当前使用默认值（可能是配置记录不存在，或配置表尚未完成数据库升级）。"
+                    : "当前使用数据库配置值。");
+
+                await Task.CompletedTask;
+                return logger.GetLogs();
+            }, saveLogAfterFinished: true, saveLogName: "查看登录过期配置");
+
+            return response;
+        }
+
+        [FunctionRender("设置登录过期配置", "设置网页登录持续时间与 JWT 过期时间（分钟）", typeof(Register))]
+        public async Task<StringAppResponse> SetAuthExpireSettings(AdminAuthConfig_SetExpireSettingsRequest request)
+        {
+            var response = await this.GetStringResponseAsync(async (_, logger) =>
+            {
+                var result = await _adminAuthConfigService.TrySaveExpireSettingsAsync(
+                    request.AdminWebLoginExpireMinutes,
+                    request.BackendJwtExpireMinutes).ConfigureAwait(false);
+
+                logger.Append(result.Message);
+                logger.Append($"当前生效：网页登录持续时间={result.Settings.AdminWebLoginExpireMinutes} 分钟，JWT 过期时间={result.Settings.BackendJwtExpireMinutes} 分钟。");
+                logger.Append(result.Settings.UsingDefault
+                    ? "当前仍为默认值回退。"
+                    : "当前已写入数据库配置。");
+
+                return logger.GetLogs();
+            }, saveLogAfterFinished: true, saveLogName: "设置登录过期配置");
+
             return response;
         }
 

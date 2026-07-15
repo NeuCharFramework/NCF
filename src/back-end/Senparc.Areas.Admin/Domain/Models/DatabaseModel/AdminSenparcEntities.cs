@@ -1,3 +1,19 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：AdminSenparcEntities.cs
+    文件功能描述：AdminSenparcEntities 相关功能实现
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260705
+    修改描述：v0.0.3 新增登录超时配置并补齐多数据库迁移支持
+
+    修改标识：Senparc - 20260705
+    修改描述：v0.0.4 新增登录超时配置并补齐多数据库迁移支持
+----------------------------------------------------------------*/
+
 using Microsoft.EntityFrameworkCore;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
@@ -22,6 +38,11 @@ namespace Senparc.Areas.Admin.Domain.Models
         /// 系统设置
         /// </summary>
         public DbSet<AdminUserInfo> SystemConfigs { get; set; }
+
+        /// <summary>
+        /// 管理后台认证配置
+        /// </summary>
+        public DbSet<AdminAuthConfig> AdminAuthConfigs { get; set; }
 
         /// <summary>
         /// 管理后台聊天会话

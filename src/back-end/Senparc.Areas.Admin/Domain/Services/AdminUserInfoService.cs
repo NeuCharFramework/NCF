@@ -1,4 +1,23 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：AdminUserInfoService.cs
+    文件功能描述：AdminUserInfoService 服务逻辑
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260702
+    修改描述：v0.11.0-preview2 同步 master/main 基线范围内改动并完成递归依赖版本处理
+
+    修改标识：Senparc - 20260705
+    修改描述：v0.0.3 新增登录超时配置并补齐多数据库迁移支持
+
+    修改标识：Senparc - 20260705
+    修改描述：v0.0.4 新增登录超时配置并补齐多数据库迁移支持
+----------------------------------------------------------------*/
+
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,7 +25,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Senparc.Areas.Admin.ACL;
 using Senparc.Areas.Admin.Domain.Models;
+using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
 using Senparc.Areas.Admin.Domain.Models.Dto;
+using Senparc.Areas.Admin.Domain.Services;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
@@ -23,13 +44,102 @@ namespace Senparc.Areas.Admin.Domain
 {
     public class AdminUserInfoService : BaseClientService<AdminUserInfo>
     {
+        private const int MinExpireMinutes = 5;
+        private const int MaxExpireMinutes = 60 * 24 * 365; // 1 year
 
         private readonly Lazy<IHttpContextAccessor> _contextAccessor;
+        private readonly Lazy<AdminAuthConfigService> _adminAuthConfigService;
 
-        public AdminUserInfoService(IAdminUserInfoRepository repository, Lazy<IHttpContextAccessor> httpContextAccessor, IServiceProvider serviceProvider)
+        public AdminUserInfoService(IAdminUserInfoRepository repository,
+            Lazy<IHttpContextAccessor> httpContextAccessor,
+            Lazy<AdminAuthConfigService> adminAuthConfigService,
+            IServiceProvider serviceProvider)
             : base(repository, serviceProvider)
         {
             _contextAccessor = httpContextAccessor;
+            _adminAuthConfigService = adminAuthConfigService;
+        }
+
+        private int NormalizeExpireMinutes(int expireMinutes, int defaultValue)
+        {
+            var value = expireMinutes <= 0 ? defaultValue : expireMinutes;
+            if (value < MinExpireMinutes)
+            {
+                return MinExpireMinutes;
+            }
+
+            if (value > MaxExpireMinutes)
+            {
+                return MaxExpireMinutes;
+            }
+
+            return value;
+        }
+
+        public int GetAdminWebLoginExpireMinutes()
+        {
+            var settings = _adminAuthConfigService.Value.GetEffectiveExpireSettings();
+            return NormalizeExpireMinutes(settings.AdminWebLoginExpireMinutes,
+                AdminAuthConfig.DefaultAdminWebLoginExpireMinutes);
+        }
+
+        public int GetBackendJwtExpireMinutes()
+        {
+            var settings = _adminAuthConfigService.Value.GetEffectiveExpireSettings();
+            return NormalizeExpireMinutes(settings.BackendJwtExpireMinutes,
+                AdminAuthConfig.DefaultBackendJwtExpireMinutes);
+        }
+
+        public async Task<DateTimeOffset> KeepCookieLoginAliveAsync(ClaimsPrincipal principal)
+        {
+            if (principal?.Identity?.IsAuthenticated != true)
+            {
+                throw new NcfExceptionBase("当前用户未登录，无法续期。");
+            }
+
+            var identity = new ClaimsIdentity(principal.Claims, SiteConfig.NcfAdminAuthorizeScheme);
+            var expiresUtc = DateTimeOffset.UtcNow.AddMinutes(GetAdminWebLoginExpireMinutes());
+            var authProperties = new AuthenticationProperties
+            {
+                AllowRefresh = true,
+                ExpiresUtc = expiresUtc,
+                IssuedUtc = DateTimeOffset.UtcNow,
+                IsPersistent = false
+            };
+
+            await _contextAccessor.Value.HttpContext.SignInAsync(SiteConfig.NcfAdminAuthorizeScheme, new ClaimsPrincipal(identity), authProperties);
+            return expiresUtc;
+        }
+
+        public DateTimeOffset? TryGetJwtExpiresUtc(ClaimsPrincipal principal)
+        {
+            var expValue = principal?.Claims?
+                .FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Exp || c.Type == "exp" || c.Type == ClaimTypes.Expiration)
+                ?.Value;
+
+            if (string.IsNullOrWhiteSpace(expValue))
+            {
+                return null;
+            }
+
+            if (long.TryParse(expValue, out var expUnix))
+            {
+                try
+                {
+                    return DateTimeOffset.FromUnixTimeSeconds(expUnix);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+
+            if (DateTimeOffset.TryParse(expValue, out var expDateTimeOffset))
+            {
+                return expDateTimeOffset.ToUniversalTime();
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -84,7 +194,7 @@ namespace Senparc.Areas.Admin.Domain
             {
                 new Claim(ClaimTypes.Name, userInfo.UserName),
                 new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString(), ClaimValueTypes.Integer),
-                new Claim("AdminMember", "", ClaimValueTypes.String)
+                new Claim("AdminMember", "1", ClaimValueTypes.String)
             };
 
             if (userInfo.TenantId > 0)
@@ -94,10 +204,12 @@ namespace Senparc.Areas.Admin.Domain
 
             var identity = new ClaimsIdentity(SiteConfig.NcfAdminAuthorizeScheme);
             identity.AddClaims(claims);
+            var expiresUtc = DateTimeOffset.UtcNow.AddMinutes(GetAdminWebLoginExpireMinutes());
             var authProperties = new AuthenticationProperties
             {
-                AllowRefresh = false,
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(120),
+                AllowRefresh = true,
+                ExpiresUtc = expiresUtc,
+                IssuedUtc = DateTimeOffset.UtcNow,
                 IsPersistent = false,
             };
 
@@ -319,12 +431,13 @@ namespace Senparc.Areas.Admin.Domain
                 {
                     throw new NcfExceptionBase("用户名不存在或密码不正确！");
                 }
-                token = GenerateToken(adminUserInfo.Id);
+                token = GenerateToken(adminUserInfo.Id, out var tokenExpiresUtc);
                 var roles = await _serviceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == adminUserInfo.Id);
                 var roleCodes = roles
                     .Select(o => o.RoleCode).Distinct().ToList();
                 result.Token = token;
-                var permissions = await _serviceProvider.GetService<SysRolePermissionService>().GetFullListAsync(p => roles.Select(o => o.RoleId).Contains(p.RoleId));
+                result.TokenExpiresUtc = tokenExpiresUtc;
+                var permissions = await _serviceProvider.GetService<Domain.Services.SysRolePermissionService>().GetFullListAsync(p => roles.Select(o => o.RoleId).Contains(p.RoleId));
                 result.MenuTree = await _serviceProvider.GetService<Domain.Services.SysMenuService>().GetAllMenusTreeAsync(false);
                 result.UserName = adminUserInfo.UserName;
                 result.RoleCodes = roleCodes;
@@ -350,7 +463,7 @@ namespace Senparc.Areas.Admin.Domain
             var roles = await _serviceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == adminUserInfo.Id);
             var roleCodes = roles
                 .Select(o => o.RoleCode).Distinct().ToList();
-            var permissions = await _serviceProvider.GetService<SysRolePermissionService>().GetFullListAsync(p => roles.Select(o => o.RoleId).Contains(p.RoleId));
+            var permissions = await _serviceProvider.GetService<Domain.Services.SysRolePermissionService>().GetFullListAsync(p => roles.Select(o => o.RoleId).Contains(p.RoleId));
             result.MenuTree = await _serviceProvider.GetService<Domain.Services.SysMenuService>().GetAllMenusTreeAsync(false);
             result.UserName = adminUserInfo.UserName;
             result.RealName = adminUserInfo.RealName;
@@ -365,26 +478,34 @@ namespace Senparc.Areas.Admin.Domain
         /// </summary>
         /// <param name="memberId"></param>
         /// <returns></returns>
-        private string GenerateToken(int memberId)
+        public string GenerateToken(int memberId, out DateTimeOffset expiresUtc, int? expiresMinutes = null)
         {
             var options = _serviceProvider.GetService<IOptionsSnapshot<JwtSettings>>();
             var jwtSettings = options.Get(JwtSettings.Position_Backend);
+            var effectiveExpireMinutes = NormalizeExpireMinutes(expiresMinutes ?? GetBackendJwtExpireMinutes(), AdminAuthConfig.DefaultBackendJwtExpireMinutes);
+            expiresUtc = DateTimeOffset.UtcNow.AddMinutes(effectiveExpireMinutes);
             byte[] keyBytes = System.Text.Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             SecurityTokenDescriptor securityToken = new SecurityTokenDescriptor()
             {
                 Subject = new System.Security.Claims.ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, memberId.ToString(), ClaimValueTypes.Integer)
+                    new Claim(ClaimTypes.NameIdentifier, memberId.ToString(), ClaimValueTypes.Integer),
+                    new Claim("AdminMember", "1", ClaimValueTypes.String)
                 }),
                 Audience = jwtSettings.Audience,
                 Issuer = jwtSettings.Issuer,
-                Expires = DateTime.UtcNow.AddHours(jwtSettings.Expires),
+                Expires = expiresUtc.UtcDateTime,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
             };
             SecurityToken token = tokenHandler.CreateToken(securityToken);
             string tokenStr = tokenHandler.WriteToken(token);
             return tokenStr;
+        }
+
+        private string GenerateToken(int memberId)
+        {
+            return GenerateToken(memberId, out _);
         }
     }
 }

@@ -1,4 +1,18 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：Program.cs
+    文件功能描述：Program 相关实现
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260702
+    修改描述：v0.11.0-preview2 同步 master/main 基线范围内改动并完成递归依赖版本处理
+
+----------------------------------------------------------------*/
+
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,10 +33,11 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire components.
-//builder.AddServiceDefaults();
+builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
+builder.Services.AddLocalization();
 
 builder.Services.AddControllers().AddDapr();
 
@@ -44,6 +59,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// 初始化 Senparc 全局 DI 访问器，避免模块静态初始化阶段拿不到 ServiceProvider。
+app.UseSenparcMvcDI();
+
 //Use NCF（必须）
 IOptions<SenparcCoreSetting> senparcCoreSetting = app.Services.GetService<IOptions<SenparcCoreSetting>>();
 IOptions<SenparcSetting> senparcSetting = app.Services.GetService<IOptions<SenparcSetting>>();
@@ -57,7 +76,7 @@ var registerService = app
 
 //XncfModules（必须）
 app.UseXncfModules(registerService, senparcCoreSetting.Value)
-   .UseNcfDatabase<SqlServerDatabaseConfiguration>();
+   .UseNcfDatabase<BySettingDatabaseConfiguration>();
 //using (var scope = app.Services.CreateScope())
 //{
 
@@ -80,7 +99,7 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers();
 
-//app.MapDefaultEndpoints();
+app.MapDefaultEndpoints();
 
 app.MapGet("/aspire-test1", async httpContext =>
 {

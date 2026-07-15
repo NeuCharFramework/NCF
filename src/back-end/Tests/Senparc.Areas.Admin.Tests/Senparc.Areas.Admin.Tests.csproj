@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -34,7 +34,7 @@
     <PackageReference Include="Senparc.CO2NET" Version="3.1.5" />
     <PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.1" />
     <PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.6-preview.1" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.24.1-preview1" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.24.2-preview1" />
     <PackageReference Include="Senparc.Ncf.UnitTestExtension" Version="0.3.14-preview1" />
     <PackageReference Include="Senparc.Xncf.SystemCore" Version="0.13.1-preview1" />
   </ItemGroup>

@@ -12,6 +12,9 @@ service.interceptors.request.use(
         if (config.method.toUpperCase() === 'POST') {
             config.headers['RequestVerificationToken'] = window.document.getElementsByName('__RequestVerificationToken')[0].value;
         }
+        if (window.ncfJwtToken) {
+            config.headers['Authorization'] = 'Bearer ' + window.ncfJwtToken;
+        }
         config.headers['x-requested-with'] = 'XMLHttpRequest';
         return config;
     },

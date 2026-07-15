@@ -1,0 +1,22 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - text: 选择语言
+    - combobox "选择语言" [ref=e3]:
+      - option "简体中文" [selected]
+      - option "English"
+      - option "日本語"
+      - option "Français"
+      - option "Español"
+      - option "Русский"
+  - generic [ref=e5]:
+    - img [ref=e7]
+    - generic [ref=e8]:
+      - generic [ref=e9]: 管理员登录
+      - generic [ref=e11]:
+        - textbox "请输入用户名" [ref=e15]
+        - textbox "请输入密码" [ref=e19]
+        - button "登录" [ref=e20] [cursor=pointer]
+    - generic [ref=e21]:
+      - text: 技术支持：
+      - link "苏州盛派网络科技有限公司" [ref=e22] [cursor=pointer]:
+        - /url: https://www.senparc.com/

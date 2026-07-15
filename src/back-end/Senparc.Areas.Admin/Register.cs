@@ -1,3 +1,22 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：Register.cs
+    文件功能描述：模块注册与初始化逻辑
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260702
+    修改描述：v0.11.0-preview2 同步 master/main 基线范围内改动并完成递归依赖版本处理
+
+    修改标识：Senparc - 20260705
+    修改描述：v0.0.3 新增登录超时配置并补齐多数据库迁移支持
+
+    修改标识：Senparc - 20260705
+    修改描述：v0.0.4 新增登录超时配置并补齐多数据库迁移支持
+----------------------------------------------------------------*/
+
 /* 
  * 特别注意：
  * 当前注册类是比较特殊的底层系统支持模块，
@@ -21,6 +40,7 @@ using Senparc.Areas.Admin.Domain;
 using Senparc.Areas.Admin.Domain.Dto;
 //using Senparc.Areas.Admin.Authorization;
 using Senparc.Areas.Admin.Domain.Models;
+using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
 using Senparc.Areas.Admin.Domain.Services;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Trace;
@@ -65,7 +85,7 @@ namespace Senparc.Areas.Admin
 
         public override string Uid => SiteConfig.SYSTEM_XNCF_MODULE_AREAS_ADMIN_UID;// "00000000-0000-0001-0001-000000000001";
 
-        public override string Version => "0.5.6-beta4";
+        public override string Version => "0.5.10-beta5";
 
         public override string MenuName => T("Admin.Register.MenuName", "NCF 系统管理员后台");
 
@@ -78,6 +98,26 @@ namespace Senparc.Areas.Admin
         {
             //更新数据库
             await XncfDatabaseDbContext.MigrateOnInstallAsync(serviceProvider, this);
+
+            // 安装后初始化认证配置默认值（仅在记录缺失时创建，不覆盖用户自定义配置）。
+            var adminAuthConfigService = serviceProvider.GetService<AdminAuthConfigService>();
+            if (adminAuthConfigService != null)
+            {
+                try
+                {
+                    var settings = adminAuthConfigService.GetEffectiveExpireSettings();
+                    if (settings.UsingDefault && settings.Source == "missing-record")
+                    {
+                        await adminAuthConfigService.TrySaveExpireSettingsAsync(
+                            AdminAuthConfig.DefaultAdminWebLoginExpireMinutes,
+                            AdminAuthConfig.DefaultBackendJwtExpireMinutes);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SenparcTrace.SendCustomLog("AdminAuthConfig 默认初始化失败", ex.ToString());
+                }
+            }
 
             //XncfModuleServiceExtension xncfModuleServiceExtension = serviceProvider.GetService<XncfModuleServiceExtension>();
             //var adminModule = xncfModuleServiceExtension.GetObject(z => z.Uid == this.Uid);
@@ -140,7 +180,9 @@ namespace Senparc.Areas.Admin
             AddJwtAuthentication(services, configuration);
 
             services.AddScoped<IAdminUserInfoRepository, AdminUserInfoRepository>();
+            services.AddScoped<IAdminAuthConfigRepository, AdminAuthConfigRepository>();
             services.AddScoped<InstallerService>();
+            services.AddScoped<AdminAuthConfigService>();
 
             // 聊天功能相关服务注册
             services.AddScoped<IAdminChatSessionRepository, AdminChatSessionRepository>();
@@ -165,6 +207,19 @@ namespace Senparc.Areas.Admin
             configuration.Bind(JwtSettings.Position_Backend, backend);
             services.AddAuthentication()
                 .AddJwtBearer(BackendJwtAuthorizeAttribute.AuthenticationScheme, options =>
+                {
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                    {
+                        ValidIssuer = backend.Issuer,
+                        ValidAudience = backend.Audience,
+                        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(backend.SecretKey)),
+                        ValidateIssuer = true, //whether or not valid Issuer
+                        ValidateAudience = true, //whether or not valid Audience
+                        ValidateLifetime = true, //whether or not valid out-of-service time
+                        ValidateIssuerSigningKey = true, //whether or not valid SecurityKey　　　　　　　　　　　
+                        ClockSkew = System.TimeSpan.Zero//Allowed server time offset
+                    };
+                }).AddJwtBearer("Bearer", options =>
                 {
                     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
                     {
@@ -231,6 +286,20 @@ namespace Senparc.Areas.Admin
                     options.AccessDeniedPath = "/Admin/Forbidden/";
                     options.LoginPath = "/Admin/Login/";
                     options.Cookie.HttpOnly = false;
+                    options.SlidingExpiration = true;
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(AdminAuthConfig.DefaultAdminWebLoginExpireMinutes);
+                    options.Events = new CookieAuthenticationEvents
+                    {
+                        OnCheckSlidingExpiration = context =>
+                        {
+                            // Session 状态轮询仅用于前端倒计时，不应触发自动续期。
+                            if (context.Request.Path.StartsWithSegments("/Admin/Session"))
+                            {
+                                context.ShouldRenew = false;
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 
             builder.Services
@@ -239,6 +308,7 @@ namespace Senparc.Areas.Admin
                 {
                     options.AddPolicy("AdminOnly", policy =>
                     {
+                        policy.RequireAuthenticatedUser();
                         policy.RequireClaim("AdminMember");
                     });
                 });
@@ -386,6 +456,7 @@ namespace Senparc.Areas.Admin
     }
 
 }
+
 
 
 

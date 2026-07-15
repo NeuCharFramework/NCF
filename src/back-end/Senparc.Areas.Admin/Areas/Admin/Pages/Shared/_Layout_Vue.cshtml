@@ -1,7 +1,26 @@
 ﻿@model Senparc.Ncf.AreaBase.Admin.IAdminPageModelBase
+@inject Senparc.Areas.Admin.Domain.AdminUserInfoService AdminUserInfoService
 @{
     var thisYear = DateTime.Now.Year;
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+    var webLoginExpireMinutes = Senparc.Areas.Admin.Domain.Models.DatabaseModel.AdminAuthConfig.DefaultAdminWebLoginExpireMinutes;
+    var jwtExpireMinutes = Senparc.Areas.Admin.Domain.Models.DatabaseModel.AdminAuthConfig.DefaultBackendJwtExpireMinutes;
+    var currentAccountName = !string.IsNullOrWhiteSpace(User?.Identity?.Name)
+        ? User.Identity.Name
+        : !string.IsNullOrWhiteSpace(Model?.AdminWorkContext?.UserName)
+            ? Model.AdminWorkContext.UserName
+            : !string.IsNullOrWhiteSpace(Model?.UserName)
+                ? Model.UserName
+                : "-";
+    try
+    {
+        webLoginExpireMinutes = AdminUserInfoService.GetAdminWebLoginExpireMinutes();
+        jwtExpireMinutes = AdminUserInfoService.GetBackendJwtExpireMinutes();
+    }
+    catch
+    {
+        // 忽略异常并回退默认值，避免布局渲染被配置异常中断。
+    }
 }
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Senparc.Areas.Admin.AdminResource> AR
 
@@ -71,18 +90,18 @@
                                 <option value="ru" selected="@(currentCulture.StartsWith("ru") ? "selected" : null)">Русский</option>
                             </select>
                         </div>
-                        @*退出*@
-                        <div class="header-logout">
-                            <el-tooltip class="item" effect="dark" content="@AR["Admin.Logout.Title"]" placement="left">
-                                <el-popconfirm confirmButtonText='@AR["Admin.Logout.Yes"]'
-                                               cancelButtonText='@AR["Admin.Logout.No"]'
-                                               icon="el-icon-info"
-                                               iconColor="red"
-                                               title="@AR["Admin.Logout.Confirm"]"
-                                               @@on-Confirm="loginout">
-                                    <i slot="reference" style="cursor:pointer;" class="fa fa-sign-out" aria-hidden="true"></i>
-                                </el-popconfirm>
-                            </el-tooltip>
+                        <div class="header-account">
+                            <el-dropdown trigger="click">
+                                <span class="el-dropdown-link">
+                                    我的账号<i class="el-icon-arrow-down el-icon--right"></i>
+                                </span>
+                                <el-dropdown-menu slot="dropdown" class="header-account-dropdown">
+                                    <el-dropdown-item disabled>当前账号：@currentAccountName</el-dropdown-item>
+                                    <el-dropdown-item divided>
+                                        <a class="header-account-action" asp-page="/Login" asp-page-handler="Logout">@AR["Admin.Logout.Title"]</a>
+                                    </el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
                         </div>
                     </el-header>
                     <el-main>
@@ -120,6 +139,23 @@
     <!--页面js-->
     @*<script src="~/js/Admin/Pages/Index/Index.js"></script>*@
     @RenderSection("scripts", false)
+    <script>
+        window.NCF_SESSION_CONFIG = {
+            webLoginExpireMinutes: @webLoginExpireMinutes,
+            jwtExpireMinutes: @jwtExpireMinutes,
+            remindBeforeMinutes: 5
+        };
+        window.NCF_SESSION_I18N = {
+            title: '登录即将过期',
+            message: '检测到当前登录会话即将过期，您可以保持登录或立即退出。',
+            keepLogin: '保持登录',
+            logoutNow: '立即退出登录',
+            keepLoginSuccess: '已保持登录，会话已续期。'
+        };
+        if (typeof window.ncfStartSessionMonitor === 'function') {
+            window.ncfStartSessionMonitor();
+        }
+    </script>
     @Html.AntiForgeryToken()
 </body>
 </html>
