@@ -197,6 +197,13 @@ jobs:
       # 支持两种构建类型：PR构建 或 master分支的合并后构建
       condition: or(eq(variables['Build.Reason'], 'PullRequest'), and(eq(variables['Build.Reason'], 'IndividualCI'), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
 
+    # ✅ 显式使用 .NET 10 SDK，避免依赖自托管代理的默认 SDK
+    - task: UseDotNet@2
+      displayName: 'Use .NET 10 SDK'
+      inputs:
+        packageType: 'sdk'
+        version: '10.0.x'
+
     # 🔧 设置版本号 (读取 PackageVersion + BuildId)
     - task: PowerShell@2
       displayName: 'Set Version from PackageVersion'
@@ -569,14 +576,6 @@ jobs:
         restoreKeys: 'nuget'
       displayName: 'Cache NuGet Packages'
 
-    # 🟢 缓存 Aspire Workload
-    - task: Cache@2
-      inputs:
-        key: 'aspire-workload | "$(Agent.OS)"'
-        path: '~/.dotnet'
-        restoreKeys: 'aspire-workload'
-      displayName: 'Cache Aspire Workload'
-
     # 🟢 缓存 NuGet 工具
     - task: Cache@2
       inputs:
@@ -584,12 +583,6 @@ jobs:
         path: 'C:\ProgramData\nuget'
         restoreKeys: 'nuget-tool'
       displayName: 'Cache NuGet Tool'
-
-    # ✅ 仅当缓存未命中时安装 Aspire Workload
-    - script: |
-        dotnet workload list | findstr /C:"aspire" || dotnet workload install aspire
-      displayName: 'Check & Install Aspire Workload'
-      condition: ne(variables['CACHE_RESTORED'], 'true')
 
     # ✅ 使用缓存的 NuGet 版本
     - task: NuGetToolInstaller@1
@@ -606,30 +599,34 @@ jobs:
       displayName: 'Add NuGet Source'
 
     # ✅ 恢复 NuGet 依赖
-    - task: NuGetCommand@2
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore .NET 10 Solution'
       inputs:
-        restoreSolution: '$(solution)'
+        command: 'restore'
+        projects: '$(solution)'
 
     # ✅ 解决方案构建
-    - task: VSBuild@1
+    - task: DotNetCoreCLI@2
+      displayName: 'Build .NET 10 Solution'
       inputs:
-        solution: '$(solution)'
-        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-        platform: 'Any CPU'
-        configuration: '$(buildConfiguration)'
+        command: 'build'
+        projects: '$(solution)'
+        arguments: '--configuration $(buildConfiguration) --no-restore /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(Build.ArtifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
 
     # ✅ 恢复 Template 依赖
-    - task: NuGetCommand@2
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore .NET 10 Template'
       inputs:
-        restoreSolution: '$(templateBuild)'
+        command: 'restore'
+        projects: '$(templateBuild)'
 
     # ✅ 构建 Template 解决方案
-    - task: VSBuild@1
+    - task: DotNetCoreCLI@2
+      displayName: 'Build .NET 10 Template'
       inputs:
-        solution: '$(templateBuild)'
-        msbuildArgs: ''
-        platform: 'Any CPU'
-        configuration: '$(buildConfiguration)'
+        command: 'build'
+        projects: '$(templateBuild)'
+        arguments: '--configuration $(buildConfiguration) --no-restore'
 
 
 
