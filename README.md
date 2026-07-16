@@ -16,7 +16,7 @@ XNCF 模块模板：[![Senparc.Xncf.XncfBuilder.Template](https://img.shields.io
 💡 在线示例：[https://www.ncf.pub](https://www.ncf.pub)
 
 > **Notice**<br>
-> 1. NCF 由盛派（Senparc）团队经过多年优化迭代的自用系统底层框架 SenparcCore 升级而来，经历了 .NET 3.5/4.5 众多系统的实战检验，并最终移植到 .NET Core（同时支持 .NET 6 / .NET 8），目前已在众多系统中稳定运行。感谢大家一直以来的支持！<br>
+> 1. NCF 由盛派（Senparc）团队经过多年优化迭代的自用系统底层框架 SenparcCore 升级而来，经历了 .NET 3.5/4.5 众多系统的实战检验，并最终移植到 .NET Core（目前最新支持 LTS - .NET 10），目前已在众多系统中稳定运行。感谢大家一直以来的支持！<br>
 > 2. 源码中已经附带文档模块，运行 NCF 并安装即可。
 
 
