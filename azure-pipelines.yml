@@ -604,6 +604,7 @@ jobs:
       inputs:
         command: 'restore'
         projects: '$(solution)'
+        arguments: '--property:Configuration=$(buildConfiguration)'
 
     # ✅ 解决方案构建
     - task: DotNetCoreCLI@2
@@ -611,7 +612,7 @@ jobs:
       inputs:
         command: 'build'
         projects: '$(solution)'
-        arguments: '--configuration $(buildConfiguration) --no-restore'
+        arguments: '--configuration $(buildConfiguration)'
 
     # ✅ 恢复 Template 依赖
     - task: DotNetCoreCLI@2
@@ -619,6 +620,7 @@ jobs:
       inputs:
         command: 'restore'
         projects: '$(templateBuild)'
+        arguments: '--property:Configuration=$(buildConfiguration)'
 
     # ✅ 构建 Template 解决方案
     - task: DotNetCoreCLI@2
@@ -626,7 +628,7 @@ jobs:
       inputs:
         command: 'build'
         projects: '$(templateBuild)'
-        arguments: '--configuration $(buildConfiguration) --no-restore'
+        arguments: '--configuration $(buildConfiguration)'
 
 
 
