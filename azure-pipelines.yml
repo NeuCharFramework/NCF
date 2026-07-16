@@ -611,7 +611,7 @@ jobs:
       inputs:
         command: 'build'
         projects: '$(solution)'
-        arguments: '--configuration $(buildConfiguration) --no-restore /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(Build.ArtifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+        arguments: '--configuration $(buildConfiguration) --no-restore'
 
     # ✅ 恢复 Template 依赖
     - task: DotNetCoreCLI@2

@@ -26,7 +26,7 @@ var installer = builder.AddProject<Senparc_Xncf_Installer>(
 
 var accounts = builder.AddProject<Senparc_Xncf_Accounts>(
         NcfWebApiHelper.GetXncfProjectName<Senparc_Xncf_Accounts>(),
-        launchProfileName: "Senparc.Xncf.Accounts")
+        launchProfileName: "https")
     .WithExternalHttpEndpoints();
 
 var ncfWeb = builder.AddProject<Senparc_Web>(
