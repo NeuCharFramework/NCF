@@ -1,4 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：ModuleAppService.cs
+    文件功能描述：XNCF 模块管理应用服务
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260724
+    修改描述：v0.1.0 增强后台模块批量更新并完善多语言管理界面
+
+----------------------------------------------------------------*/
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Areas.Admin.Areas.Admin.Pages;
 using Senparc.Areas.Admin.Domain.Dto;

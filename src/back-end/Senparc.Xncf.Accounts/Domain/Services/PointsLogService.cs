@@ -1,4 +1,17 @@
-﻿using Senparc.Service.ACL;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：PointsLogService.cs
+    文件功能描述：账户积分日志服务
+    
+    
+    创建标识：Senparc - 20200724
+    
+    修改标识：Senparc - 20260724
+    修改描述：v0.3.0 完善账户模块本地化资源与功能文案
+
+----------------------------------------------------------------*/
+using Senparc.Service.ACL;
 using Senparc.Xncf.Accounts.Domain.Cache;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Xncf.Accounts.Domain.Models;

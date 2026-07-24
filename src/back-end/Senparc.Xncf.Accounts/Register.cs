@@ -1,4 +1,17 @@
-﻿using Senparc.Ncf.Core.Enums;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：Register.cs
+    文件功能描述：模块注册与初始化逻辑
+    
+    
+    创建标识：Senparc - 20200818
+    
+    修改标识：Senparc - 20260724
+    修改描述：v0.3.0 完善账户模块本地化资源与功能文案
+
+----------------------------------------------------------------*/
+using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.XncfBase;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,17 @@
-﻿using System;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：OperationQueueService.cs
+    文件功能描述：账户操作队列服务
+    
+    
+    创建标识：Senparc - 20200724
+    
+    修改标识：Senparc - 20260724
+    修改描述：v0.3.0 完善账户模块本地化资源与功能文案
+
+----------------------------------------------------------------*/
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Senparc.CO2NET;

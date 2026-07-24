@@ -3,6 +3,7 @@ var app = new Vue({
     data: {
         isExpanded: false,
         installStarted: false,
+        installConfirmationVisible: false,
         optionsModelList: [],
         installOptions: {
             systemName: "",
@@ -23,28 +24,66 @@ var app = new Vue({
                     console.log(data);
                     this.installOptions.adminUserName = data.adminUserName;
                     this.installOptions.dbConnectionString = data.dbConnectionString;
-                    this.optionsModelList = data.needModelList;
+                    this.optionsModelList = data.needModelList || [];
+                    this.installOptions.needModelList = this.optionsModelList
+                        .filter(item => item.selectedByDefault)
+                        .map(item => item.uid);
                 })
                 .catch(error => {
-                    console.error("获取配置发生错误:", error);
+                    console.error((window.ncfInstallI18n && window.ncfInstallI18n.loadOptionsFailed) || 'Failed to load installation options:', error);
                 });
         },
         submit() {
             if (this.installStarted) {
-                alert((window.ncfInstallI18n && window.ncfInstallI18n.started) || 'Installation is already running, please wait.');
+                this.$message({
+                    message: (window.ncfInstallI18n && window.ncfInstallI18n.started) || 'Installation is already running, please wait.',
+                    type: 'info',
+                    showClose: true
+                });
                 return false;
             }
 
-            var confirmText = ((window.ncfInstallI18n && window.ncfInstallI18n.startConfirm) || 'Start installation?') + '\n' +
-                ((window.ncfInstallI18n && window.ncfInstallI18n.startConfirmDetail) || 'This page will expire after installation.');
-            if (!confirm(confirmText)) {
+            if (this.installConfirmationVisible) {
+                return false;
+            }
+
+            var i18n = window.ncfInstallI18n || {};
+            this.installConfirmationVisible = true;
+
+            this.$confirm(
+                i18n.startConfirmDetail || 'This page will expire after installation.',
+                i18n.startConfirm || 'Start installation?',
+                {
+                    confirmButtonText: i18n.confirmButtonText || 'Install now',
+                    cancelButtonText: i18n.cancelButtonText || 'Cancel',
+                    type: 'warning',
+                    closeOnClickModal: false,
+                    distinguishCancelAndClose: true
+                })
+                .then(() => {
+                    this.installConfirmationVisible = false;
+                    this.startInstallation();
+                })
+                .catch(action => {
+                    this.installConfirmationVisible = false;
+                    if (action !== 'cancel' && action !== 'close') {
+                        console.error('Failed to display the installation confirmation:', action);
+                    }
+                });
+
+            return false;
+        },
+        startInstallation() {
+            if (this.installStarted) {
                 return false;
             }
 
             this.installStarted = true;
 
-            document.getElementById('btnInstall').setAttribute('disabled', true);
-            document.getElementById('btnInstall').innerHTML = (window.ncfInstallI18n && window.ncfInstallI18n.startedWaiting) || 'Installation started, please wait...';
+            var installButton = document.getElementById('btnInstall');
+            installButton.setAttribute('disabled', 'disabled');
+            installButton.setAttribute('aria-disabled', 'true');
+            installButton.innerHTML = (window.ncfInstallI18n && window.ncfInstallI18n.startedWaiting) || 'Installation started, please wait...';
 
             axios.post("/Install/Index", this.installOptions, {
             }).then(res => {

@@ -1,0 +1,21 @@
+@using System.Text.Json
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> Localizer
+@{
+    var strings = Localizer.GetAllStrings(includeParentCultures: true)
+        .ToDictionary(item => item.Name, item => item.Value);
+}
+<script>
+    window.ncfSiteI18n = @Html.Raw(JsonSerializer.Serialize(strings));
+    window.ncfSiteT = function (key) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        var text = (window.ncfSiteI18n && window.ncfSiteI18n[key]) || key;
+        return text.replace(/\{(\d+)\}/g, function (match, index) {
+            return args[index] === undefined || args[index] === null ? match : args[index];
+        });
+    };
+    window.ncfSwitchLanguage = window.ncfSwitchLanguage || function (culture) {
+        var returnUrl = window.location.pathname + window.location.search + window.location.hash;
+        window.location.href = '/api/Language/Set?culture=' + encodeURIComponent(culture)
+            + '&returnUrl=' + encodeURIComponent(returnUrl);
+    };
+</script>

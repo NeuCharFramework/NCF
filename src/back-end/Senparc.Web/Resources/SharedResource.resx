@@ -126,4 +126,52 @@
     <value>苏州盛派网络科技有限公司 版权所有</value>
   </data>
 
+  <data name="Site.MetaDescription" xml:space="preserve"><value>用于构造基础项目的 .NET 框架，使用 DDD 和高度模块化设计</value></data>
+  <data name="Nav.Brand" xml:space="preserve"><value>NeuCharFramework 示例</value></data>
+  <data name="Nav.ToggleNavigation" xml:space="preserve"><value>切换导航</value></data>
+  <data name="Nav.Documentation" xml:space="preserve"><value>文档</value></data>
+  <data name="Nav.Community" xml:space="preserve"><value>社区</value></data>
+  <data name="Nav.AdminLogin" xml:space="preserve"><value>管理员登录</value></data>
+  <data name="Nav.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Footer.Community" xml:space="preserve"><value>社区</value></data>
+  <data name="Footer.Events" xml:space="preserve"><value>活动</value></data>
+  <data name="Footer.Contribute" xml:space="preserve"><value>贡献</value></data>
+  <data name="Footer.Documentation" xml:space="preserve"><value>文档</value></data>
+  <data name="Footer.StartDevelopment" xml:space="preserve"><value>开始开发</value></data>
+  <data name="Footer.Glossary" xml:space="preserve"><value>名词解释</value></data>
+  <data name="Footer.Faq" xml:space="preserve"><value>常见问题</value></data>
+  <data name="Footer.ReleaseNotes" xml:space="preserve"><value>更新日志</value></data>
+  <data name="Footer.ContactUs" xml:space="preserve"><value>联系我们</value></data>
+  <data name="Home.Tagline" xml:space="preserve"><value>简单 · 灵活 · 可扩展</value></data>
+  <data name="Home.Introduction.Line1" xml:space="preserve"><value>NCF（NeuCharFramework）是一整套可用于构建基础项目的企业级通用 .NET 框架，</value></data>
+  <data name="Home.Introduction.Line2" xml:space="preserve"><value>严格遵循 DDD 设计模式，包含基础的缓存、数据库、模型、验证及配套管理后台，</value></data>
+  <data name="Home.Introduction.Line3" xml:space="preserve"><value>高度模块化，具有高度的可扩展性和耐造性。</value></data>
+  <data name="Home.Notice.Framework" xml:space="preserve"><value>NCF 全面支持 .NET 8.0。</value></data>
+  <data name="Home.Notice.Databases" xml:space="preserve"><value>目前已支持 SQLite、SQL Server、MySQL、PostgreSQL、Oracle、DM（达梦）等数据库，</value></data>
+  <data name="Home.Notice.Feedback" xml:space="preserve"><value>更多数据库陆续添加中，欢迎反馈您的需求！</value></data>
+  <data name="Home.CurrentTenant" xml:space="preserve"><value>当前租户：</value></data>
+  <data name="Home.TenantUnavailable" xml:space="preserve"><value>未启用或未匹配成功</value></data>
+  <data name="Home.StartNow" xml:space="preserve"><value>立即开始</value></data>
+  <data name="Home.Features.QuickStart.Title" xml:space="preserve"><value>快速搭建</value></data>
+  <data name="Home.Features.QuickStart.Description" xml:space="preserve"><value>提供框架模板，一键安装。</value></data>
+  <data name="Home.Features.AiNative.Title" xml:space="preserve"><value>AI 原生框架</value></data>
+  <data name="Home.Features.AiNative.Description" xml:space="preserve"><value>使用 AI 构建系统，提供智能化的开发体验。同时集成 AI 基础能力，轻松开发 AI 应用。</value></data>
+  <data name="Home.Features.Modular.Title" xml:space="preserve"><value>模块化设计</value></data>
+  <data name="Home.Features.Modular.Description" xml:space="preserve"><value>高度模块化设计，自由组合、自行扩展。每个功能模块都可以独立开发、测试、集成、部署。</value></data>
+  <data name="Home.Features.Databases.Title" xml:space="preserve"><value>多数据库支持</value></data>
+  <data name="Home.Features.Databases.Description" xml:space="preserve"><value>支持 SQL Server、MySQL、SQLite、PostgreSQL、Oracle、DM（达梦）等多种数据库，并可轻松扩展。</value></data>
+  <data name="Home.Features.Performance.Title" xml:space="preserve"><value>高性能</value></data>
+  <data name="Home.Features.Performance.Description" xml:space="preserve"><value>10 余年的企业级系统优化经验，高性能、高可用。大量日均 500 万 PV 以上系统正在使用。</value></data>
+  <data name="Home.Features.Ddd.Title" xml:space="preserve"><value>DDD 模式</value></data>
+  <data name="Home.Features.Ddd.Description" xml:space="preserve"><value>基于严格的 DDD（Domain-Driven Design）模式开发，灵活应对变化。</value></data>
+  <data name="Home.Features.Dapr.Title" xml:space="preserve"><value>Dapr 支持</value></data>
+  <data name="Home.Features.Dapr.Description" xml:space="preserve"><value>支持 Dapr 微服务框架，可快速实现微服务化。</value></data>
+  <data name="Home.Features.Compatibility.Title" xml:space="preserve"><value>向下兼容</value></data>
+  <data name="Home.Features.Compatibility.Description" xml:space="preserve"><value>除微服务、分布式外，还支持传统开发和单机部署模式，无额外学习成本。基于模块化原理，框架支持无缝升级，随时保持最新状态。</value></data>
+  <data name="Home.Features.Community.Title" xml:space="preserve"><value>社区支持</value></data>
+  <data name="Home.Features.Community.Description" xml:space="preserve"><value>由盛派开发者社区核心主创团队提供维护支持，常年升级维护。</value></data>
+  <data name="Home.ComingSoon" xml:space="preserve"><value>版块暂未开放，敬请期待。</value></data>
+  <data name="Home.InstallDocsConfirm" xml:space="preserve"><value>尚未安装离线文档模块，要立即安装吗？</value></data>
+  <data name="Home.OpenDocsConfirm" xml:space="preserve"><value>{0} 刷新此页面后可看到顶部文档入口，需要立即查看文档吗？</value></data>
+  <data name="Home.RequestFailed" xml:space="preserve"><value>请求失败，请稍后重试。</value></data>
 </root>

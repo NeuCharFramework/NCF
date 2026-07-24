@@ -1,4 +1,17 @@
-﻿using Senparc.Ncf.Core.Extensions;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：FullAccountCache.cs
+    文件功能描述：账户信息缓存实现
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260724
+    修改描述：v0.3.0 完善账户模块本地化资源与功能文案
+
+----------------------------------------------------------------*/
+using Senparc.Ncf.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

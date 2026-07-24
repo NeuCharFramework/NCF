@@ -1,4 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：InstallOptionsService.cs
+    文件功能描述：安装选项与模块选择服务
+    
+    
+    创建标识：Senparc - 20240312
+    
+    修改标识：Senparc - 20260724
+    修改描述：v0.4.0 增加默认模块选择与安装确认并完善多语言界面
+
+----------------------------------------------------------------*/
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Senparc.Areas.Admin.Domain;
@@ -22,6 +35,16 @@ namespace Senparc.Xncf.Installer.Domain.Services
 {
     public class InstallOptionsService
     {
+        private static readonly HashSet<string> DefaultSelectedModuleUids = new(StringComparer.OrdinalIgnoreCase)
+        {
+            SiteConfig.SYSTEM_XNCF_MODULE_AREAS_ADMIN_UID,
+            "C6175B8E-9F79-4053-9523-F8E4AC0C3E18", // Senparc.Xncf.PromptRange
+            "C2E1F87F-2DCE-4921-87CE-36923ED0D6EA", // Senparc.Xncf.XncfBuilder
+            "149D8021-1783-4FC9-97A8-F1A1BA60245B", // Senparc.Xncf.MCP
+            "796D12D8-580B-40F3-A6E8-A5D9D2EABB69", // Senparc.Xncf.AIKernel
+            "D858D7FA-775A-4690-9023-CFB0B3B84994"  // Senparc.Xncf.AgentsManager
+        };
+
         private readonly IServiceProvider _serviceProvider;
         private readonly SenparcCoreSetting _senparcCoreSetting;
         public InstallOptionsService(IServiceProvider serviceProvider, IOptions<SenparcCoreSetting> senparcCoreSetting)
@@ -90,6 +113,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
                 var needXncfRegister = new XncfRegisterDto()
                 {
                     IgnoreInstall = item.IgnoreInstall,
+                    SelectedByDefault = DefaultSelectedModuleUids.Contains(item.Uid),
                     Uid = item.Uid,
                     Icon = item.Icon,
                     MenuName = item.MenuName,

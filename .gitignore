@@ -73,3 +73,4 @@ src/back-end/Senparc.Web/App_Data/install-finished.txt
 /src/back-end/Senparc.Web/App_Data/Database/backup
 /src/back-end/Senparc.Web/wwwroot/NcfPackages/*
 appsettings.Development.json
+src/back-end/Senparc.Web/App_Data/PromptRange/

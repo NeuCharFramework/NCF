@@ -122,4 +122,12 @@
   <data name="Installer.Register.MenuName" xml:space="preserve"><value>Instalador NCF</value></data>
   <data name="Installer.Register.Description" xml:space="preserve"><value>Módulo de instalación inicial de NCF. Puede desinstalarse o eliminarse después de completar la instalación.</value></data>
   <data name="Installer.Area.Home" xml:space="preserve"><value>Inicio</value></data>
+  <data name="Install.AlreadyRunning" xml:space="preserve"><value>La instalación ya está en curso. Espere.</value></data>
+  <data name="Install.Confirm" xml:space="preserve"><value>¿Desea iniciar la instalación?</value></data>
+  <data name="Install.ConfirmDetail" xml:space="preserve"><value>Esta página dejará de estar disponible cuando termine la instalación.</value></data>
+  <data name="Install.ConfirmButton" xml:space="preserve"><value>Instalar ahora</value></data>
+  <data name="Install.CancelButton" xml:space="preserve"><value>Cancelar</value></data>
+  <data name="Install.StartedWaiting" xml:space="preserve"><value>Instalación iniciada. Espere...</value></data>
+  <data name="Install.FailedPrefix" xml:space="preserve"><value>Error de instalación:</value></data>
+  <data name="Install.LoadOptionsFailed" xml:space="preserve"><value>No se pudieron cargar las opciones de instalación:</value></data>
 </root>

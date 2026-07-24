@@ -122,4 +122,12 @@
   <data name="Installer.Register.MenuName" xml:space="preserve"><value>Установщик NCF</value></data>
   <data name="Installer.Register.Description" xml:space="preserve"><value>Модуль начальной установки NCF. После завершения установки его можно удалить или деинсталлировать.</value></data>
   <data name="Installer.Area.Home" xml:space="preserve"><value>Главная</value></data>
+  <data name="Install.AlreadyRunning" xml:space="preserve"><value>Установка уже выполняется. Подождите.</value></data>
+  <data name="Install.Confirm" xml:space="preserve"><value>Начать установку?</value></data>
+  <data name="Install.ConfirmDetail" xml:space="preserve"><value>После завершения установки эта страница станет недоступна.</value></data>
+  <data name="Install.ConfirmButton" xml:space="preserve"><value>Установить сейчас</value></data>
+  <data name="Install.CancelButton" xml:space="preserve"><value>Отмена</value></data>
+  <data name="Install.StartedWaiting" xml:space="preserve"><value>Установка началась. Подождите...</value></data>
+  <data name="Install.FailedPrefix" xml:space="preserve"><value>Ошибка установки:</value></data>
+  <data name="Install.LoadOptionsFailed" xml:space="preserve"><value>Не удалось загрузить параметры установки:</value></data>
 </root>

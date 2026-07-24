@@ -117,4 +117,52 @@
   <data name="Footer.Copyright" xml:space="preserve">
     <value>蘇州盛派ネットワーク科技有限公司 版権所有</value>
   </data>
+  <data name="Site.MetaDescription" xml:space="preserve"><value>DDD と高度なモジュール設計を採用した、基盤プロジェクト構築用 .NET フレームワーク</value></data>
+  <data name="Nav.Brand" xml:space="preserve"><value>NeuCharFramework デモ</value></data>
+  <data name="Nav.ToggleNavigation" xml:space="preserve"><value>ナビゲーションを切り替え</value></data>
+  <data name="Nav.Documentation" xml:space="preserve"><value>ドキュメント</value></data>
+  <data name="Nav.Community" xml:space="preserve"><value>コミュニティ</value></data>
+  <data name="Nav.AdminLogin" xml:space="preserve"><value>管理者ログイン</value></data>
+  <data name="Nav.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Footer.Community" xml:space="preserve"><value>コミュニティ</value></data>
+  <data name="Footer.Events" xml:space="preserve"><value>イベント</value></data>
+  <data name="Footer.Contribute" xml:space="preserve"><value>コントリビュート</value></data>
+  <data name="Footer.Documentation" xml:space="preserve"><value>ドキュメント</value></data>
+  <data name="Footer.StartDevelopment" xml:space="preserve"><value>開発を始める</value></data>
+  <data name="Footer.Glossary" xml:space="preserve"><value>用語集</value></data>
+  <data name="Footer.Faq" xml:space="preserve"><value>よくある質問</value></data>
+  <data name="Footer.ReleaseNotes" xml:space="preserve"><value>更新履歴</value></data>
+  <data name="Footer.ContactUs" xml:space="preserve"><value>お問い合わせ</value></data>
+  <data name="Home.Tagline" xml:space="preserve"><value>シンプル · 柔軟 · 拡張可能</value></data>
+  <data name="Home.Introduction.Line1" xml:space="preserve"><value>NCF（NeuCharFramework）は、基盤プロジェクトを構築するためのエンタープライズ向け汎用 .NET フレームワークです。</value></data>
+  <data name="Home.Introduction.Line2" xml:space="preserve"><value>DDD を厳格に採用し、キャッシュ、データベース、モデル、検証、管理画面を備えています。</value></data>
+  <data name="Home.Introduction.Line3" xml:space="preserve"><value>高度なモジュール設計により、優れた拡張性と堅牢性を実現します。</value></data>
+  <data name="Home.Notice.Framework" xml:space="preserve"><value>NCF は .NET 8.0 を全面的にサポートしています。</value></data>
+  <data name="Home.Notice.Databases" xml:space="preserve"><value>SQLite、SQL Server、MySQL、PostgreSQL、Oracle、DM（Dameng）に対応しています。</value></data>
+  <data name="Home.Notice.Feedback" xml:space="preserve"><value>対応データベースは順次追加中です。ご要望をお聞かせください。</value></data>
+  <data name="Home.CurrentTenant" xml:space="preserve"><value>現在のテナント：</value></data>
+  <data name="Home.TenantUnavailable" xml:space="preserve"><value>無効、または一致するテナントがありません</value></data>
+  <data name="Home.StartNow" xml:space="preserve"><value>今すぐ始める</value></data>
+  <data name="Home.Features.QuickStart.Title" xml:space="preserve"><value>クイック構築</value></data>
+  <data name="Home.Features.QuickStart.Description" xml:space="preserve"><value>フレームワークテンプレートでワンクリック導入。</value></data>
+  <data name="Home.Features.AiNative.Title" xml:space="preserve"><value>AI ネイティブ</value></data>
+  <data name="Home.Features.AiNative.Description" xml:space="preserve"><value>AI を活用したスマートな開発体験と基盤機能により、AI アプリを簡単に構築できます。</value></data>
+  <data name="Home.Features.Modular.Title" xml:space="preserve"><value>モジュール設計</value></data>
+  <data name="Home.Features.Modular.Description" xml:space="preserve"><value>モジュールを自由に組み合わせて拡張できます。各機能は個別に開発、テスト、統合、配置できます。</value></data>
+  <data name="Home.Features.Databases.Title" xml:space="preserve"><value>複数データベース対応</value></data>
+  <data name="Home.Features.Databases.Description" xml:space="preserve"><value>SQL Server、MySQL、SQLite、PostgreSQL、Oracle、DM（Dameng）などに対応し、容易に拡張できます。</value></data>
+  <data name="Home.Features.Performance.Title" xml:space="preserve"><value>高性能</value></data>
+  <data name="Home.Features.Performance.Description" xml:space="preserve"><value>10 年を超えるエンタープライズ最適化の経験により、高性能と高可用性を実現。日間 500 万 PV 超のシステムでも利用されています。</value></data>
+  <data name="Home.Features.Ddd.Title" xml:space="preserve"><value>DDD アーキテクチャ</value></data>
+  <data name="Home.Features.Ddd.Description" xml:space="preserve"><value>厳格なドメイン駆動設計に基づき、変化へ柔軟に対応します。</value></data>
+  <data name="Home.Features.Dapr.Title" xml:space="preserve"><value>Dapr 対応</value></data>
+  <data name="Home.Features.Dapr.Description" xml:space="preserve"><value>Dapr に対応し、マイクロサービスを迅速に構築できます。</value></data>
+  <data name="Home.Features.Compatibility.Title" xml:space="preserve"><value>後方互換性</value></data>
+  <data name="Home.Features.Compatibility.Description" xml:space="preserve"><value>マイクロサービスや分散構成だけでなく、従来型開発や単体配置にも追加学習なしで対応します。モジュール設計によりシームレスに更新できます。</value></data>
+  <data name="Home.Features.Community.Title" xml:space="preserve"><value>コミュニティサポート</value></data>
+  <data name="Home.Features.Community.Description" xml:space="preserve"><value>Senparc 開発者コミュニティの中核チームが継続的に保守、更新しています。</value></data>
+  <data name="Home.ComingSoon" xml:space="preserve"><value>このセクションはまだ公開されていません。しばらくお待ちください。</value></data>
+  <data name="Home.InstallDocsConfirm" xml:space="preserve"><value>オフラインドキュメントモジュールがインストールされていません。今すぐインストールしますか？</value></data>
+  <data name="Home.OpenDocsConfirm" xml:space="preserve"><value>{0} ページを更新すると上部にドキュメント入口が表示されます。今すぐ開きますか？</value></data>
+  <data name="Home.RequestFailed" xml:space="preserve"><value>リクエストに失敗しました。後でもう一度お試しください。</value></data>
 </root>
