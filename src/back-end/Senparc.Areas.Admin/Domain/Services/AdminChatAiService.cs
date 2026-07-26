@@ -83,7 +83,12 @@ namespace Senparc.Areas.Admin.Domain.Services
         /// <param name="userMessage">用户输入消息。</param>
         /// <param name="aiModelId">可选 AIModelId，0 表示系统级 SenparcAiSetting。</param>
         /// <returns>返回回复文本与模型标识。</returns>
-        public async Task<(string response, string modelIdentifier)> GenerateResponseAsync(int sessionId, int userId, string userMessage, int aiModelId = 0)
+        public async Task<(string response, string modelIdentifier)> GenerateResponseAsync(
+            int sessionId,
+            int userId,
+            string userMessage,
+            int aiModelId = 0,
+            Action<string> onChunk = null)
         {
             var showLoadedFunctionsInConsole = true;//是否输出 function 的 schema 信息到控制台，便于调试和验证 Function Calling 功能是否正确加载了函数
 
@@ -233,17 +238,61 @@ namespace Senparc.Areas.Admin.Domain.Services
             //    FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
             //};
 
-            //TODO: 测试 MAF 中是否自动开启工具调用
-            var skResult = await iWantToRun.RunChatAsync(prompt);
+            // TODO: 测试 MAF 中是否自动开启工具调用
+            // 当调用方提供回调时，使用 AgentKernel 已有的流式回调；没有回调时保留原有整包路径。
+            var streamedOutput = new StringBuilder();
+            var hasStreamedChunk = false;
+            var skResult = onChunk == null
+                ? await iWantToRun.RunChatAsync(prompt)
+                : await ExecuteRunnerWithSessionRetryAsync(
+                    iWantToRun,
+                    prompt,
+                    update =>
+                    {
+                        var updateText = update?.Text;
+                        if (string.IsNullOrEmpty(updateText))
+                        {
+                            return;
+                        }
 
-            var result = skResult?.OutputString?.Trim();
+                        streamedOutput.Append(updateText);
+                        hasStreamedChunk = true;
+                        onChunk(updateText);
+                    });
+
+            var result = string.IsNullOrWhiteSpace(skResult?.OutputString)
+                ? streamedOutput.ToString().Trim()
+                : skResult.OutputString.Trim();
             if (string.IsNullOrWhiteSpace(result))
             {
                 _logger.LogWarning("AI 返回空内容：SessionId={SessionId}, UserId={UserId}", sessionId, userId);
                 result = "抱歉，我暂时没有生成有效回复，请稍后再试。";
             }
 
+            // 某些模型/网关不提供增量内容，但仍返回最终文本。为流式客户端补发一个完整片段，
+            // 这样界面不会一直停留在“正在回复”状态。
+            if (onChunk != null && !hasStreamedChunk)
+            {
+                onChunk(result);
+            }
+
             return (result, modelIdentifier);
+        }
+
+        private static async Task<SenparcKernelAiResult<string>> ExecuteRunnerWithSessionRetryAsync(
+            IWantToRun runner,
+            string prompt,
+            Action<AgentResponseUpdate> onUpdate)
+        {
+            var session = runner?.Kernel?.AgentSession;
+            try
+            {
+                return await runner.RunChatAsync(prompt, session, onUpdate);
+            }
+            catch when (session != null)
+            {
+                return await runner.RunChatAsync(prompt, null, onUpdate);
+            }
         }
 
         private async Task<(SenparcAiSetting setting, string modelIdentifier)> ResolveChatSettingAsync(int aiModelId)
