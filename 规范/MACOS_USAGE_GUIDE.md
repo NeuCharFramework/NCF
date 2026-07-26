@@ -52,7 +52,7 @@ Press Ctrl+C to stop the application
 ## 📋 系统要求
 
 - macOS 10.15+ (Catalina 或更高版本)
-- .NET 8.0 运行时（如果没有安装，请从 https://dotnet.microsoft.com/download/dotnet/8.0 下载）
+- .NET 10.0 运行时（如果没有安装，请从 https://dotnet.microsoft.com/download/dotnet/10.0 下载）
 - 支持 Intel 和 Apple Silicon 处理器
 
 ---
@@ -78,4 +78,4 @@ dotnet Senparc.Web.dll --urls "https://*:5001"
 > 启动后可以使用 https://localhost:5001 访问，更多启动参数请参考：https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-run
 
 
-**注意：** 此指南适用于 NCF v0.29.7+ 版本。 
+**注意：** 此指南适用于 NCF v0.33.0+ 版本。 
