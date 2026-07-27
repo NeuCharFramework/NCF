@@ -14,6 +14,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.25.0-preview2" />
+		<PackageReference Include="Senparc.Xncf.DesktopBridge" Version="0.1.0-preview2" />
 		<PackageReference Include="Senparc.Xncf.MCP" Version="0.4.0-preview3" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.10" />
