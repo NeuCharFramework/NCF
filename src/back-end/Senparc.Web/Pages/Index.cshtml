@@ -25,35 +25,35 @@
     </div>
     <div class="intro">
         <h2 class="index-simple-tip text-center">
-            简单 &nbsp; 灵活 &nbsp; 可扩展
+            @SR["Home.Tagline"]
             @*一用于构套造基础项目的 .NET 框架*@
         </h2>
 
-        NCF（ NeuCharFramework）是一整套可用于构建基础项目的企业级通用 .NET 框架，<br />
-        严格遵循 DDD 设计模式，包含了基础的缓存、数据库、模型、验证及配套管理后台，<br />高度模块化，
-        具有高度的可扩展性和耐造性。
+        @SR["Home.Introduction.Line1"]<br />
+        @SR["Home.Introduction.Line2"]<br />
+        @SR["Home.Introduction.Line3"]
 
         <div class="index-simple-notice text-center">
-            NCF 全面支持 .NET 8.0。<br />
-            目前已支持 SQLite、SQL Server、MySQL、PostgreSQL、Oracle、DM（达梦） 等数据库，<br />
-            更多数据库陆续添加中，欢迎给我们反馈您的需求！
+            @SR["Home.Notice.Framework"]<br />
+            @SR["Home.Notice.Databases"]<br />
+            @SR["Home.Notice.Feedback"]
         </div>
 
         <div class=" text-center">
-            <span>当前租户：</span>
+            <span>@SR["Home.CurrentTenant"]</span>
             @if (Model.RequestTenantInfo.MatchSuccess)
             {
                 <strong>@Model.RequestTenantInfo.Name</strong>
             }
             else
             {
-                <span>未启用或未匹配成功</span>
+                <span>@SR["Home.TenantUnavailable"]</span>
             }
         </div>
 
         <div class="row start-now">
             <a href="https://doc.ncf.pub" target="_blank" class="start-btn" id="btnStart">
-                立即开始
+                @SR["Home.StartNow"]
             </a>
         </div>
     </div>
@@ -61,88 +61,87 @@
 
     <div class="row mt-6r">
         <div class="col-lg-4 col-md-4">
-            <h3 class="index-special-title">快速搭建</h3>
+            <h3 class="index-special-title">@SR["Home.Features.QuickStart.Title"]</h3>
             <div class="index-special-point">
                 <p>
-                    提供框架模板，一键安装。
+                    @SR["Home.Features.QuickStart.Description"]
                 </p>
             </div>
         </div>
         <div class="col-lg-4 col-md-4">
             <h3 class="index-special-title">
-                AI 原生框架
+                @SR["Home.Features.AiNative.Title"]
             </h3>
             <div class="index-special-point">
                 <p>
-                    使用 AI 构建系统，提供智能化的开发体验。同时集成 AI 基础能力，轻松开发 AI 应用。
+                    @SR["Home.Features.AiNative.Description"]
                 </p>
             </div>
         </div>
         <div class="col-lg-4 col-md-4">
-            <h3 class="index-special-title">模块化设计</h3>
+            <h3 class="index-special-title">@SR["Home.Features.Modular.Title"]</h3>
             <div class="index-special-point">
                 <p>
-                    高度模块化设计，自由组合、自行扩展。每个功能模块都可以独立开发、测试、集成、部署。
+                    @SR["Home.Features.Modular.Description"]
                 </p>
             </div>
         </div>
         <div class="col-lg-4 col-md-4">
             <h3 class="index-special-title">
-                多数据库支持
+                @SR["Home.Features.Databases.Title"]
             </h3>
             <div class="index-special-point">
                 <p>
-                    支持 SQL Server、MySQL、SQLite、PostgreSQL、Oracle、DM（达梦）等多种数据库，并可轻松扩展。
+                    @SR["Home.Features.Databases.Description"]
                 </p>
             </div>
         </div>
         <div class="col-lg-4 col-md-4">
-            <h3 class="index-special-title">高性能</h3>
+            <h3 class="index-special-title">@SR["Home.Features.Performance.Title"]</h3>
             <div class="index-special-point">
                 <p>
-                    10 余年的企业级系统优化经验，高性能、高可用。大量日均 500 万 PV 以上系统正在使用。
+                    @SR["Home.Features.Performance.Description"]
                 </p>
             </div>
         </div>
 
         <div class="col-lg-4 col-md-4">
-            <h3 class="index-special-title">DDD 模式</h3>
+            <h3 class="index-special-title">@SR["Home.Features.Ddd.Title"]</h3>
             <div class="index-special-point">
                 <p>
-                    基于严格的 DDD（Domain-Driven Deisgn）模式开发，灵活应对变化。
-                </p>
-            </div>
-        </div>
-
-        <div class="col-lg-4 col-md-4">
-            <h3 class="index-special-title">
-                Dapr 支持
-            </h3>
-            <div class="index-special-point">
-                <p>
-                    支持 Dapr 微服务框架，可快速实现微服务化。
-                </p>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-4">
-            <h3 class="index-special-title">
-                向下兼容
-            </h3>
-            <div class="index-special-point">
-                <p>
-                    除微服务、分布式外，支持传统开发和单机部署模式，无额外学习成本。
-                    基于模块化原理，框架支持无缝升级，随时保持最新状态。
+                    @SR["Home.Features.Ddd.Description"]
                 </p>
             </div>
         </div>
 
         <div class="col-lg-4 col-md-4">
             <h3 class="index-special-title">
-                社区支持
+                @SR["Home.Features.Dapr.Title"]
             </h3>
             <div class="index-special-point">
                 <p>
-                    由盛派开发者社区核心主创团队提供维护支持，常年升级维护。
+                    @SR["Home.Features.Dapr.Description"]
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <h3 class="index-special-title">
+                @SR["Home.Features.Compatibility.Title"]
+            </h3>
+            <div class="index-special-point">
+                <p>
+                    @SR["Home.Features.Compatibility.Description"]
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-4">
+            <h3 class="index-special-title">
+                @SR["Home.Features.Community.Title"]
+            </h3>
+            <div class="index-special-point">
+                <p>
+                    @SR["Home.Features.Community.Description"]
                 </p>
             </div>
         </div>

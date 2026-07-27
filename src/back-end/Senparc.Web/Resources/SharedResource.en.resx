@@ -117,4 +117,52 @@
   <data name="Footer.Copyright" xml:space="preserve">
     <value>Senparc Network Technology Co., Ltd. All Rights Reserved</value>
   </data>
+  <data name="Site.MetaDescription" xml:space="preserve"><value>A .NET framework for building foundational projects with DDD and a highly modular design</value></data>
+  <data name="Nav.Brand" xml:space="preserve"><value>NeuCharFramework Demo</value></data>
+  <data name="Nav.ToggleNavigation" xml:space="preserve"><value>Toggle navigation</value></data>
+  <data name="Nav.Documentation" xml:space="preserve"><value>Documentation</value></data>
+  <data name="Nav.Community" xml:space="preserve"><value>Community</value></data>
+  <data name="Nav.AdminLogin" xml:space="preserve"><value>Admin Login</value></data>
+  <data name="Nav.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Footer.Community" xml:space="preserve"><value>Community</value></data>
+  <data name="Footer.Events" xml:space="preserve"><value>Events</value></data>
+  <data name="Footer.Contribute" xml:space="preserve"><value>Contribute</value></data>
+  <data name="Footer.Documentation" xml:space="preserve"><value>Documentation</value></data>
+  <data name="Footer.StartDevelopment" xml:space="preserve"><value>Start Developing</value></data>
+  <data name="Footer.Glossary" xml:space="preserve"><value>Glossary</value></data>
+  <data name="Footer.Faq" xml:space="preserve"><value>FAQ</value></data>
+  <data name="Footer.ReleaseNotes" xml:space="preserve"><value>Release Notes</value></data>
+  <data name="Footer.ContactUs" xml:space="preserve"><value>Contact Us</value></data>
+  <data name="Home.Tagline" xml:space="preserve"><value>Simple · Flexible · Extensible</value></data>
+  <data name="Home.Introduction.Line1" xml:space="preserve"><value>NCF (NeuCharFramework) is an enterprise-grade, general-purpose .NET framework for building foundational projects.</value></data>
+  <data name="Home.Introduction.Line2" xml:space="preserve"><value>It strictly follows DDD and includes caching, databases, models, validation, and a companion admin panel.</value></data>
+  <data name="Home.Introduction.Line3" xml:space="preserve"><value>Its highly modular design makes it extensible and resilient.</value></data>
+  <data name="Home.Notice.Framework" xml:space="preserve"><value>NCF fully supports .NET 8.0.</value></data>
+  <data name="Home.Notice.Databases" xml:space="preserve"><value>SQLite, SQL Server, MySQL, PostgreSQL, Oracle, and DM (Dameng) are currently supported.</value></data>
+  <data name="Home.Notice.Feedback" xml:space="preserve"><value>More databases are being added. Tell us what you need!</value></data>
+  <data name="Home.CurrentTenant" xml:space="preserve"><value>Current tenant:</value></data>
+  <data name="Home.TenantUnavailable" xml:space="preserve"><value>Not enabled or no tenant matched</value></data>
+  <data name="Home.StartNow" xml:space="preserve"><value>Get Started</value></data>
+  <data name="Home.Features.QuickStart.Title" xml:space="preserve"><value>Quick Setup</value></data>
+  <data name="Home.Features.QuickStart.Description" xml:space="preserve"><value>Use the framework template for one-click installation.</value></data>
+  <data name="Home.Features.AiNative.Title" xml:space="preserve"><value>AI-Native Framework</value></data>
+  <data name="Home.Features.AiNative.Description" xml:space="preserve"><value>Build systems with AI for a smarter development experience, with integrated AI capabilities that make AI applications easy to create.</value></data>
+  <data name="Home.Features.Modular.Title" xml:space="preserve"><value>Modular Design</value></data>
+  <data name="Home.Features.Modular.Description" xml:space="preserve"><value>Combine and extend highly modular components freely. Every module can be developed, tested, integrated, and deployed independently.</value></data>
+  <data name="Home.Features.Databases.Title" xml:space="preserve"><value>Multiple Databases</value></data>
+  <data name="Home.Features.Databases.Description" xml:space="preserve"><value>Supports SQL Server, MySQL, SQLite, PostgreSQL, Oracle, DM (Dameng), and more, with straightforward extensibility.</value></data>
+  <data name="Home.Features.Performance.Title" xml:space="preserve"><value>High Performance</value></data>
+  <data name="Home.Features.Performance.Description" xml:space="preserve"><value>More than 10 years of enterprise optimization expertise delivers high performance and availability, proven by systems serving over 5 million page views per day.</value></data>
+  <data name="Home.Features.Ddd.Title" xml:space="preserve"><value>DDD Architecture</value></data>
+  <data name="Home.Features.Ddd.Description" xml:space="preserve"><value>Built with a rigorous Domain-Driven Design approach to adapt flexibly to change.</value></data>
+  <data name="Home.Features.Dapr.Title" xml:space="preserve"><value>Dapr Support</value></data>
+  <data name="Home.Features.Dapr.Description" xml:space="preserve"><value>Supports the Dapr framework for rapidly building microservices.</value></data>
+  <data name="Home.Features.Compatibility.Title" xml:space="preserve"><value>Backward Compatible</value></data>
+  <data name="Home.Features.Compatibility.Description" xml:space="preserve"><value>Alongside microservices and distributed systems, NCF supports traditional and standalone deployments with no extra learning curve. Its modular architecture enables seamless upgrades.</value></data>
+  <data name="Home.Features.Community.Title" xml:space="preserve"><value>Community Support</value></data>
+  <data name="Home.Features.Community.Description" xml:space="preserve"><value>Maintained and continuously upgraded by the core Senparc developer community team.</value></data>
+  <data name="Home.ComingSoon" xml:space="preserve"><value>This section is not yet available. Stay tuned.</value></data>
+  <data name="Home.InstallDocsConfirm" xml:space="preserve"><value>The offline documentation module is not installed. Install it now?</value></data>
+  <data name="Home.OpenDocsConfirm" xml:space="preserve"><value>{0} Refresh this page to see the documentation entry. Open the documentation now?</value></data>
+  <data name="Home.RequestFailed" xml:space="preserve"><value>The request failed. Please try again later.</value></data>
 </root>

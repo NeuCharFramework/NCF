@@ -132,4 +132,12 @@
   <data name="Installer.Area.Home" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="Install.AlreadyRunning" xml:space="preserve"><value>Installation is already running. Please wait.</value></data>
+  <data name="Install.Confirm" xml:space="preserve"><value>Start the installation?</value></data>
+  <data name="Install.ConfirmDetail" xml:space="preserve"><value>This installation page will no longer be available after installation completes.</value></data>
+  <data name="Install.ConfirmButton" xml:space="preserve"><value>Install now</value></data>
+  <data name="Install.CancelButton" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Install.StartedWaiting" xml:space="preserve"><value>Installation started. Please wait...</value></data>
+  <data name="Install.FailedPrefix" xml:space="preserve"><value>Installation failed:</value></data>
+  <data name="Install.LoadOptionsFailed" xml:space="preserve"><value>Failed to load installation options:</value></data>
 </root>

@@ -122,4 +122,12 @@
   <data name="Installer.Register.MenuName" xml:space="preserve"><value>NCF 安装程序</value></data>
   <data name="Installer.Register.Description" xml:space="preserve"><value>NCF 初始化安装模块，安装完成后可卸载或移除</value></data>
   <data name="Installer.Area.Home" xml:space="preserve"><value>首页</value></data>
+  <data name="Install.AlreadyRunning" xml:space="preserve"><value>安装正在进行，请耐心等待。</value></data>
+  <data name="Install.Confirm" xml:space="preserve"><value>确定开始安装吗？</value></data>
+  <data name="Install.ConfirmDetail" xml:space="preserve"><value>安装完成后，本安装页面将不可继续使用。</value></data>
+  <data name="Install.ConfirmButton" xml:space="preserve"><value>立即安装</value></data>
+  <data name="Install.CancelButton" xml:space="preserve"><value>取消</value></data>
+  <data name="Install.StartedWaiting" xml:space="preserve"><value>安装已开始，请耐心等待...</value></data>
+  <data name="Install.FailedPrefix" xml:space="preserve"><value>安装失败：</value></data>
+  <data name="Install.LoadOptionsFailed" xml:space="preserve"><value>读取安装配置失败：</value></data>
 </root>

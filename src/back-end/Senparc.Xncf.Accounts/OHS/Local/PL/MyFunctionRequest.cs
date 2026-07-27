@@ -1,4 +1,17 @@
-﻿using Senparc.Ncf.XncfBase.FunctionRenders;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：MyFunctionRequest.cs
+    文件功能描述：示例功能请求模型
+    
+    
+    创建标识：Senparc - 20211031
+    
+    修改标识：Senparc - 20260724
+    修改描述：v0.3.0 完善账户模块本地化资源与功能文案
+
+----------------------------------------------------------------*/
+using Senparc.Ncf.XncfBase.FunctionRenders;
 using Senparc.Ncf.XncfBase;
 using Senparc.Ncf.XncfBase.Functions;
 using System.ComponentModel;

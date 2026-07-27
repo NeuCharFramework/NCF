@@ -1,0 +1,25 @@
+@using System.Text.Json
+@{
+    var translations = AR.GetAllStrings(includeParentCultures: true)
+        .GroupBy(item => item.Name)
+        .ToDictionary(group => group.Key, group => group.First().Value);
+    var translationsJson = JsonSerializer.Serialize(translations);
+}
+<script>
+    window.ncfI18n = Object.assign(window.ncfI18n || {}, @Html.Raw(translationsJson));
+    window.ncfT = window.ncfT || function (key) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        var value = Object.prototype.hasOwnProperty.call(window.ncfI18n, key)
+            ? window.ncfI18n[key]
+            : key;
+
+        return value.replace(/\{(\d+)\}/g, function (match, index) {
+            return typeof args[index] === 'undefined' ? match : args[index];
+        });
+    };
+    window.ncfSwitchLanguage = window.ncfSwitchLanguage || function (culture) {
+        var returnUrl = window.location.pathname + window.location.search + window.location.hash;
+        window.location.href = '/api/Language/Set?culture=' + encodeURIComponent(culture)
+            + '&returnUrl=' + encodeURIComponent(returnUrl);
+    };
+</script>

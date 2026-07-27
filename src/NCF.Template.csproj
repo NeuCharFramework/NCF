@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.33.0</PackageVersion>
+		<PackageVersion>0.34.0</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -107,6 +107,7 @@
 			v0.31.6 更新 PromptRange 模块，提供 3D 靶场和对话模式
 			v0.32.0 全面更新 NCF 基础库模块，提升兼容性
 			v0.33.0 支持最新版本 Senparc.AI.AgentKernel 以及 Microsoft Agent Framework
+			v0.34.0 升级基础库，使用最新 CO2NET 基础库
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -144,6 +145,8 @@
 
 		<Content Remove="**\*" />
 		<Content Include="back-end\**\*" Exclude="back-end\**\bin\**;back-end\**\obj\**;back-end\.vs\**;back-end\**\SenparcTraceLog\**;back-end\**\ApiDocXml\**;back-end\Senparc.Web\logs\**;back-end\**\*.user;back-end\**\WeChat_OfficialAccount\**;back-end\**\logs\**;back-end\**\App_Data\QQWry.Dat;**\PublishProfiles\**;**\TestResults\**;**\SenparcConfig.Development.config;**\appsettings.Development.json;**\Senparc.AI.Dalle-*.jpg;**\JeffreyMpMessageHandler.cs;**\NCF.sln-backup-*.sln;**\App_Data\Files\**;**\Senparc.Xncf.NewYearBless\**;**\Senparc.Web\Domain\PromptPlugins\**;**\Senparc.Web\App_Data\Database\*.DB;**\Senparc.Web\.config\**;**\Senparc.Web\.playwright-cli\**;**\Senparc.Web\App_Data\Files\**;**\Senparc.Web\App_Data\Database\*.DB" />
+		<!-- 排除本地开发和运行时生成物，防止日志、AI 测试输出及桌面安装包被误打入 Template NuGet 包。 -->
+		<Content Remove="back-end\**\.vs\**;back-end\**\.idea\**;back-end\**\App_Data\install-finished.txt;back-end\**\App_Data\OpenAiImageTemp\**;back-end\**\App_Data\Database\backup\**;back-end\**\App_Data\PromptRange\**;back-end\**\wwwroot\NcfPackages\**" />
 
 		<Compile Remove="**\*" />
 

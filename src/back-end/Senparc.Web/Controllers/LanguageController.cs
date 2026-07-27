@@ -1,3 +1,16 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：LanguageController.cs
+    文件功能描述：站点语言切换控制器
+    
+    
+    创建标识：Senparc - 20260403
+    
+    修改标识：Senparc - 20260724
+    修改描述：v0.34.0 完善站点本地化及内嵌 WebView 导航兼容性
+
+----------------------------------------------------------------*/
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 

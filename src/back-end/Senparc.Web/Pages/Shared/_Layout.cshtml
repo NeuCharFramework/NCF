@@ -1,6 +1,9 @@
 ﻿@model Senparc.Web.Models.VD.BasePageModel
 @using Senparc.Ncf.XncfBase
 @inject IServiceProvider _serviceProvider
+@{
+    var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+}
 @functions{
     private async Task<bool> CheckXncfModuleValiable(string xncfName)
     {
@@ -10,11 +13,11 @@
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="@currentCulture">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - 用于构造基础项目的 .NET 框架，使用 DDD 和高度模块化设计</title>
+    <title>@ViewData["Title"] - @SR["Site.MetaDescription"]</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -33,15 +36,15 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 ncf-navbar">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">NeuCharFramework 示例</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index">@SR["Nav.Brand"]</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                        aria-expanded="false" aria-label="@SR["Nav.ToggleNavigation"]">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" href="https://doc.ncf.pub" target="_blank">文档</a>
+                                    <a class="nav-link text-dark" href="https://doc.ncf.pub" target="_blank">@SR["Nav.Documentation"]</a>
                                 </li>
 
                         @{
@@ -53,16 +56,27 @@
                             }
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="https://weixin.senparc.com/QA" target="_blank">社区</a>
+                            <a class="nav-link text-dark" href="https://weixin.senparc.com/QA" target="_blank">@SR["Nav.Community"]</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Admin" asp-page="/Index">管理员登录</a>
+                            <a class="nav-link text-dark" asp-area="Admin" asp-page="/Index">@SR["Nav.AdminLogin"]</a>
+                        </li>
+                        <li class="nav-item d-flex align-items-center ml-sm-auto mr-sm-3">
+                            <label for="ncf-site-lang" class="sr-only">@SR["Language.SelectLanguage"]</label>
+                            <select id="ncf-site-lang" class="form-control form-control-sm" onchange="ncfSwitchLanguage(this.value)" aria-label="@SR["Language.SelectLanguage"]">
+                                <option value="zh-CN" selected="@(currentCulture == "zh-CN" ? "selected" : null)">@SR["Language.zh-CN"]</option>
+                                <option value="en" selected="@(currentCulture.StartsWith("en") ? "selected" : null)">@SR["Language.en"]</option>
+                                <option value="ja" selected="@(currentCulture.StartsWith("ja") ? "selected" : null)">@SR["Language.ja"]</option>
+                                <option value="fr" selected="@(currentCulture.StartsWith("fr") ? "selected" : null)">@SR["Language.fr"]</option>
+                                <option value="es" selected="@(currentCulture.StartsWith("es") ? "selected" : null)">@SR["Language.es"]</option>
+                                <option value="ru" selected="@(currentCulture.StartsWith("ru") ? "selected" : null)">@SR["Language.ru"]</option>
+                            </select>
                         </li>
                     </ul>
                 </div>
                 <div class="header-icon">
                     <a href="https://github.com/NeuCharFramework/NCF" target="_blank">
-                        <img src="~/images/Icon/github.svg" />
+                        <img src="~/images/Icon/github.svg" alt="@SR["Nav.GitHub"]" />
                     </a>
                 </div>
             </div>
@@ -80,7 +94,7 @@
             <div class=" pl-5 pr-5">
                 <div class="row">
                     <div class="col-lg-4 col-md-4 col-6">
-                        <span class="footer-title">社区</span>
+                        <span class="footer-title">@SR["Footer.Community"]</span>
                         <ul>
                             <li>
                                 <a href="https://github.com/NeuCharFramework/NCF" target="_blank">
@@ -88,32 +102,32 @@
                                 </a>
                             </li>
                             <li>
-                                <a onclick="unopen()">活动</a>
+                                <a onclick="unopen()">@SR["Footer.Events"]</a>
                             </li>
                             <li>
-                                <a onclick="unopen()">贡献</a>
+                                <a onclick="unopen()">@SR["Footer.Contribute"]</a>
                             </li>
                         </ul>
                     </div>
                     <div class="col-lg-4 col-md-4 col-6">
-                        <span class="footer-title">文档</span>
+                        <span class="footer-title">@SR["Footer.Documentation"]</span>
                         <ul>
                             <li>
-                                <a href="https://doc.ncf.pub/zh/start/start-develop/get-ncf-template.html" target="_blank">开始开发</a>
+                                <a href="https://doc.ncf.pub/zh/start/start-develop/get-ncf-template.html" target="_blank">@SR["Footer.StartDevelopment"]</a>
                             </li>
                             <li>
-                                <a href="https://doc.ncf.pub/zh/start/qa/explanation_of_terms.html" target="_blank">名词解释</a>
+                                <a href="https://doc.ncf.pub/zh/start/qa/explanation_of_terms.html" target="_blank">@SR["Footer.Glossary"]</a>
                             </li>
                             <li>
-                                <a href="https://doc.ncf.pub/zh/start/qa/common_problem.html" target="_blank">常见问题</a>
+                                <a href="https://doc.ncf.pub/zh/start/qa/common_problem.html" target="_blank">@SR["Footer.Faq"]</a>
                             </li>
                             <li>
-                                <a href="https://doc.ncf.pub/zh/start/release/log.html" target="_blank">更新日志</a>
+                                <a href="https://doc.ncf.pub/zh/start/release/log.html" target="_blank">@SR["Footer.ReleaseNotes"]</a>
                             </li>
                         </ul>
                     </div>
                     <div class="col-lg-4 col-md-4  col-6">
-                        <span class="footer-title">联系我们</span>
+                        <span class="footer-title">@SR["Footer.ContactUs"]</span>
                         <div>
                             <a href="javascript:;" id="qq-code">
                                 <img class="footer-img" src="~/images/Icon/qq.svg" />
@@ -160,6 +174,7 @@
                 integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=">
         </script>
     </environment>
+    <partial name="_LocalizationScripts" />
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/Index/index.js"></script>
 

@@ -51,7 +51,13 @@
                             }
                         </p>
                         <form method="post" id="install_main_form">
-                            <a v-on:click="submit" class="option_block" id="btnInstall">@IR["Install.StartButton"]</a>
+                            <a v-on:click.prevent="submit"
+                               v-on:keydown.enter.prevent="submit"
+                               v-on:keydown.space.prevent="submit"
+                               class="option_block"
+                               id="btnInstall"
+                               role="button"
+                               tabindex="0">@IR["Install.StartButton"]</a>
                         </form>
                         <el-button type="text" v-on:click="toggleInfo" id="btnOptions">
                             @IR["Install.AdvancedOptions"]
@@ -127,14 +133,17 @@
     <script src="~/lib/element-ui_2.13.2/element.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script>
-        window.ncfInstallI18n = {
-            installing: '@IR["Install.StartButton"]',
-            started: '@IR["Install.Warning"]',
-            startConfirm: '@IR["Install.StartButton"]?',
-            startConfirmDetail: '@IR["Install.Warning"]',
-            startedWaiting: '@IR["Install.StartButton"]...',
-            failedPrefix: 'Install failed:'
-        };
+        window.ncfInstallI18n = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(new
+        {
+            started = IR["Install.AlreadyRunning"].Value,
+            startConfirm = IR["Install.Confirm"].Value,
+            startConfirmDetail = IR["Install.ConfirmDetail"].Value,
+            confirmButtonText = IR["Install.ConfirmButton"].Value,
+            cancelButtonText = IR["Install.CancelButton"].Value,
+            startedWaiting = IR["Install.StartedWaiting"].Value,
+            failedPrefix = IR["Install.FailedPrefix"].Value,
+            loadOptionsFailed = IR["Install.LoadOptionsFailed"].Value
+        }));
 
         function ncfSwitchLanguage(culture) {
             var returnUrl = window.location.pathname + window.location.search;

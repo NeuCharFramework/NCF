@@ -122,4 +122,12 @@
   <data name="Installer.Register.MenuName" xml:space="preserve"><value>NCF インストーラー</value></data>
   <data name="Installer.Register.Description" xml:space="preserve"><value>NCF 初期インストールモジュールです。インストール完了後にアンインストールまたは削除できます。</value></data>
   <data name="Installer.Area.Home" xml:space="preserve"><value>ホーム</value></data>
+  <data name="Install.AlreadyRunning" xml:space="preserve"><value>インストールを実行中です。しばらくお待ちください。</value></data>
+  <data name="Install.Confirm" xml:space="preserve"><value>インストールを開始しますか？</value></data>
+  <data name="Install.ConfirmDetail" xml:space="preserve"><value>完了後、このインストールページは使用できなくなります。</value></data>
+  <data name="Install.ConfirmButton" xml:space="preserve"><value>今すぐインストール</value></data>
+  <data name="Install.CancelButton" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Install.StartedWaiting" xml:space="preserve"><value>インストールを開始しました。しばらくお待ちください...</value></data>
+  <data name="Install.FailedPrefix" xml:space="preserve"><value>インストールに失敗しました：</value></data>
+  <data name="Install.LoadOptionsFailed" xml:space="preserve"><value>インストール設定の読み込みに失敗しました：</value></data>
 </root>

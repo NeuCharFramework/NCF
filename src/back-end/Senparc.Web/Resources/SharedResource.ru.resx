@@ -117,4 +117,52 @@
   <data name="Footer.Copyright" xml:space="preserve">
     <value>Suzhou Senparc Network Technology Co., Ltd. Все права защищены</value>
   </data>
+  <data name="Site.MetaDescription" xml:space="preserve"><value>Платформа .NET для базовых проектов с DDD и высокомодульной архитектурой</value></data>
+  <data name="Nav.Brand" xml:space="preserve"><value>Демонстрация NeuCharFramework</value></data>
+  <data name="Nav.ToggleNavigation" xml:space="preserve"><value>Переключить навигацию</value></data>
+  <data name="Nav.Documentation" xml:space="preserve"><value>Документация</value></data>
+  <data name="Nav.Community" xml:space="preserve"><value>Сообщество</value></data>
+  <data name="Nav.AdminLogin" xml:space="preserve"><value>Вход для администратора</value></data>
+  <data name="Nav.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Footer.Community" xml:space="preserve"><value>Сообщество</value></data>
+  <data name="Footer.Events" xml:space="preserve"><value>События</value></data>
+  <data name="Footer.Contribute" xml:space="preserve"><value>Участие</value></data>
+  <data name="Footer.Documentation" xml:space="preserve"><value>Документация</value></data>
+  <data name="Footer.StartDevelopment" xml:space="preserve"><value>Начало разработки</value></data>
+  <data name="Footer.Glossary" xml:space="preserve"><value>Глоссарий</value></data>
+  <data name="Footer.Faq" xml:space="preserve"><value>Частые вопросы</value></data>
+  <data name="Footer.ReleaseNotes" xml:space="preserve"><value>История изменений</value></data>
+  <data name="Footer.ContactUs" xml:space="preserve"><value>Связаться с нами</value></data>
+  <data name="Home.Tagline" xml:space="preserve"><value>Просто · Гибко · Расширяемо</value></data>
+  <data name="Home.Introduction.Line1" xml:space="preserve"><value>NCF (NeuCharFramework) — универсальная корпоративная платформа .NET для создания базовых проектов.</value></data>
+  <data name="Home.Introduction.Line2" xml:space="preserve"><value>Она строго следует DDD и включает кэширование, базы данных, модели, проверку и панель администрирования.</value></data>
+  <data name="Home.Introduction.Line3" xml:space="preserve"><value>Высокомодульная архитектура обеспечивает расширяемость и надежность.</value></data>
+  <data name="Home.Notice.Framework" xml:space="preserve"><value>NCF полностью поддерживает .NET 8.0.</value></data>
+  <data name="Home.Notice.Databases" xml:space="preserve"><value>Сейчас поддерживаются SQLite, SQL Server, MySQL, PostgreSQL, Oracle и DM (Dameng).</value></data>
+  <data name="Home.Notice.Feedback" xml:space="preserve"><value>Поддержка новых баз добавляется. Расскажите, что вам нужно!</value></data>
+  <data name="Home.CurrentTenant" xml:space="preserve"><value>Текущий арендатор:</value></data>
+  <data name="Home.TenantUnavailable" xml:space="preserve"><value>Не включено или подходящий арендатор не найден</value></data>
+  <data name="Home.StartNow" xml:space="preserve"><value>Начать</value></data>
+  <data name="Home.Features.QuickStart.Title" xml:space="preserve"><value>Быстрый запуск</value></data>
+  <data name="Home.Features.QuickStart.Description" xml:space="preserve"><value>Установите шаблон платформы одним щелчком.</value></data>
+  <data name="Home.Features.AiNative.Title" xml:space="preserve"><value>Платформа для ИИ</value></data>
+  <data name="Home.Features.AiNative.Description" xml:space="preserve"><value>Создавайте системы с ИИ и получайте интеллектуальную среду разработки со встроенными возможностями для ИИ-приложений.</value></data>
+  <data name="Home.Features.Modular.Title" xml:space="preserve"><value>Модульная архитектура</value></data>
+  <data name="Home.Features.Modular.Description" xml:space="preserve"><value>Свободно сочетайте и расширяйте модули. Каждый компонент можно независимо разрабатывать, тестировать, интегрировать и развертывать.</value></data>
+  <data name="Home.Features.Databases.Title" xml:space="preserve"><value>Несколько баз данных</value></data>
+  <data name="Home.Features.Databases.Description" xml:space="preserve"><value>Поддерживает SQL Server, MySQL, SQLite, PostgreSQL, Oracle, DM (Dameng) и легко расширяется для других баз.</value></data>
+  <data name="Home.Features.Performance.Title" xml:space="preserve"><value>Высокая производительность</value></data>
+  <data name="Home.Features.Performance.Description" xml:space="preserve"><value>Более 10 лет оптимизации корпоративных систем обеспечивают производительность и доступность, подтвержденные системами с более чем 5 миллионами просмотров страниц в день.</value></data>
+  <data name="Home.Features.Ddd.Title" xml:space="preserve"><value>Архитектура DDD</value></data>
+  <data name="Home.Features.Ddd.Description" xml:space="preserve"><value>Строгий предметно-ориентированный подход позволяет гибко реагировать на изменения.</value></data>
+  <data name="Home.Features.Dapr.Title" xml:space="preserve"><value>Поддержка Dapr</value></data>
+  <data name="Home.Features.Dapr.Description" xml:space="preserve"><value>Поддерживает Dapr для быстрого создания микросервисов.</value></data>
+  <data name="Home.Features.Compatibility.Title" xml:space="preserve"><value>Обратная совместимость</value></data>
+  <data name="Home.Features.Compatibility.Description" xml:space="preserve"><value>Помимо микросервисов и распределенных систем, NCF поддерживает традиционную разработку и автономное развертывание без дополнительного обучения. Модульная архитектура обеспечивает плавное обновление.</value></data>
+  <data name="Home.Features.Community.Title" xml:space="preserve"><value>Поддержка сообщества</value></data>
+  <data name="Home.Features.Community.Description" xml:space="preserve"><value>Основная команда сообщества разработчиков Senparc постоянно поддерживает и обновляет проект.</value></data>
+  <data name="Home.ComingSoon" xml:space="preserve"><value>Этот раздел пока недоступен. Следите за обновлениями.</value></data>
+  <data name="Home.InstallDocsConfirm" xml:space="preserve"><value>Модуль автономной документации не установлен. Установить его сейчас?</value></data>
+  <data name="Home.OpenDocsConfirm" xml:space="preserve"><value>{0} Обновите страницу, чтобы увидеть ссылку на документацию. Открыть документацию сейчас?</value></data>
+  <data name="Home.RequestFailed" xml:space="preserve"><value>Не удалось выполнить запрос. Повторите попытку позже.</value></data>
 </root>

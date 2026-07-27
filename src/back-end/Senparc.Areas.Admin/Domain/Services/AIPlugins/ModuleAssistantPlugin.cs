@@ -1,3 +1,16 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：ModuleAssistantPlugin.cs
+    文件功能描述：后台模块助手插件
+    
+    
+    创建标识：Senparc - 20260327
+    
+    修改标识：Senparc - 20260724
+    修改描述：v0.1.0 增强后台模块批量更新并完善多语言管理界面
+
+----------------------------------------------------------------*/
 using Microsoft.SemanticKernel;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
 using Senparc.Ncf.Core.Models;

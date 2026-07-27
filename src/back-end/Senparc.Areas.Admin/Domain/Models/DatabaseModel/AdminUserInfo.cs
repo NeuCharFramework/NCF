@@ -1,4 +1,17 @@
-﻿using Senparc.CO2NET.Extensions;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：AdminUserInfo.cs
+    文件功能描述：后台管理员用户数据模型
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260724
+    修改描述：v0.1.0 增强后台模块批量更新并完善多语言管理界面
+
+----------------------------------------------------------------*/
+using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Helpers;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
