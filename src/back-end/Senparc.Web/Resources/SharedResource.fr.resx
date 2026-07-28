@@ -165,4 +165,7 @@
   <data name="Home.InstallDocsConfirm" xml:space="preserve"><value>Le module de documentation hors ligne n’est pas installé. L’installer maintenant ?</value></data>
   <data name="Home.OpenDocsConfirm" xml:space="preserve"><value>{0} Actualisez cette page pour afficher l’accès à la documentation. L’ouvrir maintenant ?</value></data>
   <data name="Home.RequestFailed" xml:space="preserve"><value>La requête a échoué. Veuillez réessayer plus tard.</value></data>
+  <data name="Home.InstallRequired.Title" xml:space="preserve"><value>Initialisation de NeuCharFramework</value></data>
+  <data name="Home.InstallRequired.Message" xml:space="preserve"><value>NeuCharFramework n’est pas encore initialisé. La page d’initialisation va s’ouvrir dans un instant...</value></data>
+  <data name="Home.InstallRequired.Link" xml:space="preserve"><value>Cliquez ici si la page ne s’ouvre pas automatiquement</value></data>
 </root>

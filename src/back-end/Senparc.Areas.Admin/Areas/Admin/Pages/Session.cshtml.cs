@@ -16,6 +16,9 @@
     修改标识：Senparc - 20260724
     修改描述：v0.1.0 增强后台模块批量更新并完善多语言管理界面
 
+    修改标识：Senparc - 20260729
+    修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Authentication;
@@ -24,6 +27,7 @@ using Senparc.Areas.Admin;
 using Senparc.Areas.Admin.Domain;
 using Senparc.Areas.Admin.Domain.Models.VD;
 using Senparc.Ncf.AreaBase.Admin.Filters;
+using Senparc.Ncf.Core.Authorization;
 using Senparc.Ncf.Core.Config;
 using System;
 using System.Security.Claims;
@@ -32,7 +36,7 @@ using System.Threading.Tasks;
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
     [ServiceFilter(typeof(AuthenticationResultFilterAttribute))]
-    [AdminOrJwtAuthorize("AdminOnly")]
+    [AdminOrJwtAuthorize(NcfAuthorizationPolicyNames.AdminOnly)]
     public class SessionModel(AdminUserInfoService adminUserInfoService) : BasePageModel
     {
         private readonly AdminUserInfoService _adminUserInfoService = adminUserInfoService;
@@ -101,15 +105,15 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                     return Ok(false, "当前用户身份无效，无法续期 JWT。请重新登录。");
                 }
 
-                var token = _adminUserInfoService.GenerateToken(userId, out var expiresUtc, jwtExpireMinutes);
+                var tokenResult = await _adminUserInfoService.GenerateTokenAsync(userId, jwtExpireMinutes);
                 return Ok(new
                 {
                     authType = "jwt",
                     serverUtc = now,
-                    expiresUtc,
+                    expiresUtc = tokenResult.ExpiresUtc,
                     webLoginExpireMinutes,
                     jwtExpireMinutes,
-                    token
+                    token = tokenResult.Token
                 });
             }
 

@@ -477,7 +477,8 @@ var chatApp = new Vue({
     formatMessageContent(content) {
       if (!content) return '';
 
-      return marked.parse(content);
+      const rendered = marked.parse(content);
+      return typeof DOMPurify === 'undefined' ? '' : DOMPurify.sanitize(rendered);
     }
   }
 });

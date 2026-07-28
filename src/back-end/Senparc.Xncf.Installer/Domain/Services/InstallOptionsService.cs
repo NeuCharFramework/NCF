@@ -10,6 +10,9 @@
     修改标识：Senparc - 20260724
     修改描述：v0.4.0 增加默认模块选择与安装确认并完善多语言界面
 
+    修改标识：Senparc - 20260729
+    修改描述：v0.4.1 加强安装状态校验并收紧安装辅助路由
+
 ----------------------------------------------------------------*/
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;

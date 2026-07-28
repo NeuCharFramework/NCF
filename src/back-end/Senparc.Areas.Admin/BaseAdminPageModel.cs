@@ -1,9 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：BaseAdminPageModel.cs
+    文件功能描述：BaseAdminPageModel.cs 相关实现
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260729
+    修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
+----------------------------------------------------------------*/
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Senparc.Areas.Admin.Domain.Models.VD;
 using Senparc.Ncf.AreaBase.Admin;
 using Senparc.Ncf.AreaBase.Admin.Filters;
 using Senparc.Ncf.Core;
+using Senparc.Ncf.Core.Authorization;
 using Senparc.Ncf.Core.Models.VD;
 using Senparc.Ncf.Core.WorkContext;
 using Senparc.Ncf.XncfBase;
@@ -22,7 +37,7 @@ namespace Senparc.Areas.Admin
 
     //暂时取消权限验证
     [ServiceFilter(typeof(AuthenticationResultFilterAttribute))]
-    [AdminAuthorize("AdminOnly")]
+    [AdminAuthorize(NcfAuthorizationPolicyNames.AdminOnly)]
     public class BaseAdminPageModel : AdminPageModelBase, IBaseAdminPageModel
     {
         public Senparc.Areas.Admin.Register _xncfRegister;

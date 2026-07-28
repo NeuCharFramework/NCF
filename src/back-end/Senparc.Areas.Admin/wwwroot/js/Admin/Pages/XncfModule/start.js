@@ -50,6 +50,9 @@
         this.getList();
     },
     methods: {
+        safeHtml(value) {
+            return typeof DOMPurify === 'undefined' ? '' : DOMPurify.sanitize(String(value || ''));
+        },
         normalizeMultiValue(value) {
             if (Array.isArray(value)) {
                 return value;
@@ -252,7 +255,20 @@
                 if (msg && (msg.indexOf('http://') === 0 || msg.indexOf('https://') === 0)) {
                     this.runResult.tit = '执行成功';
                     this.runResult.tip = '收到网址，点击下方打开<br />（此链接由第三方提供，请注意安全）：';
-                    this.runResult.msg = '<i class="fa fa-external-link"></i> <a href="' + msg + '" target="_blank">' + msg + '</a>';
+                    try {
+                        const safeUrl = new URL(msg, window.location.origin);
+                        if (safeUrl.protocol !== 'http:' && safeUrl.protocol !== 'https:') {
+                            throw new Error('unsupported URL scheme');
+                        }
+                        const anchor = document.createElement('a');
+                        anchor.href = safeUrl.href;
+                        anchor.target = '_blank';
+                        anchor.rel = 'noopener noreferrer';
+                        anchor.textContent = msg;
+                        this.runResult.msg = this.safeHtml('<i class="fa fa-external-link"></i> ') + anchor.outerHTML;
+                    } catch {
+                        this.runResult.msg = this.safeHtml(msg);
+                    }
                 }
                 else {
                     this.runResult.tit = '执行成功';

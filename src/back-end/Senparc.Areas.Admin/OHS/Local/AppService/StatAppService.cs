@@ -1,8 +1,23 @@
-﻿using Senparc.Areas.Admin.OHS.Local.PL;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：StatAppService.cs
+    文件功能描述：StatAppService.cs 相关实现
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260729
+    修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
+----------------------------------------------------------------*/
+
+using Senparc.Areas.Admin.OHS.Local.PL;
 using Senparc.Areas.Admin.SenparcTraceManager;
 using Senparc.CO2NET;
 using Senparc.Ncf.AreaBase.Admin.Filters;
 using Senparc.Ncf.Core.AppServices;
+using Senparc.Ncf.Core.Authorization;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +25,7 @@ using System.Threading.Tasks;
 namespace Senparc.Areas.Admin.OHS.Local.AppService
 {
     //[BackendJwtAuthorize]
-    [AdminAuthorize("AdminOnly")]
+    [AdminAuthorize(NcfAuthorizationPolicyNames.AdminOnly)]
     public class StatAppService : LocalAppServiceBase
     {
         public StatAppService(IServiceProvider serviceProvider) : base(serviceProvider)

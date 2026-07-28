@@ -51,6 +51,7 @@
                             }
                         </p>
                         <form method="post" id="install_main_form">
+                            @Html.AntiForgeryToken()
                             <a v-on:click.prevent="submit"
                                v-on:keydown.enter.prevent="submit"
                                v-on:keydown.space.prevent="submit"

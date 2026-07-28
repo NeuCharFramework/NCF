@@ -5,6 +5,10 @@
     文件功能描述：为桌面 Admin Chat 提供受 AdminOnly JWT 保护的流式消息接口
 
     创建标识：Senparc - 20260726
+
+    修改标识：Senparc - 20260729
+    修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -21,6 +25,7 @@ using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto;
 using Senparc.Areas.Admin.Domain.Services;
 using Senparc.Areas.Admin.OHS.Local.Events;
+using Senparc.Ncf.Core.Authorization;
 using Senparc.Ncf.Shared.Abstractions.Events;
 
 namespace Senparc.Areas.Admin.OHS.Local.Controllers;
@@ -30,7 +35,7 @@ namespace Senparc.Areas.Admin.OHS.Local.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/Senparc.Areas.Admin/AdminChatStream")]
-[AdminOrJwtAuthorize("AdminOnly")]
+[AdminOrJwtAuthorize(NcfAuthorizationPolicyNames.AdminOnly)]
 public sealed class AdminChatStreamController : ControllerBase
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);

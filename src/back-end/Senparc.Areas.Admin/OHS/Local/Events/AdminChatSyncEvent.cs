@@ -9,9 +9,13 @@
     修改标识：Senparc - 20260726
     修改描述：v0.1.0 增加后台 Admin Chat 同步服务以支持桌面管理交互
 
+    修改标识：Senparc - 20260729
+    修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
 ----------------------------------------------------------------*/
 
 using System.Globalization;
+using Senparc.Ncf.Core.Authorization;
 using Senparc.Ncf.Shared.Abstractions.Events;
 
 namespace Senparc.Areas.Admin.OHS.Local.Events;
@@ -30,7 +34,7 @@ public sealed record AdminChatSyncEvent(
 
     public string ResourceId => SessionId.ToString(CultureInfo.InvariantCulture);
 
-    public string RequiredPolicy => "AdminOnly";
+    public string RequiredPolicy => NcfAuthorizationPolicyNames.AdminOnly;
 
     public override string GetEventSummary()
     {

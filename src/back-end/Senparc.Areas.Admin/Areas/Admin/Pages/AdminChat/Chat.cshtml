@@ -356,12 +356,13 @@
 @section scripts {
     <script src="~/js/Admin/Pages/AdminChat/ChatLauncherMixin.js"></script>
     <script src="~/js/Admin/lib/marked.min.js"></script>
+    <script src="~/js/Admin/dompurify.min.js"></script>
     <script>
         window.INITIAL_DATA = {
-            sessionId: @(Model.SessionId),
-            initialMessage: '@Html.Raw(Model.InitialMessage?.Replace("'", "\\'").Replace("\n", "\\n"))',
-            currentUserId: @(Model.CurrentUserId),
-            moduleUids: '@Html.Raw(Model.ModuleUids)'
+            sessionId: @Model.SessionId,
+            initialMessage: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.InitialMessage ?? string.Empty)),
+            currentUserId: @Model.CurrentUserId,
+            moduleUids: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ModuleUids ?? string.Empty))
         };
     </script>
     <script src="~/js/Admin/Pages/AdminChat/Chat.js"></script>

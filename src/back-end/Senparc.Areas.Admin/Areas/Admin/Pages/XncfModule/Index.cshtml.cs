@@ -10,6 +10,9 @@
     修改标识：Senparc - 20260724
     修改描述：v0.1.0 增强后台模块批量更新并完善多语言管理界面
 
+    修改标识：Senparc - 20260729
+    修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
 ----------------------------------------------------------------*/
 using Microsoft.AspNetCore.Mvc;
 using Senparc.Ncf.Core.Models;
@@ -24,9 +27,12 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
+using Senparc.Areas.Admin;
+using Senparc.Ncf.AreaBase.Admin.Filters;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
+    [AdminAuthorize(BackendJwtAuthorizeAttribute.SuperAdminPolicyName)]
     public class XncfModuleIndexModel : BaseAdminPageModel
     {
         private readonly IServiceProvider _serviceProvider;

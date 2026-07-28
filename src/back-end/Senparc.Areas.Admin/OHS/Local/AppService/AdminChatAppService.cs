@@ -13,6 +13,9 @@
     修改标识：Senparc - 20260726
     修改描述：v0.1.0 增加后台 Admin Chat 同步服务以支持桌面管理交互
 
+    修改标识：Senparc - 20260729
+    修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
 ----------------------------------------------------------------*/
 using Microsoft.AspNetCore.Mvc;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
@@ -21,6 +24,7 @@ using Senparc.Areas.Admin.Domain.Services;
 using Senparc.CO2NET;
 using Senparc.CO2NET.WebApi;
 using Senparc.Ncf.Core.AppServices;
+using Senparc.Ncf.Core.Authorization;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
@@ -41,7 +45,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
     /// AdminChatAppService：管理后台聊天功能 API 服务
     /// 支持 Cookie 和 JWT 两种认证方式
     /// </summary>
-    [AdminOrJwtAuthorize("AdminOnly")]
+    [AdminOrJwtAuthorize(NcfAuthorizationPolicyNames.AdminOnly)]
     public class AdminChatAppService : LocalAppServiceBase
     {
         private readonly AdminChatSessionService _sessionService;

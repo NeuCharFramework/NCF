@@ -86,6 +86,9 @@ var app = new Vue({
             installButton.innerHTML = (window.ncfInstallI18n && window.ncfInstallI18n.startedWaiting) || 'Installation started, please wait...';
 
             axios.post("/Install/Index", this.installOptions, {
+                headers: {
+                    RequestVerificationToken: document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
             }).then(res => {
                 document.getElementById('app').innerHTML = res.data;
             }).catch(error => {

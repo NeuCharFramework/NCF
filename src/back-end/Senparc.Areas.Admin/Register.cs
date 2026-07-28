@@ -19,6 +19,9 @@
     修改标识：Senparc - 20260724
     修改描述：v0.1.0 增强后台模块批量更新并完善多语言管理界面
 
+    修改标识：Senparc - 20260729
+    修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
 ----------------------------------------------------------------*/
 
 /* 
@@ -49,12 +52,15 @@ using Senparc.Areas.Admin.Domain.Services;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.AreaBase.Admin.Filters;
+using Senparc.Ncf.AreaBase.Admin;
+using Senparc.Ncf.Core.Authorization;
 using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
+using Senparc.Ncf.Service;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.XncfBase;
 using Senparc.Ncf.XncfBase.Database;
@@ -64,6 +70,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin
@@ -289,7 +296,11 @@ namespace Senparc.Areas.Admin
                 {
                     options.AccessDeniedPath = "/Admin/Forbidden/";
                     options.LoginPath = "/Admin/Login/";
-                    options.Cookie.HttpOnly = false;
+                    // The authentication cookie is never a browser-readable API
+                    // value. Keep it out of document.cookie to limit XSS impact.
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.SameSite = SameSiteMode.Strict;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     options.SlidingExpiration = true;
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(AdminAuthConfig.DefaultAdminWebLoginExpireMinutes);
                     options.Events = new CookieAuthenticationEvents
@@ -310,10 +321,15 @@ namespace Senparc.Areas.Admin
                 //.AddAuthorization(options =>
                 .AddAuthorizationCore(options =>
                 {
-                    options.AddPolicy("AdminOnly", policy =>
+                    options.AddNcfAdminAuthorizationPolicies();
+                    options.AddPolicy(BackendJwtAuthorizeAttribute.SuperAdminPolicyName, policy =>
                     {
                         policy.RequireAuthenticatedUser();
-                        policy.RequireClaim("AdminMember");
+                        policy.RequireClaim(NcfAuthorizationPolicyNames.AdminMemberClaim);
+                        policy.RequireAssertion(context => context.User.Claims
+                            .Where(claim => claim.Type == ClaimTypes.Role)
+                            .SelectMany(claim => claim.Value.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                            .Any(role => string.Equals(role.Trim(), Config.SYSROLE_ADMINISTRATOR_ROLE_CODE, StringComparison.OrdinalIgnoreCase)));
                     });
                 });
 
@@ -324,7 +340,7 @@ namespace Senparc.Areas.Admin
                 //    model.Filters.Add(new AdminAuthorizeAttribute());
                 //});
 
-                //options.Conventions.AuthorizeAreaFolder("Admin", "/", "AdminOnly");//必须登录
+                //options.Conventions.AuthorizeAreaFolder("Admin", "/", NcfAuthorizationPolicyNames.AdminOnly);//必须登录
                 //options.Conventions.AddAreaPageRoute("Admin", "/Login", "/Admin/Login");//允许匿名
                 //options.Conventions.AddAreaPageRoute("Admin", "/Index", "/Admin/Index");//允许匿名
 
@@ -343,8 +359,8 @@ namespace Senparc.Areas.Admin
                 //});
 
 
-                options.Conventions.AuthorizePage("/", "AdminOnly");//必须登录
-                options.Conventions.AuthorizePage("/AdminChat/Chat", "AdminOnly");//聊天页面必须登录
+                options.Conventions.AuthorizePage("/", NcfAuthorizationPolicyNames.AdminOnly);//必须登录
+                options.Conventions.AuthorizePage("/AdminChat/Chat", NcfAuthorizationPolicyNames.AdminOnly);//聊天页面必须登录
                 options.Conventions.AllowAnonymousToPage("/Login");//允许匿名
 
                 //更多：https://learn.microsoft.com/en-us/aspnet/core/security/authorization/razor-pages-authorization?view=aspnetcore-8.0
@@ -460,11 +476,3 @@ namespace Senparc.Areas.Admin
     }
 
 }
-
-
-
-
-
-
-
-

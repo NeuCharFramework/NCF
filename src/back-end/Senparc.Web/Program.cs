@@ -19,6 +19,9 @@
     修改标识：Senparc - 20260724
     修改描述：v0.34.0 完善站点本地化及内嵌 WebView 导航兼容性
 
+    修改标识：Senparc - 20260729
+    修改描述：v0.34.1 完善站点初始化状态、浏览器导航与多语言提示
+
 ----------------------------------------------------------------*/
 
 //以下数据库模块的命名空间根据需要添加或删除
@@ -45,10 +48,9 @@ builder.AddNcf();
 //添加 ServiceDefaults
 builder.AddServiceDefaults();
 
-#pragma warning disable SYSLIB0014
-System.Net.ServicePointManager.ServerCertificateValidationCallback =
-    ((sender, certificate, chain, sslPolicyErrors) => true);
-#pragma warning restore SYSLIB0014
+// Keep the platform default TLS certificate validation. A global callback that
+// accepts every certificate would make all outbound HTTPS requests vulnerable
+// to man-in-the-middle attacks.
 
 //添加 Dapr
 builder.Services.AddDaprClient();
@@ -132,25 +134,30 @@ Console.WriteLine("Count of Database connection string: " + Senparc.Ncf.Database
 Console.WriteLine("============ logMsg END =============");
 */
 
-app.MapGet("/test", async httpContext =>
+// This route is a local development smoke test and must not be published by
+// the deployed site. It calls an internal installer API and exposes its result.
+if (app.Environment.IsDevelopment())
 {
-    //var senparcWebClient = httpContext.RequestServices.GetService<SenparcWebClient>();
-    //var result = await senparcWebClient.GetHtml();
-    //await httpContext.Response.WriteAsync(result);
+    app.MapGet("/test", async httpContext =>
+    {
+        //var senparcWebClient = httpContext.RequestServices.GetService<SenparcWebClient>();
+        //var result = await senparcWebClient.GetHtml();
+        //await httpContext.Response.WriteAsync(result);
 
-    var apiClientHelper = httpContext.RequestServices.GetService<ApiClientHelper>();
-    var apiClient = apiClientHelper.ConnectApiClient("installer");
+        var apiClientHelper = httpContext.RequestServices.GetService<ApiClientHelper>();
+        var apiClient = apiClientHelper.ConnectApiClient("installer");
 
-    var xncfName = "Senparc.Xncf.Installer";//Assembly name / catalog
-    var apiBindName = "InstallAppService";
-    var methodName = "KeepAlive";
-    var apiPath = GetNcfApiClientPath(xncfName, apiBindName, methodName, null);
+        var xncfName = "Senparc.Xncf.Installer";//Assembly name / catalog
+        var apiBindName = "InstallAppService";
+        var methodName = "KeepAlive";
+        var apiPath = GetNcfApiClientPath(xncfName, apiBindName, methodName, null);
 
-    //var apiPath = $"/api/{keyName}/{apiBindGroupNamePath}/{apiNamePath}{showStaticApiState}";
-    var url = apiPath; //"/api/Senparc.Xncf.Installer/InstallAppService/Xncf.Installer_InstallAppService.KeepAlive";
-    var result2 = await RequestUtility.HttpGetAsync(null, url, Encoding.UTF8, apiClient);
+        //var apiPath = $"/api/{keyName}/{apiBindGroupNamePath}/{apiNamePath}{showStaticApiState}";
+        var url = apiPath; //"/api/Senparc.Xncf.Installer/InstallAppService/Xncf.Installer_InstallAppService.KeepAlive";
+        var result2 = await RequestUtility.HttpGetAsync(null, url, Encoding.UTF8, apiClient);
 
-    await httpContext.Response.WriteAsync(result2);
-});
+        await httpContext.Response.WriteAsync(result2);
+    });
+}
 
 await app.RunAsync();

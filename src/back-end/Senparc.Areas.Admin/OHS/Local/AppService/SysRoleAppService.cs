@@ -1,4 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：SysRoleAppService.cs
+    文件功能描述：SysRoleAppService.cs 相关实现
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260729
+    修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
+----------------------------------------------------------------*/
+
+using Microsoft.AspNetCore.Mvc;
 using Senparc.Areas.Admin.OHS.Local.PL;
 using Senparc.CO2NET;
 using Senparc.Ncf.Core.AppServices;
@@ -13,7 +27,7 @@ using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin.OHS.Local.AppService
 {
-    [BackendJwtAuthorize]
+    [BackendJwtAuthorize(BackendJwtAuthorizeAttribute.SuperAdminPolicyName)]
     public class SysRoleAppService : AppServiceBase
     {
         private readonly SysRoleService _sysRoleService;
