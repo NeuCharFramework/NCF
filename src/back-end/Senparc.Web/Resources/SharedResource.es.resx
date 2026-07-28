@@ -165,4 +165,7 @@
   <data name="Home.InstallDocsConfirm" xml:space="preserve"><value>El módulo de documentación sin conexión no está instalado. ¿Desea instalarlo ahora?</value></data>
   <data name="Home.OpenDocsConfirm" xml:space="preserve"><value>{0} Actualice esta página para ver el acceso a la documentación. ¿Desea abrirla ahora?</value></data>
   <data name="Home.RequestFailed" xml:space="preserve"><value>La solicitud falló. Inténtelo de nuevo más tarde.</value></data>
+  <data name="Home.InstallRequired.Title" xml:space="preserve"><value>Inicializar NeuCharFramework</value></data>
+  <data name="Home.InstallRequired.Message" xml:space="preserve"><value>NeuCharFramework aún no se ha inicializado. La página de inicialización se abrirá en unos instantes...</value></data>
+  <data name="Home.InstallRequired.Link" xml:space="preserve"><value>Haga clic aquí si la página no se abre automáticamente</value></data>
 </root>

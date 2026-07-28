@@ -16,6 +16,9 @@
     修改标识：Senparc - 20260724
     修改描述：v0.1.0 增强后台模块批量更新并完善多语言管理界面
 
+    修改标识：Senparc - 20260729
+    修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
 ----------------------------------------------------------------*/
 
 using Senparc.Areas.Admin.Domain.Dto;
@@ -41,7 +44,7 @@ using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin.OHS.Local.AppService
 {
-    [BackendJwtAuthorize]
+    [BackendJwtAuthorize(BackendJwtAuthorizeAttribute.SuperAdminPolicyName)]
     public class SystemInfoAppService : LocalAppServiceBase
     {
         private readonly SystemConfigService _systemConfigService;

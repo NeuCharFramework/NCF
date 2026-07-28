@@ -165,4 +165,7 @@
   <data name="Home.InstallDocsConfirm" xml:space="preserve"><value>オフラインドキュメントモジュールがインストールされていません。今すぐインストールしますか？</value></data>
   <data name="Home.OpenDocsConfirm" xml:space="preserve"><value>{0} ページを更新すると上部にドキュメント入口が表示されます。今すぐ開きますか？</value></data>
   <data name="Home.RequestFailed" xml:space="preserve"><value>リクエストに失敗しました。後でもう一度お試しください。</value></data>
+  <data name="Home.InstallRequired.Title" xml:space="preserve"><value>NeuCharFramework の初期化</value></data>
+  <data name="Home.InstallRequired.Message" xml:space="preserve"><value>NeuCharFramework がまだ初期化されていません。まもなく初期化ページへ移動します...</value></data>
+  <data name="Home.InstallRequired.Link" xml:space="preserve"><value>自動的に移動しない場合はこちらをクリックしてください</value></data>
 </root>

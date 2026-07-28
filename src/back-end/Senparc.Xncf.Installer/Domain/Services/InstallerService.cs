@@ -1,4 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+
+    文件名：InstallerService.cs
+    文件功能描述：InstallerService.cs 相关实现
+
+
+    创建标识：Senparc - 20240312
+
+    修改标识：Senparc - 20260729
+    修改描述：v0.4.1 加强安装状态校验并收紧安装辅助路由
+
+----------------------------------------------------------------*/
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Areas.Admin.Domain;
 using Senparc.CO2NET.Cache;
@@ -299,6 +313,11 @@ namespace Senparc.Xncf.Installer.Domain.Services
                 var installResponseDto = new InstallResponseDto();
                 installResponseDto.StatCode = 404;
 
+                if (!SiteConfig.IsInstalling || installRequestDto == null)
+                {
+                    return installResponseDto;
+                }
+
                 if (VerifyInstallRequest(installRequestDto) == false)
                 {
                     return installResponseDto;
@@ -358,6 +377,22 @@ namespace Senparc.Xncf.Installer.Domain.Services
                     using (var cacheLock = await cacheStrategy.BeginCacheLockAsync("InstallerService", "Install"))
                     {
                         var _accountInfoService = sope.ServiceProvider.GetService<AdminUserInfoService>();
+
+                        // Re-check inside the distributed install lock to prevent a
+                        // second request from reinitializing an already installed site.
+                        try
+                        {
+                            if (await _accountInfoService.GetObjectAsync(z => true) != null)
+                            {
+                                installResponseDto.StatCode = 404;
+                                return installResponseDto;
+                            }
+                        }
+                        catch (Exception ex) when (InstallDatabaseState.IsDatabaseUnavailableForInstallation(ex))
+                        {
+                            // The target database may not be available yet. The
+                            // installation path will create/update its schema.
+                        }
 
                         var adminUserInfoResult = await _accountInfoService.InitAsync(installRequestDto.AdminUserName);//初始化管理员信息
 

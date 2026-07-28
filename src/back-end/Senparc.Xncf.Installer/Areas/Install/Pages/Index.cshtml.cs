@@ -10,21 +10,28 @@
     修改标识：Senparc - 20260702
     修改描述：v0.11.0-preview2 同步 master/main 基线范围内改动并完成递归依赖版本处理
 
+    修改标识：Senparc - 20260729
+    修改描述：v0.4.1 加强安装状态校验并收紧安装辅助路由
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Senparc.AI.AgentKernel;
 using Senparc.Areas.Admin.Domain;
 using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Trace;
+using Senparc.Ncf.Core;
+using Senparc.Ncf.Core.Cache;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.Installer.Domain.Dto;
+using Senparc.Xncf.Installer.Domain.Services;
 using Senparc.Xncf.Installer.OHS.Local.AppService;
 using Senparc.Xncf.Tenant.Domain.DataBaseModel;
 using Senparc.Xncf.Tenant.OHS.Remote;
@@ -37,7 +44,7 @@ using Senparc.Xncf.Installer;
 
 namespace Senparc.Xncf.Instraller.Pages
 {
-    [IgnoreAntiforgeryToken]
+    [AutoValidateAntiforgeryToken]
     public class IndexModel : PageModel //不使用基类，因为无法通过已安装程序自动检测
     {
         private readonly AdminUserInfoService _accountInfoService;
@@ -102,78 +109,99 @@ namespace Senparc.Xncf.Instraller.Pages
 
         public async Task<IActionResult> OnGetAsync(string forceUpdateModule,int tenantId=0)
         {
+            Console.WriteLine("进入安装程序，检测是否需要初始化");
+
+            if (Request.IsLocal() && !forceUpdateModule.IsNullOrEmpty())
+            {
+                // 强制升级仍仅允许本机请求。
+                Console.WriteLine("强制升级模块：" + forceUpdateModule);
+
+                SenparcTrace.SendCustomLog("强制更新模块", $"开始：{forceUpdateModule}");
+                var register = Senparc.CO2NET.Helpers.ReflectionHelper.CreateInstance<IXncfRegister>(forceUpdateModule + ".Register", forceUpdateModule);
+                await register.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Update);
+                SenparcTrace.SendCustomLog("强制更新模块", $"完成：{forceUpdateModule}");
+
+                return Content(_localizer["Install.ForceUpgrade.Completed", forceUpdateModule]);
+            }
+
+            var installFinished = SiteConfig.CheckInstallFinishedFileExisted();
+
             try
             {
-                Console.WriteLine("进入安装程序，检测是否需要初始化");
-
-                if (Request.IsLocal())
-                {
-                    if (!forceUpdateModule.IsNullOrEmpty())
-                    {
-                        //强制本地安装
-                        Console.WriteLine("强制升级模块：" + forceUpdateModule);
-
-                        SenparcTrace.SendCustomLog("强制更新模块", $"开始：{forceUpdateModule}");
-                        var register = Senparc.CO2NET.Helpers.ReflectionHelper.CreateInstance<IXncfRegister>(forceUpdateModule + ".Register", forceUpdateModule);
-                        await register.InstallOrUpdateAsync(_serviceProvider, Ncf.Core.Enums.InstallOrUpdate.Update);
-                        SenparcTrace.SendCustomLog("强制更新模块", $"完成：{forceUpdateModule}");
-
-                        return Content(_localizer["Install.ForceUpgrade.Completed", forceUpdateModule]);
-                    }
-                }
-
                 MultipleDatabaseType = DatabaseConfigurationFactory.Instance.Current.MultipleDatabaseType;
                 var adminUserInfo = await _accountInfoService.GetObjectAsync(z => true);//检查是否已初始化
-                if (adminUserInfo == null)
+                if (adminUserInfo != null)
                 {
-                    Console.WriteLine("需要初始化");
-                    throw new Exception(_localizer["Install.InitRequired"]);
+                    // A completed database can outlive the local marker file
+                    // (for example after a deployment or a copied App_Data
+                    // directory). Reconcile that state before deciding that the
+                    // installer should be hidden.
+                    if (!installFinished && IsSystemInitialized())
+                    {
+                        SiteConfig.IsInstalling = false;
+                        SiteConfig.SetInstallFinished();
+                        return new RedirectResult("/");
+                    }
+
+                    SenparcTrace.SendCustomLog("风险提示", "Install 被访问，已返回 404 进行混淆。如果您已经确保完成项目初始化，建议移除 Senparc.Xncf.Install 模块");
+                    return new StatusCodeResult(404);
                 }
 
-                // try
-                // {
-                //     if (Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.EnableMultiTenant)
-                //     {
-                //         //判断是不是从新的域名进入
-                //         RequestTenantInfo currentRequestTenantInfo = MultiTenantHelper.TryGetAndCheckRequestTenantInfo(_serviceProvider, null);
-                //     }
-                // }
-                // catch (Exception)
-                // {
-                //     throw;
-                // }
-
-            }
-            catch (Exception)
-            {
                 SiteConfig.IsInstalling = true;
-
-                Console.WriteLine("开始初始化");
-
-                //var database = _accountInfoService.BaseClientRepository.BaseDB.BaseDataContext.Database;
-                //var created = await database.EnsureCreatedAsync();//尝试创建数据库
-
-                //await Console.Out.WriteLineAsync("尝试创建数据库：" + (created ? "成功创建" : "已存在，无需创建"));
-
-                //初始化页面显示的配置项的默认值
+                Console.WriteLine("需要初始化，开始加载安装选项");
                 var result = await _installAppService.GetInstallOptionsAsync();
                 SystemName = result.Data.SystemName;
                 AdminUserName = result.Data.AdminUserName;
                 DbConnectionString = result.Data.DbConnectionString;
                 NeedModelList = result.Data.NeedModelList;
-
                 return Page();
             }
+            catch (Exception)
+            {
+                // Preserve the original installation entry behavior: an
+                // unavailable or not-yet-created database is an expected state
+                // while the installer is being opened. The POST operation still
+                // has to create/update the database successfully.
+                SiteConfig.IsInstalling = true;
+                Console.WriteLine("开始初始化");
 
-            //base.Response.StatusCode = 404;
-
-            SenparcTrace.SendCustomLog("风险提示", "Install 被访问，已返回 404 进行混淆。如果您已经确保完成项目初始化，建议移除 Senparc.Xncf.Install 模块");
-
-            return new StatusCodeResult(404);//已经安装完毕，且存在管理员则不进行安装
+                var result = await _installAppService.GetInstallOptionsAsync();
+                SystemName = result.Data.SystemName;
+                AdminUserName = result.Data.AdminUserName;
+                DbConnectionString = result.Data.DbConnectionString;
+                NeedModelList = result.Data.NeedModelList;
+                return Page();
+            }
         }
 
         public async Task<IActionResult> OnPostAsync([FromBody] InstallRequestDto installRequestDto)
         {
+            if (!SiteConfig.IsInstalling || installRequestDto == null)
+            {
+                return new StatusCodeResult(404);
+            }
+
+            try
+            {
+                if (await _accountInfoService.GetObjectAsync(z => true) != null)
+                {
+                    SiteConfig.IsInstalling = false;
+                    return new StatusCodeResult(404);
+                }
+            }
+            catch (Exception ex) when (InstallDatabaseState.IsDatabaseUnavailableForInstallation(ex))
+            {
+                // InstallerService creates/updates the schema before its guarded
+                // re-check. A missing schema or unavailable SQL Server target
+                // therefore remains a valid first-install request.
+            }
+            catch (Exception ex)
+            {
+                SiteConfig.IsInstalling = false;
+                SenparcTrace.BaseExceptionLog(ex);
+                return StatusCode(StatusCodes.Status503ServiceUnavailable);
+            }
+
             //开始安装
             var result = await _installAppService.InstallAsync(installRequestDto);
             if (result.Success != true)
@@ -209,6 +237,18 @@ namespace Senparc.Xncf.Instraller.Pages
         public IActionResult OnGetDefaultOptions()
         {
             return new JsonResult(_installAppService.GetInstallOptionsAsync());
+        }
+
+        private bool IsSystemInitialized()
+        {
+            try
+            {
+                return _serviceProvider.GetService<FullSystemConfigCache>()?.Data != null;
+            }
+            catch (NcfUninstallException)
+            {
+                return false;
+            }
         }
     }
 }

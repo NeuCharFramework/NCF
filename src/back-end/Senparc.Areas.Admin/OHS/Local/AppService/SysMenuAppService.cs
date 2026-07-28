@@ -1,4 +1,18 @@
-﻿using Senparc.Areas.Admin.OHS.Local.PL;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：SysMenuAppService.cs
+    文件功能描述：SysMenuAppService.cs 相关实现
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260729
+    修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
+----------------------------------------------------------------*/
+
+using Senparc.Areas.Admin.OHS.Local.PL;
 using Senparc.CO2NET;
 using Senparc.Ncf.Core.AppServices;
 using Senparc.Ncf.Core.Models.DataBaseModel;
@@ -14,7 +28,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
     /// <summary>
     /// 菜单表
     /// </summary>
-    [BackendJwtAuthorize]
+    [BackendJwtAuthorize(BackendJwtAuthorizeAttribute.SuperAdminPolicyName)]
     public class SysMenuAppService : AppServiceBase
     {
         private readonly SysMenuService _sysMenuService;

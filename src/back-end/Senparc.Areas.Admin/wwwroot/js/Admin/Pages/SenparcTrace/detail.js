@@ -184,10 +184,25 @@
         },
         // 高亮显示关键字
         highlightKeyword: function(content) {
-            if (!this.filterConditions.keyword) return content;
-            const keyword = this.filterConditions.keyword;
-            return content.replace(new RegExp(keyword, 'gi'), 
-                match => `<span class="highlight-keyword">${match}</span>`);
+            const source = String(content ?? '');
+            const keyword = String(this.filterConditions.keyword ?? '');
+            if (!keyword) return this.escapeHtml(source);
+
+            const regex = new RegExp(keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+            let html = '';
+            let lastIndex = 0;
+            source.replace(regex, (match, offset) => {
+                html += this.escapeHtml(source.slice(lastIndex, offset));
+                html += `<span class="highlight-keyword">${this.escapeHtml(match)}</span>`;
+                lastIndex = offset + match.length;
+                return match;
+            });
+            return html + this.escapeHtml(source.slice(lastIndex));
+        },
+        escapeHtml: function(content) {
+            const div = document.createElement('div');
+            div.textContent = String(content ?? '');
+            return div.innerHTML;
         }
     }
 });

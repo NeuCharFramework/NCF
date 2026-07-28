@@ -1,3 +1,17 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：Permission.cshtml.cs
+    文件功能描述：Permission.cshtml.cs 相关实现
+    
+    
+    创建标识：Senparc - 20200724
+    
+    修改标识：Senparc - 20260729
+    修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
+----------------------------------------------------------------*/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +23,7 @@ using Senparc.Ncf.Service;
 
 namespace Senparc.Areas.Admin.Areas.Admin
 {
-    [IgnoreAntiforgeryToken]
+    [AutoValidateAntiforgeryToken]
     public class PagesRolePermissionModel : BaseAdminPageModel
     {
         private readonly SysRoleService _sysRoleService;

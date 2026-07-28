@@ -19,6 +19,9 @@
     修改标识：Senparc - 20260724
     修改描述：v0.1.0 增强后台模块批量更新并完善多语言管理界面
 
+    修改标识：Senparc - 20260729
+    修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Authentication;
@@ -33,6 +36,7 @@ using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
 using Senparc.Areas.Admin.Domain.Models.Dto;
 using Senparc.Areas.Admin.Domain.Services;
 using Senparc.Ncf.Core.Config;
+using Senparc.Ncf.Core.Authorization;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Log;
@@ -198,8 +202,14 @@ namespace Senparc.Areas.Admin.Domain
             {
                 new Claim(ClaimTypes.Name, userInfo.UserName),
                 new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString(), ClaimValueTypes.Integer),
-                new Claim("AdminMember", "1", ClaimValueTypes.String)
+                new Claim(NcfAuthorizationPolicyNames.AdminMemberClaim, "1", ClaimValueTypes.String)
             };
+
+            var roleCodes = await GetRoleCodesAsync(userInfo.Id);
+            if (roleCodes.Count > 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, string.Join(",", roleCodes), ClaimValueTypes.String));
+            }
 
             if (userInfo.TenantId > 0)
             {
@@ -435,7 +445,9 @@ namespace Senparc.Areas.Admin.Domain
                 {
                     throw new NcfExceptionBase("用户名不存在或密码不正确！");
                 }
-                token = GenerateToken(adminUserInfo.Id, out var tokenExpiresUtc);
+                var tokenResult = await GenerateTokenAsync(adminUserInfo.Id);
+                token = tokenResult.Token;
+                var tokenExpiresUtc = tokenResult.ExpiresUtc;
                 var roles = await _serviceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == adminUserInfo.Id);
                 var roleCodes = roles
                     .Select(o => o.RoleCode).Distinct().ToList();
@@ -484,19 +496,54 @@ namespace Senparc.Areas.Admin.Domain
         /// <returns></returns>
         public string GenerateToken(int memberId, out DateTimeOffset expiresUtc, int? expiresMinutes = null)
         {
+            return GenerateToken(memberId, out expiresUtc, expiresMinutes, Array.Empty<string>());
+        }
+
+        public async Task<(string Token, DateTimeOffset ExpiresUtc)> GenerateTokenAsync(int memberId, int? expiresMinutes = null)
+        {
+            var roleCodes = await GetRoleCodesAsync(memberId);
+            var token = GenerateToken(memberId, out var expiresUtc, expiresMinutes, roleCodes);
+            return (token, expiresUtc);
+        }
+
+        private async Task<List<string>> GetRoleCodesAsync(int memberId)
+        {
+            var roleService = _serviceProvider.GetService<SysRoleAdminUserInfoService>();
+            if (roleService == null)
+            {
+                return new List<string>();
+            }
+
+            var roles = await roleService.GetFullListAsync(o => o.AccountId == memberId);
+            return roles
+                .Select(o => o.RoleCode)
+                .Where(o => !string.IsNullOrWhiteSpace(o))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+
+        private string GenerateToken(int memberId, out DateTimeOffset expiresUtc, int? expiresMinutes, IEnumerable<string> roleCodes)
+        {
             var options = _serviceProvider.GetService<IOptionsSnapshot<JwtSettings>>();
             var jwtSettings = options.Get(JwtSettings.Position_Backend);
             var effectiveExpireMinutes = NormalizeExpireMinutes(expiresMinutes ?? GetBackendJwtExpireMinutes(), AdminAuthConfig.DefaultBackendJwtExpireMinutes);
             expiresUtc = DateTimeOffset.UtcNow.AddMinutes(effectiveExpireMinutes);
             byte[] keyBytes = System.Text.Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, memberId.ToString(), ClaimValueTypes.Integer),
+                new Claim(NcfAuthorizationPolicyNames.AdminMemberClaim, "1", ClaimValueTypes.String)
+            };
+            var roleValue = string.Join(",", roleCodes ?? Array.Empty<string>());
+            if (!string.IsNullOrWhiteSpace(roleValue))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, roleValue, ClaimValueTypes.String));
+            }
+
             SecurityTokenDescriptor securityToken = new SecurityTokenDescriptor()
             {
-                Subject = new System.Security.Claims.ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, memberId.ToString(), ClaimValueTypes.Integer),
-                    new Claim("AdminMember", "1", ClaimValueTypes.String)
-                }),
+                Subject = new System.Security.Claims.ClaimsIdentity(claims),
                 Audience = jwtSettings.Audience,
                 Issuer = jwtSettings.Issuer,
                 Expires = expiresUtc.UtcDateTime,

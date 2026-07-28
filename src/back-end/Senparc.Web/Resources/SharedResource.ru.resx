@@ -165,4 +165,7 @@
   <data name="Home.InstallDocsConfirm" xml:space="preserve"><value>Модуль автономной документации не установлен. Установить его сейчас?</value></data>
   <data name="Home.OpenDocsConfirm" xml:space="preserve"><value>{0} Обновите страницу, чтобы увидеть ссылку на документацию. Открыть документацию сейчас?</value></data>
   <data name="Home.RequestFailed" xml:space="preserve"><value>Не удалось выполнить запрос. Повторите попытку позже.</value></data>
+  <data name="Home.InstallRequired.Title" xml:space="preserve"><value>Инициализация NeuCharFramework</value></data>
+  <data name="Home.InstallRequired.Message" xml:space="preserve"><value>NeuCharFramework еще не инициализирован. Страница инициализации скоро откроется...</value></data>
+  <data name="Home.InstallRequired.Link" xml:space="preserve"><value>Нажмите здесь, если страница не открывается автоматически</value></data>
 </root>

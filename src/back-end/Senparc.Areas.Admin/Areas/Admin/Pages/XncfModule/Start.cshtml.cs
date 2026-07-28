@@ -1,3 +1,17 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：Start.cshtml.cs
+    文件功能描述：Start.cshtml.cs 相关实现
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260729
+    修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
+----------------------------------------------------------------*/
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Areas.Admin.OHS.Local.PL;
@@ -23,11 +37,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
+using Senparc.Areas.Admin;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
     [IgnoreAuth]
-    public class XncfModuleStartModel(IServiceProvider serviceProvider, XncfModuleService xncfModuleService, 
+    [AdminAuthorize(BackendJwtAuthorizeAttribute.SuperAdminPolicyName)]
+    public class XncfModuleStartModel(IServiceProvider serviceProvider, XncfModuleService xncfModuleService,
         SysMenuService sysMenuService) : BaseAdminPageModel(serviceProvider)
     {
         private readonly SysMenuService _sysMenuService = sysMenuService;

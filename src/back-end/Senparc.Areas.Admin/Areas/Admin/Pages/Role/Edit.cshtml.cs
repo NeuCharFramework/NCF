@@ -1,3 +1,17 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：Edit.cshtml.cs
+    文件功能描述：Edit.cshtml.cs 相关实现
+    
+    
+    创建标识：Senparc - 20241028
+    
+    修改标识：Senparc - 20260729
+    修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
+----------------------------------------------------------------*/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +26,7 @@ using Senparc.Xncf.SystemCore.Domain.Database;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
-    [IgnoreAntiforgeryToken]
+    [AutoValidateAntiforgeryToken]
     public class RoleEditModel : BaseAdminPageModel
     {
         private readonly SysRoleService _sysRoleService;

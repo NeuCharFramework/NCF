@@ -10,6 +10,9 @@
     修改标识：Senparc - 20260702
     修改描述：v0.11.0-preview2 同步 master/main 基线范围内改动并完成递归依赖版本处理
 
+    修改标识：Senparc - 20260729
+    修改描述：v0.4.1 加强安装状态校验并收紧安装辅助路由
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Builder;
@@ -86,7 +89,12 @@ app.UseXncfModules(registerService, senparcCoreSetting.Value)
 //    }
 //}
 
-app.Map("/TestInstall", () => ("this is a text from Dapr Container." + SystemTime.Now));
+// These routes are local Aspire/Dapr smoke-test helpers. Do not publish them from
+// the installer host in a non-development environment.
+if (app.Environment.IsDevelopment())
+{
+    app.Map("/TestInstall", () => ("this is a text from Dapr Container." + SystemTime.Now));
+}
 
 //app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -101,33 +109,36 @@ app.MapControllers();
 
 app.MapDefaultEndpoints();
 
-app.MapGet("/aspire-test1", async httpContext =>
+if (app.Environment.IsDevelopment())
 {
-    var xncfName = "Senparc.Xncf.Accounts";//Assembly name / catalog
+    app.MapGet("/aspire-test1", async httpContext =>
+    {
+        var xncfName = "Senparc.Xncf.Accounts";//Assembly name / catalog
 
-    var apiClientHelper = httpContext.RequestServices.GetService<ApiClientHelper>();
-    var apiClient = apiClientHelper.ConnectApiClient(NcfWebApiHelper.GetXncfProjectName(xncfName));
+        var apiClientHelper = httpContext.RequestServices.GetService<ApiClientHelper>();
+        var apiClient = apiClientHelper.ConnectApiClient(NcfWebApiHelper.GetXncfProjectName(xncfName));
 
-    var apiBindName = "AccountAppService";
-    var methodName = "KeepAlive";
-    var apiPath = NcfWebApiHelper.GetNcfApiClientPath(xncfName, apiBindName, methodName, null);
-    Console.WriteLine("/test url: " + apiPath);
-    //var apiPath = $"/api/{keyName}/{apiBindGroupNamePath}/{apiNamePath}{showStaticApiState}";
-    var url = apiPath;
-    var result2 = await RequestUtility.HttpGetAsync(null, url, Encoding.UTF8, apiClient);
+        var apiBindName = "AccountAppService";
+        var methodName = "KeepAlive";
+        var apiPath = NcfWebApiHelper.GetNcfApiClientPath(xncfName, apiBindName, methodName, null);
+        Console.WriteLine("/test url: " + apiPath);
+        //var apiPath = $"/api/{keyName}/{apiBindGroupNamePath}/{apiNamePath}{showStaticApiState}";
+        var url = apiPath;
+        var result2 = await RequestUtility.HttpGetAsync(null, url, Encoding.UTF8, apiClient);
 
-    await httpContext.Response.WriteAsync(result2);
-});
+        await httpContext.Response.WriteAsync(result2);
+    });
 
-app.MapGet("/aspire-test2", async httpContext =>
-{
-    var xncfName = "Senparc.Xncf.Installer";//Assembly name / catalog
-    var apiClientHelper = httpContext.RequestServices.GetService<ApiClientHelper>();
-    var apiClient = apiClientHelper.ConnectApiClient(NcfWebApiHelper.GetXncfProjectName(xncfName));
-    var url = "/TestInstall";
-    var result2 = await RequestUtility.HttpGetAsync(null, url, Encoding.UTF8, apiClient);
+    app.MapGet("/aspire-test2", async httpContext =>
+    {
+        var xncfName = "Senparc.Xncf.Installer";//Assembly name / catalog
+        var apiClientHelper = httpContext.RequestServices.GetService<ApiClientHelper>();
+        var apiClient = apiClientHelper.ConnectApiClient(NcfWebApiHelper.GetXncfProjectName(xncfName));
+        var url = "/TestInstall";
+        var result2 = await RequestUtility.HttpGetAsync(null, url, Encoding.UTF8, apiClient);
 
-    await httpContext.Response.WriteAsync(result2);
-});
+        await httpContext.Response.WriteAsync(result2);
+    });
+}
 
 app.Run();
