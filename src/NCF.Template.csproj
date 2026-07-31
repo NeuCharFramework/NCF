@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.35.0</PackageVersion>
+		<PackageVersion>0.36.0</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -109,6 +109,7 @@
 			v0.33.0 支持最新版本 Senparc.AI.AgentKernel 以及 Microsoft Agent Framework
 			v0.34.0 升级基础库，使用最新 CO2NET 基础库、增加 DesktopBridge 模块
 			v0.35.0 更新基础库，增强安全性
+			v0.36.0 更新 DesktopBridge，支持 Token 确认远程连接
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
