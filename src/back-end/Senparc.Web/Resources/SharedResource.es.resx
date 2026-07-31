@@ -168,4 +168,16 @@
   <data name="Home.InstallRequired.Title" xml:space="preserve"><value>Inicializar NeuCharFramework</value></data>
   <data name="Home.InstallRequired.Message" xml:space="preserve"><value>NeuCharFramework aún no se ha inicializado. La página de inicialización se abrirá en unos instantes...</value></data>
   <data name="Home.InstallRequired.Link" xml:space="preserve"><value>Haga clic aquí si la página no se abre automáticamente</value></data>
+  <data name="Error.Title" xml:space="preserve"><value>Error</value></data>
+  <data name="Error.RequestFailed" xml:space="preserve"><value>Se produjo un error al procesar la solicitud.</value></data>
+  <data name="Error.RequestId" xml:space="preserve"><value>ID de solicitud</value></data>
+  <data name="Error.DevelopmentMode" xml:space="preserve"><value>Modo de desarrollo</value></data>
+  <data name="Error.DevelopmentDetails" xml:space="preserve"><value>Cambiar al entorno Development muestra información detallada sobre este error.</value></data>
+  <data name="Error.DevelopmentWarning" xml:space="preserve"><value>El entorno Development no debe habilitarse en aplicaciones desplegadas.</value></data>
+  <data name="Error.DevelopmentInstructions" xml:space="preserve"><value>Puede exponer información confidencial de las excepciones. Para depuración local, establece ASPNETCORE_ENVIRONMENT en Development y reinicia la aplicación.</value></data>
+  <data name="Privacy.Title" xml:space="preserve"><value>Política de privacidad</value></data>
+  <data name="Privacy.Description" xml:space="preserve"><value>Usa esta página para describir la política de privacidad del sitio web.</value></data>
+  <data name="Cookie.Summary" xml:space="preserve"><value>Usamos cookies para mejorar la experiencia del sitio. Consulta la política de privacidad para obtener más información.</value></data>
+  <data name="Cookie.LearnMore" xml:space="preserve"><value>Más información</value></data>
+  <data name="Cookie.Accept" xml:space="preserve"><value>Aceptar</value></data>
 </root>

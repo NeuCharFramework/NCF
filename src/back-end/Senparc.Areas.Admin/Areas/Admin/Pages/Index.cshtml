@@ -2,7 +2,7 @@
 
 @model Senparc.Areas.Admin.Pages.IndexModel
 @{
-    ViewData["Title"] = "管理员后台首页";
+    ViewData["Title"] = AR["Admin.Title"];
     Layout = "_Layout_Vue";
 }
 @section style {
@@ -466,7 +466,7 @@
 <div id="home-header">
     <el-container>
         <el-header class="module-header">
-            <span class="start-title"><span class="module-header-v">NeuCharFramework 管理员后台</span></span>
+            <span class="start-title"><span class="module-header-v">@AR["Admin.Home.Header"]</span></span>
         </el-header>
         <el-main>
             <el-row :gutter="20">
@@ -481,7 +481,7 @@
                                     <div class="icon">
                                         <i class="fa fa-caret-square-o-right"></i>
                                     </div>
-                                    <p class="tit">已安装模块</p>
+                                    <p class="tit">@AR["Admin.Home.InstalledModules"]</p>
                                 </div>
                             </a>
                         </el-col>
@@ -492,7 +492,7 @@
                                     <div class="icon">
                                         <i class="fa fa-comments-o"></i>
                                     </div>
-                                    <p class="tit">待更新模块</p>
+                                    <p class="tit">@AR["Admin.Home.PendingUpdates"]</p>
                                 </div>
                             </a>
                         </el-col>
@@ -504,7 +504,7 @@
                                     <div class="icon">
                                         <i class="fa fa-sort-amount-desc"></i>
                                     </div>
-                                    <p class="tit">发现新模块</p>
+                                    <p class="tit">@AR["Admin.Home.NewModules"]</p>
                                 </div>
                             </a>
                         </el-col>
@@ -515,7 +515,7 @@
                                     <div class="icon">
                                         <i class="fa fa-check-square-o"></i>
                                     </div>
-                                    <p class="tit">模块异常</p>
+                                    <p class="tit">@AR["Admin.Home.ModuleErrors"]</p>
                                 </div>
                             </a>
                         </el-col>
@@ -552,9 +552,9 @@
                 </div>
                 <div class="chat-entrance-content">
                     <h3 class="chat-entrance-title">
-                        <i class="fa fa-magic"></i> AI 智能助手
+                        <i class="fa fa-magic"></i> @AR["Admin.Home.AiTitle"]
                     </h3>
-                    <p class="chat-entrance-subtitle">向我提问，我将帮助您更高效地管理系统</p>
+                    <p class="chat-entrance-subtitle">@AR["Admin.Home.AiSubtitle"]</p>
                 </div>
             </div>
             
@@ -562,7 +562,7 @@
                 <el-input
                     type="textarea"
                     v-model="chatInputText"
-                    placeholder="输入您的问题，例如：如何配置系统参数？&#10;&#10;提示：按 Ctrl+Enter 或 Cmd+Enter 发送消息"
+                    placeholder="@AR["Admin.Home.AiPlaceholder"]"
                     :rows="4"
                     :autosize="{ minRows: 4, maxRows: 8 }"
                     @@keydown.native="handleLauncherInputKeydown"
@@ -577,22 +577,22 @@
                     :disabled="!chatInputText || chatInputText.trim().length === 0"
                     :loading="isCreatingSession"
                     class="chat-send-button">
-                    开始对话
+                    @AR["Admin.Home.StartConversation"]
                 </el-button>
             </div>
 
             <div class="chat-entrance-tips">
-                <span class="tip-item"><i class="fa fa-lightbulb-o"></i> 支持多轮对话</span>
-                <span class="tip-item"><i class="fa fa-cube"></i> 可添加模块作为对话上下文</span>
-                <span class="tip-item"><i class="fa fa-history"></i> 自动保存历史记录</span>
+                <span class="tip-item"><i class="fa fa-lightbulb-o"></i> @AR["Admin.Home.SupportMultiTurn"]</span>
+                <span class="tip-item"><i class="fa fa-cube"></i> @AR["Admin.Home.AddModulesContext"]</span>
+                <span class="tip-item"><i class="fa fa-history"></i> @AR["Admin.Home.SaveHistory"]</span>
             </div>
 
             <div class="chat-module-picker">
                 <div class="chat-module-picker-header">
-                    <span class="chat-module-picker-title">引用模块（可选）</span>
+                    <span class="chat-module-picker-title">@AR["Admin.Home.ReferenceModules"]</span>
                     <div class="chat-module-picker-actions">
-                        <el-button size="mini" type="primary" icon="el-icon-plus" @@click="openModuleSelector">添加引用模块</el-button>
-                        <el-button size="mini" @@click="clearSelectedModules" v-if="selectedModules.length > 0">清空</el-button>
+                        <el-button size="mini" type="primary" icon="el-icon-plus" @@click="openModuleSelector">@AR["Admin.Home.AddReferenceModule"]</el-button>
+                        <el-button size="mini" @@click="clearSelectedModules" v-if="selectedModules.length > 0">@AR["Admin.Home.Clear"]</el-button>
                     </div>
                 </div>
 
@@ -607,7 +607,7 @@
                         <i :class="module.icon"></i> {{module.name}}
                     </el-tag>
                 </div>
-                <div v-else class="chat-module-selected-empty">点击“添加引用模块”可选择多个模块作为上下文</div>
+                <div v-else class="chat-module-selected-empty">@AR["Admin.Home.EmptyReference"]</div>
             </div>
 
             @await Html.PartialAsync("~/Areas/Admin/Pages/Shared/_ChatModuleSelectorDialog.cshtml")
@@ -620,7 +620,7 @@
     <el-row>
         <el-card class="box-card">
             <div slot="header" class="clearfix">
-                <span><i class="fa fa-cubes"></i> 功能模块</span>
+                <span><i class="fa fa-cubes"></i> @AR["Admin.Home.FeatureModules"]</span>
             </div>
             <div id="xncf-modules-area">
                 <el-row :gutter="20">
@@ -634,7 +634,7 @@
                                     <el-tooltip v-if="item.hasNewVersion"
                                                 class="version-tooltip"
                                                 effect="light"
-                                                :content="`当前版本: v${item.version} -> 可更新至: v${item.newVersion}`">
+                                                :content="ncfT('Admin.Home.CurrentVersion', item.version) + ' -> ' + ncfT('Admin.Home.UpdateVersion', item.newVersion)">
                                         <i class="fa fa-level-up version-upgrade-icon"></i>
                                     </el-tooltip>
                                 </span>
@@ -650,7 +650,7 @@
                                                   :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
                                                   max-height="250"
                                                   :show-header="false">
-                                            <el-table-column prop="name" label="菜单名称" width="260">
+                                            <el-table-column prop="name" label="@AR["Admin.Home.MenuName"]" width="260">
                                                 <template slot-scope="scope">
                                                     <a :href="scope.row.url">{{scope.row.name}}</a>
                                                 </template>
@@ -663,7 +663,7 @@
                             <a v-bind:href="'/Admin/XncfModule/Start/?uid='+item.uid">
                                 <div class="component-item">
                                     <i :class="[item.icon, 'icon']"></i>
-                                    <div class="description">{{item.description || '暂无描述'}}</div>
+                                    <div class="description">{{item.description || ncfT('Admin.Home.NoDescription')}}</div>
                                 </div>
                             </a>
                         </el-card>

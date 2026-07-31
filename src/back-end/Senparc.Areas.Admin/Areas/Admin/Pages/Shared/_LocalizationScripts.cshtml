@@ -4,6 +4,12 @@
         .GroupBy(item => item.Name)
         .ToDictionary(group => group.Key, group => group.First().Value);
     var translationsJson = JsonSerializer.Serialize(translations);
+    var sourceTranslations = AR.GetAllStrings(includeParentCultures: true)
+        .Where(item => item.Name.StartsWith("Frontend.", StringComparison.Ordinal))
+        .Select(item => item.Value.Split(new[] { "||" }, 2, StringSplitOptions.None))
+        .Where(parts => parts.Length == 2)
+        .GroupBy(parts => parts[0])
+        .ToDictionary(group => group.Key, group => group.First()[1]);
 }
 <script>
     window.ncfI18n = Object.assign(window.ncfI18n || {}, @Html.Raw(translationsJson));
@@ -22,4 +28,135 @@
         window.location.href = '/api/Language/Set?culture=' + encodeURIComponent(culture)
             + '&returnUrl=' + encodeURIComponent(returnUrl);
     };
+
+    // Legacy Vue pages sometimes use localized display text as business values.
+    // Translate only the rendered display layer so those values and API contracts stay unchanged.
+    window.ncfRegisterSourceTranslations = window.ncfRegisterSourceTranslations || (function () {
+        var sourceMap = {};
+        var patterns = [];
+        var observer;
+        var translatedAttributes = ['placeholder', 'title', 'aria-label', 'alt'];
+
+        function escapeRegExp(value) {
+            return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function rebuildPatterns() {
+            patterns = Object.keys(sourceMap)
+                .filter(function (source) { return /\{\d+\}/.test(source); })
+                .map(function (source) {
+                    var indexes = [];
+                    var parts = source.split(/\{\d+\}/);
+                    source.replace(/\{(\d+)\}/g, function (_, index) {
+                        indexes.push(Number(index));
+                        return _;
+                    });
+                    var expression = '^' + parts.map(escapeRegExp).join('(.+?)') + '$';
+                    return { regex: new RegExp(expression), indexes: indexes, target: sourceMap[source] };
+                });
+        }
+
+        function translateValue(value) {
+            if (!value || typeof value !== 'string') return value;
+            var leading = value.match(/^\s*/)[0];
+            var trailing = value.match(/\s*$/)[0];
+            var text = value.trim();
+            if (!text) return value;
+            if (Object.prototype.hasOwnProperty.call(sourceMap, text)) {
+                return leading + sourceMap[text] + trailing;
+            }
+            for (var i = 0; i < patterns.length; i++) {
+                var match = text.match(patterns[i].regex);
+                if (!match) continue;
+                var translated = patterns[i].target.replace(/\{(\d+)\}/g, function (token, index) {
+                    var captureIndex = patterns[i].indexes.indexOf(Number(index));
+                    return captureIndex >= 0 ? match[captureIndex + 1] : token;
+                });
+                return leading + translated + trailing;
+            }
+            return value;
+        }
+
+        function shouldSkip(element) {
+            return !element || element.closest('script, style, textarea, pre, code, [data-i18n-skip]');
+        }
+
+        function translateElement(root) {
+            if (!root) return;
+            if (root.nodeType === Node.TEXT_NODE) {
+                if (!shouldSkip(root.parentElement)) {
+                    var translatedText = translateValue(root.nodeValue);
+                    if (translatedText !== root.nodeValue) root.nodeValue = translatedText;
+                }
+                return;
+            }
+            if (root.nodeType !== Node.ELEMENT_NODE || shouldSkip(root)) return;
+            translatedAttributes.forEach(function (attribute) {
+                if (root.hasAttribute(attribute)) {
+                    var currentValue = root.getAttribute(attribute);
+                    var translatedValue = translateValue(currentValue);
+                    if (translatedValue !== currentValue) root.setAttribute(attribute, translatedValue);
+                }
+            });
+            var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+            var node;
+            while ((node = walker.nextNode())) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    if (!shouldSkip(node.parentElement)) {
+                        var translatedNodeText = translateValue(node.nodeValue);
+                        if (translatedNodeText !== node.nodeValue) node.nodeValue = translatedNodeText;
+                    }
+                } else if (!shouldSkip(node)) {
+                    translatedAttributes.forEach(function (attribute) {
+                        if (node.hasAttribute(attribute)) {
+                            var nodeAttributeValue = node.getAttribute(attribute);
+                            var translatedAttributeValue = translateValue(nodeAttributeValue);
+                            if (translatedAttributeValue !== nodeAttributeValue) {
+                                node.setAttribute(attribute, translatedAttributeValue);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        function apply() {
+            if (!document.body) return;
+            translateElement(document.body);
+            document.title = translateValue(document.title);
+            if (!observer) {
+                observer = new MutationObserver(function (mutations) {
+                    mutations.forEach(function (mutation) {
+                        if (mutation.type === 'characterData') translateElement(mutation.target);
+                        if (mutation.type === 'attributes') translateElement(mutation.target);
+                        mutation.addedNodes.forEach(translateElement);
+                    });
+                });
+                observer.observe(document.body, {
+                    subtree: true,
+                    childList: true,
+                    characterData: true,
+                    attributes: true,
+                    attributeFilter: translatedAttributes
+                });
+            }
+        }
+
+        window.ncfST = function (source) {
+            var args = Array.prototype.slice.call(arguments, 1);
+            var translated = Object.prototype.hasOwnProperty.call(sourceMap, source) ? sourceMap[source] : source;
+            return translated.replace(/\{(\d+)\}/g, function (token, index) {
+                return typeof args[index] === 'undefined' ? token : args[index];
+            });
+        };
+
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+
+        return function (translations) {
+            sourceMap = Object.assign(sourceMap, translations || {});
+            rebuildPatterns();
+            apply();
+        };
+    })();
+    window.ncfRegisterSourceTranslations(@Html.Raw(JsonSerializer.Serialize(sourceTranslations)));
 </script>

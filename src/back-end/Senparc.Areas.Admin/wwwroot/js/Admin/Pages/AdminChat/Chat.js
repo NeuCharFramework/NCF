@@ -58,11 +58,11 @@ var chatApp = new Vue({
           this.aiKernelAvailable = !!response.data.data.aiKernelAvailable;
           this.aiModelOptions = response.data.data.models || [];
         } else {
-          this.aiModelOptions = [{ id: 0, name: '系统级 SenparcAiSetting', description: '使用 appsettings.json 中当前生效的默认 Chat 配置', isDefault: true }];
+          this.aiModelOptions = [{ id: 0, name: ncfT('AdminChat.FallbackModelName'), description: ncfT('AdminChat.FallbackModelDescription'), isDefault: true }];
         }
       } catch (error) {
         console.error('加载 AI 模型失败:', error);
-        this.aiModelOptions = [{ id: 0, name: '系统级 SenparcAiSetting', description: '使用 appsettings.json 中当前生效的默认 Chat 配置', isDefault: true }];
+        this.aiModelOptions = [{ id: 0, name: ncfT('AdminChat.FallbackModelName'), description: ncfT('AdminChat.FallbackModelDescription'), isDefault: true }];
       } finally {
         this.loadingAiModelOptions = false;
       }
@@ -94,7 +94,7 @@ var chatApp = new Vue({
         }
       } catch (error) {
         console.error('加载会话列表异常:', error);
-        this.$message.error('加载会话列表失败');
+        this.$message.error(ncfT('AdminChat.LoadSessionFailed'));
       } finally {
         this.loadingSessions = false;
       }
@@ -121,11 +121,11 @@ var chatApp = new Vue({
           });
         } else {
           console.error('加载会话详情失败:', response.data.errorMessage);
-          this.$message.error('加载会话详情失败');
+          this.$message.error(ncfT('AdminChat.LoadDetailFailed'));
         }
       } catch (error) {
         console.error('加载会话详情异常:', error);
-        this.$message.error('加载会话详情失败');
+        this.$message.error(ncfT('AdminChat.LoadDetailFailed'));
       } finally {
         this.loadingMessages = false;
       }
@@ -133,12 +133,12 @@ var chatApp = new Vue({
 
     async sendMessage() {
       if (!this.inputMessage || this.inputMessage.trim().length === 0) {
-        this.$message.warning('请输入消息内容');
+        this.$message.warning(ncfT('AdminChat.InputRequired'));
         return;
       }
 
       if (!this.currentSessionId) {
-        this.$message.error('请先选择或创建会话');
+        this.$message.error(ncfT('AdminChat.SessionRequired'));
         return;
       }
 
@@ -190,13 +190,13 @@ var chatApp = new Vue({
           });
         } else {
           console.error('发送消息失败:', response.data.errorMessage);
-          this.$message.error(response.data.errorMessage || '发送消息失败');
+          this.$message.error(response.data.errorMessage || ncfT('AdminChat.SendFailed'));
           this.messageList = this.messageList.filter((item) => item.id !== tempMessageId);
           this.inputMessage = messageContent;
         }
       } catch (error) {
         console.error('发送消息异常:', error);
-        this.$message.error('发送消息失败，请稍后重试');
+        this.$message.error(ncfT('AdminChat.SendFailedRetry'));
         this.messageList = this.messageList.filter((item) => item.id !== tempMessageId);
         this.inputMessage = messageContent;
       } finally {
@@ -214,13 +214,13 @@ var chatApp = new Vue({
           if (message) {
             message.userFeedback = feedbackType;
           }
-          this.$message.success('反馈成功');
+          this.$message.success(ncfT('AdminChat.SetFeedbackSuccess'));
         } else {
-          this.$message.error('反馈失败');
+          this.$message.error(ncfT('AdminChat.FeedbackFailed'));
         }
       } catch (error) {
         console.error('设置反馈异常:', error);
-        this.$message.error('反馈失败');
+        this.$message.error(ncfT('AdminChat.FeedbackFailed'));
       }
     },
 
@@ -286,7 +286,7 @@ var chatApp = new Vue({
       const selectedSet = new Set(this.selectedMessageIds);
       const selectedMessages = this.messageList.filter((m) => selectedSet.has(String(m.id)));
       if (selectedMessages.length === 0) {
-        this.$message.warning('请先选择要复制的消息');
+        this.$message.warning(ncfT('AdminChat.SelectMessages'));
         return;
       }
 
@@ -308,10 +308,10 @@ var chatApp = new Vue({
           document.body.removeChild(textarea);
         }
 
-        this.$message.success(`已复制 ${selectedMessages.length} 条消息`);
+        this.$message.success(ncfT('AdminChat.CopyCount', selectedMessages.length));
       } catch (error) {
         console.error('复制消息失败:', error);
-        this.$message.error('复制失败，请手动复制');
+        this.$message.error(ncfT('AdminChat.CopyFailed'));
       }
     },
 
@@ -321,14 +321,14 @@ var chatApp = new Vue({
         .filter((id) => Number.isInteger(id) && id > 0);
 
       if (selectedIds.length === 0) {
-        this.$message.warning('请先选择要删除的消息');
+        this.$message.warning(ncfT('AdminChat.SelectMessages'));
         return;
       }
 
       try {
-        await this.$confirm(`确定删除选中的 ${selectedIds.length} 条消息吗？此操作不可撤销。`, '删除确认', {
-          confirmButtonText: '删除',
-          cancelButtonText: '取消',
+        await this.$confirm(ncfT('AdminChat.DeleteMessagesConfirm', selectedIds.length), ncfT('AdminChat.DeleteConfirmTitle'), {
+          confirmButtonText: ncfT('Common.删除'),
+          cancelButtonText: ncfT('Common.取消'),
           type: 'warning'
         });
       } catch (error) {
@@ -342,28 +342,28 @@ var chatApp = new Vue({
           const selectedSet = new Set(selectedIds.map((id) => String(id)));
           this.messageList = this.messageList.filter((m) => !selectedSet.has(String(m.id)));
           this.clearMessageSelection();
-          this.$message.success(response.data.data || '删除成功');
+          this.$message.success(response.data.data || ncfT('AdminChat.DeleteMessagesSuccess'));
         } else {
-          this.$message.error((response.data && response.data.errorMessage) || '删除失败');
+          this.$message.error((response.data && response.data.errorMessage) || ncfT('AdminChat.DeleteFailed'));
         }
       } catch (error) {
         console.error('批量删除消息异常:', error);
-        this.$message.error('删除失败，请稍后重试');
+        this.$message.error(ncfT('AdminChat.DeleteFailedRetry'));
       }
     },
 
     async handleSessionCommand(command) {
       if (command.action === 'delete') {
-        this.$confirm('确定要删除这个会话吗？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$confirm(ncfT('AdminChat.DeleteConfirm'), ncfT('AdminChat.DeleteConfirmTitle'), {
+          confirmButtonText: ncfT('Common.确认'),
+          cancelButtonText: ncfT('Common.取消'),
           type: 'warning'
         }).then(async () => {
           try {
             const response = await service.delete(`/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.DeleteSessionAsync?sessionId=${command.id}`);
             
             if (response.data && response.data.success) {
-              this.$message.success('删除成功');
+              this.$message.success(ncfT('AdminChat.DeleteSessionSuccess'));
               
               if (this.currentSessionId === command.id) {
                 this.currentSessionId = 0;
@@ -374,11 +374,11 @@ var chatApp = new Vue({
               
               await this.loadSessionList();
             } else {
-              this.$message.error('删除失败');
+              this.$message.error(ncfT('AdminChat.DeleteFailed'));
             }
           } catch (error) {
             console.error('删除会话异常:', error);
-            this.$message.error('删除失败');
+            this.$message.error(ncfT('AdminChat.DeleteFailed'));
           }
         }).catch(() => {
           console.log('取消删除');
@@ -406,11 +406,11 @@ var chatApp = new Vue({
 
     getRoleTypeName(roleType) {
       const nameMap = {
-        0: '我',
-        1: 'AI 助手',
-        2: '系统'
+        0: ncfT('AdminChat.RoleMe'),
+        1: ncfT('AdminChat.RoleAssistant'),
+        2: ncfT('AdminChat.RoleSystem')
       };
-      return nameMap[roleType] || '未知';
+      return nameMap[roleType] || ncfT('AdminChat.RoleUnknown');
     },
 
     getMessageIcon(roleType) {
@@ -432,9 +432,9 @@ var chatApp = new Vue({
 
       return {
         uid,
-        name: (module && (module.displayName || module.menuName || module.moduleName)) || (matched && matched.name) || uid || '未命名模块',
+        name: (module && (module.displayName || module.menuName || module.moduleName)) || (matched && matched.name) || uid || ncfT('AdminChat.UnknownModule'),
         icon: (matched && matched.icon) || 'fa fa-cube',
-        description: (module && module.moduleDescription) || (matched && matched.description) || '暂无描述',
+        description: (module && module.moduleDescription) || (matched && matched.description) || ncfT('Admin.Home.NoDescription'),
         version: (module && module.moduleVersion) || (matched && matched.version) || '',
         menus: (matched && matched.menus) || [],
         functions: (matched && matched.functions) || []
@@ -452,10 +452,10 @@ var chatApp = new Vue({
         const diffHours = Math.floor(diffMs / 3600000);
         const diffDays = Math.floor(diffMs / 86400000);
 
-        if (diffMins < 1) return '刚刚';
-        if (diffMins < 60) return `${diffMins}分钟前`;
-        if (diffHours < 24) return `${diffHours}小时前`;
-        if (diffDays < 7) return `${diffDays}天前`;
+        if (diffMins < 1) return ncfT('AdminChat.JustNow');
+        if (diffMins < 60) return ncfT('AdminChat.MinutesAgo', diffMins);
+        if (diffHours < 24) return ncfT('AdminChat.HoursAgo', diffHours);
+        if (diffDays < 7) return ncfT('AdminChat.DaysAgo', diffDays);
         
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');

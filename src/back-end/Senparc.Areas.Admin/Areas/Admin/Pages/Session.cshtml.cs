@@ -23,6 +23,7 @@
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Senparc.Areas.Admin;
 using Senparc.Areas.Admin.Domain;
 using Senparc.Areas.Admin.Domain.Models.VD;
@@ -37,9 +38,10 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
     [ServiceFilter(typeof(AuthenticationResultFilterAttribute))]
     [AdminOrJwtAuthorize(NcfAuthorizationPolicyNames.AdminOnly)]
-    public class SessionModel(AdminUserInfoService adminUserInfoService) : BasePageModel
+    public class SessionModel(AdminUserInfoService adminUserInfoService, IStringLocalizer<AdminResource> localizer) : BasePageModel
     {
         private readonly AdminUserInfoService _adminUserInfoService = adminUserInfoService;
+        private readonly IStringLocalizer<AdminResource> _localizer = localizer;
 
         public async Task<IActionResult> OnGetStatusAsync()
         {
@@ -102,7 +104,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             {
                 if (!int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId) || userId <= 0)
                 {
-                    return Ok(false, "当前用户身份无效，无法续期 JWT。请重新登录。");
+                    return Ok(false, _localizer["Admin.Session.InvalidUser"].Value);
                 }
 
                 var tokenResult = await _adminUserInfoService.GenerateTokenAsync(userId, jwtExpireMinutes);

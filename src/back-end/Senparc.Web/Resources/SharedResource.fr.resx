@@ -168,4 +168,16 @@
   <data name="Home.InstallRequired.Title" xml:space="preserve"><value>Initialisation de NeuCharFramework</value></data>
   <data name="Home.InstallRequired.Message" xml:space="preserve"><value>NeuCharFramework n’est pas encore initialisé. La page d’initialisation va s’ouvrir dans un instant...</value></data>
   <data name="Home.InstallRequired.Link" xml:space="preserve"><value>Cliquez ici si la page ne s’ouvre pas automatiquement</value></data>
+  <data name="Error.Title" xml:space="preserve"><value>Erreur</value></data>
+  <data name="Error.RequestFailed" xml:space="preserve"><value>Une erreur s’est produite lors du traitement de votre demande.</value></data>
+  <data name="Error.RequestId" xml:space="preserve"><value>ID de la demande</value></data>
+  <data name="Error.DevelopmentMode" xml:space="preserve"><value>Mode développement</value></data>
+  <data name="Error.DevelopmentDetails" xml:space="preserve"><value>Le passage à l’environnement Development affiche les détails de cette erreur.</value></data>
+  <data name="Error.DevelopmentWarning" xml:space="preserve"><value>L’environnement Development ne doit pas être activé pour les applications déployées.</value></data>
+  <data name="Error.DevelopmentInstructions" xml:space="preserve"><value>Il peut exposer des informations sensibles sur les exceptions. Pour le débogage local, définissez ASPNETCORE_ENVIRONMENT sur Development puis redémarrez l’application.</value></data>
+  <data name="Privacy.Title" xml:space="preserve"><value>Politique de confidentialité</value></data>
+  <data name="Privacy.Description" xml:space="preserve"><value>Utilisez cette page pour décrire la politique de confidentialité de votre site.</value></data>
+  <data name="Cookie.Summary" xml:space="preserve"><value>Nous utilisons des cookies pour améliorer votre expérience. Consultez la politique de confidentialité pour plus de détails.</value></data>
+  <data name="Cookie.LearnMore" xml:space="preserve"><value>En savoir plus</value></data>
+  <data name="Cookie.Accept" xml:space="preserve"><value>Accepter</value></data>
 </root>

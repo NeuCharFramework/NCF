@@ -11,12 +11,12 @@
 
 
 @section breadcrumbs{
-    <li>系统管理</li>
+    <li>@AR["Common.系统管理"]</li>
     <li>
-        <a asp-Page="/Role/Index" asp-area="Admin">角色管理</a>
+        <a asp-Page="/Role/Index" asp-area="Admin">@AR["Role.管理"]</a>
     </li>
     <li>
-        角色权限管理
+        @AR["Role.PermissionManagement"]
     </li>
 }
 <!-- START row-->
@@ -26,13 +26,13 @@
         <div class="x_panel">
             <div class="x_content">
                 <h3>
-                    @Model.SysRoleInfo.RoleName - 权限设置
+                    @Model.SysRoleInfo.RoleName - @AR["Role.PermissionSettings"]
                 </h3>
                 <div class="treeContainer">
                     <ul id="tree" class="ztree"></ul>
                 </div>
-                <a asp-page="Index" class="btn btn-default">返回</a>
-                <a class="btn btn-primary" id="save">保存</a>
+                <a asp-page="Index" class="btn btn-default">@AR["Common.返回"]</a>
+                <a class="btn btn-primary" id="save">@AR["Common.保存"]</a>
             </div>
         </div>
     </div>

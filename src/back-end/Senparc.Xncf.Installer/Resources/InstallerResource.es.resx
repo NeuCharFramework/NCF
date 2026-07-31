@@ -122,6 +122,7 @@
   <data name="Installer.Register.MenuName" xml:space="preserve"><value>Instalador NCF</value></data>
   <data name="Installer.Register.Description" xml:space="preserve"><value>Módulo de instalación inicial de NCF. Puede desinstalarse o eliminarse después de completar la instalación.</value></data>
   <data name="Installer.Area.Home" xml:space="preserve"><value>Inicio</value></data>
+  <data name="Installer.Area.DatabaseSample" xml:space="preserve"><value>Ejemplo de base de datos</value></data>
   <data name="Install.AlreadyRunning" xml:space="preserve"><value>La instalación ya está en curso. Espere.</value></data>
   <data name="Install.Confirm" xml:space="preserve"><value>¿Desea iniciar la instalación?</value></data>
   <data name="Install.ConfirmDetail" xml:space="preserve"><value>Esta página dejará de estar disponible cuando termine la instalación.</value></data>

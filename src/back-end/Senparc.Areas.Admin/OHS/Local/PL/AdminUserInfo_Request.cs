@@ -12,6 +12,8 @@
 
 ----------------------------------------------------------------*/
 using Senparc.Ncf.XncfBase.FunctionRenders;
+using Microsoft.Extensions.Localization;
+using Senparc.Areas.Admin;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -113,7 +115,8 @@ namespace Senparc.Areas.Admin.OHS.PL
         {
             if (string.IsNullOrEmpty(Password) && Id == 0)
             {
-                yield return new ValidationResult("密码为必填项！", new[] { "Password" });
+                var localizer = validationContext.GetService(typeof(IStringLocalizer<AdminResource>)) as IStringLocalizer<AdminResource>;
+                yield return new ValidationResult(localizer?["AdminUserInfo.PasswordRequired"].Value ?? "密码为必填项！", new[] { "Password" });
             }
         }
     }

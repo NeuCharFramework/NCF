@@ -168,4 +168,16 @@
   <data name="Home.InstallRequired.Title" xml:space="preserve"><value>NeuCharFramework の初期化</value></data>
   <data name="Home.InstallRequired.Message" xml:space="preserve"><value>NeuCharFramework がまだ初期化されていません。まもなく初期化ページへ移動します...</value></data>
   <data name="Home.InstallRequired.Link" xml:space="preserve"><value>自動的に移動しない場合はこちらをクリックしてください</value></data>
+  <data name="Error.Title" xml:space="preserve"><value>エラー</value></data>
+  <data name="Error.RequestFailed" xml:space="preserve"><value>リクエストの処理中にエラーが発生しました。</value></data>
+  <data name="Error.RequestId" xml:space="preserve"><value>リクエスト ID</value></data>
+  <data name="Error.DevelopmentMode" xml:space="preserve"><value>開発モード</value></data>
+  <data name="Error.DevelopmentDetails" xml:space="preserve"><value>Development 環境に切り替えると、このエラーの詳細情報が表示されます。</value></data>
+  <data name="Error.DevelopmentWarning" xml:space="preserve"><value>デプロイ済みアプリケーションで Development 環境を有効にしないでください。</value></data>
+  <data name="Error.DevelopmentInstructions" xml:space="preserve"><value>例外の機密情報が利用者に表示される可能性があります。ローカルデバッグでは ASPNETCORE_ENVIRONMENT を Development に設定し、アプリケーションを再起動してください。</value></data>
+  <data name="Privacy.Title" xml:space="preserve"><value>プライバシーポリシー</value></data>
+  <data name="Privacy.Description" xml:space="preserve"><value>このページでウェブサイトのプライバシーポリシーを説明します。</value></data>
+  <data name="Cookie.Summary" xml:space="preserve"><value>ウェブサイトの利便性向上のため Cookie を使用します。詳細はプライバシーポリシーをご覧ください。</value></data>
+  <data name="Cookie.LearnMore" xml:space="preserve"><value>詳細</value></data>
+  <data name="Cookie.Accept" xml:space="preserve"><value>同意する</value></data>
 </root>

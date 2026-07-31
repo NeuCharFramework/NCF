@@ -49,7 +49,7 @@
                 <el-aside :style="{'width':Store.state.navMenu.isCollapse?'64px':''}" class="el-aside-index">
                     <div :class="[Store.state.navMenu.isCollapse?'head-log2':'head-log']">
                         <a href="/Admin/Index">
-                            <img src="~/images/Admin/base/head/logo_230x55.png" alt="Alternate Text" />
+                            <img src="~/images/Admin/base/head/logo_230x55.png" alt="@AR["Admin.Layout.LogoAlt"]" />
                         </a>
                     </div>
                     <el-scrollbar wrap-class="scrollbar-wrapper" style="height:calc(100vh - 80px);">
@@ -93,10 +93,10 @@
                         <div class="header-account">
                             <el-dropdown trigger="click">
                                 <span class="el-dropdown-link">
-                                    我的账号<i class="el-icon-arrow-down el-icon--right"></i>
+                                    @AR["Admin.Layout.Account"]<i class="el-icon-arrow-down el-icon--right"></i>
                                 </span>
                                 <el-dropdown-menu slot="dropdown" class="header-account-dropdown">
-                                    <el-dropdown-item disabled>当前账号：@currentAccountName</el-dropdown-item>
+                                    <el-dropdown-item disabled>@AR["Admin.Layout.CurrentAccount", currentAccountName]</el-dropdown-item>
                                     <el-dropdown-item divided>
                                         <a class="header-account-action" asp-page="/Login" asp-page-handler="Logout">@AR["Admin.Logout.Title"]</a>
                                     </el-dropdown-item>
@@ -111,7 +111,7 @@
                         </div>
                     </el-main>
                     <el-footer class="footer">
-                        Powered by <a href="https://www.ncf.pub" target="_blank">NeuCharFramework</a> © 2010-@thisYear <a href="https://www.senparc.com" target="_blank">盛派网络</a>
+                        @AR["Admin.Layout.PoweredBy"] <a href="https://www.ncf.pub" target="_blank">NeuCharFramework</a> © 2010-@thisYear <a href="https://www.senparc.com" target="_blank">盛派网络</a>
                     </el-footer>
                 </el-container>
             </el-container>
@@ -122,6 +122,7 @@
     <script src="~/lib/element-ui_2.13.2/element.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script src="~/lib/vuex.js"></script>
+    @await Html.PartialAsync("_LocalizationScripts")
     <!--js-->
     <script src="~/js/Admin/store.js"></script>
     <script src="~/js/Admin/axios.js"></script>
@@ -130,12 +131,6 @@
     <script src="~/js/Admin/navMenu.js"></script>
     <script src="~/js/Admin/vuePermission.js"></script>
     <script src="~/js/Admin/Pages/Components/Components.js"></script>
-    <script>
-        function ncfSwitchLanguage(culture) {
-            var returnUrl = window.location.pathname + window.location.search;
-            window.location.href = '/api/Language/Set?culture=' + encodeURIComponent(culture) + '&returnUrl=' + encodeURIComponent(returnUrl);
-        }
-    </script>
     <!--页面js-->
     @*<script src="~/js/Admin/Pages/Index/Index.js"></script>*@
     @RenderSection("scripts", false)
@@ -146,11 +141,11 @@
             remindBeforeMinutes: 5
         };
         window.NCF_SESSION_I18N = {
-            title: '登录即将过期',
-            message: '检测到当前登录会话即将过期，您可以保持登录或立即退出。',
-            keepLogin: '保持登录',
-            logoutNow: '立即退出登录',
-            keepLoginSuccess: '已保持登录，会话已续期。'
+            title: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Session.Title"].Value)),
+            message: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Session.Message"].Value)),
+            keepLogin: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Session.KeepLogin"].Value)),
+            logoutNow: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Session.LogoutNow"].Value)),
+            keepLoginSuccess: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Session.KeepLoginSuccess"].Value))
         };
         if (typeof window.ncfStartSessionMonitor === 'function') {
             window.ncfStartSessionMonitor();

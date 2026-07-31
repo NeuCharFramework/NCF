@@ -22,16 +22,20 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using Senparc.Areas.Admin;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Xncf.SystemManager.Domain.Service;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
     public class SystemConfig_IndexModel(IServiceProvider serviceProvider,
-        SystemConfigService systemConfigService)
+        SystemConfigService systemConfigService,
+        IStringLocalizer<AdminResource> localizer)
         : BaseAdminPageModel(serviceProvider)
     {
         private readonly SystemConfigService _systemConfigService = systemConfigService;
+        private readonly IStringLocalizer<AdminResource> _localizer = localizer;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -50,18 +54,18 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         {
             if (fullSystemConfig == null)
             {
-                return Ok(false, "请求参数不能为空");
+                return Ok(false, _localizer["SystemConfig.RequestEmpty"].Value);
             }
 
             if (string.IsNullOrWhiteSpace(fullSystemConfig.SystemName))
             {
-                return Ok(false, "系统名称不能为空");
+                return Ok(false, _localizer["SystemConfig.NameEmpty"].Value);
             }
 
             var systemConfig = await _systemConfigService.GetObjectAsync(z => true);
             if (systemConfig == null)
             {
-                return Ok(false, "系统配置信息不存在");
+                return Ok(false, _localizer["SystemConfig.ConfigNotFound"].Value);
             }
 
             systemConfig.Update(fullSystemConfig.SystemName,
@@ -72,7 +76,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
             await _systemConfigService.SaveObjectAsync(systemConfig);
 
-            base.SetMessager(MessageType.success, "修改成功");
+            base.SetMessager(MessageType.success, _localizer["SystemConfig.Updated"].Value);
             return Ok(new
             {
                 systemName = systemConfig.SystemName

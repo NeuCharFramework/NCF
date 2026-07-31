@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Senparc.Areas.Admin.Domain.Models;
+using Senparc.Ncf.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,14 @@ namespace Senparc.Areas.Admin.Domain.Models.Tests
             var salt = "SenparcSALTmustGreaterThan16digit";
             Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.PasswordSaltToken = "1234567890";
 
-            var adminUserInfo = new AdminUserInfo(ref userName, ref pwd, "Jeffrey", "4000318816", "TestAccount");
+            var adminUserInfo = new AdminUserInfo(new CreateOrUpdate_AdminUserInfoDto
+            {
+                UserName = userName,
+                Password = pwd,
+                RealName = "Jeffrey",
+                Phone = "4000318816",
+                Note = "TestAccount"
+            });
 
             //使用 PasswordSaltToken
             var result = adminUserInfo.GetSHA512Password(pwd, salt, true);

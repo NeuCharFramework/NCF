@@ -2,7 +2,7 @@
 @addTagHelper *, Senparc.Areas.Admin
 @model Senparc.Areas.Admin.Areas.Admin.Pages.SystemConfig_IndexModel
 @{
-    ViewData["Title"] = "系统信息";
+    ViewData["Title"] = AR["SystemConfig.Title"];
     Layout = "_Layout_Vue";
 }
 
@@ -11,34 +11,34 @@
 }
 
 @section breadcrumbs {
-    <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-    <el-breadcrumb-item>系统信息</el-breadcrumb-item>
+    <el-breadcrumb-item>@AR["Common.系统管理"]</el-breadcrumb-item>
+    <el-breadcrumb-item>@AR["SystemConfig.Title"]</el-breadcrumb-item>
 }
 <div>
     <div class="admin-systemconfig-info">
-        <h2 class="system-info">基础信息</h2>
+        <h2 class="system-info">@AR["SystemConfig.BasicInfo"]</h2>
 
         <el-table :data="tableData"
                   border
                   style="width: 100%">
             <el-table-column align="center"
-                             label="系统名称">
+                             label="@AR["SystemConfig.SystemName"]">
                 <template slot-scope="scope">
                     {{ scope.row.systemName}}
                 </template>
             </el-table-column>
             <el-table-column align="center"
-                             label="模块发布模式">
+                             label="@AR["SystemConfig.PublishMode"]">
                 <template slot-scope="scope">
                     {{ scope.row.hideModuleManager }}
                 </template>
             </el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column label="@AR["Common.操作"]" align="center">
                 <template slot-scope="scope">
                     <el-button size="mini"
                                type="primary"
                                v-has="['admin-edit']"
-                               @@click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                               @@click="handleEdit(scope.$index, scope.row)">@AR["Common.编辑"]</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -55,13 +55,13 @@
                      label-width="100px"
                      style="max-width: 400px; margin-left:50px;">
                 @*<p class="username-tip" v-if="dialog.title==='编辑管理员'">不建议修改用户名！</p>*@
-                <el-form-item label="系统名称" prop="systemName">
-                    <el-input v-model="dialog.data.systemName" clearable placeholder="请输入系统名称" />
+                <el-form-item label="@AR["SystemConfig.SystemName"]" prop="systemName">
+                    <el-input v-model="dialog.data.systemName" clearable placeholder="@AR["SystemConfig.SystemName"]" />
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @@click="dialog.visible = false">取 消</el-button>
-                <el-button :loading="dialog.updateLoading" type="primary" @@click="updateData">确 认</el-button>
+                <el-button @@click="dialog.visible = false">@AR["Common.取消"]</el-button>
+                <el-button :loading="dialog.updateLoading" type="primary" @@click="updateData">@AR["Common.确认"]</el-button>
             </div>
         </el-dialog>
     </div>

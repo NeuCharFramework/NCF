@@ -45,6 +45,12 @@
   <data name="Admin.Nav.Home" xml:space="preserve">
     <value>Accueil</value>
   </data>
+  <data name="Admin.Layout.Welcome" xml:space="preserve">
+    <value>Bienvenue,</value>
+  </data>
+  <data name="Admin.Layout.LogoAlt" xml:space="preserve">
+    <value>Logo NeuCharFramework</value>
+  </data>
   <data name="Admin.Logout.Title" xml:space="preserve">
     <value>Déconnexion</value>
   </data>
@@ -175,4 +181,307 @@
   <data name="AdminChat.SelectAtLeastOneMessage" xml:space="preserve"><value>Veuillez sélectionner au moins un message</value></data>
   <data name="AdminChat.DeleteMessagesSuccess" xml:space="preserve"><value>Suppression réussie. {0} messages ont été supprimés</value></data>
   <data name="AdminChat.AddModulesSuccess" xml:space="preserve"><value>Ajout réussi</value></data>
-</root>
+  <data name="Admin.Layout.Account" xml:space="preserve"><value>Mon compte</value></data>
+  <data name="Admin.Layout.CurrentAccount" xml:space="preserve"><value>Compte actuel : {0}</value></data>
+  <data name="Admin.Layout.PoweredBy" xml:space="preserve"><value>Propulsé par</value></data>
+  <data name="Admin.Session.Title" xml:space="preserve"><value>La session va expirer</value></data>
+  <data name="Admin.Session.Message" xml:space="preserve"><value>Votre session de connexion va expirer. Vous pouvez rester connecté ou vous déconnecter maintenant.</value></data>
+  <data name="Admin.Session.KeepLogin" xml:space="preserve"><value>Rester connecté</value></data>
+  <data name="Admin.Session.LogoutNow" xml:space="preserve"><value>Se déconnecter</value></data>
+  <data name="Admin.Session.KeepLoginSuccess" xml:space="preserve"><value>Vous restez connecté et la session a été renouvelée.</value></data>
+  <data name="Admin.Common.NoTime" xml:space="preserve"><value>Aucune heure</value></data>
+  <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>Copie réussie. Utilisez Ctrl+V pour coller.</value></data>
+  <data name="Admin.Home.Header" xml:space="preserve"><value>Administration NeuCharFramework</value></data>
+  <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>Modules installés</value></data>
+  <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>Modules à mettre à jour</value></data>
+  <data name="Admin.Home.NewModules" xml:space="preserve"><value>Nouveaux modules</value></data>
+  <data name="Admin.Home.ModuleErrors" xml:space="preserve"><value>Erreurs de module</value></data>
+  <data name="Admin.Home.AiTitle" xml:space="preserve"><value>Assistant IA</value></data>
+  <data name="Admin.Home.AiSubtitle" xml:space="preserve"><value>Posez une question pour gérer le système plus efficacement.</value></data>
+  <data name="Admin.Home.AiPlaceholder" xml:space="preserve"><value>Saisissez votre question, par exemple : comment configurer les paramètres système ?&#10;&#10;Astuce : appuyez sur Ctrl+Entrée ou Cmd+Entrée pour envoyer.</value></data>
+  <data name="Admin.Home.StartConversation" xml:space="preserve"><value>Démarrer la conversation</value></data>
+  <data name="Admin.Home.SupportMultiTurn" xml:space="preserve"><value>Conversations à plusieurs tours</value></data>
+  <data name="Admin.Home.AddModulesContext" xml:space="preserve"><value>Ajouter des modules au contexte</value></data>
+  <data name="Admin.Home.SaveHistory" xml:space="preserve"><value>Enregistrer automatiquement l’historique</value></data>
+  <data name="Admin.Home.ReferenceModules" xml:space="preserve"><value>Modules de référence (facultatif)</value></data>
+  <data name="Admin.Home.AddReferenceModule" xml:space="preserve"><value>Ajouter un module de référence</value></data>
+  <data name="Admin.Home.Clear" xml:space="preserve"><value>Effacer</value></data>
+  <data name="Admin.Home.EmptyReference" xml:space="preserve"><value>Cliquez sur « Ajouter un module de référence » pour choisir le contexte</value></data>
+  <data name="Admin.Home.FeatureModules" xml:space="preserve"><value>Modules fonctionnels</value></data>
+  <data name="Admin.Home.CurrentVersion" xml:space="preserve"><value>Version actuelle : v{0}</value></data>
+  <data name="Admin.Home.UpdateVersion" xml:space="preserve"><value>Mise à jour disponible : v{0}</value></data>
+  <data name="Admin.Home.MenuName" xml:space="preserve"><value>Nom du menu</value></data>
+  <data name="Admin.Home.NoDescription" xml:space="preserve"><value>Aucune description</value></data>
+  <data name="Admin.Home.LogStats" xml:space="preserve"><value>Statistiques des journaux</value></data>
+  <data name="Admin.Home.Last14Days" xml:space="preserve"><value>14 derniers jours</value></data>
+  <data name="Admin.Home.NormalLogs" xml:space="preserve"><value>Journaux normaux</value></data>
+  <data name="Admin.Home.ErrorLogs" xml:space="preserve"><value>Journaux d’erreur</value></data>
+  <data name="Admin.Home.TodayLogStats" xml:space="preserve"><value>Statistiques du jour</value></data>
+  <data name="Admin.Home.DynamicData" xml:space="preserve"><value>Données dynamiques</value></data>
+  <data name="Admin.Home.LogType" xml:space="preserve"><value>Type de journal</value></data>
+  <data name="Admin.Home.LogCountUnit" xml:space="preserve"><value>éléments</value></data>
+  <data name="AdminUserInfo.Title" xml:space="preserve"><value>Gestion des administrateurs</value></data>
+  <data name="AdminUserInfo.List" xml:space="preserve"><value>Liste des administrateurs</value></data>
+  <data name="AdminUserInfo.AddTitle" xml:space="preserve"><value>Ajouter un administrateur</value></data>
+  <data name="AdminUserInfo.EditTitle" xml:space="preserve"><value>Modifier l’administrateur</value></data>
+  <data name="AdminUserInfo.EditUsernameTip" xml:space="preserve"><value>Il est déconseillé de modifier le nom d’utilisateur.</value></data>
+  <data name="AdminUserInfo.Username" xml:space="preserve"><value>Nom d’utilisateur</value></data>
+  <data name="AdminUserInfo.Note" xml:space="preserve"><value>Notes</value></data>
+  <data name="AdminUserInfo.AddTime" xml:space="preserve"><value>Date de création</value></data>
+  <data name="AdminUserInfo.Actions" xml:space="preserve"><value>Actions</value></data>
+  <data name="AdminUserInfo.SetRole" xml:space="preserve"><value>Attribuer les rôles</value></data>
+  <data name="AdminUserInfo.DeleteConfirm" xml:space="preserve"><value>Supprimer cet administrateur ?</value></data>
+  <data name="AdminUserInfo.ConfirmPassword" xml:space="preserve"><value>Confirmer le mot de passe</value></data>
+  <data name="AdminUserInfo.RealName" xml:space="preserve"><value>Nom réel</value></data>
+  <data name="AdminUserInfo.Phone" xml:space="preserve"><value>Numéro de téléphone</value></data>
+  <data name="AdminUserInfo.NotePlaceholder" xml:space="preserve"><value>Saisissez les notes</value></data>
+  <data name="AdminUserInfo.Success" xml:space="preserve"><value>Réussi</value></data>
+  <data name="AdminUserInfo.PasswordRequired" xml:space="preserve"><value>Saisissez un mot de passe</value></data>
+  <data name="AdminUserInfo.PasswordConfirmRequired" xml:space="preserve"><value>Saisissez à nouveau le mot de passe</value></data>
+  <data name="AdminUserInfo.PasswordMismatch" xml:space="preserve"><value>Saisissez des mots de passe identiques</value></data>
+  <data name="AdminUserInfo.RoleTitle" xml:space="preserve"><value>Attribuer les rôles</value></data>
+  <data name="SystemConfig.Title" xml:space="preserve"><value>Informations système</value></data>
+  <data name="SystemConfig.BasicInfo" xml:space="preserve"><value>Informations de base</value></data>
+  <data name="SystemConfig.SystemName" xml:space="preserve"><value>Nom du système</value></data>
+  <data name="SystemConfig.PublishMode" xml:space="preserve"><value>Mode de publication des modules</value></data>
+  <data name="SystemConfig.NameRequired" xml:space="preserve"><value>Le nom du système est obligatoire</value></data>
+  <data name="SystemConfig.Updated" xml:space="preserve"><value>Mise à jour réussie.</value></data>
+  <data name="SystemConfig.UpdateFailed" xml:space="preserve"><value>Échec de la mise à jour : </value></data>
+  <data name="Admin.Common.Error" xml:space="preserve"><value>Erreur</value></data>
+  <data name="AdminChat.Conversation" xml:space="preserve"><value>Conversation</value></data>
+  <data name="AdminChat.History" xml:space="preserve"><value>Historique des conversations</value></data>
+  <data name="AdminChat.EmptyHistory" xml:space="preserve"><value>Aucun historique de conversation</value></data>
+  <data name="AdminChat.SelectModel" xml:space="preserve"><value>Sélectionner le modèle IA</value></data>
+  <data name="AdminChat.Manage" xml:space="preserve"><value>Gérer</value></data>
+  <data name="AdminChat.Done" xml:space="preserve"><value>Terminé</value></data>
+  <data name="AdminChat.MenuHierarchy" xml:space="preserve"><value>Hiérarchie des menus</value></data>
+  <data name="AdminChat.NoPreview" xml:space="preserve"><value>Aucun détail à prévisualiser pour ce module</value></data>
+  <data name="AdminChat.SelectedCount" xml:space="preserve"><value>{0} sélectionné(s)</value></data>
+  <data name="AdminChat.Copy" xml:space="preserve"><value>Copier</value></data>
+  <data name="AdminChat.ClearSelection" xml:space="preserve"><value>Effacer la sélection</value></data>
+  <data name="AdminChat.StartPrompt" xml:space="preserve"><value>Commencez votre conversation</value></data>
+  <data name="AdminChat.InputPlaceholder" xml:space="preserve"><value>Saisissez votre question...</value></data>
+  <data name="AdminChat.SendHint" xml:space="preserve"><value>Ctrl + Entrée ou Cmd + Entrée pour envoyer</value></data>
+  <data name="AdminChat.Send" xml:space="preserve"><value>Envoyer</value></data>
+  <data name="AdminChat.Thinking" xml:space="preserve"><value>Réflexion en cours...</value></data>
+  <data name="AdminChat.NewSessionDescription" xml:space="preserve"><value>Saisissez une question et sélectionnez des modules de référence pour commencer</value></data>
+  <data name="AdminChat.ComputePower" xml:space="preserve"><value>Modèle IA</value></data>
+  <data name="AdminChat.DeleteConfirm" xml:space="preserve"><value>Supprimer cette conversation ?</value></data>
+  <data name="AdminChat.DeleteConfirmTitle" xml:space="preserve"><value>Confirmation de suppression</value></data>
+  <data name="AdminChat.RoleMe" xml:space="preserve"><value>Moi</value></data>
+  <data name="AdminChat.RoleAssistant" xml:space="preserve"><value>Assistant IA</value></data>
+  <data name="AdminChat.RoleSystem" xml:space="preserve"><value>Système</value></data>
+  <data name="AdminChat.RoleUnknown" xml:space="preserve"><value>Inconnu</value></data>
+  <data name="AdminChat.FallbackModelName" xml:space="preserve"><value>SenparcAiSetting système</value></data>
+  <data name="AdminChat.FallbackModelDescription" xml:space="preserve"><value>Utiliser la configuration Chat par défaut active dans appsettings.json</value></data>
+  <data name="AdminChat.LoadSessionFailed" xml:space="preserve"><value>Échec du chargement des conversations</value></data>
+  <data name="AdminChat.LoadDetailFailed" xml:space="preserve"><value>Échec du chargement des détails</value></data>
+  <data name="AdminChat.InputRequired" xml:space="preserve"><value>Saisissez un message</value></data>
+  <data name="AdminChat.SessionRequired" xml:space="preserve"><value>Sélectionnez ou créez d’abord une conversation</value></data>
+  <data name="AdminChat.SendFailed" xml:space="preserve"><value>Échec de l’envoi du message</value></data>
+  <data name="AdminChat.SendFailedRetry" xml:space="preserve"><value>Échec de l’envoi. Veuillez réessayer plus tard.</value></data>
+  <data name="AdminChat.FeedbackFailed" xml:space="preserve"><value>Échec du retour</value></data>
+  <data name="AdminChat.CopyCount" xml:space="preserve"><value>{0} messages copiés</value></data>
+  <data name="AdminChat.CopyFailed" xml:space="preserve"><value>Échec de la copie. Copiez manuellement.</value></data>
+  <data name="AdminChat.SelectMessages" xml:space="preserve"><value>Sélectionnez d’abord les messages à traiter</value></data>
+  <data name="AdminChat.DeleteMessagesConfirm" xml:space="preserve"><value>Supprimer les {0} messages sélectionnés ? Cette action est irréversible.</value></data>
+  <data name="AdminChat.DeleteFailed" xml:space="preserve"><value>Échec de la suppression</value></data>
+  <data name="AdminChat.DeleteFailedRetry" xml:space="preserve"><value>Échec de la suppression. Veuillez réessayer plus tard.</value></data>
+  <data name="AdminChat.Functions" xml:space="preserve"><value>Fonctions</value></data>
+  <data name="AdminChat.SelectAll" xml:space="preserve"><value>Tout sélectionner</value></data>
+  <data name="AdminChat.JustNow" xml:space="preserve"><value>À l’instant</value></data>
+  <data name="AdminChat.MinutesAgo" xml:space="preserve"><value>Il y a {0} min</value></data>
+  <data name="AdminChat.HoursAgo" xml:space="preserve"><value>Il y a {0} h</value></data>
+  <data name="AdminChat.DaysAgo" xml:space="preserve"><value>Il y a {0} jours</value></data>
+  <data name="AdminChat.UnknownModule" xml:space="preserve"><value>Module sans nom</value></data>
+  <data name="Menu.ButtonRequired" xml:space="preserve"><value>Ce champ est obligatoire pour les boutons</value></data>
+  <data name="Menu.NameRequired" xml:space="preserve"><value>Le nom du menu est obligatoire</value></data>
+  <data name="Menu.TypeRequired" xml:space="preserve"><value>Le type est obligatoire</value></data>
+  <data name="Menu.AddTitle" xml:space="preserve"><value>Ajouter un menu</value></data>
+  <data name="Menu.EditTitle" xml:space="preserve"><value>Modifier le menu</value></data>
+  <data name="Menu.AddChildTitle" xml:space="preserve"><value>Ajouter un sous-menu</value></data>
+  <data name="Menu.AuthorizationSuccess" xml:space="preserve"><value>Autorisation réussie</value></data>
+  <data name="Role.NameRequired" xml:space="preserve"><value>Le nom du rôle est obligatoire</value></data>
+  <data name="Role.CodeRequired" xml:space="preserve"><value>Le code du rôle est obligatoire</value></data>
+  <data name="Role.AddTitle" xml:space="preserve"><value>Ajouter un rôle</value></data>
+  <data name="Role.EditTitle" xml:space="preserve"><value>Modifier le rôle</value></data>
+  <data name="Role.AuthorizationSuccess" xml:space="preserve"><value>Autorisation réussie</value></data>
+  <data name="Xncf.ModuleReadFailed" xml:space="preserve"><value>Échec de lecture du module. Mettez-le à jour puis actualisez la page. Module : {0}</value></data>
+  <data name="Tenant.Title" xml:space="preserve"><value>Informations multi-tenant</value></data>
+  <data name="Tenant.CurrentInfo" xml:space="preserve"><value>Locataire actuel</value></data>
+  <data name="Tenant.Disabled" xml:space="preserve"><value>Le multi-tenant est actuellement désactivé</value></data>
+  <data name="Tenant.MatchRule" xml:space="preserve"><value>Règle de correspondance actuelle :</value></data>
+  <data name="Tenant.Name" xml:space="preserve"><value>Nom</value></data>
+  <data name="Tenant.MatchKeyword" xml:space="preserve"><value>Mot-clé de correspondance</value></data>
+  <data name="Tenant.MatchTime" xml:space="preserve"><value>Heure de correspondance</value></data>
+  <data name="Tenant.ListTitle" xml:space="preserve"><value>Informations des tenants</value></data>
+  <data name="Tenant.Add" xml:space="preserve"><value>Ajouter un tenant</value></data>
+  <data name="Tenant.Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Tenant.Rule" xml:space="preserve"><value>Règle de correspondance</value></data>
+  <data name="Tenant.AdminNote" xml:space="preserve"><value>Note administrateur</value></data>
+  <data name="Tenant.Enabled" xml:space="preserve"><value>Activé</value></data>
+  <data name="Tenant.Actions" xml:space="preserve"><value>Actions</value></data>
+  <data name="Tenant.Edit" xml:space="preserve"><value>Modifier</value></data>
+  <data name="Tenant.Initialize" xml:space="preserve"><value>Initialiser</value></data>
+  <data name="Tenant.DeleteConfirm" xml:space="preserve"><value>Supprimer ce tenant ? Toutes les informations deviendront orphelines. Procédez avec prudence.</value></data>
+  <data name="Tenant.Delete" xml:space="preserve"><value>Supprimer</value></data>
+  <data name="Tenant.NamePlaceholder" xml:space="preserve"><value>Saisissez le nom du tenant</value></data>
+  <data name="Tenant.KeyPlaceholder" xml:space="preserve"><value>Saisissez le mot-clé du tenant</value></data>
+  <data name="Tenant.NotePlaceholder" xml:space="preserve"><value>Saisissez une note administrateur</value></data>
+  <data name="Tenant.EnableQuestion" xml:space="preserve"><value>Activé</value></data>
+  <data name="Tenant.InitializeTitle" xml:space="preserve"><value>Initialisation du tenant</value></data>
+  <data name="Tenant.SystemName" xml:space="preserve"><value>Nom du système</value></data>
+  <data name="Tenant.AdminAccount" xml:space="preserve"><value>Compte administrateur par défaut</value></data>
+  <data name="Tenant.SystemNamePlaceholder" xml:space="preserve"><value>Saisissez le nom du système</value></data>
+  <data name="Tenant.AdminAccountPlaceholder" xml:space="preserve"><value>Saisissez le compte administrateur par défaut</value></data>
+  <data name="Tenant.ResultTitle" xml:space="preserve"><value>Résultat de l’initialisation</value></data>
+  <data name="Tenant.KeepSecret" xml:space="preserve"><value>Conservez soigneusement les informations suivantes. Le mot de passe ne pourra plus être affiché.</value></data>
+  <data name="Tenant.TenantInfo" xml:space="preserve"><value>Informations du tenant</value></data>
+  <data name="Tenant.AdminInfo" xml:space="preserve"><value>Compte administrateur</value></data>
+  <data name="Tenant.Username" xml:space="preserve"><value>Nom d’utilisateur</value></data>
+  <data name="Tenant.Password" xml:space="preserve"><value>Mot de passe</value></data>
+  <data name="Tenant.RecordClose" xml:space="preserve"><value>J’ai noté ces informations ; fermer</value></data>
+  <data name="Tenant.CreateTitle" xml:space="preserve"><value>Ajouter un tenant</value></data>
+  <data name="Tenant.EditTitle" xml:space="preserve"><value>Modifier le tenant</value></data>
+  <data name="Tenant.NameRequired" xml:space="preserve"><value>Le nom du tenant est obligatoire</value></data>
+  <data name="Tenant.KeyRequired" xml:space="preserve"><value>La règle de correspondance est obligatoire</value></data>
+  <data name="Tenant.SystemNameRequired" xml:space="preserve"><value>Le nom du système est obligatoire</value></data>
+  <data name="Tenant.AdminAccountRequired" xml:space="preserve"><value>Le compte administrateur par défaut est obligatoire</value></data>
+  <data name="Tenant.DeleteSuccess" xml:space="preserve"><value>Suppression réussie</value></data>
+  <data name="Tenant.InitializeFailed" xml:space="preserve"><value>Échec de l’initialisation</value></data>
+  <data name="Xncf.Title" xml:space="preserve"><value>Gestion des modules</value></data>
+  <data name="Xncf.ExtensionModules" xml:space="preserve"><value>Modules d’extension</value></data>
+  <data name="Xncf.NewModules" xml:space="preserve"><value>Nouveaux modules</value></data>
+  <data name="Xncf.InstalledModules" xml:space="preserve"><value>Modules installés</value></data>
+  <data name="Xncf.PendingUpdates" xml:space="preserve"><value>Modules à mettre à jour</value></data>
+  <data name="Xncf.ModuleName" xml:space="preserve"><value>Nom du module</value></data>
+  <data name="Xncf.MenuName" xml:space="preserve"><value>Nom du menu (nom affiché)</value></data>
+  <data name="Xncf.Version" xml:space="preserve"><value>Version</value></data>
+  <data name="Xncf.UniqueCode" xml:space="preserve"><value>Code unique (globalement unique)</value></data>
+  <data name="Xncf.MenuAndVersion" xml:space="preserve"><value>Nom du menu / version</value></data>
+  <data name="Xncf.ModuleAndCode" xml:space="preserve"><value>Nom du module / code unique (globalement unique)</value></data>
+  <data name="Xncf.Search" xml:space="preserve"><value>Saisissez des mots-clés</value></data>
+  <data name="Xncf.Install" xml:space="preserve"><value>Installer</value></data>
+  <data name="Xncf.Status" xml:space="preserve"><value>État</value></data>
+  <data name="Xncf.Actions" xml:space="preserve"><value>Acciones</value></data>
+  <data name="Xncf.Home" xml:space="preserve"><value>Accueil</value></data>
+  <data name="Xncf.Missing" xml:space="preserve"><value>Ce module n’est pas déployé ou son assembly est manquant</value></data>
+  <data name="Xncf.Module" xml:space="preserve"><value>Module</value></data>
+  <data name="Xncf.DeleteConfirm" xml:space="preserve"><value>Supprimer ce module ? Les données associées seront également supprimées. Sauvegardez vos données.</value></data>
+  <data name="Xncf.Delete" xml:space="preserve"><value>Supprimer</value></data>
+  <data name="Xncf.NewVersion" xml:space="preserve"><value>Nouvelle version trouvée : v{0}</value></data>
+  <data name="Xncf.UpdateNow" xml:space="preserve"><value>Mettre à jour</value></data>
+  <data name="Xncf.UniqueNumber" xml:space="preserve"><value>Identifiant unique</value></data>
+  <data name="Xncf.Features" xml:space="preserve"><value>Fonctionnalités</value></data>
+  <data name="Xncf.View" xml:space="preserve"><value>Afficher</value></data>
+  <data name="Xncf.ExecuteMethod" xml:space="preserve"><value>Méthodes exécutables</value></data>
+  <data name="Xncf.Open" xml:space="preserve"><value>Activer</value></data>
+  <data name="Xncf.Close" xml:space="preserve"><value>Désactiver</value></data>
+  <data name="Xncf.DisabledTip" xml:space="preserve"><value>Les modules désactivés ne peuvent pas exécuter de fonctions</value></data>
+  <data name="Xncf.Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Xncf.UpdateLog" xml:space="preserve"><value>Journal des mises à jour</value></data>
+  <data name="Xncf.EnterModuleHome" xml:space="preserve"><value>Accéder à l’accueil de {0}</value></data>
+  <data name="Xncf.EnterHome" xml:space="preserve"><value>Accéder à l’accueil</value></data>
+  <data name="Xncf.Address" xml:space="preserve"><value>Adresse</value></data>
+  <data name="Xncf.PageOverview" xml:space="preserve"><value>Aperçu de la page</value></data>
+  <data name="Xncf.PageOverviewTip" xml:space="preserve"><value>Remarque : ce module fournit une interface interactive, cette entrée est donc disponible.</value></data>
+  <data name="Xncf.Execute" xml:space="preserve"><value>Exécuter</value></data>
+  <data name="Xncf.ParameterOverview" xml:space="preserve"><value>Aperçu des paramètres</value></data>
+  <data name="Xncf.ParameterName" xml:space="preserve"><value>Nom</value></data>
+  <data name="Xncf.ParameterDescription" xml:space="preserve"><value>Description</value></data>
+  <data name="Xncf.ParameterType" xml:space="preserve"><value>Type</value></data>
+  <data name="Xncf.Required" xml:space="preserve"><value>Obligatoire</value></data>
+  <data name="Xncf.Yes" xml:space="preserve"><value>Oui</value></data>
+  <data name="Xncf.No" xml:space="preserve"><value>Non</value></data>
+  <data name="Xncf.NoInputData" xml:space="preserve"><value>Aucune donnée à saisir</value></data>
+  <data name="Xncf.Executing" xml:space="preserve"><value>Exécution</value></data>
+  <data name="Xncf.DownloadLog" xml:space="preserve"><value>Télécharger le journal (valide une fois pendant 5 minutes)</value></data>
+  <data name="Xncf.DownloadLogTip" xml:space="preserve"><value>Télécharger le journal</value></data>
+  <data name="Xncf.CloseDialog" xml:space="preserve"><value>Fermer</value></data>
+  <data name="Xncf.ThreadDetails" xml:space="preserve"><value>Afficher les threads</value></data>
+  <data name="Xncf.ThreadName" xml:space="preserve"><value>Nom</value></data>
+  <data name="Xncf.ThreadActivity" xml:space="preserve"><value>Activité / arrière-plan</value></data>
+  <data name="Xncf.ThreadState" xml:space="preserve"><value>État du thread</value></data>
+  <data name="Xncf.ThreadStory" xml:space="preserve"><value>Dernière activité</value></data>
+  <data name="Xncf.Prompt" xml:space="preserve"><value>Information</value></data>
+  <data name="Xncf.EnableFirst" xml:space="preserve"><value>Activez le module avant l’exécution</value></data>
+  <data name="Xncf.SourcePathRequired" xml:space="preserve"><value>Saisissez le chemin physique des sources</value></data>
+  <data name="Xncf.RequiredOption" xml:space="preserve"><value>{0} est obligatoire</value></data>
+  <data name="Xncf.RequiredField" xml:space="preserve"><value>{0} est obligatoire</value></data>
+  <data name="Xncf.RunError" xml:space="preserve"><value>Erreur</value></data>
+  <data name="Xncf.ErrorInfo" xml:space="preserve"><value>Détails de l’erreur</value></data>
+  <data name="Xncf.RunSuccess" xml:space="preserve"><value>Exécution réussie</value></data>
+  <data name="Xncf.UrlResultTip" xml:space="preserve"><value>Une URL a été reçue. Cliquez ci-dessous pour l’ouvrir.&lt;br /&gt;(Lien fourni par un tiers, soyez prudent) :</value></data>
+  <data name="Xncf.ReturnInfo" xml:space="preserve"><value>Informations retournées</value></data>
+  <data name="Xncf.ExecutionError" xml:space="preserve"><value>Une erreur s’est produite pendant l’exécution</value></data>
+  <data name="Xncf.RunFailed" xml:space="preserve"><value>Échec de l’exécution</value></data>
+  <data name="Xncf.EnableManager" xml:space="preserve"><value>Activer le mode de gestion des modules d’extension</value></data>
+  <data name="Xncf.HideManager" xml:space="preserve"><value>Passer en mode publication et masquer le gestionnaire des modules d’extension</value></data>
+  <data name="Xncf.EnableManagerConfirm" xml:space="preserve"><value>Après activation, tous les modules d’extension apparaîtront dans le sous-menu Modules d’extension. Continuer ?</value></data>
+  <data name="Xncf.HideManagerConfirm" xml:space="preserve"><value>Après masquage, tous les modules d’extension apparaîtront au niveau supérieur. Pour le rouvrir, visitez [/Admin/XncfModule]. Masquer ?</value></data>
+  <data name="Xncf.AreaFeature" xml:space="preserve"><value>Web</value></data>
+  <data name="Xncf.DatabaseFeature" xml:space="preserve"><value>Base de données</value></data>
+  <data name="Xncf.MiddlewareFeature" xml:space="preserve"><value>Intergiciel</value></data>
+  <data name="Xncf.ThreadFeature" xml:space="preserve"><value>Thread</value></data>
+  <data name="Xncf.TypeText" xml:space="preserve"><value>Texte</value></data>
+  <data name="Xncf.TypeNumber" xml:space="preserve"><value>Nombre</value></data>
+  <data name="Xncf.TypeDate" xml:space="preserve"><value>Date</value></data>
+  <data name="Xncf.TypeOption" xml:space="preserve"><value>Options</value></data>
+  <data name="Xncf.TypeBoolean" xml:space="preserve"><value>Booléen</value></data>
+  <data name="Admin.Common.Success" xml:space="preserve"><value>Succès</value></data>
+  <data name="AdminChat.StreamInputRequired" xml:space="preserve"><value>Saisissez une session et un message valides.</value></data>
+  <data name="AdminChat.StreamSessionForbidden" xml:space="preserve"><value>La session n’existe pas ou l’accès est refusé.</value></data>
+  <data name="AdminChat.AgentReplyFailed" xml:space="preserve"><value>Échec de la réponse de l’agent.</value></data>
+  <data name="AdminChat.LoadModulesFailedRetry" xml:space="preserve"><value>Échec du chargement des modules. Réessayez plus tard.</value></data>
+  <data name="AdminChat.CreateSessionFailed" xml:space="preserve"><value>Échec de la création de la session</value></data>
+  <data name="AdminChat.CreateSessionFailedRetry" xml:space="preserve"><value>Échec de la création de la session. Réessayez plus tard.</value></data>
+  <data name="Admin.Login.Error.LoginFailed" xml:space="preserve"><value>Échec de la connexion</value></data>
+  <data name="Admin.Login.Error.LoginRetry" xml:space="preserve"><value>Échec de la connexion, veuillez réessayer</value></data>
+  <data name="Admin.Login.Support" xml:space="preserve"><value>Assistance technique :</value></data>
+  <data name="Admin.Login.VisitWebsite" xml:space="preserve"><value>Visiter le site officiel</value></data>
+  <data name="Admin.Session.InvalidUser" xml:space="preserve"><value>L’identité de l’utilisateur est invalide ; le JWT ne peut pas être renouvelé. Reconnectez-vous.</value></data>
+  <data name="SystemConfig.RequestEmpty" xml:space="preserve"><value>Les paramètres de la requête ne peuvent pas être vides</value></data>
+  <data name="SystemConfig.NameEmpty" xml:space="preserve"><value>Le nom du système ne peut pas être vide</value></data>
+  <data name="SystemConfig.ConfigNotFound" xml:space="preserve"><value>Configuration système introuvable</value></data>
+  <data name="Role.PermissionManagement" xml:space="preserve"><value>Gestion des autorisations de rôle</value></data>
+  <data name="Role.PermissionSettings" xml:space="preserve"><value>Paramètres des autorisations</value></data>
+  <data name="AdminUserInfo.UsernamePlaceholder" xml:space="preserve"><value>Saisissez un nom d’utilisateur</value></data>
+  <data name="AdminUserInfo.PasswordConfirmPlaceholder" xml:space="preserve"><value>Saisissez à nouveau le mot de passe</value></data>
+  <data name="AdminUserInfo.RealNamePlaceholder" xml:space="preserve"><value>Saisissez le nom réel</value></data>
+  <data name="AdminUserInfo.PhonePlaceholder" xml:space="preserve"><value>Saisissez un numéro de téléphone</value></data>
+  <data name="Admin.Common.Submit" xml:space="preserve"><value>Envoyer</value></data>
+  <data name="Xncf.SettingsAndExecute" xml:space="preserve"><value>Paramètres / Exécuter</value></data>
+  <data name="Admin.Session.ExpiredRedirect" xml:space="preserve"><value>Votre session a expiré. Redirection vers la page de connexion.</value></data>
+  <data name="Admin.Session.AccessDenied" xml:space="preserve"><value>Vous n’avez pas l’autorisation d’accéder à cette ressource.</value></data>
+  <data name="Trace.Today" xml:space="preserve"><value>Aujourd’hui</value></data>
+  <data name="Trace.LastHour" xml:space="preserve"><value>Dernière heure</value></data>
+  <data name="Trace.ShowAll" xml:space="preserve"><value>Afficher tous les résultats complets</value></data>
+  <data name="Trace.ShowExceptions" xml:space="preserve"><value>Afficher uniquement les exceptions</value></data>
+  <data name="Trace.ExceptionInfo" xml:space="preserve"><value>Informations sur l’exception</value></data>
+  <data name="Trace.KeywordPlaceholder" xml:space="preserve"><value>Saisissez un mot-clé</value></data>
+  <data name="Trace.To" xml:space="preserve"><value>à</value></data>
+  <data name="Trace.StartTime" xml:space="preserve"><value>Heure de début</value></data>
+  <data name="Trace.EndTime" xml:space="preserve"><value>Heure de fin</value></data>
+  <data name="Trace.SelectThread" xml:space="preserve"><value>Sélectionnez un thread</value></data>
+  <data name="Trace.SelectType" xml:space="preserve"><value>Sélectionnez un type</value></data>
+  <data name="Trace.ExceptionStatus" xml:space="preserve"><value>État de l’exception</value></data>
+  <data name="Trace.All" xml:space="preserve"><value>Tout</value></data>
+  <data name="Trace.NumberAndLine" xml:space="preserve"><value>Numéro / Ligne</value></data>
+  <data name="Trace.Time" xml:space="preserve"><value>Heure</value></data>
+  <data name="Trace.Thread" xml:space="preserve"><value>Thread</value></data>
+  <data name="Trace.Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Trace.IsException" xml:space="preserve"><value>Exception</value></data>
+  <data name="Trace.Title" xml:space="preserve"><value>Titre</value></data>
+  <data name="Trace.Content" xml:space="preserve"><value>Contenu</value></data>
+  <data name="Trace.ReturnResult" xml:space="preserve"><value>Résultat retourné</value></data>
+  <data name="Trace.PostData" xml:space="preserve"><value>Données POST</value></data>
+  <data name="AdminChat.AddReferenceModule" xml:space="preserve"><value>Ajouter des modules de référence</value></data>
+  <data name="AdminChat.SearchModulePlaceholder" xml:space="preserve"><value>Rechercher par nom / description / UID</value></data>
+  <data name="AdminChat.SelectFiltered" xml:space="preserve"><value>Sélectionner tous les résultats filtrés</value></data>
+  <data name="AdminChat.Selected" xml:space="preserve"><value>Sélectionné</value></data>
+  <data name="AdminChat.QuickOpen" xml:space="preserve"><value>Ouvrir</value></data>
+  <data name="AdminChat.NoMenu" xml:space="preserve"><value>Aucun menu</value></data>
+  <data name="AdminChat.NoMenuOrFunctions" xml:space="preserve"><value>Ce module ne contient aucun menu ni aucune fonction disponible.</value></data>
+  <data name="AdminChat.NoMatchingModules" xml:space="preserve"><value>Aucun module correspondant</value></data>
+  <data name="AdminChat.ConfirmAdd" xml:space="preserve"><value>Confirmer l’ajout</value></data>
+ </root>

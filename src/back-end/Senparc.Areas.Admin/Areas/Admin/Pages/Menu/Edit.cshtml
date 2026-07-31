@@ -1,7 +1,7 @@
 ﻿@page
 @model Senparc.Areas.Admin.Areas.Admin.Pages.MenuEditModel
 @{
-    ViewData["Title"] = $"{(!string.IsNullOrEmpty(Model.Id) ? "编辑" : "新增")}菜单";
+    ViewData["Title"] = AR["Menu.管理"];
 }
 @section Style{
     <link href="~/node_modules/@@ztree/ztree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
@@ -10,9 +10,9 @@
 
 
 @section breadcrumbs{
-    <li>系统管理</li>
+    <li>@AR["Common.系统管理"]</li>
     <li>
-        菜单管理
+        @AR["Menu.管理"]
     </li>
 }
 <!-- START row-->
@@ -22,13 +22,13 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <a id="addTopMenu" data-flag="0" class="btn btn-success addTopMenu">
             <em class="fa fa-plus">
-                新增一级菜单
+                @AR["Menu.增加菜单"]
             </em>
         </a>
 
         <a id="addChildMenu" data-flag="1" class="btn btn-success addTopMenu">
             <em class="fa fa-plus">
-                添加子菜单
+                @AR["Menu.增加下级"]
             </em>
         </a>
     </div>
@@ -50,47 +50,47 @@
 
                     <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
-                            菜单排序
+                            @AR["Common.排序"]
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="SysMenuDto.Sort" type="number" required class="form-control" placeholder="请输入菜单排序">
+                            <input asp-for="SysMenuDto.Sort" type="number" required class="form-control" placeholder="@AR["Common.排序"]">
                             <span asp-validation-for="SysMenuDto.Sort" class="text-danger"></span>
                         </div>
                     </div>
 
                     <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
-                            菜单名称
+                            @AR["Menu.名称"]
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="SysMenuDto.MenuName" type="text" data-validate-length="0,150" required class="form-control" placeholder="请输入菜单名称">
+                            <input asp-for="SysMenuDto.MenuName" type="text" data-validate-length="0,150" required class="form-control" placeholder="@AR["Menu.名称"]">
                             <span asp-validation-for="SysMenuDto.MenuName" class="text-danger"></span>
                         </div>
                     </div>
 
                     <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
-                            菜单地址
+                            @AR["Menu.路径"]
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="SysMenuDto.Url" type="text" data-validate-length="0,350" class="form-control" placeholder="请输入菜单地址">
+                            <input asp-for="SysMenuDto.Url" type="text" data-validate-length="0,350" class="form-control" placeholder="@AR["Menu.路径"]">
                             <span asp-validation-for="SysMenuDto.Url" class="text-danger"></span>
                         </div>
                     </div>
 
                     <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
-                            菜单图标
+                            @AR["Menu.图标"]
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="SysMenuDto.Icon" type="text" data-validate-length="1,150" class="form-control" placeholder="请输入菜单图标">
+                            <input asp-for="SysMenuDto.Icon" type="text" data-validate-length="1,150" class="form-control" placeholder="@AR["Menu.图标"]">
                             <span asp-validation-for="SysMenuDto.Icon" class="text-danger"></span>
                         </div>
                     </div>
 
                     <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
-                            是否锁定
+                            @AR["Menu.是否锁定"]
                         </label>
                         <div class="col-md-4 col-sm-4 col-xs-12">
                             <div class="checkbox">
@@ -103,7 +103,7 @@
 
                     <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
-                            是否可见
+                            @AR["Menu.是否显示"]
                         </label>
                         <div class="col-md-4 col-sm-4 col-xs-12">
                             <div class="checkbox">
@@ -116,20 +116,20 @@
 
                     <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
-                            说明
+                            @AR["Common.说明"]
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="SysMenuDto.Remark" type="text" data-validate-length="1,150" class="form-control" placeholder="请输入说明">
+                            <input asp-for="SysMenuDto.Remark" type="text" data-validate-length="1,150" class="form-control" placeholder="@AR["Common.请输入说明"]">
                             <span asp-validation-for="SysMenuDto.Remark" class="text-danger"></span>
                         </div>
                     </div>
 
                     <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
-                            备注
+                            @AR["Common.备注"]
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="SysMenuDto.AdminRemark" type="text" data-validate-length="1,150" class="form-control" placeholder="请输入备注">
+                            <input asp-for="SysMenuDto.AdminRemark" type="text" data-validate-length="1,150" class="form-control" placeholder="@AR["Common.请输入备注"]">
                             <span asp-validation-for="SysMenuDto.AdminRemark" class="text-danger"></span>
                         </div>
                     </div>
@@ -139,24 +139,24 @@
                     <div class="item form-group buttonContainer">
                         <input data-attribute-name="Id" type="hidden" />
                         <label class="control-label col-md-1 col-sm-1 col-xs-12" for="textarea">
-                            按钮名称
+                            @AR["Menu.按钮"]
                         </label>
                         <div class="col-md-2 col-sm-2 col-xs-12">
-                            <input type="text" data-validate-length="0,150" data-attribute-name="ButtonName" class="form-control" placeholder="按钮名称">
+                            <input type="text" data-validate-length="0,150" data-attribute-name="ButtonName" class="form-control" placeholder="@AR["Menu.按钮"]">
                         </div>
 
                         <label class="control-label col-md-1 col-sm-1 col-xs-12" for="textarea">
-                            操作标识
+                            @AR["Menu.操作代码"]
                         </label>
                         <div class="col-md-2 col-sm-2 col-xs-12">
-                            <input type="text" data-validate-length="0,150" data-attribute-name="OpearMark" class="form-control" placeholder="操作标识">
+                            <input type="text" data-validate-length="0,150" data-attribute-name="OpearMark" class="form-control" placeholder="@AR["Menu.操作代码"]">
                         </div>
 
                         <label class="control-label col-md-1 col-sm-1 col-xs-12" for="textarea">
-                            操作地址
+                            @AR["Menu.路径"]
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
-                            <input type="text" data-validate-length="0,150" data-attribute-name="Url" class="form-control" placeholder="操作地址">
+                            <input type="text" data-validate-length="0,150" data-attribute-name="Url" class="form-control" placeholder="@AR["Menu.路径"]">
                         </div>
 
                         <div class="col-md-1 col-sm-1 col-xs-12">
@@ -171,9 +171,9 @@
                     <div class="form-group">
                         <div class="col-md-6 col-md-offset-3">
                             <a class="btn btn-info addButton">
-                                <em class="fa fa-plus">添加按钮</em>
+                                <em class="fa fa-plus">@AR["Common.增加"]</em>
                             </a>
-                            <a id="submit" class="btn btn-success">保存</a>
+                            <a id="submit" class="btn btn-success">@AR["Common.保存"]</a>
                         </div>
                     </div>
                 </form>

@@ -33,6 +33,8 @@ using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Utility;
 using Senparc.Areas.Admin.Domain.Services;
 using Senparc.Areas.Admin.OHS.PL;
+using Senparc.Areas.Admin;
+using Microsoft.Extensions.Localization;
 using Senparc.Xncf.SystemManager.Domain.Service;
 using System;
 using System.Collections.Generic;
@@ -50,12 +52,14 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         private readonly SystemConfigService _systemConfigService;
         private readonly AdminAuthConfigService _adminAuthConfigService;
         private readonly IBaseObjectCacheStrategy _cacheStrategy;
+        private readonly IStringLocalizer<AdminResource> _localizer;
 
-        public SystemInfoAppService(IServiceProvider serviceProvider, SystemConfigService systemConfigService, AdminAuthConfigService adminAuthConfigService, IBaseObjectCacheStrategy cacheStrategy) : base(serviceProvider)
+        public SystemInfoAppService(IServiceProvider serviceProvider, SystemConfigService systemConfigService, AdminAuthConfigService adminAuthConfigService, IBaseObjectCacheStrategy cacheStrategy, IStringLocalizer<AdminResource> localizer) : base(serviceProvider)
         {
             _systemConfigService = systemConfigService;
             _adminAuthConfigService = adminAuthConfigService;
             this._cacheStrategy = cacheStrategy;
+            _localizer = localizer;
         }
 
 
@@ -93,7 +97,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
                 if (systemConfig == null)
                 {
-                    throw new NcfExceptionBase("系统配置信息不存在");
+                    throw new NcfExceptionBase(_localizer["SystemConfig.ConfigNotFound"].Value);
                 }
 
                 systemConfig.Update(request.SystemName, request.MchId, request.MchKey, request.TenPayAppId, systemConfig.HideModuleManager);
@@ -129,7 +133,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
                 if (systemConfig == null)
                 {
-                    throw new NcfExceptionBase("系统配置信息不存在");
+                    throw new NcfExceptionBase(_localizer["SystemConfig.ConfigNotFound"].Value);
                 }
 
                 systemConfig.Update(systemConfig.SystemName, systemConfig.MchId, systemConfig.MchKey, systemConfig.TenPayAppId, hide);

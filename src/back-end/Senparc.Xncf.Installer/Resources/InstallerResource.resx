@@ -132,6 +132,9 @@
   <data name="Installer.Area.Home" xml:space="preserve">
     <value>首页</value>
   </data>
+  <data name="Installer.Area.DatabaseSample" xml:space="preserve">
+    <value>数据库操作示例</value>
+  </data>
   <data name="Install.AlreadyRunning" xml:space="preserve"><value>安装正在进行，请耐心等待。</value></data>
   <data name="Install.Confirm" xml:space="preserve"><value>确定开始安装吗？</value></data>
   <data name="Install.ConfirmDetail" xml:space="preserve"><value>安装完成后，本安装页面将不可继续使用。</value></data>

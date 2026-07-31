@@ -45,6 +45,12 @@
   <data name="Admin.Nav.Home" xml:space="preserve">
     <value>首页</value>
   </data>
+  <data name="Admin.Layout.Welcome" xml:space="preserve">
+    <value>欢迎，</value>
+  </data>
+  <data name="Admin.Layout.LogoAlt" xml:space="preserve">
+    <value>NeuCharFramework 标志</value>
+  </data>
   <data name="Admin.Logout.Title" xml:space="preserve">
     <value>退出登录</value>
   </data>
@@ -177,4 +183,459 @@
   <data name="AdminChat.SelectAtLeastOneMessage" xml:space="preserve"><value>请至少选择一条消息</value></data>
   <data name="AdminChat.DeleteMessagesSuccess" xml:space="preserve"><value>删除成功，共删除 {0} 条消息</value></data>
   <data name="AdminChat.AddModulesSuccess" xml:space="preserve"><value>添加成功</value></data>
+  <data name="Admin.Layout.Account" xml:space="preserve"><value>我的账号</value></data>
+  <data name="Admin.Layout.CurrentAccount" xml:space="preserve"><value>当前账号：{0}</value></data>
+  <data name="Admin.Layout.PoweredBy" xml:space="preserve"><value>技术支持</value></data>
+  <data name="Admin.Session.Title" xml:space="preserve"><value>登录即将过期</value></data>
+  <data name="Admin.Session.Message" xml:space="preserve"><value>检测到当前登录会话即将过期，您可以保持登录或立即退出。</value></data>
+  <data name="Admin.Session.KeepLogin" xml:space="preserve"><value>保持登录</value></data>
+  <data name="Admin.Session.LogoutNow" xml:space="preserve"><value>立即退出登录</value></data>
+  <data name="Admin.Session.KeepLoginSuccess" xml:space="preserve"><value>已保持登录，会话已续期。</value></data>
+  <data name="Admin.Common.NoTime" xml:space="preserve"><value>暂无时间</value></data>
+  <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>复制成功！请使用 Ctrl+V 组合键进行粘贴操作。</value></data>
+  <data name="Admin.Home.Header" xml:space="preserve"><value>NeuCharFramework 管理员后台</value></data>
+  <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>已安装模块</value></data>
+  <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>待更新模块</value></data>
+  <data name="Admin.Home.NewModules" xml:space="preserve"><value>发现新模块</value></data>
+  <data name="Admin.Home.ModuleErrors" xml:space="preserve"><value>模块异常</value></data>
+  <data name="Admin.Home.AiTitle" xml:space="preserve"><value>AI 智能助手</value></data>
+  <data name="Admin.Home.AiSubtitle" xml:space="preserve"><value>向我提问，我将帮助您更高效地管理系统</value></data>
+  <data name="Admin.Home.AiPlaceholder" xml:space="preserve"><value>输入您的问题，例如：如何配置系统参数？&#10;&#10;提示：按 Ctrl+Enter 或 Cmd+Enter 发送消息</value></data>
+  <data name="Admin.Home.StartConversation" xml:space="preserve"><value>开始对话</value></data>
+  <data name="Admin.Home.SupportMultiTurn" xml:space="preserve"><value>支持多轮对话</value></data>
+  <data name="Admin.Home.AddModulesContext" xml:space="preserve"><value>可添加模块作为对话上下文</value></data>
+  <data name="Admin.Home.SaveHistory" xml:space="preserve"><value>自动保存历史记录</value></data>
+  <data name="Admin.Home.ReferenceModules" xml:space="preserve"><value>引用模块（可选）</value></data>
+  <data name="Admin.Home.AddReferenceModule" xml:space="preserve"><value>添加引用模块</value></data>
+  <data name="Admin.Home.Clear" xml:space="preserve"><value>清空</value></data>
+  <data name="Admin.Home.EmptyReference" xml:space="preserve"><value>点击“添加引用模块”可选择多个模块作为上下文</value></data>
+  <data name="Admin.Home.FeatureModules" xml:space="preserve"><value>功能模块</value></data>
+  <data name="Admin.Home.CurrentVersion" xml:space="preserve"><value>当前版本：v{0}</value></data>
+  <data name="Admin.Home.UpdateVersion" xml:space="preserve"><value>可更新至：v{0}</value></data>
+  <data name="Admin.Home.MenuName" xml:space="preserve"><value>菜单名称</value></data>
+  <data name="Admin.Home.NoDescription" xml:space="preserve"><value>暂无描述</value></data>
+  <data name="Admin.Home.LogStats" xml:space="preserve"><value>日志统计</value></data>
+  <data name="Admin.Home.Last14Days" xml:space="preserve"><value>近 14 天</value></data>
+  <data name="Admin.Home.NormalLogs" xml:space="preserve"><value>常规日志</value></data>
+  <data name="Admin.Home.ErrorLogs" xml:space="preserve"><value>异常日志</value></data>
+  <data name="Admin.Home.TodayLogStats" xml:space="preserve"><value>今日日志统计</value></data>
+  <data name="Admin.Home.DynamicData" xml:space="preserve"><value>动态数据</value></data>
+  <data name="Admin.Home.LogType" xml:space="preserve"><value>日志类型</value></data>
+  <data name="Admin.Home.LogCountUnit" xml:space="preserve"><value>条</value></data>
+  <data name="AdminUserInfo.Title" xml:space="preserve"><value>管理员管理</value></data>
+  <data name="AdminUserInfo.List" xml:space="preserve"><value>管理员列表</value></data>
+  <data name="AdminUserInfo.AddTitle" xml:space="preserve"><value>新增管理员</value></data>
+  <data name="AdminUserInfo.EditTitle" xml:space="preserve"><value>编辑管理员</value></data>
+  <data name="AdminUserInfo.EditUsernameTip" xml:space="preserve"><value>不建议修改用户名！</value></data>
+  <data name="AdminUserInfo.Username" xml:space="preserve"><value>用户名</value></data>
+  <data name="AdminUserInfo.Note" xml:space="preserve"><value>备注</value></data>
+  <data name="AdminUserInfo.AddTime" xml:space="preserve"><value>添加时间</value></data>
+  <data name="AdminUserInfo.Actions" xml:space="preserve"><value>操作</value></data>
+  <data name="AdminUserInfo.SetRole" xml:space="preserve"><value>设置角色</value></data>
+  <data name="AdminUserInfo.DeleteConfirm" xml:space="preserve"><value>确认删除此管理员吗？</value></data>
+  <data name="AdminUserInfo.ConfirmPassword" xml:space="preserve"><value>再次确认密码</value></data>
+  <data name="AdminUserInfo.RealName" xml:space="preserve"><value>真实姓名</value></data>
+  <data name="AdminUserInfo.Phone" xml:space="preserve"><value>手机号</value></data>
+  <data name="AdminUserInfo.NotePlaceholder" xml:space="preserve"><value>请输入备注信息</value></data>
+  <data name="AdminUserInfo.Success" xml:space="preserve"><value>成功</value></data>
+  <data name="AdminUserInfo.PasswordRequired" xml:space="preserve"><value>请输入密码</value></data>
+  <data name="AdminUserInfo.PasswordConfirmRequired" xml:space="preserve"><value>请再次输入密码</value></data>
+  <data name="AdminUserInfo.PasswordMismatch" xml:space="preserve"><value>请输入相同的密码</value></data>
+  <data name="AdminUserInfo.RoleTitle" xml:space="preserve"><value>设置角色</value></data>
+  <data name="SystemConfig.Title" xml:space="preserve"><value>系统信息</value></data>
+  <data name="SystemConfig.BasicInfo" xml:space="preserve"><value>基础信息</value></data>
+  <data name="SystemConfig.SystemName" xml:space="preserve"><value>系统名称</value></data>
+  <data name="SystemConfig.PublishMode" xml:space="preserve"><value>模块发布模式</value></data>
+  <data name="SystemConfig.NameRequired" xml:space="preserve"><value>系统名称为必填项</value></data>
+  <data name="SystemConfig.Updated" xml:space="preserve"><value>更新成功！</value></data>
+  <data name="SystemConfig.UpdateFailed" xml:space="preserve"><value>更新失败：</value></data>
+  <data name="Admin.Common.Error" xml:space="preserve"><value>错误</value></data>
+  <data name="AdminChat.Conversation" xml:space="preserve"><value>对话</value></data>
+  <data name="AdminChat.History" xml:space="preserve"><value>对话历史</value></data>
+  <data name="AdminChat.EmptyHistory" xml:space="preserve"><value>暂无对话历史</value></data>
+  <data name="AdminChat.SelectModel" xml:space="preserve"><value>选择 AI 算力</value></data>
+  <data name="AdminChat.Manage" xml:space="preserve"><value>管理</value></data>
+  <data name="AdminChat.Done" xml:space="preserve"><value>完成</value></data>
+  <data name="AdminChat.MenuHierarchy" xml:space="preserve"><value>菜单层级</value></data>
+  <data name="AdminChat.NoPreview" xml:space="preserve"><value>当前模块无可预览详情</value></data>
+  <data name="AdminChat.SelectedCount" xml:space="preserve"><value>已选 {0} 条</value></data>
+  <data name="AdminChat.Copy" xml:space="preserve"><value>复制</value></data>
+  <data name="AdminChat.ClearSelection" xml:space="preserve"><value>清空选择</value></data>
+  <data name="AdminChat.StartPrompt" xml:space="preserve"><value>开始您的对话吧</value></data>
+  <data name="AdminChat.InputPlaceholder" xml:space="preserve"><value>输入您的问题...</value></data>
+  <data name="AdminChat.SendHint" xml:space="preserve"><value>Ctrl + Enter 或 Cmd + Enter 发送</value></data>
+  <data name="AdminChat.Send" xml:space="preserve"><value>发送</value></data>
+  <data name="AdminChat.Thinking" xml:space="preserve"><value>正在思考中...</value></data>
+  <data name="AdminChat.NewSessionDescription" xml:space="preserve"><value>输入问题并选择引用模块，开始新的对话会话</value></data>
+  <data name="AdminChat.ComputePower" xml:space="preserve"><value>AI 算力</value></data>
+  <data name="AdminChat.DeleteConfirm" xml:space="preserve"><value>确定要删除这个会话吗？</value></data>
+  <data name="AdminChat.DeleteConfirmTitle" xml:space="preserve"><value>删除确认</value></data>
+  <data name="AdminChat.RoleMe" xml:space="preserve"><value>我</value></data>
+  <data name="AdminChat.RoleAssistant" xml:space="preserve"><value>AI 助手</value></data>
+  <data name="AdminChat.RoleSystem" xml:space="preserve"><value>系统</value></data>
+  <data name="AdminChat.RoleUnknown" xml:space="preserve"><value>未知</value></data>
+  <data name="AdminChat.FallbackModelName" xml:space="preserve"><value>系统级 SenparcAiSetting</value></data>
+  <data name="AdminChat.FallbackModelDescription" xml:space="preserve"><value>使用 appsettings.json 中当前生效的默认 Chat 配置</value></data>
+  <data name="AdminChat.LoadSessionFailed" xml:space="preserve"><value>加载会话列表失败</value></data>
+  <data name="AdminChat.LoadDetailFailed" xml:space="preserve"><value>加载会话详情失败</value></data>
+  <data name="AdminChat.InputRequired" xml:space="preserve"><value>请输入消息内容</value></data>
+  <data name="AdminChat.SessionRequired" xml:space="preserve"><value>请先选择或创建会话</value></data>
+  <data name="AdminChat.SendFailed" xml:space="preserve"><value>发送消息失败</value></data>
+  <data name="AdminChat.SendFailedRetry" xml:space="preserve"><value>发送消息失败，请稍后重试</value></data>
+  <data name="AdminChat.FeedbackFailed" xml:space="preserve"><value>反馈失败</value></data>
+  <data name="AdminChat.CopyCount" xml:space="preserve"><value>已复制 {0} 条消息</value></data>
+  <data name="AdminChat.CopyFailed" xml:space="preserve"><value>复制失败，请手动复制</value></data>
+  <data name="AdminChat.SelectMessages" xml:space="preserve"><value>请先选择要操作的消息</value></data>
+  <data name="AdminChat.DeleteMessagesConfirm" xml:space="preserve"><value>确定删除选中的 {0} 条消息吗？此操作不可撤销。</value></data>
+  <data name="AdminChat.DeleteFailed" xml:space="preserve"><value>删除失败</value></data>
+  <data name="AdminChat.DeleteFailedRetry" xml:space="preserve"><value>删除失败，请稍后重试</value></data>
+  <data name="AdminChat.Functions" xml:space="preserve"><value>功能</value></data>
+  <data name="AdminChat.SelectAll" xml:space="preserve"><value>全选</value></data>
+  <data name="AdminChat.JustNow" xml:space="preserve"><value>刚刚</value></data>
+  <data name="AdminChat.MinutesAgo" xml:space="preserve"><value>{0}分钟前</value></data>
+  <data name="AdminChat.HoursAgo" xml:space="preserve"><value>{0}小时前</value></data>
+  <data name="AdminChat.DaysAgo" xml:space="preserve"><value>{0}天前</value></data>
+  <data name="AdminChat.UnknownModule" xml:space="preserve"><value>未命名模块</value></data>
+  <data name="Menu.ButtonRequired" xml:space="preserve"><value>当类型是按钮类型时此项必填</value></data>
+  <data name="Menu.NameRequired" xml:space="preserve"><value>菜单名称为必填项</value></data>
+  <data name="Menu.TypeRequired" xml:space="preserve"><value>类型为必选项</value></data>
+  <data name="Menu.AddTitle" xml:space="preserve"><value>新增菜单</value></data>
+  <data name="Menu.EditTitle" xml:space="preserve"><value>编辑菜单</value></data>
+  <data name="Menu.AddChildTitle" xml:space="preserve"><value>增加下一级菜单</value></data>
+  <data name="Menu.AuthorizationSuccess" xml:space="preserve"><value>授权成功</value></data>
+  <data name="Role.NameRequired" xml:space="preserve"><value>角色名称为必填项</value></data>
+  <data name="Role.CodeRequired" xml:space="preserve"><value>角色代码为必填项</value></data>
+  <data name="Role.AddTitle" xml:space="preserve"><value>新增角色</value></data>
+  <data name="Role.EditTitle" xml:space="preserve"><value>编辑角色</value></data>
+  <data name="Role.AuthorizationSuccess" xml:space="preserve"><value>授权成功</value></data>
+  <data name="Xncf.ModuleReadFailed" xml:space="preserve"><value>模块读取失败，请尝试更新此模块后刷新页面！模块：{0}</value></data>
+  <data name="Tenant.Title" xml:space="preserve"><value>多租户信息</value></data>
+  <data name="Tenant.CurrentInfo" xml:space="preserve"><value>当前租户信息</value></data>
+  <data name="Tenant.Disabled" xml:space="preserve"><value>当前系统已关闭多租户</value></data>
+  <data name="Tenant.MatchRule" xml:space="preserve"><value>当前系统匹配规则：</value></data>
+  <data name="Tenant.Name" xml:space="preserve"><value>名称</value></data>
+  <data name="Tenant.MatchKeyword" xml:space="preserve"><value>匹配关键字</value></data>
+  <data name="Tenant.MatchTime" xml:space="preserve"><value>匹配时间</value></data>
+  <data name="Tenant.ListTitle" xml:space="preserve"><value>多租户信息</value></data>
+  <data name="Tenant.Add" xml:space="preserve"><value>新增租户</value></data>
+  <data name="Tenant.Id" xml:space="preserve"><value>ID</value></data>
+  <data name="Tenant.Rule" xml:space="preserve"><value>匹配规则</value></data>
+  <data name="Tenant.AdminNote" xml:space="preserve"><value>管理员备注</value></data>
+  <data name="Tenant.Enabled" xml:space="preserve"><value>启用</value></data>
+  <data name="Tenant.Actions" xml:space="preserve"><value>操作</value></data>
+  <data name="Tenant.Edit" xml:space="preserve"><value>编辑</value></data>
+  <data name="Tenant.Initialize" xml:space="preserve"><value>初始化</value></data>
+  <data name="Tenant.DeleteConfirm" xml:space="preserve"><value>确认删除此租户吗？删除后所有租户信息将处于游离状态，请谨慎操作！</value></data>
+  <data name="Tenant.Delete" xml:space="preserve"><value>删除</value></data>
+  <data name="Tenant.NamePlaceholder" xml:space="preserve"><value>请输入租户名称</value></data>
+  <data name="Tenant.KeyPlaceholder" xml:space="preserve"><value>请输入租户匹配关键字</value></data>
+  <data name="Tenant.NotePlaceholder" xml:space="preserve"><value>请输入管理员备注</value></data>
+  <data name="Tenant.EnableQuestion" xml:space="preserve"><value>是否启用</value></data>
+  <data name="Tenant.InitializeTitle" xml:space="preserve"><value>租户初始化</value></data>
+  <data name="Tenant.SystemName" xml:space="preserve"><value>系统名称</value></data>
+  <data name="Tenant.AdminAccount" xml:space="preserve"><value>默认管理员账号</value></data>
+  <data name="Tenant.SystemNamePlaceholder" xml:space="preserve"><value>请输入系统名称</value></data>
+  <data name="Tenant.AdminAccountPlaceholder" xml:space="preserve"><value>请输入默认管理员账号</value></data>
+  <data name="Tenant.ResultTitle" xml:space="preserve"><value>初始化结果</value></data>
+  <data name="Tenant.KeepSecret" xml:space="preserve"><value>请妥善保管以下信息，密码将无法再次查看！</value></data>
+  <data name="Tenant.TenantInfo" xml:space="preserve"><value>租户信息</value></data>
+  <data name="Tenant.AdminInfo" xml:space="preserve"><value>管理员账号</value></data>
+  <data name="Tenant.Username" xml:space="preserve"><value>用户名</value></data>
+  <data name="Tenant.Password" xml:space="preserve"><value>密码</value></data>
+  <data name="Tenant.RecordClose" xml:space="preserve"><value>我已记录，关闭</value></data>
+  <data name="Tenant.CreateTitle" xml:space="preserve"><value>新增租户信息</value></data>
+  <data name="Tenant.EditTitle" xml:space="preserve"><value>编辑租户信息</value></data>
+  <data name="Tenant.NameRequired" xml:space="preserve"><value>租户名称为必填项</value></data>
+  <data name="Tenant.KeyRequired" xml:space="preserve"><value>租户匹配规则为必填项</value></data>
+  <data name="Tenant.SystemNameRequired" xml:space="preserve"><value>系统名称为必填项</value></data>
+  <data name="Tenant.AdminAccountRequired" xml:space="preserve"><value>默认管理员账号为必填项</value></data>
+  <data name="Tenant.DeleteSuccess" xml:space="preserve"><value>删除成功</value></data>
+  <data name="Tenant.InitializeFailed" xml:space="preserve"><value>初始化失败</value></data>
+  <data name="Xncf.Title" xml:space="preserve"><value>模块管理</value></data>
+  <data name="Xncf.ExtensionModules" xml:space="preserve"><value>扩展模块</value></data>
+  <data name="Xncf.NewModules" xml:space="preserve"><value>新模块</value></data>
+  <data name="Xncf.InstalledModules" xml:space="preserve"><value>已安装模块</value></data>
+  <data name="Xncf.PendingUpdates" xml:space="preserve"><value>待更新模块</value></data>
+  <data name="Xncf.ModuleName" xml:space="preserve"><value>模块名称</value></data>
+  <data name="Xncf.MenuName" xml:space="preserve"><value>菜单名称（显示名称）</value></data>
+  <data name="Xncf.Version" xml:space="preserve"><value>版本号</value></data>
+  <data name="Xncf.UniqueCode" xml:space="preserve"><value>唯一编码（全局唯一）</value></data>
+  <data name="Xncf.MenuAndVersion" xml:space="preserve"><value>菜单名称/版本号</value></data>
+  <data name="Xncf.ModuleAndCode" xml:space="preserve"><value>模块名称/唯一编码（全局唯一）</value></data>
+  <data name="Xncf.Search" xml:space="preserve"><value>输入关键字搜索</value></data>
+  <data name="Xncf.Install" xml:space="preserve"><value>安装</value></data>
+  <data name="Xncf.Status" xml:space="preserve"><value>状态</value></data>
+  <data name="Xncf.Actions" xml:space="preserve"><value>操作</value></data>
+  <data name="Xncf.Home" xml:space="preserve"><value>主页</value></data>
+  <data name="Xncf.Missing" xml:space="preserve"><value>此模块未被部署或程序集文件已丢失</value></data>
+  <data name="Xncf.Module" xml:space="preserve"><value>模块</value></data>
+  <data name="Xncf.DeleteConfirm" xml:space="preserve"><value>确认删除此模块吗？此模块内相关数据也将被删除，请做好备份！</value></data>
+  <data name="Xncf.Delete" xml:space="preserve"><value>删除</value></data>
+  <data name="Xncf.NewVersion" xml:space="preserve"><value>发现新版本：v{0}</value></data>
+  <data name="Xncf.UpdateNow" xml:space="preserve"><value>立即更新</value></data>
+  <data name="Xncf.UniqueNumber" xml:space="preserve"><value>唯一编号</value></data>
+  <data name="Xncf.Features" xml:space="preserve"><value>特性</value></data>
+  <data name="Xncf.View" xml:space="preserve"><value>查看</value></data>
+  <data name="Xncf.ExecuteMethod" xml:space="preserve"><value>执行方法</value></data>
+  <data name="Xncf.Open" xml:space="preserve"><value>开启</value></data>
+  <data name="Xncf.Close" xml:space="preserve"><value>关闭</value></data>
+  <data name="Xncf.DisabledTip" xml:space="preserve"><value>未开启的模块无法执行功能</value></data>
+  <data name="Xncf.Description" xml:space="preserve"><value>介绍</value></data>
+  <data name="Xncf.UpdateLog" xml:space="preserve"><value>更新记录</value></data>
+  <data name="Xncf.EnterModuleHome" xml:space="preserve"><value>进入 {0} 的首页</value></data>
+  <data name="Xncf.EnterHome" xml:space="preserve"><value>进入首页</value></data>
+  <data name="Xncf.Address" xml:space="preserve"><value>地址</value></data>
+  <data name="Xncf.PageOverview" xml:space="preserve"><value>页面透视</value></data>
+  <data name="Xncf.PageOverviewTip" xml:space="preserve"><value>说明：当前模块配备了可互动操作的UI界面，因此您可以看到这个入口。</value></data>
+  <data name="Xncf.Execute" xml:space="preserve"><value>执行</value></data>
+  <data name="Xncf.ParameterOverview" xml:space="preserve"><value>参数透视</value></data>
+  <data name="Xncf.ParameterName" xml:space="preserve"><value>名称</value></data>
+  <data name="Xncf.ParameterDescription" xml:space="preserve"><value>说明</value></data>
+  <data name="Xncf.ParameterType" xml:space="preserve"><value>类型</value></data>
+  <data name="Xncf.Required" xml:space="preserve"><value>必须</value></data>
+  <data name="Xncf.Yes" xml:space="preserve"><value>是</value></data>
+  <data name="Xncf.No" xml:space="preserve"><value>否</value></data>
+  <data name="Xncf.NoInputData" xml:space="preserve"><value>无需填写数据</value></data>
+  <data name="Xncf.Executing" xml:space="preserve"><value>执行中</value></data>
+  <data name="Xncf.DownloadLog" xml:space="preserve"><value>下载日志（5分钟内1次有效）</value></data>
+  <data name="Xncf.DownloadLogTip" xml:space="preserve"><value>下载日志</value></data>
+  <data name="Xncf.CloseDialog" xml:space="preserve"><value>关闭</value></data>
+  <data name="Xncf.ThreadDetails" xml:space="preserve"><value>查看线程</value></data>
+  <data name="Xncf.ThreadName" xml:space="preserve"><value>名称</value></data>
+  <data name="Xncf.ThreadActivity" xml:space="preserve"><value>活动状态/后台</value></data>
+  <data name="Xncf.ThreadState" xml:space="preserve"><value>线程状态</value></data>
+  <data name="Xncf.ThreadStory" xml:space="preserve"><value>最近故事</value></data>
+  <data name="Xncf.Prompt" xml:space="preserve"><value>提示</value></data>
+  <data name="Xncf.EnableFirst" xml:space="preserve"><value>请开启后执行</value></data>
+  <data name="Xncf.SourcePathRequired" xml:space="preserve"><value>请填写源码物理路径</value></data>
+  <data name="Xncf.RequiredOption" xml:space="preserve"><value>{0} 为必选项</value></data>
+  <data name="Xncf.RequiredField" xml:space="preserve"><value>{0} 为必填项</value></data>
+  <data name="Xncf.RunError" xml:space="preserve"><value>遇到错误</value></data>
+  <data name="Xncf.ErrorInfo" xml:space="preserve"><value>错误信息</value></data>
+  <data name="Xncf.RunSuccess" xml:space="preserve"><value>执行成功</value></data>
+  <data name="Xncf.UrlResultTip" xml:space="preserve"><value>收到网址，点击下方打开&lt;br /&gt;（此链接由第三方提供，请注意安全）：</value></data>
+  <data name="Xncf.ReturnInfo" xml:space="preserve"><value>返回信息</value></data>
+  <data name="Xncf.ExecutionError" xml:space="preserve"><value>执行过程中发生错误</value></data>
+  <data name="Xncf.RunFailed" xml:space="preserve"><value>执行失败</value></data>
+  <data name="Xncf.EnableManager" xml:space="preserve"><value>开启【扩展模块】管理模式</value></data>
+  <data name="Xncf.HideManager" xml:space="preserve"><value>切换至发布状态，隐藏【扩展模块】管理单元</value></data>
+  <data name="Xncf.EnableManagerConfirm" xml:space="preserve"><value>打开【扩展模块】管理功能后，所有扩展模块将显示在【扩展模块】二级目录中。确定要打开吗？</value></data>
+  <data name="Xncf.HideManagerConfirm" xml:space="preserve"><value>隐藏【扩展模块】管理功能后，所有扩展模块将并列显示在一级目录中。如需重新打开，请直接浏览器内访问此页面【/Admin/XncfModule】。确定要隐藏吗？</value></data>
+  <data name="Xncf.AreaFeature" xml:space="preserve"><value>网页</value></data>
+  <data name="Xncf.DatabaseFeature" xml:space="preserve"><value>数据库</value></data>
+  <data name="Xncf.MiddlewareFeature" xml:space="preserve"><value>中间件</value></data>
+  <data name="Xncf.ThreadFeature" xml:space="preserve"><value>线程</value></data>
+  <data name="Xncf.TypeText" xml:space="preserve"><value>文本</value></data>
+  <data name="Xncf.TypeNumber" xml:space="preserve"><value>数字</value></data>
+  <data name="Xncf.TypeDate" xml:space="preserve"><value>日期</value></data>
+  <data name="Xncf.TypeOption" xml:space="preserve"><value>选项</value></data>
+  <data name="Xncf.TypeBoolean" xml:space="preserve"><value>布尔</value></data>
+  <data name="Admin.Common.Success" xml:space="preserve"><value>成功</value></data>
+  <data name="AdminChat.StreamInputRequired" xml:space="preserve"><value>请输入有效的会话和消息内容。</value></data>
+  <data name="AdminChat.StreamSessionForbidden" xml:space="preserve"><value>会话不存在或无权访问。</value></data>
+  <data name="AdminChat.AgentReplyFailed" xml:space="preserve"><value>Agent 回复失败。</value></data>
+  <data name="AdminChat.LoadModulesFailedRetry" xml:space="preserve"><value>加载模块列表失败，请稍后重试</value></data>
+  <data name="AdminChat.CreateSessionFailed" xml:space="preserve"><value>创建会话失败</value></data>
+  <data name="AdminChat.CreateSessionFailedRetry" xml:space="preserve"><value>创建会话失败，请稍后重试</value></data>
+  <data name="Admin.Login.Error.LoginFailed" xml:space="preserve"><value>登录失败</value></data>
+  <data name="Admin.Login.Error.LoginRetry" xml:space="preserve"><value>登录失败，请重试</value></data>
+  <data name="Admin.Login.Support" xml:space="preserve"><value>技术支持：</value></data>
+  <data name="Admin.Login.VisitWebsite" xml:space="preserve"><value>点击进入官网</value></data>
+  <data name="Admin.Session.InvalidUser" xml:space="preserve"><value>当前用户身份无效，无法续期 JWT。请重新登录。</value></data>
+  <data name="SystemConfig.RequestEmpty" xml:space="preserve"><value>请求参数不能为空</value></data>
+  <data name="SystemConfig.NameEmpty" xml:space="preserve"><value>系统名称不能为空</value></data>
+  <data name="SystemConfig.ConfigNotFound" xml:space="preserve"><value>系统配置信息不存在</value></data>
+  <data name="Role.PermissionManagement" xml:space="preserve"><value>角色权限管理</value></data>
+  <data name="Role.PermissionSettings" xml:space="preserve"><value>权限设置</value></data>
+  <data name="AdminUserInfo.UsernamePlaceholder" xml:space="preserve"><value>请输入用户名</value></data>
+  <data name="AdminUserInfo.PasswordConfirmPlaceholder" xml:space="preserve"><value>请再次输入密码</value></data>
+  <data name="AdminUserInfo.RealNamePlaceholder" xml:space="preserve"><value>请输入真实姓名</value></data>
+  <data name="AdminUserInfo.PhonePlaceholder" xml:space="preserve"><value>请输入手机号</value></data>
+  <data name="Admin.Common.Submit" xml:space="preserve"><value>提交</value></data>
+  <data name="Xncf.SettingsAndExecute" xml:space="preserve"><value>设置/执行</value></data>
+  <data name="Admin.Session.ExpiredRedirect" xml:space="preserve"><value>登录已过期，即将跳转到登录页面</value></data>
+  <data name="Admin.Session.AccessDenied" xml:space="preserve"><value>您没有访问权限</value></data>
+  <data name="Trace.Today" xml:space="preserve"><value>今天</value></data>
+  <data name="Trace.LastHour" xml:space="preserve"><value>最近一小时</value></data>
+  <data name="Trace.ShowAll" xml:space="preserve"><value>显示所有完整结果</value></data>
+  <data name="Trace.ShowExceptions" xml:space="preserve"><value>只显示所有异常信息</value></data>
+  <data name="Trace.ExceptionInfo" xml:space="preserve"><value>异常信息</value></data>
+  <data name="Trace.KeywordPlaceholder" xml:space="preserve"><value>请输入关键字</value></data>
+  <data name="Trace.To" xml:space="preserve"><value>至</value></data>
+  <data name="Trace.StartTime" xml:space="preserve"><value>开始时间</value></data>
+  <data name="Trace.EndTime" xml:space="preserve"><value>结束时间</value></data>
+  <data name="Trace.SelectThread" xml:space="preserve"><value>选择线程</value></data>
+  <data name="Trace.SelectType" xml:space="preserve"><value>选择类型</value></data>
+  <data name="Trace.ExceptionStatus" xml:space="preserve"><value>异常状态</value></data>
+  <data name="Trace.All" xml:space="preserve"><value>全部</value></data>
+  <data name="Trace.NumberAndLine" xml:space="preserve"><value>编号/行号</value></data>
+  <data name="Trace.Time" xml:space="preserve"><value>时间</value></data>
+  <data name="Trace.Thread" xml:space="preserve"><value>线程</value></data>
+  <data name="Trace.Type" xml:space="preserve"><value>类型</value></data>
+  <data name="Trace.IsException" xml:space="preserve"><value>是否异常</value></data>
+  <data name="Trace.Title" xml:space="preserve"><value>标题</value></data>
+  <data name="Trace.Content" xml:space="preserve"><value>内容</value></data>
+  <data name="Trace.ReturnResult" xml:space="preserve"><value>返回结果</value></data>
+  <data name="Trace.PostData" xml:space="preserve"><value>Post 数据</value></data>
+  <data name="AdminChat.AddReferenceModule" xml:space="preserve"><value>添加引用模块</value></data>
+  <data name="AdminChat.SearchModulePlaceholder" xml:space="preserve"><value>搜索模块名称 / 描述 / UID</value></data>
+  <data name="AdminChat.SelectFiltered" xml:space="preserve"><value>当前筛选结果全选</value></data>
+  <data name="AdminChat.Selected" xml:space="preserve"><value>已选</value></data>
+  <data name="AdminChat.QuickOpen" xml:space="preserve"><value>快速进入</value></data>
+  <data name="AdminChat.NoMenu" xml:space="preserve"><value>无菜单</value></data>
+  <data name="AdminChat.NoMenuOrFunctions" xml:space="preserve"><value>当前模块无可用菜单和 Functions</value></data>
+  <data name="AdminChat.NoMatchingModules" xml:space="preserve"><value>没有匹配的模块</value></data>
+  <data name="AdminChat.ConfirmAdd" xml:space="preserve"><value>确认添加</value></data>
+  <data name="Frontend.001" xml:space="preserve"><value>扩展模块||Extension modules</value></data>
+  <data name="Frontend.002" xml:space="preserve"><value>首页||Home</value></data>
+  <data name="Frontend.003" xml:space="preserve"><value>数据库操作示例||Database sample</value></data>
+  <data name="Frontend.004" xml:space="preserve"><value>新增||Add</value></data>
+  <data name="Frontend.005" xml:space="preserve"><value>添加||Add</value></data>
+  <data name="Frontend.006" xml:space="preserve"><value>编辑||Edit</value></data>
+  <data name="Frontend.007" xml:space="preserve"><value>删除||Delete</value></data>
+  <data name="Frontend.008" xml:space="preserve"><value>取消||Cancel</value></data>
+  <data name="Frontend.009" xml:space="preserve"><value>确定||Confirm</value></data>
+  <data name="Frontend.010" xml:space="preserve"><value>确认||Confirm</value></data>
+  <data name="Frontend.011" xml:space="preserve"><value>保存||Save</value></data>
+  <data name="Frontend.012" xml:space="preserve"><value>关闭||Off</value></data>
+  <data name="Frontend.013" xml:space="preserve"><value>返回||Back</value></data>
+  <data name="Frontend.014" xml:space="preserve"><value>搜索||Search</value></data>
+  <data name="Frontend.015" xml:space="preserve"><value>查询||Search</value></data>
+  <data name="Frontend.016" xml:space="preserve"><value>重置||Reset</value></data>
+  <data name="Frontend.017" xml:space="preserve"><value>刷新||Refresh</value></data>
+  <data name="Frontend.018" xml:space="preserve"><value>操作||Actions</value></data>
+  <data name="Frontend.019" xml:space="preserve"><value>名称||Name</value></data>
+  <data name="Frontend.020" xml:space="preserve"><value>类型||Type</value></data>
+  <data name="Frontend.021" xml:space="preserve"><value>状态||Status</value></data>
+  <data name="Frontend.022" xml:space="preserve"><value>备注||Notes</value></data>
+  <data name="Frontend.023" xml:space="preserve"><value>说明||Description</value></data>
+  <data name="Frontend.024" xml:space="preserve"><value>详情||Details</value></data>
+  <data name="Frontend.025" xml:space="preserve"><value>配置||Configure</value></data>
+  <data name="Frontend.026" xml:space="preserve"><value>管理||Manage</value></data>
+  <data name="Frontend.027" xml:space="preserve"><value>列表||List</value></data>
+  <data name="Frontend.028" xml:space="preserve"><value>上传||Upload</value></data>
+  <data name="Frontend.029" xml:space="preserve"><value>下载||Download</value></data>
+  <data name="Frontend.030" xml:space="preserve"><value>导入||Import</value></data>
+  <data name="Frontend.031" xml:space="preserve"><value>导出||Export</value></data>
+  <data name="Frontend.032" xml:space="preserve"><value>启用||Enable</value></data>
+  <data name="Frontend.033" xml:space="preserve"><value>停用||Disable</value></data>
+  <data name="Frontend.034" xml:space="preserve"><value>全部||All</value></data>
+  <data name="Frontend.035" xml:space="preserve"><value>暂无数据||No data</value></data>
+  <data name="Frontend.036" xml:space="preserve"><value>暂无内容||No content</value></data>
+  <data name="Frontend.037" xml:space="preserve"><value>请选择||Select</value></data>
+  <data name="Frontend.038" xml:space="preserve"><value>请填写||Enter a value</value></data>
+  <data name="Frontend.039" xml:space="preserve"><value>请输入||Enter a value</value></data>
+  <data name="Frontend.040" xml:space="preserve"><value>添加时间||Added</value></data>
+  <data name="Frontend.041" xml:space="preserve"><value>开始时间||Start time</value></data>
+  <data name="Frontend.042" xml:space="preserve"><value>结束时间||End time</value></data>
+  <data name="Frontend.043" xml:space="preserve"><value>创建时间||Created</value></data>
+  <data name="Frontend.044" xml:space="preserve"><value>更新时间||Updated</value></data>
+  <data name="Frontend.045" xml:space="preserve"><value>文件名||File name</value></data>
+  <data name="Frontend.046" xml:space="preserve"><value>文件大小||File size</value></data>
+  <data name="Frontend.047" xml:space="preserve"><value>上传时间||Upload time</value></data>
+  <data name="Frontend.048" xml:space="preserve"><value>批量删除||Delete selected</value></data>
+  <data name="Frontend.049" xml:space="preserve"><value>新增文件||Add file</value></data>
+  <data name="Frontend.050" xml:space="preserve"><value>选择文件||Select file</value></data>
+  <data name="Frontend.051" xml:space="preserve"><value>上一页||Previous</value></data>
+  <data name="Frontend.052" xml:space="preserve"><value>下一页||Next</value></data>
+  <data name="Frontend.053" xml:space="preserve"><value>成功||Success</value></data>
+  <data name="Frontend.054" xml:space="preserve"><value>失败||Failed</value></data>
+  <data name="Frontend.055" xml:space="preserve"><value>操作成功||Operation completed successfully</value></data>
+  <data name="Frontend.056" xml:space="preserve"><value>操作失败||Operation failed</value></data>
+  <data name="Frontend.057" xml:space="preserve"><value>加载失败||Failed to load</value></data>
+  <data name="Frontend.058" xml:space="preserve"><value>添加成功||Added successfully</value></data>
+  <data name="Frontend.059" xml:space="preserve"><value>添加失败||Add failed</value></data>
+  <data name="Frontend.060" xml:space="preserve"><value>编辑成功||Updated successfully</value></data>
+  <data name="Frontend.061" xml:space="preserve"><value>编辑失败||Update failed</value></data>
+  <data name="Frontend.062" xml:space="preserve"><value>删除成功||Deleted successfully</value></data>
+  <data name="Frontend.063" xml:space="preserve"><value>删除失败||Delete failed</value></data>
+  <data name="Frontend.064" xml:space="preserve"><value>上传成功||Uploaded successfully</value></data>
+  <data name="Frontend.065" xml:space="preserve"><value>上传失败||Upload failed</value></data>
+  <data name="Frontend.066" xml:space="preserve"><value>复制成功||Copied successfully</value></data>
+  <data name="Frontend.067" xml:space="preserve"><value>复制失败||Copy failed</value></data>
+  <data name="Frontend.068" xml:space="preserve"><value>提示||Prompt</value></data>
+  <data name="Frontend.069" xml:space="preserve"><value>警告||Warning</value></data>
+  <data name="Frontend.070" xml:space="preserve"><value>错误||Error</value></data>
+  <data name="Frontend.071" xml:space="preserve"><value>是||Yes</value></data>
+  <data name="Frontend.072" xml:space="preserve"><value>否||No</value></data>
+  <data name="Frontend.073" xml:space="preserve"><value>开启||On</value></data>
+  <data name="Frontend.074" xml:space="preserve"><value>未知||Unknown</value></data>
+  <data name="Frontend.075" xml:space="preserve"><value>未设置||Not set</value></data>
+  <data name="Frontend.076" xml:space="preserve"><value>暂无记录||No records</value></data>
+  <data name="Frontend.077" xml:space="preserve"><value>请输入关键字||Enter keywords</value></data>
+  <data name="Frontend.078" xml:space="preserve"><value>选择类型||Select type</value></data>
+  <data name="Frontend.079" xml:space="preserve"><value>选择状态||Select status</value></data>
+  <data name="Frontend.080" xml:space="preserve"><value>创建||Create</value></data>
+  <data name="Frontend.081" xml:space="preserve"><value>提交||Submit</value></data>
+  <data name="Frontend.082" xml:space="preserve"><value>查看||View</value></data>
+  <data name="Frontend.083" xml:space="preserve"><value>设为默认||Set as default</value></data>
+  <data name="Frontend.084" xml:space="preserve"><value>测试||Test</value></data>
+  <data name="Frontend.085" xml:space="preserve"><value>连接成功||Connected</value></data>
+  <data name="Frontend.086" xml:space="preserve"><value>连接失败||Connection failed</value></data>
+  <data name="Frontend.087" xml:space="preserve">
+    <value>密码为必填项！||Password is required.</value>
+  </data>
+  <data name="Frontend.088" xml:space="preserve">
+    <value>{0} 重复||{0} is duplicated.</value>
+  </data>
+  <data name="Frontend.089" xml:space="preserve">
+    <value>管理员不能删除自己！||Administrators cannot delete their own account.</value>
+  </data>
+  <data name="Frontend.090" xml:space="preserve">
+    <value>管理员不存在！||The administrator does not exist.</value>
+  </data>
+  <data name="Frontend.091" xml:space="preserve">
+    <value>删除成功！||Deleted successfully!</value>
+  </data>
+  <data name="Frontend.092" xml:space="preserve">
+    <value>微信日志文件不存在：||The WeChat log file does not exist:</value>
+  </data>
+  <data name="Frontend.093" xml:space="preserve">
+    <value>{0} 必须大于 16 位！||{0} must be longer than 16 characters.</value>
+  </data>
+  <data name="Frontend.094" xml:space="preserve">
+    <value>当前会话没有关联任何 XNCF 模块。||No XNCF modules are associated with the current session.</value>
+  </data>
+  <data name="Frontend.095" xml:space="preserve">
+    <value>未找到匹配的模块：&quot;{0}&quot;。请先调用 GetSessionModuleList 确认当前会话中的模块列表。||No matching module was found: “{0}”. Call GetSessionModuleList to check the modules in this session.</value>
+  </data>
+  <data name="Frontend.096" xml:space="preserve">
+    <value>未找到模块：&quot;{0}&quot;。请先调用 GetSessionModuleList 确认可用模块。||Module “{0}” was not found. Call GetSessionModuleList to check available modules.</value>
+  </data>
+  <data name="Frontend.097" xml:space="preserve">
+    <value>模块 {0} 的运行时注册未找到，无法读取数据库信息。||Runtime registration for module {0} was not found, so database information cannot be read.</value>
+  </data>
+  <data name="Frontend.098" xml:space="preserve">
+    <value>系统中没有已注册的模块。||No modules are registered in the system.</value>
+  </data>
+  <data name="Frontend.099" xml:space="preserve">
+    <value>未读取到 SenparcAiSetting，请检查 appsettings.json 配置。||SenparcAiSetting could not be loaded. Check appsettings.json.</value>
+  </data>
+  <data name="Frontend.100" xml:space="preserve">
+    <value>SenparcAiSetting.AiPlatform 仍为 UnSet，请先在 appsettings.json 中设置可用平台。||SenparcAiSetting.AiPlatform is still UnSet. Configure an available platform in appsettings.json.</value>
+  </data>
+  <data name="Frontend.101" xml:space="preserve">
+    <value>当前系统未安装或未启用 AIKernel 模块，无法切换到指定 AI 模型。||AIKernel is not installed or enabled, so the selected AI model cannot be used.</value>
+  </data>
+  <data name="Frontend.102" xml:space="preserve">
+    <value>未能解析 AIModelService，无法加载指定 AI 模型。||AIModelService could not be resolved, so the selected AI model cannot be loaded.</value>
+  </data>
+  <data name="Frontend.103" xml:space="preserve">
+    <value>当前选择的 AI 模型不存在：{0}||The selected AI model does not exist: {0}</value>
+  </data>
+  <data name="Frontend.104" xml:space="preserve">
+    <value>当前选择的 AI 模型不是 Chat 类型：{0}||The selected AI model is not a chat model: {0}</value>
+  </data>
+  <data name="Frontend.105" xml:space="preserve">
+    <value>当前用户未登录，无法续期。||The current user is not signed in, so the session cannot be renewed.</value>
+  </data>
+  <data name="Frontend.106" xml:space="preserve">
+    <value>用户信息不存在！||User information does not exist.</value>
+  </data>
+  <data name="Frontend.107" xml:space="preserve">
+    <value>用户名不存在或密码不正确：{0}！||The username does not exist or the password is incorrect: {0}.</value>
+  </data>
+  <data name="Frontend.108" xml:space="preserve">
+    <value>用户名不存在或密码不正确！||The username does not exist or the password is incorrect.</value>
+  </data>
 </root>

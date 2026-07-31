@@ -1,15 +1,15 @@
 ﻿@page
 @model Senparc.Areas.Admin.Areas.Admin.Pages.SenparcTrace_DateLogModel
 @{
-    ViewData["Title"] = "日志";
+    ViewData["Title"] = AR["Trace.日志"];
     //ViewData["TempMenuUrl"] = Model.XncfRegister.GetAreaUrl("/Admin/SenparcTrace/Index");
     //var exceptionCount = Model.WeixinTraceItemList.Count(z => z.IsException);
     Layout = "_Layout_Vue";
 }
 
 @section breadcrumbs {
-    <el-breadcrumb-item><a>系统管理</a></el-breadcrumb-item>
-    <el-breadcrumb-item><a asp-area="Admin" asp-page="Index">SenparcTrace 日志</a></el-breadcrumb-item>
+    <el-breadcrumb-item><a>@AR["Common.系统管理"]</a></el-breadcrumb-item>
+    <el-breadcrumb-item><a asp-area="Admin" asp-page="Index">SenparcTrace @AR["Trace.日志"]</a></el-breadcrumb-item>
     <el-breadcrumb-item>{{dateTitle}}</el-breadcrumb-item>
 }
 
@@ -80,15 +80,15 @@
 <el-row :gutter="20">
     <el-row :gutter="20" class="filter-container">
         <el-col :span="24" class="filter-item">
-            <el-button type="primary" @@click="showAll()">显示所有完整结果</el-button>
-            <el-button type="danger" @@click="showException()">只显示所有异常信息</el-button>
-            <span>异常信息 <span>{{tableData.filter(_ => _.isException).length}}</span> / {{tableData.length}}</span>
+            <el-button type="primary" @@click="showAll()">@AR["Trace.ShowAll"]</el-button>
+            <el-button type="danger" @@click="showException()">@AR["Trace.ShowExceptions"]</el-button>
+            <span>@AR["Trace.ExceptionInfo"] <span>{{tableData.filter(_ => _.isException).length}}</span> / {{tableData.length}}</span>
         </el-col>
         
         <el-col :span="8" class="filter-item">
             <el-input
                 v-model="filterConditions.keyword"
-                placeholder="请输入关键字"
+                placeholder="@AR["Trace.KeywordPlaceholder"]"
                 @@input="fetchData"
                 clearable>
             </el-input>
@@ -99,9 +99,9 @@
                 v-model="filterConditions.timeRange"
                 type="datetimerange"
                 :picker-options="pickerOptions"
-                range-separator="至"
-                start-placeholder="开始时间"
-                end-placeholder="结束时间"
+                range-separator="@AR["Trace.To"]"
+                start-placeholder="@AR["Trace.StartTime"]"
+                end-placeholder="@AR["Trace.EndTime"]"
                 @@change="fetchData"
                 align="right">
             </el-date-picker>
@@ -109,7 +109,7 @@
         
         <el-col :span="4" class="filter-item">
             <el-select v-model="filterConditions.threadId" 
-                      placeholder="选择线程" 
+                      placeholder="@AR["Trace.SelectThread"]"
                       clearable 
                       @@change="fetchData">
                 <el-option
@@ -123,7 +123,7 @@
         
         <el-col :span="4" class="filter-item">
             <el-select v-model="filterConditions.traceType" 
-                      placeholder="选择类型" 
+                      placeholder="@AR["Trace.SelectType"]"
                       clearable 
                       @@change="fetchData">
                 <el-option
@@ -137,12 +137,12 @@
         
         <el-col :span="4" class="filter-item">
             <el-select v-model="filterConditions.exceptionStatus" 
-                      placeholder="异常状态" 
+                      placeholder="@AR["Trace.ExceptionStatus"]"
                       clearable 
                       @@change="fetchData">
-                <el-option label="全部" value=""></el-option>
-                <el-option label="是" value="true"></el-option>
-                <el-option label="否" value="false"></el-option>
+                <el-option label="@AR["Trace.All"]" value=""></el-option>
+                <el-option label="@AR["Xncf.Yes"]" value="true"></el-option>
+                <el-option label="@AR["Xncf.No"]" value="false"></el-option>
             </el-select>
         </el-col>
     </el-row>
@@ -160,7 +160,7 @@
                 </template>
             </el-table-column>
             <el-table-column align="center"
-                             label="编号/行号"
+                             label="@AR["Trace.NumberAndLine"]"
                              width="100">
                 <template slot-scope="scope">
                     <strong>{{ scope.row.no }}</strong> / {{scope.row.line}}
@@ -168,7 +168,7 @@
             </el-table-column>
             <el-table-column align="center"
                              width="200"
-                             label="时间">
+                             label="@AR["Trace.Time"]">
                 <template slot-scope="scope">
                     {{ scope.row.dateTime }}
                 </template>
@@ -176,7 +176,7 @@
 
             <el-table-column align="center"
                              width="80"
-                             label="线程">
+                             label="@AR["Trace.Thread"]">
                 <template slot-scope="scope">
                     {{ scope.row.threadId }}
                 </template>
@@ -184,7 +184,7 @@
 
             <el-table-column align="center"
                              width="95"
-                             label="类型">
+                             label="@AR["Trace.Type"]">
                 <template slot-scope="scope">
                     {{ weixinTraceTypeDesc[scope.row.weixinTraceType] }}
                 </template>
@@ -192,19 +192,19 @@
 
             <el-table-column align="center"
                              width="80"
-                             label="是否异常">
+                             label="@AR["Trace.IsException"]">
                 <template slot-scope="scope">
                     {{ scope.row.isException }}
                 </template>
             </el-table-column>
             <el-table-column align="center"
-                             label="标题">
+                             label="@AR["Trace.Title"]">
                 <template slot-scope="scope">
                     <span v-html="highlightKeyword(scope.row.title)"></span>
                 </template>
             </el-table-column>
             <el-table-column align="center"
-                             label="内容">
+                             label="@AR["Trace.Content"]">
                 <template slot-scope="scope">
                     <template v-if="!scope.row.result.url_empty">
                         <p>
@@ -214,19 +214,19 @@
                     </template>
                     <template v-if="!scope.row.result.result_empty">
                         <p>
-                            <strong>返回结果：：</strong>
+                            <strong>@AR["Trace.ReturnResult"]：</strong>
                         </p>
                         {{scope.row.result.result}}
                     </template>
                     <template v-if="!scope.row.result.postData_empty">
                         <p>
-                            <strong>Post 数据：</strong>
+                            <strong>@AR["Trace.PostData"]：</strong>
                         </p>
                         {{scope.row.result.postData}}
                     </template>
                     <template v-if="scope.row.isException">
                         <p>
-                            <strong>异常信息：</strong>
+                            <strong>@AR["Trace.ExceptionInfo"]：</strong>
                         </p>
                         {{scope.row.result.exceptionMessage}}
                     </template>

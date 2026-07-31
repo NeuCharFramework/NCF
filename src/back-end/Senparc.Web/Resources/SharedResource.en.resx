@@ -168,4 +168,16 @@
   <data name="Home.InstallRequired.Title" xml:space="preserve"><value>Initialize NeuCharFramework</value></data>
   <data name="Home.InstallRequired.Message" xml:space="preserve"><value>NeuCharFramework has not been initialized. The initialization page will open shortly...</value></data>
   <data name="Home.InstallRequired.Link" xml:space="preserve"><value>Click here if the page does not open automatically</value></data>
+  <data name="Error.Title" xml:space="preserve"><value>Error</value></data>
+  <data name="Error.RequestFailed" xml:space="preserve"><value>An error occurred while processing your request.</value></data>
+  <data name="Error.RequestId" xml:space="preserve"><value>Request ID</value></data>
+  <data name="Error.DevelopmentMode" xml:space="preserve"><value>Development mode</value></data>
+  <data name="Error.DevelopmentDetails" xml:space="preserve"><value>Switching to the Development environment displays detailed information about this error.</value></data>
+  <data name="Error.DevelopmentWarning" xml:space="preserve"><value>The Development environment should not be enabled for deployed applications.</value></data>
+  <data name="Error.DevelopmentInstructions" xml:space="preserve"><value>It can expose sensitive exception information to end users. For local debugging, set ASPNETCORE_ENVIRONMENT to Development and restart the application.</value></data>
+  <data name="Privacy.Title" xml:space="preserve"><value>Privacy policy</value></data>
+  <data name="Privacy.Description" xml:space="preserve"><value>Use this page to describe your website's privacy policy.</value></data>
+  <data name="Cookie.Summary" xml:space="preserve"><value>We use cookies to improve the website experience. See the privacy policy for details.</value></data>
+  <data name="Cookie.LearnMore" xml:space="preserve"><value>Learn more</value></data>
+  <data name="Cookie.Accept" xml:space="preserve"><value>Accept</value></data>
 </root>
