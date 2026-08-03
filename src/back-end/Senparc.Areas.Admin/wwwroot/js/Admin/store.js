@@ -1,10 +1,25 @@
-﻿var Store = new Vuex.Store({
+﻿var NCF_ADMIN_NAV_STORAGE_KEYS = {
+    openedMenus: 'ncf.admin.navMenu.openedMenus',
+    scrollTop: 'ncf.admin.navMenu.scrollTop'
+};
+
+function getStoredNavMenuOpenedMenus() {
+    try {
+        var openedMenus = JSON.parse(window.sessionStorage.getItem(NCF_ADMIN_NAV_STORAGE_KEYS.openedMenus));
+        return Array.isArray(openedMenus) ? openedMenus : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+var Store = new Vuex.Store({
     state: {
         pageSrc: '1',
         resourceCodes: [],
         navMenu: { //侧边栏数据
             navMenuList: [],
             isCollapse:JSON.parse( window.sessionStorage.getItem('isCollapse'))|| false,
+            openedMenus: getStoredNavMenuOpenedMenus(),
             variables: {
                 menuBg: '#304156', // 背景色
                 menuText: '#bfcbd9', // 文字色
@@ -24,6 +39,10 @@
         // 切换菜单栏状态
         changeIsCollapse(state,data) {
             state.navMenu.isCollapse = data;
+        },
+        // 保存已展开的菜单
+        changeOpenedMenus(state, data) {
+            state.navMenu.openedMenus = data;
         },
         // 保存菜单数据
         savenavMenuList(state, data) {

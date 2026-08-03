@@ -44,7 +44,7 @@
 <body>
     <div id="app" v-cloak>
         <div class="app-wrapper">
-            <el-container>
+            <el-container class="admin-shell">
                 @*菜单栏*@
                 <el-aside :style="{'width':Store.state.navMenu.isCollapse?'64px':''}" class="el-aside-index">
                     <div :class="[Store.state.navMenu.isCollapse?'head-log2':'head-log']">
@@ -54,6 +54,7 @@
                     </div>
                     <el-scrollbar wrap-class="scrollbar-wrapper" style="height:calc(100vh - 80px);">
                         <el-menu :default-active="Store.state.navMenu.activeMenu"
+                                 :default-openeds="Store.state.navMenu.openedMenus"
                                  :collapse="Store.state.navMenu.isCollapse"
                                  :background-color="Store.state.navMenu.variables.menuBg"
                                  :text-color="Store.state.navMenu.variables.menuText"
@@ -61,12 +62,14 @@
                                  :unique-opened="false"
                                  :collapse-transition="false"
                                  @@select="menuSelect"
+                                 @@open="menuOpen"
+                                 @@close="menuClose"
                                  mode="vertical">
                             <sidebar-item v-for="(items,index) in Store.state.navMenu.navMenuList" :key="index" :item="items"></sidebar-item>
                         </el-menu>
                     </el-scrollbar>
                 </el-aside>
-                <el-container>
+                <el-container class="admin-workspace">
                     <el-header>
                         <div class="header-menu">
                             @*切换菜单栏*@
@@ -104,7 +107,7 @@
                             </el-dropdown>
                         </div>
                     </el-header>
-                    <el-main>
+                    <el-main class="admin-content">
                         <div class="ifram-wrapper">
                             @*<iframe :src="pageSrc"></iframe>*@
                             @RenderBody()

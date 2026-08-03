@@ -189,4 +189,50 @@
   <data name="Cookie.Summary" xml:space="preserve"><value>我们使用 Cookie 改善网站体验。详情请查看隐私政策。</value></data>
   <data name="Cookie.LearnMore" xml:space="preserve"><value>了解更多</value></data>
   <data name="Cookie.Accept" xml:space="preserve"><value>接受</value></data>
+  <!-- ===== Download Page ===== -->
+  <data name="Nav.Download" xml:space="preserve"><value>下载</value></data>
+  <data name="Download.PageTitle" xml:space="preserve"><value>下载 NCF</value></data>
+  <data name="Download.Hero.Eyebrow" xml:space="preserve"><value>AI NATIVE · AI READY</value></data>
+  <data name="Download.Hero.Title" xml:space="preserve"><value>即开即用，也为下一次伟大的构建准备就绪</value></data>
+  <data name="Download.Hero.Description" xml:space="preserve"><value>下载 NCF Desktop，几分钟内启动一套完整的 NCF 系统；也可以把 NCF 作为 AI Native、AI Ready 的基础框架，二次开发各种业务与智能系统。</value></data>
+  <data name="Download.Hero.Helper" xml:space="preserve"><value>系统会优先使用本站最新镜像；无法准确识别架构时，请在下方手动选择。</value></data>
+  <data name="Download.Action.Download" xml:space="preserve"><value>下载</value></data>
+  <data name="Download.Action.AllReleases" xml:space="preserve"><value>查看全部版本</value></data>
+  <data name="Download.Action.ViewReleases" xml:space="preserve"><value>查看发布版本</value></data>
+  <data name="Download.Status.Device" xml:space="preserve"><value>当前设备</value></data>
+  <data name="Download.Status.Version" xml:space="preserve"><value>最新版本</value></data>
+  <data name="Download.Status.Source" xml:space="preserve"><value>下载源</value></data>
+  <data name="Download.Status.Loading" xml:space="preserve"><value>正在匹配最佳版本…</value></data>
+  <data name="Download.Status.LocalSource" xml:space="preserve"><value>本站高速镜像</value></data>
+  <data name="Download.Status.GitHubSource" xml:space="preserve"><value>GitHub Releases</value></data>
+  <data name="Download.Status.Unavailable" xml:space="preserve"><value>暂时无法获取</value></data>
+  <data name="Download.Status.Detected" xml:space="preserve"><value>已识别</value></data>
+  <data name="Download.Status.Estimated" xml:space="preserve"><value>推测</value></data>
+  <data name="Download.Path.Eyebrow" xml:space="preserve"><value>一种框架 · 两种起点</value></data>
+  <data name="Download.Path.Title" xml:space="preserve"><value>从开箱即用，到自由构建</value></data>
+  <data name="Download.Path.Description" xml:space="preserve"><value>无论你想立刻运行一套系统，还是打造长期演进的产品，NCF 都给你清晰、可靠的起点。</value></data>
+  <data name="Download.Path.Run.Title" xml:space="preserve"><value>即开即用</value></data>
+  <data name="Download.Path.Run.Description" xml:space="preserve"><value>通过 NCF Desktop 获取完整运行环境，快速启动管理后台、模块与 AI 工作区，把时间留给真正的业务。</value></data>
+  <data name="Download.Path.Run.Tag" xml:space="preserve"><value>DOWNLOAD &amp; RUN</value></data>
+  <data name="Download.Path.Build.Title" xml:space="preserve"><value>基于 NCF 二次开发</value></data>
+  <data name="Download.Path.Build.Description" xml:space="preserve"><value>基于 DDD、高度模块化和完整基础设施，按需扩展 XNCF 模块，构建 AI Native、AI Ready 的各类系统。</value></data>
+  <data name="Download.Path.Build.Tag" xml:space="preserve"><value>BUILD &amp; EXTEND</value></data>
+  <data name="Download.Platform.Eyebrow" xml:space="preserve"><value>全部平台</value></data>
+  <data name="Download.Platform.Title" xml:space="preserve"><value>为你的设备选择 NCF Desktop</value></data>
+  <data name="Download.Platform.Description" xml:space="preserve"><value>提供 Windows、macOS 与 Linux 的 x64 和 ARM64 独立发布包。</value></data>
+  <data name="Download.Platform.Recommended" xml:space="preserve"><value>为你推荐</value></data>
+  <data name="Download.Platform.Note" xml:space="preserve"><value>所有包均来自 NeuCharFramework/NcfDesktop 官方发布；下载前可在 GitHub 查看版本说明。</value></data>
+  <data name="Download.Resources.Eyebrow" xml:space="preserve"><value>继续探索</value></data>
+  <data name="Download.Resources.Title" xml:space="preserve"><value>从使用到创造，资源都在这里</value></data>
+  <data name="Download.Resources.Description" xml:space="preserve"><value>查看源代码、阅读完整文档，或用官方项目模板开始你的 NCF 应用。</value></data>
+  <data name="Download.Resources.Source.Title" xml:space="preserve"><value>NCF 源码项目</value></data>
+  <data name="Download.Resources.Source.Description" xml:space="preserve"><value>探索框架核心、XNCF 模块与工程实现；欢迎提交 Issue、参与讨论和贡献代码。</value></data>
+  <data name="Download.Resources.Source.Link" xml:space="preserve"><value>在 GitHub 上查看源码</value></data>
+  <data name="Download.Resources.Docs.Title" xml:space="preserve"><value>NCF 开发文档</value></data>
+  <data name="Download.Resources.Docs.Description" xml:space="preserve"><value>从安装、配置到模块开发和部署，用体系化文档快速掌握 NCF。</value></data>
+  <data name="Download.Resources.Template.Description" xml:space="preserve"><value>使用官方 .NET 项目模板生成结构完整的 NCF 工程，直接进入二次开发。</value></data>
+  <data name="Download.Cta.Eyebrow" xml:space="preserve"><value>准备好了吗？</value></data>
+  <data name="Download.Cta.Title" xml:space="preserve"><value>让 NCF 成为你下一个系统的可靠底座</value></data>
+  <data name="Download.Cta.Description" xml:space="preserve"><value>先运行，再深入；从一个可用的系统开始，逐步构建属于你的 AI 原生应用。</value></data>
+  <data name="Download.Cta.Action" xml:space="preserve"><value>阅读快速开始</value></data>
 </root>

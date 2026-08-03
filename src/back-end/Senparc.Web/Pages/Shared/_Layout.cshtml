@@ -31,6 +31,7 @@
     </environment>
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/Index/index.css" rel="stylesheet" />
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <header>
@@ -43,6 +44,9 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Download">@SR["Nav.Download"]</a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" href="https://doc.ncf.pub" target="_blank">@SR["Nav.Documentation"]</a>
                                 </li>

@@ -180,4 +180,50 @@
   <data name="Cookie.Summary" xml:space="preserve"><value>ウェブサイトの利便性向上のため Cookie を使用します。詳細はプライバシーポリシーをご覧ください。</value></data>
   <data name="Cookie.LearnMore" xml:space="preserve"><value>詳細</value></data>
   <data name="Cookie.Accept" xml:space="preserve"><value>同意する</value></data>
+  <!-- ===== Download Page ===== -->
+  <data name="Nav.Download" xml:space="preserve"><value>ダウンロード</value></data>
+  <data name="Download.PageTitle" xml:space="preserve"><value>NCF をダウンロード</value></data>
+  <data name="Download.Hero.Eyebrow" xml:space="preserve"><value>AI NATIVE · AI READY</value></data>
+  <data name="Download.Hero.Title" xml:space="preserve"><value>すぐに使える。次の開発にも備えている。</value></data>
+  <data name="Download.Hero.Description" xml:space="preserve"><value>NCF Desktop なら数分で完全な NCF システムを起動できます。NCF を AI Native・AI Ready の基盤として、さまざまな業務・インテリジェントシステムを開発することもできます。</value></data>
+  <data name="Download.Hero.Helper" xml:space="preserve"><value>最新のローカルミラーを優先します。アーキテクチャを正確に判定できない場合は、下から選択してください。</value></data>
+  <data name="Download.Action.Download" xml:space="preserve"><value>ダウンロード</value></data>
+  <data name="Download.Action.AllReleases" xml:space="preserve"><value>すべてのリリース</value></data>
+  <data name="Download.Action.ViewReleases" xml:space="preserve"><value>リリースを見る</value></data>
+  <data name="Download.Status.Device" xml:space="preserve"><value>現在のデバイス</value></data>
+  <data name="Download.Status.Version" xml:space="preserve"><value>最新バージョン</value></data>
+  <data name="Download.Status.Source" xml:space="preserve"><value>ダウンロード元</value></data>
+  <data name="Download.Status.Loading" xml:space="preserve"><value>最適なパッケージを検索中…</value></data>
+  <data name="Download.Status.LocalSource" xml:space="preserve"><value>ローカル高速ミラー</value></data>
+  <data name="Download.Status.GitHubSource" xml:space="preserve"><value>GitHub Releases</value></data>
+  <data name="Download.Status.Unavailable" xml:space="preserve"><value>一時的に取得できません</value></data>
+  <data name="Download.Status.Detected" xml:space="preserve"><value>検出済み</value></data>
+  <data name="Download.Status.Estimated" xml:space="preserve"><value>推定</value></data>
+  <data name="Download.Path.Eyebrow" xml:space="preserve"><value>1 つのフレームワーク · 2 つの出発点</value></data>
+  <data name="Download.Path.Title" xml:space="preserve"><value>すぐに使うことも、自由に構築することも</value></data>
+  <data name="Download.Path.Description" xml:space="preserve"><value>今すぐ動くシステムにも、長く進化する製品にも、NCF は明確で信頼できる出発点を提供します。</value></data>
+  <data name="Download.Path.Run.Title" xml:space="preserve"><value>すぐに実行</value></data>
+  <data name="Download.Path.Run.Description" xml:space="preserve"><value>NCF Desktop で実行環境、管理画面、モジュール、AI ワークスペースをすばやく起動し、本来の業務に集中できます。</value></data>
+  <data name="Download.Path.Run.Tag" xml:space="preserve"><value>ダウンロード &amp; 実行</value></data>
+  <data name="Download.Path.Build.Title" xml:space="preserve"><value>NCF 上で開発</value></data>
+  <data name="Download.Path.Build.Description" xml:space="preserve"><value>DDD と高度なモジュール設計、充実した基盤上で XNCF を拡張し、AI Native・AI Ready なシステムを構築できます。</value></data>
+  <data name="Download.Path.Build.Tag" xml:space="preserve"><value>構築 &amp; 拡張</value></data>
+  <data name="Download.Platform.Eyebrow" xml:space="preserve"><value>すべてのプラットフォーム</value></data>
+  <data name="Download.Platform.Title" xml:space="preserve"><value>デバイスに合う NCF Desktop を選択</value></data>
+  <data name="Download.Platform.Description" xml:space="preserve"><value>Windows、macOS、Linux 向けに x64 と ARM64 の独立パッケージを提供しています。</value></data>
+  <data name="Download.Platform.Recommended" xml:space="preserve"><value>おすすめ</value></data>
+  <data name="Download.Platform.Note" xml:space="preserve"><value>すべて NeuCharFramework/NcfDesktop の公式リリースです。GitHub でリリースノートを確認できます。</value></data>
+  <data name="Download.Resources.Eyebrow" xml:space="preserve"><value>さらに詳しく</value></data>
+  <data name="Download.Resources.Title" xml:space="preserve"><value>利用から開発まで、必要なリソースを</value></data>
+  <data name="Download.Resources.Description" xml:space="preserve"><value>ソースコード、完全なドキュメント、公式プロジェクトテンプレートから NCF アプリを始められます。</value></data>
+  <data name="Download.Resources.Source.Title" xml:space="preserve"><value>NCF ソースコード</value></data>
+  <data name="Download.Resources.Source.Description" xml:space="preserve"><value>コア、XNCF モジュール、実装を確認できます。Issue、ディスカッション、コード貢献も歓迎します。</value></data>
+  <data name="Download.Resources.Source.Link" xml:space="preserve"><value>GitHub でソースを見る</value></data>
+  <data name="Download.Resources.Docs.Title" xml:space="preserve"><value>NCF 開発ドキュメント</value></data>
+  <data name="Download.Resources.Docs.Description" xml:space="preserve"><value>インストール、設定、モジュール開発、デプロイの体系的なガイドで NCF を習得できます。</value></data>
+  <data name="Download.Resources.Template.Description" xml:space="preserve"><value>公式 .NET テンプレートで完全な NCF ソリューションを生成し、すぐにカスタマイズを始められます。</value></data>
+  <data name="Download.Cta.Eyebrow" xml:space="preserve"><value>準備はできましたか？</value></data>
+  <data name="Download.Cta.Title" xml:space="preserve"><value>次のシステムの信頼できる基盤に NCF を</value></data>
+  <data name="Download.Cta.Description" xml:space="preserve"><value>まず動かし、次に深める。動くシステムから、独自の AI ネイティブアプリへ育てましょう。</value></data>
+  <data name="Download.Cta.Action" xml:space="preserve"><value>クイックスタートを読む</value></data>
 </root>

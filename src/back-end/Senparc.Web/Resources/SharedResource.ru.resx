@@ -180,4 +180,50 @@
   <data name="Cookie.Summary" xml:space="preserve"><value>Мы используем файлы cookie для улучшения работы сайта. Подробности приведены в политике конфиденциальности.</value></data>
   <data name="Cookie.LearnMore" xml:space="preserve"><value>Подробнее</value></data>
   <data name="Cookie.Accept" xml:space="preserve"><value>Принять</value></data>
+  <!-- ===== Download Page ===== -->
+  <data name="Nav.Download" xml:space="preserve"><value>Скачать</value></data>
+  <data name="Download.PageTitle" xml:space="preserve"><value>Скачать NCF</value></data>
+  <data name="Download.Hero.Eyebrow" xml:space="preserve"><value>AI NATIVE · AI READY</value></data>
+  <data name="Download.Hero.Title" xml:space="preserve"><value>Готово к запуску. Готово к вашей следующей системе.</value></data>
+  <data name="Download.Hero.Description" xml:space="preserve"><value>Запустите полноценную систему NCF за несколько минут с NCF Desktop или используйте NCF как основу AI Native и AI Ready для любых бизнес- и интеллектуальных систем.</value></data>
+  <data name="Download.Hero.Helper" xml:space="preserve"><value>Приоритет отдаётся свежему локальному зеркалу. Если архитектуру нельзя определить точно, выберите пакет ниже.</value></data>
+  <data name="Download.Action.Download" xml:space="preserve"><value>Скачать</value></data>
+  <data name="Download.Action.AllReleases" xml:space="preserve"><value>Все выпуски</value></data>
+  <data name="Download.Action.ViewReleases" xml:space="preserve"><value>Посмотреть выпуски</value></data>
+  <data name="Download.Status.Device" xml:space="preserve"><value>Ваше устройство</value></data>
+  <data name="Download.Status.Version" xml:space="preserve"><value>Последняя версия</value></data>
+  <data name="Download.Status.Source" xml:space="preserve"><value>Источник</value></data>
+  <data name="Download.Status.Loading" xml:space="preserve"><value>Подбираем лучший пакет…</value></data>
+  <data name="Download.Status.LocalSource" xml:space="preserve"><value>Быстрое локальное зеркало</value></data>
+  <data name="Download.Status.GitHubSource" xml:space="preserve"><value>GitHub Releases</value></data>
+  <data name="Download.Status.Unavailable" xml:space="preserve"><value>Временно недоступно</value></data>
+  <data name="Download.Status.Detected" xml:space="preserve"><value>Определено</value></data>
+  <data name="Download.Status.Estimated" xml:space="preserve"><value>предположительно</value></data>
+  <data name="Download.Path.Eyebrow" xml:space="preserve"><value>ОДИН ФРЕЙМВОРК · ДВА СТАРТА</value></data>
+  <data name="Download.Path.Title" xml:space="preserve"><value>От готового решения до собственного продукта</value></data>
+  <data name="Download.Path.Description" xml:space="preserve"><value>Нужна система сейчас или продукт на годы — NCF даёт ясную и надёжную отправную точку.</value></data>
+  <data name="Download.Path.Run.Title" xml:space="preserve"><value>Готово к запуску</value></data>
+  <data name="Download.Path.Run.Description" xml:space="preserve"><value>NCF Desktop быстро запускает среду, панель управления, модули и AI-пространство, чтобы вы сосредоточились на бизнесе.</value></data>
+  <data name="Download.Path.Run.Tag" xml:space="preserve"><value>СКАЧАТЬ И ЗАПУСТИТЬ</value></data>
+  <data name="Download.Path.Build.Title" xml:space="preserve"><value>Разработка на NCF</value></data>
+  <data name="Download.Path.Build.Description" xml:space="preserve"><value>Расширяйте XNCF-модули на DDD-основе с модульной архитектурой и инфраструктурой для систем AI Native и AI Ready.</value></data>
+  <data name="Download.Path.Build.Tag" xml:space="preserve"><value>СОЗДАВАТЬ И РАСШИРЯТЬ</value></data>
+  <data name="Download.Platform.Eyebrow" xml:space="preserve"><value>ВСЕ ПЛАТФОРМЫ</value></data>
+  <data name="Download.Platform.Title" xml:space="preserve"><value>Выберите NCF Desktop для вашего устройства</value></data>
+  <data name="Download.Platform.Description" xml:space="preserve"><value>Доступны автономные пакеты x64 и ARM64 для Windows, macOS и Linux.</value></data>
+  <data name="Download.Platform.Recommended" xml:space="preserve"><value>Рекомендуется</value></data>
+  <data name="Download.Platform.Note" xml:space="preserve"><value>Все пакеты взяты из официальных выпусков NeuCharFramework/NcfDesktop. Примечания доступны на GitHub.</value></data>
+  <data name="Download.Resources.Eyebrow" xml:space="preserve"><value>ИЗУЧАЙТЕ ДАЛЬШЕ</value></data>
+  <data name="Download.Resources.Title" xml:space="preserve"><value>Всё для использования и разработки</value></data>
+  <data name="Download.Resources.Description" xml:space="preserve"><value>Изучите исходный код и документацию или начните NCF-приложение с официального шаблона.</value></data>
+  <data name="Download.Resources.Source.Title" xml:space="preserve"><value>Исходный код NCF</value></data>
+  <data name="Download.Resources.Source.Description" xml:space="preserve"><value>Изучайте ядро, XNCF-модули и реализацию. Создавайте issue, участвуйте в обсуждениях и вносите вклад.</value></data>
+  <data name="Download.Resources.Source.Link" xml:space="preserve"><value>Открыть код на GitHub</value></data>
+  <data name="Download.Resources.Docs.Title" xml:space="preserve"><value>Документация NCF</value></data>
+  <data name="Download.Resources.Docs.Description" xml:space="preserve"><value>Освойте NCF по руководствам по установке, настройке, разработке модулей и развёртыванию.</value></data>
+  <data name="Download.Resources.Template.Description" xml:space="preserve"><value>Создайте полноценное решение NCF официальным шаблоном .NET и сразу приступайте к доработке.</value></data>
+  <data name="Download.Cta.Eyebrow" xml:space="preserve"><value>ГОТОВЫ?</value></data>
+  <data name="Download.Cta.Title" xml:space="preserve"><value>Сделайте NCF надёжной основой вашей следующей системы</value></data>
+  <data name="Download.Cta.Description" xml:space="preserve"><value>Сначала запустите, затем углубляйтесь. Превратите рабочую систему в собственное AI-native приложение.</value></data>
+  <data name="Download.Cta.Action" xml:space="preserve"><value>Быстрый старт</value></data>
 </root>

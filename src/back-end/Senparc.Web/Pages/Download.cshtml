@@ -1,0 +1,227 @@
+@page
+@model DownloadModel
+@{
+    ViewData["Title"] = SR["Download.PageTitle"];
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Download/download.css" asp-append-version="true" />
+}
+
+<div id="ncf-download-page"
+     class="download-page"
+     data-local-release-url="/NcfPackages/latest-desktop-release.json"
+     data-local-package-base="/NcfPackages"
+     data-github-release-url="https://api.github.com/repos/NeuCharFramework/NcfDesktop/releases/latest"
+     data-releases-url="https://github.com/NeuCharFramework/NcfDesktop/releases"
+     data-loading="@SR["Download.Status.Loading"]"
+     data-source-local="@SR["Download.Status.LocalSource"]"
+     data-source-github="@SR["Download.Status.GitHubSource"]"
+     data-source-unavailable="@SR["Download.Status.Unavailable"]"
+     data-detected="@SR["Download.Status.Detected"]"
+     data-estimated="@SR["Download.Status.Estimated"]"
+     data-download="@SR["Download.Action.Download"]"
+     data-unavailable="@SR["Download.Action.ViewReleases"]"
+     data-recommended="@SR["Download.Platform.Recommended"]"
+     data-windows="Windows"
+     data-macos="macOS"
+     data-linux="Linux"
+     data-x64="x64"
+     data-arm64="ARM64">
+
+    <section class="download-hero" aria-labelledby="download-title">
+        <div class="download-glow download-glow-one"></div>
+        <div class="download-glow download-glow-two"></div>
+        <div class="row align-items-center position-relative">
+            <div class="col-lg-7">
+                <div class="download-eyebrow">
+                    <span class="eyebrow-dot"></span>
+                    @SR["Download.Hero.Eyebrow"]
+                </div>
+                <h1 id="download-title">@SR["Download.Hero.Title"]</h1>
+                <p class="download-lead">@SR["Download.Hero.Description"]</p>
+
+                <div class="download-actions">
+                    <a id="recommended-download" class="download-button download-button-primary is-loading"
+                       href="https://github.com/NeuCharFramework/NcfDesktop/releases"
+                       aria-describedby="download-detection-note">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 20h14" /></svg>
+                        <span id="recommended-download-text">@SR["Download.Status.Loading"]</span>
+                    </a>
+                    <a class="download-button download-button-ghost"
+                       href="https://github.com/NeuCharFramework/NcfDesktop/releases"
+                       target="_blank" rel="noopener noreferrer">
+                        @SR["Download.Action.AllReleases"]
+                        <span aria-hidden="true">↗</span>
+                    </a>
+                </div>
+
+                <div id="download-detection-note" class="download-status" role="status" aria-live="polite">
+                    <span class="status-pill"><span class="status-label">@SR["Download.Status.Device"]</span><strong id="detected-device">@SR["Download.Status.Loading"]</strong></span>
+                    <span class="status-divider"></span>
+                    <span class="status-pill"><span class="status-label">@SR["Download.Status.Version"]</span><strong id="latest-version">—</strong></span>
+                    <span class="status-divider"></span>
+                    <span class="status-pill"><span class="status-label">@SR["Download.Status.Source"]</span><strong id="download-source">@SR["Download.Status.Loading"]</strong></span>
+                </div>
+                <p class="download-helper">@SR["Download.Hero.Helper"]</p>
+            </div>
+
+            <div class="col-lg-5 d-none d-lg-block" aria-hidden="true">
+                <div class="desktop-visual">
+                    <div class="desktop-window">
+                        <div class="window-bar">
+                            <span></span><span></span><span></span>
+                            <small>NCF Desktop</small>
+                        </div>
+                        <div class="window-body">
+                            <div class="window-side">
+                                <div class="mini-logo">N</div>
+                                <i class="active"></i><i></i><i></i><i></i>
+                            </div>
+                            <div class="window-content">
+                                <div class="window-kicker">AI NATIVE WORKSPACE</div>
+                                <div class="window-title"></div>
+                                <div class="window-copy"></div>
+                                <div class="window-copy short"></div>
+                                <div class="window-command"><b></b><span></span><em></em></div>
+                                <div class="window-cards"><i></i><i></i><i></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="visual-badge badge-ready"><span>✓</span> READY TO RUN</div>
+                    <div class="visual-badge badge-ai"><span>✦</span> AI READY</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="download-section path-section" aria-labelledby="choose-path-title">
+        <div class="section-heading section-heading-center">
+            <span>@SR["Download.Path.Eyebrow"]</span>
+            <h2 id="choose-path-title">@SR["Download.Path.Title"]</h2>
+            <p>@SR["Download.Path.Description"]</p>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <article class="path-card path-card-run">
+                    <div class="path-number">01</div>
+                    <div class="path-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z" /></svg>
+                    </div>
+                    <div>
+                        <h3>@SR["Download.Path.Run.Title"]</h3>
+                        <p>@SR["Download.Path.Run.Description"]</p>
+                        <span class="path-tag">@SR["Download.Path.Run.Tag"]</span>
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-6 mb-4">
+                <article class="path-card path-card-build">
+                    <div class="path-number">02</div>
+                    <div class="path-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 9-4 3 4 3m8-6 4 3-4 3M14 5l-4 14" /></svg>
+                    </div>
+                    <div>
+                        <h3>@SR["Download.Path.Build.Title"]</h3>
+                        <p>@SR["Download.Path.Build.Description"]</p>
+                        <span class="path-tag">@SR["Download.Path.Build.Tag"]</span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="download-section platform-section" aria-labelledby="platform-title">
+        <div class="section-heading">
+            <span>@SR["Download.Platform.Eyebrow"]</span>
+            <h2 id="platform-title">@SR["Download.Platform.Title"]</h2>
+            <p>@SR["Download.Platform.Description"]</p>
+        </div>
+        <div class="platform-grid">
+            @foreach (var platform in new[]
+            {
+                (Key: "win-x64", Name: "Windows", Arch: "x64", Icon: "⊞"),
+                (Key: "win-arm64", Name: "Windows", Arch: "ARM64", Icon: "⊞"),
+                (Key: "osx-arm64", Name: "macOS", Arch: "Apple Silicon", Icon: "●"),
+                (Key: "osx-x64", Name: "macOS", Arch: "Intel x64", Icon: "●"),
+                (Key: "linux-x64", Name: "Linux", Arch: "x64", Icon: "◆"),
+                (Key: "linux-arm64", Name: "Linux", Arch: "ARM64", Icon: "◆")
+            })
+            {
+                <article class="platform-card" data-package-key="@platform.Key">
+                    <div class="recommended-label">@SR["Download.Platform.Recommended"]</div>
+                    <div class="platform-icon" aria-hidden="true">@platform.Icon</div>
+                    <div class="platform-info">
+                        <h3>@platform.Name</h3>
+                        <p>@platform.Arch</p>
+                        <small data-package-size>—</small>
+                    </div>
+                    <a href="https://github.com/NeuCharFramework/NcfDesktop/releases"
+                       target="_blank" rel="noopener noreferrer" data-package-link
+                       aria-label="@SR["Download.Action.Download"] @platform.Name @platform.Arch">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 20h14" /></svg>
+                    </a>
+                </article>
+            }
+        </div>
+        <p class="platform-note">@SR["Download.Platform.Note"]</p>
+    </section>
+
+    <section class="download-section resources-section" aria-labelledby="resources-title">
+        <div class="section-heading section-heading-center">
+            <span>@SR["Download.Resources.Eyebrow"]</span>
+            <h2 id="resources-title">@SR["Download.Resources.Title"]</h2>
+            <p>@SR["Download.Resources.Description"]</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <a class="resource-card" href="https://github.com/NeuCharFramework/NCF" target="_blank" rel="noopener noreferrer">
+                    <div class="resource-icon resource-github">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.87c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.64-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.82c.85 0 1.71.11 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.77c0 .27.18.58.69.48A10 10 0 0 0 12 2Z" /></svg>
+                    </div>
+                    <div class="resource-arrow">↗</div>
+                    <h3>@SR["Download.Resources.Source.Title"]</h3>
+                    <p>@SR["Download.Resources.Source.Description"]</p>
+                    <span>@SR["Download.Resources.Source.Link"]</span>
+                </a>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <a class="resource-card" href="https://doc.ncf.pub" target="_blank" rel="noopener noreferrer">
+                    <div class="resource-icon resource-docs">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5v-16ZM20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" /></svg>
+                    </div>
+                    <div class="resource-arrow">↗</div>
+                    <h3>@SR["Download.Resources.Docs.Title"]</h3>
+                    <p>@SR["Download.Resources.Docs.Description"]</p>
+                    <span>doc.ncf.pub</span>
+                </a>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <a class="resource-card" href="https://www.nuget.org/packages/Senparc.NCF.Template" target="_blank" rel="noopener noreferrer">
+                    <div class="resource-icon resource-template">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Zm-7 9 7 4 7-4m-14 4 7 4 7-4" /></svg>
+                    </div>
+                    <div class="resource-arrow">↗</div>
+                    <h3>Senparc.NCF.Template</h3>
+                    <p>@SR["Download.Resources.Template.Description"]</p>
+                    <code>dotnet new install Senparc.NCF.Template</code>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="download-cta">
+        <div>
+            <span>@SR["Download.Cta.Eyebrow"]</span>
+            <h2>@SR["Download.Cta.Title"]</h2>
+            <p>@SR["Download.Cta.Description"]</p>
+        </div>
+        <a href="https://doc.ncf.pub" target="_blank" rel="noopener noreferrer" class="download-button download-button-light">
+            @SR["Download.Cta.Action"] <span aria-hidden="true">→</span>
+        </a>
+    </section>
+</div>
+
+@section Scripts {
+    <script src="~/js/Download/download.js" asp-append-version="true"></script>
+}

@@ -121,7 +121,7 @@
                 // 下拉框value
                 if (res.parameterType === 1 && res.selectionList.items) {
                     this.runData[res.name] = {};
-                    this.runData[res.name].value = res.value || '';
+                    this.runData[res.name].value = res.value === null || typeof res.value === 'undefined' ? '' : res.value;
                     this.runData[res.name].item = res;
                     res.selectionList.items.map(ele => {
                         if (!this.runData[res.name].value && ele.defaultSelected) {
@@ -137,7 +137,7 @@
                 if (res.parameterType === 0 || res.parameterType === 3) {
                     this.runData[res.name] = {};
                     this.runData[res.name].item = res;
-                    this.runData[res.name].value = res.value || '';
+                    this.runData[res.name].value = res.value === null || typeof res.value === 'undefined' ? '' : res.value;
                 }
                 // 布尔（单个复选框）
                 if (res.parameterType === 4) {

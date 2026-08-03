@@ -17,8 +17,11 @@ a {
     text-decoration: none;
 }
 
+html,
 body {
+    height: 100%;
     margin: 0;
+    overflow: hidden;
 }
 
 img {
@@ -41,6 +44,19 @@ li {
     width: 100%;
 }
 
+.admin-shell {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.admin-workspace {
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
 .footer {
     text-align: right;
     color: #5A738E;
@@ -51,15 +67,19 @@ li {
         color: #23527c;
     }
 
-.el-main
-{
+.admin-content {
     background-color: #e3e3e3;
-    height: 730px;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
 }
 
 /*侧边栏*/
 .el-aside-index {
-    min-height: 100vh;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
     transition: width 0.28s;
     width: 240px;
     background-color: #304156;

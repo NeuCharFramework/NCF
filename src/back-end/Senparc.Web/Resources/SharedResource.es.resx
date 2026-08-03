@@ -180,4 +180,50 @@
   <data name="Cookie.Summary" xml:space="preserve"><value>Usamos cookies para mejorar la experiencia del sitio. Consulta la política de privacidad para obtener más información.</value></data>
   <data name="Cookie.LearnMore" xml:space="preserve"><value>Más información</value></data>
   <data name="Cookie.Accept" xml:space="preserve"><value>Aceptar</value></data>
+  <!-- ===== Download Page ===== -->
+  <data name="Nav.Download" xml:space="preserve"><value>Descargar</value></data>
+  <data name="Download.PageTitle" xml:space="preserve"><value>Descargar NCF</value></data>
+  <data name="Download.Hero.Eyebrow" xml:space="preserve"><value>AI NATIVE · AI READY</value></data>
+  <data name="Download.Hero.Title" xml:space="preserve"><value>Listo para usar. Listo para lo que construyas después.</value></data>
+  <data name="Download.Hero.Description" xml:space="preserve"><value>Inicia un sistema NCF completo en minutos con NCF Desktop, o usa NCF como base AI Native y AI Ready para crear todo tipo de sistemas empresariales e inteligentes.</value></data>
+  <data name="Download.Hero.Helper" xml:space="preserve"><value>Priorizamos el espejo local más reciente. Si no se puede identificar la arquitectura, elige un paquete abajo.</value></data>
+  <data name="Download.Action.Download" xml:space="preserve"><value>Descargar</value></data>
+  <data name="Download.Action.AllReleases" xml:space="preserve"><value>Ver todas las versiones</value></data>
+  <data name="Download.Action.ViewReleases" xml:space="preserve"><value>Ver versiones</value></data>
+  <data name="Download.Status.Device" xml:space="preserve"><value>Tu dispositivo</value></data>
+  <data name="Download.Status.Version" xml:space="preserve"><value>Última versión</value></data>
+  <data name="Download.Status.Source" xml:space="preserve"><value>Fuente</value></data>
+  <data name="Download.Status.Loading" xml:space="preserve"><value>Buscando el mejor paquete…</value></data>
+  <data name="Download.Status.LocalSource" xml:space="preserve"><value>Espejo local rápido</value></data>
+  <data name="Download.Status.GitHubSource" xml:space="preserve"><value>GitHub Releases</value></data>
+  <data name="Download.Status.Unavailable" xml:space="preserve"><value>No disponible temporalmente</value></data>
+  <data name="Download.Status.Detected" xml:space="preserve"><value>Detectado</value></data>
+  <data name="Download.Status.Estimated" xml:space="preserve"><value>estimado</value></data>
+  <data name="Download.Path.Eyebrow" xml:space="preserve"><value>UN FRAMEWORK · DOS COMIENZOS</value></data>
+  <data name="Download.Path.Title" xml:space="preserve"><value>De listo para usar a totalmente tuyo</value></data>
+  <data name="Download.Path.Description" xml:space="preserve"><value>Para un sistema inmediato o un producto que evolucione durante años, NCF ofrece un punto de partida claro y fiable.</value></data>
+  <data name="Download.Path.Run.Title" xml:space="preserve"><value>Listo para usar</value></data>
+  <data name="Download.Path.Run.Description" xml:space="preserve"><value>Con NCF Desktop inicia rápidamente el entorno, la administración, los módulos y el espacio de IA, y céntrate en tu negocio.</value></data>
+  <data name="Download.Path.Run.Tag" xml:space="preserve"><value>DESCARGAR Y EJECUTAR</value></data>
+  <data name="Download.Path.Build.Title" xml:space="preserve"><value>Construir sobre NCF</value></data>
+  <data name="Download.Path.Build.Description" xml:space="preserve"><value>Extiende módulos XNCF sobre una base DDD modular y completa para crear sistemas AI Native y AI Ready.</value></data>
+  <data name="Download.Path.Build.Tag" xml:space="preserve"><value>CREAR Y EXTENDER</value></data>
+  <data name="Download.Platform.Eyebrow" xml:space="preserve"><value>TODAS LAS PLATAFORMAS</value></data>
+  <data name="Download.Platform.Title" xml:space="preserve"><value>Elige NCF Desktop para tu dispositivo</value></data>
+  <data name="Download.Platform.Description" xml:space="preserve"><value>Hay paquetes independientes x64 y ARM64 para Windows, macOS y Linux.</value></data>
+  <data name="Download.Platform.Recommended" xml:space="preserve"><value>Recomendado</value></data>
+  <data name="Download.Platform.Note" xml:space="preserve"><value>Todos los paquetes proceden de las versiones oficiales de NeuCharFramework/NcfDesktop. Consulta las notas en GitHub.</value></data>
+  <data name="Download.Resources.Eyebrow" xml:space="preserve"><value>SIGUE EXPLORANDO</value></data>
+  <data name="Download.Resources.Title" xml:space="preserve"><value>Todo, desde usar hasta crear</value></data>
+  <data name="Download.Resources.Description" xml:space="preserve"><value>Explora el código, lee la documentación o inicia tu aplicación NCF con la plantilla oficial.</value></data>
+  <data name="Download.Resources.Source.Title" xml:space="preserve"><value>Código fuente de NCF</value></data>
+  <data name="Download.Resources.Source.Description" xml:space="preserve"><value>Explora el núcleo, los módulos XNCF y la implementación. Abre un issue, participa o contribuye.</value></data>
+  <data name="Download.Resources.Source.Link" xml:space="preserve"><value>Ver código en GitHub</value></data>
+  <data name="Download.Resources.Docs.Title" xml:space="preserve"><value>Documentación de NCF</value></data>
+  <data name="Download.Resources.Docs.Description" xml:space="preserve"><value>Aprende NCF con guías de instalación, configuración, desarrollo de módulos y despliegue.</value></data>
+  <data name="Download.Resources.Template.Description" xml:space="preserve"><value>Genera una solución NCF completa con la plantilla .NET oficial y empieza a personalizarla de inmediato.</value></data>
+  <data name="Download.Cta.Eyebrow" xml:space="preserve"><value>¿LISTO?</value></data>
+  <data name="Download.Cta.Title" xml:space="preserve"><value>Haz de NCF la base fiable de tu próximo sistema</value></data>
+  <data name="Download.Cta.Description" xml:space="preserve"><value>Ejecútalo primero y profundiza después. Parte de un sistema funcional y crea tu aplicación de IA nativa.</value></data>
+  <data name="Download.Cta.Action" xml:space="preserve"><value>Leer inicio rápido</value></data>
 </root>
