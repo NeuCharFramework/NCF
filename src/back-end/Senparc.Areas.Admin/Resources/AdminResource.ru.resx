@@ -184,6 +184,7 @@
   <data name="Admin.Layout.Account" xml:space="preserve"><value>Моя учетная запись</value></data>
   <data name="Admin.Layout.CurrentAccount" xml:space="preserve"><value>Текущая учетная запись: {0}</value></data>
   <data name="Admin.Layout.PoweredBy" xml:space="preserve"><value>При поддержке</value></data>
+  <data name="Admin.Footer.SynchroLabel" xml:space="preserve"><value>Синхро</value></data>
   <data name="Admin.Session.Title" xml:space="preserve"><value>Срок входа скоро истечет</value></data>
   <data name="Admin.Session.Message" xml:space="preserve"><value>Срок вашей сессии входа скоро истечет. Можно продолжить работу или выйти сейчас.</value></data>
   <data name="Admin.Session.KeepLogin" xml:space="preserve"><value>Остаться в системе</value></data>

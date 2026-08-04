@@ -10,6 +10,9 @@
     修改标识：Senparc - 20260702
     修改描述：v0.11.0-preview2 同步 master/main 基线范围内改动并完成递归依赖版本处理
 
+    修改标识：Senparc - 20260804
+    修改描述：v0.36.0 注册数据库运行状态与升级协调服务
+
 ----------------------------------------------------------------*/
 
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +27,7 @@ using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.AreasBase;
 using Senparc.Ncf.Core.EventBus;
 using Senparc.Web.Controllers;
+using Senparc.Web.Infrastructure.Database;
 
 namespace Senparc.Web
 {
@@ -41,6 +45,8 @@ namespace Senparc.Web
             // Localization baseline for all modules (Web/Admin/Installer/XNCF).
             // Use type-based lookup without ResourcesPath override to match embedded resource names.
             builder.Services.AddLocalization();
+            builder.Services.AddSingleton<DatabaseRuntimeStateStore>();
+            builder.Services.AddSingleton<DatabaseUpgradeCoordinator>();
 
             //激活 Xncf 扩展引擎（必须）
             var logMsg = builder.StartWebEngine(new[] { "Senparc.Areas.Admin"});
@@ -123,7 +129,7 @@ namespace Senparc.Web
             //});
         }
 
-        public static void UseNcf<TDatabaseConfiguration>(this WebApplication app)
+        public static void UseNcf<TDatabaseConfiguration>(this WebApplication app, bool startBackgroundThreads = true)
             where TDatabaseConfiguration : IDatabaseConfiguration, new()
         {
             //注入DI对象
@@ -150,7 +156,7 @@ namespace Senparc.Web
                 });
 
             //XncfModules（必须）
-            app.UseXncfModules(registerService)
+            app.UseXncfModules(registerService, startBackgroundThreads: startBackgroundThreads)
                .UseNcfDatabase<TDatabaseConfiguration>();
 
             /*  UseNcfDatabase<TDatabaseConfiguration>() 泛型类型说明

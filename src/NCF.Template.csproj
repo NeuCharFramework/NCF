@@ -110,7 +110,7 @@
 			v0.34.0 升级基础库，使用最新 CO2NET 基础库、增加 DesktopBridge 模块
 			v0.35.0 更新基础库，增强安全性
 			v0.36.0 更新 DesktopBridge，支持 Token 确认远程连接
-			v0.37.0 添加“下载”页面
+			v0.37.0 添加“下载”页面，新增数据库升级维护模式与后台 Synchro Footer，升级全部 Senparc.* NuGet 依赖
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>

@@ -33,6 +33,11 @@
                     {{ scope.row.hideModuleManager }}
                 </template>
             </el-table-column>
+            <el-table-column align="center" label="Footer" min-width="240">
+                <template slot-scope="scope">
+                    <span class="system-footer-preview" v-text="scope.row.footerContent"></span>
+                </template>
+            </el-table-column>
             <el-table-column label="@AR["Common.操作"]" align="center">
                 <template slot-scope="scope">
                     <el-button size="mini"
@@ -57,6 +62,17 @@
                 @*<p class="username-tip" v-if="dialog.title==='编辑管理员'">不建议修改用户名！</p>*@
                 <el-form-item label="@AR["SystemConfig.SystemName"]" prop="systemName">
                     <el-input v-model="dialog.data.systemName" clearable placeholder="@AR["SystemConfig.SystemName"]" />
+                </el-form-item>
+                <el-form-item label="Footer" prop="footerContent">
+                    <el-input
+                        v-model="dialog.data.footerContent"
+                        type="textarea"
+                        :rows="4"
+                        maxlength="2000"
+                        show-word-limit
+                        placeholder="© @DateTime.Now.Year Senparc">
+                    </el-input>
+                    <div class="system-footer-help">支持普通文本和绝对 http/https 链接的 &lt;a&gt; 标签；其他 HTML 会被编码。</div>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">

@@ -5,7 +5,6 @@ using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.XncfBase.Database;
 using System;
-using System.IO;
 
 namespace Senparc.Areas.Admin.Domain.Models
 {
@@ -43,13 +42,5 @@ namespace Senparc.Areas.Admin.Domain.Models
         {
             Senparc.Ncf.Core.Config.SiteConfig.SenparcCoreSetting.DatabaseName = "Local";//默认配置
         }
-
-        //  : base(
-        //         /* Debug模式下项目根目录
-        //         /* 用于寻找 App_Data 文件夹，从而找到数据库连接字符串配置信息 */
-        //         Path.Combine(AppContext.BaseDirectory, $"..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}Senparc.Web"))
-        //{
-
-        //}
     }
 }

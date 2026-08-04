@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
-		<Version>0.3</Version>
+		<Version>0.4.1</Version>
 		<AssemblyName>Senparc.Xncf.Installer</AssemblyName>
 		<RootNamespace>Senparc.Xncf.Installer</RootNamespace>
 		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -20,6 +20,10 @@
     <PackageIconUrl>https://sdk.weixin.senparc.com/Images/logo-square-ncf.jpg</PackageIconUrl>-->
 		<PackageReleaseNotes>
 			v0.3 创世
+			[2026-08-04] v0.4.1 完善安装状态与数据库升级分流
+			1、数据库架构待升级时转入维护页，避免错误重开首次安装流程。
+			2、收紧异常分流并补齐安装界面的多语言资源。
+			3、升级全部 Senparc.* NuGet 依赖并同步安装模块依赖版本。
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NcfPackageSources</RepositoryUrl>
 		<Configurations>Debug;Release;Test;TemplateRelease;Debug-Dapr;NcfDebugForPromptRange;ModifyPublish</Configurations>
@@ -39,27 +43,27 @@
 		<PackageReference Include="Senparc.CO2NET" Version="4.2.0" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.4" />
 		<PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.9-preview" />
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.26.0-preview3" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.28.0-preview5" />
 		<!--<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />-->
-		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.23.4-preview3" />
-		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.22.0-preview3" />
+		<PackageReference Include="Senparc.Ncf.XncfBase" Version="0.24.0-preview5" />
+		<PackageReference Include="Senparc.Ncf.AreaBase" Version="0.23.1-preview5" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.0.0" />
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
 		<ProjectReference Include="..\Senparc.Aspire.ServiceDefaults\Senparc.Aspire.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\Senparc.Xncf.Installer.Interface\Senparc.Xncf.Installer.Interface.csproj" />
 		<!--为了兼容部分数据库迁移文件仍然有依赖的情况-->
-		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.21.3-preview3" />
+		<PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.21.5-preview5" />
 
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.13.1-preview3" />
-		<PackageReference Include="Senparc.Xncf.Menu" Version="0.14.1-preview3" />
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.14.1-preview3" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.15.1-preview4" />
-		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.15.1-preview3" />
-		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.15.1-preview3" />
-		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.22.1-preview3" />
-		<PackageReference Include="Senparc.Xncf.MCP" Version="0.4.1-preview4" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.37.1-preview6" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.15.1-preview3" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.13.3-preview5" />
+		<PackageReference Include="Senparc.Xncf.Menu" Version="0.14.3-preview5" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.14.3-preview5" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.15.3-preview6" />
+		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.15.3-preview5" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.15.3-preview5" />
+		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.22.3-preview5" />
+		<PackageReference Include="Senparc.Xncf.MCP" Version="0.4.3-preview6" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.39.0-preview8" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.15.3-preview5" />
 		<None Include="App_Data\SenparcTraceLog\*" />
 	</ItemGroup>
 	<ItemGroup>

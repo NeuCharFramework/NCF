@@ -22,6 +22,9 @@
     修改标识：Senparc - 20260729
     修改描述：v0.34.1 完善站点初始化状态、浏览器导航与多语言提示
 
+    修改标识：Senparc - 20260804
+    修改描述：v0.36.0 增加数据库状态检查、维护隔离与独立升级命令
+
 ----------------------------------------------------------------*/
 
 //以下数据库模块的命名空间根据需要添加或删除
@@ -39,14 +42,30 @@ using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Senparc.Web.Controllers;
+using Senparc.Ncf.XncfBase;
+using Senparc.Web.Infrastructure.Database;
 
-var builder = WebApplication.CreateBuilder(args);
+var databaseUpgradeOptions = DatabaseUpgradeCommandLineOptions.Parse(args);
+void ReportDatabaseUpgradeProgress(string message)
+{
+    // 独立升级命令不会启动 Web 监听，直接输出阶段信息，便于定位连接或模块迁移阻塞。
+    if (databaseUpgradeOptions.Enabled)
+    {
+        Console.WriteLine($"数据库升级：{message}");
+    }
+}
+
+ReportDatabaseUpgradeProgress("正在创建应用宿主……");
+var builder = WebApplication.CreateBuilder(databaseUpgradeOptions.HostArguments);
+ReportDatabaseUpgradeProgress("应用构建器创建完成，正在注册 NCF 服务……");
 
 //添加（注册） NCF 服务（必须）
 builder.AddNcf();
+ReportDatabaseUpgradeProgress("NCF 服务注册完成，正在注册基础服务……");
 
 //添加 ServiceDefaults
 builder.AddServiceDefaults();
+ReportDatabaseUpgradeProgress("基础服务注册完成，正在注册 Dapr……");
 
 // Keep the platform default TLS certificate validation. A global callback that
 // accepts every certificate would make all outbound HTTPS requests vulnerable
@@ -54,8 +73,10 @@ builder.AddServiceDefaults();
 
 //添加 Dapr
 builder.Services.AddDaprClient();
+ReportDatabaseUpgradeProgress("服务注册完成，正在生成应用宿主……");
 
 var app = builder.Build();
+ReportDatabaseUpgradeProgress("应用宿主创建完成，正在注册 XNCF 模块……");
 
 if (app.Environment.IsDevelopment())
 {
@@ -72,8 +93,9 @@ var localizationOptions = new RequestLocalizationOptions()
 
 app.UseRequestLocalization(localizationOptions);
 
-//Use NCF（必须）
-app.UseNcf<BySettingDatabaseConfiguration>();
+// 先完成模块和数据库注册，但延迟启动后台线程，避免旧架构上的后台任务反复失败。
+app.UseNcf<BySettingDatabaseConfiguration>(startBackgroundThreads: false);
+ReportDatabaseUpgradeProgress("XNCF 模块注册完成，正在检查数据库状态……");
 /*  UseNcf<TDatabaseConfiguration>() 泛型类型说明
  *                
  *                  方法                            |         说明
@@ -90,9 +112,48 @@ app.UseNcf<BySettingDatabaseConfiguration>();
  *  
  */
 
+var databaseUpgradeCoordinator = app.Services.GetRequiredService<DatabaseUpgradeCoordinator>();
+var databaseRuntimeState = await databaseUpgradeCoordinator.InspectAsync();
+ReportDatabaseUpgradeProgress($"数据库状态检查完成：{databaseRuntimeState.Status}");
+if (databaseUpgradeOptions.Enabled)
+{
+    ReportDatabaseUpgradeProgress("正在执行待处理的 Migration……");
+    var result = await databaseUpgradeCoordinator.UpgradeAsync();
+    Console.WriteLine(result.Message);
+    foreach (var detail in result.Details)
+    {
+        Console.WriteLine(detail);
+    }
+
+    if (!result.Succeeded)
+    {
+        Console.Error.WriteLine($"数据库升级失败：{result.State.Message}");
+        if (result.State.Exception != null)
+        {
+            Console.Error.WriteLine(result.State.Exception);
+        }
+    }
+
+    Environment.ExitCode = result.Succeeded ? 0 : 2;
+    await app.DisposeAsync();
+    return;
+}
+
+if (databaseRuntimeState.Status == DatabaseRuntimeStatus.Ready)
+{
+    app.StartXncfThreads();
+}
+else
+{
+    Console.WriteLine($"数据库状态：{databaseRuntimeState.Status}；{databaseRuntimeState.Message}");
+}
+
 //app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseFileServer();//非必须
+
+// 架构待升级或数据库不可用时只开放维护页，不让业务请求触发更多数据库异常。
+app.UseDatabaseMaintenanceMode();
 
 app.UseCookiePolicy();
 
@@ -103,7 +164,10 @@ app.MapRazorPages();
 app.MapControllers();
 app.MapDefaultEndpoints();
 
-app.ShowSuccessTip();//显示系统准备成功提示
+if (databaseRuntimeState.Status == DatabaseRuntimeStatus.Ready)
+{
+    app.ShowSuccessTip();//显示系统准备成功提示
+}
 
 string GetNcfApiClientPath(string xncfName, string appServiceName, string methodName, string showStaticApiState = null)
 {

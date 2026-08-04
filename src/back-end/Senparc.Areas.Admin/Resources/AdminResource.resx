@@ -186,6 +186,7 @@
   <data name="Admin.Layout.Account" xml:space="preserve"><value>我的账号</value></data>
   <data name="Admin.Layout.CurrentAccount" xml:space="preserve"><value>当前账号：{0}</value></data>
   <data name="Admin.Layout.PoweredBy" xml:space="preserve"><value>技术支持</value></data>
+  <data name="Admin.Footer.SynchroLabel" xml:space="preserve"><value>灵犀</value></data>
   <data name="Admin.Session.Title" xml:space="preserve"><value>登录即将过期</value></data>
   <data name="Admin.Session.Message" xml:space="preserve"><value>检测到当前登录会话即将过期，您可以保持登录或立即退出。</value></data>
   <data name="Admin.Session.KeepLogin" xml:space="preserve"><value>保持登录</value></data>

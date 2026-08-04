@@ -19,10 +19,15 @@
                 data: {
                     id: 0,
                     systemName: '',
+                    footerContent: '',
                 },
                 rules: {
                     systemName: [
                         { required: true, message: ncfT('SystemConfig.NameRequired'), trigger: "blur" }
+                    ],
+                    footerContent: [
+                        { required: true, message: 'Footer 内容不能为空', trigger: "blur" },
+                        { max: 2000, message: 'Footer 内容不能超过 2000 个字符', trigger: "blur" }
                     ]
                 },
                 updateLoading: false
@@ -40,7 +45,8 @@
             if (!val) {
                 this.dialog.data = {
                     id: 0,
-                    systemName: ''
+                    systemName: '',
+                    footerContent: ''
                 };
                 this.dialog.updateLoading = false;
                 if (this.$refs['dataForm']) {
@@ -63,9 +69,9 @@
             this.dialog.visible = true;
             if (row) {
                 // 编辑
-                let { systemName, id } = row;
+                let { systemName, footerContent, id } = row;
                 this.dialog.data = {
-                    systemName, id
+                    systemName, footerContent, id
                 };
                 this.dialog = Object.assign({}, this.dialog);
             }
@@ -79,6 +85,7 @@
                     let data = {
                         Id: this.dialog.data.id,
                         SystemName: this.dialog.data.systemName,
+                        FooterContent: this.dialog.data.footerContent,
                     };
                     service.post("/Admin/SystemConfig?handler=Edit", data).then(res => {
                         if (res.data.success) {

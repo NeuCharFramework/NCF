@@ -184,6 +184,7 @@
   <data name="Admin.Layout.Account" xml:space="preserve"><value>Mi cuenta</value></data>
   <data name="Admin.Layout.CurrentAccount" xml:space="preserve"><value>Cuenta actual: {0}</value></data>
   <data name="Admin.Layout.PoweredBy" xml:space="preserve"><value>Desarrollado por</value></data>
+  <data name="Admin.Footer.SynchroLabel" xml:space="preserve"><value>Sincronía</value></data>
   <data name="Admin.Session.Title" xml:space="preserve"><value>La sesión está a punto de caducar</value></data>
   <data name="Admin.Session.Message" xml:space="preserve"><value>La sesión está a punto de caducar. Puede mantener la sesión iniciada o cerrar sesión ahora.</value></data>
   <data name="Admin.Session.KeepLogin" xml:space="preserve"><value>Mantener la sesión</value></data>

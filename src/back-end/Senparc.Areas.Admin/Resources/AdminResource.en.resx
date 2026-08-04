@@ -186,6 +186,7 @@
   <data name="Admin.Layout.Account" xml:space="preserve"><value>My account</value></data>
   <data name="Admin.Layout.CurrentAccount" xml:space="preserve"><value>Current account: {0}</value></data>
   <data name="Admin.Layout.PoweredBy" xml:space="preserve"><value>Powered by</value></data>
+  <data name="Admin.Footer.SynchroLabel" xml:space="preserve"><value>Synchro</value></data>
   <data name="Admin.Session.Title" xml:space="preserve"><value>Login is about to expire</value></data>
   <data name="Admin.Session.Message" xml:space="preserve"><value>Your login session is about to expire. You can stay signed in or log out now.</value></data>
   <data name="Admin.Session.KeepLogin" xml:space="preserve"><value>Stay signed in</value></data>

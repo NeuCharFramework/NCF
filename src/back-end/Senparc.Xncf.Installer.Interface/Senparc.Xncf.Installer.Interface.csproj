@@ -4,7 +4,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.1</Version>
+		<Version>0.1.1</Version>
 		<AssemblyName>Senparc.Xncf.Installer.Interface</AssemblyName>
 		<RootNamespace>Senparc.Xncf.Installer.Interface</RootNamespace>
 		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
@@ -20,6 +20,8 @@
     <PackageIconUrl>https://sdk.weixin.senparc.com/Images/logo-square-ncf.jpg</PackageIconUrl>-->
 		<PackageReleaseNotes>
 			v0.1 创世
+			[2026-08-04] v0.1.1 升级 Senparc.* NuGet 依赖
+			1、同步最新 NCF Core 与 Tenant Interface 版本。
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NcfPackageSources</RepositoryUrl>
 		<Configurations>Debug;Release;Test;TemplateRelease;NcfDebugForPromptRange</Configurations>
@@ -31,8 +33,8 @@
 	  <PackageReference Include="Senparc.CO2NET" Version="4.2.0" />
 	  <PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.4" />
 	  <PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.9-preview" />
-	  <PackageReference Include="Senparc.Ncf.Core" Version="0.26.0-preview3" />
-	  <PackageReference Include="Senparc.Xncf.Tenant.Interface" Version="0.10.3-preview3" />
+	  <PackageReference Include="Senparc.Ncf.Core" Version="0.28.0-preview5" />
+	  <PackageReference Include="Senparc.Xncf.Tenant.Interface" Version="0.10.5-preview5" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="OHS\PL\" />

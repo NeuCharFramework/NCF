@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
-		<Version>0.35.0</Version>
-		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+		<Version>0.36.0</Version>
+<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
 		<TypeScriptToolsVersion>4.1</TypeScriptToolsVersion>
 		<UserSecretsId>d2144151-af7a-4d50-896d-4a306e594f7b</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -12,29 +12,36 @@
 		<!--<RestoreFallbackFolders>clear</RestoreFallbackFolders>-->
 		<DefineConstants Condition="'$(Configuration)|$(Platform)'=='NcfDebugForPromptRange|AnyCPU'">$(DefineConstants);DEBUG</DefineConstants>
 	</PropertyGroup>
+	<PackageReleaseNotes>
+		[2026-08-04] v0.36.0 新增下载页与数据库升级维护模式
+		1、提供 NCF 下载与开发资源页面，并完善站点多语言展示。
+		2、启动时检查数据库迁移状态，未就绪时隔离业务请求并开放维护页。
+		3、支持 --database-upgrade 独立升级命令和分阶段进度输出。
+		4、升级全部 Senparc.* NuGet 依赖并同步最新扩展模块版本。
+	</PackageReleaseNotes>
 	<ItemGroup>
-		<PackageReference Include="Senparc.Ncf.Core" Version="0.26.0-preview3" />
-		<PackageReference Include="Senparc.Xncf.DesktopBridge" Version="0.1.1-preview3" />
-		<PackageReference Include="Senparc.Xncf.MCP" Version="0.4.1-preview4" />
+		<PackageReference Include="Senparc.Ncf.Core" Version="0.28.0-preview5" />
+		<PackageReference Include="Senparc.Xncf.DesktopBridge" Version="0.3.0-preview3" />
+		<PackageReference Include="Senparc.Xncf.MCP" Version="0.4.3-preview6" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.10" />
 		<PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.4" />
 		<PackageReference Include="Senparc.CO2NET" Version="4.2.0" />
-		<PackageReference Include="Senparc.Ncf.Database.Sqlite" Version="0.20.3-preview3" />
-		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.20.3-preview3" />
-		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.13.1-preview3" />
-		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.27.0-preview3" />
-		<PackageReference Include="Senparc.Xncf.Menu" Version="0.14.1-preview3" />
-		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.14.1-preview3" />
-		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.15.1-preview4" />
-		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.15.1-preview3" />
-		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.15.1-preview3" />
-		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.22.1-preview3" />
-		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.15.1-preview3" />
-		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.14.1-preview6" />
-		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.37.1-preview6" />
-		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.17.1-preview6" />
-		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.12.1-preview7" />
+		<PackageReference Include="Senparc.Ncf.Database.Sqlite" Version="0.20.5-preview5" />
+		<PackageReference Include="Senparc.Ncf.Database.SqlServer" Version="0.20.5-preview5" />
+		<PackageReference Include="Senparc.Xncf.AreasBase" Version="0.13.3-preview5" />
+		<PackageReference Include="Senparc.Xncf.DatabaseToolkit" Version="0.27.2-preview5" />
+		<PackageReference Include="Senparc.Xncf.Menu" Version="0.14.3-preview5" />
+		<PackageReference Include="Senparc.Xncf.SystemCore" Version="0.14.3-preview5" />
+		<PackageReference Include="Senparc.Xncf.SystemManager" Version="0.15.3-preview6" />
+		<PackageReference Include="Senparc.Xncf.SystemPermission" Version="0.15.3-preview5" />
+		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.15.3-preview5" />
+		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.22.3-preview5" />
+		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.15.3-preview5" />
+		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.15.1-preview8" />
+		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.39.0-preview8" />
+		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.19.0-preview8" />
+		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.14.0-preview9" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />

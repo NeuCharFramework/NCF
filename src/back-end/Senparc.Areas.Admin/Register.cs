@@ -22,6 +22,9 @@
     修改标识：Senparc - 20260729
     修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
 
+    修改标识：Senparc - 20260804
+    修改描述：v0.2.1 注册 Admin Footer Synchro 聚合与实时通知服务
+
 ----------------------------------------------------------------*/
 
 /* 
@@ -203,6 +206,15 @@ namespace Senparc.Areas.Admin
             services.AddScoped<AdminChatMessageService>();
             services.AddScoped<AdminChatSessionModuleService>();
             services.AddScoped<AdminChatAiService>();
+
+            // Synchro（灵犀）Footer 聚合、全局缓存与实时变更流。Provider 虽随 DLL 注册，
+            // 但是否执行仍由 SynchroProviderCatalog 按 XNCF 安装/开放状态决定。
+            services.AddSingleton<SynchroChangeNotifier>();
+            services.AddSingleton<Senparc.Ncf.Shared.Abstractions.Synchro.ISynchroPublisher>(
+                serviceProvider => serviceProvider.GetRequiredService<SynchroChangeNotifier>());
+            services.AddScoped<ISynchroModuleAvailabilityService, SynchroModuleAvailabilityService>();
+            services.AddScoped<SynchroProviderCatalog>();
+            services.AddScoped<SynchroSnapshotService>();
 
             return base.AddXncfModule(services, configuration, env);
         }

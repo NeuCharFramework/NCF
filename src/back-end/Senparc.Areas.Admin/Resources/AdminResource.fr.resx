@@ -184,6 +184,7 @@
   <data name="Admin.Layout.Account" xml:space="preserve"><value>Mon compte</value></data>
   <data name="Admin.Layout.CurrentAccount" xml:space="preserve"><value>Compte actuel : {0}</value></data>
   <data name="Admin.Layout.PoweredBy" xml:space="preserve"><value>Propulsé par</value></data>
+  <data name="Admin.Footer.SynchroLabel" xml:space="preserve"><value>Synchro</value></data>
   <data name="Admin.Session.Title" xml:space="preserve"><value>La session va expirer</value></data>
   <data name="Admin.Session.Message" xml:space="preserve"><value>Votre session de connexion va expirer. Vous pouvez rester connecté ou vous déconnecter maintenant.</value></data>
   <data name="Admin.Session.KeepLogin" xml:space="preserve"><value>Rester connecté</value></data>

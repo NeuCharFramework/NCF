@@ -2,6 +2,11 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <Version>0.0.1</Version>
+    <PackageReleaseNotes>
+      [2026-08-04] v0.0.1 Dependency update from Senparc.Areas.Admin to 0.2.1
+      1、升级 NCF Core、DatabasePlant 与 SystemCore 至最新预览版本。
+    </PackageReleaseNotes>
     <Configurations>Debug;Release;Debug-Dapr;NcfDebugForPromptRange;ModifyPublish</Configurations>
   </PropertyGroup>
   <ItemGroup>
@@ -9,9 +14,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.26.0-preview3" />
-    <PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.21.3-preview3" />
-    <PackageReference Include="Senparc.Xncf.SystemCore" Version="0.14.1-preview3" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.28.0-preview5" />
+    <PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.21.5-preview5" />
+    <PackageReference Include="Senparc.Xncf.SystemCore" Version="0.14.3-preview5" />
     <!--<ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.AgentsManager\Senparc.Xncf.AgentsManager.ForNcf.csproj" />-->
     <!--<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />-->
     <ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
