@@ -11,14 +11,14 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<!--<RestoreFallbackFolders>clear</RestoreFallbackFolders>-->
 		<DefineConstants Condition="'$(Configuration)|$(Platform)'=='NcfDebugForPromptRange|AnyCPU'">$(DefineConstants);DEBUG</DefineConstants>
+		<PackageReleaseNotes>
+			[2026-08-04] v0.36.0 新增下载页与数据库升级维护模式
+			1、提供 NCF 下载与开发资源页面，并完善站点多语言展示。
+			2、启动时检查数据库迁移状态，未就绪时隔离业务请求并开放维护页。
+			3、支持 --database-upgrade 独立升级命令和分阶段进度输出。
+			4、升级全部 Senparc.* NuGet 依赖并同步最新扩展模块版本。
+		</PackageReleaseNotes>
 	</PropertyGroup>
-	<PackageReleaseNotes>
-		[2026-08-04] v0.36.0 新增下载页与数据库升级维护模式
-		1、提供 NCF 下载与开发资源页面，并完善站点多语言展示。
-		2、启动时检查数据库迁移状态，未就绪时隔离业务请求并开放维护页。
-		3、支持 --database-upgrade 独立升级命令和分阶段进度输出。
-		4、升级全部 Senparc.* NuGet 依赖并同步最新扩展模块版本。
-	</PackageReleaseNotes>
 	<ItemGroup>
 		<PackageReference Include="Senparc.Ncf.Core" Version="0.28.0-preview5" />
 		<PackageReference Include="Senparc.Xncf.DesktopBridge" Version="0.3.0-preview3" />
