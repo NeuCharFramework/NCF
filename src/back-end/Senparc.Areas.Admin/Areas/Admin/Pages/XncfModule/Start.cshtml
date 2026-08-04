@@ -5,8 +5,8 @@
     Layout = "_Layout_Vue";
 }
 @section breadcrumbs {
-    <el-breadcrumb-item>扩展模块</el-breadcrumb-item>
-    <el-breadcrumb-item>模块管理</el-breadcrumb-item>
+    <el-breadcrumb-item>@AR["Xncf.ExtensionModules"]</el-breadcrumb-item>
+    <el-breadcrumb-item>@AR["Xncf.Title"]</el-breadcrumb-item>
     <el-breadcrumb-item v-if="data.xncfModule">{{data.xncfModule.menuName}}</el-breadcrumb-item>
 }
 @section Style{
@@ -15,10 +15,10 @@
 <div>
     <el-container v-if="data.xncfModule">
         <el-header class="module-header">
-            <span class="start-title"> <i :class="data.xncfRegister.icon"></i>&nbsp;{{data.xncfModule.menuName}} <span class="module-header-v">模块 {{data.xncfModule.version}}</span></span>
+                        <span class="start-title"> <i :class="data.xncfRegister.icon"></i>&nbsp;{{data.xncfModule.menuName}} <span class="module-header-v">@AR["Xncf.Module"] {{data.xncfModule.version}}</span></span>
             <span class="start-delete">
-                <el-popconfirm placement="top" title="确认删除此模块吗？此模块内相关数据也将被删除，请做好备份！" @@on-confirm="handleDelete()">
-                    <el-button size="mini" type="danger" slot="reference">删除</el-button>
+                <el-popconfirm placement="top" title="@AR["Xncf.DeleteConfirm"]" @@on-confirm="handleDelete()">
+                    <el-button size="mini" type="danger" slot="reference">@AR["Xncf.Delete"]</el-button>
                 </el-popconfirm>
             </span>
         </el-header>
@@ -29,23 +29,23 @@
                         @*模块信息 xncfModule*@
                         <li><span class="start-green"><i class="fa fa-map-marker fa-cubes"></i>&nbsp;{{data.xncfModule.name}}</span></li>
                         <li><i class="fa fa-map-marker fa-code-fork"></i>&nbsp;v{{data.xncfModule.version}}</li>
-                        <li v-if="data.xncfModule.version!==data.xncfRegister.version">发现新版本:v{{data.xncfRegister.version}} <el-button size="mini" @@click="updataVersion"> <em class="fa fa-gift"></em>&nbsp;立即更新</el-button></li>
+                        <li v-if="data.xncfModule.version!==data.xncfRegister.version">{{ncfT('Xncf.NewVersion', data.xncfRegister.version)}} <el-button size="mini" @@click="updataVersion"> <em class="fa fa-gift"></em>&nbsp;@AR["Xncf.UpdateNow"]</el-button></li>
                         <li>
                             <el-tooltip class="item" effect="dark" :content="data.xncfModule.uid" placement="top-start">
                                 <span>
                                     <i class="fa fa-map-marker fa-shield"></i>
-                                    唯一编号
+                                    @AR["Xncf.UniqueNumber"]
                                 </span>
                             </el-tooltip>
                         </li>
                         <li>
-                            <i class="fa fa-map-marker puzzle-piece"></i>&nbsp;特性：
+                            <i class="fa fa-map-marker puzzle-piece"></i>&nbsp;@AR["Xncf.Features"]：
                             <el-tooltip v-for="item in data.xncfRegister.interfaces" class="item" effect="dark" placement="top">
                                 <div slot="content">
                                     {{tooltip[item]}}
                                     <span v-if="item === 'IXncfRazorRuntimeCompilation'" @@click="thread.visible=true">
                                         <el-button size="mini">
-                                            查看
+                                            @AR["Xncf.View"]
                                         </el-button>
                                     </span>
                                 </div>
@@ -59,7 +59,7 @@
                                 <i v-if="item === 'IXncfRazorRuntimeCompilation'" class="fa fa-map-marker fa-retweet"></i>
                             </el-tooltip>
                             <template v-if="data.xncfRegister.functionCount>0">
-                                <el-tooltip class="item" effect="dark" content="执行方法" placement="top-start">
+                                <el-tooltip class="item" effect="dark" content="@AR["Xncf.ExecuteMethod"]" placement="top-start">
                                     <i class="fa fa-map-marker fa-rocket">({{data.xncfRegister.functionCount}})</i>
                                 </el-tooltip>
                             </template>
@@ -67,15 +67,15 @@
                         <li>
                             <i class="fa fa-map-marker fa-sliders"></i><span :class="[data.xncfModule.state===1?'start-green':'start-gray']">&nbsp;{{xNcfModules_State[data.xncfModule.state]}}</span>
                             <template v-if="data.xncfModule.state===3||data.xncfModule.state===0||data.xncfModule.state===2">
-                                <el-button size="mini" :type="data.xncfModule.state===0?'success':'warning'" @@click="updataState('1')"> <em class="glyphicon glyphicon-flash"></em> &nbsp;开启</el-button>
-                                <p class="red"><i class="fa fa-exclamation-triangle"></i>&nbsp;未开启的模块无法执行功能</p>
+                                <el-button size="mini" :type="data.xncfModule.state===0?'success':'warning'" @@click="updataState('1')"> <em class="glyphicon glyphicon-flash"></em> &nbsp;@AR["Xncf.Open"]</el-button>
+                                <p class="red"><i class="fa fa-exclamation-triangle"></i>&nbsp;@AR["Xncf.DisabledTip"]</p>
                             </template>
                             <template v-if="data.xncfModule.state===1">
-                                <el-button size="mini" c type="danger" @@click="updataState('0')"> <em class="glyphicon glyphicon-off"></em> &nbsp;关闭</el-button>
+                                <el-button size="mini" c type="danger" @@click="updataState('0')"> <em class="glyphicon glyphicon-off"></em> &nbsp;@AR["Xncf.Close"]</el-button>
                             </template>
                         </li>
                         <li>
-                            <i class="fa fa-map-marker fa-newspaper-o"></i>&nbsp;介绍：
+                            <i class="fa fa-map-marker fa-newspaper-o"></i>&nbsp;@AR["Xncf.Description"]：
                             <p>{{data.xncfModule.description}}</p>
                         </li>
                     </ul>
@@ -83,7 +83,7 @@
                 @*更新记录*@
                 <div class="start-log">
                     <el-collapse>
-                        <el-collapse-item title="更新记录" name="1">
+                        <el-collapse-item title="@AR["Xncf.UpdateLog"]" name="1">
                             <el-table :data="data.xncfModuleUpdateLog"
                                       stripe
                                       style="width: 100%">
@@ -92,7 +92,7 @@
                                         {{scope.$index+1}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="更新记录">
+                                <el-table-column label="@AR["Xncf.UpdateLog"]">
                                     <template slot-scope="scope">
                                         {{scope.row}}
                                     </template>
@@ -107,14 +107,14 @@
                     <template v-if="data.xncfRegister.interfaces.includes('IAreaRegister')&&data.xncfRegister.areaHomeUrl!==null">
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
-                                <span>进入 {{data.xncfRegister.menuName}} 的首页</span>
-                                <a @@click="openUrl(data.xncfRegister.areaHomeUrl,data.xncfModule.state)" :class="[data.xncfModule.state===1?'box-card-action':'box-card-action2','box-card-action']">进入首页</a>
-                                <p class="box-card-des">地址：<a :href="data.xncfRegister.areaHomeUrl">{{data.xncfRegister.areaHomeUrl}}</a></p>
+                                <span>{{ncfT('Xncf.EnterModuleHome', data.xncfRegister.menuName)}}</span>
+                                <a @@click="openUrl(data.xncfRegister.areaHomeUrl,data.xncfModule.state)" :class="[data.xncfModule.state===1?'box-card-action':'box-card-action2','box-card-action']">@AR["Xncf.EnterHome"]</a>
+                                <p class="box-card-des">@AR["Xncf.Address"]：<a :href="data.xncfRegister.areaHomeUrl">{{data.xncfRegister.areaHomeUrl}}</a></p>
                             </div>
                             <template>
                                 <div class="item-container">
                                     <el-collapse>
-                                        <el-collapse-item title="页面透视" name="2">
+                                        <el-collapse-item title="@AR["Xncf.PageOverview"]" name="2">
                                             <el-menu default-active="2"
                                                      class="el-menu-vertical-demo"
                                                      background-color="#304156"
@@ -133,7 +133,7 @@
                                         </el-collapse-item>
                                     </el-collapse>
                                 </div>
-                                <p class="box-card-tip">说明：当前模块配备了可互动操作的UI界面，因此您可以看到这个入口。</p>
+                                <p class="box-card-tip">@AR["Xncf.PageOverviewTip"]</p>
                             </template>
                         </el-card>
                     </template>
@@ -141,13 +141,13 @@
                 <el-card class="box-card" v-for="item in data.functionParameterInfoCollection">
                     <div slot="header" class="clearfix">
                         <span><i class="fa fa-terminal"></i> {{item.key.name}}</span>
-                            <span type="text" :class="[data.xncfModule.state===1?'box-card-action':'box-card-action2']" @@click="openRun(item,data.xncfModule.state)">执行</span>
+                            <span type="text" :class="[data.xncfModule.state===1?'box-card-action':'box-card-action2']" @@click="openRun(item,data.xncfModule.state)">@AR["Xncf.Execute"]</span>
                         <p class="box-card-des">{{item.key.description}}</p>
                     </div>
                     <template>
                         <div class="item-container">
                             <el-collapse>
-                                <el-collapse-item title="参数透视" name="2">
+                                <el-collapse-item title="@AR["Xncf.ParameterOverview"]" name="2">
                                     <el-table v-if="item.value.length>0"
                                               :data="item.value"
                                               style="width: 100%">
@@ -156,29 +156,29 @@
                                                 {{scope.$index+1}}
                                             </template>
                                         </el-table-column>
-                                        <el-table-column label="名称" width="200">
+                                        <el-table-column label="@AR["Xncf.ParameterName"]" width="200">
                                             <template slot-scope="scope">
                                                 {{scope.row.title}}
                                             </template>
                                         </el-table-column>
-                                        <el-table-column label="说明">
+                                        <el-table-column label="@AR["Xncf.ParameterDescription"]">
                                             <template slot-scope="scope">
                                                 {{scope.row.description}}
                                             </template>
                                         </el-table-column>
-                                        <el-table-column label="类型" width="150">
+                                        <el-table-column label="@AR["Xncf.ParameterType"]" width="150">
                                             <template slot-scope="scope">
                                                 {{state[scope.row.systemType] || scope.row.systemType}}
                                             </template>
                                         </el-table-column>
-                                        <el-table-column label="必须" width="150">
+                                        <el-table-column label="@AR["Xncf.Required"]" width="150">
                                             <template slot-scope="scope">
-                                                {{scope.row.isRequired?"是":"否"}}
+                                                {{scope.row.isRequired?ncfT('Xncf.Yes'):ncfT('Xncf.No')}}
                                             </template>
                                         </el-table-column>
                                     </el-table>
                                     <div v-else class="no-content">
-                                        无需填写数据
+                                        @AR["Xncf.NoInputData"]
                                     </div>
                                 </el-collapse-item>
                             </el-collapse>
@@ -225,9 +225,9 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @@click="run.visible = false">取 消</el-button>
+            <el-button @@click="run.visible = false">@AR["Xncf.CloseDialog"]</el-button>
             <el-button type="primary" @@click="handleRun" :loading="run.loading" :disabled="run.loading">
-                {{ run.loading ? '执行中' : '执 行' }}
+                {{ run.loading ? ncfT('Xncf.Executing') : ncfT('Xncf.Execute') }}
             </el-button>
         </div>
     </el-dialog>
@@ -239,34 +239,34 @@
         <p v-html="safeHtml(runResult.tip)"></p>
         <p v-html="safeHtml(runResult.msg)"></p>
         <span slot="footer" class="dialog-footer">
-            <a :href="'?handler=Log&tempId='+ runResult.tempId" v-if="runResult.hasLog" style="display:block" target="_blank"><i class="fa fa-cloud-download"></i> 下载日志（5分钟内1次有效）</a>
-            <el-button type="primary" @@click="runResult.visible = false">关 闭</el-button>
+            <a :href="'?handler=Log&tempId='+ runResult.tempId" v-if="runResult.hasLog" style="display:block" target="_blank"><i class="fa fa-cloud-download"></i> @AR["Xncf.DownloadLog"]</a>
+            <el-button type="primary" @@click="runResult.visible = false">@AR["Xncf.CloseDialog"]</el-button>
         </span>
     </el-dialog>
     @*查看线程*@
-    <el-dialog title="查看线程"
+    <el-dialog title="@AR["Xncf.ThreadDetails"]"
                :visible.sync="thread.visible"
                width="60%">
         <div class="thread-contenet">
             <el-table :data="data.registeredThreadInfo"
                       style="width: 100%">
-                <el-table-column label="名称" width="180">
+                <el-table-column label="@AR["Xncf.ThreadName"]" width="180">
                     <template slot-scope="scope">
                         {{scope.row.key.name}}
                     </template>
                 </el-table-column>
-                <el-table-column label="活动状态/后台" width="180">
+                <el-table-column label="@AR["Xncf.ThreadActivity"]" width="180">
                     <template slot-scope="scope">
                         {{scope.row.value.isAlive}}/
                         {{scope.row.value.isAlive ? value.isBackground : false}}
                     </template>
                 </el-table-column>
-                <el-table-column label="线程状态" width="180">
+                <el-table-column label="@AR["Xncf.ThreadState"]" width="180">
                     <template slot-scope="scope">
                         {{scope.row.value.isAlive ? formaTableTime(scope.row.value.threadState): "-"}}
                     </template>
                 </el-table-column>
-                <el-table-column label="最近故事">
+                <el-table-column label="@AR["Xncf.ThreadStory"]">
                     <template slot-scope="scope">
                         <span v-html="safeHtml(scope.row.key.storyHtml)"></span>
                     </template>
@@ -274,7 +274,7 @@
             </el-table>
         </div>
         <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @@click="thread.visible = false">关 闭</el-button>
+            <el-button type="primary" @@click="thread.visible = false">@AR["Xncf.CloseDialog"]</el-button>
         </span>
     </el-dialog>
 </div>

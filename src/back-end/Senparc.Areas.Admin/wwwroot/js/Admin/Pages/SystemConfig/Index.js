@@ -14,15 +14,20 @@
             tableData: [],
             tenantData: {},
             dialog: {
-                title: '编辑系统信息',
+                title: ncfT('SystemConfig.Title'),
                 visible: false,
                 data: {
                     id: 0,
                     systemName: '',
+                    footerContent: '',
                 },
                 rules: {
                     systemName: [
-                        { required: true, message: "系统名称为必填项", trigger: "blur" }
+                        { required: true, message: ncfT('SystemConfig.NameRequired'), trigger: "blur" }
+                    ],
+                    footerContent: [
+                        { required: true, message: 'Footer 内容不能为空', trigger: "blur" },
+                        { max: 2000, message: 'Footer 内容不能超过 2000 个字符', trigger: "blur" }
                     ]
                 },
                 updateLoading: false
@@ -40,7 +45,8 @@
             if (!val) {
                 this.dialog.data = {
                     id: 0,
-                    systemName: ''
+                    systemName: '',
+                    footerContent: ''
                 };
                 this.dialog.updateLoading = false;
                 if (this.$refs['dataForm']) {
@@ -63,9 +69,9 @@
             this.dialog.visible = true;
             if (row) {
                 // 编辑
-                let { systemName, id } = row;
+                let { systemName, footerContent, id } = row;
                 this.dialog.data = {
-                    systemName, id
+                    systemName, footerContent, id
                 };
                 this.dialog = Object.assign({}, this.dialog);
             }
@@ -79,13 +85,14 @@
                     let data = {
                         Id: this.dialog.data.id,
                         SystemName: this.dialog.data.systemName,
+                        FooterContent: this.dialog.data.footerContent,
                     };
                     service.post("/Admin/SystemConfig?handler=Edit", data).then(res => {
                         if (res.data.success) {
                             this.getList();
                             this.$notify({
-                                title: "Success",
-                                message: "更新成功！",
+                                title: ncfT('AdminUserInfo.Success'),
+                                message: ncfT('SystemConfig.Updated'),
                                 type: "success",
                                 duration: 2000
                             });
@@ -93,8 +100,8 @@
                             this.dialog.updateLoading = false;
                         } else {
                             this.$notify({
-                                title: "Failed",
-                                message: "更新失败：" + res.data.msg,
+                                title: ncfT('Admin.Common.Error'),
+                                message: ncfT('SystemConfig.UpdateFailed') + res.data.msg,
                                 type: "error",
                                 duration: 2000
                             });

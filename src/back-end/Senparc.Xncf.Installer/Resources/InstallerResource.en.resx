@@ -132,6 +132,9 @@
   <data name="Installer.Area.Home" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="Installer.Area.DatabaseSample" xml:space="preserve">
+    <value>Database sample</value>
+  </data>
   <data name="Install.AlreadyRunning" xml:space="preserve"><value>Installation is already running. Please wait.</value></data>
   <data name="Install.Confirm" xml:space="preserve"><value>Start the installation?</value></data>
   <data name="Install.ConfirmDetail" xml:space="preserve"><value>This installation page will no longer be available after installation completes.</value></data>

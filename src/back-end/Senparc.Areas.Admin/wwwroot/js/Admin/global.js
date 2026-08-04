@@ -5,7 +5,7 @@ Vue.prototype.loginout = function () {
 
 // 格式化添加时间等 2020 - 06 - 19T09: 41: 51.1905692
 function formaTableTime(value) {
-    return value ? value.replace('T', '  ').substr(0, 17) : '暂无时间';
+    return value ? value.replace('T', '  ').substr(0, 17) : ncfT('Admin.Common.NoTime');
 }
 
 /**
@@ -16,7 +16,7 @@ function formaTableTime(value) {
 function copyToClipboard(value, toastText) {
     $('#clipboardContainer').val(value);
     $('#clipboardContainer').select();
-    toastText = toastText || '复制成功！请使用 Ctrl+V 组合键进行粘贴操作。';
+    toastText = toastText || ncfT('Admin.Common.CopySuccess');
     try {
         document.execCommand("copy"); // 执行浏览器复制命令
         base.swal.toast(toastText);
@@ -80,11 +80,11 @@ function formatCurrency(num) {
 
     function getI18n() {
         return window.NCF_SESSION_I18N || {
-            title: '登录即将过期',
-            message: '检测到当前登录会话即将过期，您可以保持登录或立即退出。',
-            keepLogin: '保持登录',
-            logoutNow: '立即退出登录',
-            keepLoginSuccess: '已保持登录，会话已续期。'
+            title: ncfT('Admin.Session.Title'),
+            message: ncfT('Admin.Session.Message'),
+            keepLogin: ncfT('Admin.Session.KeepLogin'),
+            logoutNow: ncfT('Admin.Session.LogoutNow'),
+            keepLoginSuccess: ncfT('Admin.Session.KeepLoginSuccess')
         };
     }
 
@@ -170,7 +170,7 @@ function formatCurrency(num) {
                 var i18n = getI18n();
                 if (typeof app !== 'undefined' && app.$message) {
                     app.$message({
-                        message: i18n.keepLoginSuccess || '已保持登录，会话已续期。',
+                        message: i18n.keepLoginSuccess || ncfT('Admin.Session.KeepLoginSuccess'),
                         type: 'success',
                         duration: 1500
                     });
@@ -195,11 +195,11 @@ function formatCurrency(num) {
         var i18n = getI18n();
 
         app.$confirm(
-            i18n.message || '检测到当前登录会话即将过期，您可以保持登录或立即退出。',
-            i18n.title || '登录即将过期',
+            i18n.message || ncfT('Admin.Session.Message'),
+            i18n.title || ncfT('Admin.Session.Title'),
             {
-                confirmButtonText: i18n.keepLogin || '保持登录',
-                cancelButtonText: i18n.logoutNow || '立即退出登录',
+                confirmButtonText: i18n.keepLogin || ncfT('Admin.Session.KeepLogin'),
+                cancelButtonText: i18n.logoutNow || ncfT('Admin.Session.LogoutNow'),
                 type: 'warning',
                 closeOnClickModal: false,
                 showClose: false,

@@ -195,9 +195,9 @@ window.ChatLauncherMixin = {
     normalizeModuleItem(item) {
       return {
         uid: item.uid,
-        name: item.menuName || item.name || '未命名模块',
+        name: item.menuName || item.name || ncfT('AdminChat.UnknownModule'),
         icon: item.icon || 'fa fa-cube',
-        description: item.description || '暂无描述',
+        description: item.description || ncfT('Admin.Home.NoDescription'),
         version: item.version || '',
         menus: item.menus || [],
         functions: item.functions || []
@@ -218,7 +218,7 @@ window.ChatLauncherMixin = {
         this.ensurePreviewModule();
       } catch (error) {
         console.error('加载模块列表失败:', error);
-        this.$message.error('加载模块列表失败，请稍后重试');
+        this.$message.error(ncfT('AdminChat.LoadModulesFailedRetry'));
       } finally {
         this.loadingModuleOptions = false;
       }
@@ -270,7 +270,7 @@ window.ChatLauncherMixin = {
 
     async startChatSession() {
       if (!this.chatInputText || this.chatInputText.trim().length === 0) {
-        this.$message.warning('请输入对话内容');
+        this.$message.warning(ncfT('AdminChat.InputRequired'));
         return;
       }
 
@@ -290,10 +290,10 @@ window.ChatLauncherMixin = {
           return;
         }
 
-        this.$message.error((response.data && response.data.errorMessage) || '创建会话失败');
+        this.$message.error((response.data && response.data.errorMessage) || ncfT('AdminChat.CreateSessionFailed'));
       } catch (error) {
         console.error('创建会话失败:', error);
-        this.$message.error('创建会话失败，请稍后重试');
+        this.$message.error(ncfT('AdminChat.CreateSessionFailedRetry'));
       } finally {
         this.isCreatingSession = false;
       }

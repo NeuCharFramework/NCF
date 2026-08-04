@@ -18,14 +18,14 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="">
                     <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        我的账号
+                        @AR["Admin.Layout.Account"]
                         <span class=" fa fa-angle-down"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-usermenu pull-right">
-                        <li class="disabled"><a href="javascript:;">当前账号：@currentAccountName</a></li>
+                        <li class="disabled"><a href="javascript:;">@AR["Admin.Layout.CurrentAccount"]：@currentAccountName</a></li>
                         <li>
                             <a asp-page="/Login" asp-page-handler="Logout">
-                                退出登录
+                                @AR["Admin.Logout.Title"]
                                 <i class="fa fa-sign-out pull-right"></i>
                             </a>
                         </li>

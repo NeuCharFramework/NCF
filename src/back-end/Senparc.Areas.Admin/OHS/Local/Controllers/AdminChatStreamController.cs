@@ -21,6 +21,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
+using Senparc.Areas.Admin;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto;
 using Senparc.Areas.Admin.Domain.Services;
@@ -43,17 +45,20 @@ public sealed class AdminChatStreamController : ControllerBase
     private readonly AdminChatSessionService _sessionService;
     private readonly AdminChatMessageService _messageService;
     private readonly AdminChatAiService _chatAiService;
+    private readonly IStringLocalizer<AdminResource> _localizer;
     private readonly IEventBus? _eventBus;
 
     public AdminChatStreamController(
         AdminChatSessionService sessionService,
         AdminChatMessageService messageService,
         AdminChatAiService chatAiService,
-        IServiceProvider serviceProvider)
+        IServiceProvider serviceProvider,
+        IStringLocalizer<AdminResource> localizer)
     {
         _sessionService = sessionService;
         _messageService = messageService;
         _chatAiService = chatAiService;
+        _localizer = localizer;
         _eventBus = serviceProvider.GetService(typeof(IEventBus)) as IEventBus;
     }
 
@@ -65,7 +70,7 @@ public sealed class AdminChatStreamController : ControllerBase
         if (request == null || request.SessionId <= 0 || string.IsNullOrWhiteSpace(request.Content))
         {
             Response.StatusCode = StatusCodes.Status400BadRequest;
-            await Response.WriteAsJsonAsync(new { success = false, errorMessage = "请输入有效的会话和消息内容。" }, cancellationToken);
+            await Response.WriteAsJsonAsync(new { success = false, errorMessage = _localizer["AdminChat.StreamInputRequired"].Value }, cancellationToken);
             return;
         }
 
@@ -80,7 +85,7 @@ public sealed class AdminChatStreamController : ControllerBase
         if (session == null)
         {
             Response.StatusCode = StatusCodes.Status404NotFound;
-            await Response.WriteAsJsonAsync(new { success = false, errorMessage = "会话不存在或无权访问。" }, cancellationToken);
+            await Response.WriteAsJsonAsync(new { success = false, errorMessage = _localizer["AdminChat.StreamSessionForbidden"].Value }, cancellationToken);
             return;
         }
 
@@ -143,7 +148,7 @@ public sealed class AdminChatStreamController : ControllerBase
             {
                 await WriteEventAsync(
                     "error",
-                    new { message = string.IsNullOrWhiteSpace(ex.Message) ? "Agent 回复失败。" : ex.Message },
+                    new { message = string.IsNullOrWhiteSpace(ex.Message) ? _localizer["AdminChat.AgentReplyFailed"].Value : ex.Message },
                     CancellationToken.None);
             }
             catch

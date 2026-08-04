@@ -13,6 +13,9 @@
     修改标识：Senparc - 20260724
     修改描述：v0.1.0 增强后台模块批量更新并完善多语言管理界面
 
+    修改标识：Senparc - 20260731
+    修改描述：v0.2.1 切换到新版 AgentKernel 原生 RunChatAsync 接口以适配 CO2NET 4.2.0
+
 ----------------------------------------------------------------*/
 
 using Microsoft.Extensions.Logging;

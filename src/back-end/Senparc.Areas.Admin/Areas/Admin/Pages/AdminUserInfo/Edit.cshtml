@@ -2,13 +2,13 @@
 
 @model Senparc.Areas.Admin.Areas.Admin.Pages.AdminUserInfo_EditModel
 @{
-    ViewData["Title"] = $"{(Model.IsEdit ? "编辑" : "新增")}管理员";
+    ViewData["Title"] = Model.IsEdit ? AR["AdminUserInfo.EditTitle"] : AR["AdminUserInfo.AddTitle"];
 }
 
 
 @section breadcrumbs{
     <li>
-        <a asp-Page="/AdminUserInfo">管理员管理</a>
+        <a asp-Page="/AdminUserInfo">@AR["AdminUserInfo.Title"]</a>
     </li>
     <li>
         @ViewData["Title"]
@@ -31,30 +31,30 @@
                             用户名 @*<span class="required">*</span>*@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="AdminUserInfo.UserName" class="form-control col-md-7 col-xs-12" data-validate-length="1,20" placeholder="请输入用户名" required="required" type="text">
-                            不建议修改用户名！
+                            <input asp-for="AdminUserInfo.UserName" class="form-control col-md-7 col-xs-12" data-validate-length="1,20" placeholder="@AR["AdminUserInfo.UsernamePlaceholder"]" required="required" type="text">
+                            @AR["AdminUserInfo.EditUsernameTip"]
                             <span asp-validation-for="AdminUserInfo.UserName" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="item form-group">
-                        <label for="password" class="control-label col-md-3">密码</label>
+                        <label for="password" class="control-label col-md-3">@AR["Admin.Login.Password"]</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="AdminUserInfo.Password" type="password" data-validate-length="5,12" class="form-control col-md-7 col-xs-12" placeholder="请输入密码">
+                            <input asp-for="AdminUserInfo.Password" type="password" data-validate-length="5,12" class="form-control col-md-7 col-xs-12" placeholder="@AR["Admin.Login.PasswordPlaceholder"]">
                             <span asp-validation-for="AdminUserInfo.Password" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="item form-group">
-                        <label for="password2" class="control-label col-md-3 col-sm-3 col-xs-12">再次确认密码</label>
+                        <label for="password2" class="control-label col-md-3 col-sm-3 col-xs-12">@AR["AdminUserInfo.ConfirmPassword"]</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="password2" type="password" data-validate-linked="password" class="form-control col-md-7 col-xs-12" placeholder="请再次输入密码">
+                            <input id="password2" type="password" data-validate-linked="password" class="form-control col-md-7 col-xs-12" placeholder="@AR["AdminUserInfo.PasswordConfirmPlaceholder"]">
                         </div>
                     </div>
                     <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
-                            真实姓名
+                            @AR["AdminUserInfo.RealName"]
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="AdminUserInfo.RealName" type="text" class="form-control col-md-7 col-xs-12" placeholder="请输入真实姓名">
+                            <input asp-for="AdminUserInfo.RealName" type="text" class="form-control col-md-7 col-xs-12" placeholder="@AR["AdminUserInfo.RealNamePlaceholder"]">
                             <span asp-validation-for="AdminUserInfo.RealName" class="text-danger"></span>
 
                             @*<textarea id="textarea" name="textarea" class="form-control col-md-7 col-xs-12"></textarea>*@
@@ -62,10 +62,10 @@
                     </div>
                     <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
-                            手机号
+                            @AR["AdminUserInfo.Phone"]
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="AdminUserInfo.Phone" type="text" class="form-control col-md-7 col-xs-12" placeholder="请输入手机号">
+                            <input asp-for="AdminUserInfo.Phone" type="text" class="form-control col-md-7 col-xs-12" placeholder="@AR["AdminUserInfo.PhonePlaceholder"]">
                             <span asp-validation-for="AdminUserInfo.Phone" class="text-danger"></span>
 
                             @*<textarea id="textarea" name="textarea" class="form-control col-md-7 col-xs-12"></textarea>*@
@@ -73,10 +73,10 @@
                     </div>
                     <div class="item form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="textarea">
-                            备注
+                            @AR["AdminUserInfo.Note"]
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input asp-for="AdminUserInfo.Note" type="text" class="form-control col-md-7 col-xs-12" placeholder="请输入备注信息" multiple="multiple">
+                            <input asp-for="AdminUserInfo.Note" type="text" class="form-control col-md-7 col-xs-12" placeholder="@AR["AdminUserInfo.NotePlaceholder"]" multiple="multiple">
                             <span asp-validation-for="AdminUserInfo.Note" class="text-danger"></span>
 
                             @*<textarea id="textarea" name="textarea" class="form-control col-md-7 col-xs-12"></textarea>*@
@@ -85,8 +85,8 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-6 col-md-offset-3">
-                            <a asp-page="./Index" class="btn btn-primary">取消</a>
-                            <button id="send" type="submit" class="btn btn-success">提交</button>
+                            <a asp-page="./Index" class="btn btn-primary">@AR["Common.取消"]</a>
+                            <button id="send" type="submit" class="btn btn-success">@AR["Admin.Common.Submit"]</button>
                         </div>
                     </div>
                 </form>

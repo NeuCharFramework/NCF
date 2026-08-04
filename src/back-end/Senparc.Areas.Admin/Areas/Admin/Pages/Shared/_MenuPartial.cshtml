@@ -66,7 +66,7 @@
                 <img src="~/images/Admin/base/head/logo_128x128.png" class="img-circle profile_img" style="background-color:transparent" />
             </div>
             <div class="profile_info" style="padding: 25px 0px 10px;">
-                <span>Welcome,</span>
+                <span>@AR["Admin.Layout.Welcome"]</span>
                 <h2>@Model.UserName</h2>
             </div>
         </div>
@@ -77,7 +77,7 @@
                 @*<h3>菜单</h3>*@
                 <ul class="nav side-menu">
                     <li>
-                        <a href="~/Admin/Index">首页</a>
+                        <a href="~/Admin/Index">@AR["Admin.Nav.Home"]</a>
                     </li>
                     @foreach (var item in sysMenuDtos)
                     {
@@ -127,7 +127,7 @@
                                                 <li class="sub_menu @(hideXncfModuleManager?"":"xncf_area_submenu")">
                                                     <a href="@childrenItem.Url" class="@CurrentXncfPage(childrenItem.Url)">
                                                         <i class="fa fa-gear"></i>
-                                                        <text>设置/执行</text>
+                                                        <text>@AR["Xncf.SettingsAndExecute"]</text>
                                                     </a>
                                                 </li>
                                                 @foreach (var xncfSubMenu in xncfAreapage.AreaPageMenuItems)

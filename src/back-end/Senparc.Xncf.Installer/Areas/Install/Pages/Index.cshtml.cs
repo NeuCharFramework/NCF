@@ -13,6 +13,9 @@
     修改标识：Senparc - 20260729
     修改描述：v0.4.1 加强安装状态校验并收紧安装辅助路由
 
+    修改标识：Senparc - 20260804
+    修改描述：v0.4.1 数据库架构待升级时转入维护页并阻止重开安装流程
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Http;
@@ -29,6 +32,7 @@ using Senparc.Ncf.Core.Cache;
 using Senparc.Ncf.Core.Config;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.MultiTenant;
+using Senparc.Ncf.Core.Utility;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.Installer.Domain.Dto;
 using Senparc.Xncf.Installer.Domain.Services;
@@ -156,7 +160,12 @@ namespace Senparc.Xncf.Instraller.Pages
                 NeedModelList = result.Data.NeedModelList;
                 return Page();
             }
-            catch (Exception)
+            catch (Exception ex) when (DatabaseInstallState.IsSchemaUpgradeRequired(ex))
+            {
+                // 已有数据库缺少新字段属于升级状态，绝不能重新开放首次安装流程。
+                return new RedirectResult("/Maintenance/DatabaseUpgrade");
+            }
+            catch (Exception ex) when (InstallDatabaseState.IsDatabaseUnavailableForInstallation(ex))
             {
                 // Preserve the original installation entry behavior: an
                 // unavailable or not-yet-created database is an expected state
@@ -171,6 +180,12 @@ namespace Senparc.Xncf.Instraller.Pages
                 DbConnectionString = result.Data.DbConnectionString;
                 NeedModelList = result.Data.NeedModelList;
                 return Page();
+            }
+            catch (Exception ex)
+            {
+                SiteConfig.IsInstalling = false;
+                SenparcTrace.BaseExceptionLog(ex);
+                return StatusCode(StatusCodes.Status503ServiceUnavailable);
             }
         }
 

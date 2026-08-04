@@ -1,8 +1,9 @@
 ﻿@model Senparc.Ncf.AreaBase.Admin.IAdminPageModelBase
 @inject Senparc.Areas.Admin.Domain.AdminUserInfoService AdminUserInfoService
+@using Senparc.Ncf.Core.Utility
 @{
-    var thisYear = DateTime.Now.Year;
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+    var isEmbedded = string.Equals(Context.Request.Query["embedded"], "1", StringComparison.Ordinal);
     var webLoginExpireMinutes = Senparc.Areas.Admin.Domain.Models.DatabaseModel.AdminAuthConfig.DefaultAdminWebLoginExpireMinutes;
     var jwtExpireMinutes = Senparc.Areas.Admin.Domain.Models.DatabaseModel.AdminAuthConfig.DefaultBackendJwtExpireMinutes;
     var currentAccountName = !string.IsNullOrWhiteSpace(User?.Identity?.Name)
@@ -41,19 +42,20 @@
     @RenderSection("HeaderContent", false)
     @RenderSection("Style", false)
 </head>
-<body>
+<body class="@(isEmbedded ? "ncf-admin-embedded" : null)">
     <div id="app" v-cloak>
         <div class="app-wrapper">
-            <el-container>
+            <el-container class="admin-shell">
                 @*菜单栏*@
                 <el-aside :style="{'width':Store.state.navMenu.isCollapse?'64px':''}" class="el-aside-index">
                     <div :class="[Store.state.navMenu.isCollapse?'head-log2':'head-log']">
                         <a href="/Admin/Index">
-                            <img src="~/images/Admin/base/head/logo_230x55.png" alt="Alternate Text" />
+                            <img src="~/images/Admin/base/head/logo_230x55.png" alt="@AR["Admin.Layout.LogoAlt"]" />
                         </a>
                     </div>
                     <el-scrollbar wrap-class="scrollbar-wrapper" style="height:calc(100vh - 80px);">
                         <el-menu :default-active="Store.state.navMenu.activeMenu"
+                                 :default-openeds="Store.state.navMenu.openedMenus"
                                  :collapse="Store.state.navMenu.isCollapse"
                                  :background-color="Store.state.navMenu.variables.menuBg"
                                  :text-color="Store.state.navMenu.variables.menuText"
@@ -61,12 +63,14 @@
                                  :unique-opened="false"
                                  :collapse-transition="false"
                                  @@select="menuSelect"
+                                 @@open="menuOpen"
+                                 @@close="menuClose"
                                  mode="vertical">
                             <sidebar-item v-for="(items,index) in Store.state.navMenu.navMenuList" :key="index" :item="items"></sidebar-item>
                         </el-menu>
                     </el-scrollbar>
                 </el-aside>
-                <el-container>
+                <el-container class="admin-workspace">
                     <el-header>
                         <div class="header-menu">
                             @*切换菜单栏*@
@@ -93,10 +97,10 @@
                         <div class="header-account">
                             <el-dropdown trigger="click">
                                 <span class="el-dropdown-link">
-                                    我的账号<i class="el-icon-arrow-down el-icon--right"></i>
+                                    @AR["Admin.Layout.Account"]<i class="el-icon-arrow-down el-icon--right"></i>
                                 </span>
                                 <el-dropdown-menu slot="dropdown" class="header-account-dropdown">
-                                    <el-dropdown-item disabled>当前账号：@currentAccountName</el-dropdown-item>
+                                    <el-dropdown-item disabled>@AR["Admin.Layout.CurrentAccount", currentAccountName]</el-dropdown-item>
                                     <el-dropdown-item divided>
                                         <a class="header-account-action" asp-page="/Login" asp-page-handler="Logout">@AR["Admin.Logout.Title"]</a>
                                     </el-dropdown-item>
@@ -104,24 +108,108 @@
                             </el-dropdown>
                         </div>
                     </el-header>
-                    <el-main>
+                    <el-main class="admin-content">
                         <div class="ifram-wrapper">
                             @*<iframe :src="pageSrc"></iframe>*@
                             @RenderBody()
                         </div>
                     </el-main>
-                    <el-footer class="footer">
-                        Powered by <a href="https://www.ncf.pub" target="_blank">NeuCharFramework</a> © 2010-@thisYear <a href="https://www.senparc.com" target="_blank">盛派网络</a>
+                    <el-footer class="footer" height="36px">
+                        <div class="admin-footer-tools">
+                            <button type="button" class="admin-footer-action" @@click="openFooterAi" title="AI 快捷对话">
+                                <i class="fa fa-comments-o"></i><span>AI</span>
+                            </button>
+                            <button type="button" class="admin-footer-action" @@click="consoleDialogVisible = true" title="浏览器 Console">
+                                <i class="fa fa-terminal"></i><span>Console</span>
+                                <span class="admin-footer-badge" v-if="consoleEntries.length">{{ consoleEntries.length }}</span>
+                            </button>
+                            <button v-if="synchroAvailable" type="button" class="admin-footer-action" @@click="synchroDrawerVisible = true" title="@AR["Admin.Footer.SynchroLabel"]">
+                                <i class="fa fa-bell-o"></i><span>@AR["Admin.Footer.SynchroLabel"]</span>
+                                <span class="admin-footer-badge" v-if="synchroTotalCount">{{ synchroTotalCount }}</span>
+                            </button>
+                            <span class="admin-footer-time" title="服务器时间">
+                                <i class="fa fa-clock-o"></i> {{ serverTimeText }}
+                            </span>
+                        </div>
+                        <div class="admin-footer-copyright">
+                            @AR["Admin.Layout.PoweredBy"] <a href="https://www.ncf.pub" target="_blank" rel="noopener noreferrer">NeuCharFramework</a>
+                            <span class="admin-footer-separator">·</span>
+                            @Html.Raw(FooterContentSanitizer.Sanitize(Model?.FullSystemConfig?.FooterContent))
+                        </div>
                     </el-footer>
                 </el-container>
             </el-container>
         </div>
+
+        <el-dialog
+            title="AI 快捷对话"
+            :visible.sync="footerAiDialogVisible"
+            width="min(1080px, 92vw)"
+            top="6vh"
+            custom-class="admin-footer-ai-dialog"
+            :close-on-click-modal="false">
+            <div class="admin-footer-ai-frame" v-if="footerAiDialogVisible">
+                <iframe :src="footerAiUrl" title="Admin Chat 快捷对话"></iframe>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @@click="footerAiDialogVisible = false">关闭</el-button>
+                <el-button type="primary" @@click="openFullAdminChat">切换到正式页面</el-button>
+            </span>
+        </el-dialog>
+
+        <el-dialog
+            title="浏览器 Console"
+            :visible.sync="consoleDialogVisible"
+            width="min(960px, 90vw)"
+            custom-class="admin-footer-console-dialog">
+            <div class="admin-console-toolbar">
+                <span>仅显示当前页面加载后捕获的浏览器日志，不包含服务器 stdout。</span>
+                <el-button size="mini" @@click="clearFooterConsole">清空</el-button>
+            </div>
+            <div class="admin-console-output">
+                <div v-if="consoleEntries.length === 0" class="admin-console-empty">暂无日志</div>
+                <div v-for="entry in consoleEntries" :key="entry.id" :class="['admin-console-line', 'is-' + entry.level]">
+                    <span class="admin-console-time">{{ entry.time }}</span>
+                    <span class="admin-console-level">{{ entry.level }}</span>
+                    <span class="admin-console-message">{{ entry.message }}</span>
+                </div>
+            </div>
+        </el-dialog>
+
+        <el-drawer
+            title="Synchro · 灵犀"
+            :visible.sync="synchroDrawerVisible"
+            direction="rtl"
+            size="380px">
+            <div class="admin-synchro-panel" v-loading="synchroLoading">
+                <p class="admin-synchro-description">选择在 Footer 显示的模块提醒。设置保存在当前账号的浏览器中。</p>
+                <div v-if="synchroProviders.length === 0" class="admin-synchro-empty">当前没有模块提供灵犀信息。</div>
+                <section v-for="provider in synchroProviders" :key="provider.providerId" class="admin-synchro-provider">
+                    <header>
+                        <span><i :class="provider.icon"></i> {{ provider.displayName }}</span>
+                        <el-switch v-model="provider.enabled" @@change="saveSynchroPreferences"></el-switch>
+                    </header>
+                    <a
+                        v-for="item in provider.items"
+                        :key="item.id"
+                        :href="item.detailUrl"
+                        class="admin-synchro-item">
+                        <span class="admin-synchro-item-content">
+                            <strong>{{ item.title }}</strong>
+                            <small>{{ item.summary }}</small>
+                        </span>
+                        <el-badge :value="item.count" :hidden="!item.count" :type="item.severity === 'warning' ? 'warning' : 'primary'"></el-badge>
+                    </a>
+                </section>
+            </div>
+        </el-drawer>
     </div>
     <!--lib-->
     <script src="~/lib/vue/vue.js"></script>
     <script src="~/lib/element-ui_2.13.2/element.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script src="~/lib/vuex.js"></script>
+    @await Html.PartialAsync("_LocalizationScripts")
     <!--js-->
     <script src="~/js/Admin/store.js"></script>
     <script src="~/js/Admin/axios.js"></script>
@@ -131,11 +219,13 @@
     <script src="~/js/Admin/vuePermission.js"></script>
     <script src="~/js/Admin/Pages/Components/Components.js"></script>
     <script>
-        function ncfSwitchLanguage(culture) {
-            var returnUrl = window.location.pathname + window.location.search;
-            window.location.href = '/api/Language/Set?culture=' + encodeURIComponent(culture) + '&returnUrl=' + encodeURIComponent(returnUrl);
-        }
+        window.NCF_ADMIN_FOOTER_INITIAL_STATE = {
+            serverTime: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(DateTimeOffset.Now)),
+            account: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(currentAccountName)),
+            embedded: @(isEmbedded ? "true" : "false")
+        };
     </script>
+    <script src="~/js/Admin/Shared/AdminFooter.js" asp-append-version="true"></script>
     <!--页面js-->
     @*<script src="~/js/Admin/Pages/Index/Index.js"></script>*@
     @RenderSection("scripts", false)
@@ -146,11 +236,11 @@
             remindBeforeMinutes: 5
         };
         window.NCF_SESSION_I18N = {
-            title: '登录即将过期',
-            message: '检测到当前登录会话即将过期，您可以保持登录或立即退出。',
-            keepLogin: '保持登录',
-            logoutNow: '立即退出登录',
-            keepLoginSuccess: '已保持登录，会话已续期。'
+            title: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Session.Title"].Value)),
+            message: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Session.Message"].Value)),
+            keepLogin: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Session.KeepLogin"].Value)),
+            logoutNow: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Session.LogoutNow"].Value)),
+            keepLoginSuccess: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Session.KeepLoginSuccess"].Value))
         };
         if (typeof window.ncfStartSessionMonitor === 'function') {
             window.ncfStartSessionMonitor();

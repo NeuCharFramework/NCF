@@ -16,22 +16,30 @@
     修改标识：Senparc - 20260724
     修改描述：v0.1.0 增强后台模块批量更新并完善多语言管理界面
 
+    修改标识：Senparc - 20260804
+    修改描述：v0.2.1 支持后台配置与校验 Footer 内容
+
 ----------------------------------------------------------------*/
 
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using Senparc.Areas.Admin;
 using Senparc.Ncf.Core.Enums;
+using Senparc.Ncf.Core.Utility;
 using Senparc.Xncf.SystemManager.Domain.Service;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
     public class SystemConfig_IndexModel(IServiceProvider serviceProvider,
-        SystemConfigService systemConfigService)
+        SystemConfigService systemConfigService,
+        IStringLocalizer<AdminResource> localizer)
         : BaseAdminPageModel(serviceProvider)
     {
         private readonly SystemConfigService _systemConfigService = systemConfigService;
+        private readonly IStringLocalizer<AdminResource> _localizer = localizer;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -50,18 +58,28 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         {
             if (fullSystemConfig == null)
             {
-                return Ok(false, "请求参数不能为空");
+                return Ok(false, _localizer["SystemConfig.RequestEmpty"].Value);
             }
 
             if (string.IsNullOrWhiteSpace(fullSystemConfig.SystemName))
             {
-                return Ok(false, "系统名称不能为空");
+                return Ok(false, _localizer["SystemConfig.NameEmpty"].Value);
+            }
+
+            if (string.IsNullOrWhiteSpace(fullSystemConfig.FooterContent))
+            {
+                return Ok(false, "Footer 内容不能为空。");
+            }
+
+            if (fullSystemConfig.FooterContent.Length > 2000)
+            {
+                return Ok(false, "Footer 内容不能超过 2000 个字符。");
             }
 
             var systemConfig = await _systemConfigService.GetObjectAsync(z => true);
             if (systemConfig == null)
             {
-                return Ok(false, "系统配置信息不存在");
+                return Ok(false, _localizer["SystemConfig.ConfigNotFound"].Value);
             }
 
             systemConfig.Update(fullSystemConfig.SystemName,
@@ -69,13 +87,15 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 systemConfig.MchKey,
                 systemConfig.TenPayAppId,
                 systemConfig.HideModuleManager);
+            systemConfig.UpdateFooterContent(FooterContentSanitizer.Sanitize(fullSystemConfig.FooterContent));
 
             await _systemConfigService.SaveObjectAsync(systemConfig);
 
-            base.SetMessager(MessageType.success, "修改成功");
+            base.SetMessager(MessageType.success, _localizer["SystemConfig.Updated"].Value);
             return Ok(new
             {
-                systemName = systemConfig.SystemName
+                systemName = systemConfig.SystemName,
+                footerContent = systemConfig.FooterContent
             });
         }
     }

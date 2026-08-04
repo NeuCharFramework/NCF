@@ -23,8 +23,8 @@
     @RenderSection("explanations", false)
 }
 @section breadcrumbs{
-    <li>扩展模块</li>
-    <li>模块管理</li>
+    <li>@AR["Xncf.ExtensionModules"]</li>
+    <li>@AR["Xncf.Title"]</li>
     <li>@Model.XncfModuleDto.MenuName</li>
     @RenderSection("breadcrumbs", false)
     @if (!IsSectionDefined("breadcrumbs"))
@@ -46,7 +46,7 @@
             <div id="sidebar-sub-menu" class="main_menu_side hidden-print main_menu">
                 <div class="menu_section active">
                     <ul class="nav side-menu" style="">
-                        <li><a asp-page="../XncfModule/Start" asp-route-uid="@Model.XncfRegister.Uid"><i class="fa fa-chevron-left"></i> 返回</a></li>
+                        <li><a asp-page="../XncfModule/Start" asp-route-uid="@Model.XncfRegister.Uid"><i class="fa fa-chevron-left"></i> @AR["Common.返回"]</a></li>
                     </ul>
                     @await Html.PartialAsync("_XncfModuleLayout_Menu", Model.XncfRegister)
 

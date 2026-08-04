@@ -83,4 +83,16 @@
   <data name="Home.InstallRequired.Title" xml:space="preserve"><value>NeuCharFramework 初始化</value></data>
   <data name="Home.InstallRequired.Message" xml:space="preserve"><value>检测到 NeuCharFramework 系统未初始化，正在进入初始化页面，请稍后...</value></data>
   <data name="Home.InstallRequired.Link" xml:space="preserve"><value>如果页面没有自动跳转，请点击这里</value></data>
+  <data name="Error.Title" xml:space="preserve"><value>错误</value></data>
+  <data name="Error.RequestFailed" xml:space="preserve"><value>处理您的请求时发生错误。</value></data>
+  <data name="Error.RequestId" xml:space="preserve"><value>请求 ID</value></data>
+  <data name="Error.DevelopmentMode" xml:space="preserve"><value>开发模式</value></data>
+  <data name="Error.DevelopmentDetails" xml:space="preserve"><value>切换到 Development 环境会显示本次错误的详细信息。</value></data>
+  <data name="Error.DevelopmentWarning" xml:space="preserve"><value>已部署的应用程序不应启用 Development 环境。</value></data>
+  <data name="Error.DevelopmentInstructions" xml:space="preserve"><value>这可能会向最终用户显示异常中的敏感信息。本地调试时，请将 ASPNETCORE_ENVIRONMENT 环境变量设为 Development，然后重新启动应用程序。</value></data>
+  <data name="Privacy.Title" xml:space="preserve"><value>隐私策略</value></data>
+  <data name="Privacy.Description" xml:space="preserve"><value>使用此页面详细说明您网站的隐私政策。</value></data>
+  <data name="Cookie.Summary" xml:space="preserve"><value>我们使用 Cookie 改善网站体验。详情请查看隐私政策。</value></data>
+  <data name="Cookie.LearnMore" xml:space="preserve"><value>了解更多</value></data>
+  <data name="Cookie.Accept" xml:space="preserve"><value>接受</value></data>
 </root>

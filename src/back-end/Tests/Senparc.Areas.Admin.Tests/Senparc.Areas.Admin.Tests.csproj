@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <Version>0.0.1</Version>
+    <PackageReleaseNotes>
+      [2026-08-04] v0.0.1 增强后台本地化与 Synchro Provider 回归覆盖
+      1、覆盖管理员模型行为及 Synchro Provider 去重、排序和模块可用性筛选。
+      2、覆盖 Admin Footer 生命周期与实时状态交互。
+      3、升级全部 Senparc.* NuGet 测试依赖并同步最新测试扩展。
+    </PackageReleaseNotes>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -34,9 +41,9 @@
     <PackageReference Include="Senparc.CO2NET" Version="4.2.0" />
     <PackageReference Include="Senparc.CO2NET.AspNet" Version="2.1.4" />
     <PackageReference Include="Senparc.CO2NET.WebApi" Version="2.1.9-preview" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.26.0-preview3" />
-    <PackageReference Include="Senparc.Ncf.UnitTestExtension" Version="0.3.16-preview.3" />
-    <PackageReference Include="Senparc.Xncf.SystemCore" Version="0.14.1-preview3" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.28.0-preview5" />
+    <PackageReference Include="Senparc.Ncf.UnitTestExtension" Version="0.3.18-preview.5" />
+    <PackageReference Include="Senparc.Xncf.SystemCore" Version="0.14.3-preview5" />
   </ItemGroup>
 
   <ItemGroup>

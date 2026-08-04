@@ -15,16 +15,16 @@
             },
             tableData: [],
             dialog: {
-                title: '新增角色',
+                title: ncfT('Role.AddTitle'),
                 visible: false,
                 data: {
                     roleName: '', roleCode: '', adminRemark: '', remark: '', addTime: '', id: '', enabled: false
                 },
                 rules: {
                     roleName: [
-                        { required: true, message: "角色名称为必填项", trigger: "blur" }
+                        { required: true, message: ncfT('Role.NameRequired'), trigger: "blur" }
                     ],
-                    roleCode: [{ required: true, message: "角色代码为必填项", trigger: "blur" }]
+                    roleCode: [{ required: true, message: ncfT('Role.CodeRequired'), trigger: "blur" }]
                 },
                 updateLoading: false
             },
@@ -134,8 +134,8 @@
             if (respnseData.data.success) {
                 this.getList();
                 this.$notify({
-                    title: "Success",
-                    message: "授权成功",
+                    title: ncfT('AdminUserInfo.Success'),
+                    message: ncfT('Role.AuthorizationSuccess'),
                     type: "success",
                     duration: 800,
                     onClose: function () {
@@ -163,10 +163,10 @@
                 this.dialog.data = {
                     roleName, roleCode, adminRemark, remark, addTime, id, enabled
                 };
-                this.dialog.title = '编辑角色';
+                this.dialog.title = ncfT('Role.EditTitle');
             } else {
                 // 新增
-                this.dialog.title = '新增角色';
+                this.dialog.title = ncfT('Role.AddTitle');
             }
         },
         // 更新新增、编辑
@@ -187,8 +187,8 @@
                         if (res.data.success) {
                             this.getList();
                             this.$notify({
-                                title: "Success",
-                                message: "成功",
+                                title: ncfT('AdminUserInfo.Success'),
+                                message: ncfT('AdminUserInfo.Success'),
                                 type: "success",
                                 duration: 2000
                             });
@@ -208,8 +208,8 @@
                 if (res.data.success) {
                     this.getList();
                     this.$notify({
-                        title: "Success",
-                        message: "删除成功",
+                        title: ncfT('AdminUserInfo.Success'),
+                        message: ncfT('AdminChat.DeleteSessionSuccess'),
                         type: "success",
                         duration: 2000
                     });

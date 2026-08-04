@@ -1,5 +1,6 @@
 ﻿@model Senparc.Web.Models.VD.BasePageModel
 @using Senparc.Ncf.XncfBase
+@using Senparc.Ncf.Core.Utility
 @inject IServiceProvider _serviceProvider
 @{
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
@@ -31,6 +32,7 @@
     </environment>
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/Index/index.css" rel="stylesheet" />
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <header>
@@ -43,6 +45,9 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Download">@SR["Nav.Download"]</a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" href="https://doc.ncf.pub" target="_blank">@SR["Nav.Documentation"]</a>
                                 </li>
@@ -149,7 +154,7 @@
             <div class="row">
                 <div class="col-12">
                     <p class="footer-copyright text-center">
-                        <a href="http://beian.miit.gov.cn" target="_blank">苏ICP备11023884号-12</a> © 2025 Senparc
+                        @Html.Raw(FooterContentSanitizer.Sanitize(Model?.FullSystemConfig?.FooterContent))
                     </p>
                 </div>
             </div>
