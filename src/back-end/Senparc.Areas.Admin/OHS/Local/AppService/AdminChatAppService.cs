@@ -385,10 +385,91 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     throw new NcfExceptionBase(_localizer["AdminChat.SessionNotFoundOrForbidden"]);
                 }
 
-                var modules = request.Modules.Select(m => (m.Uid, m.Name, m.Version ?? "")).ToList();
+                var modules = (request.Modules ?? new List<ModuleInfo>())
+                    .Where(m => m != null && !string.IsNullOrWhiteSpace(m.Uid))
+                    .GroupBy(m => m.Uid, StringComparer.OrdinalIgnoreCase)
+                    .Select(group => group.First())
+                    .Select(m => (m.Uid, m.Name, m.Version ?? ""))
+                    .ToList();
+                if (!modules.Any())
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.SelectAtLeastOneModule"]);
+                }
+
                 await _sessionModuleService.AddModulesToSessionAsync(request.SessionId, modules);
 
                 logger.Append($"添加模块: SessionId={request.SessionId}, Count={modules.Count}");
+                await PublishSyncEventAsync(userId, request.SessionId, "modules-changed");
+                return _localizer["AdminChat.AddModulesSuccess"];
+            });
+        }
+
+        /// <summary>
+        /// 将会话的模块关联更新为指定集合；系统模块管理器始终保留。
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Post)]
+        public async Task<StringAppResponse> SetSessionModulesAsync([FromBody] AddModulesRequest request)
+        {
+            return await this.GetResponseAsync<StringAppResponse, string>(async (response, logger) =>
+            {
+                var userId = GetCurrentAdminUserInfoId();
+                if (userId <= 0)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.UserNotLoggedIn"]);
+                }
+
+                var session = await _sessionService.GetSessionByIdAsync(request.SessionId, userId);
+                if (session == null)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.SessionNotFoundOrForbidden"]);
+                }
+
+                var requestedUids = (request.Modules ?? new List<ModuleInfo>())
+                    .Where(module => module != null && !string.IsNullOrWhiteSpace(module.Uid))
+                    .Select(module => module.Uid)
+                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+                requestedUids.Add(SiteConfig.SYSTEM_XNCF_MODULE_XNCF_MODULE_MANAGER_UID);
+
+                var registers = XncfRegisterManager.RegisterList
+                    .Where(register => register != null && requestedUids.Contains(register.Uid))
+                    .GroupBy(register => register.Uid, StringComparer.OrdinalIgnoreCase)
+                    .Select(group => group.First())
+                    .ToArray();
+                var availabilityService = ServiceProvider.GetRequiredService<INeuBellModuleAvailabilityService>();
+                var openModuleUids = await availabilityService.GetOpenModuleUidsAsync(registers.Select(register => register.Uid));
+                openModuleUids = openModuleUids
+                    .Append(SiteConfig.SYSTEM_XNCF_MODULE_XNCF_MODULE_MANAGER_UID)
+                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+                var desiredModules = registers
+                    .Where(register => openModuleUids.Contains(register.Uid))
+                    .Select(register => (register.Uid, register.Name, register.Version ?? string.Empty))
+                    .ToList();
+                if (desiredModules.All(module => !string.Equals(
+                        module.Uid,
+                        SiteConfig.SYSTEM_XNCF_MODULE_XNCF_MODULE_MANAGER_UID,
+                        StringComparison.OrdinalIgnoreCase)))
+                {
+                    desiredModules.Add((
+                        SiteConfig.SYSTEM_XNCF_MODULE_XNCF_MODULE_MANAGER_UID,
+                        SiteConfig.SYSTEM_XNCF_MODULE_XNCF_MODULE_MANAGER_UID,
+                        string.Empty));
+                }
+
+                var desiredUidSet = desiredModules
+                    .Select(module => module.Uid)
+                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+                var existingModules = await _sessionModuleService.GetSessionModulesAsync(request.SessionId);
+                // 先幂等添加目标集合，再移除多余关联；若中途失败，最多暂时保留旧关联，
+                // 不会先删掉用户原有的可用模块。
+                await _sessionModuleService.AddModulesToSessionAsync(request.SessionId, desiredModules);
+                foreach (var existingModule in existingModules.Where(module => !desiredUidSet.Contains(module.XncfModuleUid)))
+                {
+                    await _sessionModuleService.RemoveModuleFromSessionAsync(request.SessionId, existingModule.XncfModuleUid);
+                }
+
+                logger.Append($"更新模块关联: SessionId={request.SessionId}, Count={desiredModules.Count}");
+                await PublishSyncEventAsync(userId, request.SessionId, "modules-changed");
                 return _localizer["AdminChat.AddModulesSuccess"];
             });
         }
@@ -418,6 +499,47 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 return new GetSessionModulesResponse
                 {
                     Modules = modules.Select(z => MapModuleDtoWithRegisterInfo(AdminChatSessionModuleDto.CreateFromEntity(z))).ToList()
+                };
+            });
+        }
+
+        /// <summary>
+        /// 获取当前已安装并开放、可关联到 Admin Chat 会话的 XNCF 模块。
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Get)]
+        public async Task<AppResponseBase<GetAvailableModulesResponse>> GetAvailableModulesAsync()
+        {
+            return await this.GetResponseAsync<AppResponseBase<GetAvailableModulesResponse>, GetAvailableModulesResponse>(async (response, logger) =>
+            {
+                var registers = XncfRegisterManager.RegisterList
+                    .Where(register => register != null && !string.IsNullOrWhiteSpace(register.Uid))
+                    .GroupBy(register => register.Uid, StringComparer.OrdinalIgnoreCase)
+                    .Select(group => group.First())
+                    .ToArray();
+                var availabilityService = ServiceProvider.GetRequiredService<INeuBellModuleAvailabilityService>();
+                var openModuleUids = await availabilityService.GetOpenModuleUidsAsync(registers.Select(register => register.Uid));
+
+                var modules = registers
+                    .Where(register => openModuleUids.Contains(register.Uid))
+                    .Select(register => new AvailableModuleDto
+                    {
+                        Uid = register.Uid,
+                        Name = register.Name,
+                        DisplayName = string.IsNullOrWhiteSpace(register.MenuName) ? register.Name : register.MenuName,
+                        Version = register.Version ?? string.Empty,
+                        Description = register.Description ?? string.Empty,
+                        Icon = register.Icon ?? string.Empty,
+                        IsRequired = string.Equals(
+                            register.Uid,
+                            SiteConfig.SYSTEM_XNCF_MODULE_XNCF_MODULE_MANAGER_UID,
+                            StringComparison.OrdinalIgnoreCase)
+                    })
+                    .OrderBy(module => module.DisplayName)
+                    .ToList();
+
+                return new GetAvailableModulesResponse
+                {
+                    Modules = modules
                 };
             });
         }
@@ -593,6 +715,28 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
     public class GetSessionModulesResponse
     {
         public List<AdminChatSessionModuleDto> Modules { get; set; }
+    }
+
+    /// <summary>
+    /// 获取可关联模块列表响应。
+    /// </summary>
+    public class GetAvailableModulesResponse
+    {
+        public List<AvailableModuleDto> Modules { get; set; }
+    }
+
+    /// <summary>
+    /// 可关联到 Admin Chat 会话的开放模块。
+    /// </summary>
+    public class AvailableModuleDto
+    {
+        public string Uid { get; set; }
+        public string Name { get; set; }
+        public string DisplayName { get; set; }
+        public string Version { get; set; }
+        public string Description { get; set; }
+        public string Icon { get; set; }
+        public bool IsRequired { get; set; }
     }
 
     /// <summary>

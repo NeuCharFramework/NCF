@@ -13,6 +13,7 @@
 ----------------------------------------------------------------*/
 
 using Senparc.Areas.Admin.OHS.Local.PL;
+using Senparc.Areas.Admin.Domain.Services;
 using Senparc.Areas.Admin.SenparcTraceManager;
 using Senparc.CO2NET;
 using Senparc.Ncf.AreaBase.Admin.Filters;
@@ -28,8 +29,13 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
     [AdminAuthorize(NcfAuthorizationPolicyNames.AdminOnly)]
     public class StatAppService : LocalAppServiceBase
     {
-        public StatAppService(IServiceProvider serviceProvider) : base(serviceProvider)
+        private readonly HostMetricsCollector _hostMetricsCollector;
+
+        public StatAppService(
+            IServiceProvider serviceProvider,
+            HostMetricsCollector hostMetricsCollector) : base(serviceProvider)
         {
+            _hostMetricsCollector = hostMetricsCollector;
         }
 
         [ApiBind]
@@ -81,6 +87,18 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 }
 
                 return result;
+            });
+        }
+
+        /// <summary>
+        /// 获取当前 Host 的实时 CPU、内存、网络及 Web 进程指标。
+        /// </summary>
+        [ApiBind]
+        public async Task<AppResponseBase<HostMetricsSnapshot>> GetHostMetrics()
+        {
+            return await this.GetResponseAsync<HostMetricsSnapshot>((response, logger) =>
+            {
+                return Task.FromResult(_hostMetricsCollector.Collect());
             });
         }
     }

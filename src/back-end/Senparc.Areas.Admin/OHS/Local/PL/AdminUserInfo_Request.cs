@@ -10,9 +10,6 @@
     修改标识：Senparc - 20260724
     修改描述：v0.1.0 增强后台模块批量更新并完善多语言管理界面
 
-    修改标识：Senparc - 20260804
-    修改描述：v0.2.1 完善管理员请求模型的本地化验证
-
 ----------------------------------------------------------------*/
 using Senparc.Ncf.XncfBase.FunctionRenders;
 using Microsoft.Extensions.Localization;

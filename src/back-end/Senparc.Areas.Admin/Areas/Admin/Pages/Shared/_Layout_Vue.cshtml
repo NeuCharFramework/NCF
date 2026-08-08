@@ -123,9 +123,9 @@
                                 <i class="fa fa-terminal"></i><span>Console</span>
                                 <span class="admin-footer-badge" v-if="consoleEntries.length">{{ consoleEntries.length }}</span>
                             </button>
-                            <button v-if="synchroAvailable" type="button" class="admin-footer-action" @@click="synchroDrawerVisible = true" title="@AR["Admin.Footer.SynchroLabel"]">
-                                <i class="fa fa-bell-o"></i><span>@AR["Admin.Footer.SynchroLabel"]</span>
-                                <span class="admin-footer-badge" v-if="synchroTotalCount">{{ synchroTotalCount }}</span>
+                            <button v-if="neuBellAvailable" type="button" class="admin-footer-action" @@click="neuBellDrawerVisible = true" title="@AR["Admin.Footer.NeuBellLabel"]">
+                                <i class="fa fa-bell-o"></i><span>@AR["Admin.Footer.NeuBellLabel"]</span>
+                                <span class="admin-footer-badge" v-if="neuBellTotalCount">{{ neuBellTotalCount }}</span>
                             </button>
                             <span class="admin-footer-time" title="服务器时间">
                                 <i class="fa fa-clock-o"></i> {{ serverTimeText }}
@@ -177,24 +177,24 @@
         </el-dialog>
 
         <el-drawer
-            title="Synchro · 灵犀"
-            :visible.sync="synchroDrawerVisible"
+            title="@AR["Admin.Footer.NeuBellLabel"]"
+            :visible.sync="neuBellDrawerVisible"
             direction="rtl"
             size="380px">
-            <div class="admin-synchro-panel" v-loading="synchroLoading">
-                <p class="admin-synchro-description">选择在 Footer 显示的模块提醒。设置保存在当前账号的浏览器中。</p>
-                <div v-if="synchroProviders.length === 0" class="admin-synchro-empty">当前没有模块提供灵犀信息。</div>
-                <section v-for="provider in synchroProviders" :key="provider.providerId" class="admin-synchro-provider">
+            <div class="admin-neubell-panel" v-loading="neuBellLoading">
+                <p class="admin-neubell-description">选择在 Footer 显示的模块提醒。设置保存在当前账号的浏览器中。</p>
+                <div v-if="neuBellProviders.length === 0" class="admin-neubell-empty">当前没有模块提供纽铃信息。</div>
+                <section v-for="provider in neuBellProviders" :key="provider.providerId" class="admin-neubell-provider">
                     <header>
                         <span><i :class="provider.icon"></i> {{ provider.displayName }}</span>
-                        <el-switch v-model="provider.enabled" @@change="saveSynchroPreferences"></el-switch>
+                        <el-switch v-model="provider.enabled" @@change="saveNeuBellPreferences"></el-switch>
                     </header>
                     <a
                         v-for="item in provider.items"
                         :key="item.id"
                         :href="item.detailUrl"
-                        class="admin-synchro-item">
-                        <span class="admin-synchro-item-content">
+                        class="admin-neubell-item">
+                        <span class="admin-neubell-item-content">
                             <strong>{{ item.title }}</strong>
                             <small>{{ item.summary }}</small>
                         </span>

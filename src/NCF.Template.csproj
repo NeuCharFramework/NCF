@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.37.0</PackageVersion>
+		<PackageVersion>0.38.0</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -18,99 +18,101 @@
 		<PackageProjectUrl>https://github.com/NeuCharFramework/NCF</PackageProjectUrl>
 		<PackageIcon>icon.jpg</PackageIcon>
 		<PackageReleaseNotes>
-			v0.1 创世
-			v0.1.3 优化模板，适配 .NET 7.0 CLI
-			v0.1.4 优化模板，提供数据库名称自定义及随机服务器端口（VS）
-			v0.1.5 NCF 提升密码安全性
-			v0.1.10 优化管理员密码审核机制
-			v0.8.0 采用最新基础框架
-			v0.8.1 排除不需要的文件
-			v0.8.2 升级基础库，完成 AI 等项目升级
-			v0.9.0 升级基础库，清理模板
-			v0.9.1 更新 PromptRange，可导出和导入最新格式 Prompt 文件
-			v0.9.2 提供全数据库 Prompt 自动管理
-			v0.9.4 支持全站数据库 0 代码运行 AI 代码生成。自动调用系统初始化 Prompt
-			v0.9.5 支持 AgentsManager 模块，升级 PromptRange
-			v0.9.6 升级基础库
-			v0.9.11 更新基础库，升级 ServiceBase，提供回调方法
-			v0.9.12 添加更多单元测试演示
-			v0.9.13 更新 appsettings.json
-			v0.9.14 更新 PromptRange
-			v0.9.15 更新基础库
-			v0.10.0 启用新的单元测试基础库
-			v0.11.0 解决数据库初始化过程中过早且全量创建表格的问题
-			v0.12.0 支持 Ollama 本地模型 API
-			v0.12.5 支持最新 Senparc.Xncf.DynamicData 模块
-			v0.15.0 安装过程支持选择默认安装模块
-			v0.16.0 管理后台首页添加日志统计
-			v0.17.0 添加手动强制更新模块数据库（Migration）,用于底层更新后导致系统无法正常启动的情况。运行地址：https://localhost:5001/Install?forceUpdateModule=Senparc.Xncf.SystemManager，Senparc.Xncf.SystemManager 替换成需要强制升级的模块名称。出于安全考虑，此方法只能在本地运行。
-			v0.18.0 添加 NeuChar 云端用户接入，为将来云端算力输入做好准备
-			v0.18.1 PromptRange 支持 Markdown 格式输出
-			v0.18.2 PromptRange，提供打靶结果“复制”功能
-			v0.18.3 PromptRange 完善样式
-			v0.18.5 升级缓存基础库
-			v0.18.6 升级缓存基础库
-			v0.18.7 升级基础库，优化 XNCF 模块
-			v0.18.8 升级 DatabaseToolkit 模块
-			v0.18.9 升级 WeixinManager 模块
-			v0.18.10 添加新 Doc 模块（V2）、完善 Docker 文件配置
-			v0.18.11 优化模板
-			v0.18.12 升级 PromptRange、DynamicData
-			v0.18.13 升级基础库和 Utility 库
-			v0.19.0 优化左侧滚动条样式，可滚动到最下方 #256
-			v0.20.0 提供新版本 AgentsManager 模块
-			v0.21.0 提供新版本 AgentsManager、PromotRange 模块
-			v0.21.2 更新启动字幕，开始提供国际版英文
-			v0.21.3 优化 Admin 后台，为 Log 读取提供同步锁
-			v0.21.4 统一 MacOS 中 SQLite 数据库的路径
-			v0.22.0 加载新版本 PromptRange 和 AgentsManager
-			v0.22.1 修复菜单栏横向滚动条样式问题
-			v0.23.0 升级 AIKernel和 AgentsManager 模块
-			v0.24.0 添加 Aspire 模块
-			v0.25.0 添加 Aspire 模块 Sample
-			v0.26.0 添加 CNB 容器部署示例
-			v0.27.1 更新 Swagger 包及 CO2NET 基础库，支持 ApiBind 的接口大小写设置
-			v0.27.2 优化“菜单”列表，提供父节点信息置顶
-			v0.27.3 优化单元测试，提供最新的种子数据（Seed Data）注入方法演示，实现无外部数据库支持下的数据读写和操作测试
-			v0.27.4 重构单元测试种子数据（Seed Data）注入方法，提供自动防止单元测试实例重复注入数据的机制
-			v0.27.5 优化单元测试模块
-			v0.27.6 升级基础库
-			v0.27.7 更新单元测试模块
-			v0.27.8 更新基础模块
-			v0.27.9 更新基础模块，全面支持达梦数据库迁移
-			v0.27.10 更新基础模块，重构 XncfBuilder XNCF 生成过程
-			v0.28.0 更新 Admin 后台布局
-			v0.28.4 更新 DeepSeek 接入
-			v0.28.5 更新 PromptRange
-			v0.28.6 更新 AgentsManager 及基础库
-			v0.28.7 优化管理后台首页显示；升级 PromptRange、AgentsManagers；添加达梦数据库连接配置示例
-			v0.28.8 支持 MCP AccessToken
-			v0.28.9 更新基础库，升级 AIKernel
-			v0.28.12 更新基础库，升级 AIKernel、AgentsManager
-			v0.29.0 升级多租户，升级 AdminUserInfo、升级安装程序
-			v0.29.1 升级 Senparc.Ncf.Core 核心模块
-			v0.29.3 升级 XncfBuilder 模块
-			v0.29.4 优化 UI
-			v0.29.5 更新 XncfBuilder 及 XNCF 模板
-			v0.29.6 更新 WeixinManager 模板
-			v0.29.7 更新 XncfBuilder，升级 MCP
-			v0.30.0 增加 CI/CD 自动发布功能；升级 MCP
-			v0.30.1 更新 WeixinManager 库
-			v0.30.2 更新基础库、WeixinManager 库
-			v0.30.4 更新基础库、WeixinManager、FileManager、KnowledgeBase、AgentsManager 等库
-			v0.30.5 更新安装界面提供模块版本号
-			v0.31.0 更新 MCP 相关功能，提供 McpRouter 支持，WeixinManager 支持 AI 助手 MCP
-			v0.31.2 更新 MCP 相关功能
-			v0.31.3 更新 PromptRange 模块，升级 UI 和功能
-			v0.31.4 更新 PromptRange 模块
-			v0.31.5 更新 PromptRange 模块，提供 3D 靶场和对话模式
-			v0.31.6 更新 PromptRange 模块，提供 3D 靶场和对话模式
-			v0.32.0 全面更新 NCF 基础库模块，提升兼容性
-			v0.33.0 支持最新版本 Senparc.AI.AgentKernel 以及 Microsoft Agent Framework
-			v0.34.0 升级基础库，使用最新 CO2NET 基础库、增加 DesktopBridge 模块
-			v0.35.0 更新基础库，增强安全性
-			v0.36.0 更新 DesktopBridge，支持 Token 确认远程连接
+			v0.1 Genesis
+			v0.1.3 Optimized template, adapted for .NET 7.0 CLI
+			v0.1.4 Optimized template, enabled custom database name and random server port (VS)
+			v0.1.5 NCF enhanced password security
+			v0.1.10 Optimized admin password audit mechanism
+			v0.8.0 Adopted the latest core framework
+			v0.8.1 Excluded unnecessary files
+			v0.8.2 Upgraded core library, completed upgrades of AI and other projects
+			v0.9.0 Upgraded core library, cleaned up template
+			v0.9.1 Updated PromptRange, can export and import the latest format Prompt files
+			v0.9.2 Provided full database Prompt automatic management
+			v0.9.4 Supports 0-code AI code generation for the entire site database. Automatically invokes system initialization Prompt
+			v0.9.5 Supports AgentsManager module, upgraded PromptRange
+			v0.9.6 Upgraded core library
+			v0.9.11 Updated core library, upgraded ServiceBase, provided callback methods
+			v0.9.12 Added more unit test demos
+			v0.9.13 Updated appsettings.json
+			v0.9.14 Updated PromptRange
+			v0.9.15 Updated core library
+			v0.10.0 Enabled new unit test core library
+			v0.11.0 Resolved premature and full table creation during database initialization
+			v0.12.0 Supported Ollama local model API
+			v0.12.5 Supported latest Senparc.Xncf.DynamicData module
+			v0.15.0 Installation supports selecting default modules
+			v0.16.0 Added log statistics to admin dashboard homepage
+			v0.17.0 Added manual forced module database update (Migration), used when system can't start properly after core updates. Visit: https://localhost:5001/Install?forceUpdateModule=Senparc.Xncf.SystemManager, replace Senparc.Xncf.SystemManager with the relevant module name. For security reasons, this can only be run locally.
+			v0.18.0 Added NeuChar cloud user integration, preparing for future cloud computing input
+			v0.18.1 PromptRange supports Markdown format output
+			v0.18.2 PromptRange provides "copy" function for shooting range results
+			v0.18.3 PromptRange improved styles
+			v0.18.5 Upgraded caching core library
+			v0.18.6 Upgraded caching core library
+			v0.18.7 Upgraded core library, optimized XNCF module
+			v0.18.8 Upgraded DatabaseToolkit module
+			v0.18.9 Upgraded WeixinManager module
+			v0.18.10 Added new Doc module (V2), improved Docker file configuration
+			v0.18.11 Optimized template
+			v0.18.12 Upgraded PromptRange and DynamicData
+			v0.18.13 Upgraded core and Utility libraries
+			v0.19.0 Optimized left sidebar scrollbar style, can scroll to the bottom #256
+			v0.20.0 Provided new version of AgentsManager module
+			v0.21.0 Provided new version of AgentsManager and PromotRange modules
+			v0.21.2 Updated startup subtitle, started providing international English version
+			v0.21.3 Optimized Admin backend, provided synchronization lock for Log reading
+			v0.21.4 Unified SQLite database path on MacOS
+			v0.22.0 Loaded new versions of PromptRange and AgentsManager
+			v0.22.1 Fixed horizontal scrollbar style issue in the menu bar
+			v0.23.0 Upgraded AIKernel and AgentsManager modules
+			v0.24.0 Added Aspire module
+			v0.25.0 Added Aspire module sample
+			v0.26.0 Added CNB container deployment demo
+			v0.27.1 Updated Swagger package and CO2NET core library, supported interface case settings for ApiBind
+			v0.27.2 Optimized "menu" list, parent node info top-prioritized
+			v0.27.3 Optimized unit tests, demonstrated the latest Seed Data injection approach, enabling data read/write and manipulation tests without external database support
+			v0.27.4 Refactored unit test Seed Data injection approach, prevented duplicate data injection in test instances
+			v0.27.5 Optimized unit test module
+			v0.27.6 Upgraded core library
+			v0.27.7 Updated unit test module
+			v0.27.8 Updated basic modules
+			v0.27.9 Updated basic modules, fully supported DM database migration
+			v0.27.10 Updated basic modules, refactored XncfBuilder XNCF generation process
+			v0.28.0 Updated Admin backend layout
+			v0.28.4 Updated DeepSeek integration
+			v0.28.5 Updated PromptRange
+			v0.28.6 Updated AgentsManager and core library
+			v0.28.7 Optimized admin dashboard homepage; upgraded PromptRange and AgentsManagers; added DM database connection config sample
+			v0.28.8 Supported MCP AccessToken
+			v0.28.9 Updated core library, upgraded AIKernel
+			v0.28.12 Updated core library, upgraded AIKernel and AgentsManager
+			v0.29.0 Upgraded multi-tenancy, AdminUserInfo and installer
+			v0.29.1 Upgraded Senparc.Ncf.Core core module
+			v0.29.3 Upgraded XncfBuilder module
+			v0.29.4 Optimized UI
+			v0.29.5 Updated XncfBuilder and XNCF templates
+			v0.29.6 Updated WeixinManager template
+			v0.29.7 Updated XncfBuilder, upgraded MCP
+			v0.30.0 Added CI/CD auto-publishing; upgraded MCP
+			v0.30.1 Updated WeixinManager library
+			v0.30.2 Updated core library and WeixinManager library
+			v0.30.4 Updated core library, WeixinManager, FileManager, KnowledgeBase, AgentsManager, etc.
+			v0.30.5 Updated installer to display module versions
+			v0.31.0 Updated MCP-related functions, provided McpRouter support, WeixinManager supports AI Assistant MCP
+			v0.31.2 Updated MCP-related functions
+			v0.31.3 Updated PromptRange module, upgraded UI and features
+			v0.31.4 Updated PromptRange module
+			v0.31.5 Updated PromptRange module, provided 3D shooting range and dialogue mode
+			v0.31.6 Updated PromptRange module, provided 3D shooting range and dialogue mode
+			v0.32.0 Fully updated NCF core library modules for improved compatibility
+			v0.33.0 Supported latest Senparc.AI.AgentKernel and Microsoft Agent Framework
+			v0.34.0 Upgraded core library, used latest CO2NET core, added DesktopBridge module
+			v0.35.0 Updated core library, enhanced security
+			v0.36.0 Updated DesktopBridge, supports Token confirmation for remote connection
 			v0.37.0 添加“下载”页面，新增数据库升级维护模式与后台 Synchro Footer，升级全部 Senparc.* NuGet 依赖
+			v0.38.0 Provides desktop bridging and supports Token confirmation for remote connection. Add the "NeuBell" function; Optimize the back-end UI; Supports multi-host deployment
+
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>

@@ -10,6 +10,15 @@ var app = new Vue({
       xncfOpeningList: {},
       chartData: [],
       todayLogData: [],
+      hostMetrics: {
+        warnings: []
+      },
+      hostMetricsHistory: [],
+      hostMetricsLoading: false,
+      hostMetricsError: '',
+      hostMetricsTimer: null,
+      hostMetricsChart: null,
+      hostMetricsResizeHandler: null,
       // 添加动画控制变量
       shakeAllModules: false,
       glowUpgradeableModules: false
@@ -20,10 +29,207 @@ var app = new Vue({
     this.getXncfOpening();
     this.fetchChartData();
     this.fetchTodayLogData();
+    this.fetchHostMetrics();
+    this.startHostMetricsPolling();
+    this.hostMetricsResizeHandler = () => {
+      if (this.hostMetricsChart) {
+        this.hostMetricsChart.resize();
+      }
+    };
+    window.addEventListener('resize', this.hostMetricsResizeHandler);
     // 添加鼠标事件监听
     this.initializeHoverEffects();
   },
+  beforeDestroy() {
+    if (this.hostMetricsTimer) {
+      window.clearInterval(this.hostMetricsTimer);
+      this.hostMetricsTimer = null;
+    }
+    if (this.hostMetricsResizeHandler) {
+      window.removeEventListener('resize', this.hostMetricsResizeHandler);
+      this.hostMetricsResizeHandler = null;
+    }
+    if (this.hostMetricsChart) {
+      this.hostMetricsChart.dispose();
+      this.hostMetricsChart = null;
+    }
+  },
   methods: {
+    startHostMetricsPolling() {
+      if (this.hostMetricsTimer) {
+        window.clearInterval(this.hostMetricsTimer);
+      }
+      this.hostMetricsTimer = window.setInterval(() => this.fetchHostMetrics(), 2000);
+    },
+    async fetchHostMetrics() {
+      if (this.hostMetricsLoading || document.hidden) {
+        return;
+      }
+
+      this.hostMetricsLoading = true;
+      try {
+        const response = await service.get('/api/Senparc.Areas.Admin/StatAppService/Areas.Admin_StatAppService.GetHostMetrics');
+        const metrics = response && response.data && response.data.data;
+        if (!metrics || !metrics.sampledAt) {
+          throw new Error(ncfT('Admin.Home.HostMetricsInvalidResponse'));
+        }
+
+        this.hostMetrics = metrics;
+        this.hostMetricsError = '';
+        this.appendHostMetricsHistory(metrics);
+        this.$nextTick(() => this.updateHostMetricsChart());
+      } catch (error) {
+        this.hostMetricsError = error && error.message
+          ? error.message
+          : ncfT('Admin.Home.HostMetricsUnavailable');
+        console.warn('Host metrics refresh failed:', error);
+      } finally {
+        this.hostMetricsLoading = false;
+      }
+    },
+    appendHostMetricsHistory(metrics) {
+      this.hostMetricsHistory.push({
+        sampledAt: metrics.sampledAt,
+        cpu: this.toNullableNumber(metrics.cpuUsagePercent),
+        memory: this.toNullableNumber(metrics.memoryUsagePercent),
+        receiveMbps: this.bytesPerSecondToMbps(metrics.networkReceiveBytesPerSecond),
+        sendMbps: this.bytesPerSecondToMbps(metrics.networkSendBytesPerSecond)
+      });
+      if (this.hostMetricsHistory.length > 30) {
+        this.hostMetricsHistory.splice(0, this.hostMetricsHistory.length - 30);
+      }
+    },
+    updateHostMetricsChart() {
+      const chartElement = document.getElementById('hostMetricsChart');
+      if (!chartElement) {
+        return;
+      }
+      if (!this.hostMetricsChart) {
+        this.hostMetricsChart = echarts.init(chartElement);
+      }
+
+      const labels = this.hostMetricsHistory.map(item => this.formatSampleTime(item.sampledAt));
+      this.hostMetricsChart.setOption({
+        animationDurationUpdate: 300,
+        title: {
+          text: ncfT('Admin.Home.HostMetricsChart'),
+          textStyle: { fontSize: 15, fontWeight: 500 }
+        },
+        tooltip: { trigger: 'axis' },
+        legend: {
+          top: 2,
+          right: 8,
+          data: [
+            ncfT('Admin.Home.HostCpu'),
+            ncfT('Admin.Home.HostMemory'),
+            ncfT('Admin.Home.HostNetworkReceive'),
+            ncfT('Admin.Home.HostNetworkSend')
+          ]
+        },
+        grid: { left: 52, right: 58, top: 52, bottom: 38 },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: labels
+        },
+        yAxis: [{
+          type: 'value',
+          name: '%',
+          min: 0,
+          max: 100
+        }, {
+          type: 'value',
+          name: 'Mbps',
+          min: 0,
+          splitLine: { show: false }
+        }],
+        series: [{
+          name: ncfT('Admin.Home.HostCpu'),
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          data: this.hostMetricsHistory.map(item => item.cpu),
+          lineStyle: { color: '#8c52ff' },
+          itemStyle: { color: '#8c52ff' }
+        }, {
+          name: ncfT('Admin.Home.HostMemory'),
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          data: this.hostMetricsHistory.map(item => item.memory),
+          lineStyle: { color: '#67c23a' },
+          itemStyle: { color: '#67c23a' }
+        }, {
+          name: ncfT('Admin.Home.HostNetworkReceive'),
+          type: 'line',
+          yAxisIndex: 1,
+          smooth: true,
+          showSymbol: false,
+          data: this.hostMetricsHistory.map(item => item.receiveMbps),
+          lineStyle: { color: '#409eff' },
+          itemStyle: { color: '#409eff' }
+        }, {
+          name: ncfT('Admin.Home.HostNetworkSend'),
+          type: 'line',
+          yAxisIndex: 1,
+          smooth: true,
+          showSymbol: false,
+          data: this.hostMetricsHistory.map(item => item.sendMbps),
+          lineStyle: { color: '#e6a23c' },
+          itemStyle: { color: '#e6a23c' }
+        }]
+      }, true);
+    },
+    toNullableNumber(value) {
+      if (value === null || value === undefined || value === '') {
+        return null;
+      }
+      const number = Number(value);
+      return Number.isFinite(number) ? number : null;
+    },
+    normalizePercent(value) {
+      const number = this.toNullableNumber(value);
+      return number === null ? 0 : Math.max(0, Math.min(100, number));
+    },
+    formatPercent(value) {
+      const number = this.toNullableNumber(value);
+      return number === null ? '--' : number.toFixed(1) + '%';
+    },
+    formatBytes(value) {
+      const number = this.toNullableNumber(value);
+      if (number === null) {
+        return '--';
+      }
+      if (number <= 0) {
+        return '0 B';
+      }
+      const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+      const unitIndex = Math.min(Math.floor(Math.log(number) / Math.log(1024)), units.length - 1);
+      const scaled = number / Math.pow(1024, unitIndex);
+      const digits = scaled >= 100 ? 0 : (scaled >= 10 ? 1 : 2);
+      return scaled.toFixed(digits) + ' ' + units[unitIndex];
+    },
+    formatRate(value) {
+      const number = this.toNullableNumber(value);
+      return number === null ? '--' : this.formatBytes(number) + '/s';
+    },
+    bytesPerSecondToMbps(value) {
+      const number = this.toNullableNumber(value);
+      return number === null ? null : Number((number * 8 / 1000000).toFixed(3));
+    },
+    formatDuration(value) {
+      const totalSeconds = Math.max(0, Math.floor(Number(value) || 0));
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      return (days > 0 ? days + 'd ' : '') +
+        (hours > 0 || days > 0 ? hours + 'h ' : '') +
+        minutes + 'm';
+    },
+    formatSampleTime(value) {
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? '--' : date.toLocaleTimeString();
+    },
     async fetchChartData() {
       try {
         let response = await service.get('/api/Senparc.Areas.Admin/StatAppService/Areas.Admin_StatAppService.GetLogs');

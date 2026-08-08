@@ -16,6 +16,16 @@ let eventSourceCloseCount = 0;
 let mixinRegistrationCount = 0;
 let capturedMixin = null;
 let timerSequence = 0;
+let notificationCount = 0;
+let notificationCloseCount = 0;
+let lastNotificationOptions = null;
+let stateProviders = [{
+    providerId: 'test-provider',
+    displayName: 'Test Provider',
+    defaultVisible: true,
+    items: []
+}];
+const eventSources = [];
 const layoutElement = { id: 'app' };
 const fakeConsole = {
     log() { },
@@ -45,11 +55,7 @@ const axios = {
         return Promise.resolve({
             data: {
                 serverTime: new Date().toISOString(),
-                providers: [{
-                    providerId: 'test-provider',
-                    defaultVisible: true,
-                    items: []
-                }]
+                providers: stateProviders
             }
         });
     },
@@ -86,8 +92,16 @@ const window = {
     clearTimeout() { },
     EventSource: function EventSource() {
         eventSourceCount++;
-        this.addEventListener = function () { };
+        const listeners = new Map();
+        this.addEventListener = function (name, handler) { listeners.set(name, handler); };
+        this.emit = function (name) {
+            const handler = listeners.get(name);
+            if (handler) {
+                handler({ type: name });
+            }
+        };
         this.close = function () { eventSourceCloseCount++; };
+        eventSources.push(this);
     },
     Vue: {
         mixin(mixin) {
@@ -123,7 +137,24 @@ const context = vm.createContext({
 function createViewModel(element) {
     const viewModel = Object.assign({
         $el: element,
-        $root: null
+        $root: null,
+        $notify(options) {
+            notificationCount++;
+            lastNotificationOptions = options;
+            let closed = false;
+            return {
+                close() {
+                    if (closed) {
+                        return;
+                    }
+                    closed = true;
+                    notificationCloseCount++;
+                    if (typeof options.onClose === 'function') {
+                        options.onClose();
+                    }
+                }
+            };
+        }
     }, capturedMixin.data());
     viewModel.$root = viewModel;
     Object.keys(capturedMixin.methods).forEach(name => {
@@ -159,13 +190,48 @@ async function run() {
     assert.strictEqual(layoutRoot.footerCommunicationOwner, true);
     assert.strictEqual(stateRequestCount, 1);
     assert.strictEqual(eventSourceCount, 1);
+    assert.strictEqual(notificationCount, 0);
+
+    // SSE 刷新后，新增提醒应显示持久弹窗并增加 Footer 徽标。
+    stateProviders = [{
+        providerId: 'test-provider',
+        displayName: 'Test Provider',
+        defaultVisible: true,
+        items: [{
+            id: 'function-reminder',
+            title: 'NeuBell test reminder',
+            summary: 'One reminder is pending.',
+            count: 1,
+            severity: 'warning'
+        }]
+    }];
+    eventSources[0].emit('neubell-changed');
+    await flushPromises();
+    assert.strictEqual(stateRequestCount, 2);
+    assert.strictEqual(notificationCount, 1);
+    assert.strictEqual(lastNotificationOptions.title, 'NeuBell test reminder');
+    assert.strictEqual(lastNotificationOptions.duration, 0);
+    assert.strictEqual(capturedMixin.computed.neuBellTotalCount.call(layoutRoot), 1);
+
+    // 消费提醒后，SSE 刷新应主动关闭弹窗并清空徽标。
+    stateProviders = [{
+        providerId: 'test-provider',
+        displayName: 'Test Provider',
+        defaultVisible: true,
+        items: []
+    }];
+    eventSources[0].emit('neubell-changed');
+    await flushPromises();
+    assert.strictEqual(stateRequestCount, 3);
+    assert.strictEqual(notificationCloseCount, 1);
+    assert.strictEqual(capturedMixin.computed.neuBellTotalCount.call(layoutRoot), 0);
 
     // 即使出现第二个独立 Vue 根实例，也不能增加 state/SSE 通讯通道。
     const duplicateLayoutRoot = createViewModel(layoutElement);
     capturedMixin.mounted.call(duplicateLayoutRoot);
     await flushPromises();
     assert.strictEqual(duplicateLayoutRoot.footerCommunicationOwner, false);
-    assert.strictEqual(stateRequestCount, 1);
+    assert.strictEqual(stateRequestCount, 3);
     assert.strictEqual(eventSourceCount, 1);
 
     capturedMixin.beforeDestroy.call(layoutRoot);
@@ -176,7 +242,7 @@ async function run() {
     capturedMixin.mounted.call(duplicateLayoutRoot);
     await flushPromises();
     assert.strictEqual(duplicateLayoutRoot.footerCommunicationOwner, true);
-    assert.strictEqual(stateRequestCount, 2);
+    assert.strictEqual(stateRequestCount, 4);
     assert.strictEqual(eventSourceCount, 2);
     capturedMixin.beforeDestroy.call(duplicateLayoutRoot);
     assert.strictEqual(eventSourceCloseCount, 2);

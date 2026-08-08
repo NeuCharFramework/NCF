@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
-		<Version>0.36.0</Version>
+		<Version>0.37.0</Version>
 <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
 		<TypeScriptToolsVersion>4.1</TypeScriptToolsVersion>
 		<UserSecretsId>d2144151-af7a-4d50-896d-4a306e594f7b</UserSecretsId>
@@ -12,11 +12,12 @@
 		<!--<RestoreFallbackFolders>clear</RestoreFallbackFolders>-->
 		<DefineConstants Condition="'$(Configuration)|$(Platform)'=='NcfDebugForPromptRange|AnyCPU'">$(DefineConstants);DEBUG</DefineConstants>
 		<PackageReleaseNotes>
-			[2026-08-04] v0.36.0 新增下载页与数据库升级维护模式
-			1、提供 NCF 下载与开发资源页面，并完善站点多语言展示。
-			2、启动时检查数据库迁移状态，未就绪时隔离业务请求并开放维护页。
-			3、支持 --database-upgrade 独立升级命令和分阶段进度输出。
-			4、升级全部 Senparc.* NuGet 依赖并同步最新扩展模块版本。
+			[2026-08-04] v0.36.0 Added download page and database upgrade/maintenance mode
+			1. Provided NCF download and development resource pages, and improved site multi-language display.
+			2. Checked database migration status at startup; when not ready, isolated business requests and opened maintenance page.
+			3. Supported independent upgrade command with --database-upgrade and staged progress output.
+			4. Upgraded all Senparc.* NuGet dependencies and synchronized to latest extension module versions.
+			[2026-08-08] v0.37.0 Provided DesktopBridge; added "NeuBell" feature; improved admin UI; supported multi-host deployment
 		</PackageReleaseNotes>
 	</PropertyGroup>
 	<ItemGroup>

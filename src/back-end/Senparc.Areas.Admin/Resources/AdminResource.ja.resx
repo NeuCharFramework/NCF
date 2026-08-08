@@ -179,12 +179,13 @@
   <data name="AdminChat.MessageNotFound" xml:space="preserve"><value>メッセージが存在しません</value></data>
   <data name="AdminChat.SetFeedbackSuccess" xml:space="preserve"><value>フィードバックの送信に成功しました</value></data>
   <data name="AdminChat.SelectAtLeastOneMessage" xml:space="preserve"><value>少なくとも 1 件のメッセージを選択してください</value></data>
+  <data name="AdminChat.SelectAtLeastOneModule" xml:space="preserve"><value>少なくとも 1 つの XNCF モジュールを選択してください</value></data>
   <data name="AdminChat.DeleteMessagesSuccess" xml:space="preserve"><value>削除に成功しました。{0} 件のメッセージを削除しました</value></data>
   <data name="AdminChat.AddModulesSuccess" xml:space="preserve"><value>追加に成功しました</value></data>
   <data name="Admin.Layout.Account" xml:space="preserve"><value>マイアカウント</value></data>
   <data name="Admin.Layout.CurrentAccount" xml:space="preserve"><value>現在のアカウント：{0}</value></data>
   <data name="Admin.Layout.PoweredBy" xml:space="preserve"><value>提供元</value></data>
-  <data name="Admin.Footer.SynchroLabel" xml:space="preserve"><value>シンクロ</value></data>
+  <data name="Admin.Footer.NeuBellLabel" xml:space="preserve"><value>NeuBell</value></data>
   <data name="Admin.Session.Title" xml:space="preserve"><value>ログインの有効期限が近づいています</value></data>
   <data name="Admin.Session.Message" xml:space="preserve"><value>ログインセッションの有効期限が近づいています。ログインを継続するか、今すぐログアウトできます。</value></data>
   <data name="Admin.Session.KeepLogin" xml:space="preserve"><value>ログインを継続</value></data>
@@ -193,6 +194,23 @@
   <data name="Admin.Common.NoTime" xml:space="preserve"><value>時間なし</value></data>
   <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>コピーしました。Ctrl+V で貼り付けてください。</value></data>
   <data name="Admin.Home.Header" xml:space="preserve"><value>NeuCharFramework 管理画面</value></data>
+  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>現在のホスト状態</value></data>
+  <data name="Admin.Home.HostMetricsRealtime" xml:space="preserve"><value>ライブ · 2 秒ごとに更新</value></data>
+  <data name="Admin.Home.HostCpu" xml:space="preserve"><value>CPU</value></data>
+  <data name="Admin.Home.HostCpuDetail" xml:space="preserve"><value>ホスト全体の使用率</value></data>
+  <data name="Admin.Home.HostMemory" xml:space="preserve"><value>物理メモリ</value></data>
+  <data name="Admin.Home.HostMemoryAvailable" xml:space="preserve"><value>使用可能</value></data>
+  <data name="Admin.Home.HostNetwork" xml:space="preserve"><value>リアルタイム通信量</value></data>
+  <data name="Admin.Home.HostNetworkTotal" xml:space="preserve"><value>累計</value></data>
+  <data name="Admin.Home.HostInterfaces" xml:space="preserve"><value>個の有効なインターフェイス</value></data>
+  <data name="Admin.Home.HostProcess" xml:space="preserve"><value>現在の Web プロセス</value></data>
+  <data name="Admin.Home.HostProcessWorkingSet" xml:space="preserve"><value>ワーキングセット</value></data>
+  <data name="Admin.Home.HostProcessUptime" xml:space="preserve"><value>稼働時間</value></data>
+  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>直近 30 サンプル（このページのみ）</value></data>
+  <data name="Admin.Home.HostNetworkReceive" xml:space="preserve"><value>受信</value></data>
+  <data name="Admin.Home.HostNetworkSend" xml:space="preserve"><value>送信</value></data>
+  <data name="Admin.Home.HostMetricsInvalidResponse" xml:space="preserve"><value>ホスト指標 API から無効なデータが返されました</value></data>
+  <data name="Admin.Home.HostMetricsUnavailable" xml:space="preserve"><value>ホスト指標を一時的に取得できません</value></data>
   <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>インストール済みモジュール</value></data>
   <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>更新待ちモジュール</value></data>
   <data name="Admin.Home.NewModules" xml:space="preserve"><value>新しいモジュール</value></data>

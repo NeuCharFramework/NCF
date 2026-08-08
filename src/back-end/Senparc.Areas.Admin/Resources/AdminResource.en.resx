@@ -181,12 +181,13 @@
   <data name="AdminChat.MessageNotFound" xml:space="preserve"><value>Message not found</value></data>
   <data name="AdminChat.SetFeedbackSuccess" xml:space="preserve"><value>Feedback submitted successfully</value></data>
   <data name="AdminChat.SelectAtLeastOneMessage" xml:space="preserve"><value>Please select at least one message</value></data>
+  <data name="AdminChat.SelectAtLeastOneModule" xml:space="preserve"><value>Please select at least one XNCF module</value></data>
   <data name="AdminChat.DeleteMessagesSuccess" xml:space="preserve"><value>Deleted successfully. {0} messages were removed</value></data>
   <data name="AdminChat.AddModulesSuccess" xml:space="preserve"><value>Modules added successfully</value></data>
   <data name="Admin.Layout.Account" xml:space="preserve"><value>My account</value></data>
   <data name="Admin.Layout.CurrentAccount" xml:space="preserve"><value>Current account: {0}</value></data>
   <data name="Admin.Layout.PoweredBy" xml:space="preserve"><value>Powered by</value></data>
-  <data name="Admin.Footer.SynchroLabel" xml:space="preserve"><value>Synchro</value></data>
+  <data name="Admin.Footer.NeuBellLabel" xml:space="preserve"><value>NeuBell</value></data>
   <data name="Admin.Session.Title" xml:space="preserve"><value>Login is about to expire</value></data>
   <data name="Admin.Session.Message" xml:space="preserve"><value>Your login session is about to expire. You can stay signed in or log out now.</value></data>
   <data name="Admin.Session.KeepLogin" xml:space="preserve"><value>Stay signed in</value></data>
@@ -195,6 +196,23 @@
   <data name="Admin.Common.NoTime" xml:space="preserve"><value>No time</value></data>
   <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>Copied successfully. Use Ctrl+V to paste.</value></data>
   <data name="Admin.Home.Header" xml:space="preserve"><value>NeuCharFramework Admin Panel</value></data>
+  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>Current host health</value></data>
+  <data name="Admin.Home.HostMetricsRealtime" xml:space="preserve"><value>Live · refreshes every 2 seconds</value></data>
+  <data name="Admin.Home.HostCpu" xml:space="preserve"><value>CPU</value></data>
+  <data name="Admin.Home.HostCpuDetail" xml:space="preserve"><value>Whole-host utilization</value></data>
+  <data name="Admin.Home.HostMemory" xml:space="preserve"><value>Physical memory</value></data>
+  <data name="Admin.Home.HostMemoryAvailable" xml:space="preserve"><value>Available</value></data>
+  <data name="Admin.Home.HostNetwork" xml:space="preserve"><value>Live network throughput</value></data>
+  <data name="Admin.Home.HostNetworkTotal" xml:space="preserve"><value>Total</value></data>
+  <data name="Admin.Home.HostInterfaces" xml:space="preserve"><value>active interfaces</value></data>
+  <data name="Admin.Home.HostProcess" xml:space="preserve"><value>Current web process</value></data>
+  <data name="Admin.Home.HostProcessWorkingSet" xml:space="preserve"><value>Working set memory</value></data>
+  <data name="Admin.Home.HostProcessUptime" xml:space="preserve"><value>Uptime</value></data>
+  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>Last 30 samples (this page only)</value></data>
+  <data name="Admin.Home.HostNetworkReceive" xml:space="preserve"><value>Receive</value></data>
+  <data name="Admin.Home.HostNetworkSend" xml:space="preserve"><value>Send</value></data>
+  <data name="Admin.Home.HostMetricsInvalidResponse" xml:space="preserve"><value>The host metrics endpoint returned invalid data</value></data>
+  <data name="Admin.Home.HostMetricsUnavailable" xml:space="preserve"><value>Host metrics are temporarily unavailable</value></data>
   <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>Installed modules</value></data>
   <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>Modules pending update</value></data>
   <data name="Admin.Home.NewModules" xml:space="preserve"><value>New modules found</value></data>

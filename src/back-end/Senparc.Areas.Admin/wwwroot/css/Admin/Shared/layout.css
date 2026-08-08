@@ -204,27 +204,27 @@ li {
     color: #909399;
 }
 
-.admin-synchro-panel {
+.admin-neubell-panel {
     height: calc(100vh - 76px);
     overflow-y: auto;
     padding: 0 18px 18px;
 }
 
-.admin-synchro-description,
-.admin-synchro-empty {
+.admin-neubell-description,
+.admin-neubell-empty {
     color: #909399;
     font-size: 12px;
     line-height: 1.6;
 }
 
-.admin-synchro-provider {
+.admin-neubell-provider {
     margin-top: 14px;
     border: 1px solid #ebeef5;
     border-radius: 6px;
     overflow: hidden;
 }
 
-.admin-synchro-provider > header {
+.admin-neubell-provider > header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -234,7 +234,7 @@ li {
     font-weight: 600;
 }
 
-.admin-synchro-item {
+.admin-neubell-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -243,11 +243,11 @@ li {
     border-top: 1px solid #ebeef5;
 }
 
-.admin-synchro-item:hover {
+.admin-neubell-item:hover {
     background: #f8fbff;
 }
 
-.admin-synchro-item-content {
+.admin-neubell-item-content {
     display: flex;
     flex: 1;
     min-width: 0;
@@ -255,7 +255,7 @@ li {
     gap: 4px;
 }
 
-.admin-synchro-item-content small {
+.admin-neubell-item-content small {
     color: #909399;
     line-height: 1.5;
 }

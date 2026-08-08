@@ -99,11 +99,11 @@
                 footerAiUrl: '/Admin/AdminChat/Chat?embedded=1',
                 consoleDialogVisible: false,
                 consoleEntries: [],
-                synchroDrawerVisible: false,
-                synchroProviders: [],
-                synchroAvailable: false,
+                neuBellDrawerVisible: false,
+                neuBellProviders: [],
+                neuBellAvailable: false,
                 footerAvailabilityKnown: false,
-                synchroLoading: false,
+                neuBellLoading: false,
                 serverTimeBaseMs: Number.isFinite(parsedServerTime) ? parsedServerTime : Date.now(),
                 serverTimeMeasuredAtMs: Date.now(),
                 footerClockTick: 0,
@@ -113,6 +113,9 @@
                 footerEventSource: null,
                 footerStateRequest: null,
                 footerStateCancelSource: null,
+                neuBellNotificationHandles: {},
+                neuBellNotifyOnRefresh: false,
+                neuBellRefreshQueued: false,
                 footerCommunicationOwner: false,
                 footerPaused: false,
                 footerDisposed: false,
@@ -134,8 +137,8 @@
                     second: '2-digit'
                 });
             },
-            synchroTotalCount() {
-                return this.synchroProviders
+            neuBellTotalCount() {
+                return this.neuBellProviders
                     .filter(provider => provider.enabled)
                     .reduce((providerTotal, provider) => providerTotal + (provider.items || [])
                         .reduce((itemTotal, item) => itemTotal + Math.max(0, Number(item.count) || 0), 0), 0);
@@ -191,39 +194,117 @@
             clearFooterConsole() {
                 window.NcfAdminConsole.clear();
             },
-            synchroPreferenceKey() {
-                return 'ncf.admin.synchro.providers.' + (initialState.account || 'admin');
+            neuBellPreferenceKey() {
+                return 'ncf.admin.neubell.providers.' + (initialState.account || 'admin');
             },
-            readSynchroPreferences() {
+            readNeuBellPreferences() {
                 try {
-                    const value = JSON.parse(window.localStorage.getItem(this.synchroPreferenceKey()) || '{}');
+                    const value = JSON.parse(window.localStorage.getItem(this.neuBellPreferenceKey()) || '{}');
                     return value && typeof value === 'object' ? value : {};
                 } catch (_) {
                     return {};
                 }
             },
-            saveSynchroPreferences() {
+            saveNeuBellPreferences() {
                 const preferences = {};
-                this.synchroProviders.forEach(provider => {
+                this.neuBellProviders.forEach(provider => {
                     preferences[provider.providerId] = provider.enabled !== false;
                 });
-                window.localStorage.setItem(this.synchroPreferenceKey(), JSON.stringify(preferences));
+                window.localStorage.setItem(this.neuBellPreferenceKey(), JSON.stringify(preferences));
+                this.syncNeuBellNotifications(this.neuBellProviders, this.neuBellProviders, false);
             },
-            applySynchroProviders(providers) {
-                const preferences = this.readSynchroPreferences();
-                this.synchroProviders = (providers || []).map(provider => Object.assign({}, provider, {
+            neuBellItemKey(providerId, itemId) {
+                return String(providerId || '') + ':' + String(itemId || '');
+            },
+            getNeuBellItemCounts(providers) {
+                const counts = {};
+                (providers || []).forEach(provider => {
+                    (provider.items || []).forEach(item => {
+                        counts[this.neuBellItemKey(provider.providerId, item.id)] = Math.max(0, Number(item.count) || 0);
+                    });
+                });
+                return counts;
+            },
+            closeNeuBellNotification(key) {
+                const notification = this.neuBellNotificationHandles[key];
+                if (notification && typeof notification.close === 'function') {
+                    notification.close();
+                }
+                delete this.neuBellNotificationHandles[key];
+            },
+            closeAllNeuBellNotifications() {
+                Object.keys(this.neuBellNotificationHandles).forEach(key => this.closeNeuBellNotification(key));
+            },
+            syncNeuBellNotifications(previousProviders, nextProviders, showNewNotifications) {
+                const previousCounts = this.getNeuBellItemCounts(previousProviders);
+                const visibleItemKeys = {};
+
+                (nextProviders || []).forEach(provider => {
+                    if (provider.enabled === false) {
+                        return;
+                    }
+                    (provider.items || []).forEach(item => {
+                        const count = Math.max(0, Number(item.count) || 0);
+                        if (count <= 0) {
+                            return;
+                        }
+
+                        const key = this.neuBellItemKey(provider.providerId, item.id);
+                        visibleItemKeys[key] = true;
+                        if (!showNewNotifications || count <= (previousCounts[key] || 0)) {
+                            return;
+                        }
+
+                        this.closeNeuBellNotification(key);
+                        if (typeof this.$notify !== 'function') {
+                            return;
+                        }
+
+                        const supportedTypes = ['success', 'warning', 'info', 'error'];
+                        const notificationType = supportedTypes.indexOf(item.severity) >= 0 ? item.severity : 'info';
+                        let notification = null;
+                        notification = this.$notify({
+                            title: item.title || provider.displayName || 'NeuBell',
+                            message: item.summary || '',
+                            type: notificationType,
+                            duration: 0,
+                            position: 'bottom-right',
+                            onClose: () => {
+                                if (this.neuBellNotificationHandles[key] === notification) {
+                                    delete this.neuBellNotificationHandles[key];
+                                }
+                            }
+                        });
+                        if (notification) {
+                            this.neuBellNotificationHandles[key] = notification;
+                        }
+                    });
+                });
+
+                Object.keys(this.neuBellNotificationHandles).forEach(key => {
+                    if (!visibleItemKeys[key]) {
+                        this.closeNeuBellNotification(key);
+                    }
+                });
+            },
+            applyNeuBellProviders(providers, showNewNotifications) {
+                const previousProviders = this.neuBellProviders;
+                const preferences = this.readNeuBellPreferences();
+                const nextProviders = (providers || []).map(provider => Object.assign({}, provider, {
                     enabled: Object.prototype.hasOwnProperty.call(preferences, provider.providerId)
                         ? preferences[provider.providerId]
                         : provider.defaultVisible !== false
                 }));
+                this.neuBellProviders = nextProviders;
+                this.syncNeuBellNotifications(previousProviders, nextProviders, showNewNotifications === true);
                 // 服务端只返回已安装且开放的 Provider；空集合即代表应隐藏功能并停止通讯。
                 this.footerAvailabilityKnown = true;
-                this.synchroAvailable = this.synchroProviders.length > 0;
-                if (this.synchroAvailable && !document.hidden) {
-                    this.ensureSynchroRealtime();
+                this.neuBellAvailable = this.neuBellProviders.length > 0;
+                if (this.neuBellAvailable && !document.hidden) {
+                    this.ensureNeuBellRealtime();
                 } else {
-                    this.synchroDrawerVisible = false;
-                    this.stopSynchroRealtime();
+                    this.neuBellDrawerVisible = false;
+                    this.stopNeuBellRealtime();
                 }
             },
             refreshFooterState() {
@@ -235,10 +316,12 @@
                     return this.footerStateRequest;
                 }
 
-                this.synchroLoading = true;
+                const showNewNotifications = this.neuBellNotifyOnRefresh;
+                this.neuBellNotifyOnRefresh = false;
+                this.neuBellLoading = true;
                 const requestSource = axios.CancelToken.source();
                 this.footerStateCancelSource = requestSource;
-                const request = axios.get('/api/Senparc.Areas.Admin/synchro/state', {
+                const request = axios.get('/api/Senparc.Areas.Admin/neubell/state', {
                     timeout: 10000,
                     cancelToken: requestSource.token,
                     headers: { 'Cache-Control': 'no-cache', 'x-requested-with': 'XMLHttpRequest' }
@@ -250,10 +333,13 @@
                         this.serverTimeBaseMs = serverTime;
                         this.serverTimeMeasuredAtMs = Date.now();
                     }
-                    this.applySynchroProviders(state.providers || []);
+                    this.applyNeuBellProviders(state.providers || [], showNewNotifications);
                 }).catch(error => {
+                    if (showNewNotifications) {
+                        this.neuBellNotifyOnRefresh = true;
+                    }
                     if (!axios.isCancel(error)) {
-                        console.warn('Synchro 状态刷新失败:', error);
+                        console.warn('纽铃状态刷新失败:', error);
                     }
                 }).finally(() => {
                     if (this.footerStateRequest === request) {
@@ -262,9 +348,15 @@
                     if (this.footerStateCancelSource === requestSource) {
                         this.footerStateCancelSource = null;
                     }
-                    this.synchroLoading = false;
-                    if (this.synchroAvailable) {
-                        this.ensureSynchroRealtime();
+                    this.neuBellLoading = false;
+                    const refreshQueued = this.neuBellRefreshQueued;
+                    this.neuBellRefreshQueued = false;
+                    if (refreshQueued && !this.footerDisposed && !this.footerPaused && !document.hidden) {
+                        this.refreshFooterState();
+                        return;
+                    }
+                    if (this.neuBellAvailable) {
+                        this.ensureNeuBellRealtime();
                     } else if (!this.footerAvailabilityKnown && !document.hidden) {
                         // 初始化失败时做低频恢复；已确认无 Provider 后不再轮询。
                         this.scheduleFooterPoll(30000, true);
@@ -282,7 +374,7 @@
                     || this.footerDisposed
                     || this.footerPaused
                     || document.hidden
-                    || (!this.synchroAvailable && !allowWhenUnknown)) {
+                    || (!this.neuBellAvailable && !allowWhenUnknown)) {
                     return;
                 }
                 this.footerPollTimer = window.setTimeout(() => {
@@ -290,19 +382,19 @@
                     this.refreshFooterState();
                 }, delay);
             },
-            ensureSynchroRealtime() {
+            ensureNeuBellRealtime() {
                 if (!this.footerCommunicationOwner
                     || this.footerDisposed
                     || this.footerPaused
                     || document.hidden
-                    || !this.synchroAvailable) {
+                    || !this.neuBellAvailable) {
                     return;
                 }
                 // SSE 负责及时通知，30 秒单次定时器用于断线和不支持 EventSource 时的兼容兜底。
-                this.startSynchroEventStream();
+                this.startNeuBellEventStream();
                 this.scheduleFooterPoll(30000, false);
             },
-            stopSynchroRealtime() {
+            stopNeuBellRealtime() {
                 if (this.footerPollTimer) {
                     window.clearTimeout(this.footerPollTimer);
                     this.footerPollTimer = null;
@@ -312,18 +404,26 @@
                     this.footerEventSource = null;
                 }
             },
-            startSynchroEventStream() {
+            startNeuBellEventStream() {
                 if (!this.footerCommunicationOwner
                     || typeof window.EventSource === 'undefined'
                     || this.footerEventSource
                     || this.footerDisposed
                     || this.footerPaused
                     || document.hidden
-                    || !this.synchroAvailable) {
+                    || !this.neuBellAvailable) {
                     return;
                 }
-                this.footerEventSource = new EventSource('/api/Senparc.Areas.Admin/synchro/events');
-                this.footerEventSource.addEventListener('synchro-changed', () => this.refreshFooterState());
+                this.footerEventSource = new EventSource('/api/Senparc.Areas.Admin/neubell/events');
+                this.footerEventSource.addEventListener('neubell-changed', () => this.handleNeuBellChanged());
+            },
+            handleNeuBellChanged() {
+                this.neuBellNotifyOnRefresh = true;
+                if (this.footerStateRequest) {
+                    this.neuBellRefreshQueued = true;
+                    return this.footerStateRequest;
+                }
+                return this.refreshFooterState();
             },
             startFooterClock() {
                 if (!this.footerClockTimer) {
@@ -337,7 +437,7 @@
                     window.clearInterval(this.footerClockTimer);
                     this.footerClockTimer = null;
                 }
-                this.stopSynchroRealtime();
+                this.stopNeuBellRealtime();
                 if (this.footerStateCancelSource) {
                     this.footerStateCancelSource.cancel('page paused');
                 }
@@ -365,6 +465,7 @@
                 }
                 this.pauseFooter();
                 this.footerDisposed = true;
+                this.closeAllNeuBellNotifications();
                 if (this.footerConsoleUnsubscribe) {
                     this.footerConsoleUnsubscribe();
                     this.footerConsoleUnsubscribe = null;

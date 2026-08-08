@@ -181,12 +181,13 @@
   <data name="AdminChat.MessageNotFound" xml:space="preserve"><value>消息不存在</value></data>
   <data name="AdminChat.SetFeedbackSuccess" xml:space="preserve"><value>反馈成功</value></data>
   <data name="AdminChat.SelectAtLeastOneMessage" xml:space="preserve"><value>请至少选择一条消息</value></data>
+  <data name="AdminChat.SelectAtLeastOneModule" xml:space="preserve"><value>请至少选择一个 XNCF 模块</value></data>
   <data name="AdminChat.DeleteMessagesSuccess" xml:space="preserve"><value>删除成功，共删除 {0} 条消息</value></data>
   <data name="AdminChat.AddModulesSuccess" xml:space="preserve"><value>添加成功</value></data>
   <data name="Admin.Layout.Account" xml:space="preserve"><value>我的账号</value></data>
   <data name="Admin.Layout.CurrentAccount" xml:space="preserve"><value>当前账号：{0}</value></data>
   <data name="Admin.Layout.PoweredBy" xml:space="preserve"><value>技术支持</value></data>
-  <data name="Admin.Footer.SynchroLabel" xml:space="preserve"><value>灵犀</value></data>
+  <data name="Admin.Footer.NeuBellLabel" xml:space="preserve"><value>纽铃</value></data>
   <data name="Admin.Session.Title" xml:space="preserve"><value>登录即将过期</value></data>
   <data name="Admin.Session.Message" xml:space="preserve"><value>检测到当前登录会话即将过期，您可以保持登录或立即退出。</value></data>
   <data name="Admin.Session.KeepLogin" xml:space="preserve"><value>保持登录</value></data>
@@ -195,6 +196,23 @@
   <data name="Admin.Common.NoTime" xml:space="preserve"><value>暂无时间</value></data>
   <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>复制成功！请使用 Ctrl+V 组合键进行粘贴操作。</value></data>
   <data name="Admin.Home.Header" xml:space="preserve"><value>NeuCharFramework 管理员后台</value></data>
+  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>当前 Host 实时状态</value></data>
+  <data name="Admin.Home.HostMetricsRealtime" xml:space="preserve"><value>实时 · 每 2 秒刷新</value></data>
+  <data name="Admin.Home.HostCpu" xml:space="preserve"><value>CPU</value></data>
+  <data name="Admin.Home.HostCpuDetail" xml:space="preserve"><value>Host 整体使用率</value></data>
+  <data name="Admin.Home.HostMemory" xml:space="preserve"><value>物理内存</value></data>
+  <data name="Admin.Home.HostMemoryAvailable" xml:space="preserve"><value>可用</value></data>
+  <data name="Admin.Home.HostNetwork" xml:space="preserve"><value>实时网络吞吐</value></data>
+  <data name="Admin.Home.HostNetworkTotal" xml:space="preserve"><value>累计</value></data>
+  <data name="Admin.Home.HostInterfaces" xml:space="preserve"><value>个活动网卡</value></data>
+  <data name="Admin.Home.HostProcess" xml:space="preserve"><value>当前 Web 进程</value></data>
+  <data name="Admin.Home.HostProcessWorkingSet" xml:space="preserve"><value>工作集内存</value></data>
+  <data name="Admin.Home.HostProcessUptime" xml:space="preserve"><value>运行时长</value></data>
+  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>最近 30 次采样趋势（仅当前页面）</value></data>
+  <data name="Admin.Home.HostNetworkReceive" xml:space="preserve"><value>下行</value></data>
+  <data name="Admin.Home.HostNetworkSend" xml:space="preserve"><value>上行</value></data>
+  <data name="Admin.Home.HostMetricsInvalidResponse" xml:space="preserve"><value>Host 指标接口返回了无效数据</value></data>
+  <data name="Admin.Home.HostMetricsUnavailable" xml:space="preserve"><value>暂时无法获取 Host 实时指标</value></data>
   <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>已安装模块</value></data>
   <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>待更新模块</value></data>
   <data name="Admin.Home.NewModules" xml:space="preserve"><value>发现新模块</value></data>

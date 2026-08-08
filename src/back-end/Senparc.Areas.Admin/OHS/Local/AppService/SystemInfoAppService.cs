@@ -19,6 +19,12 @@
     修改标识：Senparc - 20260729
     修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
 
+    修改标识：Senparc - 20260804
+    修改描述：v0.3.0 新增纽铃内部触发测试 Function
+
+    修改标识：Senparc - 20260804
+    修改描述：v0.3.0 将后台同步功能统一更名为 NeuBell/纽铃
+
 ----------------------------------------------------------------*/
 
 using Senparc.Areas.Admin.Domain.Dto;
@@ -36,6 +42,7 @@ using Senparc.Areas.Admin.OHS.PL;
 using Senparc.Areas.Admin;
 using Microsoft.Extensions.Localization;
 using Senparc.Xncf.SystemManager.Domain.Service;
+using Senparc.Ncf.Shared.Abstractions.NeuBell;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices.Protocols;
@@ -53,13 +60,24 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         private readonly AdminAuthConfigService _adminAuthConfigService;
         private readonly IBaseObjectCacheStrategy _cacheStrategy;
         private readonly IStringLocalizer<AdminResource> _localizer;
+        private readonly NeuBellTestProvider _neuBellTestProvider;
+        private readonly INeuBellPublisher _neuBellPublisher;
 
-        public SystemInfoAppService(IServiceProvider serviceProvider, SystemConfigService systemConfigService, AdminAuthConfigService adminAuthConfigService, IBaseObjectCacheStrategy cacheStrategy, IStringLocalizer<AdminResource> localizer) : base(serviceProvider)
+        public SystemInfoAppService(
+            IServiceProvider serviceProvider,
+            SystemConfigService systemConfigService,
+            AdminAuthConfigService adminAuthConfigService,
+            IBaseObjectCacheStrategy cacheStrategy,
+            IStringLocalizer<AdminResource> localizer,
+            NeuBellTestProvider neuBellTestProvider,
+            INeuBellPublisher neuBellPublisher) : base(serviceProvider)
         {
             _systemConfigService = systemConfigService;
             _adminAuthConfigService = adminAuthConfigService;
             this._cacheStrategy = cacheStrategy;
             _localizer = localizer;
+            _neuBellTestProvider = neuBellTestProvider;
+            _neuBellPublisher = neuBellPublisher;
         }
 
 
@@ -186,6 +204,32 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             }, saveLogAfterFinished: true, saveLogName: "设置登录过期配置");
 
             return response;
+        }
+
+        [FunctionRender("纽铃可见提醒测试", "发送或消费可在 Admin Footer 弹窗与徽标中看到的纽铃测试提醒", typeof(Register))]
+        public async Task<StringAppResponse> TriggerNeuBellTest(NeuBellTest_Request request)
+        {
+            return await this.GetStringResponseAsync(async (_, logger) =>
+            {
+                if (string.Equals(request?.Action, NeuBellTest_Request.SendAction, StringComparison.OrdinalIgnoreCase))
+                {
+                    var pendingCount = _neuBellTestProvider.Send();
+                    await _neuBellPublisher.NotifyChangedAsync(NeuBellTestProvider.ProviderIdValue).ConfigureAwait(false);
+                    logger.Append($"已发送 NeuBell 测试提醒，当前待消费数量：{pendingCount}。请观察 Admin Footer 的弹窗和徽标。");
+                }
+                else if (string.Equals(request?.Action, NeuBellTest_Request.ConsumeAction, StringComparison.OrdinalIgnoreCase))
+                {
+                    var consumedCount = _neuBellTestProvider.ConsumeAll();
+                    await _neuBellPublisher.NotifyChangedAsync(NeuBellTestProvider.ProviderIdValue).ConfigureAwait(false);
+                    logger.Append($"已消费 {consumedCount} 条 NeuBell 测试提醒，Footer 弹窗和徽标将被清除。");
+                }
+                else
+                {
+                    logger.Append("不支持的操作，请选择“发送提醒”或“消费提醒”。");
+                }
+
+                return logger.GetLogs();
+            }, saveLogAfterFinished: true, saveLogName: "纽铃可见提醒测试");
         }
 
         [FunctionRender("缓存测试", "测试当前缓存类型及分布式锁", typeof(Register))]

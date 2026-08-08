@@ -13,6 +13,156 @@
             height: auto;
         }
 
+        .host-metrics-section {
+            margin: 20px 10px 0;
+        }
+
+        .host-metrics-card {
+            border-radius: 10px;
+        }
+
+        .host-metrics-header,
+        .host-metrics-title,
+        .host-metrics-status {
+            display: flex;
+            align-items: center;
+        }
+
+        .host-metrics-header {
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .host-metrics-title {
+            gap: 9px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #303133;
+        }
+
+        .host-metrics-title .fa {
+            color: #8c52ff;
+        }
+
+        .host-metrics-status {
+            gap: 10px;
+            color: #909399;
+            font-size: 12px;
+        }
+
+        .host-live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #67c23a;
+        }
+
+        .host-live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #67c23a;
+            box-shadow: 0 0 0 rgba(103, 194, 58, 0.4);
+            animation: host-live-pulse 1.8s infinite;
+        }
+
+        @@keyframes host-live-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(103, 194, 58, 0.45); }
+            70% { box-shadow: 0 0 0 7px rgba(103, 194, 58, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(103, 194, 58, 0); }
+        }
+
+        .host-metrics-meta {
+            margin-bottom: 12px;
+            color: #909399;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .host-metric-item {
+            min-height: 148px;
+            margin-bottom: 14px;
+            padding: 17px;
+            border: 1px solid #ebeef5;
+            border-radius: 9px;
+            background: linear-gradient(145deg, #ffffff 0%, #fafbff 100%);
+            box-sizing: border-box;
+        }
+
+        .host-metric-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #606266;
+            font-size: 14px;
+        }
+
+        .host-metric-label .fa {
+            color: #8c52ff;
+            font-size: 18px;
+        }
+
+        .host-metric-value {
+            min-height: 39px;
+            color: #303133;
+            font-size: 27px;
+            font-weight: 600;
+            line-height: 1.35;
+        }
+
+        .host-metric-value.host-network-value {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 17px;
+            line-height: 2.1;
+        }
+
+        .host-network-down {
+            color: #409eff;
+        }
+
+        .host-network-up {
+            color: #e6a23c;
+        }
+
+        .host-metric-detail {
+            margin-top: 8px;
+            color: #909399;
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        .host-metric-item .el-progress {
+            margin-top: 10px;
+        }
+
+        .host-metrics-chart {
+            height: 285px;
+            margin-top: 4px;
+        }
+
+        .host-metrics-error {
+            color: #f56c6c;
+        }
+
+        @@media screen and (max-width: 768px) {
+            .host-metrics-section {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .host-metric-value.host-network-value {
+                flex-direction: column;
+                gap: 0;
+                line-height: 1.6;
+            }
+        }
+
         .xncf-stat-item {
             position: relative;
             display: block;
@@ -540,6 +690,102 @@
             </el-row>
         </el-main>
     </el-container>
+</div>
+
+<!-- 当前 Host 实时指标：只在浏览器内保留最近 30 个采样点，不写入服务端缓存 -->
+<div class="host-metrics-section">
+    <el-card class="host-metrics-card" v-loading="hostMetricsLoading && !hostMetrics.sampledAt">
+        <div slot="header" class="host-metrics-header">
+            <div class="host-metrics-title">
+                <i class="fa fa-tachometer"></i>
+                <span>@AR["Admin.Home.HostMetrics"]</span>
+            </div>
+            <div class="host-metrics-status">
+                <span v-if="hostMetricsError" class="host-metrics-error">
+                    <i class="fa fa-exclamation-circle"></i> {{hostMetricsError}}
+                </span>
+                <span v-else class="host-live-indicator">
+                    <i class="host-live-dot"></i>
+                    @AR["Admin.Home.HostMetricsRealtime"]
+                </span>
+                <span v-if="hostMetrics.sampledAt">{{formatSampleTime(hostMetrics.sampledAt)}}</span>
+            </div>
+        </div>
+
+        <div class="host-metrics-meta" v-if="hostMetrics.hostName">
+            <i class="fa fa-server"></i>
+            {{hostMetrics.hostName}} · {{hostMetrics.operatingSystem}}
+        </div>
+
+        <el-row :gutter="14">
+            <el-col :xs="24" :sm="12" :lg="6">
+                <div class="host-metric-item">
+                    <div class="host-metric-label">
+                        <span>@AR["Admin.Home.HostCpu"]</span>
+                        <i class="fa fa-microchip"></i>
+                    </div>
+                    <div class="host-metric-value">{{formatPercent(hostMetrics.cpuUsagePercent)}}</div>
+                    <el-progress :percentage="normalizePercent(hostMetrics.cpuUsagePercent)"
+                                 :show-text="false"
+                                 :stroke-width="7"
+                                 color="#8c52ff"></el-progress>
+                    <div class="host-metric-detail">@AR["Admin.Home.HostCpuDetail"]</div>
+                </div>
+            </el-col>
+
+            <el-col :xs="24" :sm="12" :lg="6">
+                <div class="host-metric-item">
+                    <div class="host-metric-label">
+                        <span>@AR["Admin.Home.HostMemory"]</span>
+                        <i class="fa fa-hdd-o"></i>
+                    </div>
+                    <div class="host-metric-value">{{formatPercent(hostMetrics.memoryUsagePercent)}}</div>
+                    <el-progress :percentage="normalizePercent(hostMetrics.memoryUsagePercent)"
+                                 :show-text="false"
+                                 :stroke-width="7"
+                                 color="#67c23a"></el-progress>
+                    <div class="host-metric-detail">
+                        {{formatBytes(hostMetrics.memoryUsedBytes)}} / {{formatBytes(hostMetrics.memoryTotalBytes)}}
+                        · @AR["Admin.Home.HostMemoryAvailable"] {{formatBytes(hostMetrics.memoryAvailableBytes)}}
+                    </div>
+                </div>
+            </el-col>
+
+            <el-col :xs="24" :sm="12" :lg="6">
+                <div class="host-metric-item">
+                    <div class="host-metric-label">
+                        <span>@AR["Admin.Home.HostNetwork"]</span>
+                        <i class="fa fa-exchange"></i>
+                    </div>
+                    <div class="host-metric-value host-network-value">
+                        <span class="host-network-down">↓ {{formatRate(hostMetrics.networkReceiveBytesPerSecond)}}</span>
+                        <span class="host-network-up">↑ {{formatRate(hostMetrics.networkSendBytesPerSecond)}}</span>
+                    </div>
+                    <div class="host-metric-detail">
+                        @AR["Admin.Home.HostNetworkTotal"] ↓ {{formatBytes(hostMetrics.networkReceiveTotalBytes)}}
+                        / ↑ {{formatBytes(hostMetrics.networkSendTotalBytes)}}
+                        · {{hostMetrics.networkInterfaceCount || 0}} @AR["Admin.Home.HostInterfaces"]
+                    </div>
+                </div>
+            </el-col>
+
+            <el-col :xs="24" :sm="12" :lg="6">
+                <div class="host-metric-item">
+                    <div class="host-metric-label">
+                        <span>@AR["Admin.Home.HostProcess"]</span>
+                        <i class="fa fa-cogs"></i>
+                    </div>
+                    <div class="host-metric-value">{{formatBytes(hostMetrics.processWorkingSetBytes)}}</div>
+                    <div class="host-metric-detail">
+                        @AR["Admin.Home.HostProcessWorkingSet"]<br />
+                        @AR["Admin.Home.HostProcessUptime"] {{formatDuration(hostMetrics.applicationUptimeSeconds)}}
+                    </div>
+                </div>
+            </el-col>
+        </el-row>
+
+        <div id="hostMetricsChart" class="host-metrics-chart"></div>
+    </el-card>
 </div>
 
 <!-- AI 对话入口 -->

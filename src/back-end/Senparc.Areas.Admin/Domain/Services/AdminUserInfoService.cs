@@ -506,6 +506,29 @@ namespace Senparc.Areas.Admin.Domain
             return (token, expiresUtc);
         }
 
+        /// <summary>
+        /// 为已经通过 WebView Cookie 与 DesktopBridge 一次性挑战校验的管理员签发 JWT。
+        /// JWT 不能超过 Cookie 剩余寿命，也不能超过后台 JWT 的正常配置寿命。
+        /// </summary>
+        public async Task<(string Token, DateTimeOffset ExpiresUtc)> GenerateTokenForDesktopHandoffAsync(
+            int memberId,
+            DateTimeOffset sourceAuthenticationExpiresUtc)
+        {
+            var now = DateTimeOffset.UtcNow;
+            var configuredExpiresUtc = now.AddMinutes(GetBackendJwtExpireMinutes());
+            var expiresUtc = sourceAuthenticationExpiresUtc < configuredExpiresUtc
+                ? sourceAuthenticationExpiresUtc
+                : configuredExpiresUtc;
+            if (expiresUtc <= now.AddSeconds(10))
+            {
+                throw new NcfExceptionBase("WebView 管理员登录已过期，请重新登录。");
+            }
+
+            var roleCodes = await GetRoleCodesAsync(memberId);
+            var token = GenerateToken(memberId, expiresUtc, roleCodes);
+            return (token, expiresUtc);
+        }
+
         private async Task<List<string>> GetRoleCodesAsync(int memberId)
         {
             var roleService = _serviceProvider.GetService<SysRoleAdminUserInfoService>();
@@ -524,10 +547,15 @@ namespace Senparc.Areas.Admin.Domain
 
         private string GenerateToken(int memberId, out DateTimeOffset expiresUtc, int? expiresMinutes, IEnumerable<string> roleCodes)
         {
-            var options = _serviceProvider.GetService<IOptionsSnapshot<JwtSettings>>();
-            var jwtSettings = options.Get(JwtSettings.Position_Backend);
             var effectiveExpireMinutes = NormalizeExpireMinutes(expiresMinutes ?? GetBackendJwtExpireMinutes(), AdminAuthConfig.DefaultBackendJwtExpireMinutes);
             expiresUtc = DateTimeOffset.UtcNow.AddMinutes(effectiveExpireMinutes);
+            return GenerateToken(memberId, expiresUtc, roleCodes);
+        }
+
+        private string GenerateToken(int memberId, DateTimeOffset expiresUtc, IEnumerable<string> roleCodes)
+        {
+            var options = _serviceProvider.GetService<IOptionsSnapshot<JwtSettings>>();
+            var jwtSettings = options.Get(JwtSettings.Position_Backend);
             byte[] keyBytes = System.Text.Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             var claims = new List<Claim>
