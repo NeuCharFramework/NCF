@@ -40,6 +40,7 @@ public class HostMetricsCollectorTests
         Assert.IsTrue(second.NetworkInterfaceCount >= 0);
         Assert.IsTrue(second.NetworkReceiveBytesPerSecond is null or >= 0);
         Assert.IsTrue(second.NetworkSendBytesPerSecond is null or >= 0);
+        AssertPercentage(second.ProcessCpuUsagePercent);
         Assert.IsTrue(second.ProcessWorkingSetBytes > 0);
         Assert.IsTrue(second.ApplicationUptimeSeconds >= 0);
     }

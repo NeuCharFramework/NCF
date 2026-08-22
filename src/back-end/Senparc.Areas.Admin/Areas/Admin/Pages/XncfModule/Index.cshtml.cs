@@ -15,6 +15,7 @@
 
 ----------------------------------------------------------------*/
 using Microsoft.AspNetCore.Mvc;
+using Senparc.CO2NET.Trace;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Service;
@@ -216,6 +217,163 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         }
 
         /// <summary>
+        /// 批量更新并启用所选模块。模块安装/迁移按顺序执行，避免并发修改菜单和数据库结构。
+        /// handler=BatchUpdateAndEnable
+        /// </summary>
+        public async Task<IActionResult> OnPostBatchUpdateAndEnableAsync([FromBody] BatchUpdateAndEnableXncfModulesRequest request)
+        {
+            var uids = request?.Uids?
+                .Where(z => !string.IsNullOrWhiteSpace(z))
+                .Select(z => z.Trim())
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList() ?? new List<string>();
+
+            if (uids.Count == 0)
+            {
+                return Ok(CreateBatchResult(
+                    new List<BatchUpdateAndEnableXncfModuleResult>(),
+                    _localizer["Xncf.BatchUpdate.SelectAtLeastOne"]));
+            }
+
+            var results = new List<BatchUpdateAndEnableXncfModuleResult>();
+            foreach (var uid in uids)
+            {
+                var register = XncfRegisterManager.RegisterList.FirstOrDefault(z =>
+                    string.Equals(z.Uid, uid, StringComparison.OrdinalIgnoreCase) && !z.IgnoreInstall);
+                var item = new BatchUpdateAndEnableXncfModuleResult
+                {
+                    Uid = uid,
+                    ModuleName = register?.MenuName ?? uid,
+                    TargetVersion = register?.Version
+                };
+
+                try
+                {
+                    if (register == null)
+                    {
+                        throw new InvalidOperationException(_localizer["Xncf.BatchUpdate.ModuleUnavailable"]);
+                    }
+
+                    var installedModule = await _xncfModuleServiceEx
+                        .GetObjectAsync(z => z.Uid == register.Uid)
+                        .ConfigureAwait(false);
+                    if (installedModule == null)
+                    {
+                        throw new InvalidOperationException(_localizer["Xncf.ModuleNotInstalled"]);
+                    }
+
+                    item.PreviousVersion = installedModule.Version;
+                    if (!string.Equals(installedModule.Version, register.Version, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var updateResult = await _xncfModuleServiceEx
+                            .InstallModuleAsync(register.Uid, true)
+                            .ConfigureAwait(false);
+                        if (updateResult.InstallOrUpdate != Ncf.Core.Enums.InstallOrUpdate.Update)
+                        {
+                            throw new InvalidOperationException(_localizer["Xncf.BatchUpdate.UpdateNotApplied"]);
+                        }
+                    }
+
+                    item.UpdateSucceeded = true;
+                    var updatedModule = await _xncfModuleServiceEx
+                        .GetObjectAsync(z => z.Uid == register.Uid)
+                        .ConfigureAwait(false);
+                    if (updatedModule == null)
+                    {
+                        throw new InvalidOperationException(_localizer["Xncf.ModuleNotInstalled"]);
+                    }
+
+                    item.FinalVersion = updatedModule.Version;
+                    if (!string.Equals(updatedModule.Version, register.Version, StringComparison.OrdinalIgnoreCase))
+                    {
+                        item.UpdateSucceeded = false;
+                        throw new InvalidOperationException(_localizer["Xncf.BatchUpdate.VersionMismatch", register.Version, updatedModule.Version]);
+                    }
+
+                    if (updatedModule.State != Ncf.Core.Enums.XncfModules_State.开放)
+                    {
+                        updatedModule.UpdateState(Ncf.Core.Enums.XncfModules_State.开放);
+                        await _xncfModuleServiceEx.SaveObjectAsync(updatedModule).ConfigureAwait(false);
+                    }
+
+                    var finalModule = await _xncfModuleServiceEx
+                        .GetObjectAsync(z => z.Uid == register.Uid)
+                        .ConfigureAwait(false);
+                    item.FinalVersion = finalModule?.Version ?? item.FinalVersion;
+                    item.FinalState = finalModule == null ? null : (int)finalModule.State;
+                    item.EnableSucceeded = finalModule?.State == Ncf.Core.Enums.XncfModules_State.开放;
+                    if (!item.EnableSucceeded)
+                    {
+                        throw new InvalidOperationException(_localizer["Xncf.BatchUpdate.EnableNotApplied"]);
+                    }
+
+                    item.Message = _localizer["Xncf.BatchUpdate.UpdateAndEnableSuccess"];
+                }
+                catch (Exception ex)
+                {
+                    try
+                    {
+                        var finalModule = register == null
+                            ? null
+                            : await _xncfModuleServiceEx.GetObjectAsync(z => z.Uid == register.Uid).ConfigureAwait(false);
+                        item.FinalVersion = finalModule?.Version ?? item.FinalVersion;
+                        item.FinalState = finalModule == null ? null : (int)finalModule.State;
+                        item.EnableSucceeded = item.UpdateSucceeded &&
+                            finalModule?.State == Ncf.Core.Enums.XncfModules_State.开放;
+                    }
+                    catch (Exception statusException)
+                    {
+                        SenparcTrace.SendCustomLog(
+                            "读取批量操作后的 XNCF 模块状态失败",
+                            $"模块：{item.ModuleName} / {uid}\r\n{statusException}");
+                    }
+
+                    item.Message = item.UpdateSucceeded && item.EnableSucceeded
+                        ? _localizer["Xncf.BatchUpdate.UpdateAndEnableSuccess"]
+                        : item.UpdateSucceeded
+                        ? _localizer["Xncf.BatchUpdate.EnableFailed", ex.Message]
+                        : _localizer["Xncf.BatchUpdate.UpdateFailed", ex.Message];
+
+                    SenparcTrace.SendCustomLog(
+                        "批量更新并启用 XNCF 模块失败",
+                        $"模块：{item.ModuleName} / {uid}\r\n{ex}");
+                }
+
+                results.Add(item);
+            }
+
+            if (results.Any(z => z.UpdateSucceeded || z.EnableSucceeded))
+            {
+                try
+                {
+                    await _sysMenuService.GetMenuDtoByCacheAsync(true).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    SenparcTrace.SendCustomLog("批量操作后的菜单缓存刷新失败", ex.ToString());
+                }
+            }
+
+            return Ok(CreateBatchResult(results));
+        }
+
+        private static object CreateBatchResult(
+            List<BatchUpdateAndEnableXncfModuleResult> results,
+            string message = null)
+        {
+            var successCount = results.Count(z => z.UpdateSucceeded && z.EnableSucceeded);
+            return new
+            {
+                Success = message == null && results.Count > 0 && successCount == results.Count,
+                TotalCount = results.Count,
+                SuccessCount = successCount,
+                FailureCount = results.Count - successCount,
+                Message = message,
+                Items = results
+            };
+        }
+
+        /// <summary>
         /// 根据名称安装模块
         /// </summary>
         /// <param name="xncfName"></param>
@@ -268,5 +426,23 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             return new JsonResult(new { success, message });
 
         }
+    }
+
+    public class BatchUpdateAndEnableXncfModulesRequest
+    {
+        public List<string> Uids { get; set; } = new List<string>();
+    }
+
+    public class BatchUpdateAndEnableXncfModuleResult
+    {
+        public string Uid { get; set; }
+        public string ModuleName { get; set; }
+        public string PreviousVersion { get; set; }
+        public string TargetVersion { get; set; }
+        public string FinalVersion { get; set; }
+        public bool UpdateSucceeded { get; set; }
+        public bool EnableSucceeded { get; set; }
+        public int? FinalState { get; set; }
+        public string Message { get; set; }
     }
 }

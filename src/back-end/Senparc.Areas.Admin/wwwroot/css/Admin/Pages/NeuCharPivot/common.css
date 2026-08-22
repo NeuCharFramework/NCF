@@ -1,0 +1,99 @@
+.neuchar-page {
+    min-height: calc(100vh - 150px);
+    padding: 18px;
+    background: #f5f7fa;
+}
+
+.neuchar-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.neuchar-page-header h2,
+.neuchar-page-header p {
+    margin: 0;
+}
+
+.neuchar-page-header p {
+    margin-top: 6px;
+    color: #909399;
+}
+
+.neuchar-empty {
+    padding: 70px 20px;
+    color: #909399;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #ebeef5;
+    border-radius: 10px;
+}
+
+.neuchar-function-card {
+    height: calc(100% - 16px);
+    margin-bottom: 16px;
+    border-radius: 8px;
+}
+
+.neuchar-function-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.neuchar-function-head h4,
+.neuchar-function-head p {
+    margin: 0;
+}
+
+.neuchar-function-head p {
+    margin-top: 5px;
+    color: #909399;
+    font-size: 12px;
+}
+
+.neuchar-parameter {
+    margin-top: 12px;
+}
+
+.neuchar-parameter label,
+.neuchar-parameter small {
+    display: block;
+}
+
+.neuchar-parameter label {
+    margin-bottom: 5px;
+    color: #606266;
+    font-size: 13px;
+}
+
+.neuchar-parameter label em {
+    color: #f56c6c;
+    font-style: normal;
+}
+
+.neuchar-parameter small {
+    margin-top: 4px;
+    color: #a0a4aa;
+}
+
+.neuchar-parameter .el-select {
+    width: 100%;
+}
+
+.neuchar-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+}
+
+@media (max-width: 720px) {
+    .neuchar-page-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}

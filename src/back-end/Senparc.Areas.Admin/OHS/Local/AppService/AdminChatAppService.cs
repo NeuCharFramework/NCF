@@ -16,11 +16,15 @@
     修改标识：Senparc - 20260729
     修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
 
+    修改标识：Senparc - 20260808
+    修改描述：v0.4.0 适配桌面管理员换票相关的后台对话安全上下文
+
 ----------------------------------------------------------------*/
 using Microsoft.AspNetCore.Mvc;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto;
 using Senparc.Areas.Admin.Domain.Services;
+using Senparc.Xncf.NeuCharWorkflow.Abstractions.Workflow;
 using Senparc.CO2NET;
 using Senparc.CO2NET.WebApi;
 using Senparc.Ncf.Core.AppServices;
@@ -51,6 +55,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         private readonly AdminChatSessionService _sessionService;
         private readonly AdminChatMessageService _messageService;
         private readonly AdminChatSessionModuleService _sessionModuleService;
+        private readonly AdminChatSessionWorkflowService _sessionWorkflowService;
         private readonly AdminChatAiService _chatAiService;
         private readonly IStringLocalizer<AdminResource> _localizer;
         private readonly IEventBus _eventBus;
@@ -60,12 +65,14 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             AdminChatSessionService sessionService,
             AdminChatMessageService messageService,
             AdminChatSessionModuleService sessionModuleService,
+            AdminChatSessionWorkflowService sessionWorkflowService,
             AdminChatAiService chatAiService,
             IStringLocalizer<AdminResource> localizer) : base(serviceProvider)
         {
             _sessionService = sessionService;
             _messageService = messageService;
             _sessionModuleService = sessionModuleService;
+            _sessionWorkflowService = sessionWorkflowService;
             _chatAiService = chatAiService;
             _localizer = localizer;
             _eventBus = serviceProvider.GetService<IEventBus>();
@@ -112,6 +119,26 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 }
 
                 await _sessionModuleService.AddModulesToSessionAsync(session.Id, modules);
+
+                var workflowProvider = ServiceProvider.GetService<IWorkflowFunctionCallingProvider>();
+                if (workflowProvider != null && request.WorkflowIds != null)
+                {
+                    var selectedWorkflowIds = request.WorkflowIds
+                        .Where(id => id > 0)
+                        .ToHashSet();
+                    var availableWorkflows = await workflowProvider
+                        .GetAvailableAsync(userId)
+                        .ConfigureAwait(false);
+                    await _sessionWorkflowService.AddWorkflowsToSessionAsync(
+                        session.Id,
+                        availableWorkflows
+                            .Where(workflow => selectedWorkflowIds.Contains(workflow.Id))
+                            .Select(workflow => (
+                                workflow.Id,
+                                workflow.Name,
+                                workflow.Description))
+                            .ToList());
+                }
 
                 if (!string.IsNullOrEmpty(request.InitialMessage))
                 {
@@ -185,10 +212,12 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
                 var (messages, _) = await _messageService.GetSessionMessagesAsync(sessionId);
                 var modules = await _sessionModuleService.GetSessionModulesAsync(sessionId);
+                var workflows = await _sessionWorkflowService.GetSessionWorkflowsAsync(sessionId);
 
                 var sessionDto = AdminChatSessionDto.CreateFromEntity(session);
                 sessionDto.Messages = messages.Select(AdminChatMessageDto.CreateFromEntity).ToList();
                 sessionDto.Modules = modules.Select(z => MapModuleDtoWithRegisterInfo(AdminChatSessionModuleDto.CreateFromEntity(z))).ToList();
+                sessionDto.Workflows = await MapWorkflowDtosAsync(workflows, userId).ConfigureAwait(false);
 
                 return new GetSessionDetailResponse
                 {
@@ -504,6 +533,48 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         }
 
         /// <summary>
+        /// 将会话的 Workflow 关联更新为指定集合。
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Post)]
+        public async Task<StringAppResponse> SetSessionWorkflowsAsync([FromBody] SetWorkflowsRequest request)
+        {
+            return await this.GetResponseAsync<StringAppResponse, string>(async (response, logger) =>
+            {
+                var userId = GetCurrentAdminUserInfoId();
+                if (userId <= 0)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.UserNotLoggedIn"]);
+                }
+
+                var session = await _sessionService.GetSessionByIdAsync(request.SessionId, userId);
+                if (session == null)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.SessionNotFoundOrForbidden"]);
+                }
+
+                var provider = ServiceProvider.GetService<IWorkflowFunctionCallingProvider>();
+                var available = provider == null
+                    ? Array.Empty<WorkflowFunctionCallingDescriptor>()
+                    : await provider.GetAvailableAsync(userId).ConfigureAwait(false);
+                var requestedIds = (request.WorkflowIds ?? new List<int>())
+                    .Where(id => id > 0)
+                    .ToHashSet();
+                var desired = available
+                    .Where(workflow => requestedIds.Contains(workflow.Id))
+                    .Select(workflow => (
+                        workflow.Id,
+                        workflow.Name,
+                        workflow.Description))
+                    .ToList();
+
+                await _sessionWorkflowService.SetSessionWorkflowsAsync(request.SessionId, desired);
+                logger.Append($"更新 Workflow 关联: SessionId={request.SessionId}, Count={desired.Count}");
+                await PublishSyncEventAsync(userId, request.SessionId, "workflows-changed");
+                return _localizer["AdminChat.AddModulesSuccess"];
+            });
+        }
+
+        /// <summary>
         /// 获取当前已安装并开放、可关联到 Admin Chat 会话的 XNCF 模块。
         /// </summary>
         [ApiBind(ApiRequestMethod = ApiRequestMethod.Get)]
@@ -542,6 +613,32 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     Modules = modules
                 };
             });
+        }
+
+        /// <summary>
+        /// 获取当前管理员可用于 AdminChat Function Calling 的已启用 Workflow。
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Get)]
+        public async Task<AppResponseBase<GetAvailableWorkflowsResponse>> GetAvailableWorkflowsAsync()
+        {
+            return await this.GetResponseAsync<AppResponseBase<GetAvailableWorkflowsResponse>, GetAvailableWorkflowsResponse>(
+                async (response, logger) =>
+                {
+                    var userId = GetCurrentAdminUserInfoId();
+                    if (userId <= 0)
+                    {
+                        throw new NcfExceptionBase(_localizer["AdminChat.UserNotLoggedIn"]);
+                    }
+
+                    var provider = ServiceProvider.GetService<IWorkflowFunctionCallingProvider>();
+                    var workflows = provider == null
+                        ? Array.Empty<WorkflowFunctionCallingDescriptor>()
+                        : await provider.GetAvailableAsync(userId).ConfigureAwait(false);
+                    return new GetAvailableWorkflowsResponse
+                    {
+                        Workflows = workflows.Select(MapAvailableWorkflowDto).ToList()
+                    };
+                });
         }
 
         /// <summary>
@@ -631,6 +728,51 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             return dto;
         }
 
+        private async Task<List<AdminChatSessionWorkflowDto>> MapWorkflowDtosAsync(
+            IReadOnlyList<AdminChatSessionWorkflow> workflows,
+            int userId)
+        {
+            var provider = ServiceProvider.GetService<IWorkflowFunctionCallingProvider>();
+            var available = provider == null
+                ? Array.Empty<WorkflowFunctionCallingDescriptor>()
+                : await provider.GetAvailableAsync(userId).ConfigureAwait(false);
+            var availableById = available.ToDictionary(workflow => workflow.Id);
+
+            return workflows.Select(workflow =>
+            {
+                var dto = AdminChatSessionWorkflowDto.CreateFromEntity(workflow);
+                if (availableById.TryGetValue(workflow.WorkflowId, out var descriptor))
+                {
+                    dto.WorkflowName = descriptor.Name;
+                    dto.WorkflowDescription = descriptor.Description;
+                    dto.Parameters = descriptor.Parameters
+                        .Select(parameter => new WorkflowFunctionCallingParameterDto
+                        {
+                            Name = parameter.Name,
+                            Description = parameter.Description
+                        })
+                        .ToList();
+                }
+                return dto;
+            }).ToList();
+        }
+
+        private static AvailableWorkflowDto MapAvailableWorkflowDto(
+            WorkflowFunctionCallingDescriptor workflow) =>
+            new()
+            {
+                Id = workflow.Id,
+                Name = workflow.Name,
+                Description = workflow.Description ?? string.Empty,
+                Parameters = workflow.Parameters
+                    .Select(parameter => new WorkflowParameterDto
+                    {
+                        Name = parameter.Name,
+                        Description = parameter.Description ?? string.Empty
+                    })
+                    .ToList()
+            };
+
         #endregion
 
         #region 私有辅助方法
@@ -699,6 +841,12 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         public List<ModuleInfo> Modules { get; set; }
     }
 
+    public class SetWorkflowsRequest
+    {
+        public int SessionId { get; set; }
+        public List<int> WorkflowIds { get; set; } = new();
+    }
+
     /// <summary>
     /// 模块信息
     /// </summary>
@@ -723,6 +871,25 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
     public class GetAvailableModulesResponse
     {
         public List<AvailableModuleDto> Modules { get; set; }
+    }
+
+    public class GetAvailableWorkflowsResponse
+    {
+        public List<AvailableWorkflowDto> Workflows { get; set; } = new();
+    }
+
+    public class AvailableWorkflowDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public List<WorkflowParameterDto> Parameters { get; set; } = new();
+    }
+
+    public class WorkflowParameterDto
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 
     /// <summary>

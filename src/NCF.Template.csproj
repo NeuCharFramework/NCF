@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<PackageType>Template</PackageType>
-		<PackageVersion>0.38.0</PackageVersion>
+		<PackageVersion>0.39.0</PackageVersion>
 		<PackageId>Senparc.NCF.Template</PackageId>
 		<Title>NCF Template</Title>
 		<Authors>JeffreySu</Authors>
@@ -112,7 +112,7 @@
 			v0.36.0 Updated DesktopBridge, supports Token confirmation for remote connection
 			v0.37.0 添加“下载”页面，新增数据库升级维护模式与后台 Synchro Footer，升级全部 Senparc.* NuGet 依赖
 			v0.38.0 Provides desktop bridging and supports Token confirmation for remote connection. Add the "NeuBell" function; Optimize the back-end UI; Supports multi-host deployment
-
+			v0.39.0 Add Workflow and Sandbox module
 		</PackageReleaseNotes>
 		<RepositoryUrl>https://github.com/NeuCharFramework/NCF</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>

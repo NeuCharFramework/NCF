@@ -33,8 +33,63 @@
 .chat-module-selected-list {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
-  min-height: 30px;
+  min-height: 34px;
+}
+
+.chat-module-selected-list .module-tag.el-tag {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  height: 34px;
+  padding: 0 10px;
+  gap: 6px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 2px 8px rgba(43, 35, 95, 0.12);
+  color: #4b5563;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.chat-module-selected-list .module-tag > .fa {
+  flex: 0 0 auto;
+  margin: 0;
+  color: #667eea;
+  line-height: 1;
+}
+
+.chat-module-selected-list .module-tag-name {
+  display: block;
+  min-width: 0;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-module-selected-list .module-tag .el-tag__close {
+  position: static;
+  top: auto;
+  right: auto;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  color: #8492a6;
+  line-height: 16px;
+}
+
+.chat-module-selected-list .module-tag .el-tag__close:hover {
+  color: #fff;
+  background-color: #8c52ff;
 }
 
 @media screen and (max-width: 768px) {

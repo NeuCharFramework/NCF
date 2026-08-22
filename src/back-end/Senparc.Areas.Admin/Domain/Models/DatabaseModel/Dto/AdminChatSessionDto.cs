@@ -39,10 +39,16 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
         /// </summary>
         public List<AdminChatSessionModuleDto> Modules { get; set; }
 
+        /// <summary>
+        /// 关联的 Workflow 列表（可选，用于嵌套查询）
+        /// </summary>
+        public List<AdminChatSessionWorkflowDto> Workflows { get; set; }
+
         public AdminChatSessionDto() 
         {
             Messages = new List<AdminChatMessageDto>();
             Modules = new List<AdminChatSessionModuleDto>();
+            Workflows = new List<AdminChatSessionWorkflowDto>();
         }
 
         /// <summary>
@@ -90,9 +96,15 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
         /// </summary>
         public List<string> ModuleUids { get; set; }
 
+        /// <summary>
+        /// 选中的 Workflow Id 列表
+        /// </summary>
+        public List<int> WorkflowIds { get; set; }
+
         public CreateChatSessionInputDto()
         {
             ModuleUids = new List<string>();
+            WorkflowIds = new List<int>();
         }
     }
 }

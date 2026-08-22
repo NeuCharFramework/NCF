@@ -1,6 +1,5 @@
 var app = new Vue({
   el: '#app',
-  mixins: [window.ChatLauncherMixin],
   data() {
     return {
       isExpandAll: true,
@@ -19,6 +18,13 @@ var app = new Vue({
       hostMetricsTimer: null,
       hostMetricsChart: null,
       hostMetricsResizeHandler: null,
+      agentsOverview: {
+        available: false
+      },
+      agentsOverviewLoading: false,
+      agentsOverviewUnavailable: false,
+      agentsOverviewTimer: null,
+      agentsOverviewUpdatedAt: null,
       // 添加动画控制变量
       shakeAllModules: false,
       glowUpgradeableModules: false
@@ -31,8 +37,11 @@ var app = new Vue({
     this.fetchTodayLogData();
     this.fetchHostMetrics();
     this.startHostMetricsPolling();
+    this.fetchAgentsOverview();
+    this.startAgentsOverviewPolling();
     this.hostMetricsResizeHandler = () => {
-      if (this.hostMetricsChart) {
+      if (this.hostMetricsChart &&
+        (typeof this.hostMetricsChart.isDisposed !== 'function' || !this.hostMetricsChart.isDisposed())) {
         this.hostMetricsChart.resize();
       }
     };
@@ -45,16 +54,83 @@ var app = new Vue({
       window.clearInterval(this.hostMetricsTimer);
       this.hostMetricsTimer = null;
     }
+    if (this.agentsOverviewTimer) {
+      window.clearInterval(this.agentsOverviewTimer);
+      this.agentsOverviewTimer = null;
+    }
     if (this.hostMetricsResizeHandler) {
       window.removeEventListener('resize', this.hostMetricsResizeHandler);
       this.hostMetricsResizeHandler = null;
     }
-    if (this.hostMetricsChart) {
+    if (this.hostMetricsChart &&
+      (typeof this.hostMetricsChart.isDisposed !== 'function' || !this.hostMetricsChart.isDisposed())) {
       this.hostMetricsChart.dispose();
-      this.hostMetricsChart = null;
     }
+    this.hostMetricsChart = null;
   },
   methods: {
+    startAgentsOverviewPolling() {
+      if (this.agentsOverviewTimer) {
+        window.clearInterval(this.agentsOverviewTimer);
+      }
+      this.agentsOverviewTimer = window.setInterval(() => this.fetchAgentsOverview(), 5000);
+    },
+    async fetchAgentsOverview() {
+      if (this.agentsOverviewLoading || this.agentsOverviewUnavailable || document.hidden) {
+        return;
+      }
+
+      this.agentsOverviewLoading = true;
+      try {
+        const headers = { 'x-requested-with': 'XMLHttpRequest' };
+        if (window.ncfJwtToken) {
+          headers.Authorization = 'Bearer ' + window.ncfJwtToken;
+        }
+        const response = await axios.get(
+          '/api/Senparc.Xncf.AgentsManager/ChatGroupAppService/Xncf.AgentsManager_ChatGroupAppService.GetDashboardOverview',
+          { headers: headers });
+        const payload = response && response.data;
+        if (!payload || !payload.success || !payload.data) {
+          throw new Error('AgentsManager overview is unavailable.');
+        }
+
+        this.agentsOverview = Object.assign({ available: true }, payload.data);
+        this.agentsOverviewUpdatedAt = new Date();
+      } catch (_) {
+        // AgentsManager 是可选模块。端点不可用通常表示未安装、未启用或当前账号无权访问，首页保持无卡片状态。
+        this.agentsOverviewUnavailable = true;
+        this.agentsOverview = { available: false };
+      } finally {
+        this.agentsOverviewLoading = false;
+      }
+    },
+    disabledCount(total, enabled) {
+      return Math.max(0, (Number(total) || 0) - (Number(enabled) || 0));
+    },
+    agentsTotal() {
+      return (Number(this.agentsOverview.localAgentCount) || 0) + (Number(this.agentsOverview.remoteA2AAgentCount) || 0);
+    },
+    agentsEnabledTotal() {
+      return (Number(this.agentsOverview.localAgentEnabledCount) || 0) + (Number(this.agentsOverview.remoteA2AAgentEnabledCount) || 0);
+    },
+    agentsDisabledTotal() {
+      return this.disabledCount(this.agentsTotal(), this.agentsEnabledTotal());
+    },
+    agentsActiveTotal() {
+      return (Number(this.agentsOverview.activeLocalAgentCount) || 0) + (Number(this.agentsOverview.activeRemoteA2AAgentCount) || 0);
+    },
+    agentsChattingTotal() {
+      return (Number(this.agentsOverview.chattingLocalAgentCount) || 0) + (Number(this.agentsOverview.chattingRemoteA2AAgentCount) || 0);
+    },
+    agentsOverviewUpdatedText() {
+      if (!this.agentsOverviewUpdatedAt) {
+        return '--';
+      }
+      return this.agentsOverviewUpdatedAt.toLocaleTimeString();
+    },
+    navigateToAgentsManager() {
+      window.location.href = '/Admin/XncfModule/Start/?uid=D858D7FA-775A-4690-9023-CFB0B3B84994';
+    },
     startHostMetricsPolling() {
       if (this.hostMetricsTimer) {
         window.clearInterval(this.hostMetricsTimer);
@@ -91,6 +167,7 @@ var app = new Vue({
       this.hostMetricsHistory.push({
         sampledAt: metrics.sampledAt,
         cpu: this.toNullableNumber(metrics.cpuUsagePercent),
+        processCpu: this.toNullableNumber(metrics.processCpuUsagePercent),
         memory: this.toNullableNumber(metrics.memoryUsagePercent),
         receiveMbps: this.bytesPerSecondToMbps(metrics.networkReceiveBytesPerSecond),
         sendMbps: this.bytesPerSecondToMbps(metrics.networkSendBytesPerSecond)
@@ -104,10 +181,32 @@ var app = new Vue({
       if (!chartElement) {
         return;
       }
+      if (this.hostMetricsChart &&
+        typeof this.hostMetricsChart.isDisposed === 'function' &&
+        this.hostMetricsChart.isDisposed()) {
+        this.hostMetricsChart = null;
+      }
       if (!this.hostMetricsChart) {
-        this.hostMetricsChart = echarts.init(chartElement);
+        const existingChart = typeof echarts.getInstanceByDom === 'function'
+          ? echarts.getInstanceByDom(chartElement)
+          : null;
+        this.hostMetricsChart = existingChart &&
+          (typeof existingChart.isDisposed !== 'function' || !existingChart.isDisposed())
+          ? existingChart
+          : echarts.init(chartElement);
       }
 
+      // 旧版 ECharts 在第一次 setOption() 前没有内部 model，此时调用 getOption() 会抛错。
+      // 仅在已有 model 时读取图例状态，保证首屏能完成第一次绘制。
+      const chartModel = typeof this.hostMetricsChart.getModel === 'function'
+        ? this.hostMetricsChart.getModel()
+        : true;
+      const currentOption = chartModel && typeof this.hostMetricsChart.getOption === 'function'
+        ? this.hostMetricsChart.getOption()
+        : null;
+      const selectedSeries = currentOption && currentOption.legend && currentOption.legend[0]
+        ? Object.assign({}, currentOption.legend[0].selected || {})
+        : {};
       const labels = this.hostMetricsHistory.map(item => this.formatSampleTime(item.sampledAt));
       this.hostMetricsChart.setOption({
         animationDurationUpdate: 300,
@@ -119,8 +218,10 @@ var app = new Vue({
         legend: {
           top: 2,
           right: 8,
+          selected: selectedSeries,
           data: [
             ncfT('Admin.Home.HostCpu'),
+            ncfT('Admin.Home.HostProcessCpu'),
             ncfT('Admin.Home.HostMemory'),
             ncfT('Admin.Home.HostNetworkReceive'),
             ncfT('Admin.Home.HostNetworkSend')
@@ -151,6 +252,14 @@ var app = new Vue({
           data: this.hostMetricsHistory.map(item => item.cpu),
           lineStyle: { color: '#8c52ff' },
           itemStyle: { color: '#8c52ff' }
+        }, {
+          name: ncfT('Admin.Home.HostProcessCpu'),
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          data: this.hostMetricsHistory.map(item => item.processCpu),
+          lineStyle: { color: '#00a6a6', type: 'dashed' },
+          itemStyle: { color: '#00a6a6' }
         }, {
           name: ncfT('Admin.Home.HostMemory'),
           type: 'line',
@@ -190,6 +299,28 @@ var app = new Vue({
     normalizePercent(value) {
       const number = this.toNullableNumber(value);
       return number === null ? 0 : Math.max(0, Math.min(100, number));
+    },
+    barWidth(value) {
+      return this.normalizePercent(value).toFixed(3) + '%';
+    },
+    boundedSubsetPercent(value, maximum) {
+      const subset = this.normalizePercent(value);
+      const maximumNumber = this.toNullableNumber(maximum);
+      if (maximumNumber === null || maximumNumber <= 0) {
+        return subset;
+      }
+      return Math.min(subset, this.normalizePercent(maximumNumber));
+    },
+    boundedSubsetWidth(value, maximum) {
+      return this.boundedSubsetPercent(value, maximum).toFixed(3) + '%';
+    },
+    processMemoryPercent() {
+      const processBytes = this.toNullableNumber(this.hostMetrics.processWorkingSetBytes);
+      const totalBytes = this.toNullableNumber(this.hostMetrics.memoryTotalBytes);
+      if (processBytes === null || totalBytes === null || totalBytes <= 0) {
+        return 0;
+      }
+      return this.normalizePercent(processBytes / totalBytes * 100);
     },
     formatPercent(value) {
       const number = this.toNullableNumber(value);

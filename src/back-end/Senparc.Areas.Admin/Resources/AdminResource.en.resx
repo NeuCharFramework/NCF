@@ -198,14 +198,17 @@
   <data name="Admin.Home.Header" xml:space="preserve"><value>NeuCharFramework Admin Panel</value></data>
   <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>Current host health</value></data>
   <data name="Admin.Home.HostMetricsRealtime" xml:space="preserve"><value>Live · refreshes every 2 seconds</value></data>
-  <data name="Admin.Home.HostCpu" xml:space="preserve"><value>CPU</value></data>
+  <data name="Admin.Home.HostCpu" xml:space="preserve"><value>Host CPU (overall)</value></data>
   <data name="Admin.Home.HostCpuDetail" xml:space="preserve"><value>Whole-host utilization</value></data>
+  <data name="Admin.Home.HostScope" xml:space="preserve"><value>Host</value></data>
+  <data name="Admin.Home.WebScope" xml:space="preserve"><value>Web</value></data>
   <data name="Admin.Home.HostMemory" xml:space="preserve"><value>Physical memory</value></data>
   <data name="Admin.Home.HostMemoryAvailable" xml:space="preserve"><value>Available</value></data>
   <data name="Admin.Home.HostNetwork" xml:space="preserve"><value>Live network throughput</value></data>
   <data name="Admin.Home.HostNetworkTotal" xml:space="preserve"><value>Total</value></data>
   <data name="Admin.Home.HostInterfaces" xml:space="preserve"><value>active interfaces</value></data>
   <data name="Admin.Home.HostProcess" xml:space="preserve"><value>Current web process</value></data>
+  <data name="Admin.Home.HostProcessCpu" xml:space="preserve"><value>Web process CPU</value></data>
   <data name="Admin.Home.HostProcessWorkingSet" xml:space="preserve"><value>Working set memory</value></data>
   <data name="Admin.Home.HostProcessUptime" xml:space="preserve"><value>Uptime</value></data>
   <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>Last 30 samples (this page only)</value></data>
@@ -375,6 +378,32 @@
   <data name="Xncf.NewModules" xml:space="preserve"><value>New Modules</value></data>
   <data name="Xncf.InstalledModules" xml:space="preserve"><value>Installed Modules</value></data>
   <data name="Xncf.PendingUpdates" xml:space="preserve"><value>Modules Pending Update</value></data>
+  <data name="Xncf.BatchUpdateAndEnable" xml:space="preserve"><value>Update and enable selected</value></data>
+  <data name="Xncf.BatchUpdate.SelectedCount" xml:space="preserve"><value>{0} modules selected</value></data>
+  <data name="Xncf.BatchUpdate.SelectAtLeastOne" xml:space="preserve"><value>Select at least one module pending update.</value></data>
+  <data name="Xncf.BatchUpdate.Confirm" xml:space="preserve"><value>Update and enable the {0} selected modules?</value></data>
+  <data name="Xncf.BatchUpdate.Title" xml:space="preserve"><value>Batch update modules</value></data>
+  <data name="Xncf.BatchUpdateResult" xml:space="preserve"><value>Batch operation status</value></data>
+  <data name="Xncf.BatchUpdate.Summary" xml:space="preserve"><value>Processed {0} modules: {1} succeeded and {2} failed.</value></data>
+  <data name="Xncf.BatchUpdate.VersionResult" xml:space="preserve"><value>Version change</value></data>
+  <data name="Xncf.BatchUpdate.TargetVersion" xml:space="preserve"><value>Target version: {0}</value></data>
+  <data name="Xncf.BatchUpdate.UpdateStatus" xml:space="preserve"><value>Update</value></data>
+  <data name="Xncf.BatchUpdate.EnableStatus" xml:space="preserve"><value>Enable</value></data>
+  <data name="Xncf.BatchUpdate.FinalState" xml:space="preserve"><value>Final state</value></data>
+  <data name="Xncf.BatchUpdate.Details" xml:space="preserve"><value>Details</value></data>
+  <data name="Xncf.BatchUpdate.Success" xml:space="preserve"><value>Succeeded</value></data>
+  <data name="Xncf.BatchUpdate.Failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="Xncf.BatchUpdate.NoResult" xml:space="preserve"><value>No batch operation result was returned.</value></data>
+  <data name="Xncf.BatchUpdate.RefreshFailed" xml:space="preserve"><value>The operation finished, but status refresh failed. Refresh the page manually.</value></data>
+  <data name="Xncf.BatchUpdate.RequestFailed" xml:space="preserve"><value>The batch update and enable request failed.</value></data>
+  <data name="Xncf.BatchUpdate.UnknownModule" xml:space="preserve"><value>Unknown module</value></data>
+  <data name="Xncf.BatchUpdate.ModuleUnavailable" xml:space="preserve"><value>The module does not exist, is ignored, or is not loaded.</value></data>
+  <data name="Xncf.BatchUpdate.UpdateNotApplied" xml:space="preserve"><value>The module update was not applied.</value></data>
+  <data name="Xncf.BatchUpdate.EnableNotApplied" xml:space="preserve"><value>The module did not switch to the enabled state.</value></data>
+  <data name="Xncf.BatchUpdate.VersionMismatch" xml:space="preserve"><value>The target version is {0}, but the actual version is {1}.</value></data>
+  <data name="Xncf.BatchUpdate.UpdateAndEnableSuccess" xml:space="preserve"><value>Updated and enabled successfully.</value></data>
+  <data name="Xncf.BatchUpdate.EnableFailed" xml:space="preserve"><value>The update succeeded, but enabling failed: {0}</value></data>
+  <data name="Xncf.BatchUpdate.UpdateFailed" xml:space="preserve"><value>Update failed: {0}</value></data>
   <data name="Xncf.ModuleName" xml:space="preserve"><value>Module Name</value></data>
   <data name="Xncf.MenuName" xml:space="preserve"><value>Menu Name (Display Name)</value></data>
   <data name="Xncf.Version" xml:space="preserve"><value>Version</value></data>
@@ -505,4 +534,21 @@
   <data name="AdminChat.NoMenuOrFunctions" xml:space="preserve"><value>This module has no available menus or functions.</value></data>
   <data name="AdminChat.NoMatchingModules" xml:space="preserve"><value>No matching modules</value></data>
   <data name="AdminChat.ConfirmAdd" xml:space="preserve"><value>Confirm add</value></data>
- </root>
+  <data name="Admin.Home.AgentsOverview" xml:space="preserve"><value>Agents operations overview</value></data>
+  <data name="Admin.Home.AgentsOverviewLive" xml:space="preserve"><value>Live</value></data>
+  <data name="Admin.Home.AgentsManage" xml:space="preserve"><value>Manage Agents</value></data>
+  <data name="Admin.Home.AgentsTotal" xml:space="preserve"><value>Total Agents</value></data>
+  <data name="Admin.Home.AgentsLocal" xml:space="preserve"><value>Local</value></data>
+  <data name="Admin.Home.AgentsRemoteA2A" xml:space="preserve"><value>Connected A2A</value></data>
+  <data name="Admin.Home.AgentsEnabled" xml:space="preserve"><value>Enabled</value></data>
+  <data name="Admin.Home.AgentsDisabled" xml:space="preserve"><value>Disabled</value></data>
+  <data name="Admin.Home.AgentsPublishedA2A" xml:space="preserve"><value>Published A2A</value></data>
+  <data name="Admin.Home.AgentsConfigured" xml:space="preserve"><value>Configured</value></data>
+  <data name="Admin.Home.AgentsActive" xml:space="preserve"><value>Active</value></data>
+  <data name="Admin.Home.AgentsGroups" xml:space="preserve"><value>Collaboration groups</value></data>
+  <data name="Admin.Home.AgentsChatting" xml:space="preserve"><value>Chatting</value></data>
+  <data name="Admin.Home.AgentsActiveTasks" xml:space="preserve"><value>Active tasks</value></data>
+  <data name="Admin.Home.AgentsWaitingOrPaused" xml:space="preserve"><value>Waiting / paused</value></data>
+  <data name="Admin.Home.AiQuickDescription" xml:space="preserve"><value>Use the Footer AI quick chat to open the full conversation and context selector when needed.</value></data>
+  <data name="Admin.Home.AiQuickDialog" xml:space="preserve"><value>Open quick chat</value></data>
+</root>

@@ -134,7 +134,12 @@ li {
 .admin-footer-time {
     margin-left: 4px;
     padding-left: 9px;
+    color: inherit;
+    font: inherit;
+    background: transparent;
+    border: 0;
     border-left: 1px solid #ebeef5;
+    cursor: default;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
 }
@@ -234,6 +239,12 @@ li {
     font-weight: 600;
 }
 
+.admin-neubell-provider-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .admin-neubell-item {
     display: flex;
     align-items: center;
@@ -241,6 +252,17 @@ li {
     gap: 12px;
     padding: 12px;
     border-top: 1px solid #ebeef5;
+}
+
+.admin-neubell-item-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
 }
 
 .admin-neubell-item:hover {
@@ -258,6 +280,151 @@ li {
 .admin-neubell-item-content small {
     color: #909399;
     line-height: 1.5;
+}
+
+.admin-neubell-toast-stack {
+    position: fixed;
+    right: 24px;
+    bottom: 52px;
+    z-index: 3000;
+    width: min(360px, calc(100vw - 32px));
+    pointer-events: none;
+}
+
+.admin-neubell-toast-toolbar,
+.admin-neubell-toast-list,
+.admin-neubell-toast-expand {
+    pointer-events: auto;
+}
+
+.admin-neubell-toast-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    color: #303133;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    border-bottom: 0;
+    border-radius: 6px 6px 0 0;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, .12);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.admin-neubell-toast-clear,
+.admin-neubell-toast-expand {
+    padding: 0;
+    color: #409eff;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.admin-neubell-toast-clear:hover,
+.admin-neubell-toast-expand:hover {
+    color: #66b1ff;
+}
+
+.admin-neubell-toast-list {
+    max-height: 52vh;
+    overflow-y: auto;
+}
+
+.admin-neubell-toast-card {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    min-height: 68px;
+    padding: 12px;
+    color: #303133;
+    text-align: left;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    border-top: 0;
+    cursor: pointer;
+    gap: 10px;
+    transition: background-color .15s ease, transform .15s ease;
+}
+
+.admin-neubell-toast-card:hover {
+    background: #f5faff;
+}
+
+.admin-neubell-toast-card:focus-visible,
+.admin-neubell-toast-clear:focus-visible,
+.admin-neubell-toast-expand:focus-visible {
+    outline: 2px solid #409eff;
+    outline-offset: -2px;
+}
+
+.admin-neubell-toast-stack:not(.is-expanded) .admin-neubell-toast-card:first-child {
+    position: relative;
+    z-index: 2;
+}
+
+.admin-neubell-toast-stack:not(.is-expanded) .admin-neubell-toast-card:nth-child(2) {
+    position: relative;
+    z-index: 1;
+    margin-top: -8px;
+    transform: scale(.97);
+    transform-origin: top center;
+}
+
+.admin-neubell-toast-icon {
+    flex: 0 0 20px;
+    color: #409eff;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+}
+
+.admin-neubell-toast-content {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.admin-neubell-toast-content strong,
+.admin-neubell-toast-content small {
+    overflow-wrap: anywhere;
+}
+
+.admin-neubell-toast-content small {
+    color: #606266;
+    line-height: 1.45;
+}
+
+.admin-neubell-toast-arrow {
+    flex: 0 0 auto;
+    color: #909399;
+    line-height: 20px;
+}
+
+.admin-neubell-toast-expand {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    border-top: 0;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, .12);
+}
+
+.admin-neubell-toast-stack.is-expanded .admin-neubell-toast-card:last-child {
+    border-radius: 0;
+}
+
+@media (max-width: 600px) {
+    .admin-neubell-toast-stack {
+        right: 16px;
+        bottom: 48px;
+        width: calc(100vw - 32px);
+    }
 }
 
 .ncf-admin-embedded .el-aside-index,

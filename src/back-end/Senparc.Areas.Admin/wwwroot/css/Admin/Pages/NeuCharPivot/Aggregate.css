@@ -1,0 +1,15 @@
+.pivot-aggregate > .neuchar-page-header .el-input { width: 300px; }
+.aggregate-module-title { display: flex; align-items: center; gap: 10px; width: 100%; }
+.aggregate-module-title > span:last-child { margin-left: auto; color: #909399; font-size: 12px; }
+.aggregate-functions { padding-top: 16px; }
+.aggregate-result { max-height: 55vh; margin: 0; padding: 14px; overflow: auto; overflow-wrap: anywhere; background: #f5f7fa; border-radius: 6px; }
+.aggregate-result-text { white-space: pre-wrap; }
+.aggregate-result-html { color: #303640; line-height: 1.65; }
+.aggregate-result-html > :first-child { margin-top: 0; }
+.aggregate-result-html > :last-child { margin-bottom: 0; }
+.aggregate-result-html a { color: #1677d2; text-decoration: underline; }
+.aggregate-result-html pre, .aggregate-result-html code { font-family: SFMono-Regular, Consolas, "Liberation Mono", monospace; }
+.aggregate-result-html pre { padding: 10px; overflow: auto; white-space: pre-wrap; background: #eef1f5; border-radius: 4px; }
+.aggregate-result-html table { width: 100%; border-spacing: 0; border-collapse: collapse; background: #fff; }
+.aggregate-result-html th, .aggregate-result-html td { padding: 7px 9px; text-align: left; border: 1px solid #dfe5ec; }
+.aggregate-result-html th { background: #eef3f8; }

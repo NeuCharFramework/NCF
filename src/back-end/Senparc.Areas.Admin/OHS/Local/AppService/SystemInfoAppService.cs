@@ -1,12 +1,12 @@
-﻿/*----------------------------------------------------------------
+/*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
   
     文件名：SystemInfoAppService.cs
     文件功能描述：SystemInfoAppService 相关功能实现
-    
-    
+
+
     创建标识：Senparc - 20241028
-    
+
     修改标识：Senparc - 20260705
     修改描述：v0.0.3 新增登录超时配置并补齐多数据库迁移支持
 
@@ -24,6 +24,12 @@
 
     修改标识：Senparc - 20260804
     修改描述：v0.3.0 将后台同步功能统一更名为 NeuBell/纽铃
+
+    修改标识：Senparc - 20260808
+    修改描述：v0.4.0 完善系统信息接口以支持 Host 指标与纽铃测试
+
+    修改标识：Senparc - 20260813
+    修改描述：v0.5.0 集成 NeuCharPivot 与 NeuCharWorkflow 管理能力并优化后台体验
 
 ----------------------------------------------------------------*/
 
@@ -217,7 +223,15 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     await _neuBellPublisher.NotifyChangedAsync(NeuBellTestProvider.ProviderIdValue).ConfigureAwait(false);
                     logger.Append($"已发送 NeuBell 测试提醒，当前待消费数量：{pendingCount}。请观察 Admin Footer 的弹窗和徽标。");
                 }
-                else if (string.Equals(request?.Action, NeuBellTest_Request.ConsumeAction, StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(request?.Action, NeuBellTest_Request.ConsumeOneAction, StringComparison.OrdinalIgnoreCase))
+                {
+                    var consumedCount = _neuBellTestProvider.ConsumeLatest();
+                    await _neuBellPublisher.NotifyChangedAsync(NeuBellTestProvider.ProviderIdValue).ConfigureAwait(false);
+                    logger.Append(consumedCount > 0
+                        ? "已消费最新 1 条 NeuBell 测试提醒，Footer 徽标将减少。"
+                        : "当前没有可消费的 NeuBell 测试提醒。" );
+                }
+                else if (string.Equals(request?.Action, NeuBellTest_Request.ConsumeAllAction, StringComparison.OrdinalIgnoreCase))
                 {
                     var consumedCount = _neuBellTestProvider.ConsumeAll();
                     await _neuBellPublisher.NotifyChangedAsync(NeuBellTestProvider.ProviderIdValue).ConfigureAwait(false);
@@ -225,7 +239,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 }
                 else
                 {
-                    logger.Append("不支持的操作，请选择“发送提醒”或“消费提醒”。");
+                    logger.Append("不支持的操作，请选择“发送提醒”、“消费最新一条”或“消费全部提醒”。");
                 }
 
                 return logger.GetLogs();

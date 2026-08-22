@@ -3,10 +3,10 @@
   
     文件名：Register.cs
     文件功能描述：模块注册与初始化逻辑
-    
-    
+
+
     创建标识：Senparc - 20241028
-    
+
     修改标识：Senparc - 20260702
     修改描述：v0.11.0-preview2 同步 master/main 基线范围内改动并完成递归依赖版本处理
 
@@ -28,6 +28,15 @@
     修改标识：Senparc - 20260804
     修改描述：v0.3.0 将后台同步功能统一更名为 NeuBell/纽铃
 
+    修改标识：Senparc - 20260808
+    修改描述：v0.4.0 注册 Host 指标采集、换票签发与纽铃示例服务
+
+    修改标识：Senparc - 20260812
+    修改描述：对齐 Admin Cookie 默认 Scheme，失效会话引导登录而非 403
+
+    修改标识：Senparc - 20260813
+    修改描述：v0.5.0 集成 NeuCharPivot 与 NeuCharWorkflow 管理能力并优化后台体验
+
 ----------------------------------------------------------------*/
 
 /* 
@@ -37,9 +46,11 @@
  * 如果需要学习扩展模块，请参考 【Senparc.ExtensionAreaTemplate】 项目的 Register.cs 文件！
  */
 
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
@@ -67,6 +78,7 @@ using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Shared.Abstractions.Security;
+using Senparc.Ncf.Shared.Abstractions.ChatAgent;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.XncfBase;
@@ -209,10 +221,28 @@ namespace Senparc.Areas.Admin
             services.AddScoped<IAdminChatSessionRepository, AdminChatSessionRepository>();
             services.AddScoped<IAdminChatMessageRepository, AdminChatMessageRepository>();
             services.AddScoped<IAdminChatSessionModuleRepository, AdminChatSessionModuleRepository>();
+            services.AddScoped<IAdminChatSessionWorkflowRepository, AdminChatSessionWorkflowRepository>();
             services.AddScoped<AdminChatSessionService>();
             services.AddScoped<AdminChatMessageService>();
             services.AddScoped<AdminChatSessionModuleService>();
+            services.AddScoped<AdminChatSessionWorkflowService>();
             services.AddScoped<AdminChatAiService>();
+
+            // ChatAgent / NeuCharPivot：系统表、声明式 UI、Function 安全执行和 EventBus 协调。
+            services.AddScoped<INeuCharPivotConfigurationRepository, NeuCharPivotConfigurationRepository>();
+            services.AddScoped<INeuCharPivotFunctionRepository, NeuCharPivotFunctionRepository>();
+            services.AddScoped<INeuCharPivotLoopTaskRepository, NeuCharPivotLoopTaskRepository>();
+            services.AddScoped<INeuCharExecutionLogRepository, NeuCharExecutionLogRepository>();
+            services.AddScoped<NeuCharPivotConfigurationService>();
+            services.AddScoped<NeuCharPivotFunctionService>();
+            services.AddScoped<NeuCharPivotLoopTaskService>();
+            services.AddScoped<NeuCharExecutionLogService>();
+            services.AddScoped<NeuCharFunctionService>();
+            services.AddScoped<NeuCharPivotService>();
+            services.AddDataProtection();
+            services.AddScoped<NeuCharParameterProtector>();
+            services.AddScoped<ChatAgentNeuCharPivotComposer>();
+            services.AddHostedService<NeuCharPivotLoopTaskHostedService>();
 
             // Admin 首页 Host 实时指标采样器。Singleton 仅保存计算速率所需的上一帧计数器，
             // 不保存历史记录，也不写入任何缓存。
@@ -229,6 +259,9 @@ namespace Senparc.Areas.Admin
             services.AddScoped<INeuBellModuleAvailabilityService, NeuBellModuleAvailabilityService>();
             services.AddScoped<NeuBellProviderCatalog>();
             services.AddScoped<NeuBellSnapshotService>();
+            services.AddSingleton<NeuCharPivotNeuBellProvider>();
+            services.AddSingleton<Senparc.Ncf.Shared.Abstractions.NeuBell.INeuBellProvider>(
+                serviceProvider => serviceProvider.GetRequiredService<NeuCharPivotNeuBellProvider>());
 
             return base.AddXncfModule(services, configuration, env);
         }
@@ -316,8 +349,16 @@ namespace Senparc.Areas.Admin
 
             //鉴权配置
             //添加基于Cookie的权限验证：https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-2.1&tabs=aspnetcore2x
+            // 默认 Scheme 必须与 AddCookie 注册名一致（NcfAdminAuthorizeScheme），
+            // 否则重启后旧 Cookie / 未带 AdminMember 声明时容易落到 AccessDenied(403)。
             builder.Services
-                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddAuthentication(options =>
+                {
+                    options.DefaultScheme = AdminAuthorizeAttribute.AuthenticationScheme;
+                    options.DefaultAuthenticateScheme = AdminAuthorizeAttribute.AuthenticationScheme;
+                    options.DefaultChallengeScheme = AdminAuthorizeAttribute.AuthenticationScheme;
+                    options.DefaultForbidScheme = AdminAuthorizeAttribute.AuthenticationScheme;
+                })
                 .AddCookie(AdminAuthorizeAttribute.AuthenticationScheme, options =>
                 {
                     options.AccessDeniedPath = "/Admin/Forbidden/";
@@ -325,8 +366,11 @@ namespace Senparc.Areas.Admin
                     // The authentication cookie is never a browser-readable API
                     // value. Keep it out of document.cookie to limit XSS impact.
                     options.Cookie.HttpOnly = true;
+                    options.Cookie.IsEssential = true;
                     options.Cookie.SameSite = SameSiteMode.Strict;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    // Keep Secure cookies on HTTPS while allowing local HTTP hosts
+                    // (for example Safari/WebKit on http://localhost) to persist login.
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                     options.SlidingExpiration = true;
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(AdminAuthConfig.DefaultAdminWebLoginExpireMinutes);
                     options.Events = new CookieAuthenticationEvents
@@ -338,6 +382,53 @@ namespace Senparc.Areas.Admin
                             {
                                 context.ShouldRenew = false;
                             }
+                            return Task.CompletedTask;
+                        },
+                        OnValidatePrincipal = async context =>
+                        {
+                            // 缺少管理员声明的会话视为无效，清除 Cookie 后走重新登录。
+                            if (context.Principal?.Identity?.IsAuthenticated != true)
+                            {
+                                return;
+                            }
+
+                            if (!context.Principal.HasClaim(claim =>
+                                    claim.Type == NcfAuthorizationPolicyNames.AdminMemberClaim))
+                            {
+                                context.RejectPrincipal();
+                                await context.HttpContext.SignOutAsync(AdminAuthorizeAttribute.AuthenticationScheme);
+                            }
+                        },
+                        OnRedirectToAccessDenied = context =>
+                        {
+                            // 未形成有效管理员身份时不应显示 403，应 Challenge 到登录页。
+                            var principal = context.HttpContext.User;
+                            var isAdmin = principal?.Identity?.IsAuthenticated == true
+                                && principal.HasClaim(claim =>
+                                    claim.Type == NcfAuthorizationPolicyNames.AdminMemberClaim);
+                            if (!isAdmin)
+                            {
+                                var returnUrl = $"{context.Request.PathBase}{context.Request.Path}{context.Request.QueryString}";
+                                var loginPath = options.LoginPath.HasValue ? options.LoginPath.Value : "/Admin/Login/";
+                                context.Response.Redirect(
+                                    $"{loginPath}?ReturnUrl={Uri.EscapeDataString(returnUrl)}");
+                                return Task.CompletedTask;
+                            }
+
+                            // 已登录但无权限：保持 Forbidden / 403 行为。
+                            if (string.Equals(
+                                    context.Request.Headers.XRequestedWith,
+                                    "XMLHttpRequest",
+                                    StringComparison.OrdinalIgnoreCase))
+                            {
+                                context.Response.Headers.Location = context.RedirectUri;
+                                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                            }
+                            else
+                            {
+                                context.Response.Redirect(context.RedirectUri);
+                            }
+
                             return Task.CompletedTask;
                         }
                     };
@@ -387,6 +478,7 @@ namespace Senparc.Areas.Admin
 
                 options.Conventions.AuthorizePage("/", NcfAuthorizationPolicyNames.AdminOnly);//必须登录
                 options.Conventions.AuthorizePage("/AdminChat/Chat", NcfAuthorizationPolicyNames.AdminOnly);//聊天页面必须登录
+                options.Conventions.AuthorizePage("/NeuCharPivot/Aggregate", NcfAuthorizationPolicyNames.AdminOnly);
                 options.Conventions.AllowAnonymousToPage("/Login");//允许匿名
 
                 //更多：https://learn.microsoft.com/en-us/aspnet/core/security/authorization/razor-pages-authorization?view=aspnetcore-8.0

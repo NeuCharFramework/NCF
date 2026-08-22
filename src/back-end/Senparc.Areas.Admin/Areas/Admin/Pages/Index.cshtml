@@ -6,7 +6,7 @@
     Layout = "_Layout_Vue";
 }
 @section style {
-    <link rel="stylesheet" href="~/css/Admin/Pages/AdminChat/ChatLauncher.css" />
+    <link rel="stylesheet" href="~/css/Admin/Pages/AdminChat/ChatLauncher.css" asp-append-version="true" />
     <style>
         #home-header .el-main {
             padding: 20px 10px 0px 10px;
@@ -122,6 +122,102 @@
             line-height: 2.1;
         }
 
+        .host-metric-readings {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            align-items: baseline;
+            gap: 14px;
+            min-height: 38px;
+        }
+
+        .host-metric-reading {
+            display: flex;
+            align-items: baseline;
+            min-width: 0;
+            gap: 7px;
+            white-space: nowrap;
+        }
+
+        .host-metric-reading + .host-metric-reading {
+            justify-content: flex-end;
+        }
+
+        .host-metric-scope {
+            display: inline-flex;
+            align-items: center;
+            flex: 0 0 auto;
+            gap: 5px;
+            color: #909399;
+            font-size: 12px;
+        }
+
+        .host-metric-scope-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+        }
+
+        .host-metric-scope-dot.cpu-host {
+            background: #8c52ff;
+        }
+
+        .host-metric-scope-dot.memory-host {
+            background: #67c23a;
+        }
+
+        .host-metric-scope-dot.web-process {
+            background: #00a6a6;
+        }
+
+        .host-metric-reading-value {
+            overflow: hidden;
+            color: #303133;
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.35;
+            text-overflow: ellipsis;
+        }
+
+        .host-metric-reading.web-process .host-metric-reading-value {
+            color: #008f8f;
+            font-size: 18px;
+        }
+
+        .host-comparison-bar {
+            position: relative;
+            height: 9px;
+            margin-top: 11px;
+            overflow: hidden;
+            border-radius: 5px;
+            background: #ebeef5;
+        }
+
+        .host-comparison-bar-fill {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            transition: width 0.35s ease;
+        }
+
+        .host-comparison-bar-fill.cpu-host {
+            background: linear-gradient(90deg, #a172ff 0%, #8c52ff 100%);
+        }
+
+        .host-comparison-bar-fill.memory-host {
+            background: linear-gradient(90deg, #85ce61 0%, #67c23a 100%);
+        }
+
+        .host-comparison-bar-fill.web-process {
+            z-index: 1;
+            background: #00a6a6;
+            box-shadow: 1px 0 0 rgba(255, 255, 255, 0.75);
+        }
+
+        .host-comparison-bar-fill.web-process.has-value {
+            min-width: 3px;
+        }
+
         .host-network-down {
             color: #409eff;
         }
@@ -135,10 +231,6 @@
             color: #909399;
             font-size: 12px;
             line-height: 1.55;
-        }
-
-        .host-metric-item .el-progress {
-            margin-top: 10px;
         }
 
         .host-metrics-chart {
@@ -161,6 +253,157 @@
                 gap: 0;
                 line-height: 1.6;
             }
+        }
+
+        .agents-overview-section {
+            margin: 20px 10px 0;
+        }
+
+        .agents-overview-card {
+            overflow: hidden;
+            border: 1px solid #e7e0ff;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #fbfaff 0%, #ffffff 58%, #f7fffc 100%);
+        }
+
+        .agents-overview-header,
+        .agents-overview-title,
+        .agents-overview-actions,
+        .agents-overview-live,
+        .agents-overview-status-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .agents-overview-header {
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .agents-overview-title {
+            gap: 10px;
+            color: #303133;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .agents-overview-title .fa {
+            color: #7c3aed;
+        }
+
+        .agents-overview-actions {
+            gap: 12px;
+        }
+
+        .agents-overview-live {
+            gap: 6px;
+            color: #909399;
+            font-size: 12px;
+        }
+
+        .agents-overview-live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #67c23a;
+            box-shadow: 0 0 0 rgba(103, 194, 58, .4);
+            animation: host-live-pulse 1.8s infinite;
+        }
+
+        .agents-overview-metric {
+            min-height: 132px;
+            padding: 17px;
+            margin-bottom: 14px;
+            border: 1px solid #ece9f8;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, .82);
+            box-sizing: border-box;
+        }
+
+        .agents-overview-metric.is-published {
+            border-color: #f9ddb1;
+            background: linear-gradient(145deg, #fffdfa 0%, #fff8e9 100%);
+        }
+
+        .agents-overview-metric.is-remote {
+            border-color: #c7e9e2;
+            background: linear-gradient(145deg, #fbfffe 0%, #effbf8 100%);
+        }
+
+        .agents-overview-metric.is-group {
+            border-color: #dce8fb;
+            background: linear-gradient(145deg, #fcfdff 0%, #f0f6ff 100%);
+        }
+
+        .agents-overview-metric-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            color: #606266;
+            font-size: 14px;
+        }
+
+        .agents-overview-metric-label .fa {
+            color: #8c52ff;
+            font-size: 18px;
+        }
+
+        .agents-overview-metric.is-published .agents-overview-metric-label .fa { color: #e6a23c; }
+        .agents-overview-metric.is-remote .agents-overview-metric-label .fa { color: #0f9d8a; }
+        .agents-overview-metric.is-group .agents-overview-metric-label .fa { color: #409eff; }
+
+        .agents-overview-metric-value {
+            margin: 9px 0 5px;
+            color: #303133;
+            font-size: 30px;
+            font-weight: 650;
+            line-height: 1.15;
+        }
+
+        .agents-overview-metric-meta {
+            color: #909399;
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        .agents-overview-status-strip {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #312e4d;
+            color: #f5f3ff;
+        }
+
+        .agents-overview-status-item {
+            min-width: 0;
+            gap: 9px;
+            padding: 3px 6px;
+        }
+
+        .agents-overview-status-item .fa {
+            color: #c4b5fd;
+        }
+
+        .agents-overview-status-value {
+            display: block;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.1;
+        }
+
+        .agents-overview-status-label {
+            display: block;
+            margin-top: 2px;
+            overflow: hidden;
+            color: #d8d4fe;
+            font-size: 12px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .xncf-stat-item {
@@ -575,17 +818,6 @@
             width: 100%;
         }
 
-        .module-tag {
-            font-size: 14px;
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.95);
-            color: #333;
-        }
-
-            .module-tag .fa {
-                margin-right: 5px;
-            }
-
         #xncf-modules-area .xncf-item.dragging {
             opacity: 0.5;
         }
@@ -607,6 +839,87 @@
         #xncf-modules-area .xncf-item[draggable="true"]:active {
             cursor: grabbing;
         }
+
+        .quick-ai-entrance {
+            margin: 20px 10px 30px;
+        }
+
+        .quick-ai-card {
+            border: 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .quick-ai-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: #fff;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .quick-ai-content:focus-visible {
+            border-radius: 8px;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, .8);
+        }
+
+        .quick-ai-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, .16);
+            font-size: 25px;
+        }
+
+        .quick-ai-copy {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .quick-ai-title {
+            margin: 0 0 4px;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .quick-ai-description {
+            margin: 0;
+            color: rgba(255, 255, 255, .88);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        @@media screen and (max-width: 768px) {
+            .agents-overview-section,
+            .quick-ai-entrance {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .agents-overview-status-strip {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .agents-overview-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .quick-ai-content {
+                align-items: flex-start;
+            }
+
+            .quick-ai-content .el-button {
+                align-self: flex-end;
+            }
+        }
     </style>
 }
 
@@ -625,7 +938,7 @@
                     <el-row :gutter="10">
                         <!-- 第一行 -->
                         <el-col :span="12">
-                            <a href="~/Admin/XncfModule/Index">
+                            <a href="~/Admin/XncfModule/Index?tab=installed">
                                 <div class="grid-content xncf-stat-item">
                                     <span class="count">{{xncfStat.installedXncfCount || 0}}</span>
                                     <div class="icon">
@@ -636,7 +949,7 @@
                             </a>
                         </el-col>
                         <el-col :span="12">
-                            <a href="~/Admin/XncfModule/Index">
+                            <a href="~/Admin/XncfModule/Index?tab=updates">
                                 <div class="grid-content xncf-stat-item">
                                     <span class="count">{{xncfStat.updateVersionXncfCount || 0}}</span>
                                     <div class="icon">
@@ -648,7 +961,7 @@
                         </el-col>
                         <!-- 第二行 -->
                         <el-col :span="12">
-                            <a href="~/Admin/XncfModule/Index">
+                            <a href="~/Admin/XncfModule/Index?tab=new">
                                 <div class="grid-content xncf-stat-item">
                                     <span class="count">{{xncfStat.newXncfCount || 0}}</span>
                                     <div class="icon">
@@ -659,7 +972,7 @@
                             </a>
                         </el-col>
                         <el-col :span="12">
-                            <a href="~/Admin/XncfModule/Index">
+                            <a href="~/Admin/XncfModule/Index?tab=installed">
                                 <div class="grid-content xncf-stat-item">
                                     <span class="count">{{xncfStat.missingXncfCount || 0}}</span>
                                     <div class="icon">
@@ -692,6 +1005,77 @@
     </el-container>
 </div>
 
+<!-- AgentsManager 已安装并启用时才展示；数据由模块的轻量概览接口提供。 -->
+<section v-if="agentsOverview.available" class="agents-overview-section">
+    <el-card class="agents-overview-card" v-loading="agentsOverviewLoading">
+        <div slot="header" class="agents-overview-header">
+            <div class="agents-overview-title">
+                <i class="fa fa-sitemap"></i>
+                <span>@AR["Admin.Home.AgentsOverview"]</span>
+            </div>
+            <div class="agents-overview-actions">
+                <span class="agents-overview-live">
+                    <i class="agents-overview-live-dot"></i>
+                    @AR["Admin.Home.AgentsOverviewLive"] {{ agentsOverviewUpdatedText() }}
+                </span>
+                <el-button size="mini" type="primary" plain icon="el-icon-s-operation" @@click="navigateToAgentsManager">
+                    @AR["Admin.Home.AgentsManage"]
+                </el-button>
+            </div>
+        </div>
+
+        <el-row :gutter="14">
+            <el-col :xs="24" :sm="12" :lg="6">
+                <div class="agents-overview-metric">
+                    <div class="agents-overview-metric-label"><span>@AR["Admin.Home.AgentsTotal"]</span><i class="fa fa-user-circle-o"></i></div>
+                    <div class="agents-overview-metric-value">{{ agentsTotal() }}</div>
+                    <div class="agents-overview-metric-meta">
+                        @AR["Admin.Home.AgentsLocal"] {{ agentsOverview.localAgentCount }} · @AR["Admin.Home.AgentsRemoteA2A"] {{ agentsOverview.remoteA2AAgentCount }}<br />
+                        @AR["Admin.Home.AgentsEnabled"] {{ agentsEnabledTotal() }} · @AR["Admin.Home.AgentsDisabled"] {{ agentsDisabledTotal() }}
+                    </div>
+                </div>
+            </el-col>
+            <el-col :xs="24" :sm="12" :lg="6">
+                <div class="agents-overview-metric is-published">
+                    <div class="agents-overview-metric-label"><span>@AR["Admin.Home.AgentsPublishedA2A"]</span><i class="fa fa-share-alt"></i></div>
+                    <div class="agents-overview-metric-value">{{ agentsOverview.publishedA2AAgentEnabledCount }}</div>
+                    <div class="agents-overview-metric-meta">
+                        @AR["Admin.Home.AgentsConfigured"] {{ agentsOverview.publishedA2AAgentCount }}<br />
+                        @AR["Admin.Home.AgentsDisabled"] {{ disabledCount(agentsOverview.publishedA2AAgentCount, agentsOverview.publishedA2AAgentEnabledCount) }}
+                    </div>
+                </div>
+            </el-col>
+            <el-col :xs="24" :sm="12" :lg="6">
+                <div class="agents-overview-metric is-remote">
+                    <div class="agents-overview-metric-label"><span>@AR["Admin.Home.AgentsRemoteA2A"]</span><i class="fa fa-exchange"></i></div>
+                    <div class="agents-overview-metric-value">{{ agentsOverview.remoteA2AAgentCount }}</div>
+                    <div class="agents-overview-metric-meta">
+                        @AR["Admin.Home.AgentsEnabled"] {{ agentsOverview.remoteA2AAgentEnabledCount }} · @AR["Admin.Home.AgentsDisabled"] {{ disabledCount(agentsOverview.remoteA2AAgentCount, agentsOverview.remoteA2AAgentEnabledCount) }}<br />
+                        @AR["Admin.Home.AgentsActive"] {{ agentsOverview.activeRemoteA2AAgentCount }}
+                    </div>
+                </div>
+            </el-col>
+            <el-col :xs="24" :sm="12" :lg="6">
+                <div class="agents-overview-metric is-group">
+                    <div class="agents-overview-metric-label"><span>@AR["Admin.Home.AgentsGroups"]</span><i class="fa fa-users"></i></div>
+                    <div class="agents-overview-metric-value">{{ agentsOverview.groupCount }}</div>
+                    <div class="agents-overview-metric-meta">
+                        @AR["Admin.Home.AgentsEnabled"] {{ agentsOverview.groupEnabledCount }} · @AR["Admin.Home.AgentsDisabled"] {{ disabledCount(agentsOverview.groupCount, agentsOverview.groupEnabledCount) }}<br />
+                        @AR["Admin.Home.AgentsActive"] {{ agentsOverview.activeGroupCount }} · @AR["Admin.Home.AgentsChatting"] {{ agentsOverview.chattingGroupCount }}
+                    </div>
+                </div>
+            </el-col>
+        </el-row>
+
+        <div class="agents-overview-status-strip">
+            <div class="agents-overview-status-item"><i class="fa fa-bolt"></i><span><strong class="agents-overview-status-value">{{ agentsActiveTotal() }}</strong><small class="agents-overview-status-label">@AR["Admin.Home.AgentsActive"]</small></span></div>
+            <div class="agents-overview-status-item"><i class="fa fa-comments"></i><span><strong class="agents-overview-status-value">{{ agentsChattingTotal() }}</strong><small class="agents-overview-status-label">@AR["Admin.Home.AgentsChatting"]</small></span></div>
+            <div class="agents-overview-status-item"><i class="fa fa-tasks"></i><span><strong class="agents-overview-status-value">{{ agentsOverview.activeTaskCount }}</strong><small class="agents-overview-status-label">@AR["Admin.Home.AgentsActiveTasks"]</small></span></div>
+            <div class="agents-overview-status-item"><i class="fa fa-pause-circle-o"></i><span><strong class="agents-overview-status-value">{{ agentsOverview.waitingOrPausedTaskCount }}</strong><small class="agents-overview-status-label">@AR["Admin.Home.AgentsWaitingOrPaused"]</small></span></div>
+        </div>
+    </el-card>
+</section>
+
 <!-- 当前 Host 实时指标：只在浏览器内保留最近 30 个采样点，不写入服务端缓存 -->
 <div class="host-metrics-section">
     <el-card class="host-metrics-card" v-loading="hostMetricsLoading && !hostMetrics.sampledAt">
@@ -718,32 +1102,63 @@
         </div>
 
         <el-row :gutter="14">
-            <el-col :xs="24" :sm="12" :lg="6">
+            <el-col :xs="24" :sm="12" :lg="8">
                 <div class="host-metric-item">
                     <div class="host-metric-label">
-                        <span>@AR["Admin.Home.HostCpu"]</span>
+                        <span>CPU</span>
                         <i class="fa fa-microchip"></i>
                     </div>
-                    <div class="host-metric-value">{{formatPercent(hostMetrics.cpuUsagePercent)}}</div>
-                    <el-progress :percentage="normalizePercent(hostMetrics.cpuUsagePercent)"
-                                 :show-text="false"
-                                 :stroke-width="7"
-                                 color="#8c52ff"></el-progress>
-                    <div class="host-metric-detail">@AR["Admin.Home.HostCpuDetail"]</div>
+                    <div class="host-metric-readings">
+                        <div class="host-metric-reading">
+                            <span class="host-metric-scope">
+                                <i class="host-metric-scope-dot cpu-host"></i>@AR["Admin.Home.HostScope"]
+                            </span>
+                            <span class="host-metric-reading-value">{{formatPercent(hostMetrics.cpuUsagePercent)}}</span>
+                        </div>
+                        <div class="host-metric-reading web-process">
+                            <span class="host-metric-scope">
+                                <i class="host-metric-scope-dot web-process"></i>@AR["Admin.Home.WebScope"]
+                            </span>
+                            <span class="host-metric-reading-value">{{formatPercent(hostMetrics.processCpuUsagePercent)}}</span>
+                        </div>
+                    </div>
+                    <div class="host-comparison-bar">
+                        <span class="host-comparison-bar-fill cpu-host"
+                              :style="{ width: barWidth(hostMetrics.cpuUsagePercent) }"></span>
+                        <span class="host-comparison-bar-fill web-process"
+                              :class="{ 'has-value': boundedSubsetPercent(hostMetrics.processCpuUsagePercent, hostMetrics.cpuUsagePercent) > 0 }"
+                              :style="{ width: boundedSubsetWidth(hostMetrics.processCpuUsagePercent, hostMetrics.cpuUsagePercent) }"></span>
+                    </div>
                 </div>
             </el-col>
 
-            <el-col :xs="24" :sm="12" :lg="6">
+            <el-col :xs="24" :sm="12" :lg="8">
                 <div class="host-metric-item">
                     <div class="host-metric-label">
                         <span>@AR["Admin.Home.HostMemory"]</span>
                         <i class="fa fa-hdd-o"></i>
                     </div>
-                    <div class="host-metric-value">{{formatPercent(hostMetrics.memoryUsagePercent)}}</div>
-                    <el-progress :percentage="normalizePercent(hostMetrics.memoryUsagePercent)"
-                                 :show-text="false"
-                                 :stroke-width="7"
-                                 color="#67c23a"></el-progress>
+                    <div class="host-metric-readings">
+                        <div class="host-metric-reading">
+                            <span class="host-metric-scope">
+                                <i class="host-metric-scope-dot memory-host"></i>@AR["Admin.Home.HostScope"]
+                            </span>
+                            <span class="host-metric-reading-value">{{formatPercent(hostMetrics.memoryUsagePercent)}}</span>
+                        </div>
+                        <div class="host-metric-reading web-process">
+                            <span class="host-metric-scope">
+                                <i class="host-metric-scope-dot web-process"></i>@AR["Admin.Home.WebScope"]
+                            </span>
+                            <span class="host-metric-reading-value">{{formatBytes(hostMetrics.processWorkingSetBytes)}}</span>
+                        </div>
+                    </div>
+                    <div class="host-comparison-bar">
+                        <span class="host-comparison-bar-fill memory-host"
+                              :style="{ width: barWidth(hostMetrics.memoryUsagePercent) }"></span>
+                        <span class="host-comparison-bar-fill web-process"
+                              :class="{ 'has-value': processMemoryPercent() > 0 }"
+                              :style="{ width: boundedSubsetWidth(processMemoryPercent(), hostMetrics.memoryUsagePercent) }"></span>
+                    </div>
                     <div class="host-metric-detail">
                         {{formatBytes(hostMetrics.memoryUsedBytes)}} / {{formatBytes(hostMetrics.memoryTotalBytes)}}
                         · @AR["Admin.Home.HostMemoryAvailable"] {{formatBytes(hostMetrics.memoryAvailableBytes)}}
@@ -751,7 +1166,7 @@
                 </div>
             </el-col>
 
-            <el-col :xs="24" :sm="12" :lg="6">
+            <el-col :xs="24" :sm="24" :lg="8">
                 <div class="host-metric-item">
                     <div class="host-metric-label">
                         <span>@AR["Admin.Home.HostNetwork"]</span>
@@ -768,98 +1183,25 @@
                     </div>
                 </div>
             </el-col>
-
-            <el-col :xs="24" :sm="12" :lg="6">
-                <div class="host-metric-item">
-                    <div class="host-metric-label">
-                        <span>@AR["Admin.Home.HostProcess"]</span>
-                        <i class="fa fa-cogs"></i>
-                    </div>
-                    <div class="host-metric-value">{{formatBytes(hostMetrics.processWorkingSetBytes)}}</div>
-                    <div class="host-metric-detail">
-                        @AR["Admin.Home.HostProcessWorkingSet"]<br />
-                        @AR["Admin.Home.HostProcessUptime"] {{formatDuration(hostMetrics.applicationUptimeSeconds)}}
-                    </div>
-                </div>
-            </el-col>
         </el-row>
 
         <div id="hostMetricsChart" class="host-metrics-chart"></div>
     </el-card>
 </div>
 
-<!-- AI 对话入口 -->
-<div id="ai-chat-entrance" style="margin-top: 30px; margin-bottom: 30px;">
-    <el-card class="box-card chat-entrance-card">
-        <div class="chat-entrance-container">
-            <div class="chat-entrance-header">
-                <div class="chat-entrance-icon">
-                    <i class="fa fa-comments"></i>
-                </div>
-                <div class="chat-entrance-content">
-                    <h3 class="chat-entrance-title">
-                        <i class="fa fa-magic"></i> @AR["Admin.Home.AiTitle"]
-                    </h3>
-                    <p class="chat-entrance-subtitle">@AR["Admin.Home.AiSubtitle"]</p>
-                </div>
+<!-- AI 对话使用 Footer 的弹出会话，首页仅保留紧凑入口，避免挤占运行概览。 -->
+<section id="ai-chat-entrance" class="quick-ai-entrance">
+    <el-card class="quick-ai-card" :body-style="{ padding: '18px 22px' }">
+        <div class="quick-ai-content" role="button" tabindex="0" @@click="openFooterAi" @@keydown.enter.prevent="openFooterAi" @@keydown.space.prevent="openFooterAi">
+            <span class="quick-ai-icon"><i class="fa fa-comments"></i></span>
+            <div class="quick-ai-copy">
+                <h3 class="quick-ai-title">@AR["Admin.Home.AiTitle"]</h3>
+                <p class="quick-ai-description">@AR["Admin.Home.AiQuickDescription"]</p>
             </div>
-            
-            <div class="chat-entrance-input-wrapper">
-                <el-input
-                    type="textarea"
-                    v-model="chatInputText"
-                    placeholder="@AR["Admin.Home.AiPlaceholder"]"
-                    :rows="4"
-                    :autosize="{ minRows: 4, maxRows: 8 }"
-                    @@keydown.native="handleLauncherInputKeydown"
-                    class="chat-entrance-input"
-                    resize="none">
-                </el-input>
-                <el-button 
-                    type="primary"
-                    size="medium"
-                    icon="el-icon-s-promotion" 
-                    @@click="startChatSession"
-                    :disabled="!chatInputText || chatInputText.trim().length === 0"
-                    :loading="isCreatingSession"
-                    class="chat-send-button">
-                    @AR["Admin.Home.StartConversation"]
-                </el-button>
-            </div>
-
-            <div class="chat-entrance-tips">
-                <span class="tip-item"><i class="fa fa-lightbulb-o"></i> @AR["Admin.Home.SupportMultiTurn"]</span>
-                <span class="tip-item"><i class="fa fa-cube"></i> @AR["Admin.Home.AddModulesContext"]</span>
-                <span class="tip-item"><i class="fa fa-history"></i> @AR["Admin.Home.SaveHistory"]</span>
-            </div>
-
-            <div class="chat-module-picker">
-                <div class="chat-module-picker-header">
-                    <span class="chat-module-picker-title">@AR["Admin.Home.ReferenceModules"]</span>
-                    <div class="chat-module-picker-actions">
-                        <el-button size="mini" type="primary" icon="el-icon-plus" @@click="openModuleSelector">@AR["Admin.Home.AddReferenceModule"]</el-button>
-                        <el-button size="mini" @@click="clearSelectedModules" v-if="selectedModules.length > 0">@AR["Admin.Home.Clear"]</el-button>
-                    </div>
-                </div>
-
-                <div v-if="selectedModules.length > 0" class="chat-module-selected-list">
-                    <el-tag
-                        v-for="module in selectedModules"
-                        :key="module.uid"
-                        closable
-                        @@close="removeModule(module.uid)"
-                        type="info"
-                        class="module-tag">
-                        <i :class="module.icon"></i> {{module.name}}
-                    </el-tag>
-                </div>
-                <div v-else class="chat-module-selected-empty">@AR["Admin.Home.EmptyReference"]</div>
-            </div>
-
-            @await Html.PartialAsync("~/Areas/Admin/Pages/Shared/_ChatModuleSelectorDialog.cshtml")
+            <el-button type="primary" plain icon="el-icon-chat-dot-round" @@click.stop="openFooterAi">@AR["Admin.Home.AiQuickDialog"]</el-button>
         </div>
     </el-card>
-</div>
+</section>
 
 <!-- 功能模块 -->
 <div>
@@ -923,6 +1265,5 @@
 
 @section scripts {
     <script src="~/lib/echarts/dist/echarts.js"></script>
-    <script src="~/js/Admin/Pages/AdminChat/ChatLauncherMixin.js"></script>
-    <script src="~/js/Admin/Pages/Index/Index.js"></script>
+    <script src="~/js/Admin/Pages/Index/Index.js" asp-append-version="true"></script>
 }
