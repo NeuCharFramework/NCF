@@ -32,6 +32,10 @@ const runCoordinatorPath = path.resolve(__dirname,
     '../../../../../src/Extensions/Senparc.Xncf.NeuCharWorkflow/Domain/Services/NeuCharWorkflowRunCoordinator.cs');
 const workflowEnginePath = path.resolve(__dirname,
     '../../../../../src/Extensions/Senparc.Xncf.NeuCharWorkflow/Domain/Services/NeuCharWorkflowEngine.cs');
+const agentsWorkflowObjectProviderPath = path.resolve(__dirname,
+    '../../../../../src/Extensions/Senparc.Xncf.AgentsManager/Domain/Services/AgentsWorkflowObjectProvider.cs');
+const workflowObjectContractsPath = path.resolve(__dirname,
+    '../../../../../src/Extensions/Senparc.Xncf.NeuCharWorkflow.Abstractions/Workflow/WorkflowObjectContracts.cs');
 const adminAxiosPath = path.resolve(__dirname,
     '../../../Senparc.Areas.Admin/wwwroot/js/Admin/axios.js');
 const moduleFunctionPagePath = path.resolve(__dirname,
@@ -203,6 +207,12 @@ assert.match(registeredVueComponents['workflow-rich-text-input'].template, /@mou
     'Formula editor controls must keep their pointer completion event away from the canvas handler.');
 assert.match(workflowPageMarkup, /@@mouseup\.native\.stop/,
     'Pointer events inside the formula dialog must not reach the global canvas pointer handler.');
+assert.ok(workflowScript.includes("name: 'toArray'") && workflowScript.includes("name: 'flatten'"),
+    'The formula picker should expose the shared array helpers.');
+assert.ok(workflowPageMarkup.includes('template-editor-formulas') &&
+    workflowPageMarkup.includes('insertTemplateFormula(formula)') &&
+    workflowPageMarkup.includes('openCodeAssignmentTemplateEditor'),
+    'Safe Code assignments should reuse the common formula dialog and its quick-insert catalog.');
 assert.ok(fs.readFileSync(scriptPath, 'utf8').includes('subWorkflowTargets()'),
     'The designer must provide valid target workflows to the sub-workflow selector.');
 assert.ok(fs.readFileSync(scriptPath, 'utf8').includes('openSubWorkflow(workflowId)'),
@@ -1044,6 +1054,20 @@ vueOptions.methods.setSelectedNodes.call(unchangedSelectionContext, [selectionNo
 assert.strictEqual(unchangedSelectionContext.selectedNodeIds, unchangedSelectionIds,
     'Selecting the already-selected node must not replace the reactive selection array.');
 
+const editingNode = { id: 'editing-node', type: 'delay' };
+const editingNodeContext = {
+    editing: true,
+    editingLocked: false,
+    inspectorCollapsed: false,
+    selectedNodeId: 'editing-node'
+};
+assert.strictEqual(vueOptions.methods.isNodeBeingEdited.call(editingNodeContext, editingNode), true,
+    'The current inspector target should expose the active editing state on the canvas node.');
+assert.strictEqual(vueOptions.methods.isNodeBeingEdited.call({ ...editingNodeContext, inspectorCollapsed: true }, editingNode), false,
+    'A selected node should not be marked as being edited while the inspector is collapsed.');
+assert.strictEqual(vueOptions.methods.isNodeBeingEdited.call({ ...editingNodeContext, selectedNodeId: 'other-node' }, editingNode), false,
+    'Only the node currently shown in the inspector should expose the active editing state.');
+
 const formulaPointerContext = {
     canvasPan: { active: false, moved: false },
     selectionBox: { active: true, startX: 10, startY: 10, endX: 20, endY: 20, additive: false },
@@ -1070,7 +1094,8 @@ const formulaOpenContext = {
     clearSelectionBox: vueOptions.methods.clearSelectionBox,
     clearCanvasPointerInteraction: vueOptions.methods.clearCanvasPointerInteraction,
     isBinding() { return false; },
-    templateFor() { return null; }
+    templateFor() { return null; },
+    openTemplateEditorForValue: vueOptions.methods.openTemplateEditorForValue
 };
 vueOptions.methods.openNodeTemplateEditor.call(formulaOpenContext, {
     id: 'selection-a',
@@ -1396,11 +1421,15 @@ assert.ok(page.includes('按设置自动排版</button>') && page.includes('就�
     'The canvas shortcut menu should surface the common overflow layout actions.');
 assert.ok(page.includes('onCanvasMouseDown') && page.includes('class="workflow-selection-box"') && page.includes('selectedNodeIds'),
     'The canvas should expose a drag-selection rectangle and a multi-node selection state.');
+assert.ok(page.includes("'is-editing':isNodeBeingEdited(node)") && workflowScript.includes('isNodeBeingEdited(node)'),
+    'The canvas should distinguish the node currently being edited from the rest of the selection.');
 assert.ok(page.includes('openNodeContextMenu'), 'Nodes should expose a context menu on right click.');
 assert.ok(page.includes('class="workflow-context-menu"'), 'The node context menu should be rendered in the workflow page.');
 assert.ok(page.includes('>复制</button>') && page.includes('>删除</button>'), 'The node context menu should expose copy and delete actions.');
 assert.ok(styles.includes('.workflow-selection-box') && styles.includes('.workflow-node.is-multi-selected'),
     'Multi-selection should have a visible marquee and selected-node treatment.');
+assert.ok(styles.includes('.workflow-node.is-editing') && styles.includes('outline-offset: 3px'),
+    'The node currently being edited should have a distinct outer focus treatment.');
 assert.ok(styles.includes('.workflow-canvas-context-menu') && styles.includes('.workflow-canvas-node-insert-menu'),
     'Canvas shortcut commands and the contextual node picker should share dedicated styles.');
 assert.ok(page.includes('value="webhook"'), 'Workflow trigger settings should expose a Webhook mode.');
@@ -1600,6 +1629,59 @@ assert.strictEqual(templateSaveNode.config.parameters.message, '固定文本',
     'A removed placeholder must be saved as ordinary text rather than an invalid template that the server rejects.');
 assert.strictEqual(templateSaveContext.templateEditor.visible, false,
     'Applying a normalized template should still close the explicit variable editor.');
+const formulaInsertContext = {
+    editingLocked: false,
+    templateEditor: { text: 'hello world', selectionStart: 6, selectionEnd: 11 },
+    templateEditorInputElement() { return null; },
+    $nextTick() { }
+};
+vueOptions.methods.insertTemplateFormula.call(formulaInsertContext,
+    { name: 'toArray', arity: 1 });
+assert.strictEqual(formulaInsertContext.templateEditor.text, 'hello {{= toArray(world) }}',
+    'Selecting text before clicking a formula should wrap the selection as the first argument.');
+formulaInsertContext.templateEditor.text = "{{= upper(split(vars.msg, ',')) }}";
+formulaInsertContext.templateEditor.selectionStart = 0;
+formulaInsertContext.templateEditor.selectionEnd = formulaInsertContext.templateEditor.text.length;
+vueOptions.methods.insertTemplateFormula.call(formulaInsertContext,
+    { name: 'toArray', arity: 1 });
+assert.strictEqual(formulaInsertContext.templateEditor.text,
+    "{{= toArray(upper(split(vars.msg, ','))) }}",
+    'Selecting an existing whole formula should remove its old template wrapper before applying the new formula.');
+formulaInsertContext.templateEditor.text = "{{= upper(split(vars.msg, ',')) }}";
+formulaInsertContext.templateEditor.selectionStart = 3;
+formulaInsertContext.templateEditor.selectionEnd = formulaInsertContext.templateEditor.text.length - 3;
+vueOptions.methods.insertTemplateFormula.call(formulaInsertContext,
+    { name: 'toArray', arity: 1 });
+assert.strictEqual(formulaInsertContext.templateEditor.text,
+    "{{= toArray(upper(split(vars.msg, ','))) }}",
+    'Selecting only the expression inside an external formula wrapper should replace the whole wrapper instead of nesting it.');
+formulaInsertContext.templateEditor.text = '';
+formulaInsertContext.templateEditor.selectionStart = 0;
+formulaInsertContext.templateEditor.selectionEnd = 0;
+vueOptions.methods.insertTemplateFormula.call(formulaInsertContext,
+    { name: 'substring', arity: 3 });
+assert.strictEqual(formulaInsertContext.templateEditor.text, '{{= substring(, , ) }}',
+    'Multi-argument formulas should leave editable empty argument positions when no text is selected.');
+const assignmentSaveNode = { id: 'code-node', config: { assignments: [{ name: 'result', value: '' }] } };
+const assignmentSaveContext = {
+    templateEditor: {
+        visible: true,
+        nodeId: 'code-node',
+        configKey: 'assignments',
+        targetType: 'code-assignment',
+        assignmentIndex: 0,
+        text: '{{= toArray(input) }}',
+        bindings: []
+    },
+    form: { graph: { nodes: [assignmentSaveNode] } },
+    normalizeTemplateBindings: vueOptions.methods.normalizeTemplateBindings,
+    templateUsesBindingToken: vueOptions.methods.templateUsesBindingToken,
+    $set(target, key, value) { target[key] = value; }
+};
+vueOptions.methods.saveParameterTemplate.call(assignmentSaveContext);
+assert.strictEqual(assignmentSaveNode.config.assignments[0].value.$template.text,
+    '{{= toArray(input) }}',
+    'Safe Code formula edits should persist through the shared template contract.');
 assert.doesNotThrow(() => vueOptions.methods.setConfigBinding.call({
     form: { graph: { nodes: [] } },
     nodeOutputFields() { return []; },
@@ -1642,6 +1724,16 @@ assert.ok(page.includes("selectedNode.config.title") && page.includes("selectedN
     'NeuBell title/content and Agent Prompt should use the shared formula text input.');
 assert.ok(styles.includes('.workflow-rich-text-input') && styles.includes('.workflow-rich-text-info'),
     'Formula text inputs should have a distinct visual treatment and an info icon.');
+assert.ok(styles.includes('container-type: inline-size') &&
+    styles.includes('@container (max-width: 360px)') &&
+    styles.includes('.workflow-rich-text-input-control { flex-direction: column; }'),
+    'Shared formula inputs should stack their textarea and editor action when the Inspector makes the component narrow.');
+assert.ok(styles.includes('@container (max-width: 560px)') &&
+    styles.includes('.workflow-code-assignment-row { grid-template-columns: minmax(0, 1fr); }'),
+    'Safe Code assignment rows should stack variable, formula input, and delete action in narrow containers.');
+assert.ok(styles.includes('@container (max-width: 440px)') &&
+    styles.includes('.workflow-function-actions { width: 100%; flex-wrap: wrap; }'),
+    'Function and Agent object cards should let action buttons wrap instead of squeezing their titles.');
 assert.ok(fs.readFileSync(scriptPath, 'utf8').includes('$template'),
     'The designer should persist mixed text binding values with an explicit template contract.');
 assert.ok(!page.includes("{{'{{'+item.token+'}}'}}"),
@@ -1752,10 +1844,9 @@ assert.strictEqual(tasksVueOptions.computed.hasRunningTasks.call({ tasks: taskRo
 const filteredTaskRows = tasksVueOptions.computed.filteredTasks.call({ tasks: taskRows, keyword: '失败', statusFilter: 'failed' });
 assert.strictEqual(filteredTaskRows.length, 1,
     'Task search and status filtering should compose without hiding matching failed tasks.');
-let liveReplayMessage = '';
-tasksVueOptions.methods.openTask.call({ $message: { info(message) { liveReplayMessage = message; } } }, taskRows[0]);
-assert.match(liveReplayMessage, /运行结束后/,
-    'An active task must wait for completion rather than opening an incomplete replay.');
+tasksVueOptions.methods.openTask.call({ $message: { warning() {} } }, taskRows[0]);
+assert.match(navigatedTaskUrl, /NeuCharWorkflow\/Index\?workflowId=21&runId=f6d7e0a2-4f33-46f8-a9e3-116a272bab58/,
+    'An active task must reopen the locked Workflow editor and resume live status polling.');
 tasksVueOptions.methods.openTask.call({}, taskRows[1]);
 assert.match(navigatedTaskUrl, /NeuCharWorkflow\/Replay\?executionLogId=88/,
     'Opening a completed task should navigate to its immutable run replay instead of the live editor.');
@@ -1767,6 +1858,14 @@ const runCoordinator = fs.readFileSync(runCoordinatorPath, 'utf8');
 const workflowEngine = fs.readFileSync(workflowEnginePath, 'utf8');
 assert.ok(fs.readFileSync(tasksScriptPath, 'utf8').includes('handler=List') && tasksPage.includes('回看运行'),
     'The task page should expose a task-list endpoint and an explicit replay action.');
+assert.ok(tasksPage.includes('当前工作流 #{{workflowIdFilter}}') &&
+    fs.readFileSync(tasksScriptPath, 'utf8').includes('workflowIdFilter') &&
+    fs.readFileSync(tasksScriptPath, 'utf8').includes('workflowId=${encodeURIComponent(this.workflowIdFilter)}') &&
+    fs.readFileSync(tasksScriptPath, 'utf8').includes('status=${encodeURIComponent(this.statusFilter)}') &&
+    tasksPage.includes('正在运行') &&
+    workflowAppService.includes('int? workflowId = null') &&
+    workflowAppService.includes('run.WorkflowId == workflowId.Value'),
+    'The task list should apply a workflow-scoped server query for direct links from detail and replay pages.');
 assert.ok(tasksPage.includes('@@click.stop="abortTask(scope.row)"') && fs.readFileSync(tasksScriptPath, 'utf8').includes('handler=Abort'),
     'The task page should expose a manual abort action for active runs.');
 assert.match(tasksPage, /src="~\/js\/NeuCharWorkflow\/Tasks\.js"\s+asp-append-version="true"/,
@@ -1786,6 +1885,19 @@ assert.ok(fs.readFileSync(tasksScriptPath, 'utf8').includes('handler=CleanupPrev
     'Quick cleanup should preview then delete only completed task logs, never active tasks.');
 assert.ok(page.includes('@@click="abortWorkflow"') && fs.readFileSync(scriptPath, 'utf8').includes('handler=AbortRun'),
     'The workflow editor should keep a visible abort action while a test run is active.');
+assert.ok(page.includes('运行中 {{form.runningCount}}') &&
+    workflowScript.includes("openWorkflowTasks(status)") &&
+    workflowScript.includes("query.set('status', status)") &&
+    workflowScript.includes('snapshot.runningCount') &&
+    workflowAppService.includes('GetActiveRunCount') &&
+    runCoordinator.includes('public int GetActiveRunCount') &&
+    runCoordinator.includes('RunningCount = GetActiveRunCount'),
+    'The Workflow detail page should expose the active run count and link directly to its running-task filter.');
+assert.ok(!runCoordinator.includes('当前工作流已有运行正在执行'),
+    'A Workflow must be able to register more than one active run at the same time.');
+assert.ok(page.includes('@@click="openWorkflowTasks"') &&
+    workflowScript.includes("new URLSearchParams({ workflowId: String(workflowId) })"),
+    'The Workflow detail page should jump directly to a list containing only its own tasks.');
 assert.match(tasksStyles, /\.workflow-task-table \.el-table__row\s*\{[^}]*cursor:\s*pointer;/s,
     'Task rows should make their workflow-board navigation discoverable.');
 assert.ok(workflowAppService.includes('GetTaskListAsync') && workflowAppService.includes('WorkflowTaskListItem'),
@@ -1829,6 +1941,9 @@ const replayScript = fs.readFileSync(replayScriptPath, 'utf8');
 const replayStyles = fs.readFileSync(replayStylePath, 'utf8');
 assert.ok(replayPage.includes('只读运行回看') && replayPage.includes('复制当前工作流并编辑') && replayPage.includes('查看最新工作流'),
     'The separate replay page should clearly be read-only and expose both requested exit actions.');
+assert.ok(replayPage.includes('查看此工作流任务') &&
+    replayScript.includes('Tasks?workflowId=${encodeURIComponent(this.replay.workflowId)}'),
+    'The replay page should jump directly to a list containing only the replayed Workflow tasks.');
 assert.ok(replayPage.includes('workflow-replay-canvas') && replayPage.includes('执行步骤'),
     'The replay page should render the frozen workflow canvas and a step timeline.');
 assert.ok(replayScript.includes('togglePlayback') && replayScript.includes('nextStep') && replayScript.includes('rebuildNodeStates'),
@@ -1841,6 +1956,14 @@ assert.ok(replayStyles.includes('.workflow-replay-node.state-running') && replay
     'Replay styling should visually distinguish active nodes and the selected timeline step.');
 assert.ok(replayPage.includes('输入参数') && replayPage.includes('currentEvent.input'),
     'The replay detail panel should show the recorded input parameters alongside output.');
+assert.ok(replayPage.includes('查看 Agent Group 对话') &&
+    replayScript.includes('openAgentGroupConversation') &&
+    fs.readFileSync(scriptPath, 'utf8').includes('hasAgentGroupConversation(event)') &&
+    fs.readFileSync(agentsWorkflowObjectProviderPath, 'utf8').includes('RunChatGroupAwaitWithResultAsync') &&
+    fs.readFileSync(agentsWorkflowObjectProviderPath, 'utf8').includes('WorkflowObjectExecutionReference') &&
+    workflowEngine.includes('ObjectReference') &&
+    fs.readFileSync(workflowObjectContractsPath, 'utf8').includes('ChatTaskId'),
+    'Agent Group Workflow events should retain the ChatTask reference so live Console and replay can open the persisted conversation.');
 assert.ok(replayScript.includes('centerCurrentNode') && replayScript.includes("behavior: 'smooth'"),
     'Selecting or playing a replay step should smoothly center its node in the canvas viewport.');
 assert.match(replayStyles, /\.workflow-replay-canvas-wrap\s*\{[^}]*scroll-behavior:\s*smooth;/s,

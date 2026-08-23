@@ -1,3 +1,17 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+
+    文件名：AdminChatFunctionToolFactory.cs
+    文件功能描述：AdminChatFunctionToolFactory.cs 相关实现
+
+
+    创建标识：Senparc - 20260820
+
+    修改标识：Senparc - 20260822
+    修改描述：v0.6.0 新增管理端 Chat 会话工作流能力
+
+----------------------------------------------------------------*/
+
 using Microsoft.Extensions.AI;
 using System;
 using System.Reflection;

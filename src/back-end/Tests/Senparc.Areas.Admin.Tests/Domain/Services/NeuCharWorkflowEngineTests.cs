@@ -935,8 +935,7 @@ public class NeuCharWorkflowEngineTests
             null!,
             serviceProvider.GetRequiredService<IServiceScopeFactory>(),
             null!,
-            null!,
-            Array.Empty<IWorkflowObjectProvider>());
+            null!);
         var method = typeof(NeuCharWorkflowEngine).GetMethod(
             "ExecuteInFunctionScopeAsync",
             BindingFlags.Instance | BindingFlags.NonPublic)!.MakeGenericMethod(typeof(int));
@@ -953,6 +952,29 @@ public class NeuCharWorkflowEngineTests
     }
 
     [TestMethod]
+    public void Construction_ShouldNotResolveWorkflowObjectProviders()
+    {
+        var providerResolved = false;
+        var services = new ServiceCollection();
+        services.AddScoped<NeuCharWorkflowService>(_ => null!);
+        services.AddScoped<NeuCharWorkflowExecutionLogService>(_ => null!);
+        services.AddScoped<NeuCharWorkflowParameterProtector>(_ => null!);
+        services.AddScoped<IWorkflowObjectProvider>(_ =>
+        {
+            providerResolved = true;
+            return new CapturingWorkflowObjectProvider();
+        });
+        services.AddScoped<NeuCharWorkflowEngine>();
+        using var serviceProvider = services.BuildServiceProvider();
+        using var scope = serviceProvider.CreateScope();
+
+        _ = scope.ServiceProvider.GetRequiredService<NeuCharWorkflowEngine>();
+
+        Assert.IsFalse(providerResolved,
+            "Workflow page construction must not instantiate external object providers or their dependency graph.");
+    }
+
+    [TestMethod]
     public async Task AgentGroupExecution_ShouldPassHilPolicyThroughProviderParameters()
     {
         var provider = new CapturingWorkflowObjectProvider();
@@ -963,8 +985,7 @@ public class NeuCharWorkflowEngineTests
             null!,
             serviceProvider.GetRequiredService<IServiceScopeFactory>(),
             null!,
-            null!,
-            new[] { provider });
+            null!);
         var workflow = new Senparc.Xncf.NeuCharWorkflow.Domain.Models.DatabaseModel.NeuCharWorkflow(
             "HIL 参数测试",
             37);
@@ -1271,6 +1292,44 @@ public class NeuCharWorkflowEngineTests
     }
 
     [TestMethod]
+    public void TemplateExpression_ShouldSupportArrayAndObjectConversions()
+    {
+        var variables = new Dictionary<string, JsonNode>
+        {
+            ["item"] = JsonValue.Create("one"),
+            ["msg"] = JsonValue.Create("哈利波特"),
+            ["nested"] = JsonNode.Parse("""[1, [2, 3], 4]""")!,
+            ["object"] = JsonNode.Parse("""{ "first": 1, "second": 2 }""")!
+        };
+
+        Assert.IsTrue(NeuCharWorkflowExpressionEngine.TryEvaluate("toArray(item)[0]", variables, out var arrayItem, out var error), error);
+        Assert.AreEqual("one", arrayItem!.GetValue<string>());
+        Assert.IsTrue(NeuCharWorkflowExpressionEngine.TryEvaluate("flatten(nested)[2]", variables, out var flattenedItem, out error), error);
+        Assert.AreEqual(3, flattenedItem!.GetValue<int>());
+        Assert.IsTrue(NeuCharWorkflowExpressionEngine.TryEvaluate("concat(toArray(item), nested)[1]", variables, out var concatenatedItem, out error), error);
+        Assert.AreEqual(1, concatenatedItem!.GetValue<int>());
+        Assert.IsTrue(NeuCharWorkflowExpressionEngine.TryEvaluate("has(object, 'second')", variables, out var hasProperty, out error), error);
+        Assert.IsTrue(hasProperty!.GetValue<bool>());
+        Assert.IsTrue(NeuCharWorkflowExpressionEngine.TryEvaluate("isEmpty(null)", variables, out var emptyValue, out error), error);
+        Assert.IsTrue(emptyValue!.GetValue<bool>());
+        Assert.IsTrue(NeuCharWorkflowExpressionEngine.TryEvaluate("isNull(null)", variables, out var nullValue, out error), error);
+        Assert.IsTrue(nullValue!.GetValue<bool>());
+        Assert.IsTrue(NeuCharWorkflowExpressionEngine.TryEvaluate(
+            "upper(split(msg, ','))",
+            variables,
+            out var upperArray,
+            out error), error);
+        Assert.AreEqual("[\"哈利波特\"]", upperArray!.GetValue<string>());
+        Assert.IsFalse(upperArray.GetValue<string>().Contains("\\U", StringComparison.Ordinal));
+        Assert.IsTrue(NeuCharWorkflowExpressionEngine.TryEvaluate(
+            "upper(last(split(msg, ',')))",
+            variables,
+            out var upperLast,
+            out error), error);
+        Assert.AreEqual("哈利波特", upperLast!.GetValue<string>());
+    }
+
+    [TestMethod]
     public async Task WorkflowVariablesAndSafeCode_ShouldRemainRunLocalAndRequireDeclaration()
     {
         var engine = CreateEngine();
@@ -1542,5 +1601,5 @@ public class NeuCharWorkflowEngineTests
     }
 
     private static NeuCharWorkflowEngine CreateEngine() =>
-        new(null!, null!, null!, null!, Array.Empty<IWorkflowObjectProvider>());
+        new(null!, null!, null!, null!);
 }
