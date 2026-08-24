@@ -6,7 +6,7 @@
 }
 
 @section Style {
-    <link rel="stylesheet" href="~/css/Admin/Pages/AdminChat/ChatLauncher.css" />
+    <link rel="stylesheet" href="~/css/Admin/Pages/AdminChat/ChatLauncher.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Admin/Pages/AdminChat/Chat.css" />
 }
 
@@ -154,6 +154,43 @@
                                 <i class="fa fa-cube"></i>
                                 {{ module.displayName || module.menuName || module.moduleName || module.xncfModuleUid }}
                                 <span v-if="module.moduleVersion"> v{{ module.moduleVersion }}</span>
+                            </el-tag>
+                        </el-popover>
+                    </div>
+                    <div class="chat-modules" v-if="currentSessionWorkflows.length > 0">
+                        <el-popover
+                            v-for="workflow in currentSessionWorkflows"
+                            :key="workflow.id"
+                            placement="bottom-start"
+                            width="360"
+                            trigger="hover"
+                            popper-class="chat-module-detail-popover">
+                            <div class="chat-module-detail-wrapper">
+                                <div class="module-selector-preview-title">
+                                    <i class="fa fa-random selector-module-icon"></i>
+                                    <span>{{ workflow.workflowName }}</span>
+                                    <span class="selector-module-version">#{{ workflow.workflowId }}</span>
+                                </div>
+                                <div class="module-selector-preview-subtitle">{{ workflow.workflowDescription || '已启用 Workflow' }}</div>
+                                <div class="module-selector-preview-section" v-if="workflow.parameters && workflow.parameters.length > 0">
+                                    <div class="module-selector-preview-section-title">Function Calling 参数</div>
+                                    <div class="module-selector-functions-list">
+                                        <div v-for="parameter in workflow.parameters"
+                                             :key="`session-workflow-${workflow.workflowId}-${parameter.name}`"
+                                             class="module-selector-function-item">
+                                            <div class="module-selector-function-name">{{ parameter.name }}</div>
+                                            <div class="module-selector-function-description">{{ parameter.description || '可选参数' }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <el-tag
+                                slot="reference"
+                                size="mini"
+                                type="success"
+                                class="chat-workflow-tag">
+                                <i class="fa fa-random"></i>
+                                {{ workflow.workflowName }}
                             </el-tag>
                         </el-popover>
                     </div>
@@ -339,10 +376,23 @@
                                     @@close="removeModule(module.uid)"
                                     type="info"
                                     class="module-tag">
-                                    <i :class="module.icon"></i> {{module.name}}
+                                    <i :class="module.icon" aria-hidden="true"></i>
+                                    <span class="module-tag-name">{{module.name}}</span>
                                 </el-tag>
                             </div>
-                            <div v-else class="chat-module-selected-empty">@AR["Admin.Home.EmptyReference"]</div>
+                            <div v-if="selectedWorkflows.length > 0" class="chat-module-selected-list">
+                                <el-tag
+                                    v-for="workflow in selectedWorkflows"
+                                    :key="`selected-workflow-${workflow.id}`"
+                                    closable
+                                    @@close="removeWorkflow(workflow.id)"
+                                    type="success"
+                                    class="module-tag">
+                                    <i class="fa fa-random" aria-hidden="true"></i>
+                                    <span class="module-tag-name">{{workflow.name}}</span>
+                                </el-tag>
+                            </div>
+                            <div v-if="selectedModules.length === 0 && selectedWorkflows.length === 0" class="chat-module-selected-empty">@AR["Admin.Home.EmptyReference"]</div>
                         </div>
 
                         @await Html.PartialAsync("~/Areas/Admin/Pages/Shared/_ChatModuleSelectorDialog.cshtml")

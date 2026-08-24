@@ -179,12 +179,13 @@
   <data name="AdminChat.MessageNotFound" xml:space="preserve"><value>メッセージが存在しません</value></data>
   <data name="AdminChat.SetFeedbackSuccess" xml:space="preserve"><value>フィードバックの送信に成功しました</value></data>
   <data name="AdminChat.SelectAtLeastOneMessage" xml:space="preserve"><value>少なくとも 1 件のメッセージを選択してください</value></data>
+  <data name="AdminChat.SelectAtLeastOneModule" xml:space="preserve"><value>少なくとも 1 つの XNCF モジュールを選択してください</value></data>
   <data name="AdminChat.DeleteMessagesSuccess" xml:space="preserve"><value>削除に成功しました。{0} 件のメッセージを削除しました</value></data>
   <data name="AdminChat.AddModulesSuccess" xml:space="preserve"><value>追加に成功しました</value></data>
   <data name="Admin.Layout.Account" xml:space="preserve"><value>マイアカウント</value></data>
   <data name="Admin.Layout.CurrentAccount" xml:space="preserve"><value>現在のアカウント：{0}</value></data>
   <data name="Admin.Layout.PoweredBy" xml:space="preserve"><value>提供元</value></data>
-  <data name="Admin.Footer.SynchroLabel" xml:space="preserve"><value>シンクロ</value></data>
+  <data name="Admin.Footer.NeuBellLabel" xml:space="preserve"><value>NeuBell</value></data>
   <data name="Admin.Session.Title" xml:space="preserve"><value>ログインの有効期限が近づいています</value></data>
   <data name="Admin.Session.Message" xml:space="preserve"><value>ログインセッションの有効期限が近づいています。ログインを継続するか、今すぐログアウトできます。</value></data>
   <data name="Admin.Session.KeepLogin" xml:space="preserve"><value>ログインを継続</value></data>
@@ -193,6 +194,26 @@
   <data name="Admin.Common.NoTime" xml:space="preserve"><value>時間なし</value></data>
   <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>コピーしました。Ctrl+V で貼り付けてください。</value></data>
   <data name="Admin.Home.Header" xml:space="preserve"><value>NeuCharFramework 管理画面</value></data>
+  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>現在のホスト状態</value></data>
+  <data name="Admin.Home.HostMetricsRealtime" xml:space="preserve"><value>ライブ · 2 秒ごとに更新</value></data>
+  <data name="Admin.Home.HostCpu" xml:space="preserve"><value>ホスト CPU（全体）</value></data>
+  <data name="Admin.Home.HostCpuDetail" xml:space="preserve"><value>ホスト全体の使用率</value></data>
+  <data name="Admin.Home.HostScope" xml:space="preserve"><value>ホスト</value></data>
+  <data name="Admin.Home.WebScope" xml:space="preserve"><value>Web</value></data>
+  <data name="Admin.Home.HostMemory" xml:space="preserve"><value>物理メモリ</value></data>
+  <data name="Admin.Home.HostMemoryAvailable" xml:space="preserve"><value>使用可能</value></data>
+  <data name="Admin.Home.HostNetwork" xml:space="preserve"><value>リアルタイム通信量</value></data>
+  <data name="Admin.Home.HostNetworkTotal" xml:space="preserve"><value>累計</value></data>
+  <data name="Admin.Home.HostInterfaces" xml:space="preserve"><value>個の有効なインターフェイス</value></data>
+  <data name="Admin.Home.HostProcess" xml:space="preserve"><value>現在の Web プロセス</value></data>
+  <data name="Admin.Home.HostProcessCpu" xml:space="preserve"><value>Web プロセス CPU</value></data>
+  <data name="Admin.Home.HostProcessWorkingSet" xml:space="preserve"><value>ワーキングセット</value></data>
+  <data name="Admin.Home.HostProcessUptime" xml:space="preserve"><value>稼働時間</value></data>
+  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>直近 30 サンプル（このページのみ）</value></data>
+  <data name="Admin.Home.HostNetworkReceive" xml:space="preserve"><value>受信</value></data>
+  <data name="Admin.Home.HostNetworkSend" xml:space="preserve"><value>送信</value></data>
+  <data name="Admin.Home.HostMetricsInvalidResponse" xml:space="preserve"><value>ホスト指標 API から無効なデータが返されました</value></data>
+  <data name="Admin.Home.HostMetricsUnavailable" xml:space="preserve"><value>ホスト指標を一時的に取得できません</value></data>
   <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>インストール済みモジュール</value></data>
   <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>更新待ちモジュール</value></data>
   <data name="Admin.Home.NewModules" xml:space="preserve"><value>新しいモジュール</value></data>
@@ -355,6 +376,32 @@
   <data name="Xncf.NewModules" xml:space="preserve"><value>新しいモジュール</value></data>
   <data name="Xncf.InstalledModules" xml:space="preserve"><value>インストール済みモジュール</value></data>
   <data name="Xncf.PendingUpdates" xml:space="preserve"><value>更新待ちモジュール</value></data>
+  <data name="Xncf.BatchUpdateAndEnable" xml:space="preserve"><value>選択項目を更新して有効化</value></data>
+  <data name="Xncf.BatchUpdate.SelectedCount" xml:space="preserve"><value>{0} 個のモジュールを選択中</value></data>
+  <data name="Xncf.BatchUpdate.SelectAtLeastOne" xml:space="preserve"><value>更新待ちのモジュールを 1 つ以上選択してください。</value></data>
+  <data name="Xncf.BatchUpdate.Confirm" xml:space="preserve"><value>選択した {0} 個のモジュールを更新して有効化しますか？</value></data>
+  <data name="Xncf.BatchUpdate.Title" xml:space="preserve"><value>モジュールの一括更新</value></data>
+  <data name="Xncf.BatchUpdateResult" xml:space="preserve"><value>一括操作の状態</value></data>
+  <data name="Xncf.BatchUpdate.Summary" xml:space="preserve"><value>{0} 個を処理しました：成功 {1}、失敗 {2}。</value></data>
+  <data name="Xncf.BatchUpdate.VersionResult" xml:space="preserve"><value>バージョン変更</value></data>
+  <data name="Xncf.BatchUpdate.TargetVersion" xml:space="preserve"><value>対象バージョン：{0}</value></data>
+  <data name="Xncf.BatchUpdate.UpdateStatus" xml:space="preserve"><value>更新</value></data>
+  <data name="Xncf.BatchUpdate.EnableStatus" xml:space="preserve"><value>有効化</value></data>
+  <data name="Xncf.BatchUpdate.FinalState" xml:space="preserve"><value>最終状態</value></data>
+  <data name="Xncf.BatchUpdate.Details" xml:space="preserve"><value>詳細</value></data>
+  <data name="Xncf.BatchUpdate.Success" xml:space="preserve"><value>成功</value></data>
+  <data name="Xncf.BatchUpdate.Failed" xml:space="preserve"><value>失敗</value></data>
+  <data name="Xncf.BatchUpdate.NoResult" xml:space="preserve"><value>一括操作の結果を取得できませんでした。</value></data>
+  <data name="Xncf.BatchUpdate.RefreshFailed" xml:space="preserve"><value>操作は完了しましたが、状態を更新できませんでした。ページを手動で更新してください。</value></data>
+  <data name="Xncf.BatchUpdate.RequestFailed" xml:space="preserve"><value>一括更新と有効化の要求に失敗しました。</value></data>
+  <data name="Xncf.BatchUpdate.UnknownModule" xml:space="preserve"><value>不明なモジュール</value></data>
+  <data name="Xncf.BatchUpdate.ModuleUnavailable" xml:space="preserve"><value>モジュールが存在しない、無視されている、または読み込まれていません。</value></data>
+  <data name="Xncf.BatchUpdate.UpdateNotApplied" xml:space="preserve"><value>モジュールの更新は適用されませんでした。</value></data>
+  <data name="Xncf.BatchUpdate.EnableNotApplied" xml:space="preserve"><value>モジュールを有効状態に切り替えられませんでした。</value></data>
+  <data name="Xncf.BatchUpdate.VersionMismatch" xml:space="preserve"><value>対象バージョンは {0} ですが、実際のバージョンは {1} です。</value></data>
+  <data name="Xncf.BatchUpdate.UpdateAndEnableSuccess" xml:space="preserve"><value>更新と有効化が完了しました。</value></data>
+  <data name="Xncf.BatchUpdate.EnableFailed" xml:space="preserve"><value>更新は成功しましたが、有効化に失敗しました：{0}</value></data>
+  <data name="Xncf.BatchUpdate.UpdateFailed" xml:space="preserve"><value>更新に失敗しました：{0}</value></data>
   <data name="Xncf.ModuleName" xml:space="preserve"><value>モジュール名</value></data>
   <data name="Xncf.MenuName" xml:space="preserve"><value>メニュー名（表示名）</value></data>
   <data name="Xncf.Version" xml:space="preserve"><value>バージョン</value></data>
@@ -485,4 +532,21 @@
   <data name="AdminChat.NoMenuOrFunctions" xml:space="preserve"><value>このモジュールには利用可能なメニューまたは機能がありません。</value></data>
   <data name="AdminChat.NoMatchingModules" xml:space="preserve"><value>一致するモジュールはありません</value></data>
   <data name="AdminChat.ConfirmAdd" xml:space="preserve"><value>追加を確定</value></data>
- </root>
+  <data name="Admin.Home.AgentsOverview" xml:space="preserve"><value>Agents 運用概要</value></data>
+  <data name="Admin.Home.AgentsOverviewLive" xml:space="preserve"><value>リアルタイム</value></data>
+  <data name="Admin.Home.AgentsManage" xml:space="preserve"><value>Agents を管理</value></data>
+  <data name="Admin.Home.AgentsTotal" xml:space="preserve"><value>Agents 合計</value></data>
+  <data name="Admin.Home.AgentsLocal" xml:space="preserve"><value>ローカル</value></data>
+  <data name="Admin.Home.AgentsRemoteA2A" xml:space="preserve"><value>接続済み A2A</value></data>
+  <data name="Admin.Home.AgentsEnabled" xml:space="preserve"><value>有効</value></data>
+  <data name="Admin.Home.AgentsDisabled" xml:space="preserve"><value>無効</value></data>
+  <data name="Admin.Home.AgentsPublishedA2A" xml:space="preserve"><value>公開 A2A</value></data>
+  <data name="Admin.Home.AgentsConfigured" xml:space="preserve"><value>設定済み</value></data>
+  <data name="Admin.Home.AgentsActive" xml:space="preserve"><value>アクティブ</value></data>
+  <data name="Admin.Home.AgentsGroups" xml:space="preserve"><value>協働グループ</value></data>
+  <data name="Admin.Home.AgentsChatting" xml:space="preserve"><value>対話中</value></data>
+  <data name="Admin.Home.AgentsActiveTasks" xml:space="preserve"><value>アクティブなタスク</value></data>
+  <data name="Admin.Home.AgentsWaitingOrPaused" xml:space="preserve"><value>待機 / 一時停止</value></data>
+  <data name="Admin.Home.AiQuickDescription" xml:space="preserve"><value>Footer の AI クイックチャットから、必要なときに完全な会話とコンテキスト選択を開けます。</value></data>
+  <data name="Admin.Home.AiQuickDialog" xml:space="preserve"><value>クイックチャットを開く</value></data>
+</root>

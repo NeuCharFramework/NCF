@@ -14,9 +14,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.28.0-preview5" />
-    <PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.21.5-preview5" />
-    <PackageReference Include="Senparc.Xncf.SystemCore" Version="0.14.3-preview5" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.29.0-preview8" />
+    <PackageReference Include="Senparc.Ncf.DatabasePlant" Version="0.21.8-preview8" />
+    <PackageReference Include="Senparc.Xncf.SystemCore" Version="0.14.6-preview8" />
     <!--<ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.AgentsManager\Senparc.Xncf.AgentsManager.ForNcf.csproj" />-->
     <!--<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />-->
     <ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />

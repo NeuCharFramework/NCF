@@ -1,4 +1,4 @@
-﻿/*----------------------------------------------------------------
+﻿/*-----------------------------------------------------------------
     Copyright (C) 2026 Senparc
   
     文件名：AdminUserInfoAppService.cs
@@ -13,6 +13,9 @@
     修改标识：Senparc - 20260729
     修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
 
+    修改标识：Senparc - 20260822
+    修改描述：v0.6.0 新增管理端 Chat 会话工作流能力
+
 ----------------------------------------------------------------*/
 using Microsoft.AspNetCore.Mvc;
 using Senparc.Areas.Admin.Domain;
@@ -24,11 +27,15 @@ using Senparc.CO2NET.Extensions;
 using Senparc.Ncf.Core.AppServices;
 using Senparc.Ncf.Core.Models;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.Core.Exceptions;
+using System.ComponentModel;
 
 namespace Senparc.Areas.Admin.OHS.Local.AppService
 {
@@ -134,6 +141,42 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             return resultDto;
         }
 
+
+        [FunctionRender("设置数字管", "设置数字管显示", typeof(Register))]
+        public async Task<AppResponseBase<AdminUserInfo_SetDigitalPipeResponse>> SetDigitalPipeAsync(AdminUserInfo_SetDigitalPipeRequest request)
+        {
+            return await this.GetResponseAsync<AppResponseBase<AdminUserInfo_SetDigitalPipeResponse>, AdminUserInfo_SetDigitalPipeResponse>(async (response, logger) =>
+            {
+                try{
+                logger.Append("设置数字管：" + request.Number);
+
+                var jsonBody = new { number = request.Number }.ToJson();
+                logger.Append("数字管请求 JSON：" + jsonBody);
+
+                using var stream = new MemoryStream(Encoding.UTF8.GetBytes(jsonBody));
+                var result = await Senparc.CO2NET.HttpUtility.Post.PostGetJsonAsync<AdminUserInfo_SetDigitalPipeResponse>(
+                    ServiceProvider,
+                    "http://192.168.1.175:5000/api/DisplayNumber",
+                    cookieContainer: null,
+                    fileStream: stream,
+                    encoding: Encoding.UTF8,
+                    contentType: "application/json");
+
+                logger.Append("数字管接口返回：" + result.ToJson());
+                return result;
+                }
+                catch(Exception ex){
+                    logger.Append("设置数字管失败：" + ex.Message);
+                    logger.Append("设置数字管失败：" + ex.StackTrace);
+                    return new AdminUserInfo_SetDigitalPipeResponse()
+                    {
+                        Success = false,
+                        Data = ex.Message
+                    };
+                }
+            });
+        }
+
         /// <summary>
         /// 获取当前管理员信息
         /// </summary>
@@ -217,5 +260,19 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             });
             return response;
         }
+    }
+
+    public class AdminUserInfo_SetDigitalPipeRequest:AppRequestBase
+    {
+        [Description("数字管显示内容")]
+        public string Number{get;set;}
+    }
+
+    public class AdminUserInfo_SetDigitalPipeResponse
+    {
+        [Description("是否成功")]
+        public bool Success{get;set;}
+        [Description("返回数据")]
+        public string Data{get;set;}
     }
 }

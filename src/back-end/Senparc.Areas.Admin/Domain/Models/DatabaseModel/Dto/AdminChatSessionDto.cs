@@ -1,3 +1,17 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+
+    文件名：AdminChatSessionDto.cs
+    文件功能描述：AdminChatSessionDto.cs 相关实现
+
+
+    创建标识：Senparc - 20260325
+
+    修改标识：Senparc - 20260822
+    修改描述：v0.6.0 新增管理端 Chat 会话工作流能力
+
+----------------------------------------------------------------*/
+
 using Senparc.Ncf.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -39,10 +53,16 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
         /// </summary>
         public List<AdminChatSessionModuleDto> Modules { get; set; }
 
+        /// <summary>
+        /// 关联的 Workflow 列表（可选，用于嵌套查询）
+        /// </summary>
+        public List<AdminChatSessionWorkflowDto> Workflows { get; set; }
+
         public AdminChatSessionDto() 
         {
             Messages = new List<AdminChatMessageDto>();
             Modules = new List<AdminChatSessionModuleDto>();
+            Workflows = new List<AdminChatSessionWorkflowDto>();
         }
 
         /// <summary>
@@ -90,9 +110,15 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
         /// </summary>
         public List<string> ModuleUids { get; set; }
 
+        /// <summary>
+        /// 选中的 Workflow Id 列表
+        /// </summary>
+        public List<int> WorkflowIds { get; set; }
+
         public CreateChatSessionInputDto()
         {
             ModuleUids = new List<string>();
+            WorkflowIds = new List<int>();
         }
     }
 }

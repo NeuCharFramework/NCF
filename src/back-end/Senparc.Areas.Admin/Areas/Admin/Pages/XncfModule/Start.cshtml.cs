@@ -3,12 +3,15 @@
   
     文件名：Start.cshtml.cs
     文件功能描述：Start.cshtml.cs 相关实现
-    
-    
+
+
     创建标识：Senparc - 20241028
-    
+
     修改标识：Senparc - 20260729
     修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
+
+    修改标识：Senparc - 20260813
+    修改描述：v0.5.0 集成 NeuCharPivot 与 NeuCharWorkflow 管理能力并优化后台体验
 
 ----------------------------------------------------------------*/
 
@@ -22,6 +25,7 @@ using Senparc.CO2NET.Trace;
 using Senparc.Ncf.AreaBase.Admin.Filters;
 using Senparc.Ncf.Core.AppServices;
 using Senparc.Ncf.Core.Enums;
+using Senparc.Ncf.Shared.Abstractions.Events;
 using Senparc.Ncf.Service;
 using Senparc.Ncf.XncfBase;
 using Senparc.Ncf.XncfBase.FunctionRenders;
@@ -38,21 +42,41 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using Senparc.Areas.Admin;
+using Senparc.Areas.Admin.Domain.Services;
+using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
+using Senparc.Ncf.Core.WorkContext.Provider;
+using Senparc.Ncf.Shared.Abstractions.ChatAgent;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
     [IgnoreAuth]
     [AdminAuthorize(BackendJwtAuthorizeAttribute.SuperAdminPolicyName)]
     public class XncfModuleStartModel(IServiceProvider serviceProvider, XncfModuleService xncfModuleService,
-        SysMenuService sysMenuService) : BaseAdminPageModel(serviceProvider)
+        Senparc.Ncf.Service.SysMenuService sysMenuService,
+        NeuCharFunctionService neuCharFunctionService,
+        NeuCharPivotService neuCharPivotService,
+        NeuCharPivotFunctionService neuCharPivotFunctionService,
+        NeuCharPivotLoopTaskService neuCharPivotLoopTaskService,
+        NeuCharExecutionLogService neuCharExecutionLogService,
+        NeuCharParameterProtector neuCharParameterProtector,
+        IEventBusRequestClient eventBusRequestClient,
+        IAdminWorkContextProvider adminWorkContextProvider) : BaseAdminPageModel(serviceProvider)
     {
-        private readonly SysMenuService _sysMenuService = sysMenuService;
+        private readonly Senparc.Ncf.Service.SysMenuService _sysMenuService = sysMenuService;
         public Senparc.Ncf.Core.Models.DataBaseModel.XncfModule XncfModule { get; set; }
         //public Dictionary<IXncfFunction, List<FunctionParameterInfo>> FunctionParameterInfoCollection { get; set; } = new Dictionary<IXncfFunction, List<FunctionParameterInfo>>();
 
         XncfModuleService _xncfModuleService = xncfModuleService;
         IServiceProvider _serviceProvider = serviceProvider;
         private readonly IStringLocalizer<AdminResource> _localizer = serviceProvider.GetRequiredService<IStringLocalizer<AdminResource>>();
+        private readonly NeuCharFunctionService _neuCharFunctionService = neuCharFunctionService;
+        private readonly NeuCharPivotService _neuCharPivotService = neuCharPivotService;
+        private readonly NeuCharPivotFunctionService _neuCharPivotFunctionService = neuCharPivotFunctionService;
+        private readonly NeuCharPivotLoopTaskService _neuCharPivotLoopTaskService = neuCharPivotLoopTaskService;
+        private readonly NeuCharExecutionLogService _neuCharExecutionLogService = neuCharExecutionLogService;
+        private readonly NeuCharParameterProtector _neuCharParameterProtector = neuCharParameterProtector;
+        private readonly IEventBusRequestClient _eventBusRequestClient = eventBusRequestClient;
+        private readonly IAdminWorkContextProvider _adminWorkContextProvider = adminWorkContextProvider;
 
         public List<string> XncfModuleUpdateLog { get; set; }
 
@@ -150,97 +174,14 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         /// <returns></returns>
         public async Task<IActionResult> OnPostRunFunctionAsync([FromBody] ExecuteFuncParamDto2 executeFuncParamDto2)
         {
-            var xncfRegister = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == executeFuncParamDto2.XncfUid);
-
-            if (xncfRegister == null)
-            {
-                return new JsonResult(new { success = false, msg = _localizer["Xncf.ModuleNotRegistered"] });
-            }
-
-            var xncfModule = await _xncfModuleService.GetObjectAsync(z => z.Uid == xncfRegister.Uid).ConfigureAwait(false);
-            if (xncfModule == null)
-            {
-                return new JsonResult(new { success = false, msg = _localizer["Xncf.ModuleNotInstalled"] });
-            }
-
-            if (xncfModule.State != XncfModules_State.开放)
-            {
-                return new JsonResult(new { success = false, msg = _localizer["Xncf.InvalidModuleState", xncfModule.State] });
-            }
-
-
-            FunctionRenderBag? rightFunctionBag = null;
-            if (Senparc.Ncf.XncfBase.Register.FunctionRenderCollection.TryGetValue(xncfRegister.GetType(), out var functionGroup))
-            {
-                foreach (var funtionBag in functionGroup.Values)
-                {
-                    var funClass = _serviceProvider.GetService(funtionBag.MethodInfo.DeclaringType) as IAppService;
-                    //var funMethod = funClass.GetType().GetMethod()
-
-                    if (funtionBag.FunctionRenderAttribute.Name == executeFuncParamDto2.XncfFunctionName)
-                    {
-                        rightFunctionBag = funtionBag;
-                        break;
-                    }
-                }
-            }
-
-            if (rightFunctionBag == null)
-            {
-                return new JsonResult(new { success = false, msg = _localizer["Xncf.FunctionNotMatched"] });
-            }
-
-            var functionParameterType = rightFunctionBag.Value.MethodInfo.GetParameters().FirstOrDefault()?.ParameterType;
-            if (functionParameterType == null)
-            {
-                functionParameterType = typeof(FunctionAppRequestBase);
-            }
-
-            var paramCount = rightFunctionBag.Value.MethodInfo.GetParameters().Length;
-            object[] paras = null;
-            switch (paramCount)
-            {
-                case 1:
-                    var normalizedJson = FunctionRequestParameterNormalizer.NormalizeJson(executeFuncParamDto2.XncfFunctionParams, functionParameterType);
-                    var requestPara = SerializerHelper.GetObject(normalizedJson, functionParameterType) as IAppRequest;
-                    paras = new[] { requestPara };
-                    break;
-                case 0:
-                    //不处理
-                    break;
-                default:
-                    return new JsonResult(new { success = false, msg = _localizer["Xncf.FunctionSingleParameterOnly"] });
-            }
-
-            var functionClass = _serviceProvider.GetService(rightFunctionBag.Value.MethodInfo.DeclaringType);
-            var taskFunc = rightFunctionBag.Value.MethodInfo.Invoke(functionClass, paras) as Task; // Task<StringAppResponse>  as IAppResponse;
-            await taskFunc.ConfigureAwait(false);
-
-
-            //方案一：
-            //参考：https://stackoverflow.com/questions/48033760/cast-taskt-to-taskobject-in-c-sharp-without-having-t/48033780
-            var taskResult = (object)((dynamic)taskFunc).Result;
-            var result = taskResult as IAppResponse;
-
-            /* 方案二：
-            var obj0 = rightFunctionBag.Value.MethodInfo.Invoke(functionClass, paras);
-            var obj1 = taskFunc.GetType().GetMethod("GetAwaiter").Invoke(taskFunc, null);
-            var obj2= obj1.GetType().GetMethod("GetResult").Invoke(obj1, null);
-            var realResult = obj2 as IAppResponse;
-
-            方案效率对比见：https://www.cnblogs.com/szw/p/dynamic-vs-reflect.html
-            */
-
-            //已经在 AppService 中记录
-            //var tempId = "Xncf-FunctionRun-" + Guid.NewGuid().ToString("n");
-            ////记录日志缓存
-            //if (result.Data != null)
-            //{
-            //    var cache = _serviceProvider.GetObjectCacheStrategyInstance();
-            //    await cache.SetAsync(tempId, result.Data.ToJson(), TimeSpan.FromMinutes(5));//TODO：可设置
-            //}
-
-            var returnData = result.Data is string stringData ? stringData.HtmlEncode() : result.Data?.ToJson().HtmlEncode();
+            var result = await _neuCharFunctionService.ExecuteAsync(
+                executeFuncParamDto2.XncfUid,
+                executeFuncParamDto2.XncfFunctionName,
+                executeFuncParamDto2.XncfFunctionParams,
+                HttpContext.RequestAborted).ConfigureAwait(false);
+            var returnData = result.Data is string stringData
+                ? stringData.HtmlEncode()
+                : result.Data?.ToJson().HtmlEncode();
 
             var data = new
             {
@@ -252,6 +193,215 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             };
             return new JsonResult(data);
         }
+
+        public async Task<IActionResult> OnGetNeuCharPivotAsync(string uid)
+        {
+            var snapshot = await _neuCharPivotService.GetSnapshotAsync(uid, HttpContext.RequestAborted)
+                .ConfigureAwait(false);
+            return Ok(snapshot == null ? null : ToPivotResponse(snapshot));
+        }
+
+        public async Task<IActionResult> OnPostGenerateNeuCharPivotAsync(
+            [FromBody] GenerateNeuCharPivotRequest request)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(request.XncfUid))
+            {
+                return BadRequest("模块 UID 不能为空。");
+            }
+            if (request.UserRequirement?.Length > 10_000)
+            {
+                return BadRequest("生成要求不能超过 10000 个字符。");
+            }
+
+            var current = await _neuCharPivotService.GetSnapshotAsync(
+                request.XncfUid,
+                HttpContext.RequestAborted).ConfigureAwait(false);
+            var operation = current == null
+                ? ChatAgentOperation.GenerateNeuCharPivot
+                : ChatAgentOperation.RefineNeuCharPivot;
+            var adminUserId = _adminWorkContextProvider.GetAdminWorkContext().AdminUserId;
+            var eventRequest = new ChatAgentRequestEvent(
+                operation,
+                Register.ModuleUid,
+                request.XncfUid,
+                adminUserId,
+                request.AiModelId,
+                request.UserRequirement,
+                current?.Configuration.LayoutSchemaJson,
+                current?.Configuration.ChatSessionId);
+            ChatAgentResponseEvent response;
+            try
+            {
+                response = await _eventBusRequestClient.RequestAsync<ChatAgentResponseEvent>(
+                    eventRequest,
+                    TimeSpan.FromMinutes(3),
+                    HttpContext.RequestAborted).ConfigureAwait(false);
+            }
+            catch (TimeoutException)
+            {
+                return StatusCode(504, "ChatAgent 生成超时，请稍后重试；本次异常会保留在服务端日志中。");
+            }
+            if (!response.Success)
+            {
+                return BadRequest(response.ErrorMessage ?? response.Message);
+            }
+
+            var snapshot = await _neuCharPivotService.GetSnapshotAsync(
+                request.XncfUid,
+                HttpContext.RequestAborted).ConfigureAwait(false);
+            return Ok(ToPivotResponse(snapshot));
+        }
+
+        public async Task<IActionResult> OnPostSaveLoopTaskAsync([FromBody] SaveLoopTaskRequest request)
+        {
+            if (request == null || request.FunctionId <= 0 || request.ParametersJson?.Length > 1_000_000)
+            {
+                return BadRequest("Loop Task 请求无效，参数不能超过 1000000 个字符。");
+            }
+            var function = await _neuCharPivotFunctionService.GetObjectAsync(z => z.Id == request.FunctionId)
+                .ConfigureAwait(false);
+            if (function == null || !function.Visible)
+            {
+                return BadRequest("NeuCharPivot Function 不存在。");
+            }
+
+            var catalog = await _neuCharFunctionService.GetCatalogAsync(
+                function.ModuleUid,
+                true,
+                HttpContext.RequestAborted).ConfigureAwait(false);
+            var descriptor = catalog.FirstOrDefault(z => string.Equals(
+                z.FunctionKey,
+                function.FunctionKey,
+                StringComparison.OrdinalIgnoreCase));
+            if (descriptor == null)
+            {
+                return BadRequest("Function 在当前模块版本中已不存在。");
+            }
+            if (request.Enabled && !descriptor.ModuleAvailable)
+            {
+                return BadRequest("模块未安装、未加载或未开启，不能启用 Loop Task。");
+            }
+            var task = await _neuCharPivotLoopTaskService.GetObjectAsync(z => z.FunctionId == function.Id)
+                .ConfigureAwait(false);
+            var secretNames = descriptor.Parameters
+                .Where(z => z.ParameterType == ParameterType.Password)
+                .Select(z => z.Name)
+                .ToArray();
+            string plainParameters;
+            string protectedParameters;
+            try
+            {
+                plainParameters = _neuCharParameterProtector.MergeWithExisting(
+                    request.ParametersJson,
+                    task?.ParametersJson,
+                    secretNames);
+                protectedParameters = _neuCharParameterProtector.Protect(plainParameters, secretNames);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            var validationError = NeuCharFunctionService.ValidateRequiredParameters(
+                descriptor.Parameters,
+                plainParameters);
+            if (request.Enabled && validationError != null)
+            {
+                return BadRequest(validationError);
+            }
+
+            task ??= new NeuCharPivotLoopTask(
+                function.Id,
+                _adminWorkContextProvider.GetAdminWorkContext().AdminUserId);
+            task.Configure(request.IntervalSeconds, protectedParameters, request.Enabled, request.UseNeuBell);
+            await _neuCharPivotLoopTaskService.SaveObjectAsync(task).ConfigureAwait(false);
+            return Ok(new
+            {
+                task.Id,
+                task.FunctionId,
+                task.IntervalSeconds,
+                task.Enabled,
+                task.UseNeuBell,
+                task.NextRunAt,
+                task.LastRunAt,
+                task.LastSucceeded,
+                task.LastError
+            });
+        }
+
+        public async Task<IActionResult> OnPostRunPivotFunctionAsync([FromBody] RunPivotFunctionRequest request)
+        {
+            if (request == null || request.FunctionId <= 0)
+            {
+                return BadRequest("NeuCharPivot Function 请求无效。");
+            }
+            var function = await _neuCharPivotFunctionService.GetObjectAsync(z => z.Id == request.FunctionId)
+                .ConfigureAwait(false);
+            if (function == null || !function.Visible)
+            {
+                return BadRequest("NeuCharPivot Function 不存在或已失效。");
+            }
+
+            var log = new NeuCharExecutionLog(
+                "pivot",
+                function.Id,
+                function.ModuleUid,
+                function.FunctionKey,
+                function.FunctionName,
+                $"pivot-{Guid.NewGuid():N}");
+            await _neuCharExecutionLogService.SaveObjectAsync(log).ConfigureAwait(false);
+            var result = await _neuCharFunctionService.ExecuteAsync(
+                function.ModuleUid,
+                function.FunctionKey,
+                request.ParametersJson,
+                HttpContext.RequestAborted).ConfigureAwait(false);
+            log.Complete(result.Success, result.Data?.ToString(), result.ErrorMessage);
+            await _neuCharExecutionLogService.SaveObjectAsync(log).ConfigureAwait(false);
+            return Ok(result);
+        }
+
+        private object ToPivotResponse(NeuCharPivotSnapshot snapshot) => new
+        {
+            configuration = new
+            {
+                snapshot.Configuration.Id,
+                snapshot.Configuration.ModuleUid,
+                snapshot.Configuration.Name,
+                snapshot.Configuration.UserRequirement,
+                snapshot.Configuration.LayoutSchemaJson,
+                snapshot.Configuration.AiModelId,
+                snapshot.Configuration.ChatSessionId,
+                snapshot.Configuration.Revision,
+                snapshot.Configuration.LastGeneratedAt,
+                snapshot.Configuration.LastError
+            },
+            functions = snapshot.Functions.Select(function => new
+            {
+                function.Id,
+                function.ModuleUid,
+                function.FunctionKey,
+                function.FunctionName,
+                function.Description,
+                function.UiSchemaJson,
+                function.DefaultParametersJson,
+                function.ModuleVersion,
+                function.Sort,
+                function.Visible,
+                available = snapshot.FunctionAvailability.TryGetValue(function.Id, out var available) && available,
+                loopTask = snapshot.LoopTasks.TryGetValue(function.Id, out var task) ? new
+                {
+                    task.Id,
+                    task.IntervalSeconds,
+                    task.Enabled,
+                    task.UseNeuBell,
+                    task.NextRunAt,
+                    task.LastRunAt,
+                    task.LastSucceeded,
+                    task.LastError
+                } : null
+            }),
+            snapshot.ModuleAvailable,
+            snapshot.ModuleState
+        };
 
         /// <summary>
         /// 获取日志
@@ -290,7 +440,8 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             Func<Task> uninstall = async () =>
             {
                 //删除菜单
-                SysRolePermissionService sysPermissionService = _serviceProvider.GetService<SysRolePermissionService>();
+                Senparc.Ncf.Service.SysRolePermissionService sysPermissionService =
+                    _serviceProvider.GetService<Senparc.Ncf.Service.SysRolePermissionService>();
                 var menu = await _sysMenuService.GetObjectAsync(z => z.Id == module.MenuId).ConfigureAwait(false);
                 if (menu != null)
                 {
@@ -424,6 +575,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 {
                     Key = new
                     {
+                        functionKey = z.Key.key,
                         z.Key.name,
                         z.Key.description
                     },
@@ -476,5 +628,28 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         public string XncfFunctionName { get; set; }
         [Required]
         public string XncfFunctionParams { get; set; }
+    }
+
+    public sealed class GenerateNeuCharPivotRequest
+    {
+        [Required]
+        public string XncfUid { get; set; }
+        public string UserRequirement { get; set; }
+        public int AiModelId { get; set; }
+    }
+
+    public sealed class SaveLoopTaskRequest
+    {
+        public int FunctionId { get; set; }
+        public int IntervalSeconds { get; set; } = 300;
+        public string ParametersJson { get; set; } = "{}";
+        public bool Enabled { get; set; }
+        public bool UseNeuBell { get; set; }
+    }
+
+    public sealed class RunPivotFunctionRequest
+    {
+        public int FunctionId { get; set; }
+        public string ParametersJson { get; set; } = "{}";
     }
 }

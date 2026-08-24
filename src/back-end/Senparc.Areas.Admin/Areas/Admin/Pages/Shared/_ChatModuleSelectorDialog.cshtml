@@ -4,6 +4,8 @@
     width="960px"
     class="chat-module-selector-dialog"
     append-to-body>
+    <el-tabs v-model="moduleSelectorTab" class="chat-reference-tabs">
+        <el-tab-pane label="XNCF 模块" name="modules">
     <div class="module-selector-toolbar">
         <div class="module-selector-toolbar-left">
             <el-input
@@ -124,6 +126,98 @@
         <i class="el-icon-search"></i>
         <p>@AR["AdminChat.NoMatchingModules"]</p>
     </div>
+        </el-tab-pane>
+
+        <el-tab-pane label="Workflow" name="workflows">
+            <div class="module-selector-toolbar">
+                <div class="module-selector-toolbar-left">
+                    <el-input
+                        size="small"
+                        clearable
+                        v-model="workflowSearchKeyword"
+                        placeholder="搜索 Workflow 名称 / 描述 / 参数"
+                        style="max-width: 320px;">
+                    </el-input>
+                    <el-checkbox
+                        :indeterminate="workflowSelectionIndeterminate"
+                        :value="isAllFilteredWorkflowsSelected"
+                        @@change="handleSelectAllFilteredWorkflows">
+                        当前筛选结果全选
+                    </el-checkbox>
+                    <el-button size="mini" @@click="selectedWorkflowIds = []">清空选择</el-button>
+                </div>
+                <div class="module-selector-toolbar-right">
+                    已选 {{ selectedWorkflowIds.length }} / {{ filteredAvailableWorkflows.length }}
+                </div>
+            </div>
+
+            <div class="module-selector-layout" v-loading="loadingWorkflowOptions" v-if="filteredAvailableWorkflows.length > 0">
+                <div class="module-selector-list-pane">
+                    <div
+                        v-for="item in sortedFilteredAvailableWorkflows"
+                        :key="`workflow-${item.id}`"
+                        class="selector-module-row"
+                        :class="{ 'is-selected': selectedWorkflowIds.includes(item.id), 'is-active': activePreviewWorkflowId === item.id }"
+                        @@click="setPreviewWorkflow(item.id)">
+                        <div class="selector-module-row-main">
+                            <el-checkbox
+                                :value="selectedWorkflowIds.includes(item.id)"
+                                @@change="() => toggleWorkflowSelection(item.id)"
+                                @@click.native.stop>
+                            </el-checkbox>
+                            <i class="fa fa-random selector-module-icon"></i>
+                            <div class="selector-module-row-content">
+                                <div class="selector-module-row-title">
+                                    <span class="selector-module-name" :title="item.name">{{ item.name }}</span>
+                                    <span class="selector-module-version">#{{ item.id }}</span>
+                                </div>
+                                <div class="selector-module-description" :title="item.description">
+                                    {{ item.description || '已启用 Workflow' }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="selector-module-row-actions" @@click.stop>
+                            <a :href="'/Admin/NeuCharWorkflow/Index#workflow-' + item.id">打开</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="module-selector-preview-pane" v-if="previewWorkflow">
+                    <div class="module-selector-preview-header">
+                        <div class="module-selector-preview-title">
+                            <i class="fa fa-random selector-module-icon"></i>
+                            <span>{{ previewWorkflow.name }}</span>
+                        </div>
+                    </div>
+                    <div class="module-selector-preview-body">
+                        <div class="module-selector-preview-subtitle">
+                            {{ previewWorkflow.description || '已启用 Workflow' }}
+                        </div>
+                        <div class="module-selector-preview-section">
+                            <div class="module-selector-preview-section-title">Function Calling 参数</div>
+                            <div v-if="previewWorkflow.parameters && previewWorkflow.parameters.length > 0"
+                                 class="module-selector-functions-list">
+                                <div v-for="parameter in previewWorkflow.parameters"
+                                     :key="`workflow-${previewWorkflow.id}-${parameter.name}`"
+                                     class="module-selector-function-item">
+                                    <div class="module-selector-function-name">{{ parameter.name }}</div>
+                                    <div class="module-selector-function-description">
+                                        {{ parameter.description || '可选参数' }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else class="module-selector-preview-empty">仅接收常规 input 参数</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-else class="module-selector-empty">
+                <i class="el-icon-search"></i>
+                <p>没有可用的已启用 Workflow</p>
+            </div>
+        </el-tab-pane>
+    </el-tabs>
 
     <span slot="footer" class="dialog-footer">
         <el-button @@click="moduleSelectorVisible = false">@AR["Common.取消"]</el-button>

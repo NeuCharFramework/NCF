@@ -1,3 +1,17 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：Index.cshtml.cs
+    文件功能描述：集成 NeuCharPivot 与 NeuCharWorkflow 管理能力并优化后台体验
+
+
+    创建标识：Senparc - 20241028
+
+    修改标识：Senparc - 20260813
+    修改描述：v0.5.0 集成 NeuCharPivot 与 NeuCharWorkflow 管理能力并优化后台体验
+
+----------------------------------------------------------------*/
+
 using Microsoft.AspNetCore.Mvc;
 using Senparc.Areas.Admin.Domain;
 using Senparc.Ncf.Core.Models.DataBaseModel;
@@ -289,6 +303,36 @@ namespace Senparc.Areas.Admin.Pages
                 });
             }
 
+            // NeuCharPivot 是系统级 AI 能力入口，与 AdminChat 同属系统管理；
+            // 聚合页负责跨模块快捷调用。Workflow 由独立 XNCF 自行注册菜单和授权。
+            var pivotMenu = dest.FirstOrDefault(z =>
+                string.Equals(z.MenuName, "NeuCharPivot", StringComparison.OrdinalIgnoreCase));
+            if (pivotMenu == null)
+            {
+                pivotMenu = new SysMenuDto
+                {
+                    MenuName = "NeuCharPivot",
+                    Url = string.Empty,
+                    Icon = "fa fa-th-large",
+                    Id = (index++).ToString(),
+                    ParentId = adminChatParentId
+                };
+                var adminChatIndex = dest.FindIndex(z =>
+                    string.Equals(z.Url, "/Admin/AdminChat/Chat", StringComparison.OrdinalIgnoreCase));
+                dest.Insert(adminChatIndex >= 0 ? adminChatIndex + 1 : 0, pivotMenu);
+            }
+
+            if (!dest.Any(z => string.Equals(z.Url, "/Admin/NeuCharPivot/Aggregate", StringComparison.OrdinalIgnoreCase)))
+            {
+                dest.Add(new SysMenuDto
+                {
+                    MenuName = "聚合",
+                    Url = "/Admin/NeuCharPivot/Aggregate",
+                    Icon = "fa fa-cubes",
+                    Id = (index++).ToString(),
+                    ParentId = pivotMenu.Id
+                });
+            }
             GetSysMenuTreesRecursive(dest, sysMenuTrees, null);
             return sysMenuTrees;
         }

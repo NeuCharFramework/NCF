@@ -7,29 +7,24 @@
     创建标识：Senparc - 20260803
 
     修改标识：Senparc - 20260804
-    修改描述：v0.36.0 展示数据库运行状态并返回维护状态码
+    修改描述：v0.35.0 新增数据库升级维护流程与多平台下载入口
+
+    修改标识：Senparc - 20260808
+    修改描述：v0.35.1 维护页改为无缓存与 noindex 响应头
 
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Senparc.Web.Infrastructure.Database;
 
 namespace Senparc.Web.Pages.Maintenance;
 
 public sealed class DatabaseUpgradeModel : PageModel
 {
-    private readonly DatabaseRuntimeStateStore _stateStore;
-
-    public DatabaseUpgradeModel(DatabaseRuntimeStateStore stateStore)
-    {
-        _stateStore = stateStore;
-    }
-
-    public DatabaseRuntimeState State { get; private set; }
-
     public void OnGet()
     {
-        State = _stateStore.Current;
         Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+        Response.Headers.CacheControl = "no-store, no-cache";
+        Response.Headers.Pragma = "no-cache";
+        Response.Headers.Append("X-Robots-Tag", "noindex, nofollow");
     }
 }

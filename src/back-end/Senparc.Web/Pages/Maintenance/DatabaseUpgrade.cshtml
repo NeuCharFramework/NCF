@@ -1,5 +1,4 @@
 @page "/Maintenance/DatabaseUpgrade"
-@using Senparc.Web.Infrastructure.Database
 @model Senparc.Web.Pages.Maintenance.DatabaseUpgradeModel
 @{
     Layout = null;
@@ -9,49 +8,29 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>NCF 数据库需要升级</title>
+    <title>NCF 系统维护</title>
     <style>
         :root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
         body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f5f7fa; color: #243447; }
         main { width: min(720px, calc(100% - 3rem)); padding: 2.5rem; box-sizing: border-box; background: #fff; border-radius: 14px; box-shadow: 0 14px 44px rgba(36, 52, 71, .12); }
         h1 { margin-top: 0; font-size: 1.75rem; }
-        p, li { line-height: 1.75; }
+        p { line-height: 1.75; }
         code { display: block; margin: 1rem 0; padding: .9rem 1rem; overflow-wrap: anywhere; background: #f2f4f7; border-radius: 8px; }
         .status { display: inline-block; padding: .25rem .65rem; border-radius: 999px; background: #fff3cd; color: #8a5a00; }
-        ul { padding-left: 1.25rem; }
         small { color: #667085; }
     </style>
 </head>
 <body>
 <main>
-    <span class="status">@Model.State.Status</span>
-    <h1>数据库需要维护</h1>
-    <p>@Model.State.Message</p>
-    @if (Model.State.Modules.Count > 0)
-    {
-        <ul>
-        @foreach (var module in Model.State.Modules)
-        {
-            <li><strong>@module.Name</strong>：@string.Join(", ", module.PendingMigrations)</li>
-        }
-        </ul>
-    }
-    @if (Model.State.Status == DatabaseRuntimeStatus.UpgradeRequired && Model.State.Modules.Count > 0)
-    {
-        <p>请先备份数据库，然后在站点目录执行独立升级命令。该命令不会启动正常网站或 XNCF 后台任务：</p>
-        <code>dotnet run -- --database-upgrade</code>
-        <p>发布版本可执行：</p>
-        <code>dotnet Senparc.Web.dll --database-upgrade</code>
-        <small>升级完成并显示“数据库升级完成”后，重新正常启动站点。</small>
-    }
-    else if (Model.State.Status == DatabaseRuntimeStatus.UpgradeRequired)
-    {
-        <p>程序检测到实际架构与模型不一致，但没有取得可安全执行的迁移列表。升级命令会拒绝修改数据库，请检查迁移文件和迁移历史后再处理。</p>
-    }
-    else if (Model.State.Status == DatabaseRuntimeStatus.Unavailable)
-    {
-        <p>请先恢复数据库连接、账号权限或基础表。为避免误写，数据库不可用时升级命令不会执行迁移。</p>
-    }
+    <span class="status">维护中</span>
+    <h1>系统数据库需要维护</h1>
+    <p>当前站点暂不可用，请联系系统管理员处理。</p>
+    <p>管理员请登录<strong>部署此站点的服务器或容器</strong>，查看应用控制台或服务端日志。升级命令必须在该部署环境中执行，而不是在浏览此页面的客户端上执行。</p>
+    <p>确认需要升级后，请先备份数据库，然后在服务器或容器的应用目录执行独立升级命令。该命令不会启动正常网站或 XNCF 后台任务：</p>
+    <code>dotnet run -- --database-upgrade</code>
+    <p>发布版本可执行：</p>
+    <code>dotnet Senparc.Web.dll --database-upgrade</code>
+    <small>若数据库连接不可用或无法安全确定待执行的迁移，命令将拒绝修改数据库。升级完成并显示“数据库升级完成”后，请重新正常启动站点。</small>
 </main>
 </body>
 </html>

@@ -179,12 +179,13 @@
   <data name="AdminChat.MessageNotFound" xml:space="preserve"><value>Сообщение не найдено</value></data>
   <data name="AdminChat.SetFeedbackSuccess" xml:space="preserve"><value>Отзыв успешно отправлен</value></data>
   <data name="AdminChat.SelectAtLeastOneMessage" xml:space="preserve"><value>Выберите хотя бы одно сообщение</value></data>
+  <data name="AdminChat.SelectAtLeastOneModule" xml:space="preserve"><value>Выберите хотя бы один модуль XNCF</value></data>
   <data name="AdminChat.DeleteMessagesSuccess" xml:space="preserve"><value>Успешно удалено. Удалено сообщений: {0}</value></data>
   <data name="AdminChat.AddModulesSuccess" xml:space="preserve"><value>Модули успешно добавлены</value></data>
   <data name="Admin.Layout.Account" xml:space="preserve"><value>Моя учетная запись</value></data>
   <data name="Admin.Layout.CurrentAccount" xml:space="preserve"><value>Текущая учетная запись: {0}</value></data>
   <data name="Admin.Layout.PoweredBy" xml:space="preserve"><value>При поддержке</value></data>
-  <data name="Admin.Footer.SynchroLabel" xml:space="preserve"><value>Синхро</value></data>
+  <data name="Admin.Footer.NeuBellLabel" xml:space="preserve"><value>NeuBell</value></data>
   <data name="Admin.Session.Title" xml:space="preserve"><value>Срок входа скоро истечет</value></data>
   <data name="Admin.Session.Message" xml:space="preserve"><value>Срок вашей сессии входа скоро истечет. Можно продолжить работу или выйти сейчас.</value></data>
   <data name="Admin.Session.KeepLogin" xml:space="preserve"><value>Остаться в системе</value></data>
@@ -193,6 +194,26 @@
   <data name="Admin.Common.NoTime" xml:space="preserve"><value>Нет времени</value></data>
   <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>Скопировано. Используйте Ctrl+V для вставки.</value></data>
   <data name="Admin.Home.Header" xml:space="preserve"><value>Панель администратора NeuCharFramework</value></data>
+  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>Текущее состояние хоста</value></data>
+  <data name="Admin.Home.HostMetricsRealtime" xml:space="preserve"><value>В реальном времени · каждые 2 секунды</value></data>
+  <data name="Admin.Home.HostCpu" xml:space="preserve"><value>CPU хоста (общая)</value></data>
+  <data name="Admin.Home.HostCpuDetail" xml:space="preserve"><value>Общая загрузка хоста</value></data>
+  <data name="Admin.Home.HostScope" xml:space="preserve"><value>Хост</value></data>
+  <data name="Admin.Home.WebScope" xml:space="preserve"><value>Web</value></data>
+  <data name="Admin.Home.HostMemory" xml:space="preserve"><value>Физическая память</value></data>
+  <data name="Admin.Home.HostMemoryAvailable" xml:space="preserve"><value>Доступно</value></data>
+  <data name="Admin.Home.HostNetwork" xml:space="preserve"><value>Сетевой трафик в реальном времени</value></data>
+  <data name="Admin.Home.HostNetworkTotal" xml:space="preserve"><value>Всего</value></data>
+  <data name="Admin.Home.HostInterfaces" xml:space="preserve"><value>активных интерфейсов</value></data>
+  <data name="Admin.Home.HostProcess" xml:space="preserve"><value>Текущий веб-процесс</value></data>
+  <data name="Admin.Home.HostProcessCpu" xml:space="preserve"><value>CPU веб-процесса</value></data>
+  <data name="Admin.Home.HostProcessWorkingSet" xml:space="preserve"><value>Рабочий набор памяти</value></data>
+  <data name="Admin.Home.HostProcessUptime" xml:space="preserve"><value>Время работы</value></data>
+  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>Последние 30 замеров (только эта страница)</value></data>
+  <data name="Admin.Home.HostNetworkReceive" xml:space="preserve"><value>Приём</value></data>
+  <data name="Admin.Home.HostNetworkSend" xml:space="preserve"><value>Передача</value></data>
+  <data name="Admin.Home.HostMetricsInvalidResponse" xml:space="preserve"><value>API метрик хоста вернул недопустимые данные</value></data>
+  <data name="Admin.Home.HostMetricsUnavailable" xml:space="preserve"><value>Метрики хоста временно недоступны</value></data>
   <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>Установленные модули</value></data>
   <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>Модули, ожидающие обновления</value></data>
   <data name="Admin.Home.NewModules" xml:space="preserve"><value>Найдены новые модули</value></data>
@@ -355,6 +376,32 @@
   <data name="Xncf.NewModules" xml:space="preserve"><value>Новые модули</value></data>
   <data name="Xncf.InstalledModules" xml:space="preserve"><value>Установленные модули</value></data>
   <data name="Xncf.PendingUpdates" xml:space="preserve"><value>Модули, ожидающие обновления</value></data>
+  <data name="Xncf.BatchUpdateAndEnable" xml:space="preserve"><value>Обновить и включить выбранные</value></data>
+  <data name="Xncf.BatchUpdate.SelectedCount" xml:space="preserve"><value>Выбрано модулей: {0}</value></data>
+  <data name="Xncf.BatchUpdate.SelectAtLeastOne" xml:space="preserve"><value>Выберите хотя бы один модуль, ожидающий обновления.</value></data>
+  <data name="Xncf.BatchUpdate.Confirm" xml:space="preserve"><value>Обновить и включить выбранные модули ({0})?</value></data>
+  <data name="Xncf.BatchUpdate.Title" xml:space="preserve"><value>Пакетное обновление модулей</value></data>
+  <data name="Xncf.BatchUpdateResult" xml:space="preserve"><value>Состояние пакетной операции</value></data>
+  <data name="Xncf.BatchUpdate.Summary" xml:space="preserve"><value>Обработано модулей: {0}; успешно: {1}; с ошибкой: {2}.</value></data>
+  <data name="Xncf.BatchUpdate.VersionResult" xml:space="preserve"><value>Изменение версии</value></data>
+  <data name="Xncf.BatchUpdate.TargetVersion" xml:space="preserve"><value>Целевая версия: {0}</value></data>
+  <data name="Xncf.BatchUpdate.UpdateStatus" xml:space="preserve"><value>Обновление</value></data>
+  <data name="Xncf.BatchUpdate.EnableStatus" xml:space="preserve"><value>Включение</value></data>
+  <data name="Xncf.BatchUpdate.FinalState" xml:space="preserve"><value>Итоговое состояние</value></data>
+  <data name="Xncf.BatchUpdate.Details" xml:space="preserve"><value>Сведения</value></data>
+  <data name="Xncf.BatchUpdate.Success" xml:space="preserve"><value>Успешно</value></data>
+  <data name="Xncf.BatchUpdate.Failed" xml:space="preserve"><value>Ошибка</value></data>
+  <data name="Xncf.BatchUpdate.NoResult" xml:space="preserve"><value>Результат пакетной операции не получен.</value></data>
+  <data name="Xncf.BatchUpdate.RefreshFailed" xml:space="preserve"><value>Операция завершена, но обновить состояние не удалось. Обновите страницу вручную.</value></data>
+  <data name="Xncf.BatchUpdate.RequestFailed" xml:space="preserve"><value>Не удалось выполнить пакетное обновление и включение.</value></data>
+  <data name="Xncf.BatchUpdate.UnknownModule" xml:space="preserve"><value>Неизвестный модуль</value></data>
+  <data name="Xncf.BatchUpdate.ModuleUnavailable" xml:space="preserve"><value>Модуль не существует, игнорируется или не загружен.</value></data>
+  <data name="Xncf.BatchUpdate.UpdateNotApplied" xml:space="preserve"><value>Обновление модуля не применено.</value></data>
+  <data name="Xncf.BatchUpdate.EnableNotApplied" xml:space="preserve"><value>Не удалось перевести модуль во включённое состояние.</value></data>
+  <data name="Xncf.BatchUpdate.VersionMismatch" xml:space="preserve"><value>Целевая версия — {0}, фактическая версия — {1}.</value></data>
+  <data name="Xncf.BatchUpdate.UpdateAndEnableSuccess" xml:space="preserve"><value>Модуль успешно обновлён и включён.</value></data>
+  <data name="Xncf.BatchUpdate.EnableFailed" xml:space="preserve"><value>Обновление выполнено, но включить модуль не удалось: {0}</value></data>
+  <data name="Xncf.BatchUpdate.UpdateFailed" xml:space="preserve"><value>Ошибка обновления: {0}</value></data>
   <data name="Xncf.ModuleName" xml:space="preserve"><value>Имя модуля</value></data>
   <data name="Xncf.MenuName" xml:space="preserve"><value>Имя меню (отображаемое имя)</value></data>
   <data name="Xncf.Version" xml:space="preserve"><value>Версия</value></data>
@@ -485,4 +532,21 @@
   <data name="AdminChat.NoMenuOrFunctions" xml:space="preserve"><value>В этом модуле нет доступных меню или функций.</value></data>
   <data name="AdminChat.NoMatchingModules" xml:space="preserve"><value>Совпадающие модули не найдены</value></data>
   <data name="AdminChat.ConfirmAdd" xml:space="preserve"><value>Подтвердить добавление</value></data>
- </root>
+  <data name="Admin.Home.AgentsOverview" xml:space="preserve"><value>Обзор работы Agents</value></data>
+  <data name="Admin.Home.AgentsOverviewLive" xml:space="preserve"><value>В реальном времени</value></data>
+  <data name="Admin.Home.AgentsManage" xml:space="preserve"><value>Управление Agents</value></data>
+  <data name="Admin.Home.AgentsTotal" xml:space="preserve"><value>Всего Agents</value></data>
+  <data name="Admin.Home.AgentsLocal" xml:space="preserve"><value>Локальные</value></data>
+  <data name="Admin.Home.AgentsRemoteA2A" xml:space="preserve"><value>Подключённые A2A</value></data>
+  <data name="Admin.Home.AgentsEnabled" xml:space="preserve"><value>Включено</value></data>
+  <data name="Admin.Home.AgentsDisabled" xml:space="preserve"><value>Отключено</value></data>
+  <data name="Admin.Home.AgentsPublishedA2A" xml:space="preserve"><value>Опубликованные A2A</value></data>
+  <data name="Admin.Home.AgentsConfigured" xml:space="preserve"><value>Настроено</value></data>
+  <data name="Admin.Home.AgentsActive" xml:space="preserve"><value>Активные</value></data>
+  <data name="Admin.Home.AgentsGroups" xml:space="preserve"><value>Группы сотрудничества</value></data>
+  <data name="Admin.Home.AgentsChatting" xml:space="preserve"><value>В диалоге</value></data>
+  <data name="Admin.Home.AgentsActiveTasks" xml:space="preserve"><value>Активные задачи</value></data>
+  <data name="Admin.Home.AgentsWaitingOrPaused" xml:space="preserve"><value>Ожидание / пауза</value></data>
+  <data name="Admin.Home.AiQuickDescription" xml:space="preserve"><value>Используйте быстрый AI-чат в Footer, чтобы при необходимости открыть полный диалог и выбрать контекст.</value></data>
+  <data name="Admin.Home.AiQuickDialog" xml:space="preserve"><value>Открыть быстрый чат</value></data>
+</root>

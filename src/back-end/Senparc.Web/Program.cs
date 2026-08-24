@@ -3,10 +3,10 @@
   
     文件名：Program.cs
     文件功能描述：Program 相关实现
-    
-    
+
+
     创建标识：Senparc - 20241028
-    
+
     修改标识：Senparc - 20260702
     修改描述：v0.11.0-preview2 同步 master/main 基线范围内改动并完成递归依赖版本处理
 
@@ -23,7 +23,16 @@
     修改描述：v0.34.1 完善站点初始化状态、浏览器导航与多语言提示
 
     修改标识：Senparc - 20260804
-    修改描述：v0.36.0 增加数据库状态检查、维护隔离与独立升级命令
+    修改描述：v0.35.0 新增数据库升级维护流程与多平台下载入口
+
+    修改标识：Senparc - 20260812
+    修改描述：补齐 UseAuthentication，避免重启后旧 Cookie 被误判为 403
+
+    修改标识：Senparc - 20260813
+    修改描述：v0.36.0 集成工作流模块与 A2A 发布配置并修复认证持久化
+
+    修改标识：Senparc - 20260815
+    修改描述：v0.36.1 适配工作流、A2A 与预览模块宿主配置
 
 ----------------------------------------------------------------*/
 
@@ -81,6 +90,21 @@ ReportDatabaseUpgradeProgress("应用宿主创建完成，正在注册 XNCF 模�
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+}
+
+// A Sandbox NCF preview is exposed through /sandbox-preview/{sessionId}. The value is supplied
+// only by the fixed Sandbox container workload; normal sites have no path-base at all. Applying
+// it before NCF/static/routing middleware keeps links, redirects and WebSocket endpoints inside
+// the authenticated reverse-proxy prefix instead of leaking to the main host root.
+var xncfPreviewPathBase = Environment.GetEnvironmentVariable("NCF_XNCF_PREVIEW_PATH_BASE");
+if (!string.IsNullOrWhiteSpace(xncfPreviewPathBase)
+    && xncfPreviewPathBase.StartsWith('/')
+    && !xncfPreviewPathBase.Contains("..", StringComparison.Ordinal)
+    && !xncfPreviewPathBase.Contains('\\')
+    && !xncfPreviewPathBase.Contains('\r')
+    && !xncfPreviewPathBase.Contains('\n'))
+{
+    app.UsePathBase(xncfPreviewPathBase);
 }
 
 // Configure request localization (cookie first, then query/header providers)
@@ -158,6 +182,7 @@ app.UseDatabaseMaintenanceMode();
 app.UseCookiePolicy();
 
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();

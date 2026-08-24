@@ -16,11 +16,18 @@
     修改标识：Senparc - 20260729
     修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
 
+    修改标识：Senparc - 20260808
+    修改描述：v0.4.0 适配桌面管理员换票相关的后台对话安全上下文
+
+    修改标识：Senparc - 20260822
+    修改描述：v0.6.0 新增管理端 Chat 会话工作流能力
+
 ----------------------------------------------------------------*/
 using Microsoft.AspNetCore.Mvc;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto;
 using Senparc.Areas.Admin.Domain.Services;
+using Senparc.Xncf.NeuCharWorkflow.Abstractions.Workflow;
 using Senparc.CO2NET;
 using Senparc.CO2NET.WebApi;
 using Senparc.Ncf.Core.AppServices;
@@ -51,6 +58,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         private readonly AdminChatSessionService _sessionService;
         private readonly AdminChatMessageService _messageService;
         private readonly AdminChatSessionModuleService _sessionModuleService;
+        private readonly AdminChatSessionWorkflowService _sessionWorkflowService;
         private readonly AdminChatAiService _chatAiService;
         private readonly IStringLocalizer<AdminResource> _localizer;
         private readonly IEventBus _eventBus;
@@ -60,12 +68,14 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             AdminChatSessionService sessionService,
             AdminChatMessageService messageService,
             AdminChatSessionModuleService sessionModuleService,
+            AdminChatSessionWorkflowService sessionWorkflowService,
             AdminChatAiService chatAiService,
             IStringLocalizer<AdminResource> localizer) : base(serviceProvider)
         {
             _sessionService = sessionService;
             _messageService = messageService;
             _sessionModuleService = sessionModuleService;
+            _sessionWorkflowService = sessionWorkflowService;
             _chatAiService = chatAiService;
             _localizer = localizer;
             _eventBus = serviceProvider.GetService<IEventBus>();
@@ -112,6 +122,26 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 }
 
                 await _sessionModuleService.AddModulesToSessionAsync(session.Id, modules);
+
+                var workflowProvider = ServiceProvider.GetService<IWorkflowFunctionCallingProvider>();
+                if (workflowProvider != null && request.WorkflowIds != null)
+                {
+                    var selectedWorkflowIds = request.WorkflowIds
+                        .Where(id => id > 0)
+                        .ToHashSet();
+                    var availableWorkflows = await workflowProvider
+                        .GetAvailableAsync(userId)
+                        .ConfigureAwait(false);
+                    await _sessionWorkflowService.AddWorkflowsToSessionAsync(
+                        session.Id,
+                        availableWorkflows
+                            .Where(workflow => selectedWorkflowIds.Contains(workflow.Id))
+                            .Select(workflow => (
+                                workflow.Id,
+                                workflow.Name,
+                                workflow.Description))
+                            .ToList());
+                }
 
                 if (!string.IsNullOrEmpty(request.InitialMessage))
                 {
@@ -185,10 +215,12 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
                 var (messages, _) = await _messageService.GetSessionMessagesAsync(sessionId);
                 var modules = await _sessionModuleService.GetSessionModulesAsync(sessionId);
+                var workflows = await _sessionWorkflowService.GetSessionWorkflowsAsync(sessionId);
 
                 var sessionDto = AdminChatSessionDto.CreateFromEntity(session);
                 sessionDto.Messages = messages.Select(AdminChatMessageDto.CreateFromEntity).ToList();
                 sessionDto.Modules = modules.Select(z => MapModuleDtoWithRegisterInfo(AdminChatSessionModuleDto.CreateFromEntity(z))).ToList();
+                sessionDto.Workflows = await MapWorkflowDtosAsync(workflows, userId).ConfigureAwait(false);
 
                 return new GetSessionDetailResponse
                 {
@@ -385,10 +417,91 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     throw new NcfExceptionBase(_localizer["AdminChat.SessionNotFoundOrForbidden"]);
                 }
 
-                var modules = request.Modules.Select(m => (m.Uid, m.Name, m.Version ?? "")).ToList();
+                var modules = (request.Modules ?? new List<ModuleInfo>())
+                    .Where(m => m != null && !string.IsNullOrWhiteSpace(m.Uid))
+                    .GroupBy(m => m.Uid, StringComparer.OrdinalIgnoreCase)
+                    .Select(group => group.First())
+                    .Select(m => (m.Uid, m.Name, m.Version ?? ""))
+                    .ToList();
+                if (!modules.Any())
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.SelectAtLeastOneModule"]);
+                }
+
                 await _sessionModuleService.AddModulesToSessionAsync(request.SessionId, modules);
 
                 logger.Append($"添加模块: SessionId={request.SessionId}, Count={modules.Count}");
+                await PublishSyncEventAsync(userId, request.SessionId, "modules-changed");
+                return _localizer["AdminChat.AddModulesSuccess"];
+            });
+        }
+
+        /// <summary>
+        /// 将会话的模块关联更新为指定集合；系统模块管理器始终保留。
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Post)]
+        public async Task<StringAppResponse> SetSessionModulesAsync([FromBody] AddModulesRequest request)
+        {
+            return await this.GetResponseAsync<StringAppResponse, string>(async (response, logger) =>
+            {
+                var userId = GetCurrentAdminUserInfoId();
+                if (userId <= 0)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.UserNotLoggedIn"]);
+                }
+
+                var session = await _sessionService.GetSessionByIdAsync(request.SessionId, userId);
+                if (session == null)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.SessionNotFoundOrForbidden"]);
+                }
+
+                var requestedUids = (request.Modules ?? new List<ModuleInfo>())
+                    .Where(module => module != null && !string.IsNullOrWhiteSpace(module.Uid))
+                    .Select(module => module.Uid)
+                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+                requestedUids.Add(SiteConfig.SYSTEM_XNCF_MODULE_XNCF_MODULE_MANAGER_UID);
+
+                var registers = XncfRegisterManager.RegisterList
+                    .Where(register => register != null && requestedUids.Contains(register.Uid))
+                    .GroupBy(register => register.Uid, StringComparer.OrdinalIgnoreCase)
+                    .Select(group => group.First())
+                    .ToArray();
+                var availabilityService = ServiceProvider.GetRequiredService<INeuBellModuleAvailabilityService>();
+                var openModuleUids = await availabilityService.GetOpenModuleUidsAsync(registers.Select(register => register.Uid));
+                openModuleUids = openModuleUids
+                    .Append(SiteConfig.SYSTEM_XNCF_MODULE_XNCF_MODULE_MANAGER_UID)
+                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+                var desiredModules = registers
+                    .Where(register => openModuleUids.Contains(register.Uid))
+                    .Select(register => (register.Uid, register.Name, register.Version ?? string.Empty))
+                    .ToList();
+                if (desiredModules.All(module => !string.Equals(
+                        module.Uid,
+                        SiteConfig.SYSTEM_XNCF_MODULE_XNCF_MODULE_MANAGER_UID,
+                        StringComparison.OrdinalIgnoreCase)))
+                {
+                    desiredModules.Add((
+                        SiteConfig.SYSTEM_XNCF_MODULE_XNCF_MODULE_MANAGER_UID,
+                        SiteConfig.SYSTEM_XNCF_MODULE_XNCF_MODULE_MANAGER_UID,
+                        string.Empty));
+                }
+
+                var desiredUidSet = desiredModules
+                    .Select(module => module.Uid)
+                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+                var existingModules = await _sessionModuleService.GetSessionModulesAsync(request.SessionId);
+                // 先幂等添加目标集合，再移除多余关联；若中途失败，最多暂时保留旧关联，
+                // 不会先删掉用户原有的可用模块。
+                await _sessionModuleService.AddModulesToSessionAsync(request.SessionId, desiredModules);
+                foreach (var existingModule in existingModules.Where(module => !desiredUidSet.Contains(module.XncfModuleUid)))
+                {
+                    await _sessionModuleService.RemoveModuleFromSessionAsync(request.SessionId, existingModule.XncfModuleUid);
+                }
+
+                logger.Append($"更新模块关联: SessionId={request.SessionId}, Count={desiredModules.Count}");
+                await PublishSyncEventAsync(userId, request.SessionId, "modules-changed");
                 return _localizer["AdminChat.AddModulesSuccess"];
             });
         }
@@ -420,6 +533,115 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     Modules = modules.Select(z => MapModuleDtoWithRegisterInfo(AdminChatSessionModuleDto.CreateFromEntity(z))).ToList()
                 };
             });
+        }
+
+        /// <summary>
+        /// 将会话的 Workflow 关联更新为指定集合。
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Post)]
+        public async Task<StringAppResponse> SetSessionWorkflowsAsync([FromBody] SetWorkflowsRequest request)
+        {
+            return await this.GetResponseAsync<StringAppResponse, string>(async (response, logger) =>
+            {
+                var userId = GetCurrentAdminUserInfoId();
+                if (userId <= 0)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.UserNotLoggedIn"]);
+                }
+
+                var session = await _sessionService.GetSessionByIdAsync(request.SessionId, userId);
+                if (session == null)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.SessionNotFoundOrForbidden"]);
+                }
+
+                var provider = ServiceProvider.GetService<IWorkflowFunctionCallingProvider>();
+                var available = provider == null
+                    ? Array.Empty<WorkflowFunctionCallingDescriptor>()
+                    : await provider.GetAvailableAsync(userId).ConfigureAwait(false);
+                var requestedIds = (request.WorkflowIds ?? new List<int>())
+                    .Where(id => id > 0)
+                    .ToHashSet();
+                var desired = available
+                    .Where(workflow => requestedIds.Contains(workflow.Id))
+                    .Select(workflow => (
+                        workflow.Id,
+                        workflow.Name,
+                        workflow.Description))
+                    .ToList();
+
+                await _sessionWorkflowService.SetSessionWorkflowsAsync(request.SessionId, desired);
+                logger.Append($"更新 Workflow 关联: SessionId={request.SessionId}, Count={desired.Count}");
+                await PublishSyncEventAsync(userId, request.SessionId, "workflows-changed");
+                return _localizer["AdminChat.AddModulesSuccess"];
+            });
+        }
+
+        /// <summary>
+        /// 获取当前已安装并开放、可关联到 Admin Chat 会话的 XNCF 模块。
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Get)]
+        public async Task<AppResponseBase<GetAvailableModulesResponse>> GetAvailableModulesAsync()
+        {
+            return await this.GetResponseAsync<AppResponseBase<GetAvailableModulesResponse>, GetAvailableModulesResponse>(async (response, logger) =>
+            {
+                var registers = XncfRegisterManager.RegisterList
+                    .Where(register => register != null && !string.IsNullOrWhiteSpace(register.Uid))
+                    .GroupBy(register => register.Uid, StringComparer.OrdinalIgnoreCase)
+                    .Select(group => group.First())
+                    .ToArray();
+                var availabilityService = ServiceProvider.GetRequiredService<INeuBellModuleAvailabilityService>();
+                var openModuleUids = await availabilityService.GetOpenModuleUidsAsync(registers.Select(register => register.Uid));
+
+                var modules = registers
+                    .Where(register => openModuleUids.Contains(register.Uid))
+                    .Select(register => new AvailableModuleDto
+                    {
+                        Uid = register.Uid,
+                        Name = register.Name,
+                        DisplayName = string.IsNullOrWhiteSpace(register.MenuName) ? register.Name : register.MenuName,
+                        Version = register.Version ?? string.Empty,
+                        Description = register.Description ?? string.Empty,
+                        Icon = register.Icon ?? string.Empty,
+                        IsRequired = string.Equals(
+                            register.Uid,
+                            SiteConfig.SYSTEM_XNCF_MODULE_XNCF_MODULE_MANAGER_UID,
+                            StringComparison.OrdinalIgnoreCase)
+                    })
+                    .OrderBy(module => module.DisplayName)
+                    .ToList();
+
+                return new GetAvailableModulesResponse
+                {
+                    Modules = modules
+                };
+            });
+        }
+
+        /// <summary>
+        /// 获取当前管理员可用于 AdminChat Function Calling 的已启用 Workflow。
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Get)]
+        public async Task<AppResponseBase<GetAvailableWorkflowsResponse>> GetAvailableWorkflowsAsync()
+        {
+            return await this.GetResponseAsync<AppResponseBase<GetAvailableWorkflowsResponse>, GetAvailableWorkflowsResponse>(
+                async (response, logger) =>
+                {
+                    var userId = GetCurrentAdminUserInfoId();
+                    if (userId <= 0)
+                    {
+                        throw new NcfExceptionBase(_localizer["AdminChat.UserNotLoggedIn"]);
+                    }
+
+                    var provider = ServiceProvider.GetService<IWorkflowFunctionCallingProvider>();
+                    var workflows = provider == null
+                        ? Array.Empty<WorkflowFunctionCallingDescriptor>()
+                        : await provider.GetAvailableAsync(userId).ConfigureAwait(false);
+                    return new GetAvailableWorkflowsResponse
+                    {
+                        Workflows = workflows.Select(MapAvailableWorkflowDto).ToList()
+                    };
+                });
         }
 
         /// <summary>
@@ -509,6 +731,51 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             return dto;
         }
 
+        private async Task<List<AdminChatSessionWorkflowDto>> MapWorkflowDtosAsync(
+            IReadOnlyList<AdminChatSessionWorkflow> workflows,
+            int userId)
+        {
+            var provider = ServiceProvider.GetService<IWorkflowFunctionCallingProvider>();
+            var available = provider == null
+                ? Array.Empty<WorkflowFunctionCallingDescriptor>()
+                : await provider.GetAvailableAsync(userId).ConfigureAwait(false);
+            var availableById = available.ToDictionary(workflow => workflow.Id);
+
+            return workflows.Select(workflow =>
+            {
+                var dto = AdminChatSessionWorkflowDto.CreateFromEntity(workflow);
+                if (availableById.TryGetValue(workflow.WorkflowId, out var descriptor))
+                {
+                    dto.WorkflowName = descriptor.Name;
+                    dto.WorkflowDescription = descriptor.Description;
+                    dto.Parameters = descriptor.Parameters
+                        .Select(parameter => new WorkflowFunctionCallingParameterDto
+                        {
+                            Name = parameter.Name,
+                            Description = parameter.Description
+                        })
+                        .ToList();
+                }
+                return dto;
+            }).ToList();
+        }
+
+        private static AvailableWorkflowDto MapAvailableWorkflowDto(
+            WorkflowFunctionCallingDescriptor workflow) =>
+            new()
+            {
+                Id = workflow.Id,
+                Name = workflow.Name,
+                Description = workflow.Description ?? string.Empty,
+                Parameters = workflow.Parameters
+                    .Select(parameter => new WorkflowParameterDto
+                    {
+                        Name = parameter.Name,
+                        Description = parameter.Description ?? string.Empty
+                    })
+                    .ToList()
+            };
+
         #endregion
 
         #region 私有辅助方法
@@ -577,6 +844,12 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         public List<ModuleInfo> Modules { get; set; }
     }
 
+    public class SetWorkflowsRequest
+    {
+        public int SessionId { get; set; }
+        public List<int> WorkflowIds { get; set; } = new();
+    }
+
     /// <summary>
     /// 模块信息
     /// </summary>
@@ -593,6 +866,47 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
     public class GetSessionModulesResponse
     {
         public List<AdminChatSessionModuleDto> Modules { get; set; }
+    }
+
+    /// <summary>
+    /// 获取可关联模块列表响应。
+    /// </summary>
+    public class GetAvailableModulesResponse
+    {
+        public List<AvailableModuleDto> Modules { get; set; }
+    }
+
+    public class GetAvailableWorkflowsResponse
+    {
+        public List<AvailableWorkflowDto> Workflows { get; set; } = new();
+    }
+
+    public class AvailableWorkflowDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public List<WorkflowParameterDto> Parameters { get; set; } = new();
+    }
+
+    public class WorkflowParameterDto
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
+
+    /// <summary>
+    /// 可关联到 Admin Chat 会话的开放模块。
+    /// </summary>
+    public class AvailableModuleDto
+    {
+        public string Uid { get; set; }
+        public string Name { get; set; }
+        public string DisplayName { get; set; }
+        public string Version { get; set; }
+        public string Description { get; set; }
+        public string Icon { get; set; }
+        public bool IsRequired { get; set; }
     }
 
     /// <summary>

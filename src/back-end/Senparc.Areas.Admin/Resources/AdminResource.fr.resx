@@ -179,12 +179,13 @@
   <data name="AdminChat.MessageNotFound" xml:space="preserve"><value>Message introuvable</value></data>
   <data name="AdminChat.SetFeedbackSuccess" xml:space="preserve"><value>Retour envoyé avec succès</value></data>
   <data name="AdminChat.SelectAtLeastOneMessage" xml:space="preserve"><value>Veuillez sélectionner au moins un message</value></data>
+  <data name="AdminChat.SelectAtLeastOneModule" xml:space="preserve"><value>Veuillez sélectionner au moins un module XNCF</value></data>
   <data name="AdminChat.DeleteMessagesSuccess" xml:space="preserve"><value>Suppression réussie. {0} messages ont été supprimés</value></data>
   <data name="AdminChat.AddModulesSuccess" xml:space="preserve"><value>Ajout réussi</value></data>
   <data name="Admin.Layout.Account" xml:space="preserve"><value>Mon compte</value></data>
   <data name="Admin.Layout.CurrentAccount" xml:space="preserve"><value>Compte actuel : {0}</value></data>
   <data name="Admin.Layout.PoweredBy" xml:space="preserve"><value>Propulsé par</value></data>
-  <data name="Admin.Footer.SynchroLabel" xml:space="preserve"><value>Synchro</value></data>
+  <data name="Admin.Footer.NeuBellLabel" xml:space="preserve"><value>NeuBell</value></data>
   <data name="Admin.Session.Title" xml:space="preserve"><value>La session va expirer</value></data>
   <data name="Admin.Session.Message" xml:space="preserve"><value>Votre session de connexion va expirer. Vous pouvez rester connecté ou vous déconnecter maintenant.</value></data>
   <data name="Admin.Session.KeepLogin" xml:space="preserve"><value>Rester connecté</value></data>
@@ -193,6 +194,26 @@
   <data name="Admin.Common.NoTime" xml:space="preserve"><value>Aucune heure</value></data>
   <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>Copie réussie. Utilisez Ctrl+V pour coller.</value></data>
   <data name="Admin.Home.Header" xml:space="preserve"><value>Administration NeuCharFramework</value></data>
+  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>État actuel de l’hôte</value></data>
+  <data name="Admin.Home.HostMetricsRealtime" xml:space="preserve"><value>En direct · actualisation toutes les 2 secondes</value></data>
+  <data name="Admin.Home.HostCpu" xml:space="preserve"><value>CPU de l’hôte (global)</value></data>
+  <data name="Admin.Home.HostCpuDetail" xml:space="preserve"><value>Utilisation globale de l’hôte</value></data>
+  <data name="Admin.Home.HostScope" xml:space="preserve"><value>Hôte</value></data>
+  <data name="Admin.Home.WebScope" xml:space="preserve"><value>Web</value></data>
+  <data name="Admin.Home.HostMemory" xml:space="preserve"><value>Mémoire physique</value></data>
+  <data name="Admin.Home.HostMemoryAvailable" xml:space="preserve"><value>Disponible</value></data>
+  <data name="Admin.Home.HostNetwork" xml:space="preserve"><value>Débit réseau en direct</value></data>
+  <data name="Admin.Home.HostNetworkTotal" xml:space="preserve"><value>Total</value></data>
+  <data name="Admin.Home.HostInterfaces" xml:space="preserve"><value>interfaces actives</value></data>
+  <data name="Admin.Home.HostProcess" xml:space="preserve"><value>Processus web actuel</value></data>
+  <data name="Admin.Home.HostProcessCpu" xml:space="preserve"><value>CPU du processus web</value></data>
+  <data name="Admin.Home.HostProcessWorkingSet" xml:space="preserve"><value>Mémoire de travail</value></data>
+  <data name="Admin.Home.HostProcessUptime" xml:space="preserve"><value>Durée d’exécution</value></data>
+  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>30 derniers échantillons (cette page uniquement)</value></data>
+  <data name="Admin.Home.HostNetworkReceive" xml:space="preserve"><value>Réception</value></data>
+  <data name="Admin.Home.HostNetworkSend" xml:space="preserve"><value>Envoi</value></data>
+  <data name="Admin.Home.HostMetricsInvalidResponse" xml:space="preserve"><value>L’API des métriques de l’hôte a renvoyé des données invalides</value></data>
+  <data name="Admin.Home.HostMetricsUnavailable" xml:space="preserve"><value>Les métriques de l’hôte sont temporairement indisponibles</value></data>
   <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>Modules installés</value></data>
   <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>Modules à mettre à jour</value></data>
   <data name="Admin.Home.NewModules" xml:space="preserve"><value>Nouveaux modules</value></data>
@@ -355,6 +376,32 @@
   <data name="Xncf.NewModules" xml:space="preserve"><value>Nouveaux modules</value></data>
   <data name="Xncf.InstalledModules" xml:space="preserve"><value>Modules installés</value></data>
   <data name="Xncf.PendingUpdates" xml:space="preserve"><value>Modules à mettre à jour</value></data>
+  <data name="Xncf.BatchUpdateAndEnable" xml:space="preserve"><value>Mettre à jour et activer la sélection</value></data>
+  <data name="Xncf.BatchUpdate.SelectedCount" xml:space="preserve"><value>{0} modules sélectionnés</value></data>
+  <data name="Xncf.BatchUpdate.SelectAtLeastOne" xml:space="preserve"><value>Sélectionnez au moins un module à mettre à jour.</value></data>
+  <data name="Xncf.BatchUpdate.Confirm" xml:space="preserve"><value>Mettre à jour et activer les {0} modules sélectionnés ?</value></data>
+  <data name="Xncf.BatchUpdate.Title" xml:space="preserve"><value>Mise à jour groupée des modules</value></data>
+  <data name="Xncf.BatchUpdateResult" xml:space="preserve"><value>État de l’opération groupée</value></data>
+  <data name="Xncf.BatchUpdate.Summary" xml:space="preserve"><value>{0} modules traités : {1} réussis et {2} échoués.</value></data>
+  <data name="Xncf.BatchUpdate.VersionResult" xml:space="preserve"><value>Changement de version</value></data>
+  <data name="Xncf.BatchUpdate.TargetVersion" xml:space="preserve"><value>Version cible : {0}</value></data>
+  <data name="Xncf.BatchUpdate.UpdateStatus" xml:space="preserve"><value>Mise à jour</value></data>
+  <data name="Xncf.BatchUpdate.EnableStatus" xml:space="preserve"><value>Activation</value></data>
+  <data name="Xncf.BatchUpdate.FinalState" xml:space="preserve"><value>État final</value></data>
+  <data name="Xncf.BatchUpdate.Details" xml:space="preserve"><value>Détails</value></data>
+  <data name="Xncf.BatchUpdate.Success" xml:space="preserve"><value>Réussi</value></data>
+  <data name="Xncf.BatchUpdate.Failed" xml:space="preserve"><value>Échoué</value></data>
+  <data name="Xncf.BatchUpdate.NoResult" xml:space="preserve"><value>Aucun résultat d’opération groupée n’a été renvoyé.</value></data>
+  <data name="Xncf.BatchUpdate.RefreshFailed" xml:space="preserve"><value>L’opération est terminée, mais l’actualisation de l’état a échoué. Actualisez la page manuellement.</value></data>
+  <data name="Xncf.BatchUpdate.RequestFailed" xml:space="preserve"><value>La demande de mise à jour et d’activation groupées a échoué.</value></data>
+  <data name="Xncf.BatchUpdate.UnknownModule" xml:space="preserve"><value>Module inconnu</value></data>
+  <data name="Xncf.BatchUpdate.ModuleUnavailable" xml:space="preserve"><value>Le module n’existe pas, est ignoré ou n’est pas chargé.</value></data>
+  <data name="Xncf.BatchUpdate.UpdateNotApplied" xml:space="preserve"><value>La mise à jour du module n’a pas été appliquée.</value></data>
+  <data name="Xncf.BatchUpdate.EnableNotApplied" xml:space="preserve"><value>Le module n’est pas passé à l’état activé.</value></data>
+  <data name="Xncf.BatchUpdate.VersionMismatch" xml:space="preserve"><value>La version cible est {0}, mais la version réelle est {1}.</value></data>
+  <data name="Xncf.BatchUpdate.UpdateAndEnableSuccess" xml:space="preserve"><value>Mise à jour et activation réussies.</value></data>
+  <data name="Xncf.BatchUpdate.EnableFailed" xml:space="preserve"><value>La mise à jour a réussi, mais l’activation a échoué : {0}</value></data>
+  <data name="Xncf.BatchUpdate.UpdateFailed" xml:space="preserve"><value>Échec de la mise à jour : {0}</value></data>
   <data name="Xncf.ModuleName" xml:space="preserve"><value>Nom du module</value></data>
   <data name="Xncf.MenuName" xml:space="preserve"><value>Nom du menu (nom affiché)</value></data>
   <data name="Xncf.Version" xml:space="preserve"><value>Version</value></data>
@@ -485,4 +532,21 @@
   <data name="AdminChat.NoMenuOrFunctions" xml:space="preserve"><value>Ce module ne contient aucun menu ni aucune fonction disponible.</value></data>
   <data name="AdminChat.NoMatchingModules" xml:space="preserve"><value>Aucun module correspondant</value></data>
   <data name="AdminChat.ConfirmAdd" xml:space="preserve"><value>Confirmer l’ajout</value></data>
- </root>
+  <data name="Admin.Home.AgentsOverview" xml:space="preserve"><value>Vue d’ensemble des Agents</value></data>
+  <data name="Admin.Home.AgentsOverviewLive" xml:space="preserve"><value>Temps réel</value></data>
+  <data name="Admin.Home.AgentsManage" xml:space="preserve"><value>Gérer les Agents</value></data>
+  <data name="Admin.Home.AgentsTotal" xml:space="preserve"><value>Total des Agents</value></data>
+  <data name="Admin.Home.AgentsLocal" xml:space="preserve"><value>Locaux</value></data>
+  <data name="Admin.Home.AgentsRemoteA2A" xml:space="preserve"><value>A2A connectés</value></data>
+  <data name="Admin.Home.AgentsEnabled" xml:space="preserve"><value>Activés</value></data>
+  <data name="Admin.Home.AgentsDisabled" xml:space="preserve"><value>Désactivés</value></data>
+  <data name="Admin.Home.AgentsPublishedA2A" xml:space="preserve"><value>A2A publiés</value></data>
+  <data name="Admin.Home.AgentsConfigured" xml:space="preserve"><value>Configurés</value></data>
+  <data name="Admin.Home.AgentsActive" xml:space="preserve"><value>Actifs</value></data>
+  <data name="Admin.Home.AgentsGroups" xml:space="preserve"><value>Groupes de collaboration</value></data>
+  <data name="Admin.Home.AgentsChatting" xml:space="preserve"><value>En conversation</value></data>
+  <data name="Admin.Home.AgentsActiveTasks" xml:space="preserve"><value>Tâches actives</value></data>
+  <data name="Admin.Home.AgentsWaitingOrPaused" xml:space="preserve"><value>En attente / en pause</value></data>
+  <data name="Admin.Home.AiQuickDescription" xml:space="preserve"><value>Utilisez le chat IA rapide du Footer pour ouvrir la conversation complète et choisir le contexte au besoin.</value></data>
+  <data name="Admin.Home.AiQuickDialog" xml:space="preserve"><value>Ouvrir le chat rapide</value></data>
+</root>

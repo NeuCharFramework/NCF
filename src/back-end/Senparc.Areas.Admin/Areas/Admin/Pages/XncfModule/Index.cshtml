@@ -23,8 +23,8 @@
             </div>
         </el-header>
         <el-main>
-            <el-tabs type="border-card" class="demo-tabs">
-                <el-tab-pane>
+            <el-tabs v-model="activeTab" type="border-card" class="demo-tabs" @@tab-click="handleTabClick">
+                <el-tab-pane name="new">
                     <template #label>
                         @AR["Xncf.NewModules"]<sup class="el-badge__content">{{newTableData.length}}</sup>
                     </template>
@@ -75,7 +75,7 @@
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
-                <el-tab-pane label="@AR["Xncf.InstalledModules"]">
+                <el-tab-pane name="installed" label="@AR["Xncf.InstalledModules"]">
                     <el-table :data="oldTableData.filter(data => !oldTableSearch || data.xncfModule.name.includes(oldTableSearch))"
                                 v-if="oldTableData.length>0"
                                 style="width: 100%;margin-bottom: 20px;">
@@ -143,7 +143,7 @@
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
-                <el-tab-pane>
+                <el-tab-pane name="updates">
                     <template #label>
                         @AR["Xncf.PendingUpdates"]<sup class="el-badge__content">{{updatedTableData.length}}</sup>
                     </template>
@@ -152,8 +152,22 @@
                             <el-button size="mini" type="danger" slot="reference">{{handlerText}}</el-button>
                         </el-popconfirm>
                     </template>
-                    <el-table :data="updatedTableData.filter(data => !newTableSearch || data.name.includes(newTableSearch))"
+                    <div class="filter-container" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                        <span style="color:#606266;">{{ncfT('Xncf.BatchUpdate.SelectedCount', selectedUpdatedModules.length)}}</span>
+                        <el-button type="primary"
+                                   icon="el-icon-refresh"
+                                   :loading="batchUpdate.loading"
+                                   :disabled="selectedUpdatedModules.length === 0 || batchUpdate.loading"
+                                   @@click="confirmBatchUpdate">
+                            @AR["Xncf.BatchUpdateAndEnable"]
+                        </el-button>
+                    </div>
+                    <el-table ref="updatedModulesTable"
+                              :data="filteredUpdatedTableData"
+                              row-key="uid"
+                              @@selection-change="handleUpdatedSelectionChange"
                               style="width: 100%;margin-bottom: 20px;">
+                        <el-table-column type="selection" width="48" reserve-selection></el-table-column>
                         <el-table-column align="left" label="@AR["Xncf.ModuleName"]">
                             <template slot-scope="scope">
                                 <i class="fa fa-cubes"></i>
@@ -181,7 +195,7 @@
                         </el-table-column>
                         <el-table-column label="@AR["Xncf.Actions"]" width="95">
                             <template slot="header" slot-scope="scope">
-                                <el-input v-model="newTableSearch"
+                                <el-input v-model="updatedTableSearch"
                                           size="mini"
                                           placeholder="@AR["Xncf.Search"]" />
                             </template>
@@ -189,7 +203,7 @@
                                 <el-button size="mini"
                                            type="primary"
                                            icon="el-icon-circle-plus"
-                                           @@click="handleInstall(scope.$index, scope.row)">@AR["Xncf.Install"]</el-button>
+                                           @@click="handleSingleUpdate(scope.row)">@AR["Xncf.UpdateNow"]</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -197,6 +211,55 @@
             </el-tabs>
         </el-main>
     </el-container>
+
+    <el-dialog title="@AR["Xncf.BatchUpdateResult"]"
+               :visible.sync="batchUpdate.resultVisible"
+               :close-on-click-modal="false"
+               width="90%">
+        <template v-if="batchUpdate.result">
+            <el-alert :title="ncfT('Xncf.BatchUpdate.Summary', batchUpdate.result.totalCount, batchUpdate.result.successCount, batchUpdate.result.failureCount)"
+                      :type="batchUpdate.result.failureCount === 0 ? 'success' : 'warning'"
+                      :closable="false"
+                      show-icon>
+            </el-alert>
+            <el-table :data="batchUpdate.result.items"
+                      style="width:100%;margin-top:16px;"
+                      max-height="460">
+                <el-table-column prop="moduleName" label="@AR["Xncf.ModuleName"]" min-width="145"></el-table-column>
+                <el-table-column label="@AR["Xncf.BatchUpdate.VersionResult"]" min-width="165">
+                    <template slot-scope="scope">
+                        <div>{{scope.row.previousVersion || '-'}} → {{scope.row.finalVersion || '-'}}</div>
+                        <small v-if="scope.row.finalVersion !== scope.row.targetVersion" style="color:#e6a23c;">
+                            {{ncfT('Xncf.BatchUpdate.TargetVersion', scope.row.targetVersion || '-')}}
+                        </small>
+                    </template>
+                </el-table-column>
+                <el-table-column label="@AR["Xncf.BatchUpdate.UpdateStatus"]" width="105" align="center">
+                    <template slot-scope="scope">
+                        <el-tag :type="scope.row.updateSucceeded ? 'success' : 'danger'" size="mini">
+                            {{scope.row.updateSucceeded ? ncfT('Xncf.BatchUpdate.Success') : ncfT('Xncf.BatchUpdate.Failed')}}
+                        </el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="@AR["Xncf.BatchUpdate.EnableStatus"]" width="105" align="center">
+                    <template slot-scope="scope">
+                        <el-tag :type="scope.row.enableSucceeded ? 'success' : 'danger'" size="mini">
+                            {{scope.row.enableSucceeded ? ncfT('Xncf.BatchUpdate.Success') : ncfT('Xncf.BatchUpdate.Failed')}}
+                        </el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="@AR["Xncf.BatchUpdate.FinalState"]" width="115" align="center">
+                    <template slot-scope="scope">
+                        {{scope.row.finalState === null ? '-' : oldData.state[scope.row.finalState]}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="message" label="@AR["Xncf.BatchUpdate.Details"]" min-width="220"></el-table-column>
+            </el-table>
+        </template>
+        <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @@click="batchUpdate.resultVisible = false">@AR["Xncf.CloseDialog"]</el-button>
+        </span>
+    </el-dialog>
 </div>
 @section scripts {
     <script src="~/js/Admin/Pages/XncfModule/Index.js"></script>

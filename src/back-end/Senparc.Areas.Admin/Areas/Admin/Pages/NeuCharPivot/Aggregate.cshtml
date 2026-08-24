@@ -1,0 +1,75 @@
+@page
+@model Senparc.Areas.Admin.Areas.Admin.Pages.NeuCharPivot.AggregateModel
+@{
+    ViewData["Title"] = "NeuCharPivot · 聚合";
+    Layout = "_Layout_Vue";
+}
+
+@section breadcrumbs {
+    <el-breadcrumb-item>NeuCharPivot</el-breadcrumb-item>
+    <el-breadcrumb-item>聚合</el-breadcrumb-item>
+}
+
+@section Style {
+    <link rel="stylesheet" href="~/css/Admin/Pages/NeuCharPivot/common.css" />
+    <link rel="stylesheet" href="~/css/Admin/Pages/NeuCharPivot/Aggregate.css" />
+}
+
+<div class="neuchar-page pivot-aggregate" v-loading="loading">
+    <header class="neuchar-page-header">
+        <div>
+            <h2>NeuCharPivot 聚合</h2>
+            <p>集中查看和调用各个已生成模块的快捷操作。模块未安装或未开启时，服务端与界面都会禁用调用。</p>
+        </div>
+        <el-input v-model="keyword" clearable prefix-icon="el-icon-search" placeholder="搜索模块或 Function"></el-input>
+    </header>
+
+    <el-collapse v-if="filteredModules.length" v-model="openedModules">
+        <el-collapse-item v-for="module in filteredModules" :key="module.configuration.moduleUid" :name="module.configuration.moduleUid">
+            <template slot="title">
+                <div class="aggregate-module-title">
+                    <strong>{{module.configuration.name}}</strong>
+                    <el-tag size="mini">Revision {{module.configuration.revision}}</el-tag>
+                    <el-tag :type="module.moduleAvailable ? 'success' : 'danger'" size="mini">{{module.moduleAvailable ? '已开启' : '不可用'}}</el-tag>
+                    <span>{{module.functions.length}} Functions</span>
+                </div>
+            </template>
+            <el-alert v-if="!module.moduleAvailable" title="该模块当前未安装或未开启。所有引用均已禁用，重新开启模块后会自动恢复。" type="warning" :closable="false" show-icon></el-alert>
+            <el-row :gutter="16" class="aggregate-functions">
+                <el-col :xs="24" :sm="12" :lg="8" v-for="fn in module.functions" :key="fn.id">
+                    <el-card class="neuchar-function-card" shadow="hover">
+                        <div class="neuchar-function-head">
+                            <div><h4>{{fn.functionName}}</h4><p>{{fn.description}}</p></div>
+                            <div><el-tag v-if="!fn.available" size="mini" type="danger">Function 已移除</el-tag><el-tag v-if="fn.loopTask && fn.loopTask.enabled" size="mini" type="success"><i class="el-icon-time"></i> Loop</el-tag></div>
+                        </div>
+                        <div v-for="parameter in getParameters(fn)" :key="parameter.name" class="neuchar-parameter">
+                            <label>{{parameter.title || parameter.name}} <em v-if="parameter.required">*</em></label>
+                            <el-input v-if="parameter.parameterType===0 || parameter.parameterType===3" :type="parameter.parameterType===3?'password':'text'" v-model="inputs[fn.id][parameter.name]" :maxlength="parameter.maxLength || 500"></el-input>
+                            <el-select v-else-if="parameter.parameterType===1" v-model="inputs[fn.id][parameter.name]" :filterable="parameter.filterable" :allow-create="parameter.allowCreate"><el-option v-for="option in parameter.options" :key="option.value" :label="option.text" :value="option.value"></el-option></el-select>
+                            <el-checkbox-group v-else-if="parameter.parameterType===2" v-model="inputs[fn.id][parameter.name]"><el-checkbox v-for="option in parameter.options" :key="option.value" :label="option.value">{{option.text}}</el-checkbox></el-checkbox-group>
+                            <el-switch v-else-if="parameter.parameterType===4" v-model="inputs[fn.id][parameter.name]"></el-switch>
+                            <small v-if="parameter.description">{{parameter.description}}</small>
+                        </div>
+                        <div class="neuchar-card-actions">
+                            <small>模块版本 {{fn.moduleVersion || '-'}}</small>
+                            <el-button size="mini" type="primary" :disabled="!module.moduleAvailable || !fn.available" @@click="run(module, fn)">执行</el-button>
+                        </div>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </el-collapse-item>
+    </el-collapse>
+    <div v-else-if="!loading" class="neuchar-empty"><i class="fa fa-th-large fa-3x"></i><h3>还没有 NeuCharPivot</h3><p>请先进入任意模块的“设置/执行 → NeuCharPivot”生成操作面板。</p></div>
+
+    <el-dialog :title="result.title" :visible.sync="result.visible" width="50%" :close-on-click-modal="false">
+        <div v-if="result.htmlMode" class="aggregate-result aggregate-result-html" v-html="result.html"></div>
+        <pre v-else class="aggregate-result aggregate-result-text">{{result.content}}</pre>
+        <span slot="footer"><el-button type="primary" @@click="result.visible=false">关闭</el-button></span>
+    </el-dialog>
+</div>
+
+@section scripts {
+    <script src="~/js/Admin/dompurify.min.js"></script>
+    <script src="~/js/Admin/Pages/NeuCharPivot/common.js"></script>
+    <script src="~/js/Admin/Pages/NeuCharPivot/Aggregate.js"></script>
+}

@@ -3,18 +3,28 @@
   
     文件名：Register.cs
     文件功能描述：模块注册与初始化逻辑
-    
-    
+
+
     创建标识：Senparc - 20241028
-    
+
     修改标识：Senparc - 20260702
     修改描述：v0.11.0-preview2 同步 master/main 基线范围内改动并完成递归依赖版本处理
 
     修改标识：Senparc - 20260804
-    修改描述：v0.36.0 注册数据库运行状态与升级协调服务
+    修改描述：v0.35.0 新增数据库升级维护流程与多平台下载入口
+
+    修改标识：Senparc - 20260812
+    修改描述：默认将 Data Protection 密钥持久化到 App_Data，避免重启后登录 Cookie 校验异常
+
+    修改标识：Senparc - 20260813
+    修改描述：v0.36.0 集成工作流模块与 A2A 发布配置并修复认证持久化
+
+    修改标识：Senparc - 20260822
+    修改描述：v0.37.0 集成管理端 Chat 工作流与最新桌面发布信息
 
 ----------------------------------------------------------------*/
 
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Senparc.AI.Interfaces;
@@ -55,7 +65,27 @@ namespace Senparc.Web
             Console.WriteLine("============ logMsg =============");
             Console.WriteLine(logMsg);
             Console.WriteLine("============ logMsg END =============");
-            
+
+            #region Data Protection（登录 Cookie / Antiforgery 密钥）
+
+            // 默认：持久化到站点 App_Data/DataProtection-Keys。
+            // 首次运行自动生成 key-*.xml，开发者无需手工创建或拷贝；请勿将密钥提交到 Git。
+            var dataProtectionKeysDirectory = Path.Combine(
+                builder.Environment.ContentRootPath,
+                "App_Data",
+                "DataProtection-Keys");
+            Directory.CreateDirectory(dataProtectionKeysDirectory);
+            builder.Services.AddDataProtection()
+                .SetApplicationName("Senparc.NCF")
+                .PersistKeysToFileSystem(new DirectoryInfo(dataProtectionKeysDirectory));
+
+            // 可选：改用系统用户目录（macOS/Linux: ~/.aspnet/DataProtection-Keys；
+            // Windows: %LOCALAPPDATA%\ASP.NET\DataProtection-Keys）。
+            // 启用时请注释上方 AddDataProtection() 块，并取消下一行注释：
+            // builder.Services.AddDataProtection().SetApplicationName("Senparc.NCF");
+
+            #endregion
+
             // 注册 EventBus 并自动扫描所有模块的 EventHandler
             // 必须在 StartWebEngine 之后，确保所有模块程序集已加载
             var assembliesToScan = AppDomain.CurrentDomain.GetAssemblies()
@@ -88,10 +118,6 @@ namespace Senparc.Web
                 assembliesToScan);
             
             Console.WriteLine($"EventBus 已注册，共扫描了 {assembliesToScan.Length} 个程序集");
-
-            Console.WriteLine("============ logMsg =============");
-            Console.WriteLine(logMsg);
-            Console.WriteLine("============ logMsg END =============");
 
             #region 仅在完全删除 Senparc.Xncf.Swagger 时启用以下代码！
 

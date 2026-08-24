@@ -6,11 +6,27 @@
 var service = axios.create({
     timeout: 1000000 // request timeout
 });
+
+function showErrorMessage(options) {
+    if (typeof app !== 'undefined' && app && typeof app.$message === 'function') {
+        app.$message(options);
+        return;
+    }
+    if (typeof ELEMENT !== 'undefined' && ELEMENT && typeof ELEMENT.Message === 'function') {
+        ELEMENT.Message(options);
+        return;
+    }
+    console.error(options.message);
+}
+
 // 请求拦截
 service.interceptors.request.use(
     config => {
-        if (config.method.toUpperCase() === 'POST') {
-            config.headers['RequestVerificationToken'] = window.document.getElementsByName('__RequestVerificationToken')[0].value;
+        if ((config.method || '').toUpperCase() === 'POST') {
+            const tokenInput = window.document.getElementsByName('__RequestVerificationToken')[0];
+            if (tokenInput && tokenInput.value) {
+                config.headers['RequestVerificationToken'] = tokenInput.value;
+            }
         }
         if (window.ncfJwtToken) {
             config.headers['Authorization'] = 'Bearer ' + window.ncfJwtToken;
@@ -36,7 +52,7 @@ service.interceptors.response.use(
                     return;
                 }
                 if (!response.config.customAlert){
-                    app.$message({
+                    showErrorMessage({
                         message: response.data.msg||response.data.exception|| 'Error',
                         type: 'error',
                         duration: 5 * 1000
@@ -45,7 +61,7 @@ service.interceptors.response.use(
                 return Promise.resolve(response);
             }
         } else {
-            app.$message({
+            showErrorMessage({
                 message: response.msg || 'Error',
                 type: 'error',
                 duration: 5 * 1000
@@ -55,8 +71,14 @@ service.interceptors.response.use(
     },
     error => {
         console.log('err' + error);
+        // Workflow uses customAlert to render a 400 validation failure in its
+        // own node-aware panel. Do not call the legacy global `app` here: this
+        // page deliberately has no globally named Vue instance.
+        if (error && error.config && error.config.customAlert) {
+            return Promise.reject(error);
+        }
         if (error.message.includes('401')) {
-            app.$message({
+            showErrorMessage({
                 message: ncfT('Admin.Session.ExpiredRedirect'),
                 type: 'error',
                 duration: 3 * 1000,
@@ -66,7 +88,7 @@ service.interceptors.response.use(
             });
             return Promise.reject(error);
         } if (error.message.includes('403')) {
-            app.$message({
+            showErrorMessage({
                 message: ncfT('Admin.Session.AccessDenied'),
                 type: 'error',
                 duration: 3 * 1000
@@ -75,7 +97,7 @@ service.interceptors.response.use(
         } else if (error.message.includes('302')) {
             return Promise.reject(error);
         }
-        app.$message({
+        showErrorMessage({
             message: error.message,
             type: 'error',
             duration: 5 * 1000

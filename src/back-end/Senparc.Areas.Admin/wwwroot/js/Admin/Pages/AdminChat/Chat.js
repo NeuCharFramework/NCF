@@ -6,6 +6,7 @@ var chatApp = new Vue({
       currentSessionId: 0,
       currentSessionTitle: '',
       currentSessionModules: [],
+      currentSessionWorkflows: [],
       currentSessionAiModelId: 0,
       aiModelOptions: [],
       aiKernelAvailable: false,
@@ -112,6 +113,7 @@ var chatApp = new Vue({
           this.currentSessionTitle = session.title;
           this.messageList = session.messages || [];
           this.currentSessionModules = session.modules || [];
+          this.currentSessionWorkflows = session.workflows || [];
           this.currentSessionAiModelId = this.getSessionAiModelId(this.currentSessionId);
           this.clearMessageSelection();
           this.isManageMode = false;
@@ -231,6 +233,7 @@ var chatApp = new Vue({
       this.currentSessionAiModelId = this.getSessionAiModelId(sessionId);
       this.messageList = [];
       this.currentSessionModules = [];
+      this.currentSessionWorkflows = [];
       this.clearMessageSelection();
       this.isManageMode = false;
       await this.loadSessionDetail();
@@ -241,6 +244,7 @@ var chatApp = new Vue({
       this.currentSessionId = 0;
       this.currentSessionTitle = '';
       this.currentSessionModules = [];
+      this.currentSessionWorkflows = [];
       this.messageList = [];
       this.inputMessage = '';
       this.chatInputText = '';
@@ -370,6 +374,7 @@ var chatApp = new Vue({
                 this.messageList = [];
                 this.currentSessionTitle = '';
                 this.currentSessionModules = [];
+                this.currentSessionWorkflows = [];
               }
               
               await this.loadSessionList();
@@ -438,6 +443,15 @@ var chatApp = new Vue({
         version: (module && module.moduleVersion) || (matched && matched.version) || '',
         menus: (matched && matched.menus) || [],
         functions: (matched && matched.functions) || []
+      };
+    },
+
+    resolveWorkflowDetail(workflow) {
+      return {
+        id: workflow && workflow.workflowId,
+        name: workflow && workflow.workflowName ? workflow.workflowName : `Workflow #${workflow && workflow.workflowId}`,
+        description: workflow && workflow.workflowDescription ? workflow.workflowDescription : '',
+        parameters: workflow && workflow.parameters ? workflow.parameters : []
       };
     },
 

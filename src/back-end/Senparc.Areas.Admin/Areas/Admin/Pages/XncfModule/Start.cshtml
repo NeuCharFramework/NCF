@@ -10,99 +10,39 @@
     <el-breadcrumb-item v-if="data.xncfModule">{{data.xncfModule.menuName}}</el-breadcrumb-item>
 }
 @section Style{
+    <link rel="stylesheet" href="~/css/Admin/Pages/NeuCharPivot/common.css" />
     <link href="~/css/Admin/XncfModule/XncfModule.css" rel="stylesheet" />
 }
 <div>
-    <el-container v-if="data.xncfModule">
+    <el-container v-if="data.xncfModule" direction="vertical" class="module-start-shell">
         <el-header class="module-header">
-                        <span class="start-title"> <i :class="data.xncfRegister.icon"></i>&nbsp;{{data.xncfModule.menuName}} <span class="module-header-v">@AR["Xncf.Module"] {{data.xncfModule.version}}</span></span>
-            <span class="start-delete">
+            <span class="start-title"><i :class="data.xncfRegister.icon"></i>&nbsp;{{data.xncfModule.menuName}} <span class="module-header-v">@AR["Xncf.Module"] {{data.xncfModule.version}}</span></span>
+            <span class="module-header-actions">
+                <el-button size="mini" icon="el-icon-document" @@click="updateLogVisible=true">@AR["Xncf.UpdateLog"]</el-button>
+                <el-button size="mini" icon="el-icon-chat-line-round" @@click="openModuleChat">ChatAgent</el-button>
                 <el-popconfirm placement="top" title="@AR["Xncf.DeleteConfirm"]" @@on-confirm="handleDelete()">
                     <el-button size="mini" type="danger" slot="reference">@AR["Xncf.Delete"]</el-button>
                 </el-popconfirm>
             </span>
         </el-header>
-        <el-container>
-            <el-aside class="module-aside">
-                <div class="start-des">
-                    <ul>
-                        @*模块信息 xncfModule*@
-                        <li><span class="start-green"><i class="fa fa-map-marker fa-cubes"></i>&nbsp;{{data.xncfModule.name}}</span></li>
-                        <li><i class="fa fa-map-marker fa-code-fork"></i>&nbsp;v{{data.xncfModule.version}}</li>
-                        <li v-if="data.xncfModule.version!==data.xncfRegister.version">{{ncfT('Xncf.NewVersion', data.xncfRegister.version)}} <el-button size="mini" @@click="updataVersion"> <em class="fa fa-gift"></em>&nbsp;@AR["Xncf.UpdateNow"]</el-button></li>
-                        <li>
-                            <el-tooltip class="item" effect="dark" :content="data.xncfModule.uid" placement="top-start">
-                                <span>
-                                    <i class="fa fa-map-marker fa-shield"></i>
-                                    @AR["Xncf.UniqueNumber"]
-                                </span>
-                            </el-tooltip>
-                        </li>
-                        <li>
-                            <i class="fa fa-map-marker puzzle-piece"></i>&nbsp;@AR["Xncf.Features"]：
-                            <el-tooltip v-for="item in data.xncfRegister.interfaces" class="item" effect="dark" placement="top">
-                                <div slot="content">
-                                    {{tooltip[item]}}
-                                    <span v-if="item === 'IXncfRazorRuntimeCompilation'" @@click="thread.visible=true">
-                                        <el-button size="mini">
-                                            @AR["Xncf.View"]
-                                        </el-button>
-                                    </span>
-                                </div>
-                                @*网页*@
-                                <i v-if="item === 'IAreaRegister'" class="fa fa-map-marker fa-external-link"></i>
-                                @*数据库*@
-                                <i v-if="item === 'IXncfDatabase'" class="fa fa-map-marker fa-database"></i>
-                                @*中间件*@
-                                <i v-if="item === 'IXncfMiddleware'" class="fa fa-map-marker fa-plug"></i>
-                                @*线程 *@
-                                <i v-if="item === 'IXncfRazorRuntimeCompilation'" class="fa fa-map-marker fa-retweet"></i>
-                            </el-tooltip>
-                            <template v-if="data.xncfRegister.functionCount>0">
-                                <el-tooltip class="item" effect="dark" content="@AR["Xncf.ExecuteMethod"]" placement="top-start">
-                                    <i class="fa fa-map-marker fa-rocket">({{data.xncfRegister.functionCount}})</i>
-                                </el-tooltip>
-                            </template>
-                        </li>
-                        <li>
-                            <i class="fa fa-map-marker fa-sliders"></i><span :class="[data.xncfModule.state===1?'start-green':'start-gray']">&nbsp;{{xNcfModules_State[data.xncfModule.state]}}</span>
-                            <template v-if="data.xncfModule.state===3||data.xncfModule.state===0||data.xncfModule.state===2">
-                                <el-button size="mini" :type="data.xncfModule.state===0?'success':'warning'" @@click="updataState('1')"> <em class="glyphicon glyphicon-flash"></em> &nbsp;@AR["Xncf.Open"]</el-button>
-                                <p class="red"><i class="fa fa-exclamation-triangle"></i>&nbsp;@AR["Xncf.DisabledTip"]</p>
-                            </template>
-                            <template v-if="data.xncfModule.state===1">
-                                <el-button size="mini" c type="danger" @@click="updataState('0')"> <em class="glyphicon glyphicon-off"></em> &nbsp;@AR["Xncf.Close"]</el-button>
-                            </template>
-                        </li>
-                        <li>
-                            <i class="fa fa-map-marker fa-newspaper-o"></i>&nbsp;@AR["Xncf.Description"]：
-                            <p>{{data.xncfModule.description}}</p>
-                        </li>
-                    </ul>
-                </div>
-                @*更新记录*@
-                <div class="start-log">
-                    <el-collapse>
-                        <el-collapse-item title="@AR["Xncf.UpdateLog"]" name="1">
-                            <el-table :data="data.xncfModuleUpdateLog"
-                                      stripe
-                                      style="width: 100%">
-                                <el-table-column label="#" width="30">
-                                    <template slot-scope="scope">
-                                        {{scope.$index+1}}
-                                    </template>
-                                </el-table-column>
-                                <el-table-column label="@AR["Xncf.UpdateLog"]">
-                                    <template slot-scope="scope">
-                                        {{scope.row}}
-                                    </template>
-                                </el-table-column>
-                            </el-table>
-                        </el-collapse-item>
-                    </el-collapse>
-                </div>
-            </el-aside>
-            <el-main>
+        <section class="module-summary-bar">
+            <div class="module-summary-primary">
+                <span><i class="fa fa-cubes"></i> {{data.xncfModule.name}}</span>
+                <span><i class="fa fa-code-fork"></i> v{{data.xncfModule.version}}</span>
+                <el-tooltip effect="dark" :content="data.xncfModule.uid"><span><i class="fa fa-shield"></i> UID</span></el-tooltip>
+                <span><i class="fa fa-rocket"></i> {{data.xncfRegister.functionCount}} Functions</span>
+                <span :class="data.xncfModule.state===1?'start-green':'start-gray'"><i class="fa fa-sliders"></i> {{xNcfModules_State[data.xncfModule.state]}}</span>
+            </div>
+            <div class="module-summary-description">{{data.xncfModule.description}}</div>
+            <div class="module-summary-actions">
+                <el-button v-if="data.xncfModule.version!==data.xncfRegister.version" size="mini" type="warning" @@click="updataVersion"><i class="fa fa-gift"></i> @AR["Xncf.UpdateNow"]</el-button>
+                <el-button v-if="data.xncfModule.state!==1" size="mini" type="success" @@click="updataState('1')">@AR["Xncf.Open"]</el-button>
+                <el-button v-else size="mini" type="danger" plain @@click="updataState('0')">@AR["Xncf.Close"]</el-button>
+            </div>
+        </section>
+        <el-main class="module-main">
+            <el-tabs v-model="activeModuleTab" class="module-mode-tabs">
+                <el-tab-pane label="Function" name="function">
                 <template v-if="!data.mustUpdate">
                     <template v-if="data.xncfRegister.interfaces.includes('IAreaRegister')&&data.xncfRegister.areaHomeUrl!==null">
                         <el-card class="box-card">
@@ -138,7 +78,10 @@
                         </el-card>
                     </template>
                 </template>
-                <el-card class="box-card" v-for="item in data.functionParameterInfoCollection">
+                <el-card v-for="item in data.functionParameterInfoCollection"
+                         :id="functionAnchorId(item)"
+                         :key="item.key.functionKey || item.key.name"
+                         :class="['box-card', {'function-card-highlight': isFocusedFunction(item)}]">
                     <div slot="header" class="clearfix">
                         <span><i class="fa fa-terminal"></i> {{item.key.name}}</span>
                             <span type="text" :class="[data.xncfModule.state===1?'box-card-action':'box-card-action2']" @@click="openRun(item,data.xncfModule.state)">@AR["Xncf.Execute"]</span>
@@ -185,9 +128,93 @@
                         </div>
                     </template>
                 </el-card>
-            </el-main>
-        </el-container>
+                </el-tab-pane>
+                <el-tab-pane label="NeuCharPivot" name="pivot">
+                    <div class="pivot-empty" v-if="!pivot.configuration" v-loading="pivot.loading">
+                        <div class="pivot-empty-icon"><i class="fa fa-th-large"></i></div>
+                        <h3>生成此模块的 NeuCharPivot</h3>
+                        <p>ChatAgent 会汇总全部 Function，生成一个声明式快捷操作面板。不会执行 AI 生成的脚本或任意内部方法。</p>
+                        <el-input type="textarea" :rows="4" v-model="pivot.requirement" placeholder="Generate a concise and clean operation panel for all Functions."></el-input>
+                        <div class="pivot-generate-row">
+                            <el-select v-model="pivot.aiModelId" placeholder="选择 AI 算力" filterable>
+                                <el-option v-for="model in pivot.aiModels" :key="model.id" :label="model.name" :value="model.id"></el-option>
+                            </el-select>
+                            <el-button type="primary" icon="el-icon-magic-stick" :loading="pivot.loading" @@click="generatePivot">生成界面</el-button>
+                        </div>
+                    </div>
+                    <div v-else class="pivot-workspace" v-loading="pivot.loading">
+                        <el-alert v-if="!pivot.moduleAvailable" title="模块当前未安装或未开启，所有 Pivot Function 和定时任务均已在底层禁用。" type="warning" :closable="false" show-icon></el-alert>
+                        <div class="pivot-toolbar">
+                            <div>
+                                <h3>{{pivot.layout.title}}</h3>
+                                <p>{{pivot.layout.description}}</p>
+                            </div>
+                            <div class="pivot-toolbar-actions">
+                                <el-tag size="small">Revision {{pivot.configuration.revision}}</el-tag>
+                                <el-button size="mini" icon="el-icon-chat-dot-round" @@click="chat.visible=true">Chat 修改</el-button>
+                            </div>
+                        </div>
+                        <div class="pivot-grid" :style="{'--pivot-columns': pivot.layout.columns || 2}">
+                            <section v-for="section in pivot.layout.sections" :key="section.title" class="pivot-section">
+                                <h4>{{section.title}}</h4>
+                                <article v-for="layoutFunction in section.functions" :key="layoutFunction.functionKey" :class="['pivot-function-card','accent-'+layoutFunction.accent]">
+                                    <template v-if="getPivotFunction(layoutFunction.functionKey)">
+                                        <div class="pivot-function-title">
+                                            <span>{{layoutFunction.title}}</span>
+                                            <el-tag v-if="!pivot.moduleAvailable || !getPivotFunction(layoutFunction.functionKey).available" type="info" size="mini">{{pivot.moduleAvailable?'Function 已移除':'模块不可用'}}</el-tag>
+                                        </div>
+                                        <p>{{layoutFunction.summary}}</p>
+                                        <div class="pivot-parameter" v-for="parameter in getPivotParameters(getPivotFunction(layoutFunction.functionKey))" :key="parameter.name">
+                                            <label>{{parameter.title || parameter.name}} <em v-if="parameter.required">*</em></label>
+                                            <el-input v-if="parameter.parameterType===0 || parameter.parameterType===3" :type="parameter.parameterType===3?'password':'text'" v-model="pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name]" :maxlength="parameter.maxLength || 500"></el-input>
+                                            <el-select v-else-if="parameter.parameterType===1" v-model="pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name]" :filterable="parameter.filterable" :allow-create="parameter.allowCreate">
+                                                <el-option v-for="option in parameter.options" :key="option.value" :label="option.text" :value="option.value"></el-option>
+                                            </el-select>
+                                            <el-checkbox-group v-else-if="parameter.parameterType===2" v-model="pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name]">
+                                                <el-checkbox v-for="option in parameter.options" :key="option.value" :label="option.value">{{option.text}}</el-checkbox>
+                                            </el-checkbox-group>
+                                            <el-switch v-else-if="parameter.parameterType===4" v-model="pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name]"></el-switch>
+                                            <small v-if="parameter.description">{{parameter.description}}</small>
+                                        </div>
+                                        <div class="pivot-function-actions">
+                                            <el-button size="mini" type="primary" :disabled="!pivot.moduleAvailable || !getPivotFunction(layoutFunction.functionKey).available" @@click="runPivotFunction(getPivotFunction(layoutFunction.functionKey))">执行</el-button>
+                                            <el-button size="mini" icon="el-icon-time" :disabled="!pivot.moduleAvailable || !getPivotFunction(layoutFunction.functionKey).available" @@click="openLoopTask(getPivotFunction(layoutFunction.functionKey))">Loop Task</el-button>
+                                        </div>
+                                    </template>
+                                </article>
+                            </section>
+                        </div>
+                    </div>
+                </el-tab-pane>
+            </el-tabs>
+        </el-main>
     </el-container>
+
+    <el-dialog title="@AR["Xncf.UpdateLog"]" :visible.sync="updateLogVisible" width="55%">
+        <el-table :data="data.xncfModuleUpdateLog" stripe><el-table-column type="index" width="60"></el-table-column><el-table-column prop="" label="@AR["Xncf.UpdateLog"]"><template slot-scope="scope">{{scope.row}}</template></el-table-column></el-table>
+    </el-dialog>
+
+    <el-drawer title="ChatAgent · 当前 XNCF 模块" :visible.sync="chat.visible" direction="rtl" size="420px" custom-class="chat-agent-drawer">
+        <div class="chat-agent-body">
+            <p>当前引用：<strong>{{data.xncfModule.menuName}}</strong></p>
+            <el-input type="textarea" :rows="6" v-model="chat.message" placeholder="例如：把高频操作放在第一组，并只暴露必要参数"></el-input>
+            <el-select v-model="pivot.aiModelId" placeholder="选择 AI 算力"><el-option v-for="model in pivot.aiModels" :key="model.id" :label="model.name" :value="model.id"></el-option></el-select>
+            <el-button type="primary" :loading="pivot.loading" @@click="refinePivotFromChat">发送并更新 Pivot</el-button>
+            <el-button plain @@click="openFullModuleChat">打开完整 AdminChat</el-button>
+            <div class="chat-agent-note">NeuCharPivot 生成过程已关闭 Function Calling；完整 AdminChat 仍只加载会话显式关联模块公开注册的 FunctionRender。Pivot/Workflow 执行会再次进行服务端白名单和模块状态校验。</div>
+        </div>
+    </el-drawer>
+
+    <el-dialog title="Loop Task" :visible.sync="loop.visible" width="520px" :close-on-click-modal="false">
+        <el-form label-width="130px">
+            <el-form-item label="Function"><strong>{{loop.function ? loop.function.functionName : ''}}</strong></el-form-item>
+            <el-form-item label="自动执行"><el-switch v-model="loop.enabled"></el-switch></el-form-item>
+            <el-form-item label="间隔（秒）"><el-input-number v-model="loop.intervalSeconds" :min="60" :max="31536000" :step="60"></el-input-number></el-form-item>
+            <el-form-item label="NeuBell 通知"><el-switch v-model="loop.useNeuBell"></el-switch></el-form-item>
+            <el-alert title="启用前会再次校验所有必填参数；模块关闭或 Function 被移除时不会执行。" type="info" :closable="false"></el-alert>
+        </el-form>
+        <span slot="footer"><el-button @@click="loop.visible=false">取消</el-button><el-button type="primary" :loading="loop.saving" @@click="saveLoopTask">保存</el-button></span>
+    </el-dialog>
     @*执行弹窗*@
     <el-dialog width="60%" v-if="run.data.key" :title="run.data.key.name" :visible.sync="run.visible" class="run-dialog"  :close-on-click-modal="false">
         <h4><i class="fa fa-newspaper-o"></i>&nbsp;{{run.data.key.description}}</h4>
@@ -236,8 +263,14 @@
                :visible.sync="runResult.visible"
                :close-on-click-modal="false"
                width="40%">
-        <p v-html="safeHtml(runResult.tip)"></p>
-        <p v-html="safeHtml(runResult.msg)"></p>
+        <p>{{runResult.tip}}</p>
+        <p v-if="runResult.url">
+            <i class="fa fa-external-link"></i>
+            <a :href="runResult.url" target="_blank" rel="noopener noreferrer">{{runResult.url}}</a>
+        </p>
+        <div v-else
+             v-html="safeFunctionResultHtml(runResult.msg)"
+             style="white-space: pre-wrap; overflow-wrap: anywhere;"></div>
         <span slot="footer" class="dialog-footer">
             <a :href="'?handler=Log&tempId='+ runResult.tempId" v-if="runResult.hasLog" style="display:block" target="_blank"><i class="fa fa-cloud-download"></i> @AR["Xncf.DownloadLog"]</a>
             <el-button type="primary" @@click="runResult.visible = false">@AR["Xncf.CloseDialog"]</el-button>
@@ -281,6 +314,7 @@
 
 @section scripts{
 
-    <script src="~/js/Admin/Pages/XncfModule/Start.js"></script>
     <script src="~/js/Admin/dompurify.min.js"></script>
+    <script src="~/js/Admin/Pages/NeuCharPivot/common.js"></script>
+    <script src="~/js/Admin/Pages/XncfModule/Start.js"></script>
 }

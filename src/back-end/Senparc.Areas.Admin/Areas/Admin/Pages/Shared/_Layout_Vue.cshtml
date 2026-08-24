@@ -123,13 +123,13 @@
                                 <i class="fa fa-terminal"></i><span>Console</span>
                                 <span class="admin-footer-badge" v-if="consoleEntries.length">{{ consoleEntries.length }}</span>
                             </button>
-                            <button v-if="synchroAvailable" type="button" class="admin-footer-action" @@click="synchroDrawerVisible = true" title="@AR["Admin.Footer.SynchroLabel"]">
-                                <i class="fa fa-bell-o"></i><span>@AR["Admin.Footer.SynchroLabel"]</span>
-                                <span class="admin-footer-badge" v-if="synchroTotalCount">{{ synchroTotalCount }}</span>
+                            <button v-if="footerAvailabilityKnown" type="button" class="admin-footer-action" @@click="neuBellDrawerVisible = true" title="@AR["Admin.Footer.NeuBellLabel"]">
+                                <i class="fa fa-bell-o"></i><span>@AR["Admin.Footer.NeuBellLabel"]</span>
+                                <span class="admin-footer-badge" v-if="neuBellTotalCount">{{ neuBellTotalCount }}</span>
                             </button>
-                            <span class="admin-footer-time" title="服务器时间">
+                            <button type="button" class="admin-footer-time" @@click="handleFooterTimeClick" title="服务器时间" aria-label="服务器时间">
                                 <i class="fa fa-clock-o"></i> {{ serverTimeText }}
-                            </span>
+                            </button>
                         </div>
                         <div class="admin-footer-copyright">
                             @AR["Admin.Layout.PoweredBy"] <a href="https://www.ncf.pub" target="_blank" rel="noopener noreferrer">NeuCharFramework</a>
@@ -177,33 +177,70 @@
         </el-dialog>
 
         <el-drawer
-            title="Synchro · 灵犀"
-            :visible.sync="synchroDrawerVisible"
+            title="@AR["Admin.Footer.NeuBellLabel"]"
+            :visible.sync="neuBellDrawerVisible"
             direction="rtl"
             size="380px">
-            <div class="admin-synchro-panel" v-loading="synchroLoading">
-                <p class="admin-synchro-description">选择在 Footer 显示的模块提醒。设置保存在当前账号的浏览器中。</p>
-                <div v-if="synchroProviders.length === 0" class="admin-synchro-empty">当前没有模块提供灵犀信息。</div>
-                <section v-for="provider in synchroProviders" :key="provider.providerId" class="admin-synchro-provider">
+            <div class="admin-neubell-panel" v-loading="neuBellLoading">
+                <p class="admin-neubell-description">选择在 Footer 显示的模块提醒。设置保存在当前账号的浏览器中。</p>
+                <div v-if="neuBellProviders.length === 0" class="admin-neubell-empty">当前没有模块提供纽铃信息。</div>
+                <section v-for="provider in neuBellProviders" :key="provider.providerId" class="admin-neubell-provider">
                     <header>
                         <span><i :class="provider.icon"></i> {{ provider.displayName }}</span>
-                        <el-switch v-model="provider.enabled" @@change="saveSynchroPreferences"></el-switch>
-                    </header>
-                    <a
-                        v-for="item in provider.items"
-                        :key="item.id"
-                        :href="item.detailUrl"
-                        class="admin-synchro-item">
-                        <span class="admin-synchro-item-content">
-                            <strong>{{ item.title }}</strong>
-                            <small>{{ item.summary }}</small>
+                        <span class="admin-neubell-provider-actions">
+                            <el-button v-if="provider.canConsume"
+                                       type="text"
+                                       size="mini"
+                                       :disabled="!provider.items || provider.items.length === 0"
+                                       @@click="consumeNeuBell(provider, null, true)">消费全部</el-button>
+                            <el-switch v-model="provider.enabled" @@change="saveNeuBellPreferences"></el-switch>
                         </span>
-                        <el-badge :value="item.count" :hidden="!item.count" :type="item.severity === 'warning' ? 'warning' : 'primary'"></el-badge>
-                    </a>
+                    </header>
+                    <div v-for="item in provider.items" :key="item.id" class="admin-neubell-item">
+                        <a :href="item.detailUrl" class="admin-neubell-item-link">
+                            <span class="admin-neubell-item-content">
+                                <strong>{{ item.title }}</strong>
+                                <small>{{ item.summary }}</small>
+                            </span>
+                            <el-badge :value="item.count" :hidden="!item.count" :type="item.severity === 'warning' ? 'warning' : 'primary'"></el-badge>
+                        </a>
+                        <el-button v-if="provider.canConsume" type="text" size="mini" @@click="consumeNeuBell(provider, item, false)">消费</el-button>
+                    </div>
                 </section>
             </div>
         </el-drawer>
+
+        <section v-if="neuBellToastEntries.length"
+                 :class="['admin-neubell-toast-stack', { 'is-expanded': neuBellToastExpanded }]"
+                 aria-live="polite"
+                 aria-label="NeuBell 提醒">
+            <header class="admin-neubell-toast-toolbar">
+                <span><i class="fa fa-bell-o"></i> NeuBell 提醒</span>
+                <button type="button" class="admin-neubell-toast-clear" @@click="clearAllNeuBellToasts">关闭全部</button>
+            </header>
+            <div class="admin-neubell-toast-list">
+                <button v-for="entry in neuBellToastVisibleItems"
+                        :key="entry.key"
+                        type="button"
+                        class="admin-neubell-toast-card"
+                        @@click="openNeuBellToast(entry)">
+                    <span class="admin-neubell-toast-icon"><i :class="entry.providerIcon || 'fa fa-bell-o'"></i></span>
+                    <span class="admin-neubell-toast-content">
+                        <strong>{{ entry.item.title || entry.providerName || 'NeuBell' }}</strong>
+                        <small>{{ entry.item.summary }}</small>
+                    </span>
+                    <i class="el-icon-arrow-right admin-neubell-toast-arrow"></i>
+                </button>
+            </div>
+            <button v-if="neuBellToastOverflowCount"
+                    type="button"
+                    class="admin-neubell-toast-expand"
+                    @@click="toggleNeuBellToastExpanded">
+                {{ neuBellToastExpanded ? '收起' : '还有 ' + neuBellToastOverflowCount + ' 条，点击展开' }}
+            </button>
+        </section>
     </div>
+    @Html.AntiForgeryToken()
     <!--lib-->
     <script src="~/lib/vue/vue.js"></script>
     <script src="~/lib/element-ui_2.13.2/element.js"></script>
@@ -212,7 +249,7 @@
     @await Html.PartialAsync("_LocalizationScripts")
     <!--js-->
     <script src="~/js/Admin/store.js"></script>
-    <script src="~/js/Admin/axios.js"></script>
+    <script src="~/js/Admin/axios.js" asp-append-version="true"></script>
     <script src="~/js/Admin/global.js"></script>
     <!--菜单栏-->
     <script src="~/js/Admin/navMenu.js"></script>
@@ -246,6 +283,5 @@
             window.ncfStartSessionMonitor();
         }
     </script>
-    @Html.AntiForgeryToken()
 </body>
 </html>
