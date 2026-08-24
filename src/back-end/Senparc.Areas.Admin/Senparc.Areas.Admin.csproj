@@ -46,6 +46,7 @@
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.15.7" />
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.15.7" />
 		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.24.4" />
+		<PackageReference Include="Senparc.Xncf.NeuCharWorkflow.Abstractions" Version="0.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>
