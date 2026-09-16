@@ -94,6 +94,13 @@
                                 @@click="toggleManageMode">
                                 {{ isManageMode ? ncfT('AdminChat.Done') : ncfT('AdminChat.Manage') }}
                             </el-button>
+                            <el-button
+                                size="mini"
+                                type="text"
+                                title="任务轨迹"
+                                @@click="openTrajectoryDialog">
+                                <i class="fa fa-road"></i>
+                            </el-button>
                         </div>
                     </div>
                     <div class="chat-modules" v-if="currentSessionModules.length > 0">
@@ -231,6 +238,41 @@
                             <span class="message-time">{{ formatTime(message.addTime) }}</span>
                         </div>
                         <div class="message-text" v-html="formatMessageContent(message.content)"></div>
+                        <div class="message-harness-steps" v-if="message.roleType === 1 && !isManageMode && message.harnessSteps && message.harnessSteps.length > 0">
+                            <el-collapse class="harness-collapse">
+                                <el-collapse-item :title="harnessStepsTitle(message.harnessSteps)">
+                                    <div class="harness-step" v-for="(step, idx) in message.harnessSteps" :key="idx">
+                                        <div class="harness-step-head">
+                                            <span class="harness-step-index">
+                                                <i :class="step.isFinal ? 'fa fa-flag-checkered' : (step.timedOut ? 'fa fa-exclamation-triangle' : 'fa fa-arrow-circle-right')"></i>
+                                                {{ step.index }}
+                                            </span>
+                                            <i v-if="step.isFinal" class="fa fa-flag-checkered harness-step-done"></i>
+                                            <i v-else-if="step.timedOut" class="fa fa-exclamation-triangle harness-step-timeout"></i>
+                                        </div>
+                                        <div class="harness-step-body" v-html="formatMessageContent(step.output)"></div>
+                                    </div>
+                                </el-collapse-item>
+                            </el-collapse>
+                        </div>
+                        <div class="message-trajectory-actions" v-if="message.roleType === 1 && !isManageMode && message.trajectoryId">
+                            <el-button type="text" size="mini" @@click="openTrajectory(message.trajectoryId)">
+                                <i class="fa fa-road"></i> 轨迹
+                            </el-button>
+                            <el-button v-if="canResumeMessage(message)" type="text" size="mini" @@click="resumeTrajectory(message.trajectoryId)">
+                                <i class="fa fa-play"></i> 恢复
+                            </el-button>
+                            <el-button type="text" size="mini" @@click="forkTrajectory(message.trajectoryId, message.trajectorySequence)">
+                                <i class="fa fa-code-fork"></i> 分叉
+                            </el-button>
+                        </div>
+                        <div class="message-trajectory-approvals" v-if="message.roleType === 1 && !isManageMode && message.pendingApprovals && message.pendingApprovals.length > 0">
+                            <div v-for="approval in message.pendingApprovals" :key="approval.requestId" class="trajectory-approval-item">
+                                <span><i class="fa fa-shield"></i> {{ approval.toolName }}</span>
+                                <el-button type="success" size="mini" @@click="respondApproval(message.trajectoryId, approval, true)">允许</el-button>
+                                <el-button type="danger" plain size="mini" @@click="respondApproval(message.trajectoryId, approval, false)">拒绝</el-button>
+                            </div>
+                        </div>
                         <div class="message-actions" v-if="message.roleType === 1 && !isManageMode">
                             <el-button 
                                 type="text" 
@@ -255,19 +297,37 @@
                     <p>@AR["AdminChat.StartPrompt"]</p>
                 </div>
 
-                <div v-if="isAIResponding" class="message-item message-assistant ai-thinking">
+                <div v-if="isAIResponding" class="message-item message-assistant ai-thinking live-run-panel">
                     <div class="message-avatar">
                         <i class="fa fa-robot"></i>
                     </div>
                     <div class="message-content">
                         <div class="message-meta">
                             <span class="message-role">@AR["AdminChat.RoleAssistant"]</span>
+                            <span class="live-run-status">{{ liveStatusText || (chatMode === 'harness' ? '正在规划任务…' : '正在生成回答…') }}</span>
                         </div>
-                        <div class="message-text">
+                        <div class="message-text" v-if="liveAssistantText">
+                            <div class="live-answer-preview" v-html="formatMessageContent(liveAssistantText)"></div>
+                        </div>
+                        <div class="message-text" v-else>
                             <span class="typing-indicator">
                                 <span></span><span></span><span></span>
                             </span>
                             @AR["AdminChat.Thinking"]
+                        </div>
+                        <el-collapse v-if="liveTrajectoryEvents.length > 0" class="live-trajectory-collapse">
+                            <el-collapse-item title="查看实时执行过程">
+                                <div v-for="event in liveTrajectoryEvents" :key="`live-${event.correlationId || event.id || event.sequence}`" class="live-trajectory-event">
+                                    <div class="live-trajectory-event-title">
+                                        <span>{{ trajectoryEventLabel(event.eventType) }}</span>
+                                        <strong v-if="event.name">{{ event.name }}</strong>
+                                    </div>
+                                    <div v-if="event.content" class="live-trajectory-event-content">{{ event.content }}</div>
+                                </div>
+                            </el-collapse-item>
+                        </el-collapse>
+                        <div v-if="livePendingApprovals.length > 0" class="live-approval-hint">
+                            <i class="fa fa-shield"></i> 等待工具确认
                         </div>
                     </div>
                 </div>
@@ -287,10 +347,27 @@
                     <span class="input-tip">
                         <i class="fa fa-info-circle"></i> @AR["AdminChat.SendHint"]
                     </span>
-                    <el-button 
-                        type="primary" 
+                    <el-radio-group v-model="chatMode" size="mini" class="chat-mode-toggle" :disabled="isSending">
+                        <el-radio-button label="simple">
+                            <i class="fa fa-comment"></i> @AR["AdminChat.ModeSimple"]
+                        </el-radio-button>
+                        <el-radio-button label="harness">
+                            <i class="fa fa-rocket"></i> @AR["AdminChat.ModeHarness"]
+                        </el-radio-button>
+                    </el-radio-group>
+                    <el-button
+                        v-if="isSending"
+                        type="danger"
+                        icon="el-icon-close"
+                        :loading="isStopping"
+                        :disabled="isStopping"
+                        @@click="stopCurrentRequest">
+                        终止
+                    </el-button>
+                    <el-button
+                        v-else
+                        type="primary"
                         icon="el-icon-s-promotion"
-                        :loading="isSending"
                         :disabled="!currentSessionId || !inputMessage || inputMessage.trim().length === 0"
                         @@click="sendMessage">
                         @AR["AdminChat.Send"]
@@ -314,16 +391,18 @@
                         </div>
 
                         <div class="chat-entrance-input-wrapper">
-                            <div class="chat-module-picker" style="margin-bottom:16px;">
-                                <div class="chat-module-picker-header">
-                                    <span class="chat-module-picker-title">@AR["AdminChat.ComputePower"]</span>
-                                </div>
+                            <div class="chat-launcher-controls">
+                                <div class="launcher-control launcher-control-model">
+                                    <div class="launcher-control-label">
+                                        <i class="fa fa-bolt"></i>
+                                        <span>@AR["AdminChat.ComputePower"]</span>
+                                    </div>
                                 <el-select
                                     v-model="launcherAiModelId"
                                     class="chat-ai-model-select"
                                     :loading="loadingAiModelOptions"
                                     placeholder="@AR["AdminChat.SelectModel"]"
-                                    style="width:100%;">
+                                    >
                                     <el-option
                                         v-for="item in aiModelOptions"
                                         :key="`launcher-${item.id}`"
@@ -335,6 +414,22 @@
                                         </div>
                                     </el-option>
                                 </el-select>
+                                </div>
+
+                                <div class="launcher-control launcher-control-mode">
+                                    <div class="launcher-control-label">
+                                        <i class="fa fa-sliders"></i>
+                                        <span>执行模式</span>
+                                    </div>
+                                    <el-radio-group v-model="launcherChatMode" size="small" class="launcher-mode-toggle">
+                                    <el-radio-button label="simple">
+                                        <i class="fa fa-comment"></i> @AR["AdminChat.ModeSimple"]
+                                    </el-radio-button>
+                                    <el-radio-button label="harness">
+                                        <i class="fa fa-rocket"></i> @AR["AdminChat.ModeHarness"]
+                                    </el-radio-button>
+                                    </el-radio-group>
+                                </div>
                             </div>
 
                             <el-input
@@ -359,40 +454,53 @@
                             </el-button>
                         </div>
 
-                        <div class="chat-module-picker">
+                        <div class="chat-module-picker chat-reference-picker">
                             <div class="chat-module-picker-header">
-                                <span class="chat-module-picker-title">@AR["Admin.Home.ReferenceModules"]</span>
+                                <div class="chat-reference-title">
+                                    <span class="chat-module-picker-title">@AR["Admin.Home.ReferenceModules"]</span>
+                                    <span class="chat-reference-count" v-if="selectedModules.length + selectedWorkflows.length > 0">
+                                        {{ selectedModules.length + selectedWorkflows.length }}
+                                    </span>
+                                    <span class="chat-reference-optional">可选</span>
+                                </div>
                                 <div class="chat-module-picker-actions">
-                                    <el-button size="mini" type="primary" icon="el-icon-plus" @@click="openModuleSelector">@AR["Admin.Home.AddReferenceModule"]</el-button>
-                                    <el-button size="mini" @@click="clearSelectedModules" v-if="selectedModules.length > 0">@AR["Admin.Home.Clear"]</el-button>
+                                    <el-button size="mini" type="primary" plain icon="el-icon-plus" @@click="openModuleSelector">@AR["Admin.Home.AddReferenceModule"]</el-button>
+                                    <el-button size="mini" type="text" @@click="clearSelectedModules" v-if="selectedModules.length > 0 || selectedWorkflows.length > 0">
+                                        <i class="fa fa-eraser"></i> @AR["Admin.Home.Clear"]
+                                    </el-button>
                                 </div>
                             </div>
 
-                            <div v-if="selectedModules.length > 0" class="chat-module-selected-list">
-                                <el-tag
-                                    v-for="module in selectedModules"
-                                    :key="module.uid"
-                                    closable
-                                    @@close="removeModule(module.uid)"
-                                    type="info"
-                                    class="module-tag">
-                                    <i :class="module.icon" aria-hidden="true"></i>
-                                    <span class="module-tag-name">{{module.name}}</span>
-                                </el-tag>
+                            <div v-if="selectedModules.length > 0 || selectedWorkflows.length > 0" class="chat-reference-tags">
+                                <div v-if="selectedModules.length > 0" class="chat-module-selected-list chat-reference-tag-row">
+                                    <el-tag
+                                        v-for="module in selectedModules"
+                                        :key="module.uid"
+                                        closable
+                                        @@close="removeModule(module.uid)"
+                                        type="info"
+                                        class="module-tag">
+                                        <i :class="module.icon" aria-hidden="true"></i>
+                                        <span class="module-tag-name">{{module.name}}</span>
+                                    </el-tag>
+                                </div>
+                                <div v-if="selectedWorkflows.length > 0" class="chat-module-selected-list chat-reference-tag-row chat-workflow-tag-row">
+                                    <el-tag
+                                        v-for="workflow in selectedWorkflows"
+                                        :key="`selected-workflow-${workflow.id}`"
+                                        closable
+                                        @@close="removeWorkflow(workflow.id)"
+                                        type="success"
+                                        class="module-tag">
+                                        <i class="fa fa-random" aria-hidden="true"></i>
+                                        <span class="module-tag-name">{{workflow.name}}</span>
+                                    </el-tag>
+                                </div>
                             </div>
-                            <div v-if="selectedWorkflows.length > 0" class="chat-module-selected-list">
-                                <el-tag
-                                    v-for="workflow in selectedWorkflows"
-                                    :key="`selected-workflow-${workflow.id}`"
-                                    closable
-                                    @@close="removeWorkflow(workflow.id)"
-                                    type="success"
-                                    class="module-tag">
-                                    <i class="fa fa-random" aria-hidden="true"></i>
-                                    <span class="module-tag-name">{{workflow.name}}</span>
-                                </el-tag>
+                            <div v-else class="chat-module-selected-empty">
+                                <i class="fa fa-lightbulb-o"></i>
+                                <span>不引用模块也可以直接开始</span>
                             </div>
-                            <div v-if="selectedModules.length === 0 && selectedWorkflows.length === 0" class="chat-module-selected-empty">@AR["Admin.Home.EmptyReference"]</div>
                         </div>
 
                         @await Html.PartialAsync("~/Areas/Admin/Pages/Shared/_ChatModuleSelectorDialog.cshtml")
@@ -401,6 +509,82 @@
             </div>
         </el-main>
     </el-container>
+    <el-dialog
+        title="Harness 任务轨迹"
+        :visible.sync="trajectoryDialogVisible"
+        width="760px"
+        custom-class="trajectory-dialog">
+        <div class="trajectory-toolbar">
+            <el-input
+                v-model="trajectorySearchText"
+                clearable
+                size="small"
+                placeholder="检索轨迹、工具或结果"
+                @@keyup.enter.native="searchTrajectories">
+                <el-button slot="append" icon="el-icon-search" @@click="searchTrajectories"></el-button>
+            </el-input>
+        </div>
+        <div class="trajectory-list" v-loading="trajectoryLoading">
+            <div
+                v-for="trajectory in trajectoryList"
+                :key="trajectory.id"
+                :class="['trajectory-list-item', { active: selectedTrajectory && selectedTrajectory.id === trajectory.id }]"
+                @@click="openTrajectory(trajectory.id)">
+                <div>
+                    <strong>{{ trajectory.title }}</strong>
+                    <span class="trajectory-status">{{ trajectoryStatusLabel(trajectory.status) }}</span>
+                </div>
+                <small>#{{ trajectory.id }} · {{ trajectory.lastSequence }} events · {{ formatTime(trajectory.startedAt) }}</small>
+            </div>
+            <div v-if="trajectoryList.length === 0 && !trajectoryLoading" class="trajectory-empty">暂无 Harness 轨迹</div>
+        </div>
+        <div class="trajectory-detail" v-if="selectedTrajectory" v-loading="trajectoryDetailLoading">
+            <div class="trajectory-detail-head">
+                <div>
+                    <strong>{{ selectedTrajectory.title }}</strong>
+                    <span class="trajectory-status">{{ trajectoryStatusLabel(selectedTrajectory.status) }}</span>
+                </div>
+                <div class="trajectory-detail-actions">
+                    <el-button size="mini" @@click="toggleTrajectoryReplay">
+                        <i :class="replayPlaying ? 'fa fa-pause' : 'fa fa-play-circle'"></i>
+                        {{ replayPlaying ? '暂停回放' : '回放' }}
+                    </el-button>
+                    <el-button size="mini" type="primary" @@click="resumeSelectedTrajectory">
+                        <i class="fa fa-play"></i> 恢复
+                    </el-button>
+                    <el-button size="mini" @@click="forkSelectedTrajectory">
+                        <i class="fa fa-code-fork"></i> 分叉
+                    </el-button>
+                </div>
+            </div>
+            <div class="trajectory-replay-banner" v-if="replayEvent">
+                <span>回放事件 #{{ replayEvent.sequence }} · {{ replayEvent.eventType }}</span>
+                <strong v-if="replayEvent.name">{{ replayEvent.name }}</strong>
+                <div v-if="replayEvent.content">{{ replayEvent.content }}</div>
+            </div>
+            <div ref="trajectoryTimeline" class="trajectory-timeline">
+                <el-timeline>
+                    <el-timeline-item
+                        v-for="event in selectedTrajectoryEvents"
+                        :key="event.id || event.sequence"
+                        :timestamp="formatTime(event.occurredAt)"
+                        placement="top">
+                        <div
+                            :id="trajectoryEventDomId(event.sequence)"
+                            :class="['trajectory-event', { 'is-replay-current': replayEvent && replayEvent.sequence === event.sequence }]"
+                            @@click="selectReplayEvent(selectedTrajectoryEvents.indexOf(event))">
+                            <div class="trajectory-event-title">
+                                <span>#{{ event.sequence }} {{ trajectoryEventLabel(event.eventType) }}</span>
+                                <strong v-if="event.name">{{ event.name }}</strong>
+                            </div>
+                            <div class="trajectory-event-content" v-if="event.content">{{ event.content }}</div>
+                            <pre class="trajectory-event-payload" v-if="event.payloadJson">{{ formatTrajectoryPayload(event.payloadJson) }}</pre>
+                        </div>
+                    </el-timeline-item>
+                </el-timeline>
+            </div>
+        </div>
+    </el-dialog>
 </div>
 
 @section scripts {

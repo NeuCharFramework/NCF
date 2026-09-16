@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------
+﻿/*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
 
     文件名：NeuCharPivotRepositories.cs
@@ -9,6 +9,9 @@
 
     修改标识：Senparc - 20260813
     修改描述：v0.5.0 集成 NeuCharPivot 与 NeuCharWorkflow 管理能力并优化后台体验
+
+    修改标识：Senparc - 20260915
+    修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
 
 ----------------------------------------------------------------*/
 
@@ -45,4 +48,12 @@ public sealed class NeuCharExecutionLogRepository : ClientRepositoryBase<NeuChar
 {
     private NeuCharExecutionLogRepository() : base(null) { }
     public NeuCharExecutionLogRepository(INcfDbData ncfDbData) : base(ncfDbData) { }
+}
+
+public interface INeuCharPivotBoardRepository : IClientRepositoryBase<NeuCharPivotBoard> { }
+
+public sealed class NeuCharPivotBoardRepository : ClientRepositoryBase<NeuCharPivotBoard>, INeuCharPivotBoardRepository
+{
+    private NeuCharPivotBoardRepository() : base(null) { }
+    public NeuCharPivotBoardRepository(INcfDbData ncfDbData) : base(ncfDbData) { }
 }

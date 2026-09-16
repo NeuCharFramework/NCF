@@ -10,6 +10,9 @@
     修改标识：Senparc - 20260813
     修改描述：v0.5.0 集成 NeuCharPivot 与 NeuCharWorkflow 管理能力并优化后台体验
 
+    修改标识：Senparc - 20260829
+    修改描述：v0.7.0 新增 NeuCharPivot 全局浮动调用与工作流分析管理能力
+
 ----------------------------------------------------------------*/
 
 using Microsoft.Extensions.Logging;
@@ -295,7 +298,9 @@ public sealed class ChatAgentNeuCharPivotComposer
         Never emit HTML, JavaScript, CSS, URLs, executable code, tool calls, method calls, secrets, or markdown fences.
         You may only arrange the supplied Function keys and choose which supplied parameter names are exposed.
         Required parameters must always be exposed. Keep the UI concise, clean, beginner-friendly, and task-oriented.
-        Return JSON with: version, title, description, columns (1-3), sections[] { title, functions[] { functionKey, title, summary, accent, exposedParameters[] } }.
+        Return JSON with: version, title, description, columns (1-3), panels[] { key, title, description, type, columns (1-3), sections[] { title, functions[] { functionKey, title, summary, accent, exposedParameters[] } } }.
+        The default panel must be a panel with key "shortcuts", title "快捷操作", and type "shortcuts".
+        When exposedParameters is omitted or empty, expose all supplied parameters for that Function.
         Allowed accent values: blue, green, orange, purple, gray.
         """;
 

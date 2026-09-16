@@ -199,6 +199,12 @@
   <data name="Download.Status.Unavailable" xml:space="preserve"><value>No disponible temporalmente</value></data>
   <data name="Download.Status.Detected" xml:space="preserve"><value>Detectado</value></data>
   <data name="Download.Status.Estimated" xml:space="preserve"><value>estimado</value></data>
+  <data name="Download.Source.Mode" xml:space="preserve"><value>Fuente de descarga</value></data>
+  <data name="Download.Source.Auto" xml:space="preserve"><value>Automática (local primero)</value></data>
+  <data name="Download.Source.Local" xml:space="preserve"><value>Espejo local</value></data>
+  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Download.Status.Md5" xml:space="preserve"><value>Huella MD5</value></data>
+  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>No disponible</value></data>
   <data name="Download.Path.Eyebrow" xml:space="preserve"><value>UN FRAMEWORK · DOS COMIENZOS</value></data>
   <data name="Download.Path.Title" xml:space="preserve"><value>De listo para usar a totalmente tuyo</value></data>
   <data name="Download.Path.Description" xml:space="preserve"><value>Para un sistema inmediato o un producto que evolucione durante años, NCF ofrece un punto de partida claro y fiable.</value></data>

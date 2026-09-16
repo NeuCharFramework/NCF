@@ -45,6 +45,27 @@
   <data name="Admin.Nav.Home" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="Admin.Nav.Search" xml:space="preserve">
+    <value>Search menu</value>
+  </data>
+  <data name="Admin.Nav.SearchPlaceholder" xml:space="preserve">
+    <value>Type a keyword to filter the menu</value>
+  </data>
+  <data name="Admin.Nav.SearchEmpty" xml:space="preserve">
+    <value>No matching menu found</value>
+  </data>
+  <data name="Admin.Nav.ConfigTitle" xml:space="preserve">
+    <value>Menu Configuration</value>
+  </data>
+  <data name="Admin.Nav.ConfigHint" xml:space="preserve">
+    <value>Drag first-level menus to reorder; saving updates the menu sort values</value>
+  </data>
+  <data name="Admin.Nav.ConfigSave" xml:space="preserve">
+    <value>Save order</value>
+  </data>
+  <data name="Admin.Nav.ConfigSaved" xml:space="preserve">
+    <value>Menu order saved</value>
+  </data>
   <data name="Admin.Layout.Welcome" xml:space="preserve">
     <value>Welcome,</value>
   </data>
@@ -288,6 +309,11 @@
   <data name="AdminChat.SendHint" xml:space="preserve"><value>Press Ctrl + Enter or Cmd + Enter to send</value></data>
   <data name="AdminChat.Send" xml:space="preserve"><value>Send</value></data>
   <data name="AdminChat.Thinking" xml:space="preserve"><value>Thinking...</value></data>
+
+  <data name="AdminChat.ModeSimple" xml:space="preserve"><value>Chat</value></data>
+  <data name="AdminChat.ModeHarness" xml:space="preserve"><value>Harness</value></data>
+  <data name="AdminChat.HarnessSteps" xml:space="preserve"><value>Harness Steps</value></data>
+  <data name="AdminChat.TrajectoryNotFound" xml:space="preserve"><value>Trajectory was not found.</value></data>
   <data name="AdminChat.NewSessionDescription" xml:space="preserve"><value>Enter a question and select reference modules to start a conversation</value></data>
   <data name="AdminChat.ComputePower" xml:space="preserve"><value>AI model</value></data>
   <data name="AdminChat.DeleteConfirm" xml:space="preserve"><value>Delete this conversation?</value></data>
@@ -551,4 +577,23 @@
   <data name="Admin.Home.AgentsWaitingOrPaused" xml:space="preserve"><value>Waiting / paused</value></data>
   <data name="Admin.Home.AiQuickDescription" xml:space="preserve"><value>Use the Footer AI quick chat to open the full conversation and context selector when needed.</value></data>
   <data name="Admin.Home.AiQuickDialog" xml:space="preserve"><value>Open quick chat</value></data>
+  <data name="Menu.ConfigMode" xml:space="preserve">
+    <value>Config Mode</value>
+  </data>
+  <data name="Menu.ConfigModeExit" xml:space="preserve">
+    <value>Exit Config Mode</value>
+  </data>
+  <data name="Menu.ConfigModeTip" xml:space="preserve">
+    <value>All menus/pages are listed below by hierarchy (buttons are not sortable). Drag items within the same level to reorder, or type a number in the Sort box and press Enter to jump to that position. Saving really updates the Sort values and refreshes the left menu.</value>
+  </data>
+  <data name="Menu.ConfigSave" xml:space="preserve">
+    <value>Save Order</value>
+  </data>
+  <data name="Menu.ConfigSaveSuccess" xml:space="preserve">
+    <value>Menu order has been saved</value>
+  </data>
+  <data name="Menu.ConfigEmpty" xml:space="preserve">
+    <value>No sortable menus or pages</value>
+  </data>
+  <data name="Admin.Footer.NeuBellWebHookSettings" xml:space="preserve"><value>WebHook Settings</value></data>
 </root>

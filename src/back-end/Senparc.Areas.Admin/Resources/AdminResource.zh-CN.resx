@@ -45,6 +45,27 @@
   <data name="Admin.Nav.Home" xml:space="preserve">
     <value>首页</value>
   </data>
+  <data name="Admin.Nav.Search" xml:space="preserve">
+    <value>搜索菜单</value>
+  </data>
+  <data name="Admin.Nav.SearchPlaceholder" xml:space="preserve">
+    <value>输入关键字筛选左侧菜单</value>
+  </data>
+  <data name="Admin.Nav.SearchEmpty" xml:space="preserve">
+    <value>未找到匹配的菜单</value>
+  </data>
+  <data name="Admin.Nav.ConfigTitle" xml:space="preserve">
+    <value>菜单配置</value>
+  </data>
+  <data name="Admin.Nav.ConfigHint" xml:space="preserve">
+    <value>拖拽一级菜单调整顺序，保存后将更新菜单排序值</value>
+  </data>
+  <data name="Admin.Nav.ConfigSave" xml:space="preserve">
+    <value>保存顺序</value>
+  </data>
+  <data name="Admin.Nav.ConfigSaved" xml:space="preserve">
+    <value>菜单顺序已保存</value>
+  </data>
   <data name="Admin.Layout.Welcome" xml:space="preserve">
     <value>欢迎，</value>
   </data>
@@ -286,6 +307,11 @@
   <data name="AdminChat.SendHint" xml:space="preserve"><value>Ctrl + Enter 或 Cmd + Enter 发送</value></data>
   <data name="AdminChat.Send" xml:space="preserve"><value>发送</value></data>
   <data name="AdminChat.Thinking" xml:space="preserve"><value>正在思考中...</value></data>
+
+  <data name="AdminChat.ModeSimple" xml:space="preserve"><value>普通对话</value></data>
+  <data name="AdminChat.ModeHarness" xml:space="preserve"><value>长任务</value></data>
+  <data name="AdminChat.HarnessSteps" xml:space="preserve"><value>执行步骤</value></data>
+  <data name="AdminChat.TrajectoryNotFound" xml:space="preserve"><value>未找到任务轨迹。</value></data>
   <data name="AdminChat.NewSessionDescription" xml:space="preserve"><value>输入问题并选择引用模块，开始新的对话会话</value></data>
   <data name="AdminChat.ComputePower" xml:space="preserve"><value>AI 算力</value></data>
   <data name="AdminChat.DeleteConfirm" xml:space="preserve"><value>确定要删除这个会话吗？</value></data>
@@ -701,4 +727,23 @@
   <data name="Admin.Home.AgentsWaitingOrPaused" xml:space="preserve"><value>等待 / 暂停</value></data>
   <data name="Admin.Home.AiQuickDescription" xml:space="preserve"><value>使用页脚 AI 快捷对话，随时展开完整会话与上下文选择。</value></data>
   <data name="Admin.Home.AiQuickDialog" xml:space="preserve"><value>打开快捷对话</value></data>
+  <data name="Menu.ConfigMode" xml:space="preserve">
+    <value>配置模式</value>
+  </data>
+  <data name="Menu.ConfigModeExit" xml:space="preserve">
+    <value>退出配置模式</value>
+  </data>
+  <data name="Menu.ConfigModeTip" xml:space="preserve">
+    <value>下方按层级列出所有“菜单/页面”（按钮不参与排序）。同级之间可直接拖拽调整顺序，也可在右侧“排序”框输入数字后回车跳转到对应位置；保存后将真实更新 Sort 数值并刷新左侧菜单</value>
+  </data>
+  <data name="Menu.ConfigSave" xml:space="preserve">
+    <value>保存排序</value>
+  </data>
+  <data name="Menu.ConfigSaveSuccess" xml:space="preserve">
+    <value>菜单排序已保存</value>
+  </data>
+  <data name="Menu.ConfigEmpty" xml:space="preserve">
+    <value>暂无可排序的菜单或页面</value>
+  </data>
+  <data name="Admin.Footer.NeuBellWebHookSettings" xml:space="preserve"><value>WebHook 设置</value></data>
 </root>

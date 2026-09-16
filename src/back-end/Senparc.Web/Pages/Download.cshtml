@@ -18,6 +18,12 @@
      data-source-local="@SR["Download.Status.LocalSource"]"
      data-source-github="@SR["Download.Status.GitHubSource"]"
      data-source-unavailable="@SR["Download.Status.Unavailable"]"
+     data-source-mode="auto"
+     data-source-mode-auto="@SR["Download.Source.Auto"]"
+     data-source-mode-local="@SR["Download.Source.Local"]"
+     data-source-mode-github="@SR["Download.Source.GitHub"]"
+     data-md5-label="@SR["Download.Status.Md5"]"
+     data-md5-unavailable="@SR["Download.Status.Md5Unavailable"]"
      data-detected="@SR["Download.Status.Detected"]"
      data-estimated="@SR["Download.Status.Estimated"]"
      data-download="@SR["Download.Action.Download"]"
@@ -56,12 +62,32 @@
                     </a>
                 </div>
 
+                <div class="download-source-picker">
+                    <span class="source-picker-label">@SR["Download.Source.Mode"]</span>
+                    <div class="source-picker-options" role="radiogroup" aria-label="@SR["Download.Source.Mode"]">
+                        <label class="source-option">
+                            <input type="radio" name="download-source" value="auto" checked />
+                            <span>@SR["Download.Source.Auto"]</span>
+                        </label>
+                        <label class="source-option">
+                            <input type="radio" name="download-source" value="local" />
+                            <span>@SR["Download.Source.Local"]</span>
+                        </label>
+                        <label class="source-option">
+                            <input type="radio" name="download-source" value="github" />
+                            <span>@SR["Download.Source.GitHub"]</span>
+                        </label>
+                    </div>
+                </div>
+
                 <div id="download-detection-note" class="download-status" role="status" aria-live="polite">
                     <span class="status-pill"><span class="status-label">@SR["Download.Status.Device"]</span><strong id="detected-device">@SR["Download.Status.Loading"]</strong></span>
                     <span class="status-divider"></span>
                     <span class="status-pill"><span class="status-label">@SR["Download.Status.Version"]</span><strong id="latest-version">—</strong></span>
                     <span class="status-divider"></span>
                     <span class="status-pill"><span class="status-label">@SR["Download.Status.Source"]</span><strong id="download-source">@SR["Download.Status.Loading"]</strong></span>
+                    <span class="status-divider"></span>
+                    <span class="status-pill status-fingerprint"><span class="status-label">@SR["Download.Status.Md5"]</span><strong id="latest-md5">—</strong></span>
                 </div>
                 <p class="download-helper">@SR["Download.Hero.Helper"]</p>
             </div>
@@ -155,6 +181,7 @@
                         <h3>@platform.Name</h3>
                         <p>@platform.Arch</p>
                         <small data-package-size>—</small>
+                        <small class="package-fingerprint" data-package-md5>@SR["Download.Status.Md5"]: —</small>
                     </div>
                     <a href="https://github.com/NeuCharFramework/NcfDesktop/releases"
                        target="_blank" rel="noopener noreferrer" data-package-link

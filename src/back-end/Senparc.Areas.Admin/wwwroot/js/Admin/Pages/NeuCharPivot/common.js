@@ -52,6 +52,69 @@
         });
     }
 
+    function normalizeLayout(value) {
+        const layout = typeof value === 'string' ? parseJson(value, {}) : (value || {});
+        const legacySections = Array.isArray(layout.sections) ? layout.sections : [];
+        const panels = Array.isArray(layout.panels) && layout.panels.length
+            ? layout.panels
+            : [{
+                key: 'shortcuts',
+                title: '快捷操作',
+                description: '常用 Function 的参数化执行面板',
+                type: 'shortcuts',
+                columns: layout.columns || 2,
+                sections: legacySections
+            }];
+        return {
+            ...layout,
+            panels: panels.map((panel, index) => ({
+                key: panel.key || `panel-${index + 1}`,
+                title: panel.title || (index === 0 ? '快捷操作' : `面板 ${index + 1}`),
+                description: panel.description || '',
+                type: panel.type || 'shortcuts',
+                columns: Math.max(1, Math.min(3, Number(panel.columns || layout.columns || 2))),
+                sections: Array.isArray(panel.sections) ? panel.sections : []
+            }))
+        };
+    }
+
+    function loopStatus(loopTask) {
+        if (!loopTask) return 'none';
+        if (loopTask.isRunning) return 'running';
+        if (!loopTask.enabled) return 'disabled';
+        if (loopTask.lastSucceeded === false) return 'failed';
+        if (loopTask.nextRunAt) return 'countdown';
+        return 'due';
+    }
+
+    function formatCountdown(value, now) {
+        if (!value) return '';
+        const target = new Date(value).getTime();
+        const remaining = target - (now ? new Date(now).getTime() : Date.now());
+        if (!Number.isFinite(remaining)) return '';
+        if (remaining <= 0) return '即将执行';
+        const totalSeconds = Math.ceil(remaining / 1000);
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        if (days > 0) return `${days}天 ${hours}小时后`;
+        if (hours > 0) return `${hours}小时 ${minutes}分钟后`;
+        if (minutes > 0) return `${minutes}分 ${seconds}秒后`;
+        return `${seconds}秒后`;
+    }
+
+    function loopStatusText(status) {
+        return {
+            none: '未设置',
+            disabled: '已停用',
+            running: '执行中',
+            countdown: '倒计时',
+            due: '待执行',
+            failed: '上次失败'
+        }[status] || '未知';
+    }
+
     function sanitizeHtml(value) {
         if (!global.DOMPurify || typeof global.DOMPurify.sanitize !== 'function') {
             return '';
@@ -77,6 +140,10 @@
         unwrap,
         createParameterValues,
         firstMissingRequired,
+        normalizeLayout,
+        loopStatus,
+        formatCountdown,
+        loopStatusText,
         sanitizeHtml
     });
 })(window);

@@ -199,6 +199,12 @@
   <data name="Download.Status.Unavailable" xml:space="preserve"><value>一時的に取得できません</value></data>
   <data name="Download.Status.Detected" xml:space="preserve"><value>検出済み</value></data>
   <data name="Download.Status.Estimated" xml:space="preserve"><value>推定</value></data>
+  <data name="Download.Source.Mode" xml:space="preserve"><value>ダウンロード元</value></data>
+  <data name="Download.Source.Auto" xml:space="preserve"><value>自動（ローカル優先）</value></data>
+  <data name="Download.Source.Local" xml:space="preserve"><value>ローカルミラー</value></data>
+  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Download.Status.Md5" xml:space="preserve"><value>MD5 フィンガープリント</value></data>
+  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>利用できません</value></data>
   <data name="Download.Path.Eyebrow" xml:space="preserve"><value>1 つのフレームワーク · 2 つの出発点</value></data>
   <data name="Download.Path.Title" xml:space="preserve"><value>すぐに使うことも、自由に構築することも</value></data>
   <data name="Download.Path.Description" xml:space="preserve"><value>今すぐ動くシステムにも、長く進化する製品にも、NCF は明確で信頼できる出発点を提供します。</value></data>

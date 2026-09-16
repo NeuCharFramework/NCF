@@ -8,6 +8,17 @@ var chatApp = new Vue({
       currentSessionModules: [],
       currentSessionWorkflows: [],
       currentSessionAiModelId: 0,
+      chatMode: 'harness',
+      trajectoryDialogVisible: false,
+      trajectoryLoading: false,
+      trajectoryDetailLoading: false,
+      trajectoryList: [],
+      selectedTrajectory: null,
+      selectedTrajectoryEvents: [],
+      trajectorySearchText: '',
+      replayIndex: -1,
+      replayPlaying: false,
+      replayTimer: null,
       aiModelOptions: [],
       aiKernelAvailable: false,
       loadingAiModelOptions: false,
@@ -17,12 +28,25 @@ var chatApp = new Vue({
       loadingSessions: false,
       loadingMessages: false,
       isSending: false,
+      isStopping: false,
+      activeRequestController: null,
       isAIResponding: false,
+      liveAssistantText: '',
+      liveTrajectoryEvents: [],
+      livePendingApprovals: [],
+      liveTrajectoryId: 0,
+      liveStatusText: '',
+      pendingInitialSend: false,
       currentUserId: 0,
       autoScrollEnabled: true,
       isManageMode: false,
       selectedMessageIds: []
     };
+  },
+  computed: {
+    replayEvent() {
+      return this.replayIndex >= 0 ? this.selectedTrajectoryEvents[this.replayIndex] || null : null;
+    }
   },
   mounted() {
     if (window.INITIAL_DATA) {
@@ -38,6 +62,16 @@ var chatApp = new Vue({
         }
       }
     }
+    const modeParam = new URLSearchParams(window.location.search || '').get('mode');
+    if (modeParam === '0') this.chatMode = 'simple';
+    if (modeParam === '1') this.chatMode = 'harness';
+    const initialMessageKey = `ncf.admin.chat.initialMessage.${this.currentSessionId}`;
+    const initialMessageParam = this.currentSessionId > 0 ? sessionStorage.getItem(initialMessageKey) : '';
+    if (initialMessageParam) {
+      sessionStorage.removeItem(initialMessageKey);
+      this.inputMessage = initialMessageParam;
+      this.pendingInitialSend = true;
+    }
 
     this.currentSessionAiModelId = this.getSessionAiModelId(this.currentSessionId);
     this.launcherAiModelId = this.currentSessionAiModelId;
@@ -46,7 +80,19 @@ var chatApp = new Vue({
     this.loadSessionList();
     
     if (this.currentSessionId > 0) {
-      this.loadSessionDetail();
+      this.loadSessionDetail().then(() => {
+        this.loadTrajectoryList();
+        if (this.pendingInitialSend) {
+          this.pendingInitialSend = false;
+          this.sendMessage();
+        }
+      });
+    }
+  },
+  beforeDestroy() {
+    if (this.activeRequestController) {
+      this.activeRequestController.abort();
+      this.activeRequestController = null;
     }
   },
   methods: {
@@ -72,6 +118,296 @@ var chatApp = new Vue({
     handleCurrentSessionAiModelChange(value) {
       this.currentSessionAiModelId = this.normalizeAiModelId(value);
       this.setSessionAiModelId(this.currentSessionId, this.currentSessionAiModelId);
+    },
+
+    harnessStepsTitle(steps) {
+      const label = (typeof ncfT === 'function' && ncfT('AdminChat.HarnessSteps')) || 'Harness';
+      return label + ' · ' + (steps ? steps.length : 0);
+    },
+
+    trajectoryStatusLabel(status) {
+      return {
+        0: '执行中',
+        1: '等待审批',
+        2: '已完成',
+        3: '失败',
+        4: '已取消'
+      }[status] || '未知状态';
+    },
+
+    trajectoryEventLabel(eventType) {
+      return {
+        'request': '任务请求',
+        'resume': '恢复任务',
+        'fork': '创建分支',
+        'assistant.text': '阶段输出',
+        'tool.call': '调用工具',
+        'tool.result': '工具结果',
+        'approval.request': '等待确认',
+        'approval.response': '确认结果',
+        'error': '执行错误',
+        'cancelled': '已取消'
+      }[eventType] || eventType || '执行事件';
+    },
+
+    canResumeMessage(message) {
+      if (!message || !message.trajectoryId) return false;
+      const trajectory = this.trajectoryList.find(item => item.id === message.trajectoryId);
+      return !trajectory || !message.trajectorySequence || trajectory.lastSequence === message.trajectorySequence;
+    },
+
+    formatTrajectoryPayload(payload) {
+      if (!payload) return '';
+      try {
+        return JSON.stringify(JSON.parse(payload), null, 2);
+      } catch (error) {
+        return payload;
+      }
+    },
+
+    trajectoryEventDomId(sequence) {
+      return `admin-chat-trajectory-event-${sequence}`;
+    },
+
+    moveToReplayIndex(index) {
+      if (!this.selectedTrajectoryEvents.length) return;
+      this.replayIndex = Math.max(0, Math.min(index, this.selectedTrajectoryEvents.length - 1));
+      this.$nextTick(() => this.scrollToReplayEvent());
+    },
+
+    selectReplayEvent(index) {
+      this.stopTrajectoryReplay(false);
+      this.moveToReplayIndex(index);
+    },
+
+    scrollToReplayEvent() {
+      const event = this.replayEvent;
+      if (!event) return;
+
+      const container = this.$refs.trajectoryTimeline;
+      const target = this.$el.querySelector(`#${this.trajectoryEventDomId(event.sequence)}`);
+      if (!container || !target) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const targetTop = container.scrollTop
+        + targetRect.top
+        - containerRect.top
+        - (container.clientHeight - targetRect.height) / 2;
+      const maxScrollTop = Math.max(0, container.scrollHeight - container.clientHeight);
+      const nextScrollTop = Math.max(0, Math.min(targetTop, maxScrollTop));
+
+      if (typeof container.scrollTo === 'function') {
+        container.scrollTo({ top: nextScrollTop, behavior: 'smooth' });
+      } else {
+        container.scrollTop = nextScrollTop;
+      }
+    },
+
+    async loadTrajectoryList() {
+      if (!this.currentSessionId) return;
+      this.trajectoryLoading = true;
+      try {
+        const response = await service.get(`/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.GetSessionTrajectoriesAsync?sessionId=${this.currentSessionId}`);
+        if (response.data && response.data.success && response.data.data) {
+          this.trajectoryList = response.data.data.trajectories || [];
+        }
+      } catch (error) {
+        console.error('加载 Harness 轨迹失败:', error);
+      } finally {
+        this.trajectoryLoading = false;
+      }
+    },
+
+    openTrajectoryDialog() {
+      this.trajectoryDialogVisible = true;
+      this.loadTrajectoryList();
+    },
+
+    async openTrajectory(trajectoryId) {
+      if (!trajectoryId) return;
+      this.trajectoryDialogVisible = true;
+      this.trajectoryDetailLoading = true;
+      try {
+        const query = this.trajectorySearchText ? `&query=${encodeURIComponent(this.trajectorySearchText)}` : '';
+        const response = await service.get(`/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.GetTrajectoryAsync?trajectoryId=${trajectoryId}${query}`);
+        if (response.data && response.data.success && response.data.data) {
+          this.selectedTrajectory = response.data.data.trajectory;
+          this.selectedTrajectoryEvents = response.data.data.events || [];
+          this.stopTrajectoryReplay(true);
+        }
+      } catch (error) {
+        console.error('加载 Harness 轨迹详情失败:', error);
+        this.$message.error('轨迹加载失败');
+      } finally {
+        this.trajectoryDetailLoading = false;
+      }
+    },
+
+    async searchTrajectories() {
+      if (!this.trajectorySearchText || !this.trajectorySearchText.trim()) {
+        await this.loadTrajectoryList();
+        return;
+      }
+      this.trajectoryLoading = true;
+      try {
+        const response = await service.get(`/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.SearchTrajectoriesAsync?query=${encodeURIComponent(this.trajectorySearchText.trim())}`);
+        if (response.data && response.data.success && response.data.data) {
+          this.trajectoryList = response.data.data.trajectories || [];
+          if (this.selectedTrajectory) {
+            await this.openTrajectory(this.selectedTrajectory.id);
+          }
+        }
+      } catch (error) {
+        console.error('检索 Harness 轨迹失败:', error);
+      } finally {
+        this.trajectoryLoading = false;
+      }
+    },
+
+    async resumeTrajectory(trajectoryId) {
+      const prompt = await this.askTrajectoryInstruction('恢复 Harness 任务', '继续执行上次尚未完成的任务');
+      if (prompt === null) return;
+      await this.runTrajectoryAction('resume', { trajectoryId, instruction: prompt });
+    },
+
+    async forkTrajectory(trajectoryId, forkFromSequence) {
+      const trajectory = this.trajectoryList.find(item => item.id === trajectoryId) || this.selectedTrajectory;
+      const prompt = await this.askTrajectoryInstruction('分叉 Harness 任务', '从当前轨迹最后一步创建一个新分支');
+      if (prompt === null) return;
+      await this.runTrajectoryAction('fork', {
+        trajectoryId,
+        forkFromSequence: forkFromSequence || (trajectory ? trajectory.lastSequence : 0),
+        instruction: prompt
+      });
+    },
+
+    resumeSelectedTrajectory() {
+      return this.selectedTrajectory ? this.resumeTrajectory(this.selectedTrajectory.id) : null;
+    },
+
+    forkSelectedTrajectory() {
+      return this.selectedTrajectory ? this.forkTrajectory(this.selectedTrajectory.id) : null;
+    },
+
+    toggleTrajectoryReplay() {
+      if (this.replayPlaying) {
+        this.stopTrajectoryReplay();
+      } else {
+        this.startTrajectoryReplay();
+      }
+    },
+
+    startTrajectoryReplay() {
+      if (!this.selectedTrajectoryEvents.length) return;
+      this.stopTrajectoryReplay(false);
+      if (this.replayIndex < 0 || this.replayIndex >= this.selectedTrajectoryEvents.length - 1) {
+        this.replayIndex = 0;
+      }
+      this.moveToReplayIndex(this.replayIndex);
+      this.replayPlaying = true;
+      this.replayTimer = window.setInterval(() => {
+        if (this.replayIndex >= this.selectedTrajectoryEvents.length - 1) {
+          this.stopTrajectoryReplay(false);
+          return;
+        }
+        this.moveToReplayIndex(this.replayIndex + 1);
+      }, 650);
+    },
+
+    stopTrajectoryReplay(resetPosition = false) {
+      if (this.replayTimer) {
+        window.clearInterval(this.replayTimer);
+        this.replayTimer = null;
+      }
+      this.replayPlaying = false;
+      if (resetPosition) {
+        this.replayIndex = -1;
+      }
+    },
+
+    askTrajectoryInstruction(title, defaultValue) {
+      return this.$prompt('可以直接确认默认指令，也可以补充新的执行要求。', title, {
+        confirmButtonText: '执行',
+        cancelButtonText: '取消',
+        inputValue: defaultValue,
+        inputType: 'textarea'
+      }).then(({ value }) => value).catch(() => null);
+    },
+
+    async runTrajectoryAction(action, payload) {
+      this.isSending = true;
+      this.isAIResponding = true;
+      try {
+        const method = action === 'fork' ? 'ForkTrajectoryAsync' : 'ResumeTrajectoryAsync';
+        const response = await service.post(`/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.${method}`, payload);
+        if (!(response.data && response.data.success && response.data.data)) {
+          throw new Error(response.data && response.data.errorMessage ? response.data.errorMessage : '任务执行失败');
+        }
+        const data = response.data.data;
+        const harness = data.harness || {};
+        if (action === 'fork' && data.sessionId) {
+          await this.loadSessionList();
+          await this.switchSession(data.sessionId);
+          this.trajectoryDialogVisible = false;
+          this.$message.success('已创建新的任务分支');
+          return;
+        }
+        if (data.userMessage) this.messageList.push(data.userMessage);
+        if (data.assistantMessage) {
+          data.assistantMessage.trajectoryId = harness.trajectoryId || 0;
+          data.assistantMessage.trajectorySequence = harness.trajectorySequence || 0;
+          data.assistantMessage.trajectoryEvents = harness.trajectoryEvents || [];
+          data.assistantMessage.pendingApprovals = harness.pendingApprovals || [];
+          this.messageList.push(data.assistantMessage);
+        }
+        await this.loadSessionList();
+        await this.loadTrajectoryList();
+        if (harness.trajectoryId) await this.openTrajectory(harness.trajectoryId);
+        this.$message.success('已继续执行任务');
+      } catch (error) {
+        console.error('Harness 轨迹操作失败:', error);
+        this.$message.error(error.message || '任务执行失败');
+      } finally {
+        this.isSending = false;
+        this.isAIResponding = false;
+      }
+    },
+
+    async respondApproval(trajectoryId, approval, approved) {
+      this.isSending = true;
+      this.isAIResponding = true;
+      try {
+        const response = await service.post('/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.RespondTrajectoryApprovalAsync', {
+          trajectoryId,
+          requestId: approval.requestId,
+          toolCallId: approval.toolCallId,
+          toolName: approval.toolName,
+          argumentsJson: approval.argumentsJson || '{}',
+          approved,
+          reason: approved ? '管理员允许执行' : '管理员拒绝执行'
+        });
+        if (!(response.data && response.data.success && response.data.data)) {
+          throw new Error(response.data && response.data.errorMessage ? response.data.errorMessage : '审批处理失败');
+        }
+        const data = response.data.data;
+        const harness = data.harness || {};
+        if (data.assistantMessage) {
+          data.assistantMessage.trajectoryId = harness.trajectoryId || trajectoryId;
+          data.assistantMessage.trajectorySequence = harness.trajectorySequence || 0;
+          data.assistantMessage.trajectoryEvents = harness.trajectoryEvents || [];
+          data.assistantMessage.pendingApprovals = harness.pendingApprovals || [];
+          this.messageList.push(data.assistantMessage);
+        }
+        await this.loadTrajectoryList();
+        await this.openTrajectory(harness.trajectoryId || trajectoryId);
+      } catch (error) {
+        console.error('处理 Harness 审批失败:', error);
+        this.$message.error(error.message || '审批处理失败');
+      } finally {
+        this.isSending = false;
+        this.isAIResponding = false;
+      }
     },
 
     handleChatInputKeydown(event) {
@@ -133,7 +469,157 @@ var chatApp = new Vue({
       }
     },
 
+    resetLiveRun() {
+      this.liveAssistantText = '';
+      this.liveTrajectoryEvents = [];
+      this.livePendingApprovals = [];
+      this.liveTrajectoryId = 0;
+      this.liveStatusText = '';
+    },
+
+    handleLiveStreamEvent(eventName, payload, tempMessageId) {
+      if (eventName === 'user-message') {
+        const tempIndex = this.messageList.findIndex((item) => item.id === tempMessageId);
+        if (tempIndex >= 0 && payload) {
+          this.messageList.splice(tempIndex, 1, payload);
+        }
+        return;
+      }
+
+      if (eventName === 'token') {
+        this.liveAssistantText += payload && payload.text ? payload.text : '';
+        this.liveStatusText = '正在生成回答…';
+        return;
+      }
+
+      if (eventName === 'assistant-phase') {
+        if (payload && payload.trajectoryId) {
+          this.liveTrajectoryId = payload.trajectoryId;
+        }
+        if (payload && payload.trajectoryEvent) {
+          this.upsertLiveTrajectoryEvent(payload.trajectoryEvent);
+          this.liveStatusText = '正在组织当前阶段…';
+        }
+        return;
+      }
+
+      if (eventName === 'trajectory-event') {
+        if (payload && payload.trajectoryId) {
+          this.liveTrajectoryId = payload.trajectoryId;
+        }
+        if (payload && payload.trajectoryEvent) {
+          if (payload.trajectoryEvent.eventType === 'assistant.text') {
+            this.upsertLiveTrajectoryEvent(payload.trajectoryEvent);
+          } else {
+            this.liveTrajectoryEvents.push(payload.trajectoryEvent);
+          }
+          const eventType = payload.trajectoryEvent.eventType || '';
+          this.liveStatusText = {
+            'tool.call': '正在调用工具…',
+            'tool.result': '正在整理工具结果…',
+            'approval.request': '等待你的确认…',
+            'assistant.text': '正在组织回答…'
+          }[eventType] || '正在处理任务…';
+        }
+        this.livePendingApprovals = payload && payload.pendingApprovals ? payload.pendingApprovals : [];
+        return;
+      }
+
+      if (eventName === 'trajectory-complete') {
+        this.livePendingApprovals = payload && payload.pendingApprovals ? payload.pendingApprovals : [];
+        this.liveStatusText = this.livePendingApprovals.length > 0 ? '等待你的确认…' : '任务已完成，正在保存…';
+        return;
+      }
+
+      if (eventName === 'assistant-message') {
+        if (payload) {
+          payload.trajectoryId = payload.trajectoryId || this.liveTrajectoryId;
+          payload.trajectoryEvents = this.liveTrajectoryEvents.slice();
+          payload.pendingApprovals = this.livePendingApprovals.slice();
+          this.messageList.push(payload);
+        }
+        return;
+      }
+
+      if (eventName === 'error') {
+        throw new Error(payload && payload.message ? payload.message : '对话执行失败');
+      }
+    },
+
+    upsertLiveTrajectoryEvent(event) {
+      const key = event.correlationId || `${event.eventType || 'event'}-${event.sequence || 0}`;
+      const index = this.liveTrajectoryEvents.findIndex((item) => {
+        const itemKey = item.correlationId || `${item.eventType || 'event'}-${item.sequence || 0}`;
+        return itemKey === key;
+      });
+      if (index >= 0) {
+        this.liveTrajectoryEvents.splice(index, 1, event);
+      } else {
+        this.liveTrajectoryEvents.push(event);
+      }
+    },
+
+    async consumeAdminChatStream(requestData, tempMessageId, signal) {
+      const response = await fetch('/api/Senparc.Areas.Admin/AdminChatStream/send', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify(requestData),
+        signal
+      });
+      if (!response.ok || !response.body) {
+        throw new Error(`流式接口请求失败 (${response.status})`);
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let buffer = '';
+      let streamDone = false;
+
+      const consumeBlock = (block) => {
+        const lines = block.split(/\r?\n/);
+        let eventName = 'message';
+        const dataLines = [];
+        lines.forEach((line) => {
+          if (line.startsWith('event:')) eventName = line.slice(6).trim();
+          if (line.startsWith('data:')) dataLines.push(line.slice(5).trim());
+        });
+        if (!dataLines.length) return;
+        const raw = dataLines.join('\n');
+        let payload = raw;
+        try { payload = JSON.parse(raw); } catch (error) { /* keep text payload */ }
+        if (eventName === 'done') {
+          streamDone = true;
+          return;
+        }
+        this.handleLiveStreamEvent(eventName, payload, tempMessageId);
+      };
+
+      while (true) {
+        const { value, done } = await reader.read();
+        buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
+        const blocks = buffer.split(/\r?\n\r?\n/);
+        buffer = blocks.pop() || '';
+        blocks.forEach(consumeBlock);
+        if (done) break;
+      }
+      if (buffer.trim()) consumeBlock(buffer);
+      if (!streamDone) throw new Error('流式接口未正常结束');
+    },
+
+    stopCurrentRequest() {
+      if (!this.activeRequestController || !this.isSending) return;
+
+      this.isStopping = true;
+      this.activeRequestController.abort();
+    },
+
     async sendMessage() {
+      if (this.isSending) return;
+
       if (!this.inputMessage || this.inputMessage.trim().length === 0) {
         this.$message.warning(ncfT('AdminChat.InputRequired'));
         return;
@@ -147,7 +633,13 @@ var chatApp = new Vue({
       const messageContent = this.inputMessage.trim();
       this.inputMessage = '';
       this.isSending = true;
+      this.isStopping = false;
       this.isAIResponding = true;
+      this.resetLiveRun();
+      const requestController = typeof AbortController !== 'undefined'
+        ? new AbortController()
+        : null;
+      this.activeRequestController = requestController;
 
       // 乐观渲染：立即显示“我”的消息，避免等待接口返回期间出现空白。
       const tempMessageId = `temp-${Date.now()}`;
@@ -167,41 +659,38 @@ var chatApp = new Vue({
         const requestData = {
           sessionId: this.currentSessionId,
           aiModelId: this.normalizeAiModelId(this.currentSessionAiModelId),
-          content: messageContent
+          content: messageContent,
+          mode: this.chatMode === 'harness' ? 1 : 0
         };
 
-        const response = await service.post('/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.SendMessageAsync', requestData);
-        
-        if (response.data && response.data.success && response.data.data) {
-          const { userMessage, assistantMessage } = response.data.data;
-
-                  const tempIndex = this.messageList.findIndex((item) => item.id === tempMessageId);
-                  if (tempIndex >= 0) {
-                    // 用服务端正式消息替换临时消息，确保时间、ID等数据准确。
-                    this.messageList.splice(tempIndex, 1, userMessage || tempUserMessage);
-                  }
-
-                  if (assistantMessage) {
-                    this.messageList.push(assistantMessage);
-                  }
-          
-          await this.loadSessionList();
-          
-          this.$nextTick(() => {
-            this.scrollToBottom();
-          });
+        await this.consumeAdminChatStream(
+          requestData,
+          tempMessageId,
+          requestController ? requestController.signal : undefined
+        );
+        await this.loadSessionList();
+        await this.loadTrajectoryList();
+        this.$nextTick(() => this.scrollToBottom());
+      } catch (error) {
+        const wasAborted = (error && error.name === 'AbortError')
+          || (requestController && requestController.signal.aborted);
+        if (wasAborted) {
+          this.messageList = this.messageList.filter((item) => item.id !== tempMessageId);
+          this.inputMessage = messageContent;
+          await this.loadSessionDetail();
+          await this.loadTrajectoryList();
+          this.$message.info('本次请求已终止');
         } else {
-          console.error('发送消息失败:', response.data.errorMessage);
-          this.$message.error(response.data.errorMessage || ncfT('AdminChat.SendFailed'));
+          console.error('发送消息异常:', error);
+          this.$message.error(ncfT('AdminChat.SendFailedRetry'));
           this.messageList = this.messageList.filter((item) => item.id !== tempMessageId);
           this.inputMessage = messageContent;
         }
-      } catch (error) {
-        console.error('发送消息异常:', error);
-        this.$message.error(ncfT('AdminChat.SendFailedRetry'));
-        this.messageList = this.messageList.filter((item) => item.id !== tempMessageId);
-        this.inputMessage = messageContent;
       } finally {
+        if (this.activeRequestController === requestController) {
+          this.activeRequestController = null;
+        }
+        this.isStopping = false;
         this.isSending = false;
         this.isAIResponding = false;
       }
@@ -237,6 +726,7 @@ var chatApp = new Vue({
       this.clearMessageSelection();
       this.isManageMode = false;
       await this.loadSessionDetail();
+      await this.loadTrajectoryList();
     },
 
     async createNewSession() {
@@ -248,6 +738,9 @@ var chatApp = new Vue({
       this.messageList = [];
       this.inputMessage = '';
       this.chatInputText = '';
+      this.trajectoryList = [];
+      this.selectedTrajectory = null;
+      this.selectedTrajectoryEvents = [];
       this.clearMessageSelection();
       this.isManageMode = false;
     },

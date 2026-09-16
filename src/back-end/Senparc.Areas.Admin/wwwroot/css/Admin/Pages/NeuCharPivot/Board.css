@@ -1,0 +1,62 @@
+/*----------------------------------------------------------------
+    文件名：Board.css
+    文件功能描述：Pivot 面板（Provit Panel）管理页样式
+----------------------------------------------------------------*/
+
+.board-header-actions { display: flex; align-items: center; gap: 8px; }
+.board-header-actions .el-input { width: 240px; }
+
+.board-group { margin-bottom: 18px; }
+.board-group-title { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; color: #303133; font-size: 15px; }
+.board-group-title .fa { color: #8c52ff; }
+.board-group-title small { color: #a0a4aa; font-weight: normal; }
+
+.board-card { margin-bottom: 14px; border-radius: 10px; }
+.board-card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.board-card-title { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.board-card-actions { display: flex; align-items: center; gap: 6px; }
+.board-description { margin: 8px 0 0; color: #909399; font-size: 12px; }
+
+.board-blocks { margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f2f5; }
+.board-blocks-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.board-blocks-label { color: #606266; font-size: 13px; }
+
+.board-block-list { display: flex; flex-direction: column; gap: 6px; }
+.board-block-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: #fff;
+    border: 1px solid #ebeef5;
+    border-left: 3px solid #409eff;
+    border-radius: 6px;
+    cursor: grab;
+}
+.board-block-item:active { cursor: grabbing; }
+.board-block-item.accent-green { border-left-color: #67c23a; }
+.board-block-item.accent-orange { border-left-color: #e6a23c; }
+.board-block-item.accent-purple { border-left-color: #8c52ff; }
+.board-block-item.accent-gray { border-left-color: #909399; }
+.board-block-drag { color: #c0c4cc; }
+.board-block-index { min-width: 20px; height: 20px; line-height: 20px; text-align: center; background: #f5f7fa; border-radius: 10px; color: #909399; font-size: 12px; }
+.board-block-body { flex: 1; min-width: 0; }
+.board-block-body strong, .board-block-body small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.board-block-body small { margin-top: 2px; color: #a0a4aa; font-size: 12px; }
+.board-block-actions { display: flex; flex-shrink: 0; }
+
+.board-block-empty { padding: 18px; color: #a0a4aa; text-align: center; background: #fafbfc; border: 1px dashed #dcdfe6; border-radius: 6px; }
+
+.board-ai { margin-top: 14px; padding: 12px; background: #fafbfc; border: 1px solid #ebeef5; border-radius: 8px; }
+.board-ai-input { display: flex; gap: 10px; align-items: flex-start; }
+.board-ai-input .el-textarea { flex: 1; }
+.board-ai-reply { margin-top: 10px; }
+.board-ai-reply .fa { color: #8c52ff; }
+.board-ai-reply pre { margin: 6px 0 0; padding: 10px; background: #fff; border: 1px solid #ebeef5; border-radius: 6px; white-space: pre-wrap; word-break: break-word; color: #303133; font-size: 12px; }
+
+.picker-tip { margin: 0 0 12px; color: #909399; font-size: 12px; }
+
+@media (max-width: 720px) {
+    .board-header-actions { width: 100%; flex-wrap: wrap; }
+    .board-header-actions .el-input { flex: 1; width: auto; }
+}

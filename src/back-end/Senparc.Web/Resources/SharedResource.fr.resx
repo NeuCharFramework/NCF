@@ -199,6 +199,12 @@
   <data name="Download.Status.Unavailable" xml:space="preserve"><value>Temporairement indisponible</value></data>
   <data name="Download.Status.Detected" xml:space="preserve"><value>Détecté</value></data>
   <data name="Download.Status.Estimated" xml:space="preserve"><value>estimé</value></data>
+  <data name="Download.Source.Mode" xml:space="preserve"><value>Source de téléchargement</value></data>
+  <data name="Download.Source.Auto" xml:space="preserve"><value>Automatique (local d’abord)</value></data>
+  <data name="Download.Source.Local" xml:space="preserve"><value>Miroir local</value></data>
+  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Download.Status.Md5" xml:space="preserve"><value>Empreinte MD5</value></data>
+  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>Indisponible</value></data>
   <data name="Download.Path.Eyebrow" xml:space="preserve"><value>UN FRAMEWORK · DEUX DÉPARTS</value></data>
   <data name="Download.Path.Title" xml:space="preserve"><value>Du prêt à l’emploi au sur-mesure</value></data>
   <data name="Download.Path.Description" xml:space="preserve"><value>Pour un système immédiat ou un produit destiné à évoluer, NCF offre un point de départ clair et fiable.</value></data>

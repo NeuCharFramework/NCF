@@ -45,6 +45,27 @@
   <data name="Admin.Nav.Home" xml:space="preserve">
     <value>Inicio</value>
   </data>
+  <data name="Admin.Nav.Search" xml:space="preserve">
+    <value>Buscar menú</value>
+  </data>
+  <data name="Admin.Nav.SearchPlaceholder" xml:space="preserve">
+    <value>Escriba un término para filtrar el menú</value>
+  </data>
+  <data name="Admin.Nav.SearchEmpty" xml:space="preserve">
+    <value>No se encontró ningún menú</value>
+  </data>
+  <data name="Admin.Nav.ConfigTitle" xml:space="preserve">
+    <value>Configuración de menú</value>
+  </data>
+  <data name="Admin.Nav.ConfigHint" xml:space="preserve">
+    <value>Arrastre los menús de primer nivel para reordenar; guardar actualiza los valores de orden</value>
+  </data>
+  <data name="Admin.Nav.ConfigSave" xml:space="preserve">
+    <value>Guardar orden</value>
+  </data>
+  <data name="Admin.Nav.ConfigSaved" xml:space="preserve">
+    <value>Orden del menú guardado</value>
+  </data>
   <data name="Admin.Layout.Welcome" xml:space="preserve">
     <value>Bienvenido,</value>
   </data>
@@ -549,4 +570,23 @@
   <data name="Admin.Home.AgentsWaitingOrPaused" xml:space="preserve"><value>En espera / pausadas</value></data>
   <data name="Admin.Home.AiQuickDescription" xml:space="preserve"><value>Use el chat rápido de IA del Footer para abrir la conversación completa y seleccionar el contexto cuando lo necesite.</value></data>
   <data name="Admin.Home.AiQuickDialog" xml:space="preserve"><value>Abrir chat rápido</value></data>
+  <data name="Menu.ConfigMode" xml:space="preserve">
+    <value>Modo de configuración</value>
+  </data>
+  <data name="Menu.ConfigModeExit" xml:space="preserve">
+    <value>Salir del modo de configuración</value>
+  </data>
+  <data name="Menu.ConfigModeTip" xml:space="preserve">
+    <value>Todos los menús/páginas aparecen abajo por jerarquía (los botones no se ordenan). Arrastre elementos del mismo nivel para reordenarlos, o escriba un número en la casilla Orden y pulse Enter para saltar a esa posición. Al guardar se actualizan de verdad los valores Sort y se refresca el menú izquierdo.</value>
+  </data>
+  <data name="Menu.ConfigSave" xml:space="preserve">
+    <value>Guardar orden</value>
+  </data>
+  <data name="Menu.ConfigSaveSuccess" xml:space="preserve">
+    <value>El orden de los menús se ha guardado</value>
+  </data>
+  <data name="Menu.ConfigEmpty" xml:space="preserve">
+    <value>No hay menús o páginas para ordenar</value>
+  </data>
+  <data name="Admin.Footer.NeuBellWebHookSettings" xml:space="preserve"><value>Configuración de WebHook</value></data>
 </root>

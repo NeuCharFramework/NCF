@@ -22,6 +22,9 @@
     修改标识：Senparc - 20260822
     修改描述：v0.6.0 新增管理端 Chat 会话工作流能力
 
+    修改标识：Senparc - 20260915
+    修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
+
 ----------------------------------------------------------------*/
 using Microsoft.AspNetCore.Mvc;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
@@ -59,6 +62,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         private readonly AdminChatMessageService _messageService;
         private readonly AdminChatSessionModuleService _sessionModuleService;
         private readonly AdminChatSessionWorkflowService _sessionWorkflowService;
+        private readonly AdminChatTrajectoryService _trajectoryService;
         private readonly AdminChatAiService _chatAiService;
         private readonly IStringLocalizer<AdminResource> _localizer;
         private readonly IEventBus _eventBus;
@@ -69,6 +73,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             AdminChatMessageService messageService,
             AdminChatSessionModuleService sessionModuleService,
             AdminChatSessionWorkflowService sessionWorkflowService,
+            AdminChatTrajectoryService trajectoryService,
             AdminChatAiService chatAiService,
             IStringLocalizer<AdminResource> localizer) : base(serviceProvider)
         {
@@ -76,6 +81,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             _messageService = messageService;
             _sessionModuleService = sessionModuleService;
             _sessionWorkflowService = sessionWorkflowService;
+            _trajectoryService = trajectoryService;
             _chatAiService = chatAiService;
             _localizer = localizer;
             _eventBus = serviceProvider.GetService<IEventBus>();
@@ -97,9 +103,10 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     throw new NcfExceptionBase(_localizer["AdminChat.UserNotLoggedIn"]);
                 }
 
-                var title = string.IsNullOrEmpty(request.InitialMessage) 
+                var titleSource = string.IsNullOrEmpty(request.Title) ? request.InitialMessage : request.Title;
+                var title = string.IsNullOrEmpty(titleSource)
                     ? _localizer["AdminChat.NewConversation"] 
-                    : (request.InitialMessage.Length > 50 ? request.InitialMessage.Substring(0, 50) + "..." : request.InitialMessage);
+                    : (titleSource.Length > 50 ? titleSource.Substring(0, 50) + "..." : titleSource);
 
                 var session = await _sessionService.CreateSessionAsync(title, userId);
 
@@ -143,28 +150,15 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                             .ToList());
                 }
 
-                if (!string.IsNullOrEmpty(request.InitialMessage))
-                {
-                    await _messageService.AddMessageAsync(
-                        session.Id,
-                        ChatMessageRoleType.User,
-                        request.InitialMessage);
-
-                    var (aiResponse, modelIdentifier) = await _chatAiService.GenerateResponseAsync(session.Id, userId, request.InitialMessage, request.AiModelId);
-                    await _messageService.AddMessageAsync(
-                        session.Id,
-                        ChatMessageRoleType.Assistant,
-                        aiResponse,
-                        modelIdentifier);
-                }
-
                 logger.Append($"创建会话: SessionId={session.Id}, UserId={userId}");
                 await PublishSyncEventAsync(userId, session.Id, "session-created");
 
                 return new CreateSessionResponse
                 {
                     SessionId = session.Id,
-                    Title = session.Title
+                    Title = session.Title,
+                    InitialMessage = request.InitialMessage,
+                    Mode = request.Mode
                 };
             });
         }
@@ -286,21 +280,46 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
                 await _sessionService.UpdateLastMessageTimeAsync(request.SessionId);
 
-                var (aiResponse, modelIdentifier) = await _chatAiService.GenerateResponseAsync(request.SessionId, userId, request.Content, request.AiModelId);
+                var mode = request.Mode;
+                string aiResponse;
+                string modelIdentifier;
+                AdminChatHarnessResult harness = null;
+
+                if (mode == AdminChatMode.Harness)
+                {
+                    (aiResponse, modelIdentifier, harness) = await _chatAiService.GenerateNativeHarnessResponseAsync(
+                        request.SessionId,
+                        userId,
+                        request.Content,
+                        request.AiModelId);
+                }
+                else
+                {
+                    (aiResponse, modelIdentifier) = await _chatAiService.GenerateResponseAsync(request.SessionId, userId, request.Content, request.AiModelId);
+                }
 
                 var assistantMessage = await _messageService.AddMessageAsync(
                     request.SessionId,
                     ChatMessageRoleType.Assistant,
                     aiResponse,
-                    modelIdentifier);
+                    modelIdentifier,
+                    harness?.TrajectoryId,
+                    harness?.TrajectorySequence);
 
-                logger.Append($"发送消息: SessionId={request.SessionId}, MessageId={userMessage.Id}");
+                logger.Append($"发送消息: SessionId={request.SessionId}, MessageId={userMessage.Id}, Mode={mode}");
                 await PublishSyncEventAsync(userId, request.SessionId, "messages-changed");
 
                 return new SendMessageResponse
                 {
                     UserMessage = AdminChatMessageDto.CreateFromEntity(userMessage),
-                    AssistantMessage = AdminChatMessageDto.CreateFromEntity(assistantMessage)
+                    AssistantMessage = AdminChatMessageDto.CreateFromEntity(assistantMessage),
+                    Mode = mode,
+                    HarnessSteps = harness?.Steps,
+                    TrajectoryId = harness?.TrajectoryId ?? 0,
+                    TrajectorySequence = harness?.TrajectorySequence ?? 0,
+                    TrajectoryStatus = harness?.Status ?? default,
+                    TrajectoryEvents = harness?.TrajectoryEvents,
+                    PendingApprovals = harness?.PendingApprovals
                 };
             });
         }
@@ -331,6 +350,255 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 {
                     Messages = messages.Select(AdminChatMessageDto.CreateFromEntity).ToList(),
                     TotalCount = totalCount
+                };
+            });
+        }
+
+        /// <summary>
+        /// 获取 Harness Trajectory 及其事件。Trajectory 内容只通过显式接口返回，不混入普通消息历史。
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Get)]
+        public async Task<AppResponseBase<GetTrajectoryResponse>> GetTrajectoryAsync(
+            int trajectoryId,
+            string query = null,
+            int beforeSequence = 0,
+            int pageSize = 200)
+        {
+            return await this.GetResponseAsync<AppResponseBase<GetTrajectoryResponse>, GetTrajectoryResponse>(async (response, logger) =>
+            {
+                var userId = GetCurrentAdminUserInfoId();
+                if (userId <= 0)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.UserNotLoggedIn"]);
+                }
+
+                var trajectory = await _trajectoryService.GetAsync(trajectoryId, userId);
+                if (trajectory == null)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.TrajectoryNotFound"]);
+                }
+
+                var events = await _trajectoryService.GetEventsAsync(
+                    trajectoryId,
+                    userId,
+                    beforeSequence > 0 ? beforeSequence : null,
+                    query,
+                    pageSize);
+
+                return new GetTrajectoryResponse
+                {
+                    Trajectory = AdminChatTrajectoryDto.CreateFromEntity(trajectory),
+                    Events = AdminChatTrajectoryEventDto.CollapseAssistantTextChunks(
+                        events.Select(AdminChatTrajectoryEventDto.CreateFromEntity)).ToList()
+                };
+            });
+        }
+
+        /// <summary>
+        /// 在当前管理员可见的 Harness Trajectory 中检索事件内容。
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Get)]
+        public async Task<AppResponseBase<SearchTrajectoriesResponse>> SearchTrajectoriesAsync(
+            string query,
+            int pageSize = 50)
+        {
+            return await this.GetResponseAsync<AppResponseBase<SearchTrajectoriesResponse>, SearchTrajectoriesResponse>(async (response, logger) =>
+            {
+                var userId = GetCurrentAdminUserInfoId();
+                if (userId <= 0)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.UserNotLoggedIn"]);
+                }
+
+                var trajectories = await _trajectoryService.SearchAsync(userId, query, pageSize);
+                return new SearchTrajectoriesResponse
+                {
+                    Trajectories = trajectories.Select(AdminChatTrajectoryDto.CreateFromEntity).ToList()
+                };
+            });
+        }
+
+        /// <summary>
+        /// 获取当前会话的全部 Harness Trajectory 索引。
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Get)]
+        public async Task<AppResponseBase<SearchTrajectoriesResponse>> GetSessionTrajectoriesAsync(int sessionId)
+        {
+            return await this.GetResponseAsync<AppResponseBase<SearchTrajectoriesResponse>, SearchTrajectoriesResponse>(async (response, logger) =>
+            {
+                var userId = GetCurrentAdminUserInfoId();
+                if (userId <= 0)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.UserNotLoggedIn"]);
+                }
+
+                if (await _sessionService.GetSessionByIdAsync(sessionId, userId) == null)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.SessionNotFoundOrForbidden"]);
+                }
+
+                var trajectories = await _trajectoryService.GetSessionTrajectoriesAsync(sessionId, userId);
+                return new SearchTrajectoriesResponse
+                {
+                    Trajectories = trajectories.Select(AdminChatTrajectoryDto.CreateFromEntity).ToList()
+                };
+            });
+        }
+
+        /// <summary>
+        /// Resume a stored native MAF Harness Trajectory.
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Post)]
+        public async Task<AppResponseBase<SendTrajectoryResponse>> ResumeTrajectoryAsync(
+            [FromBody] ResumeTrajectoryRequest request)
+        {
+            return await this.GetResponseAsync<AppResponseBase<SendTrajectoryResponse>, SendTrajectoryResponse>(async (response, logger) =>
+            {
+                var userId = GetCurrentAdminUserInfoId();
+                var trajectory = await _trajectoryService.GetAsync(request?.TrajectoryId ?? 0, userId);
+                if (trajectory == null)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.TrajectoryNotFound"]);
+                }
+
+                var userMessage = await _messageService.AddMessageAsync(
+                    trajectory.SessionId,
+                    ChatMessageRoleType.User,
+                    request.Instruction ?? string.Empty);
+                var (aiResponse, modelIdentifier, harness) = await _chatAiService.ResumeNativeHarnessResponseAsync(
+                    trajectory.Id,
+                    userId,
+                    request.Instruction,
+                    request.AiModelId);
+                var assistantMessage = await _messageService.AddMessageAsync(
+                    trajectory.SessionId,
+                    ChatMessageRoleType.Assistant,
+                    aiResponse,
+                    modelIdentifier,
+                    harness.TrajectoryId,
+                    harness.TrajectorySequence);
+                await _sessionService.UpdateLastMessageTimeAsync(trajectory.SessionId);
+                await PublishSyncEventAsync(userId, trajectory.SessionId, "messages-changed");
+
+                return new SendTrajectoryResponse
+                {
+                    SessionId = trajectory.SessionId,
+                    UserMessage = AdminChatMessageDto.CreateFromEntity(userMessage),
+                    AssistantMessage = AdminChatMessageDto.CreateFromEntity(assistantMessage),
+                    Harness = harness
+                };
+            });
+        }
+
+        /// <summary>
+        /// Fork a new native MAF Harness Trajectory from an existing event sequence.
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Post)]
+        public async Task<AppResponseBase<SendTrajectoryResponse>> ForkTrajectoryAsync(
+            [FromBody] ForkTrajectoryRequest request)
+        {
+            return await this.GetResponseAsync<AppResponseBase<SendTrajectoryResponse>, SendTrajectoryResponse>(async (response, logger) =>
+            {
+                var userId = GetCurrentAdminUserInfoId();
+                var parent = await _trajectoryService.GetAsync(request?.TrajectoryId ?? 0, userId);
+                if (parent == null)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.TrajectoryNotFound"]);
+                }
+
+                var branchTitle = string.IsNullOrWhiteSpace(request.Instruction)
+                    ? $"分叉：{parent.Title}"
+                    : (request.Instruction.Length > 50
+                        ? request.Instruction.Substring(0, 50) + "..."
+                        : request.Instruction);
+                var branchSession = await _sessionService.CreateSessionAsync(branchTitle, userId);
+                var parentModules = await _sessionModuleService.GetSessionModulesAsync(parent.SessionId);
+                await _sessionModuleService.AddModulesToSessionAsync(
+                    branchSession.Id,
+                    parentModules.Select(module => (
+                        module.XncfModuleUid,
+                        module.ModuleName,
+                        module.ModuleVersion)).ToList());
+                var parentWorkflows = await _sessionWorkflowService.GetSessionWorkflowsAsync(parent.SessionId);
+                await _sessionWorkflowService.AddWorkflowsToSessionAsync(
+                    branchSession.Id,
+                    parentWorkflows.Select(workflow => (
+                        workflow.WorkflowId,
+                        workflow.WorkflowName,
+                        workflow.WorkflowDescription)));
+
+                var userMessage = await _messageService.AddMessageAsync(
+                    branchSession.Id,
+                    ChatMessageRoleType.User,
+                    request.Instruction ?? string.Empty);
+                var (aiResponse, modelIdentifier, harness) = await _chatAiService.ForkNativeHarnessResponseAsync(
+                    parent.Id,
+                    userId,
+                    branchSession.Id,
+                    request.ForkFromSequence,
+                    request.Instruction,
+                    request.AiModelId);
+                var assistantMessage = await _messageService.AddMessageAsync(
+                    branchSession.Id,
+                    ChatMessageRoleType.Assistant,
+                    aiResponse,
+                    modelIdentifier,
+                    harness.TrajectoryId,
+                    harness.TrajectorySequence);
+                await _sessionService.UpdateLastMessageTimeAsync(branchSession.Id);
+                await PublishSyncEventAsync(userId, branchSession.Id, "messages-changed");
+
+                return new SendTrajectoryResponse
+                {
+                    SessionId = branchSession.Id,
+                    UserMessage = AdminChatMessageDto.CreateFromEntity(userMessage),
+                    AssistantMessage = AdminChatMessageDto.CreateFromEntity(assistantMessage),
+                    Harness = harness
+                };
+            });
+        }
+
+        /// <summary>
+        /// Approve or reject a tool call waiting in a native MAF Harness Trajectory.
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Post)]
+        public async Task<AppResponseBase<SendTrajectoryResponse>> RespondTrajectoryApprovalAsync(
+            [FromBody] TrajectoryApprovalRequest request)
+        {
+            return await this.GetResponseAsync<AppResponseBase<SendTrajectoryResponse>, SendTrajectoryResponse>(async (response, logger) =>
+            {
+                var userId = GetCurrentAdminUserInfoId();
+                var trajectory = await _trajectoryService.GetAsync(request?.TrajectoryId ?? 0, userId);
+                if (trajectory == null)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.TrajectoryNotFound"]);
+                }
+
+                var (aiResponse, modelIdentifier, harness) = await _chatAiService.RespondNativeHarnessApprovalAsync(
+                    trajectory.Id,
+                    userId,
+                    request.RequestId,
+                    request.ToolCallId,
+                    request.ToolName,
+                    request.ArgumentsJson,
+                    request.Approved,
+                    request.Reason,
+                    request.AiModelId);
+                var assistantMessage = await _messageService.AddMessageAsync(
+                    trajectory.SessionId,
+                    ChatMessageRoleType.Assistant,
+                    aiResponse,
+                    modelIdentifier,
+                    harness.TrajectoryId,
+                    harness.TrajectorySequence);
+                await _sessionService.UpdateLastMessageTimeAsync(trajectory.SessionId);
+                await PublishSyncEventAsync(userId, trajectory.SessionId, "messages-changed");
+
+                return new SendTrajectoryResponse
+                {
+                    SessionId = trajectory.SessionId,
+                    AssistantMessage = AdminChatMessageDto.CreateFromEntity(assistantMessage),
+                    Harness = harness
                 };
             });
         }
@@ -798,6 +1066,8 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
     {
         public int SessionId { get; set; }
         public string Title { get; set; }
+        public string InitialMessage { get; set; }
+        public AdminChatMode Mode { get; set; }
     }
 
     /// <summary>
@@ -824,6 +1094,38 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
     {
         public AdminChatMessageDto UserMessage { get; set; }
         public AdminChatMessageDto AssistantMessage { get; set; }
+
+        /// <summary>
+        /// 本次运行使用的模式（Simple 或 Harness）。
+        /// </summary>
+        public AdminChatMode Mode { get; set; } = AdminChatMode.Simple;
+
+        /// <summary>
+        /// Harness 模式的执行步骤记录（Simple 模式为 null）。
+        /// </summary>
+        public IReadOnlyList<AdminChatHarnessStep> HarnessSteps { get; set; }
+
+        /// <summary>
+        /// Native MAF Harness Trajectory identifier.
+        /// </summary>
+        public int TrajectoryId { get; set; }
+
+        /// <summary>
+        /// Native MAF Harness Trajectory status.
+        /// </summary>
+        public AdminChatTrajectoryStatus TrajectoryStatus { get; set; }
+
+        public int TrajectorySequence { get; set; }
+
+        /// <summary>
+        /// Events produced during the current Harness request.
+        /// </summary>
+        public IReadOnlyList<AdminChatTrajectoryEventDto> TrajectoryEvents { get; set; }
+
+        /// <summary>
+        /// Tool approvals waiting for the user.
+        /// </summary>
+        public IReadOnlyList<AdminChatApprovalRequestDto> PendingApprovals { get; set; }
     }
 
     /// <summary>
@@ -833,6 +1135,58 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
     {
         public List<AdminChatMessageDto> Messages { get; set; }
         public int TotalCount { get; set; }
+    }
+
+    public class GetTrajectoryResponse
+    {
+        public AdminChatTrajectoryDto Trajectory { get; set; }
+        public List<AdminChatTrajectoryEventDto> Events { get; set; }
+    }
+
+    public class SearchTrajectoriesResponse
+    {
+        public List<AdminChatTrajectoryDto> Trajectories { get; set; }
+    }
+
+    public class ResumeTrajectoryRequest
+    {
+        [System.ComponentModel.DataAnnotations.Required]
+        public int TrajectoryId { get; set; }
+        public string Instruction { get; set; }
+        public int AiModelId { get; set; }
+    }
+
+    public class ForkTrajectoryRequest
+    {
+        [System.ComponentModel.DataAnnotations.Required]
+        public int TrajectoryId { get; set; }
+        public int ForkFromSequence { get; set; }
+        public string Instruction { get; set; }
+        public int AiModelId { get; set; }
+    }
+
+    public class TrajectoryApprovalRequest
+    {
+        [System.ComponentModel.DataAnnotations.Required]
+        public int TrajectoryId { get; set; }
+        [System.ComponentModel.DataAnnotations.Required]
+        public string RequestId { get; set; }
+        [System.ComponentModel.DataAnnotations.Required]
+        public string ToolCallId { get; set; }
+        [System.ComponentModel.DataAnnotations.Required]
+        public string ToolName { get; set; }
+        public string ArgumentsJson { get; set; }
+        public bool Approved { get; set; }
+        public string Reason { get; set; }
+        public int AiModelId { get; set; }
+    }
+
+    public class SendTrajectoryResponse
+    {
+        public int SessionId { get; set; }
+        public AdminChatMessageDto UserMessage { get; set; }
+        public AdminChatMessageDto AssistantMessage { get; set; }
+        public AdminChatHarnessResult Harness { get; set; }
     }
 
     /// <summary>

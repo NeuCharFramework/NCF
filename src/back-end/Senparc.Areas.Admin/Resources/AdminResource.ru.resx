@@ -45,6 +45,27 @@
   <data name="Admin.Nav.Home" xml:space="preserve">
     <value>Главная</value>
   </data>
+  <data name="Admin.Nav.Search" xml:space="preserve">
+    <value>Поиск меню</value>
+  </data>
+  <data name="Admin.Nav.SearchPlaceholder" xml:space="preserve">
+    <value>Введите ключевое слово для фильтрации меню</value>
+  </data>
+  <data name="Admin.Nav.SearchEmpty" xml:space="preserve">
+    <value>Совпадающее меню не найдено</value>
+  </data>
+  <data name="Admin.Nav.ConfigTitle" xml:space="preserve">
+    <value>Настройка меню</value>
+  </data>
+  <data name="Admin.Nav.ConfigHint" xml:space="preserve">
+    <value>Перетащите верхнеуровневые меню для изменения порядка; сохранение обновит значения сортировки</value>
+  </data>
+  <data name="Admin.Nav.ConfigSave" xml:space="preserve">
+    <value>Сохранить порядок</value>
+  </data>
+  <data name="Admin.Nav.ConfigSaved" xml:space="preserve">
+    <value>Порядок меню сохранён</value>
+  </data>
   <data name="Admin.Layout.Welcome" xml:space="preserve">
     <value>Добро пожаловать,</value>
   </data>
@@ -549,4 +570,23 @@
   <data name="Admin.Home.AgentsWaitingOrPaused" xml:space="preserve"><value>Ожидание / пауза</value></data>
   <data name="Admin.Home.AiQuickDescription" xml:space="preserve"><value>Используйте быстрый AI-чат в Footer, чтобы при необходимости открыть полный диалог и выбрать контекст.</value></data>
   <data name="Admin.Home.AiQuickDialog" xml:space="preserve"><value>Открыть быстрый чат</value></data>
+  <data name="Menu.ConfigMode" xml:space="preserve">
+    <value>Режим настройки</value>
+  </data>
+  <data name="Menu.ConfigModeExit" xml:space="preserve">
+    <value>Выйти из режима настройки</value>
+  </data>
+  <data name="Menu.ConfigModeTip" xml:space="preserve">
+    <value>Ниже перечислены все меню/страницы по иерархии (кнопки не сортируются). Перетаскивайте элементы одного уровня, чтобы изменить порядок, или введите число в поле «Сортировка» и нажмите Enter, чтобы переместить на эту позицию. После сохранения реально обновляются значения Sort и обновляется левое меню.</value>
+  </data>
+  <data name="Menu.ConfigSave" xml:space="preserve">
+    <value>Сохранить порядок</value>
+  </data>
+  <data name="Menu.ConfigSaveSuccess" xml:space="preserve">
+    <value>Порядок меню сохранён</value>
+  </data>
+  <data name="Menu.ConfigEmpty" xml:space="preserve">
+    <value>Нет меню или страниц для сортировки</value>
+  </data>
+  <data name="Admin.Footer.NeuBellWebHookSettings" xml:space="preserve"><value>Настройки WebHook</value></data>
 </root>

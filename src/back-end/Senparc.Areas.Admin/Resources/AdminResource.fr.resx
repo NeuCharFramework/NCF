@@ -45,6 +45,27 @@
   <data name="Admin.Nav.Home" xml:space="preserve">
     <value>Accueil</value>
   </data>
+  <data name="Admin.Nav.Search" xml:space="preserve">
+    <value>Rechercher un menu</value>
+  </data>
+  <data name="Admin.Nav.SearchPlaceholder" xml:space="preserve">
+    <value>Saisir un mot-clé pour filtrer le menu</value>
+  </data>
+  <data name="Admin.Nav.SearchEmpty" xml:space="preserve">
+    <value>Aucun menu correspondant</value>
+  </data>
+  <data name="Admin.Nav.ConfigTitle" xml:space="preserve">
+    <value>Configuration des menus</value>
+  </data>
+  <data name="Admin.Nav.ConfigHint" xml:space="preserve">
+    <value>Glissez les menus de premier niveau pour réorganiser; l'enregistrement met à jour les valeurs de tri</value>
+  </data>
+  <data name="Admin.Nav.ConfigSave" xml:space="preserve">
+    <value>Enregistrer l'ordre</value>
+  </data>
+  <data name="Admin.Nav.ConfigSaved" xml:space="preserve">
+    <value>Ordre des menus enregistré</value>
+  </data>
   <data name="Admin.Layout.Welcome" xml:space="preserve">
     <value>Bienvenue,</value>
   </data>
@@ -549,4 +570,23 @@
   <data name="Admin.Home.AgentsWaitingOrPaused" xml:space="preserve"><value>En attente / en pause</value></data>
   <data name="Admin.Home.AiQuickDescription" xml:space="preserve"><value>Utilisez le chat IA rapide du Footer pour ouvrir la conversation complète et choisir le contexte au besoin.</value></data>
   <data name="Admin.Home.AiQuickDialog" xml:space="preserve"><value>Ouvrir le chat rapide</value></data>
+  <data name="Menu.ConfigMode" xml:space="preserve">
+    <value>Mode de configuration</value>
+  </data>
+  <data name="Menu.ConfigModeExit" xml:space="preserve">
+    <value>Quitter le mode de configuration</value>
+  </data>
+  <data name="Menu.ConfigModeTip" xml:space="preserve">
+    <value>Tous les menus/pages sont listés ci-dessous par hiérarchie (les boutons ne sont pas triables). Glissez les éléments du même niveau pour les réordonner, ou saisissez un nombre dans la colonne Tri puis appuyez sur Entrée pour aller à cette position. L'enregistrement met réellement à jour les valeurs Sort et rafraîchit le menu de gauche.</value>
+  </data>
+  <data name="Menu.ConfigSave" xml:space="preserve">
+    <value>Enregistrer l'ordre</value>
+  </data>
+  <data name="Menu.ConfigSaveSuccess" xml:space="preserve">
+    <value>L'ordre des menus a été enregistré</value>
+  </data>
+  <data name="Menu.ConfigEmpty" xml:space="preserve">
+    <value>Aucun menu ou page à trier</value>
+  </data>
+  <data name="Admin.Footer.NeuBellWebHookSettings" xml:space="preserve"><value>Paramètres WebHook</value></data>
 </root>

@@ -208,6 +208,12 @@
   <data name="Download.Status.Unavailable" xml:space="preserve"><value>暂时无法获取</value></data>
   <data name="Download.Status.Detected" xml:space="preserve"><value>已识别</value></data>
   <data name="Download.Status.Estimated" xml:space="preserve"><value>推测</value></data>
+  <data name="Download.Source.Mode" xml:space="preserve"><value>下载源</value></data>
+  <data name="Download.Source.Auto" xml:space="preserve"><value>自动（本地优先）</value></data>
+  <data name="Download.Source.Local" xml:space="preserve"><value>本机镜像</value></data>
+  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Download.Status.Md5" xml:space="preserve"><value>MD5 指纹</value></data>
+  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>暂无指纹</value></data>
   <data name="Download.Path.Eyebrow" xml:space="preserve"><value>一种框架 · 两种起点</value></data>
   <data name="Download.Path.Title" xml:space="preserve"><value>从开箱即用，到自由构建</value></data>
   <data name="Download.Path.Description" xml:space="preserve"><value>无论你想立刻运行一套系统，还是打造长期演进的产品，NCF 都给你清晰、可靠的起点。</value></data>

@@ -1,0 +1,138 @@
+.neubell-webhook-page {
+    padding: 16px 20px;
+}
+
+.neubell-webhook-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.neubell-webhook-header h2 {
+    margin: 0 0 6px;
+    font-size: 18px;
+}
+
+.neubell-webhook-header p {
+    margin: 0;
+    max-width: 640px;
+    color: #909399;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.neubell-webhook-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.neubell-webhook-header-actions .el-input {
+    width: 240px;
+}
+
+.neubell-muted {
+    color: #c0c4cc;
+}
+
+.neubell-empty {
+    padding: 60px 0;
+    text-align: center;
+    color: #909399;
+}
+
+.neubell-empty h3 {
+    margin: 12px 0 6px;
+    color: #606266;
+}
+
+.neubell-log-section {
+    margin-top: 26px;
+}
+
+.neubell-log-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.neubell-log-head h3 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.neubell-log-head small {
+    color: #909399;
+}
+
+.neubell-log-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+}
+
+.neubell-log-empty {
+    padding: 24px 0;
+    text-align: center;
+    color: #c0c4cc;
+}
+
+.neubell-payload-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.neubell-payload-url {
+    color: #606266;
+    font-size: 12px;
+    word-break: break-all;
+}
+
+.neubell-payload {
+    max-height: 420px;
+    overflow: auto;
+    padding: 12px;
+    margin: 0;
+    background: #f5f7fa;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+
+/* v0.7.1 占位符说明帮助块 */
+.neubell-token-help {
+    margin-top: 8px;
+    padding: 10px 12px;
+    background: #f5f7fa;
+    border-left: 3px solid #409eff;
+    border-radius: 2px;
+    font-size: 12px;
+    line-height: 1.8;
+    color: #606266;
+}
+
+.neubell-token-help p {
+    margin: 2px 0;
+}
+
+.neubell-token-help code {
+    background: #ecf5ff;
+    color: #409eff;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: Consolas, Monaco, monospace;
+}
+
+.neubell-token-notes {
+    color: #909399;
+}

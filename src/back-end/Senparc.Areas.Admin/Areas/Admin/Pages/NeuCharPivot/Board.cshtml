@@ -1,0 +1,169 @@
+@page
+@model Senparc.Areas.Admin.Areas.Admin.Pages.NeuCharPivot.BoardModel
+@{
+    ViewData["Title"] = "NeuCharPivot · 面板";
+    Layout = "_Layout_Vue";
+}
+
+@section breadcrumbs {
+    <el-breadcrumb-item>NeuCharPivot</el-breadcrumb-item>
+    <el-breadcrumb-item>面板</el-breadcrumb-item>
+}
+
+@section Style {
+    <link rel="stylesheet" href="~/css/Admin/Pages/NeuCharPivot/common.css" />
+    <link rel="stylesheet" href="~/css/Admin/Pages/NeuCharPivot/Board.css" />
+}
+
+<div class="neuchar-page pivot-board" v-loading="loading">
+    <header class="neuchar-page-header">
+        <div>
+            <h2>NeuCharPivot 面板</h2>
+            <p>将面板（Provit Panel）绑定到特定页面（如后台首页 admin-home），组合来自任意 XNCF 模块的 Provit Block，并支持 AI Chat 创建或修改。</p>
+        </div>
+        <div class="board-header-actions">
+            <el-input v-model="keyword" clearable prefix-icon="el-icon-search" placeholder="搜索面板名称、页面标识"></el-input>
+            <el-button icon="el-icon-refresh" @@click="load">刷新</el-button>
+            <el-button type="primary" icon="el-icon-plus" @@click="openCreate">创建面板</el-button>
+        </div>
+    </header>
+
+    <div v-if="groupedBoards.length">
+        <section v-for="group in groupedBoards" :key="group.pageKey" class="board-group">
+            <h3 class="board-group-title">
+                <i class="fa fa-map-marker"></i> {{group.pageKey}}
+                <small>{{group.boards.length}} 个面板</small>
+            </h3>
+            <el-card v-for="board in group.boards" :key="board.id" class="board-card" shadow="hover">
+                <div class="board-card-head">
+                    <div class="board-card-title">
+                        <strong>{{board.name}}</strong>
+                        <el-tag size="mini" type="info">{{board.pageKey}}</el-tag>
+                        <el-tag size="mini">{{board.columns || 2}} 列</el-tag>
+                        <el-tag size="mini" :type="(board.blocks || []).length ? 'success' : 'info'">{{(board.blocks || []).length}} 块</el-tag>
+                        <el-tag v-if="!board.isEnabled" size="mini" type="warning">已停用</el-tag>
+                    </div>
+                    <div class="board-card-actions">
+                        <el-switch v-model="board.isEnabled" @@change="toggleEnabled(board)"></el-switch>
+                        <el-button size="mini" icon="el-icon-edit" @@click="openEdit(board)">编辑</el-button>
+                        <el-button size="mini" icon="el-icon-chat-dot-round" @@click="board.aiVisible = !board.aiVisible">AI</el-button>
+                        <el-button size="mini" type="danger" plain icon="el-icon-delete" @@click="removeBoard(board)">删除</el-button>
+                    </div>
+                </div>
+                <p v-if="board.description" class="board-description">{{board.description}}</p>
+
+                <div class="board-blocks">
+                    <div class="board-blocks-toolbar">
+                        <span class="board-blocks-label">Provit Block 列表（可拖动排序）</span>
+                        <el-button size="mini" type="primary" plain icon="el-icon-plus" @@click="openBlockPicker(board)">添加块</el-button>
+                    </div>
+                    <div v-if="(board.blocks || []).length" class="board-block-list">
+                        <div v-for="(block, index) in board.blocks" :key="block.key || index"
+                             class="board-block-item" :class="'accent-' + (block.accent || 'blue')"
+                             draggable="true"
+                             @@dragstart="dragStart(board, index)"
+                             @@dragover.prevent
+                             @@drop.prevent="dropBlock(board, index)"
+                             @@dragend="dragEnd">
+                            <i class="el-icon-rank board-block-drag"></i>
+                            <span class="board-block-index">{{index + 1}}</span>
+                            <div class="board-block-body">
+                                <strong>{{block.title || block.functionKey}}</strong>
+                                <small>{{moduleLabel(block.moduleUid)}} · {{block.functionKey}}</small>
+                                <small v-if="block.summary" class="board-block-summary">{{block.summary}}</small>
+                            </div>
+                            <div class="board-block-actions">
+                                <el-button type="text" icon="el-icon-top" size="mini" :disabled="index === 0" @@click="moveBlock(board, index, -1)"></el-button>
+                                <el-button type="text" icon="el-icon-bottom" size="mini" :disabled="index === board.blocks.length - 1" @@click="moveBlock(board, index, 1)"></el-button>
+                                <el-button type="text" icon="el-icon-delete" size="mini" @@click="removeBlock(board, index)"></el-button>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="board-block-empty">暂无块，点击“添加块”从任意 XNCF 模块的 Pivot Function 中选择。</div>
+                </div>
+
+                <div v-if="board.aiVisible" class="board-ai">
+                    <div class="board-ai-input">
+                        <el-input v-model="board.aiInstruction" type="textarea" :rows="2"
+                                  placeholder="用一句话告诉 AI 你的需求，例如：加入主机监控和待办任务两块，改成三列"></el-input>
+                        <el-button type="primary" icon="el-icon-s-promotion" :loading="board.aiLoading" @@click="sendAi(board)">发送</el-button>
+                    </div>
+                    <div v-if="board.aiReply" class="board-ai-reply">
+                        <i class="fa fa-robot"></i>
+                        <pre>{{board.aiReply}}</pre>
+                    </div>
+                </div>
+            </el-card>
+        </section>
+    </div>
+    <div v-else-if="!loading" class="neuchar-empty">
+        <i class="fa fa-th-large fa-3x"></i>
+        <h3>还没有面板</h3>
+        <p>点击右上角“创建面板”，将面板绑定到页面（如 admin-home 绑定后台首页）。</p>
+    </div>
+
+    <el-dialog :title="form.id ? '编辑面板' : '创建面板'" :visible.sync="formDialogVisible" width="520px" :close-on-click-modal="false">
+        <el-form label-width="90px">
+            <el-form-item label="面板名称" required>
+                <el-input v-model="form.name" maxlength="200" placeholder="例如：后台首页运维面板"></el-input>
+            </el-form-item>
+            <el-form-item label="页面标识" required>
+                <el-input v-model="form.pageKey" maxlength="100" placeholder="admin-home（后台首页）"></el-input>
+            </el-form-item>
+            <el-form-item label="说明">
+                <el-input v-model="form.description" type="textarea" :rows="2"></el-input>
+            </el-form-item>
+            <el-form-item label="列数">
+                <el-select v-model="form.columns">
+                    <el-option v-for="n in 6" :key="n" :label="n + ' 列'" :value="n"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="启用">
+                <el-switch v-model="form.isEnabled"></el-switch>
+            </el-form-item>
+        </el-form>
+        <span slot="footer">
+            <el-button @@click="formDialogVisible = false">取消</el-button>
+            <el-button type="primary" :loading="formSaving" @@click="saveBoard">保存</el-button>
+        </span>
+    </el-dialog>
+
+    <el-dialog title="添加 Provit Block" :visible.sync="pickerVisible" width="620px" :close-on-click-modal="false">
+        <p class="picker-tip">选择任意 XNCF 模块的 Pivot Function 作为本面板的块。</p>
+        <el-select v-model="picker.moduleUid" placeholder="选择模块" style="width: 100%" @@change="onPickModule">
+            <el-option v-for="group in catalog" :key="group.moduleUid"
+                       :label="group.moduleName + '（' + group.moduleUid + '）'" :value="group.moduleUid"></el-option>
+        </el-select>
+        <el-select v-model="picker.functionKey" placeholder="选择 Function" filterable
+                   :disabled="!picker.moduleUid" style="width: 100%; margin-top: 10px">
+            <el-option v-for="fn in pickerFunctions" :key="fn.functionKey"
+                       :label="fn.functionName + '（' + fn.functionKey + '）'" :value="fn.functionKey"></el-option>
+        </el-select>
+        <el-form label-width="80px" style="margin-top: 14px" v-if="pickerFunction">
+            <el-form-item label="块标题">
+                <el-input v-model="picker.title" :placeholder="'默认使用 Function 名称：' + (pickerFunction.functionName || '')"></el-input>
+            </el-form-item>
+            <el-form-item label="一句话说明">
+                <el-input v-model="picker.summary" :placeholder="pickerFunction.description || ''"></el-input>
+            </el-form-item>
+            <el-form-item label="主题色">
+                <el-select v-model="picker.accent">
+                    <el-option label="蓝" value="blue"></el-option>
+                    <el-option label="绿" value="green"></el-option>
+                    <el-option label="橙" value="orange"></el-option>
+                    <el-option label="紫" value="purple"></el-option>
+                    <el-option label="灰" value="gray"></el-option>
+                </el-select>
+            </el-form-item>
+        </el-form>
+        <span slot="footer">
+            <el-button @@click="pickerVisible = false">取消</el-button>
+            <el-button type="primary" :disabled="!picker.moduleUid || !picker.functionKey" @@click="addBlock">添加</el-button>
+        </span>
+    </el-dialog>
+</div>
+
+@section scripts {
+    <script src="~/js/Admin/Pages/NeuCharPivot/common.js"></script>
+    <script src="~/js/Admin/Pages/NeuCharPivot/Board.js"></script>
+}

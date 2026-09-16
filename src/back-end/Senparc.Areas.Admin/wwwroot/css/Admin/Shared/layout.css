@@ -222,6 +222,25 @@ li {
     line-height: 1.6;
 }
 
+.admin-neubell-webhook-entry {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 2px 0 4px;
+    padding: 4px 10px;
+    color: #409eff;
+    font-size: 12px;
+    border: 1px solid #d9ecff;
+    border-radius: 4px;
+    background: #ecf5ff;
+    text-decoration: none;
+}
+
+.admin-neubell-webhook-entry:hover {
+    color: #66b1ff;
+    border-color: #b3d8ff;
+}
+
 .admin-neubell-provider {
     margin-top: 14px;
     border: 1px solid #ebeef5;
@@ -623,4 +642,45 @@ li {
 .module-header {
     line-height: 60px;
     font-size: 20px;
+}
+
+/*侧边栏菜单搜索*/
+.admin-nav-search {
+    padding: 8px 12px 4px 12px;
+}
+
+.admin-nav-search .el-input__inner {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #bfcbd9;
+}
+
+.admin-nav-search .el-input__inner::placeholder {
+    color: rgba(191, 203, 217, 0.55);
+}
+
+.admin-nav-search .el-input__inner:focus {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: #409EFF;
+}
+
+.admin-nav-search .el-input__icon {
+    color: rgba(191, 203, 217, 0.65);
+    line-height: 30px;
+}
+
+.admin-nav-search-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 28px 10px;
+    color: rgba(191, 203, 217, 0.6);
+    font-size: 13px;
+    text-align: center;
+}
+
+.admin-nav-search-empty i {
+    font-size: 26px;
+    opacity: 0.7;
 }

@@ -38,6 +38,7 @@
     <!-- 引入样式 -->
     <link href="~/lib/element-ui_2.13.2/element.css" rel="stylesheet" />
     <link href="~/css/Admin/Shared/layout.css" rel="stylesheet" />
+    <link href="~/css/Admin/GlobalNeuCharPivot.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     @RenderSection("HeaderContent", false)
     @RenderSection("Style", false)
@@ -53,9 +54,18 @@
                             <img src="~/images/Admin/base/head/logo_230x55.png" alt="@AR["Admin.Layout.LogoAlt"]" />
                         </a>
                     </div>
-                    <el-scrollbar wrap-class="scrollbar-wrapper" style="height:calc(100vh - 80px);">
-                        <el-menu :default-active="Store.state.navMenu.activeMenu"
-                                 :default-openeds="Store.state.navMenu.openedMenus"
+                    <div v-show="!Store.state.navMenu.isCollapse" class="admin-nav-search">
+                        <el-input v-model="Store.state.navMenu.searchKeyword"
+                                  size="mini"
+                                  clearable
+                                  prefix-icon="el-icon-search"
+                                  placeholder="@AR["Admin.Nav.SearchPlaceholder"]">
+                        </el-input>
+                    </div>
+                    <el-scrollbar wrap-class="scrollbar-wrapper" :style="{'height': Store.state.navMenu.isCollapse ? 'calc(100vh - 80px)' : 'calc(100vh - 122px)'}">
+                        <el-menu :key="Store.getters.navMenuRenderKey"
+                                 :default-active="Store.state.navMenu.activeMenu"
+                                 :default-openeds="Store.getters.effectiveNavMenuOpeneds"
                                  :collapse="Store.state.navMenu.isCollapse"
                                  :background-color="Store.state.navMenu.variables.menuBg"
                                  :text-color="Store.state.navMenu.variables.menuText"
@@ -66,7 +76,11 @@
                                  @@open="menuOpen"
                                  @@close="menuClose"
                                  mode="vertical">
-                            <sidebar-item v-for="(items,index) in Store.state.navMenu.navMenuList" :key="index" :item="items"></sidebar-item>
+                            <sidebar-item v-for="(items,index) in Store.getters.filteredNavMenuList" :key="index" :item="items"></sidebar-item>
+                            <div v-if="!Store.getters.filteredNavMenuList.length" class="admin-nav-search-empty">
+                                <i class="el-icon-search"></i>
+                                <span>@AR["Admin.Nav.SearchEmpty"]</span>
+                            </div>
                         </el-menu>
                     </el-scrollbar>
                 </el-aside>
@@ -183,6 +197,7 @@
             size="380px">
             <div class="admin-neubell-panel" v-loading="neuBellLoading">
                 <p class="admin-neubell-description">选择在 Footer 显示的模块提醒。设置保存在当前账号的浏览器中。</p>
+                <a class="admin-neubell-webhook-entry" href="/Admin/NeuBell/Index"><i class="fa fa-plug"></i> @AR["Admin.Footer.NeuBellWebHookSettings"]</a>
                 <div v-if="neuBellProviders.length === 0" class="admin-neubell-empty">当前没有模块提供纽铃信息。</div>
                 <section v-for="provider in neuBellProviders" :key="provider.providerId" class="admin-neubell-provider">
                     <header>
@@ -240,6 +255,7 @@
             </button>
         </section>
     </div>
+    <div id="ncf-global-function-host"></div>
     @Html.AntiForgeryToken()
     <!--lib-->
     <script src="~/lib/vue/vue.js"></script>
@@ -255,6 +271,8 @@
     <script src="~/js/Admin/navMenu.js"></script>
     <script src="~/js/Admin/vuePermission.js"></script>
     <script src="~/js/Admin/Pages/Components/Components.js"></script>
+    <script src="~/js/Admin/dompurify.min.js"></script>
+    <script src="~/js/Admin/GlobalNeuCharPivot.js" asp-append-version="true"></script>
     <script>
         window.NCF_ADMIN_FOOTER_INITIAL_STATE = {
             serverTime: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(DateTimeOffset.Now)),

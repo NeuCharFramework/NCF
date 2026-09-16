@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost" Version="9.0.0" />
-    <PackageReference Include="Senparc.Ncf.Core" Version="0.29.0-preview8" />
+    <PackageReference Include="Senparc.Ncf.Core" Version="0.30.0-preview9" />
   </ItemGroup>
 
   <ItemGroup>

@@ -10,6 +10,8 @@
 
 using Senparc.Areas.Admin.Domain.Services;
 using Senparc.Ncf.Shared.Abstractions.NeuBell;
+using Senparc.Ncf.XncfBase;
+using System.Reflection;
 
 namespace Senparc.Areas.Admin.Tests.Domain.Services;
 
@@ -56,5 +58,50 @@ public class NeuBellTestProviderTests
         CollectionAssert.Contains(values, Senparc.Areas.Admin.OHS.PL.NeuBellTest_Request.SendAction);
         CollectionAssert.Contains(values, Senparc.Areas.Admin.OHS.PL.NeuBellTest_Request.ConsumeOneAction);
         CollectionAssert.Contains(values, Senparc.Areas.Admin.OHS.PL.NeuBellTest_Request.ConsumeAllAction);
+    }
+
+    [TestMethod]
+    public void TestFunctionWebHookParameters_ShouldExposeDropdownMultilineInputAndDescriptions()
+    {
+        var requestType = typeof(Senparc.Areas.Admin.OHS.PL.NeuBellTest_Request);
+        var methodProperty = requestType.GetProperty(nameof(Senparc.Areas.Admin.OHS.PL.NeuBellTest_Request.WebHookMethod));
+        var bodyProperty = requestType.GetProperty(nameof(Senparc.Areas.Admin.OHS.PL.NeuBellTest_Request.WebHookBody));
+
+        var methodUi = methodProperty.GetCustomAttribute<FunctionParameterUiAttribute>();
+        var bodyUi = bodyProperty.GetCustomAttribute<FunctionParameterUiAttribute>();
+        var methodDescription = methodProperty.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()?.Description;
+        var bodyDescription = bodyProperty.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()?.Description;
+
+        Assert.IsNotNull(methodUi);
+        Assert.AreEqual(ParameterType.DropDownList, methodUi.ParameterType);
+        Assert.AreEqual(nameof(Senparc.Areas.Admin.OHS.PL.NeuBellTest_Request.WebHookMethodOptions),
+            methodUi.SelectionListPropertyName);
+        Assert.IsNotNull(bodyUi);
+        Assert.AreEqual(ParameterType.TextArea, bodyUi.ParameterType);
+        StringAssert.Contains(methodDescription, "||");
+        StringAssert.Contains(bodyDescription, "{{operationStatus}}");
+        StringAssert.Contains(bodyDescription, "{{payload}}");
+
+        var request = new Senparc.Areas.Admin.OHS.PL.NeuBellTest_Request();
+        CollectionAssert.AreEqual(
+            new[] { "POST", "GET", "PUT" },
+            request.WebHookMethodOptions.Items.Select(item => item.Value).ToArray());
+    }
+
+    [TestMethod]
+    public void ConsumeHelpers_ShouldReturnRemovedItemsForWebhookPayloads()
+    {
+        var provider = new NeuBellTestProvider();
+        provider.Send();
+        provider.Send();
+
+        var latest = provider.ConsumeLatestAndGetItem();
+        Assert.IsNotNull(latest);
+        Assert.AreEqual(1, provider.PendingCount);
+
+        var remaining = provider.ConsumeAllAndGetItems();
+        Assert.AreEqual(1, remaining.Count);
+        Assert.AreEqual(0, provider.PendingCount);
+        Assert.AreNotEqual(latest.Id, remaining[0].Id);
     }
 }

@@ -6,7 +6,7 @@ var app = new Vue({
       loading: false,
       refreshTable: true,
       xncfStat: {},
-      xncfOpeningList: {},
+      xncfOpeningList: [],
       chartData: [],
       todayLogData: [],
       hostMetrics: {
@@ -25,6 +25,8 @@ var app = new Vue({
       agentsOverviewUnavailable: false,
       agentsOverviewTimer: null,
       agentsOverviewUpdatedAt: null,
+      // Pivot 面板（admin-home 绑定的启用面板）
+      pivotBoard: null,
       // 添加动画控制变量
       shakeAllModules: false,
       glowUpgradeableModules: false
@@ -39,6 +41,7 @@ var app = new Vue({
     this.startHostMetricsPolling();
     this.fetchAgentsOverview();
     this.startAgentsOverviewPolling();
+    this.loadPivotBoard();
     this.hostMetricsResizeHandler = () => {
       if (this.hostMetricsChart &&
         (typeof this.hostMetricsChart.isDisposed !== 'function' || !this.hostMetricsChart.isDisposed())) {
@@ -130,6 +133,41 @@ var app = new Vue({
     },
     navigateToAgentsManager() {
       window.location.href = '/Admin/XncfModule/Start/?uid=D858D7FA-775A-4690-9023-CFB0B3B84994';
+    },
+    // 加载绑定到后台首页（admin-home）的启用 Pivot 面板。
+    // 使用原始 axios（与 AgentsManager 概览一致），非超管账号 403 时静默隐藏，不触发全局错误提示。
+    async loadPivotBoard() {
+      try {
+        const headers = { 'x-requested-with': 'XMLHttpRequest' };
+        if (window.ncfJwtToken) {
+          headers.Authorization = 'Bearer ' + window.ncfJwtToken;
+        }
+        const response = await axios.get(
+          '/Admin/NeuCharPivot/Board?handler=ByPageKey&pageKey=admin-home',
+          { headers: headers });
+        const payload = response && response.data;
+        if (!payload || !payload.success || !payload.data) {
+          throw new Error('Pivot board is unavailable.');
+        }
+        const board = payload.data;
+        this.pivotBoard = board && Array.isArray(board.blocks) && board.blocks.length ? board : null;
+      } catch (_) {
+        this.pivotBoard = null;
+      }
+    },
+    pivotBlockModuleLabel(moduleUid) {
+      const openingModules = Array.isArray(this.xncfOpeningList) ? this.xncfOpeningList : [];
+      const item = openingModules.find(z => z.uid === moduleUid);
+      return item ? item.menuName : moduleUid;
+    },
+    openPivotBlock(block) {
+      if (window.NeuCharPivotFunction && typeof window.NeuCharPivotFunction.open === 'function') {
+        window.NeuCharPivotFunction.open({
+          moduleUid: block.moduleUid,
+          functionKey: block.functionKey,
+          title: block.title || block.functionName || block.functionKey
+        });
+      }
     },
     startHostMetricsPolling() {
       if (this.hostMetricsTimer) {
@@ -498,7 +536,8 @@ var app = new Vue({
     //开放模块数据
     async getXncfOpening() {
       let xncfOpeningList = await service.get('/Admin/Index?handler=XncfOpening');
-      this.xncfOpeningList = xncfOpeningList.data.data;
+      const data = xncfOpeningList && xncfOpeningList.data && xncfOpeningList.data.data;
+      this.xncfOpeningList = Array.isArray(data) ? data : [];
     },
     //点击打开模块
     navigateTo(uid) {

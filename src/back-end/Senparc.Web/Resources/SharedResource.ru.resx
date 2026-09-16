@@ -199,6 +199,12 @@
   <data name="Download.Status.Unavailable" xml:space="preserve"><value>Временно недоступно</value></data>
   <data name="Download.Status.Detected" xml:space="preserve"><value>Определено</value></data>
   <data name="Download.Status.Estimated" xml:space="preserve"><value>предположительно</value></data>
+  <data name="Download.Source.Mode" xml:space="preserve"><value>Источник загрузки</value></data>
+  <data name="Download.Source.Auto" xml:space="preserve"><value>Авто (сначала локальный)</value></data>
+  <data name="Download.Source.Local" xml:space="preserve"><value>Локальное зеркало</value></data>
+  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Download.Status.Md5" xml:space="preserve"><value>Отпечаток MD5</value></data>
+  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>Недоступно</value></data>
   <data name="Download.Path.Eyebrow" xml:space="preserve"><value>ОДИН ФРЕЙМВОРК · ДВА СТАРТА</value></data>
   <data name="Download.Path.Title" xml:space="preserve"><value>От готового решения до собственного продукта</value></data>
   <data name="Download.Path.Description" xml:space="preserve"><value>Нужна система сейчас или продукт на годы — NCF даёт ясную и надёжную отправную точку.</value></data>

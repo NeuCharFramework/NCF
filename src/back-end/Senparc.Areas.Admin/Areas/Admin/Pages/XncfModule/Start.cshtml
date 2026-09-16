@@ -144,6 +144,13 @@
                     </div>
                     <div v-else class="pivot-workspace" v-loading="pivot.loading">
                         <el-alert v-if="!pivot.moduleAvailable" title="模块当前未安装或未开启，所有 Pivot Function 和定时任务均已在底层禁用。" type="warning" :closable="false" show-icon></el-alert>
+                        <section class="pivot-stat-grid pivot-stat-grid-module" v-if="pivot.summary">
+                            <div class="pivot-stat-item"><span>Function</span><strong>{{pivot.summary.availableFunctionCount || 0}} / {{pivot.summary.functionCount || 0}}</strong><small>可用 / 总数</small></div>
+                            <div class="pivot-stat-item"><span>LoopTask</span><strong>{{pivot.summary.enabledLoopTaskCount || 0}} / {{pivot.summary.loopTaskCount || 0}}</strong><small>启用 / 已配置</small></div>
+                            <div class="pivot-stat-item"><span>执行状态</span><strong>{{pivot.summary.runningLoopTaskCount || 0}} / {{pivot.summary.waitingLoopTaskCount || 0}}</strong><small>执行中 / 倒计时</small></div>
+                            <div class="pivot-stat-item"><span>上次失败</span><strong class="is-danger">{{pivot.summary.failedLoopTaskCount || 0}}</strong><small>LoopTask</small></div>
+                            <div class="pivot-stat-item"><span>Workflow 关联</span><strong>{{pivot.summary.workflowLoopTaskCount || 0}}</strong><small>{{pivot.summary.workflowCount || 0}} 个可用 Workflow</small></div>
+                        </section>
                         <div class="pivot-toolbar">
                             <div>
                                 <h3>{{pivot.layout.title}}</h3>
@@ -154,36 +161,74 @@
                                 <el-button size="mini" icon="el-icon-chat-dot-round" @@click="chat.visible=true">Chat 修改</el-button>
                             </div>
                         </div>
-                        <div class="pivot-grid" :style="{'--pivot-columns': pivot.layout.columns || 2}">
-                            <section v-for="section in pivot.layout.sections" :key="section.title" class="pivot-section">
-                                <h4>{{section.title}}</h4>
-                                <article v-for="layoutFunction in section.functions" :key="layoutFunction.functionKey" :class="['pivot-function-card','accent-'+layoutFunction.accent]">
-                                    <template v-if="getPivotFunction(layoutFunction.functionKey)">
-                                        <div class="pivot-function-title">
-                                            <span>{{layoutFunction.title}}</span>
-                                            <el-tag v-if="!pivot.moduleAvailable || !getPivotFunction(layoutFunction.functionKey).available" type="info" size="mini">{{pivot.moduleAvailable?'Function 已移除':'模块不可用'}}</el-tag>
-                                        </div>
-                                        <p>{{layoutFunction.summary}}</p>
-                                        <div class="pivot-parameter" v-for="parameter in getPivotParameters(getPivotFunction(layoutFunction.functionKey))" :key="parameter.name">
-                                            <label>{{parameter.title || parameter.name}} <em v-if="parameter.required">*</em></label>
-                                            <el-input v-if="parameter.parameterType===0 || parameter.parameterType===3" :type="parameter.parameterType===3?'password':'text'" v-model="pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name]" :maxlength="parameter.maxLength || 500"></el-input>
-                                            <el-select v-else-if="parameter.parameterType===1" v-model="pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name]" :filterable="parameter.filterable" :allow-create="parameter.allowCreate">
-                                                <el-option v-for="option in parameter.options" :key="option.value" :label="option.text" :value="option.value"></el-option>
-                                            </el-select>
-                                            <el-checkbox-group v-else-if="parameter.parameterType===2" v-model="pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name]">
-                                                <el-checkbox v-for="option in parameter.options" :key="option.value" :label="option.value">{{option.text}}</el-checkbox>
-                                            </el-checkbox-group>
-                                            <el-switch v-else-if="parameter.parameterType===4" v-model="pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name]"></el-switch>
-                                            <small v-if="parameter.description">{{parameter.description}}</small>
-                                        </div>
-                                        <div class="pivot-function-actions">
-                                            <el-button size="mini" type="primary" :disabled="!pivot.moduleAvailable || !getPivotFunction(layoutFunction.functionKey).available" @@click="runPivotFunction(getPivotFunction(layoutFunction.functionKey))">执行</el-button>
-                                            <el-button size="mini" icon="el-icon-time" :disabled="!pivot.moduleAvailable || !getPivotFunction(layoutFunction.functionKey).available" @@click="openLoopTask(getPivotFunction(layoutFunction.functionKey))">Loop Task</el-button>
-                                        </div>
-                                    </template>
-                                </article>
-                            </section>
-                        </div>
+                        <section class="pivot-filter-bar">
+                            <el-select v-model="pivot.functionStateFilter" clearable size="mini" placeholder="Function 状态">
+                                <el-option label="Function：全部" value=""></el-option>
+                                <el-option label="Function：可用" value="available"></el-option>
+                                <el-option label="Function：已移除" value="unavailable"></el-option>
+                            </el-select>
+                            <el-select v-model="pivot.loopStatusFilter" clearable size="mini" placeholder="LoopTask 状态">
+                                <el-option label="LoopTask：全部" value=""></el-option>
+                                <el-option label="LoopTask：执行中" value="running"></el-option>
+                                <el-option label="LoopTask：倒计时" value="countdown"></el-option>
+                                <el-option label="LoopTask：上次失败" value="failed"></el-option>
+                                <el-option label="LoopTask：已停用" value="disabled"></el-option>
+                            </el-select>
+                            <el-select v-model="pivot.workflowFilter" clearable filterable size="mini" placeholder="Workflow 关联">
+                                <el-option label="Workflow：全部" value=""></el-option>
+                                <el-option label="Workflow：已关联" value="linked"></el-option>
+                                <el-option label="Workflow：未关联" value="unlinked"></el-option>
+                                <el-option v-for="workflow in pivot.workflowOptions" :key="workflow.id" :label="workflow.name" :value="String(workflow.id)"></el-option>
+                            </el-select>
+                            <el-button size="mini" icon="el-icon-refresh-left" @@click="resetPivotFilters">重置筛选</el-button>
+                        </section>
+                        <el-tabs v-if="pivot.layout.panels && pivot.layout.panels.length" v-model="pivot.activePanel" type="card" class="pivot-panel-tabs">
+                            <el-tab-pane v-for="panel in pivot.layout.panels" :key="panel.key" :name="panel.key">
+                                <span slot="label"><i class="el-icon-menu"></i> {{panel.title}}</span>
+                                <p v-if="panel.description" class="pivot-panel-description">{{panel.description}}</p>
+                                <div class="pivot-grid" :style="{'--pivot-columns': panel.columns || 2}">
+                                    <section v-for="section in panel.sections" :key="section.title" class="pivot-section" v-if="visiblePivotFunctions(section).length">
+                                        <h4>{{section.title}}</h4>
+                                        <article v-for="layoutFunction in section.functions" :key="layoutFunction.functionKey" :class="['pivot-function-card','accent-'+layoutFunction.accent]" v-if="getPivotFunction(layoutFunction.functionKey) && matchesPivotFunction(getPivotFunction(layoutFunction.functionKey))">
+                                            <template v-if="getPivotFunction(layoutFunction.functionKey)">
+                                                <div class="pivot-function-title">
+                                                    <span>{{layoutFunction.title}}</span>
+                                                    <div>
+                                                        <el-tag v-if="!pivot.moduleAvailable" type="info" size="mini">模块已关闭</el-tag>
+                                                        <el-tag v-else-if="!getPivotFunction(layoutFunction.functionKey).available" type="warning" size="mini">当前版本已移除</el-tag>
+                                                        <el-tag v-if="getPivotFunction(layoutFunction.functionKey).loopTask" size="mini" type="warning"><i class="el-icon-time"></i> {{pivotLoopStatusText(getPivotFunction(layoutFunction.functionKey))}}</el-tag>
+                                                    </div>
+                                                </div>
+                                                <p>{{layoutFunction.summary}}</p>
+                                                <div class="pivot-parameter" v-for="parameter in getPivotParameters(getPivotFunction(layoutFunction.functionKey))" :key="parameter.name">
+                                                    <label>{{parameter.title || parameter.name}} <em v-if="parameter.required">*</em></label>
+                                                    <el-input v-if="parameter.parameterType===0 || parameter.parameterType===3" :type="parameter.parameterType===3?'password':'text'" v-model="pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name]" :maxlength="parameter.maxLength || 500"></el-input>
+                                                    <el-input v-else-if="parameter.parameterType===5" type="textarea" :rows="6" v-model="pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name]" :maxlength="parameter.maxLength || 20000" show-word-limit></el-input>
+                                                    <el-select v-else-if="parameter.parameterType===1" v-model="pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name]" :filterable="parameter.filterable" :allow-create="parameter.allowCreate">
+                                                        <el-option v-for="option in parameter.options" :key="option.value" :label="option.text" :value="option.value"></el-option>
+                                                    </el-select>
+                                                    <el-checkbox-group v-else-if="parameter.parameterType===2" v-model="pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name]">
+                                                        <el-checkbox v-for="option in parameter.options" :key="option.value" :label="option.value">{{option.text}}</el-checkbox>
+                                                    </el-checkbox-group>
+                                                    <el-switch v-else-if="parameter.parameterType===4" v-model="pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name]"></el-switch>
+                                                    <small v-if="parameter.description">{{parameter.description}}</small>
+                                                </div>
+                                                <div class="pivot-function-actions">
+                                                    <div>
+                                                        <small v-if="getPivotFunction(layoutFunction.functionKey).loopTask && getPivotFunction(layoutFunction.functionKey).loopTask.workflowId" class="pivot-workflow-link"><i class="el-icon-share"></i> {{workflowName(getPivotFunction(layoutFunction.functionKey).loopTask.workflowId)}}</small>
+                                                        <small v-if="getPivotFunction(layoutFunction.functionKey).loopTask && getPivotFunction(layoutFunction.functionKey).loopTask.nextRunAt">{{pivotLoopCountdown(getPivotFunction(layoutFunction.functionKey))}}</small>
+                                                    </div>
+                                                    <div>
+                                                        <el-button size="mini" type="primary" :disabled="!pivot.moduleAvailable || !getPivotFunction(layoutFunction.functionKey).available" @@click="runPivotFunction(getPivotFunction(layoutFunction.functionKey))">执行</el-button>
+                                                        <el-button size="mini" icon="el-icon-time" :disabled="!pivot.moduleAvailable || !getPivotFunction(layoutFunction.functionKey).available" @@click="openLoopTask(getPivotFunction(layoutFunction.functionKey))">Loop Task</el-button>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </article>
+                                    </section>
+                                </div>
+                            </el-tab-pane>
+                        </el-tabs>
                     </div>
                 </el-tab-pane>
             </el-tabs>
@@ -211,6 +256,11 @@
             <el-form-item label="自动执行"><el-switch v-model="loop.enabled"></el-switch></el-form-item>
             <el-form-item label="间隔（秒）"><el-input-number v-model="loop.intervalSeconds" :min="60" :max="31536000" :step="60"></el-input-number></el-form-item>
             <el-form-item label="NeuBell 通知"><el-switch v-model="loop.useNeuBell"></el-switch></el-form-item>
+            <el-form-item label="完成后触发 Workflow">
+                <el-select v-model="loop.workflowId" clearable filterable placeholder="不关联">
+                    <el-option v-for="workflow in pivot.workflowOptions" :key="workflow.id" :label="workflow.name" :value="workflow.id"></el-option>
+                </el-select>
+            </el-form-item>
             <el-alert title="启用前会再次校验所有必填参数；模块关闭或 Function 被移除时不会执行。" type="info" :closable="false"></el-alert>
         </el-form>
         <span slot="footer"><el-button @@click="loop.visible=false">取消</el-button><el-button type="primary" :loading="loop.saving" @@click="saveLoopTask">保存</el-button></span>
@@ -224,6 +274,12 @@
                           v-model="runData[item.name].value" 
                           :maxlength="item.maxLength===0 ? 500 : item.maxLength"
                           :type="item.parameterType===3 ? 'password' : 'text'"></el-input>
+                <el-input v-else-if="item.parameterType===5"
+                          type="textarea"
+                          :rows="8"
+                          v-model="runData[item.name].value"
+                          :maxlength="item.maxLength===0 ? 20000 : item.maxLength"
+                          show-word-limit></el-input>
                 <el-checkbox v-if="item.parameterType===4" v-model="runData[item.name].value"></el-checkbox>
                 <el-select v-if="item.parameterType===1"
                            v-model="runData[item.name].value"

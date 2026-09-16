@@ -1,4 +1,4 @@
-﻿var app = new Vue({
+var app = new Vue({
     el: "#app",
     data() {
         var validateCode = (rule, value, callback) => {
@@ -15,6 +15,12 @@
         return {
             // 表格数据
             tableData: [],
+            // 配置模式（整棵树“菜单/页面”的拖拽/数字排序，保存后真实更新 Sort 数值）
+            configMode: false,
+            configMenus: [],
+            dragId: null,
+            dragOverId: null,
+            configSaving: false,
             dialog: {
                 title: ncfT('Menu.AddTitle'),
                 visible: false,
@@ -690,6 +696,298 @@
         pickIcon(item) {
             this.dialogIcon.visible = false;
             this.dialog.data.icon = item;
+        },
+        // 切换配置模式（整棵树“菜单/页面”拖拽/数字排序）
+        toggleConfigMode() {
+            this.configMode = !this.configMode;
+            if (this.configMode) {
+                this.buildConfigMenus();
+            }
+        },
+        // 构建配置模式列表：递归整棵菜单树，仅保留“菜单(1)/页面(2)”，按钮(3)不参与排序；
+        // 同级按 Sort 降序排列（与左侧菜单一致），最终保存为深度优先顺序的扁平数组
+        buildConfigMenus() {
+            var rows = [];
+            var walk = function (nodes, level) {
+                if (!nodes || !nodes.length) {
+                    return;
+                }
+                nodes.slice().sort(function (a, b) {
+                    var sa = Number(a.sort) || 0;
+                    var sb = Number(b.sort) || 0;
+                    if (sb !== sa) {
+                        return sb - sa;
+                    }
+                    return (a.menuName || '') < (b.menuName || '') ? -1 : ((a.menuName || '') > (b.menuName || '') ? 1 : 0);
+                }).forEach(function (node) {
+                    var type = Number(node.menuType);
+                    if (type === 1 || type === 2) {
+                        rows.push({
+                            id: node.id,
+                            parentId: node.parentId || null,
+                            menuName: node.menuName,
+                            icon: node.icon || '',
+                            url: node.url || '',
+                            sort: Number(node.sort) || 0,
+                            menuType: type,
+                            level: level
+                        });
+                    }
+                    walk(node.children, level + 1);
+                });
+            };
+            walk(this.tableData || [], 0);
+            this.configMenus = rows;
+        },
+        // 按 id 查找配置行
+        findConfigRow(id) {
+            for (var i = 0; i < this.configMenus.length; i++) {
+                if (this.configMenus[i].id === id) {
+                    return this.configMenus[i];
+                }
+            }
+            return null;
+        },
+        // 计算以 rows[startIndex] 为根的子树在扁平数组中的结束下标（扁平数组为深度优先顺序，子树连续）
+        subtreeEndIndex(rows, startIndex) {
+            if (startIndex >= rows.length) {
+                return startIndex;
+            }
+            var rootId = rows[startIndex].id;
+            var parentMap = {};
+            for (var i = startIndex + 1; i < rows.length; i++) {
+                parentMap[rows[i].id] = rows[i].parentId || null;
+            }
+            var isDescendant = function (pid) {
+                var checked = {};
+                while (pid) {
+                    if (pid === rootId) {
+                        return true;
+                    }
+                    if (checked[pid]) {
+                        return false;
+                    }
+                    checked[pid] = true;
+                    pid = parentMap[pid] || null;
+                }
+                return false;
+            };
+            var end = startIndex;
+            for (var j = startIndex + 1; j < rows.length; j++) {
+                if (isDescendant(rows[j].parentId || null)) {
+                    end = j;
+                } else {
+                    break;
+                }
+            }
+            return end;
+        },
+        // 将 dragId 所在项（连同其全部子项）移动到 targetId 所在项“之前(before)/之后(after)”，仅限同级
+        moveTo(dragId, targetId, position) {
+            var rows = this.configMenus.slice();
+            var dragIdx = -1;
+            var targetIdx = -1;
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].id === dragId) {
+                    dragIdx = i;
+                }
+                if (rows[i].id === targetId) {
+                    targetIdx = i;
+                }
+            }
+            if (dragIdx < 0 || targetIdx < 0 || dragIdx === targetIdx) {
+                return;
+            }
+            var dragRow = rows[dragIdx];
+            var targetRow = rows[targetIdx];
+            if ((dragRow.parentId || null) !== (targetRow.parentId || null)) {
+                return; // 只允许同级之间拖动
+            }
+            var blockEnd = this.subtreeEndIndex(rows, dragIdx);
+            var block = rows.slice(dragIdx, blockEnd + 1);
+            var remaining = rows.slice(0, dragIdx).concat(rows.slice(blockEnd + 1));
+            var tIdx = -1;
+            for (var k = 0; k < remaining.length; k++) {
+                if (remaining[k].id === targetId) {
+                    tIdx = k;
+                    break;
+                }
+            }
+            if (tIdx < 0) {
+                return;
+            }
+            var tEnd = this.subtreeEndIndex(remaining, tIdx);
+            var insertAt = (position === 'after') ? tEnd + 1 : tIdx;
+            this.configMenus = remaining.slice(0, insertAt).concat(block).concat(remaining.slice(insertAt));
+            this.renumberGroup(dragRow.parentId || null);
+        },
+        // 同级重排后重新分配 Sort 数值：自上而下递减、间隔 10（与左侧菜单降序渲染一致）
+        renumberGroup(parentId) {
+            var key = parentId || null;
+            var group = [];
+            for (var i = 0; i < this.configMenus.length; i++) {
+                if ((this.configMenus[i].parentId || null) === key) {
+                    group.push(this.configMenus[i]);
+                }
+            }
+            var total = group.length;
+            for (var j = 0; j < group.length; j++) {
+                group[j].sort = (total - j) * 10;
+            }
+        },
+        // 判断拖放目标是否合法（仅同级可接受拖放）
+        canDropTo(dragId, targetId) {
+            if (!dragId || dragId === targetId) {
+                return false;
+            }
+            var dragRow = this.findConfigRow(dragId);
+            var targetRow = this.findConfigRow(targetId);
+            if (!dragRow || !targetRow) {
+                return false;
+            }
+            return (dragRow.parentId || null) === (targetRow.parentId || null);
+        },
+        // 拖拽开始（数字输入框与按钮上不触发整行拖拽）
+        onConfigDragStart(id, ev) {
+            if (ev && ev.target) {
+                var t = ev.target;
+                var node = (typeof t.closest === 'function') ? t.closest('input, button, .el-button, a') : null;
+                if (node || t.tagName === 'INPUT' || t.tagName === 'BUTTON' || t.tagName === 'A') {
+                    ev.preventDefault();
+                    return;
+                }
+            }
+            this.dragId = id;
+            this.dragOverId = null;
+        },
+        // 拖拽悬停（仅高亮可投放的同级目标）
+        onConfigDragOver(id) {
+            if (this.canDropTo(this.dragId, id)) {
+                this.dragOverId = id;
+            } else if (this.dragOverId === id) {
+                this.dragOverId = null;
+            }
+        },
+        // 拖拽结束（落点）
+        onConfigDrop(id) {
+            if (!this.canDropTo(this.dragId, id)) {
+                this.onConfigDragEnd();
+                return;
+            }
+            var fromIndex = -1;
+            var toIndex = -1;
+            for (var i = 0; i < this.configMenus.length; i++) {
+                if (this.configMenus[i].id === this.dragId) {
+                    fromIndex = i;
+                }
+                if (this.configMenus[i].id === id) {
+                    toIndex = i;
+                }
+            }
+            this.moveTo(this.dragId, id, fromIndex < toIndex ? 'after' : 'before');
+            this.onConfigDragEnd();
+        },
+        onConfigDragEnd() {
+            this.dragId = null;
+            this.dragOverId = null;
+        },
+        // 获取某行的同级行列表
+        siblingRows(row) {
+            var key = (row.parentId || null);
+            var list = [];
+            for (var i = 0; i < this.configMenus.length; i++) {
+                if ((this.configMenus[i].parentId || null) === key) {
+                    list.push(this.configMenus[i]);
+                }
+            }
+            return list;
+        },
+        canMoveUp(row) {
+            return this.siblingRows(row).indexOf(row) > 0;
+        },
+        canMoveDown(row) {
+            var list = this.siblingRows(row);
+            var idx = list.indexOf(row);
+            return idx >= 0 && idx < list.length - 1;
+        },
+        // 上移/下移按钮（连同子项一起移动，辅助键盘/鼠标用户）
+        moveConfigItem(row, delta) {
+            if (!row) {
+                return;
+            }
+            var siblings = this.siblingRows(row);
+            var from = siblings.indexOf(row);
+            var to = from + delta;
+            if (to < 0 || to >= siblings.length) {
+                return;
+            }
+            this.moveTo(row.id, siblings[to].id, delta > 0 ? 'after' : 'before');
+        },
+        // 直接在“排序”输入框中输入数字并回车/失焦：按 Sort 降序把该项移动到相应位置（可先试数字再微调）
+        applyNumber(id) {
+            var row = this.findConfigRow(id);
+            if (!row) {
+                return;
+            }
+            var val = parseInt(row.sort, 10);
+            if (isNaN(val)) {
+                this.renumberGroup(row.parentId || null);
+                return;
+            }
+            var siblings = [];
+            for (var i = 0; i < this.configMenus.length; i++) {
+                var r = this.configMenus[i];
+                if (r.id !== id && (r.parentId || null) === (row.parentId || null)) {
+                    siblings.push(r);
+                }
+            }
+            var insertPos = 0;
+            for (var j = 0; j < siblings.length; j++) {
+                var s = parseInt(siblings[j].sort, 10) || 0;
+                if (s >= val) {
+                    insertPos++;
+                }
+            }
+            var target = null;
+            var position = 'before';
+            if (insertPos >= siblings.length) {
+                target = siblings.length ? siblings[siblings.length - 1] : null;
+                position = 'after';
+            } else {
+                target = siblings[insertPos];
+            }
+            if (!target) {
+                this.renumberGroup(row.parentId || null);
+                return;
+            }
+            this.moveTo(id, target.id, position);
+        },
+        // 保存配置模式排序：按当前（深度优先）顺序提交全部“菜单/页面”Id，
+        // 服务端按父级分组后真实更新各级 Sort 数值
+        saveConfigOrder() {
+            if (!this.configMenus.length) {
+                this.$message.warning(ncfT('Menu.ConfigEmpty'));
+                return;
+            }
+            var self = this;
+            self.configSaving = true;
+            service.post('/Admin/Menu/Index?handler=Reorder', {
+                ids: self.configMenus.map(function (m) { return m.id; })
+            }).then(function (res) {
+                if (res.data.success) {
+                    self.$notify({
+                        title: ncfT('AdminUserInfo.Success'),
+                        message: ncfT('Menu.ConfigSaveSuccess'),
+                        type: 'success',
+                        duration: 2000
+                    });
+                    self.getList();
+                } else {
+                    self.$message.error(res.data.msg || ncfT('Admin.Common.Error'));
+                }
+            }).finally(function () {
+                self.configSaving = false;
+            });
         },
         // 更新授权
         async  auUpdateData() {

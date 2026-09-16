@@ -114,6 +114,120 @@
             line-height: 1.35;
         }
 
+        .pivot-board-section {
+            margin: 20px 10px 0;
+        }
+
+        .pivot-board-card {
+            border-radius: 10px;
+        }
+
+        .pivot-board-header,
+        .pivot-board-title,
+        .pivot-board-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .pivot-board-header {
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .pivot-board-title {
+            gap: 9px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #303133;
+        }
+
+        .pivot-board-title .fa {
+            color: #8c52ff;
+        }
+
+        .pivot-board-actions a {
+            color: #909399;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .pivot-board-actions a:hover {
+            color: #409eff;
+        }
+
+        .pivot-board-description {
+            margin: 0 0 12px;
+            color: #909399;
+            font-size: 12px;
+        }
+
+        .pivot-board-grid {
+            display: grid;
+            grid-template-columns: repeat(var(--pivot-board-columns, 2), minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .pivot-board-block {
+            position: relative;
+            padding: 16px;
+            border: 1px solid #ebeef5;
+            border-left: 4px solid #409eff;
+            border-radius: 9px;
+            background: linear-gradient(145deg, #ffffff 0%, #fafbff 100%);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .pivot-board-block:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(64, 158, 255, 0.15);
+        }
+
+        .pivot-board-block h4,
+        .pivot-board-block p {
+            margin: 0;
+        }
+
+        .pivot-board-block h4 {
+            color: #303133;
+            font-size: 15px;
+        }
+
+        .pivot-board-block p {
+            margin-top: 6px;
+            color: #909399;
+            font-size: 12px;
+        }
+
+        .pivot-board-block.pivot-block-accent-green { border-left-color: #67c23a; }
+        .pivot-board-block.pivot-block-accent-orange { border-left-color: #e6a23c; }
+        .pivot-board-block.pivot-block-accent-purple { border-left-color: #8c52ff; }
+        .pivot-board-block.pivot-block-accent-gray { border-left-color: #909399; }
+
+        .pivot-block-module {
+            display: inline-block;
+            margin-top: 10px;
+            color: #a0a4aa;
+            font-size: 11px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .pivot-block-hint {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            color: #c0c4cc;
+        }
+
+        @@media (max-width: 720px) {
+            .pivot-board-grid {
+                grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+            }
+        }
+
         .host-metric-value.host-network-value {
             display: flex;
             justify-content: space-between;
@@ -929,7 +1043,7 @@
 <div id="home-header">
     <el-container>
         <el-header class="module-header">
-            <span class="start-title"><span class="module-header-v">@AR["Admin.Home.Header"]</span></span>
+            <span class="start-title"><span class="module-header-v">@(Model.FullSystemConfig?.SystemName ?? AR["Admin.Home.Header"])</span></span>
         </el-header>
         <el-main>
             <el-row :gutter="20">
@@ -1199,6 +1313,33 @@
                 <p class="quick-ai-description">@AR["Admin.Home.AiQuickDescription"]</p>
             </div>
             <el-button type="primary" plain icon="el-icon-chat-dot-round" @@click.stop="openFooterAi">@AR["Admin.Home.AiQuickDialog"]</el-button>
+        </div>
+    </el-card>
+</section>
+
+<!-- Pivot 面板（Provit Panel）：由 admin-home 页面绑定的启用面板驱动，无数据时整节隐藏 -->
+<section v-if="pivotBoard && (pivotBoard.blocks || []).length" class="pivot-board-section">
+    <el-card class="pivot-board-card">
+        <div slot="header" class="pivot-board-header">
+            <div class="pivot-board-title">
+                <i class="fa fa-th-large"></i>
+                <span>{{pivotBoard.name || 'Pivot 面板'}}</span>
+            </div>
+            <div class="pivot-board-actions">
+                <a href="/Admin/NeuCharPivot/Board" title="管理面板"><i class="el-icon-setting"></i> 管理</a>
+            </div>
+        </div>
+        <p v-if="pivotBoard.description" class="pivot-board-description">{{pivotBoard.description}}</p>
+        <div class="pivot-board-grid" :style="{'--pivot-board-columns': pivotBoard.columns || 2}">
+            <div v-for="block in pivotBoard.blocks" :key="block.key || (block.moduleUid + block.functionKey)"
+                 class="pivot-board-block" :class="'pivot-block-accent-' + (block.accent || 'blue')"
+                 role="button" tabindex="0"
+                 @@click="openPivotBlock(block)" @@keydown.enter.prevent="openPivotBlock(block)">
+                <h4>{{block.title || block.functionKey}}</h4>
+                <p>{{block.summary || block.functionName}}</p>
+                <small class="pivot-block-module"><i class="fa fa-cube"></i> {{pivotBlockModuleLabel(block.moduleUid)}}</small>
+                <i class="fa fa-hand-pointer-o pivot-block-hint"></i>
+            </div>
         </div>
     </el-card>
 </section>

@@ -10,6 +10,9 @@
     修改标识：Senparc - 20260813
     修改描述：v0.5.0 集成 NeuCharPivot 与 NeuCharWorkflow 管理能力并优化后台体验
 
+    修改标识：Senparc - 20260829
+    修改描述：v0.7.0 新增 NeuCharPivot 全局浮动调用与工作流分析管理能力
+
 ----------------------------------------------------------------*/
 
 using Microsoft.Extensions.DependencyInjection;
@@ -18,10 +21,12 @@ using Microsoft.Extensions.Logging;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Shared.Abstractions.NeuBell;
+using Senparc.Xncf.NeuCharWorkflow.Abstractions.Workflow;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -119,6 +124,7 @@ public sealed class NeuCharPivotLoopTaskHostedService : BackgroundService
         var parameterProtector = scope.ServiceProvider.GetRequiredService<NeuCharParameterProtector>();
         var neuBellProvider = scope.ServiceProvider.GetRequiredService<NeuCharPivotNeuBellProvider>();
         var neuBellPublisher = scope.ServiceProvider.GetService<INeuBellPublisher>();
+        var workflowProvider = scope.ServiceProvider.GetService<IWorkflowFunctionCallingProvider>();
         var now = DateTime.UtcNow;
         var dueTasks = await loopTaskService.GetFullListAsync(
             z => z.Enabled && z.NextRunAt != null && z.NextRunAt <= now,
@@ -185,6 +191,15 @@ public sealed class NeuCharPivotLoopTaskHostedService : BackgroundService
                 log.Complete(result.Success, resultText, result.ErrorMessage);
                 await loopTaskService.SaveObjectAsync(task).ConfigureAwait(false);
                 await logService.SaveObjectAsync(log).ConfigureAwait(false);
+                await TriggerWorkflowAsync(
+                    task,
+                    function,
+                    result.Success,
+                    resultText,
+                    result.ErrorMessage,
+                    logService,
+                    workflowProvider,
+                    cancellationToken).ConfigureAwait(false);
 
                 if (task.UseNeuBell)
                 {
@@ -203,6 +218,15 @@ public sealed class NeuCharPivotLoopTaskHostedService : BackgroundService
                 log.Complete(false, null, ex.ToString());
                 await loopTaskService.SaveObjectAsync(task).ConfigureAwait(false);
                 await logService.SaveObjectAsync(log).ConfigureAwait(false);
+                await TriggerWorkflowAsync(
+                    task,
+                    function,
+                    false,
+                    null,
+                    ex.Message,
+                    logService,
+                    workflowProvider,
+                    cancellationToken).ConfigureAwait(false);
                 if (task.UseNeuBell)
                 {
                     neuBellProvider.AddResult(task.Id, function.FunctionName, false, DateTimeOffset.UtcNow);
@@ -216,5 +240,76 @@ public sealed class NeuCharPivotLoopTaskHostedService : BackgroundService
                 _logger.LogError(ex, "Loop Task 执行异常：TaskId={TaskId}", task.Id);
             }
         }
+    }
+
+    private static async Task TriggerWorkflowAsync(
+        NeuCharPivotLoopTask task,
+        NeuCharPivotFunction function,
+        bool succeeded,
+        string result,
+        string error,
+        NeuCharExecutionLogService logService,
+        IWorkflowFunctionCallingProvider workflowProvider,
+        CancellationToken cancellationToken)
+    {
+        if (!task.WorkflowId.HasValue)
+        {
+            return;
+        }
+
+        var workflowLog = new NeuCharExecutionLog(
+            "loop-workflow",
+            task.Id,
+            function.ModuleUid,
+            task.WorkflowId.Value.ToString(),
+            $"Workflow #{task.WorkflowId.Value}",
+            $"loop-workflow-{task.Id}-{Guid.NewGuid():N}");
+        await logService.SaveObjectAsync(workflowLog).ConfigureAwait(false);
+
+        WorkflowFunctionCallingResult workflowResult;
+        try
+        {
+            if (workflowProvider == null)
+            {
+                workflowResult = new WorkflowFunctionCallingResult(
+                    false,
+                    null,
+                    "NeuChar Workflow 模块未安装或未开启。");
+            }
+            else
+            {
+                var input = JsonSerializer.Serialize(new
+                {
+                    taskId = task.Id,
+                    functionId = function.Id,
+                    functionKey = function.FunctionKey,
+                    functionName = function.FunctionName,
+                    succeeded,
+                    data = result,
+                    error,
+                    completedAt = DateTimeOffset.UtcNow
+                });
+                workflowResult = await workflowProvider.ExecuteAsync(
+                    task.WorkflowId.Value,
+                    task.AdminUserId,
+                    input,
+                    null,
+                    cancellationToken).ConfigureAwait(false);
+            }
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            workflowResult = new WorkflowFunctionCallingResult(false, null, ex.Message);
+        }
+
+        workflowLog.Complete(
+            workflowResult.Success,
+            workflowResult.Output,
+            workflowResult.ErrorMessage);
+        await logService.SaveObjectAsync(workflowLog).ConfigureAwait(false);
     }
 }

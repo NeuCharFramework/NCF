@@ -19,47 +19,134 @@
     <header class="neuchar-page-header">
         <div>
             <h2>NeuCharPivot 聚合</h2>
-            <p>集中查看和调用各个已生成模块的快捷操作。模块未安装或未开启时，服务端与界面都会禁用调用。</p>
+            <p>集中查看模块面板、参数化 Function、LoopTask 倒计时和完成后触发的 Workflow。</p>
         </div>
-        <el-input v-model="keyword" clearable prefix-icon="el-icon-search" placeholder="搜索模块或 Function"></el-input>
+        <div class="aggregate-header-actions">
+            <el-input v-model="keyword" clearable prefix-icon="el-icon-search" placeholder="搜索模块、Function 或 Workflow"></el-input>
+            <el-button icon="el-icon-refresh" @@click="load">刷新</el-button>
+        </div>
     </header>
 
-    <el-collapse v-if="filteredModules.length" v-model="openedModules">
-        <el-collapse-item v-for="module in filteredModules" :key="module.configuration.moduleUid" :name="module.configuration.moduleUid">
+    <section class="pivot-stat-grid" v-if="summary">
+        <div class="pivot-stat-item"><span>模块</span><strong>{{summary.availableModuleCount || 0}} / {{summary.moduleCount || 0}}</strong><small>可用 / 总数</small></div>
+        <div class="pivot-stat-item"><span>Function</span><strong>{{summary.availableFunctionCount || 0}} / {{summary.functionCount || 0}}</strong><small>可用 / 总数</small></div>
+        <div class="pivot-stat-item"><span>LoopTask</span><strong>{{summary.enabledLoopTaskCount || 0}} / {{summary.loopTaskCount || 0}}</strong><small>启用 / 已配置</small></div>
+        <div class="pivot-stat-item"><span>执行状态</span><strong>{{summary.runningLoopTaskCount || 0}} / {{summary.waitingLoopTaskCount || 0}}</strong><small>执行中 / 倒计时</small></div>
+        <div class="pivot-stat-item"><span>上次失败</span><strong class="is-danger">{{summary.failedLoopTaskCount || 0}}</strong><small>LoopTask</small></div>
+        <div class="pivot-stat-item"><span>Workflow 关联</span><strong>{{summary.workflowLoopTaskCount || 0}}</strong><small>{{summary.workflowCount || 0}} 个可用 Workflow</small></div>
+        <div class="pivot-stat-item"><span>Pivot 执行</span><strong>{{summary.pivotSuccessCount || 0}} / {{summary.pivotFailedCount || 0}}</strong><small>成功 / 失败</small></div>
+        <div class="pivot-stat-item"><span>Workflow 触发</span><strong>{{summary.workflowTriggerSuccessCount || 0}} / {{summary.workflowTriggerFailedCount || 0}}</strong><small>成功 / 失败</small></div>
+    </section>
+
+    <section class="pivot-filter-bar">
+        <el-select v-model="moduleStateFilter" clearable size="mini" placeholder="模块状态">
+            <el-option label="模块状态：全部" value=""></el-option>
+            <el-option label="模块状态：可用" value="available"></el-option>
+            <el-option label="模块状态：不可用" value="unavailable"></el-option>
+        </el-select>
+        <el-select v-model="functionStateFilter" clearable size="mini" placeholder="Function 状态">
+            <el-option label="Function：全部" value=""></el-option>
+            <el-option label="Function：可用" value="available"></el-option>
+            <el-option label="Function：已移除" value="unavailable"></el-option>
+        </el-select>
+        <el-select v-model="loopStatusFilter" clearable size="mini" placeholder="LoopTask 状态">
+            <el-option label="LoopTask：全部" value=""></el-option>
+            <el-option label="LoopTask：执行中" value="running"></el-option>
+            <el-option label="LoopTask：倒计时" value="countdown"></el-option>
+            <el-option label="LoopTask：上次失败" value="failed"></el-option>
+            <el-option label="LoopTask：待执行" value="due"></el-option>
+            <el-option label="LoopTask：已停用" value="disabled"></el-option>
+            <el-option label="LoopTask：未设置" value="none"></el-option>
+        </el-select>
+        <el-select v-model="workflowFilter" clearable filterable size="mini" placeholder="Workflow 关联">
+            <el-option label="Workflow：全部" value=""></el-option>
+            <el-option label="Workflow：已关联" value="linked"></el-option>
+            <el-option label="Workflow：未关联" value="unlinked"></el-option>
+            <el-option v-for="workflow in workflowOptions" :key="workflow.id" :label="workflow.name" :value="String(workflow.id)"></el-option>
+        </el-select>
+        <el-button size="mini" icon="el-icon-refresh-left" @@click="resetFilters">重置筛选</el-button>
+        <el-checkbox v-model="showUnavailableModules" border size="mini">
+            显示不可用模块（{{summary.unavailableModuleCount || 0}}）
+        </el-checkbox>
+    </section>
+
+    <div v-if="filteredModules.length" class="aggregate-content-layout">
+        <aside class="aggregate-module-nav" aria-label="NeuCharPivot 模块导航">
+            <div class="aggregate-module-nav-title"><i class="el-icon-menu"></i> 模块导航</div>
+            <button v-for="module in filteredModules"
+                    :key="'nav-' + module.configuration.moduleUid"
+                    type="button"
+                    class="aggregate-module-nav-item"
+                    @@click="jumpToModule(module)">
+                <span>{{module.configuration.name}}</span>
+                <small>{{module.functions.length}} Functions</small>
+            </button>
+        </aside>
+        <main class="aggregate-module-list">
+            <el-collapse v-model="openedModules">
+        <el-collapse-item v-for="module in filteredModules" :key="module.configuration.moduleUid" :id="moduleAnchorId(module)" :name="module.configuration.moduleUid">
             <template slot="title">
                 <div class="aggregate-module-title">
                     <strong>{{module.configuration.name}}</strong>
                     <el-tag size="mini">Revision {{module.configuration.revision}}</el-tag>
-                    <el-tag :type="module.moduleAvailable ? 'success' : 'danger'" size="mini">{{module.moduleAvailable ? '已开启' : '不可用'}}</el-tag>
+                    <el-tag :type="module.moduleAvailable ? 'success' : 'info'" size="mini">{{module.moduleAvailable ? '已开启' : '模块已关闭'}}</el-tag>
                     <span>{{module.functions.length}} Functions</span>
                 </div>
             </template>
-            <el-alert v-if="!module.moduleAvailable" title="该模块当前未安装或未开启。所有引用均已禁用，重新开启模块后会自动恢复。" type="warning" :closable="false" show-icon></el-alert>
-            <el-row :gutter="16" class="aggregate-functions">
-                <el-col :xs="24" :sm="12" :lg="8" v-for="fn in module.functions" :key="fn.id">
-                    <el-card class="neuchar-function-card" shadow="hover">
-                        <div class="neuchar-function-head">
-                            <div><h4>{{fn.functionName}}</h4><p>{{fn.description}}</p></div>
-                            <div><el-tag v-if="!fn.available" size="mini" type="danger">Function 已移除</el-tag><el-tag v-if="fn.loopTask && fn.loopTask.enabled" size="mini" type="success"><i class="el-icon-time"></i> Loop</el-tag></div>
-                        </div>
-                        <div v-for="parameter in getParameters(fn)" :key="parameter.name" class="neuchar-parameter">
-                            <label>{{parameter.title || parameter.name}} <em v-if="parameter.required">*</em></label>
-                            <el-input v-if="parameter.parameterType===0 || parameter.parameterType===3" :type="parameter.parameterType===3?'password':'text'" v-model="inputs[fn.id][parameter.name]" :maxlength="parameter.maxLength || 500"></el-input>
-                            <el-select v-else-if="parameter.parameterType===1" v-model="inputs[fn.id][parameter.name]" :filterable="parameter.filterable" :allow-create="parameter.allowCreate"><el-option v-for="option in parameter.options" :key="option.value" :label="option.text" :value="option.value"></el-option></el-select>
-                            <el-checkbox-group v-else-if="parameter.parameterType===2" v-model="inputs[fn.id][parameter.name]"><el-checkbox v-for="option in parameter.options" :key="option.value" :label="option.value">{{option.text}}</el-checkbox></el-checkbox-group>
-                            <el-switch v-else-if="parameter.parameterType===4" v-model="inputs[fn.id][parameter.name]"></el-switch>
-                            <small v-if="parameter.description">{{parameter.description}}</small>
-                        </div>
-                        <div class="neuchar-card-actions">
-                            <small>模块版本 {{fn.moduleVersion || '-'}}</small>
-                            <el-button size="mini" type="primary" :disabled="!module.moduleAvailable || !fn.available" @@click="run(module, fn)">执行</el-button>
-                        </div>
-                    </el-card>
-                </el-col>
-            </el-row>
+            <el-alert v-if="!module.moduleAvailable" title="该模块当前未安装或未开启，Function 仅保留配置，不允许执行。" type="info" :closable="false" show-icon></el-alert>
+            <el-tabs v-if="panels(module).length" v-model="activePanels[module.configuration.moduleUid]" type="card" class="aggregate-panel-tabs">
+                <el-tab-pane v-for="panel in panels(module)" :key="panel.key" :name="panel.key">
+                    <span slot="label"><i class="el-icon-menu"></i> {{panel.title}}</span>
+                    <p v-if="panel.description" class="aggregate-panel-description">{{panel.description}}</p>
+                    <div class="aggregate-panel-grid" :style="{'--pivot-columns': panel.columns || 2}">
+                        <section v-for="section in panel.sections" :key="section.title" class="aggregate-section" v-if="visibleFunctions(module, section).length">
+                            <h4>{{section.title}}</h4>
+                            <el-row :gutter="16" class="aggregate-functions">
+                                <el-col :xs="24" :sm="12" :lg="8" v-for="fn in visibleFunctions(module, section)" :key="fn.id">
+                                    <el-card class="neuchar-function-card" shadow="hover">
+                                        <div class="neuchar-function-head">
+                                            <div><h4>{{fn.functionName}}</h4><p>{{fn.description}}</p></div>
+                                            <div>
+                                                <el-tag v-if="!module.moduleAvailable" size="mini" type="info">模块已关闭</el-tag>
+                                                <el-tag v-else-if="!fn.available" size="mini" type="warning">当前版本已移除</el-tag>
+                                                <el-tag v-if="fn.loopTask" size="mini" :type="loopStatus(fn)==='running'?'warning':(loopStatus(fn)==='failed'?'danger':'info')">
+                                                    <i class="el-icon-time"></i> {{loopStatusText(fn)}}
+                                                </el-tag>
+                                            </div>
+                                        </div>
+                                        <div v-for="parameter in getParameters(fn)" :key="parameter.name" class="neuchar-parameter">
+                                            <label>{{parameter.title || parameter.name}} <em v-if="parameter.required">*</em></label>
+                                            <el-input v-if="parameter.parameterType===0 || parameter.parameterType===3" :type="parameter.parameterType===3?'password':'text'" v-model="inputs[fn.id][parameter.name]" :maxlength="parameter.maxLength || 500"></el-input>
+                                            <el-input v-else-if="parameter.parameterType===5" type="textarea" :rows="6" v-model="inputs[fn.id][parameter.name]" :maxlength="parameter.maxLength || 20000" show-word-limit></el-input>
+                                            <el-select v-else-if="parameter.parameterType===1" v-model="inputs[fn.id][parameter.name]" :filterable="parameter.filterable" :allow-create="parameter.allowCreate">
+                                                <el-option v-for="option in parameter.options" :key="option.value" :label="option.text" :value="option.value"></el-option>
+                                            </el-select>
+                                            <el-checkbox-group v-else-if="parameter.parameterType===2" v-model="inputs[fn.id][parameter.name]">
+                                                <el-checkbox v-for="option in parameter.options" :key="option.value" :label="option.value">{{option.text}}</el-checkbox>
+                                            </el-checkbox-group>
+                                            <el-switch v-else-if="parameter.parameterType===4" v-model="inputs[fn.id][parameter.name]"></el-switch>
+                                            <small v-if="parameter.description">{{parameter.description}}</small>
+                                        </div>
+                                        <div class="neuchar-card-actions">
+                                            <div>
+                                                <small>模块版本 {{fn.moduleVersion || '-'}}</small>
+                                                <small v-if="fn.loopTask && fn.loopTask.workflowId" class="aggregate-workflow-link"><i class="el-icon-share"></i> {{workflowName(fn.loopTask.workflowId)}}</small>
+                                                <small v-if="fn.loopTask && fn.loopTask.nextRunAt">{{loopCountdown(fn)}}</small>
+                                            </div>
+                                            <el-button size="mini" type="primary" :disabled="!module.moduleAvailable || !fn.available" @@click="run(module, fn)">执行</el-button>
+                                        </div>
+                                    </el-card>
+                                </el-col>
+                            </el-row>
+                        </section>
+                    </div>
+                </el-tab-pane>
+            </el-tabs>
         </el-collapse-item>
     </el-collapse>
-    <div v-else-if="!loading" class="neuchar-empty"><i class="fa fa-th-large fa-3x"></i><h3>还没有 NeuCharPivot</h3><p>请先进入任意模块的“设置/执行 → NeuCharPivot”生成操作面板。</p></div>
+        </main>
+    </div>
+    <div v-else-if="!loading" class="neuchar-empty"><i class="fa fa-th-large fa-3x"></i><h3>没有匹配的 NeuCharPivot</h3><p>请调整筛选条件，或先进入任意模块的“设置/执行 → NeuCharPivot”生成操作面板。</p></div>
 
     <el-dialog :title="result.title" :visible.sync="result.visible" width="50%" :close-on-click-modal="false">
         <div v-if="result.htmlMode" class="aggregate-result aggregate-result-html" v-html="result.html"></div>

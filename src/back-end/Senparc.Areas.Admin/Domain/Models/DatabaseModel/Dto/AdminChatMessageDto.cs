@@ -1,3 +1,17 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+
+    文件名：AdminChatMessageDto.cs
+    文件功能描述：AdminChatMessageDto 相关功能实现
+
+
+    创建标识：Senparc - 20260325
+
+    修改标识：Senparc - 20260915
+    修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
+
+----------------------------------------------------------------*/
+using Senparc.Areas.Admin.Domain.Services;
 using Senparc.Ncf.Core.Models;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -39,6 +53,10 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
         /// </summary>
         public string ModelIdentifier { get; set; }
 
+        public int? TrajectoryId { get; set; }
+
+        public int? TrajectorySequence { get; set; }
+
         /// <summary>
         /// 从实体映射到 DTO
         /// </summary>
@@ -61,7 +79,9 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
                 Content = entity.Content,
                 Sequence = entity.Sequence,
                 UserFeedback = entity.UserFeedback,
-                ModelIdentifier = entity.ModelIdentifier
+                ModelIdentifier = entity.ModelIdentifier,
+                TrajectoryId = entity.TrajectoryId,
+                TrajectorySequence = entity.TrajectorySequence
             };
         }
     }
@@ -87,5 +107,10 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
         /// </summary>
         [Required]
         public string Content { get; set; }
+
+        /// <summary>
+        /// 运行模式：Simple（普通单轮对话，默认）或 Harness（MAF 长任务）。
+        /// </summary>
+        public AdminChatMode Mode { get; set; } = AdminChatMode.Simple;
     }
 }

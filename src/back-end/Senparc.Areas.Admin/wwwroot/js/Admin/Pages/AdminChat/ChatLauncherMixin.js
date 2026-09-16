@@ -6,6 +6,7 @@ window.ChatLauncherMixin = {
       aiModelStorageKey: 'ncf.admin.chat.sessionAiModelMap',
       chatInputText: '',
       launcherAiModelId: 0,
+      launcherChatMode: 'harness',
       sessionAiModelMap: {},
       selectedModules: [],
       moduleSelectorVisible: false,
@@ -440,18 +441,24 @@ window.ChatLauncherMixin = {
 
       this.isCreatingSession = true;
       try {
+        const initialMessage = this.chatInputText.trim();
         const requestData = {
-          initialMessage: this.chatInputText.trim(),
+          initialMessage: '',
+          title: initialMessage,
           aiModelId: this.normalizeAiModelId(this.launcherAiModelId),
           moduleUids: this.selectedModules.map((item) => item.uid),
-          workflowIds: this.selectedWorkflows.map((item) => item.id)
+          workflowIds: this.selectedWorkflows.map((item) => item.id),
+          mode: this.launcherChatMode === 'harness' ? 1 : 0
         };
 
         const response = await service.post('/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.CreateSessionAsync', requestData);
         if (response.data && response.data.success && response.data.data) {
           const sessionId = response.data.data.sessionId;
           this.setSessionAiModelId(sessionId, this.launcherAiModelId);
-          window.location.href = '/Admin/AdminChat/Chat?sessionId=' + sessionId;
+          const pendingMessage = response.data.data.initialMessage || initialMessage;
+          sessionStorage.setItem(`ncf.admin.chat.initialMessage.${sessionId}`, pendingMessage);
+          window.location.href = '/Admin/AdminChat/Chat?sessionId=' + sessionId
+            + '&mode=' + (this.launcherChatMode === 'harness' ? '1' : '0');
           return;
         }
 

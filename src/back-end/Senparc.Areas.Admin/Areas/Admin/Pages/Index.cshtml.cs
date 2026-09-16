@@ -10,6 +10,9 @@
     修改标识：Senparc - 20260813
     修改描述：v0.5.0 集成 NeuCharPivot 与 NeuCharWorkflow 管理能力并优化后台体验
 
+    修改标识：Senparc - 20260915
+    修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
@@ -329,6 +332,18 @@ namespace Senparc.Areas.Admin.Pages
                     MenuName = "聚合",
                     Url = "/Admin/NeuCharPivot/Aggregate",
                     Icon = "fa fa-cubes",
+                    Id = (index++).ToString(),
+                    ParentId = pivotMenu.Id
+                });
+            }
+
+            if (!dest.Any(z => string.Equals(z.Url, "/Admin/NeuCharPivot/Board", StringComparison.OrdinalIgnoreCase)))
+            {
+                dest.Add(new SysMenuDto
+                {
+                    MenuName = "面板",
+                    Url = "/Admin/NeuCharPivot/Board",
+                    Icon = "fa fa-th-large",
                     Id = (index++).ToString(),
                     ParentId = pivotMenu.Id
                 });

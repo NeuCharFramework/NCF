@@ -95,4 +95,10 @@
   <data name="Cookie.Summary" xml:space="preserve"><value>我们使用 Cookie 改善网站体验。详情请查看隐私政策。</value></data>
   <data name="Cookie.LearnMore" xml:space="preserve"><value>了解更多</value></data>
   <data name="Cookie.Accept" xml:space="preserve"><value>接受</value></data>
+  <data name="Download.Source.Mode" xml:space="preserve"><value>下载源</value></data>
+  <data name="Download.Source.Auto" xml:space="preserve"><value>自动（本地优先）</value></data>
+  <data name="Download.Source.Local" xml:space="preserve"><value>本机镜像</value></data>
+  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Download.Status.Md5" xml:space="preserve"><value>MD5 指纹</value></data>
+  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>暂无指纹</value></data>
 </root>

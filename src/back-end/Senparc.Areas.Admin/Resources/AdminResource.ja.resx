@@ -45,6 +45,27 @@
   <data name="Admin.Nav.Home" xml:space="preserve">
     <value>ホーム</value>
   </data>
+  <data name="Admin.Nav.Search" xml:space="preserve">
+    <value>メニューを検索</value>
+  </data>
+  <data name="Admin.Nav.SearchPlaceholder" xml:space="preserve">
+    <value>キーワードでメニューを絞り込み</value>
+  </data>
+  <data name="Admin.Nav.SearchEmpty" xml:space="preserve">
+    <value>一致するメニューがありません</value>
+  </data>
+  <data name="Admin.Nav.ConfigTitle" xml:space="preserve">
+    <value>メニュー設定</value>
+  </data>
+  <data name="Admin.Nav.ConfigHint" xml:space="preserve">
+    <value>1次メニューをドラッグして順序を変更。保存すると並び順値が更新されます</value>
+  </data>
+  <data name="Admin.Nav.ConfigSave" xml:space="preserve">
+    <value>順序を保存</value>
+  </data>
+  <data name="Admin.Nav.ConfigSaved" xml:space="preserve">
+    <value>メニューの順序を保存しました</value>
+  </data>
   <data name="Admin.Layout.Welcome" xml:space="preserve">
     <value>ようこそ、</value>
   </data>
@@ -549,4 +570,23 @@
   <data name="Admin.Home.AgentsWaitingOrPaused" xml:space="preserve"><value>待機 / 一時停止</value></data>
   <data name="Admin.Home.AiQuickDescription" xml:space="preserve"><value>Footer の AI クイックチャットから、必要なときに完全な会話とコンテキスト選択を開けます。</value></data>
   <data name="Admin.Home.AiQuickDialog" xml:space="preserve"><value>クイックチャットを開く</value></data>
+  <data name="Menu.ConfigMode" xml:space="preserve">
+    <value>設定モード</value>
+  </data>
+  <data name="Menu.ConfigModeExit" xml:space="preserve">
+    <value>設定モードを終了</value>
+  </data>
+  <data name="Menu.ConfigModeTip" xml:space="preserve">
+    <value>下にすべてのメニュー/ページを階層で表示します（ボタンは並べ替え対象外）。同じ階層内はドラッグで並べ替え、または右の並べ替え欄に数値を入力して Enter でその位置へ移動できます。保存すると Sort 値が実際に更新され、左メニューが更新されます。</value>
+  </data>
+  <data name="Menu.ConfigSave" xml:space="preserve">
+    <value>順序を保存</value>
+  </data>
+  <data name="Menu.ConfigSaveSuccess" xml:space="preserve">
+    <value>メニューの順序を保存しました</value>
+  </data>
+  <data name="Menu.ConfigEmpty" xml:space="preserve">
+    <value>並べ替え可能なメニューやページがありません</value>
+  </data>
+  <data name="Admin.Footer.NeuBellWebHookSettings" xml:space="preserve"><value>WebHook 設定</value></data>
 </root>

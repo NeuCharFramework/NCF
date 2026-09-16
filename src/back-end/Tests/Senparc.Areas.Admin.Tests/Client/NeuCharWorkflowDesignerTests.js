@@ -19,6 +19,12 @@ const tasksPagePath = path.resolve(__dirname,
     '../../../../../src/Extensions/Senparc.Xncf.NeuCharWorkflow/Areas/Admin/Pages/NeuCharWorkflow/Tasks.cshtml');
 const tasksStylePath = path.resolve(__dirname,
     '../../../../../src/Extensions/Senparc.Xncf.NeuCharWorkflow/wwwroot/css/NeuCharWorkflow/Tasks.css');
+const analyticsScriptPath = path.resolve(__dirname,
+    '../../../../../src/Extensions/Senparc.Xncf.NeuCharWorkflow/wwwroot/js/NeuCharWorkflow/Analytics.js');
+const analyticsPagePath = path.resolve(__dirname,
+    '../../../../../src/Extensions/Senparc.Xncf.NeuCharWorkflow/Areas/Admin/Pages/NeuCharWorkflow/Analytics.cshtml');
+const analyticsStylePath = path.resolve(__dirname,
+    '../../../../../src/Extensions/Senparc.Xncf.NeuCharWorkflow/wwwroot/css/NeuCharWorkflow/Analytics.css');
 const replayScriptPath = path.resolve(__dirname,
     '../../../../../src/Extensions/Senparc.Xncf.NeuCharWorkflow/wwwroot/js/NeuCharWorkflow/Replay.js');
 const replayPagePath = path.resolve(__dirname,
@@ -1844,6 +1850,11 @@ assert.strictEqual(tasksVueOptions.computed.hasRunningTasks.call({ tasks: taskRo
 const filteredTaskRows = tasksVueOptions.computed.filteredTasks.call({ tasks: taskRows, keyword: '失败', statusFilter: 'failed' });
 assert.strictEqual(filteredTaskRows.length, 1,
     'Task search and status filtering should compose without hiding matching failed tasks.');
+assert.ok(fs.readFileSync(tasksScriptPath, 'utf8').includes('selectStatus(status)') &&
+    fs.readFileSync(tasksScriptPath, 'utf8').includes('syncRoute()') &&
+    fs.readFileSync(tasksPagePath, 'utf8').includes('>当前</el-tag>') &&
+    fs.readFileSync(workflowAppServicePath, 'utf8').includes('WorkflowAnalyticsSummary'),
+    'Task status cards must expose the current filter, synchronize the URL, and use full summary counts.');
 tasksVueOptions.methods.openTask.call({ $message: { warning() {} } }, taskRows[0]);
 assert.match(navigatedTaskUrl, /NeuCharWorkflow\/Index\?workflowId=21&runId=f6d7e0a2-4f33-46f8-a9e3-116a272bab58/,
     'An active task must reopen the locked Workflow editor and resume live status polling.');
@@ -1902,6 +1913,47 @@ assert.match(tasksStyles, /\.workflow-task-table \.el-table__row\s*\{[^}]*cursor
     'Task rows should make their workflow-board navigation discoverable.');
 assert.ok(workflowAppService.includes('GetTaskListAsync') && workflowAppService.includes('WorkflowTaskListItem'),
     'The application service should combine execution task data behind a dedicated contract.');
+const analyticsScript = fs.readFileSync(analyticsScriptPath, 'utf8');
+const analyticsPage = fs.readFileSync(analyticsPagePath, 'utf8');
+const analyticsStyles = fs.readFileSync(analyticsStylePath, 'utf8');
+const analyticsServicePath = path.resolve(__dirname,
+    '../../../../../src/Extensions/Senparc.Xncf.NeuCharWorkflow/Domain/Services/NeuCharWorkflowAnalyticsService.cs');
+const analyticsService = fs.readFileSync(analyticsServicePath, 'utf8');
+const workflowContracts = fs.readFileSync(workflowObjectContractsPath, 'utf8');
+const agentsWorkflowObjectProvider = fs.readFileSync(agentsWorkflowObjectProviderPath, 'utf8');
+assert.ok(analyticsPage.includes('Workflow 统计分析') &&
+    analyticsPage.includes('daterange') &&
+    analyticsPage.includes('全部外部资源') &&
+    analyticsPage.includes('全部资源类型') &&
+    analyticsPage.includes('运行明细') &&
+    analyticsScript.includes('resourceType') &&
+    analyticsScript.includes('resourceId') &&
+    analyticsScript.includes("params.set('from', range[0])") &&
+    analyticsScript.includes('openRun(run)') &&
+    analyticsScript.includes('openTasks'),
+    'Workflow analytics should expose date, workflow, status, resource filters and drill-down run navigation.');
+assert.ok(analyticsStyles.includes('.workflow-analytics-summary') &&
+    analyticsStyles.includes('.workflow-analytics-trend-bars') &&
+    analyticsStyles.includes('.workflow-analytics-table'),
+    'Workflow analytics should provide stable responsive dashboard and table layout styles.');
+assert.ok(workflowAppService.includes('GetAnalyticsAsync') &&
+    analyticsService.includes('WorkflowAnalyticsSummary') &&
+    analyticsService.includes('ParseResources') &&
+    analyticsService.includes('GetAnalyticsLogsAsync') &&
+    analyticsService.includes('JsonDocument.Parse') &&
+    !analyticsService.includes('GetFullListAsync(') &&
+    analyticsService.includes('"function"') &&
+    analyticsService.includes('"agent-group"'),
+    'The server analytics contract should use a projected log query and lightweight resource parsing for run health and persisted references.');
+assert.ok(workflowContracts.includes('string ObjectId = null') &&
+    agentsWorkflowObjectProvider.includes('ObjectId: request.ObjectId') &&
+    agentsWorkflowObjectProvider.includes('Reference = reference'),
+    'Agent, AgentGroup and A2A execution references should carry stable resource identifiers into replay data.');
+assert.ok(page.includes('openWorkflowAnalytics') &&
+    workflowScript.includes('openWorkflowAnalytics') &&
+    fs.readFileSync(replayPagePath, 'utf8').includes('查看统计') &&
+    fs.readFileSync(replayScriptPath, 'utf8').includes('openWorkflowAnalytics'),
+    'Workflow detail and replay pages should provide coordinated navigation into analytics.');
 assert.ok(workflowAppService.includes('private static DateTimeOffset ToUtcOffset') &&
     workflowAppService.includes('DateTimeOffset StartedAt') &&
     workflowAppService.includes('ToUtcOffset(log.StartedAt)'),

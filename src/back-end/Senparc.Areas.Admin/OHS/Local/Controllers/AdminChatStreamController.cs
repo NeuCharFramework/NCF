@@ -9,6 +9,9 @@
     修改标识：Senparc - 20260729
     修改描述：v0.2.0 增强后台管理员交互与桌面 Admin Chat 安全同步
 
+    修改标识：Senparc - 20260915
+    修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -103,40 +106,73 @@ public sealed class AdminChatStreamController : ControllerBase
 
         await WriteEventAsync("user-message", AdminChatMessageDto.CreateFromEntity(userMessage), cancellationToken);
 
-        var chunks = Channel.CreateUnbounded<string>(new UnboundedChannelOptions
+        var liveEvents = Channel.CreateUnbounded<AdminChatLiveEvent>(new UnboundedChannelOptions
         {
             SingleReader = true,
             SingleWriter = false,
             AllowSynchronousContinuations = false
         });
 
-        var generationTask = GenerateResponseAsync(
+        var generationTask = request.Mode == AdminChatMode.Harness
+            ? GenerateHarnessResponseAsync(
+                request.SessionId,
+                userId,
+                content,
+                request.AiModelId,
+                liveEvents.Writer,
+                cancellationToken)
+            : GenerateResponseAsync(
             request.SessionId,
             userId,
             content,
             request.AiModelId,
-            chunks.Writer);
+            liveEvents.Writer,
+            cancellationToken);
 
         try
         {
-            await foreach (var chunk in chunks.Reader.ReadAllAsync(cancellationToken).ConfigureAwait(false))
+            await foreach (var liveEvent in liveEvents.Reader.ReadAllAsync(cancellationToken).ConfigureAwait(false))
             {
-                await WriteEventAsync("token", new { text = chunk }, cancellationToken);
+                switch (liveEvent.Kind)
+                {
+                    case "token":
+                        await WriteEventAsync("token", new { text = liveEvent.Text }, cancellationToken);
+                        break;
+                    case "assistant-phase":
+                        await WriteEventAsync("assistant-phase", liveEvent, cancellationToken);
+                        break;
+                    case "trajectory-event":
+                        await WriteEventAsync("trajectory-event", liveEvent, cancellationToken);
+                        break;
+                    case "trajectory-complete":
+                        await WriteEventAsync("trajectory-complete", liveEvent, cancellationToken);
+                        break;
+                }
             }
 
-            var (aiResponse, modelIdentifier) = await generationTask.ConfigureAwait(false);
+            var result = await generationTask.ConfigureAwait(false);
             var assistantMessage = await _messageService.AddMessageAsync(
                 request.SessionId,
                 ChatMessageRoleType.Assistant,
-                aiResponse,
-                modelIdentifier);
+                result.Response,
+                result.ModelIdentifier,
+                result.Harness?.TrajectoryId,
+                result.Harness?.TrajectorySequence);
 
             if (_eventBus != null)
             {
                 await _eventBus.PublishAsync(new AdminChatSyncEvent(userId, request.SessionId, "messages-changed"));
             }
             await WriteEventAsync("assistant-message", AdminChatMessageDto.CreateFromEntity(assistantMessage), cancellationToken);
-            await WriteEventAsync("done", new { sessionId = request.SessionId }, cancellationToken);
+            await WriteEventAsync("done", new
+            {
+                sessionId = request.SessionId,
+                mode = request.Mode,
+                trajectoryId = result.Harness?.TrajectoryId ?? 0,
+                trajectorySequence = result.Harness?.TrajectorySequence ?? 0,
+                trajectoryStatus = result.Harness?.Status,
+                pendingApprovals = result.Harness?.PendingApprovals
+            }, cancellationToken);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
@@ -158,21 +194,67 @@ public sealed class AdminChatStreamController : ControllerBase
         }
     }
 
-    private async Task<(string response, string modelIdentifier)> GenerateResponseAsync(
+    private async Task<AdminChatStreamResult> GenerateResponseAsync(
         int sessionId,
         int userId,
         string content,
         int aiModelId,
-        ChannelWriter<string> writer)
+        ChannelWriter<AdminChatLiveEvent> writer,
+        CancellationToken cancellationToken)
+        {
+            try
+            {
+                var result = await _chatAiService.GenerateResponseAsync(
+                    sessionId,
+                    userId,
+                    content,
+                    aiModelId,
+                    chunk => writer.TryWrite(new AdminChatLiveEvent
+                    {
+                        Kind = "token",
+                        Text = chunk
+                    }),
+                    cancellationToken: cancellationToken);
+                return new AdminChatStreamResult
+                {
+                    Response = result.response,
+                    ModelIdentifier = result.modelIdentifier
+                };
+            }
+            catch (Exception ex)
+            {
+                writer.TryComplete(ex);
+                throw;
+            }
+            finally
+            {
+                writer.TryComplete();
+            }
+        }
+
+    private async Task<AdminChatStreamResult> GenerateHarnessResponseAsync(
+        int sessionId,
+        int userId,
+        string content,
+        int aiModelId,
+        ChannelWriter<AdminChatLiveEvent> writer,
+        CancellationToken cancellationToken)
     {
         try
         {
-            return await _chatAiService.GenerateResponseAsync(
+            var result = await _chatAiService.GenerateNativeHarnessResponseAsync(
                 sessionId,
                 userId,
                 content,
                 aiModelId,
-                chunk => writer.TryWrite(chunk));
+                cancellationToken: cancellationToken,
+                onLiveEvent: liveEvent => writer.TryWrite(liveEvent));
+            return new AdminChatStreamResult
+            {
+                Response = result.response,
+                ModelIdentifier = result.modelIdentifier,
+                Harness = result.harness
+            };
         }
         catch (Exception ex)
         {
@@ -191,6 +273,13 @@ public sealed class AdminChatStreamController : ControllerBase
         await Response.WriteAsync($"event: {eventName}\n", cancellationToken).ConfigureAwait(false);
         await Response.WriteAsync($"data: {serialized}\n\n", cancellationToken).ConfigureAwait(false);
         await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    private sealed class AdminChatStreamResult
+    {
+        public string Response { get; set; }
+        public string ModelIdentifier { get; set; }
+        public AdminChatHarnessResult Harness { get; set; }
     }
 
     private int GetCurrentAdminUserInfoId()

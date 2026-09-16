@@ -1,3 +1,16 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+
+    文件名：AdminChatMessageService.cs
+    文件功能描述：AdminChatMessageService 相关功能实现
+
+
+    创建标识：Senparc - 20260325
+
+    修改标识：Senparc - 20260915
+    修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
+
+----------------------------------------------------------------*/
 using Microsoft.EntityFrameworkCore;
 using Senparc.Areas.Admin.ACL;
 using Senparc.Areas.Admin.Domain.Models;
@@ -64,12 +77,38 @@ namespace Senparc.Areas.Admin.Domain.Services
         /// <param name="roleType">角色类型</param>
         /// <param name="content">消息内容</param>
         /// <param name="modelIdentifier">模型标识符（可选）</param>
-        public async Task<AdminChatMessage> AddMessageAsync(int sessionId, ChatMessageRoleType roleType, string content, string modelIdentifier = null)
+        public async Task<AdminChatMessage> AddMessageAsync(
+            int sessionId,
+            ChatMessageRoleType roleType,
+            string content,
+            string modelIdentifier = null,
+            int? trajectoryId = null,
+            int? trajectorySequence = null)
         {
             var sequence = await GetNextSequenceAsync(sessionId);
-            var message = new AdminChatMessage(sessionId, roleType, content, sequence, modelIdentifier);
+            var message = new AdminChatMessage(
+                sessionId,
+                roleType,
+                content,
+                sequence,
+                modelIdentifier,
+                trajectoryId,
+                trajectorySequence);
             await base.SaveObjectAsync(message);
             return message;
+        }
+
+        public async Task<bool> SetTrajectoryAsync(int messageId, int? trajectoryId, int? trajectorySequence)
+        {
+            var message = await base.GetObjectAsync(m => m.Id == messageId);
+            if (message == null)
+            {
+                return false;
+            }
+
+            message.SetTrajectory(trajectoryId, trajectorySequence);
+            await base.SaveObjectAsync(message);
+            return true;
         }
 
         /// <summary>

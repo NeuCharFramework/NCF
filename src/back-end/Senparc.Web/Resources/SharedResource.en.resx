@@ -199,6 +199,12 @@
   <data name="Download.Status.Unavailable" xml:space="preserve"><value>Temporarily unavailable</value></data>
   <data name="Download.Status.Detected" xml:space="preserve"><value>Detected</value></data>
   <data name="Download.Status.Estimated" xml:space="preserve"><value>estimated</value></data>
+  <data name="Download.Source.Mode" xml:space="preserve"><value>Download source</value></data>
+  <data name="Download.Source.Auto" xml:space="preserve"><value>Auto (local first)</value></data>
+  <data name="Download.Source.Local" xml:space="preserve"><value>Local mirror</value></data>
+  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Download.Status.Md5" xml:space="preserve"><value>MD5 fingerprint</value></data>
+  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>Not available</value></data>
   <data name="Download.Path.Eyebrow" xml:space="preserve"><value>ONE FRAMEWORK · TWO STARTING POINTS</value></data>
   <data name="Download.Path.Title" xml:space="preserve"><value>From ready-made to fully yours</value></data>
   <data name="Download.Path.Description" xml:space="preserve"><value>Whether you need a system now or a product that will evolve for years, NCF gives you a clear and dependable starting point.</value></data>

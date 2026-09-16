@@ -10,6 +10,9 @@
     修改标识：Senparc - 20260813
     修改描述：v0.5.0 集成 NeuCharPivot 与 NeuCharWorkflow 管理能力并优化后台体验
 
+    修改标识：Senparc - 20260829
+    修改描述：v0.7.0 新增 NeuCharPivot 全局浮动调用与工作流分析管理能力
+
 ----------------------------------------------------------------*/
 
 using Senparc.Ncf.Core.Models;
@@ -170,6 +173,8 @@ public class NeuCharPivotLoopTask : EntityBase<int>
 
     public bool UseNeuBell { get; private set; }
 
+    public int? WorkflowId { get; private set; }
+
     public DateTime? NextRunAt { get; private set; }
 
     public DateTime? LastRunAt { get; private set; }
@@ -190,12 +195,18 @@ public class NeuCharPivotLoopTask : EntityBase<int>
         ParametersJson = "{}";
     }
 
-    public void Configure(int intervalSeconds, string parametersJson, bool enabled, bool useNeuBell)
+    public void Configure(
+        int intervalSeconds,
+        string parametersJson,
+        bool enabled,
+        bool useNeuBell,
+        int? workflowId = null)
     {
         IntervalSeconds = Math.Clamp(intervalSeconds, 60, 31_536_000);
         ParametersJson = parametersJson ?? "{}";
         Enabled = enabled;
         UseNeuBell = useNeuBell;
+        WorkflowId = workflowId > 0 ? workflowId : null;
         NextRunAt = enabled ? DateTime.UtcNow.AddSeconds(IntervalSeconds) : null;
         if (!enabled)
         {
