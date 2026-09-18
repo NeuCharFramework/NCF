@@ -1,4 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+
+    文件名：20260915083446_Add_NeuBellWebHookMethodAndBody.cs
+    文件功能描述：数据库迁移代码
+
+
+    创建标识：Senparc - 20260915
+
+    修改标识：Senparc - 20260916
+    修改描述：v0.9.0 增强 Admin Chat 取消与推理轨迹，并扩展 NeuBell WebHook 请求能力
+
+----------------------------------------------------------------*/
+
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 

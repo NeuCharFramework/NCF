@@ -26,6 +26,9 @@
     修改标识：Senparc - 20260915
     修改描述：WebHook 请求方式改为下拉框，新增多行 Body 模板参数
 
+    修改标识：Senparc - 20260916
+    修改描述：v0.9.0 增强 Admin Chat 取消与推理轨迹，并扩展 NeuBell WebHook 请求能力
+
 ----------------------------------------------------------------*/
 
 using Senparc.Ncf.XncfBase;

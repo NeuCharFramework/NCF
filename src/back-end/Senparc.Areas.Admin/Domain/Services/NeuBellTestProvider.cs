@@ -17,6 +17,9 @@
     修改描述：v0.7.1 新增 SendAndGetItem（发送并返回 NeuBellItem），
     供 WebHook 创建通知（item-created）携带完整条目数据
 
+    修改标识：Senparc - 20260916
+    修改描述：v0.9.0 增强 Admin Chat 取消与推理轨迹，并扩展 NeuBell WebHook 请求能力
+
 ----------------------------------------------------------------*/
 
 using Senparc.Ncf.Shared.Abstractions.NeuBell;

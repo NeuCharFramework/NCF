@@ -1,6 +1,6 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
-  
+
     文件名：SystemInfoAppService.cs
     文件功能描述：SystemInfoAppService 相关功能实现
 
@@ -33,6 +33,9 @@
 
     修改标识：Senparc - 20260915
     修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
+
+    修改标识：Senparc - 20260916
+    修改描述：v0.9.0 增强 Admin Chat 取消与推理轨迹，并扩展 NeuBell WebHook 请求能力
 
 ----------------------------------------------------------------*/
 

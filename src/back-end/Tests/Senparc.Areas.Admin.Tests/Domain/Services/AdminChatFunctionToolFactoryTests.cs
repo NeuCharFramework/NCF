@@ -1,6 +1,9 @@
 using Microsoft.Extensions.AI;
+using Senparc.Ncf.XncfBase;
+using Senparc.Ncf.XncfBase.Functions;
 using Senparc.Areas.Admin.Domain.Services;
 using Senparc.Xncf.NeuCharWorkflow.Abstractions.Workflow;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -32,6 +35,51 @@ public class AdminChatFunctionToolFactoryTests
         Assert.AreEqual("Xncf_RecordingPlugin_Echo", function.Name);
         Assert.AreEqual(1, plugin.InvocationCount);
         Assert.AreEqual("AdminChat", plugin.LastValue);
+    }
+
+    [TestMethod]
+    public void Create_ExposesSelectionValuesAndDisplayTextInSchema()
+    {
+        var plugin = new RecordingPlugin();
+        var method = typeof(RecordingPlugin).GetMethod(nameof(RecordingPlugin.Select));
+        var function = AdminChatFunctionToolFactory.Create(
+            method,
+            plugin,
+            "Xncf_RecordingPlugin_Select",
+            "Selects a sandbox template.",
+            new[]
+            {
+                new FunctionParameterInfo
+                {
+                    Name = nameof(SelectionRequest.TemplateKey),
+                    ParameterType = ParameterType.DropDownList,
+                    SelectionList = new SelectionList(
+                        SelectionType.DropDownList,
+                        new[]
+                        {
+                            new SelectionItem("python-exec", "Python Exec", "short Python workload"),
+                            new SelectionItem("csharp-exec", "C# Exec", "short C# workload")
+                        })
+                }
+            });
+
+        using var schema = JsonDocument.Parse(function.JsonSchema.GetRawText());
+        var parameterSchema = FindPropertySchema(schema.RootElement, nameof(SelectionRequest.TemplateKey));
+        Assert.IsNotNull(parameterSchema);
+        CollectionAssert.AreEqual(
+            new[] { "python-exec", "csharp-exec" },
+            parameterSchema.Value.GetProperty("enum").EnumerateArray().Select(item => item.GetString()).ToArray());
+        StringAssert.Contains(parameterSchema.Value.GetProperty("description").GetString(), "Python Exec");
+        StringAssert.Contains(parameterSchema.Value.GetProperty("description").GetString(), "python-exec");
+
+        var result = function.InvokeAsync(new AIFunctionArguments
+        {
+            ["request"] = new SelectionRequest { TemplateKey = "csharp-exec" }
+        }).GetAwaiter().GetResult();
+        var resultText = result is JsonElement resultElement
+            ? resultElement.GetString()
+            : result?.ToString();
+        Assert.AreEqual("csharp-exec", resultText);
     }
 
     [TestMethod]
@@ -111,5 +159,40 @@ public class AdminChatFunctionToolFactoryTests
             LastValue = value;
             return value;
         }
+
+        public string Select(SelectionRequest request) => request.TemplateKey;
+    }
+
+    private sealed class SelectionRequest
+    {
+        public string TemplateKey { get; set; }
+    }
+
+    private static JsonElement? FindPropertySchema(JsonElement schema, string name)
+    {
+        if (schema.ValueKind != JsonValueKind.Object)
+        {
+            return null;
+        }
+
+        if (schema.TryGetProperty("properties", out var properties) &&
+            properties.ValueKind == JsonValueKind.Object)
+        {
+            foreach (var property in properties.EnumerateObject())
+            {
+                if (string.Equals(property.Name, name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return property.Value;
+                }
+
+                var nested = FindPropertySchema(property.Value, name);
+                if (nested.HasValue)
+                {
+                    return nested;
+                }
+            }
+        }
+
+        return null;
     }
 }

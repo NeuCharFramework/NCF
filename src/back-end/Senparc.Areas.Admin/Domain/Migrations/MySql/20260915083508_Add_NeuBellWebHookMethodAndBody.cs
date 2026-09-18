@@ -7,6 +7,9 @@
     创建标识：Senparc - 20260915
     修改描述：v0.7.1 WebHook 请求方式（GET/POST/PUT）与请求体模板迁移（MySql 手工编写，因无可用数据库实例）
 
+    修改标识：Senparc - 20260916
+    修改描述：v0.9.0 增强 Admin Chat 取消与推理轨迹，并扩展 NeuBell WebHook 请求能力
+
 ----------------------------------------------------------------*/
 
 using Microsoft.EntityFrameworkCore.Migrations;

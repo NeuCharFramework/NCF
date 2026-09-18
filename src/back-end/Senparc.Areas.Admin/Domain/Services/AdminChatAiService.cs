@@ -28,6 +28,12 @@
     修改标识：Senparc - 20260915
     修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
 
+    修改标识：Senparc - 20260916
+    修改描述：v0.9.0 增强 Admin Chat 取消与推理轨迹，并扩展 NeuBell WebHook 请求能力
+
+    修改标识：Senparc - 20260917
+    修改描述：v0.10.0 增强 Admin Chat FunctionRender 参数元数据与工具调用兼容
+
 ----------------------------------------------------------------*/
 
 using Microsoft.Extensions.Logging;
@@ -47,6 +53,7 @@ using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.AIKernel.Domain.Models.DatabaseModel.Dto;
 using Senparc.Xncf.AIKernel.Domain.Services;
 using Senparc.Ncf.XncfBase.FunctionRenders;
+using Senparc.Ncf.XncfBase.Functions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -395,14 +402,9 @@ namespace Senparc.Areas.Admin.Domain.Services
                     {
                         Name = $"AdminChatHarness-{sessionId}",
                         Description = "NeuCharFramework Admin Chat long-running task agent",
-                        ChatOptions = new ChatOptions
-                        {
-                            Instructions = BuildSystemMessage(modules),
-                            Tools = build.Functions.Count > 0 ? build.Functions.Cast<AITool>().ToList() : null,
-                            MaxOutputTokens = 4_000,
-                            TopP = 0.9f,
-                            Temperature = 0.4f
-                        },
+                        ChatOptions = BuildHarnessChatOptions(
+                            modules,
+                            build.Functions),
                         DisableFileAccess = true,
                         DisableFileMemory = true,
                         DisableAgentSkillsProvider = true,
@@ -589,7 +591,7 @@ namespace Senparc.Areas.Admin.Domain.Services
                 timeout ?? TimeSpan.FromMinutes(10),
                 cancellationToken,
                 [new ChatMessage(ChatRole.User, [responseContent])],
-                onLiveEvent);
+                onLiveEvent: onLiveEvent);
             return (result.FinalText, modelIdentifier, result);
         }
 
@@ -619,14 +621,9 @@ namespace Senparc.Areas.Admin.Domain.Services
                     {
                         Name = $"AdminChatHarness-{sessionId}",
                         Description = "NeuCharFramework Admin Chat long-running task agent",
-                        ChatOptions = new ChatOptions
-                        {
-                            Instructions = BuildSystemMessage(modules),
-                            Tools = build.Functions.Count > 0 ? build.Functions.Cast<AITool>().ToList() : null,
-                            MaxOutputTokens = 4_000,
-                            TopP = 0.9f,
-                            Temperature = 0.4f
-                        },
+                        ChatOptions = BuildHarnessChatOptions(
+                            modules,
+                            build.Functions),
                         DisableFileAccess = true,
                         DisableFileMemory = true,
                         DisableAgentSkillsProvider = true,
@@ -637,6 +634,24 @@ namespace Senparc.Areas.Admin.Domain.Services
                 serializedSession: serializedSession,
                 cancellationToken: cancellationToken);
             return (harnessAgent, modelIdentifier);
+        }
+
+        private static ChatOptions BuildHarnessChatOptions(
+            List<AdminChatSessionModule> modules,
+            IReadOnlyCollection<AIFunction> functions)
+        {
+            var chatOptions = new ChatOptions
+            {
+                Instructions = BuildSystemMessage(modules),
+                Tools = functions != null && functions.Count > 0
+                    ? functions.Cast<AITool>().ToList()
+                    : null,
+                MaxOutputTokens = 4_000,
+                TopP = 0.9f,
+                Temperature = 0.4f
+            };
+
+            return chatOptions;
         }
 
         private static JsonElement? ParseSessionState(string sessionStateJson)
@@ -1153,11 +1168,30 @@ namespace Senparc.Areas.Admin.Domain.Services
                             var kernelFunction = KernelFunctionFactory.CreateFromMethod(functionBag.MethodInfo, plugin, options);
                             kernelFunctions.Add(kernelFunction);
 
+                            IReadOnlyList<FunctionParameterInfo> parameterInfos;
+                            try
+                            {
+                                parameterInfos = await FunctionHelper.GetFunctionParameterInfoAsync(
+                                    _serviceProvider,
+                                    functionBag,
+                                    true).ConfigureAwait(false);
+                            }
+                            catch (Exception metadataException)
+                            {
+                                _logger.LogWarning(
+                                    metadataException,
+                                    "读取 FunctionRender 参数选项失败，将使用基础 schema：Plugin={PluginType}, Method={MethodName}",
+                                    pluginType.FullName,
+                                    functionBag.MethodInfo.Name);
+                                parameterInfos = Array.Empty<FunctionParameterInfo>();
+                            }
+
                             aiFunctions.Add(AdminChatFunctionToolFactory.Create(
                                 method: functionBag.MethodInfo,
                                 target: plugin,
                                 name: BuildFunctionToolName(pluginName, options.FunctionName),
-                                description: options.Description));
+                                description: options.Description,
+                                parameterInfos: parameterInfos));
                         }
                         catch (Exception ex)
                         {
