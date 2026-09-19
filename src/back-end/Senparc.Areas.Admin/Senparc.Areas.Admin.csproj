@@ -15,6 +15,7 @@
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<DocumentationFile>../Senparc.Web/App_Data/ApiDocXml/Senparc.Areas.Admin.XML</DocumentationFile>
 		<Configurations>Debug;Release;Debug-Dapr;ModifyPublish;ModifyPublish</Configurations>
+		<NoWarn>$(NoWarn);MEAI001;MAAI001</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
