@@ -1,4 +1,4 @@
-var chatApp = new Vue({
+﻿var chatApp = new Vue({
   el: '#app',
   mixins: [window.ChatLauncherMixin],
   data() {
@@ -40,7 +40,11 @@ var chatApp = new Vue({
       currentUserId: 0,
       autoScrollEnabled: true,
       isManageMode: false,
-      selectedMessageIds: []
+      selectedMessageIds: [],
+      isSuperAdmin: false,
+      userStatsDrawerVisible: false,
+      userStatsLoading: false,
+      userStatsList: []
     };
   },
   computed: {
@@ -52,6 +56,7 @@ var chatApp = new Vue({
     if (window.INITIAL_DATA) {
       this.currentSessionId = window.INITIAL_DATA.sessionId || 0;
       this.currentUserId = window.INITIAL_DATA.currentUserId || 0;
+      this.isSuperAdmin = !!window.INITIAL_DATA.isSuperAdmin;
       
       if (window.INITIAL_DATA.initialMessage) {
         const initialMessage = decodeURIComponent(window.INITIAL_DATA.initialMessage);
@@ -96,6 +101,27 @@ var chatApp = new Vue({
     }
   },
   methods: {
+    openUserStatsDrawer() {
+      this.userStatsDrawerVisible = true;
+      this.loadUserStats();
+    },
+    async loadUserStats() {
+      this.userStatsLoading = true;
+      try {
+        const response = await service.get('/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.GetUserSessionStatsAsync');
+        if (response.data && response.data.success && response.data.data) {
+          this.userStatsList = response.data.data.stats || [];
+        } else {
+          this.userStatsList = [];
+          this.$notify({ title: ncfT('Admin.Common.Error'), message: (response.data && response.data.msg) || ncfT('AdminChat.UserStatsLoadFailed'), type: 'error', duration: 2500 });
+        }
+      } catch (error) {
+        console.error('加载用户用量统计失败:', error);
+        this.$notify({ title: ncfT('Admin.Common.Error'), message: ncfT('AdminChat.UserStatsLoadFailed'), type: 'error', duration: 2500 });
+      } finally {
+        this.userStatsLoading = false;
+      }
+    },
     async loadAiModelOptions() {
       this.loadingAiModelOptions = true;
       try {

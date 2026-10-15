@@ -41,15 +41,19 @@
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.15.10" />
 		<PackageReference Include="Senparc.Xncf.Terminal" Version="0.22.10" />
 		<PackageReference Include="Senparc.Xncf.XncfModuleManager" Version="0.15.10" />
-		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.16.2" />
+		<PackageReference Include="Senparc.Xncf.AIKernel" Version="0.16.4" />
 		<PackageReference Include="Senparc.Xncf.XncfBuilder" Version="0.41.4" />
 		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.19.7" />
 		<PackageReference Include="Senparc.Xncf.AgentsManager" Version="0.18.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Senparc.Areas.Admin\Senparc.Areas.Admin.csproj" />
+		<ProjectReference Include="..\..\..\..\NcfPackageSources\src\Extensions\Senparc.Xncf.Workspace\Senparc.Xncf.Workspace.csproj" />
 		<!--<ProjectReference Include="..\Senparc.Aspire.ServiceDefaults\Senparc.Aspire.ServiceDefaults.csproj" />-->
 		<!--<ProjectReference Include="..\Senparc.Xncf.Accounts\Senparc.Xncf.Accounts.csproj" />-->
 		<ProjectReference Include="..\Senparc.Xncf.Installer\Senparc.Xncf.Installer.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="App_Data/**/*.cs" />
 	</ItemGroup>
 </Project>

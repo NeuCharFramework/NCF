@@ -33,6 +33,8 @@ namespace Senparc.Areas.Admin.Domain.Services.AIPlugins
     /// </summary>
     public class ModuleAssistantPlugin
     {
+        private const int MaxToolResultCharacters = 8000;
+
         private readonly List<AdminChatSessionModule> _sessionModules;
 
         /// <summary>
@@ -67,7 +69,7 @@ namespace Senparc.Areas.Admin.Domain.Services.AIPlugins
                     sb.AppendLine($"  菜单名: {register.MenuName}");
                 }
             }
-            return sb.ToString();
+            return LimitToolResult(sb.ToString());
         }
 
         /// <summary>
@@ -120,7 +122,7 @@ namespace Senparc.Areas.Admin.Domain.Services.AIPlugins
             {
                 sb.AppendLine("（该模块已关联会话，但运行时 XncfRegisterManager 中未找到其注册，可能已卸载。）");
             }
-            return sb.ToString();
+            return LimitToolResult(sb.ToString());
         }
 
         /// <summary>
@@ -187,7 +189,7 @@ namespace Senparc.Areas.Admin.Domain.Services.AIPlugins
                 sb.AppendLine("此模块没有独立数据库（未实现 IXncfDatabase 接口）。");
                 sb.AppendLine("该模块可能使用公共数据库，或不涉及持久化存储。");
             }
-            return sb.ToString();
+            return LimitToolResult(sb.ToString());
         }
 
         /// <summary>
@@ -213,7 +215,18 @@ namespace Senparc.Areas.Admin.Domain.Services.AIPlugins
                 if (!string.IsNullOrWhiteSpace(r.Description))
                     sb.AppendLine($"  {r.Description}");
             }
-            return sb.ToString();
+            return LimitToolResult(sb.ToString());
+        }
+
+        private static string LimitToolResult(string value)
+        {
+            if (value.Length <= MaxToolResultCharacters)
+            {
+                return value;
+            }
+
+            const string truncated = "\n[结果过长，已截断]";
+            return value.Substring(0, MaxToolResultCharacters - truncated.Length) + truncated;
         }
 
         /// <summary>

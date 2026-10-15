@@ -1,4 +1,4 @@
-﻿/*----------------------------------------------------------------
+/*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
 
     文件名：GetDefaultInstallOptionsResponseDto.cs
@@ -9,6 +9,9 @@
 
     修改标识：Senparc - 20260916
     修改描述：v0.5.7 整理安装器 DTO 归属并保持安装服务接口兼容
+
+    修改标识：Senparc - 20261005
+    修改描述：v0.5.9 0.5.9 Merge remote-tracking branch 'origin/Developer-MAF-V3' into Developer-MAF-V3-Spark
 
 ----------------------------------------------------------------*/
 

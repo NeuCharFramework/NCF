@@ -1,0 +1,90 @@
+/*----------------------------------------------------------------
+    文件名：Access.css
+    文件功能描述：Function 全局 Provit 访问控制页样式
+
+    创建标识：Senparc - 20260917
+    修改描述：v0.9.1 新增 Function 全局 Provit 数据库访问策略映射
+----------------------------------------------------------------*/
+
+.access-header-actions { display: flex; align-items: center; gap: 8px; }
+.access-header-actions .el-input { width: 240px; }
+
+.access-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+.access-toolbar-summary { display: flex; align-items: center; gap: 8px; }
+.access-toolbar-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+.access-table .access-muted { color: #a0a4aa; font-size: 12px; }
+
+.access-module, .access-function { min-width: 0; }
+.access-module strong, .access-function strong {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #303133;
+}
+.access-module small, .access-function small {
+    display: block;
+    margin-top: 2px;
+    color: #a0a4aa;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.access-module-removed, .access-function-removed { color: #f56c6c; }
+.access-module-tags, .access-chips { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+.access-chip .fa { margin-right: 3px; }
+.access-function-desc { margin-top: 3px; color: #909399; }
+.access-remark, .access-time { display: block; margin-top: 4px; color: #909399; font-size: 12px; }
+
+.access-effective small { display: block; margin-top: 4px; }
+
+/* 详情弹窗 */
+.access-detail h4 { margin: 16px 0 8px; color: #303133; font-size: 13px; }
+.access-detail h4:first-child { margin-top: 0; }
+.access-detail-title .fa { margin-right: 5px; color: #8c52ff; }
+.access-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+    padding: 10px 12px;
+    background: #fafbfc;
+    border: 1px solid #f0f2f5;
+    border-radius: 6px;
+}
+.access-detail-grid > div { min-width: 0; }
+.access-detail-wide { grid-column: 1 / -1; }
+.access-detail-grid label {
+    display: block;
+    margin-bottom: 4px;
+    color: #909399;
+    font-size: 12px;
+}
+.access-detail-grid div > div { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.access-detail-grid small { display: block; margin-top: 3px; color: #a0a4aa; font-size: 12px; }
+.access-warn { color: #f56c6c; }
+.access-warn small { color: #a0a4aa; }
+
+.access-form { margin-top: 16px; }
+.access-mode-hint {
+    margin-top: 6px;
+    padding: 6px 10px;
+    background: #f4f0ff;
+    border-radius: 4px;
+    color: #6b4fd8;
+    font-size: 12px;
+    line-height: 1.5;
+}
+.access-batch-tip { margin: 0 0 14px; color: #606266; font-size: 13px; line-height: 1.6; }
+
+@media (max-width: 720px) {
+    .access-detail-grid { grid-template-columns: 1fr; }
+}

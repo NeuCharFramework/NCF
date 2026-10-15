@@ -1019,3 +1019,46 @@
   color: #e6a23c;
   font-size: 12px;
 }
+
+/* ===== 超级管理员：用户用量统计 ===== */
+.user-stats-button {
+    margin-left: 8px;
+}
+.user-stats-drawer-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #303133;
+}
+.user-stats-drawer-title .fa {
+    margin-right: 8px;
+    color: #e6a23c;
+}
+.user-stats-body {
+    padding: 4px 8px;
+}
+.user-stats-tip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #909399;
+    margin-bottom: 12px;
+    background: #fdf6ec;
+    border: 1px solid #faecd8;
+    border-radius: 4px;
+    padding: 8px 12px;
+}
+.user-stats-tip .el-icon-info {
+    color: #e6a23c;
+}
+.user-stats-user-cell {
+    line-height: 1.3;
+}
+.user-stats-user-name {
+    font-weight: 600;
+    color: #303133;
+}
+.user-stats-user-real {
+    font-size: 12px;
+    color: #909399;
+}

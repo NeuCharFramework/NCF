@@ -1,0 +1,96 @@
+@page
+@model Senparc.Areas.Admin.Areas.Admin.Pages.WeixinClaw.IndexModel
+@{
+    ViewData["Title"] = "个人微信集成";
+    Layout = "_Layout_Vue";
+}
+
+@section breadcrumbs {
+    <el-breadcrumb-item>Admin</el-breadcrumb-item>
+    <el-breadcrumb-item>个人微信集成</el-breadcrumb-item>
+}
+
+<style>
+    .weixin-claw-integration { padding: 16px; }
+    .weixin-claw-integration .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 18px; }
+    .weixin-claw-integration .status-item { padding: 14px; border: 1px solid #ebeef5; background: #fff; }
+    .weixin-claw-integration .status-label { color: #909399; font-size: 12px; }
+    .weixin-claw-integration .status-value { margin-top: 6px; font-size: 16px; }
+    .weixin-claw-integration .guide { padding: 14px; margin-bottom: 18px; background: #f5f7fa; border-left: 3px solid #409eff; line-height: 1.8; }
+    .weixin-claw-integration code { padding: 2px 5px; background: #e4e7ed; }
+</style>
+
+<div class="weixin-claw-integration">
+    <h2>个人微信集成</h2>
+
+    <div class="status-grid">
+        <div class="status-item">
+            <div class="status-label">集成状态</div>
+            <div class="status-value">
+                <el-tag type="@(Model.PageData.Enabled ? "success" : "info")">
+                    @(Model.PageData.Enabled ? "已启用" : "已停用")
+                </el-tag>
+            </div>
+        </div>
+        <div class="status-item">
+            <div class="status-label">当前 Admin 用户 Id</div>
+            <div class="status-value">@Model.PageData.CurrentAdminUserId</div>
+        </div>
+        <div class="status-item">
+            <div class="status-label">数据库绑定配置</div>
+            <div class="status-value">
+                <el-tag type="@(Model.PageData.BindingProfileCount > 0 ? "success" : "danger")">
+                    @Model.PageData.BindingProfileCount 条启用
+                </el-tag>
+            </div>
+        </div>
+    </div>
+
+    <div class="guide">
+        <div><strong>首次绑定</strong></div>
+        <div>在微信管理模块页面打开“绑定配置”，为每个微信账号创建绑定配置：</div>
+        <div>配置名称、AdminUserId、绑定码、WorkflowId 及 NeuBell/Workflow 权限。</div>
+        <div>绑定码只保存为不可逆哈希；创建或修改后，将绑定码发送给目标微信用户。</div>
+        <div>在手机端发送 <code>@(Model.PageData.CommandPrefix)bind &lt;绑定码&gt;</code>。</div>
+        <div>微信通道页面：<a href="/Admin/WeixinManager/WeixinClaw">个人微信 Bot</a></div>
+    </div>
+
+    <h3>当前可用 Workflow</h3>
+    <p class="claw-muted">
+        当前按 AdminUserId=@Model.PageData.WorkflowUserId 查询；手机端发送
+        <code>@(Model.PageData.CommandPrefix)workflow</code> 也可以获取此列表。
+    </p>
+
+    @if (Model.PageData.Workflows.Count == 0)
+    {
+        <el-empty description="当前没有可用 Workflow"></el-empty>
+    }
+    else
+    {
+        <el-table :data="workflows" border style="width:100%">
+            <el-table-column prop="id" label="WorkflowID" width="130"></el-table-column>
+            <el-table-column prop="name" label="名称" min-width="180"></el-table-column>
+            <el-table-column prop="description" label="描述" min-width="300"></el-table-column>
+            <el-table-column label="手机命令" min-width="260">
+                <template slot-scope="scope">
+                    <code>@(Model.PageData.CommandPrefix)workflow {{scope.row.id}} 输入内容</code>
+                </template>
+            </el-table-column>
+        </el-table>
+    }
+</div>
+
+@section scripts {
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    workflows: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.PageData.Workflows,
+                        new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web)))
+                };
+            }
+        });
+    </script>
+}

@@ -1,3 +1,17 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+
+    文件名：AdminChatSessionService.cs
+    文件功能描述：AdminChatSessionService.cs implementation and project behavior.
+
+
+    创建标识：Senparc - 20260325
+
+    修改标识：Senparc - 20261005
+    修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
+
+----------------------------------------------------------------*/
+
 using Microsoft.EntityFrameworkCore;
 using Senparc.Areas.Admin.ACL;
 using Senparc.Areas.Admin.Domain.Models;
@@ -133,5 +147,40 @@ namespace Senparc.Areas.Admin.Domain.Services
             var sessions = await base.GetFullListAsync(s => s.UserId == userId && s.Status == status);
             return sessions.Count();
         }
+
+        /// <summary>
+        /// 按用户统计会话数量（管理端监控用，仅返回数量与最后活跃时间，不包含任何会话/消息内容）
+        /// </summary>
+        public async Task<List<AdminChatUserSessionStat>> GetUserSessionStatsAsync()
+        {
+            var db = base.BaseData.BaseDB.BaseDataContext;
+            var stats = await db.Set<AdminChatSession>()
+                .AsNoTracking()
+                .GroupBy(s => s.UserId)
+                .Select(g => new AdminChatUserSessionStat
+                {
+                    UserId = g.Key,
+                    TotalSessionCount = g.Count(),
+                    ActiveSessionCount = g.Count(s => s.Status == ChatSessionStatus.Active),
+                    ArchivedSessionCount = g.Count(s => s.Status == ChatSessionStatus.Archived),
+                    DeletedSessionCount = g.Count(s => s.Status == ChatSessionStatus.Deleted),
+                    LastActiveTime = g.Max(s => s.LastMessageTime)
+                })
+                .ToListAsync();
+            return stats;
+        }
+    }
+
+    /// <summary>
+    /// 单个用户的 AdminChat 会话统计（管理端监控用，仅含数量，不含内容）
+    /// </summary>
+    public class AdminChatUserSessionStat
+    {
+        public int UserId { get; set; }
+        public int TotalSessionCount { get; set; }
+        public int ActiveSessionCount { get; set; }
+        public int ArchivedSessionCount { get; set; }
+        public int DeletedSessionCount { get; set; }
+        public DateTime LastActiveTime { get; set; }
     }
 }

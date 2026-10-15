@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -596,4 +596,21 @@
     <value>No sortable menus or pages</value>
   </data>
   <data name="Admin.Footer.NeuBellWebHookSettings" xml:space="preserve"><value>WebHook Settings</value></data>
+  <data name="AdminChat.UserStats" xml:space="preserve"><value>Usage Stats</value></data>
+  <data name="AdminChat.UserStatsTitle" xml:space="preserve"><value>User Usage Statistics (AdminChat)</value></data>
+  <data name="AdminChat.UserStatsTip" xml:space="preserve"><value>Only the per-account session/message counts are shown. No session or message content is exposed.</value></data>
+  <data name="AdminChat.UserStatsCol.User" xml:space="preserve"><value>Account</value></data>
+  <data name="AdminChat.UserStatsCol.Total" xml:space="preserve"><value>Sessions</value></data>
+  <data name="AdminChat.UserStatsCol.Active" xml:space="preserve"><value>Active</value></data>
+  <data name="AdminChat.UserStatsCol.Archived" xml:space="preserve"><value>Archived</value></data>
+  <data name="AdminChat.UserStatsCol.Deleted" xml:space="preserve"><value>Deleted</value></data>
+  <data name="AdminChat.UserStatsCol.Messages" xml:space="preserve"><value>Messages</value></data>
+  <data name="AdminChat.UserStatsCol.LastActive" xml:space="preserve"><value>Last Active</value></data>
+  <data name="AdminChat.UserStatsLoadFailed" xml:space="preserve"><value>Failed to load user usage statistics</value></data>
+  <data name="AdminChat.SuperAdminOnly" xml:space="preserve"><value>Only super administrators can view per-account usage statistics</value></data>
+  <data name="Tenant.AdminUserCount" xml:space="preserve"><value>Admins</value></data>
+  <data name="Tenant.DeleteCurrentTenantNotAllowed" xml:space="preserve"><value>You cannot delete the tenant currently in use!</value></data>
+  <data name="Tenant.DeleteLastTenantNotAllowed" xml:space="preserve"><value>The system must keep at least one enabled tenant; the last tenant cannot be deleted!</value></data>
+  <data name="Tenant.DeleteHasAdminUsers" xml:space="preserve"><value>Tenant {0} still has {1} admin account(s). Reassign or delete them before deleting the tenant!</value></data>
+  <data name="Tenant.DeleteNotFound" xml:space="preserve"><value>Tenant not found!</value></data>
 </root>

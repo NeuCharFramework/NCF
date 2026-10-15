@@ -146,7 +146,7 @@
   <data name="Home.Introduction.Line1" xml:space="preserve"><value>NCF（NeuCharFramework）是一整套可用于构建基础项目的企业级通用 .NET 框架，</value></data>
   <data name="Home.Introduction.Line2" xml:space="preserve"><value>严格遵循 DDD 设计模式，包含基础的缓存、数据库、模型、验证及配套管理后台，</value></data>
   <data name="Home.Introduction.Line3" xml:space="preserve"><value>高度模块化，具有高度的可扩展性和耐造性。</value></data>
-  <data name="Home.Notice.Framework" xml:space="preserve"><value>NCF 全面支持 .NET 8.0。</value></data>
+  <data name="Home.Notice.Framework" xml:space="preserve"><value>NeuCharFramework 全面支持 .NET 10.0+</value></data>
   <data name="Home.Notice.Databases" xml:space="preserve"><value>目前已支持 SQLite、SQL Server、MySQL、PostgreSQL、Oracle、DM（达梦）等数据库，</value></data>
   <data name="Home.Notice.Feedback" xml:space="preserve"><value>更多数据库陆续添加中，欢迎反馈您的需求！</value></data>
   <data name="Home.CurrentTenant" xml:space="preserve"><value>当前租户：</value></data>

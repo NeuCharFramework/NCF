@@ -159,6 +159,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
             {
                 Console.WriteLine("=== NCF === 修改数据库配置错误：" + e.ToString());
                 LogUtility.WebLogger.ErrorFormat("SenparcConfigs.Configs 修改错误：" + e.Message, e);
+                throw;
             }
 
             //清空数据库配置缓存

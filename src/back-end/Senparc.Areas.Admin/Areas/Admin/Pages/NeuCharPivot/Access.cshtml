@@ -1,0 +1,238 @@
+@page
+@model Senparc.Areas.Admin.Areas.Admin.Pages.NeuCharPivot.AccessModel
+@{
+    ViewData["Title"] = "NeuCharPivot · 访问控制";
+    Layout = "_Layout_Vue";
+}
+
+@section breadcrumbs {
+    <el-breadcrumb-item>NeuCharPivot</el-breadcrumb-item>
+    <el-breadcrumb-item>访问控制</el-breadcrumb-item>
+}
+
+@section Style {
+    <link rel="stylesheet" href="~/css/Admin/Pages/NeuCharPivot/common.css" />
+    <link rel="stylesheet" href="~/css/Admin/Pages/NeuCharPivot/Access.css" />
+}
+
+<div class="neuchar-page pivot-access" v-loading="loading">
+    <header class="neuchar-page-header">
+        <div>
+            <h2>Function 全局 Provit 访问控制</h2>
+            <p>为任意 XNCF 模块的 Function 设置数据库访问策略，绑定用户 / 角色 / 权限码。数据库策略存在时覆盖代码属性（AllowGlobalPivot / GlobalPivotRoleCodes / GlobalPivotPermissionCodes）；模块被清除后策略冗余保留，模块重装后自动继续生效，仅手动清除才会删除。</p>
+        </div>
+        <div class="access-header-actions">
+            <el-input v-model="keyword" clearable prefix-icon="el-icon-search" placeholder="搜索模块 / Function"></el-input>
+            <el-button icon="el-icon-refresh" @@click="load">刷新</el-button>
+        </div>
+    </header>
+
+    <div class="access-toolbar">
+        <div class="access-toolbar-summary">
+            <el-tag size="small">Function 共 {{items.length}} 个</el-tag>
+            <el-tag size="small" type="primary">数据库策略 {{policyCount}} 条</el-tag>
+            <el-tag size="small" type="warning">孤儿策略 {{orphanCount}} 条</el-tag>
+        </div>
+        <div class="access-toolbar-actions">
+            <el-button size="small" type="success" plain icon="el-icon-unlock" :disabled="!selection.length" @@click="batchApply('apply-open')">批量开放</el-button>
+            <el-button size="small" type="warning" plain icon="el-icon-user" :disabled="!selection.length" @@click="openBatchRestrict">批量受限</el-button>
+            <el-button size="small" type="danger" plain icon="el-icon-lock" :disabled="!selection.length" @@click="batchApply('apply-deny')">批量禁用</el-button>
+            <el-button size="small" plain icon="el-icon-refresh-left" :disabled="!selection.length" @@click="batchApply('apply-inherit')">批量恢复继承</el-button>
+            <el-button size="small" type="danger" plain icon="el-icon-delete" :disabled="!selection.length" @@click="batchApply('clear')">批量清除</el-button>
+        </div>
+    </div>
+
+    <el-table :data="filteredItems" border stripe size="small" row-key="rowKey"
+              @@selection-change="onSelectionChange" class="access-table">
+        <el-table-column type="selection" width="42" :reserve-selection="true"></el-table-column>
+        <el-table-column label="模块" min-width="180">
+            <template slot-scope="scope">
+                <div class="access-module">
+                    <strong v-if="!scope.row.orphan">{{scope.row.moduleName || scope.row.moduleUid}}</strong>
+                    <strong v-else class="access-module-removed">{{scope.row.moduleUid}}</strong>
+                    <small>{{scope.row.moduleUid}}</small>
+                    <div class="access-module-tags">
+                        <el-tag v-if="scope.row.moduleVersion" size="mini" type="info">{{scope.row.moduleVersion}}</el-tag>
+                        <el-tag v-if="scope.row.orphan" size="mini" type="danger">模块已清除</el-tag>
+                        <el-tag v-else-if="scope.row.moduleAvailable === false" size="mini" type="warning">模块不可用</el-tag>
+                    </div>
+                </div>
+            </template>
+        </el-table-column>
+        <el-table-column label="Function" min-width="200">
+            <template slot-scope="scope">
+                <div class="access-function">
+                    <strong v-if="!scope.row.orphan">{{scope.row.functionName || scope.row.functionKey}}</strong>
+                    <strong v-else class="access-function-removed">{{scope.row.functionKey}}</strong>
+                    <small>{{scope.row.functionKey}}</small>
+                    <small v-if="scope.row.functionDescription" class="access-function-desc">{{scope.row.functionDescription}}</small>
+                </div>
+            </template>
+        </el-table-column>
+        <el-table-column label="代码基线" min-width="190">
+            <template slot-scope="scope">
+                <template v-if="!scope.row.orphan">
+                    <el-tag size="mini" :type="scope.row.code.allowGlobalPivot === true ? 'success' : 'info'">
+                        {{scope.row.code.allowGlobalPivot === true ? '允许全局' : '未声明全局'}}
+                    </el-tag>
+                    <div class="access-chips">
+                        <el-tag v-for="role in (scope.row.code.roleCodes || [])" :key="'cr-' + role" size="mini" type="warning" class="access-chip">{{role}}</el-tag>
+                        <el-tag v-for="code in (scope.row.code.permissionCodes || [])" :key="'cp-' + code" size="mini" type="primary" class="access-chip">{{code}}</el-tag>
+                    </div>
+                    <small v-if="!(scope.row.code.roleCodes || []).length && !(scope.row.code.permissionCodes || []).length && scope.row.code.allowGlobalPivot === true" class="access-muted">任意登录管理员</small>
+                </template>
+                <span v-else class="access-muted">—</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="数据库策略" min-width="230">
+            <template slot-scope="scope">
+                <template v-if="scope.row.db">
+                    <el-tag size="mini" :type="modeType(scope.row.db.accessMode)">{{modeLabel(scope.row.db.accessMode)}}</el-tag>
+                    <div class="access-chips">
+                        <el-tag v-for="role in (scope.row.db.roleCodes || [])" :key="'dr-' + role" size="mini" type="warning" class="access-chip"><i class="fa fa-users"></i> {{role}}</el-tag>
+                        <el-tag v-for="code in (scope.row.db.permissionCodes || [])" :key="'dp-' + code" size="mini" type="primary" class="access-chip"><i class="fa fa-key"></i> {{code}}</el-tag>
+                        <el-tag v-for="uid in (scope.row.db.userIds || [])" :key="'du-' + uid" size="mini" type="success" class="access-chip"><i class="fa fa-user"></i> {{userLabel(uid)}}</el-tag>
+                    </div>
+                    <small v-if="scope.row.db.remark" class="access-remark">备注：{{scope.row.db.remark}}</small>
+                    <small v-if="scope.row.db.lastUpdateTime" class="access-time">更新于 {{formatTime(scope.row.db.lastUpdateTime)}}</small>
+                </template>
+                <span v-else class="access-muted">未设置（按代码基线）</span>
+            </template>
+        </el-table-column>
+        <el-table-column label="生效策略" width="130">
+            <template slot-scope="scope">
+                <div class="access-effective">
+                    <el-tag size="mini" :type="effectiveType(scope.row)">{{effectiveLabel(scope.row)}}</el-tag>
+                    <small class="access-muted">{{scope.row.effective.effectiveSource === 'db' ? '来源：数据库策略' : (scope.row.orphan ? '重装后生效' : '来源：代码属性')}}</small>
+                </div>
+            </template>
+        </el-table-column>
+        <el-table-column label="操作" width="150" fixed="right">
+            <template slot-scope="scope">
+                <el-button size="mini" type="primary" plain icon="el-icon-edit" @@click="openEdit(scope.row)">设置</el-button>
+                <el-button size="mini" type="danger" plain icon="el-icon-delete"
+                           :disabled="!scope.row.db" @@click="clearPolicy(scope.row)">清除</el-button>
+            </template>
+        </el-table-column>
+    </el-table>
+
+    <el-dialog title="设置全局 Provit 访问策略" :visible.sync="editVisible" width="680px" :close-on-click-modal="false">
+        <div v-if="editing" class="access-detail">
+            <h4 class="access-detail-title"><i class="fa fa-cube"></i> 目标信息</h4>
+            <div class="access-detail-grid">
+                <div><label>模块</label>
+                    <div v-if="!editing.orphan">{{editing.moduleName || editing.moduleUid}}<small>{{editing.moduleUid}} · {{editing.moduleVersion || '未知版本'}}</small></div>
+                    <div v-else class="access-warn"><el-tag size="mini" type="danger">模块已清除</el-tag> {{editing.moduleUid}}<small>策略保存后冗余保留，模块重装后自动生效</small></div>
+                </div>
+                <div><label>Function</label>
+                    <div v-if="!editing.orphan">{{editing.functionName || editing.functionKey}}<small>{{editing.functionKey}}</small></div>
+                    <div v-else class="access-warn">{{editing.functionKey}}<small>Function 已不存在，策略冗余保留</small></div>
+                </div>
+                <div v-if="!editing.orphan" class="access-detail-wide"><label>说明</label><div>{{editing.functionDescription || '（无）'}}</div></div>
+            </div>
+
+            <h4 class="access-detail-title"><i class="fa fa-code"></i> 代码基线（FunctionRenderAttribute）</h4>
+            <div v-if="!editing.orphan" class="access-detail-grid">
+                <div><label>AllowGlobalPivot</label>
+                    <el-tag size="mini" :type="editing.code.allowGlobalPivot === true ? 'success' : 'info'">{{editing.code.allowGlobalPivot === true ? '允许出现在全局 Provit' : '不允许出现在全局 Provit'}}</el-tag>
+                </div>
+                <div class="access-detail-wide"><label>GlobalPivotRoleCodes</label>
+                    <div><el-tag v-for="role in (editing.code.roleCodes || [])" :key="'br-' + role" size="mini" type="warning" class="access-chip">{{role}}</el-tag><span v-if="!(editing.code.roleCodes || []).length" class="access-muted">（无）</span></div>
+                </div>
+                <div class="access-detail-wide"><label>GlobalPivotPermissionCodes</label>
+                    <div><el-tag v-for="code in (editing.code.permissionCodes || [])" :key="'bp-' + code" size="mini" type="primary" class="access-chip">{{code}}</el-tag><span v-if="!(editing.code.permissionCodes || []).length" class="access-muted">（无）</span></div>
+                </div>
+            </div>
+            <div v-else class="access-muted">模块已清除，无法读取代码基线；策略以数据库记录为准。</div>
+
+            <h4 class="access-detail-title"><i class="fa fa-database"></i> 当前数据库策略</h4>
+            <div v-if="editing.db" class="access-detail-grid">
+                <div><label>模式</label><el-tag size="mini" :type="modeType(editing.db.accessMode)">{{modeLabel(editing.db.accessMode)}}</el-tag></div>
+                <div><label>创建时间</label><div>{{formatTime(editing.db.addTime)}}</div></div>
+                <div class="access-detail-wide"><label>已有绑定</label>
+                    <div class="access-chips">
+                        <el-tag v-for="role in (editing.db.roleCodes || [])" :key="'cr2-' + role" size="mini" type="warning" class="access-chip">{{role}}</el-tag>
+                        <el-tag v-for="code in (editing.db.permissionCodes || [])" :key="'cp2-' + code" size="mini" type="primary" class="access-chip">{{code}}</el-tag>
+                        <el-tag v-for="uid in (editing.db.userIds || [])" :key="'cu2-' + uid" size="mini" type="success" class="access-chip">{{userLabel(uid)}}</el-tag>
+                        <span v-if="!(editing.db.roleCodes || []).length && !(editing.db.permissionCodes || []).length && !(editing.db.userIds || []).length" class="access-muted">（无）</span>
+                    </div>
+                </div>
+                <div v-if="editing.db.remark" class="access-detail-wide"><label>备注</label><div>{{editing.db.remark}}</div></div>
+            </div>
+            <div v-else class="access-muted">尚未设置数据库策略，当前按代码基线执行。</div>
+
+            <el-form label-width="110px" class="access-form">
+                <el-form-item label="策略模式" required>
+                    <el-radio-group v-model="form.accessMode">
+                        <el-radio :label="0">继承代码</el-radio>
+                        <el-radio :label="1">开放</el-radio>
+                        <el-radio :label="2">受限</el-radio>
+                        <el-radio :label="3">禁用</el-radio>
+                    </el-radio-group>
+                    <div class="access-mode-hint">{{modeHint(form.accessMode)}}</div>
+                </el-form-item>
+                <el-form-item v-if="form.accessMode === 2" label="允许角色" required>
+                    <el-select v-model="form.roleCodes" multiple filterable allow-create default-first-option
+                               placeholder="选择或输入角色码（任一命中即放行）" style="width: 100%">
+                        <el-option v-for="role in roles" :key="role.roleCode"
+                                   :label="role.roleName ? role.roleCode + '（' + role.roleName + '）' : role.roleCode"
+                                   :value="role.roleCode"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item v-if="form.accessMode === 2" label="允许权限码">
+                    <el-select v-model="form.permissionCodes" multiple filterable allow-create default-first-option
+                               placeholder="输入权限资源码（如 sandbox.execute，任一命中即放行）" style="width: 100%"></el-select>
+                </el-form-item>
+                <el-form-item v-if="form.accessMode === 2" label="允许用户">
+                    <el-select v-model="form.userIds" multiple filterable
+                               placeholder="选择后台管理员用户（任一命中即放行）" style="width: 100%">
+                        <el-option v-for="user in users" :key="user.id" :label="userLabelByUser(user)" :value="user.id"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="备注">
+                    <el-input v-model="form.remark" maxlength="300" type="textarea" :rows="2" placeholder="记录本次策略调整的原因，便于后续审计"></el-input>
+                </el-form-item>
+            </el-form>
+        </div>
+        <span slot="footer">
+            <el-button @@click="editVisible = false">取消</el-button>
+            <el-button type="primary" :loading="saving" @@click="savePolicy">保存策略</el-button>
+        </span>
+    </el-dialog>
+
+    <el-dialog title="批量受限设置" :visible.sync="batchRestrictVisible" width="560px" :close-on-click-modal="false">
+        <p class="access-batch-tip">将对选中的 <strong>{{selection.length}}</strong> 个 Function 应用“受限”策略。受限模式下，仅绑定的用户 / 角色 / 权限码（任一命中）可访问全局 Provit，请至少绑定一项。</p>
+        <el-form label-width="110px">
+            <el-form-item label="允许角色" required>
+                <el-select v-model="batchForm.roleCodes" multiple filterable allow-create default-first-option
+                           placeholder="选择或输入角色码" style="width: 100%">
+                    <el-option v-for="role in roles" :key="role.roleCode"
+                               :label="role.roleName ? role.roleCode + '（' + role.roleName + '）' : role.roleCode"
+                               :value="role.roleCode"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="允许权限码">
+                <el-select v-model="batchForm.permissionCodes" multiple filterable allow-create default-first-option
+                           placeholder="输入权限资源码" style="width: 100%"></el-select>
+            </el-form-item>
+            <el-form-item label="允许用户">
+                <el-select v-model="batchForm.userIds" multiple filterable
+                           placeholder="选择后台管理员用户" style="width: 100%">
+                    <el-option v-for="user in users" :key="user.id" :label="userLabelByUser(user)" :value="user.id"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="备注">
+                <el-input v-model="batchForm.remark" maxlength="300" type="textarea" :rows="2"></el-input>
+            </el-form-item>
+        </el-form>
+        <span slot="footer">
+            <el-button @@click="batchRestrictVisible = false">取消</el-button>
+            <el-button type="primary" :loading="batchSaving" @@click="batchApply('apply-restrict', true)">应用</el-button>
+        </span>
+    </el-dialog>
+</div>
+
+@section scripts {
+    <script src="~/js/Admin/Pages/NeuCharPivot/common.js"></script>
+    <script src="~/js/Admin/Pages/NeuCharPivot/Access.js"></script>
+}

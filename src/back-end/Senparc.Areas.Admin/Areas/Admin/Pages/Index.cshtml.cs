@@ -13,6 +13,9 @@
     修改标识：Senparc - 20260915
     修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
 
+    修改标识：Senparc - 20261005
+    修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
@@ -344,6 +347,17 @@ namespace Senparc.Areas.Admin.Pages
                     MenuName = "面板",
                     Url = "/Admin/NeuCharPivot/Board",
                     Icon = "fa fa-th-large",
+                    Id = (index++).ToString(),
+                    ParentId = pivotMenu.Id
+                });
+            }
+            if (!dest.Any(z => string.Equals(z.Url, "/Admin/NeuCharPivot/Access", StringComparison.OrdinalIgnoreCase)))
+            {
+                dest.Add(new SysMenuDto
+                {
+                    MenuName = "访问控制",
+                    Url = "/Admin/NeuCharPivot/Access",
+                    Icon = "fa fa-user-shield",
                     Id = (index++).ToString(),
                     ParentId = pivotMenu.Id
                 });

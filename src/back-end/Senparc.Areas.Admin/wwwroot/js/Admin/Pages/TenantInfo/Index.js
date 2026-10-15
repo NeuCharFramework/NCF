@@ -105,6 +105,9 @@
                 if (res.data.success) {
                     this.tableData = res.data.data.list;
                     this.paginationQuery.total = res.data.data.totalCount;
+                    if (typeof res.data.data.enableMultiTenant === "boolean") {
+                        this.enableMultiTenant = res.data.data.enableMultiTenant;
+                    }
                 }
             });
         },
@@ -178,6 +181,13 @@
                         message: ncfT('Tenant.DeleteSuccess'),
                         type: "success",
                         duration: 2000
+                    });
+                } else {
+                    this.$notify({
+                        title: ncfT('Admin.Common.Error'),
+                        message: res.data.msg || ncfT('Tenant.DeleteNotFound'),
+                        type: "error",
+                        duration: 3000
                     });
                 }
             });

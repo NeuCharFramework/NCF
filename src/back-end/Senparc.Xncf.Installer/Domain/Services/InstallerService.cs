@@ -90,7 +90,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
                 {
                     SysMenuService _sysMenuService = serviceProvider.GetService<SysMenuService>();
 
-                    _sysMenuService.Init(null, adminUserInfoId);
+                    await _sysMenuService.InitAsync(null, adminUserInfoId);
                 }
                 catch (Exception ex)
                 {

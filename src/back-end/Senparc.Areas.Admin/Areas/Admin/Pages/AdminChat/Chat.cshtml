@@ -1,4 +1,4 @@
-@page
+﻿@page
 @model Senparc.Areas.Admin.Pages.AdminChat.ChatModel
 @{
     ViewData["Title"] = AR["Admin.Home.AiTitle"];
@@ -30,8 +30,17 @@
                     @@click="createNewSession">
                     @AR["AdminChat.NewConversation"]
                 </el-button>
+                <el-button
+                    v-if="isSuperAdmin"
+                    type="warning"
+                    size="small"
+                    icon="el-icon-data-line"
+                    @@click="openUserStatsDrawer"
+                    class="user-stats-button">
+                    @AR["AdminChat.UserStats"]
+                </el-button>
             </div>
-            
+
             <div class="session-list" v-loading="loadingSessions">
                 <div 
                     v-for="session in sessionList" 
@@ -585,6 +594,69 @@
             </div>
         </div>
     </el-dialog>
+
+    <!-- 超级管理员：用户用量统计（仅数量，不含内容） -->
+    <el-drawer
+        :visible.sync="userStatsDrawerVisible"
+        :with-close-button="true"
+        direction="rtl"
+        size="640px"
+        custom-class="user-stats-drawer"
+        :wrapper-closable="true">
+        <div slot="title" class="user-stats-drawer-title">
+            <i class="fa fa-data-line"></i> @AR["AdminChat.UserStatsTitle"]
+        </div>
+        <div class="user-stats-body" v-loading="userStatsLoading">
+            <div class="user-stats-tip">
+                <i class="el-icon-info"></i>
+                <span>@AR["AdminChat.UserStatsTip"]</span>
+            </div>
+            <el-table
+                :data="userStatsList"
+                border
+                stripe
+                size="small"
+                style="width: 100%">
+                <el-table-column align="center"
+                                 label="@AR["AdminChat.UserStatsCol.User"]"
+                                 min-width="150">
+                    <template slot-scope="scope">
+                        <div class="user-stats-user-cell">
+                            <div class="user-stats-user-name">{{ scope.row.userName || ('User #' + scope.row.userId) }}</div>
+                            <div class="user-stats-user-real" v-if="scope.row.realName">{{ scope.row.realName }}</div>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center"
+                                 label="@AR["AdminChat.UserStatsCol.Total"]"
+                                 width="80"
+                                 prop="totalSessionCount"></el-table-column>
+                <el-table-column align="center"
+                                 label="@AR["AdminChat.UserStatsCol.Active"]"
+                                 width="80"
+                                 prop="activeSessionCount"></el-table-column>
+                <el-table-column align="center"
+                                 label="@AR["AdminChat.UserStatsCol.Archived"]"
+                                 width="90"
+                                 prop="archivedSessionCount"></el-table-column>
+                <el-table-column align="center"
+                                 label="@AR["AdminChat.UserStatsCol.Deleted"]"
+                                 width="80"
+                                 prop="deletedSessionCount"></el-table-column>
+                <el-table-column align="center"
+                                 label="@AR["AdminChat.UserStatsCol.Messages"]"
+                                 width="90"
+                                 prop="messageCount"></el-table-column>
+                <el-table-column align="center"
+                                 label="@AR["AdminChat.UserStatsCol.LastActive"]"
+                                 width="150">
+                    <template slot-scope="scope">
+                        {{ formatTime(scope.row.lastActiveTime) }}
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+    </el-drawer>
 </div>
 
 @section scripts {
@@ -596,6 +668,7 @@
             sessionId: @Model.SessionId,
             initialMessage: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.InitialMessage ?? string.Empty)),
             currentUserId: @Model.CurrentUserId,
+            isSuperAdmin: @(Model.IsSuperAdmin ? "true" : "false"),
             moduleUids: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ModuleUids ?? string.Empty))
         };
     </script>

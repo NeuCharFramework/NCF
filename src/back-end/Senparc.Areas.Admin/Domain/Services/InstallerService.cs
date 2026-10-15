@@ -69,7 +69,7 @@ namespace Senparc.Areas.Admin.Domain.Services
                     //.Init 内部还会执行一次
                     _sysMenuService.SetTenantInfoForAllServices(tenantInfoService.GetRequestTenantInfo(tenantInfo));
 
-                    _sysMenuService.Init(tenantInfoService.GetRequestTenantInfo(tenantInfo), adminUserInfoId);
+                    await _sysMenuService.InitAsync(tenantInfoService.GetRequestTenantInfo(tenantInfo), adminUserInfoId);
                 }
                 catch (Exception ex)
                 {

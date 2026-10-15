@@ -10,6 +10,9 @@
     修改标识：Senparc - 20260915
     修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
 
+    修改标识：Senparc - 20261005
+    修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
+
 ----------------------------------------------------------------*/
 using Microsoft.EntityFrameworkCore;
 using Senparc.Areas.Admin.ACL;
@@ -191,6 +194,62 @@ namespace Senparc.Areas.Admin.Domain.Services
         {
             var messages = await base.GetFullListAsync(m => m.SessionId == sessionId);
             return messages.Count();
+        }
+
+        /// <summary>
+        /// 获取归属校验通过的消息：仅当消息所属会话属于指定用户时返回，否则返回 null。
+        /// 用于消息级操作（如反馈）的防御性越权防护。
+        /// </summary>
+        public async Task<AdminChatMessage> GetOwnedMessageAsync(int messageId, int userId)
+        {
+            if (messageId <= 0 || userId <= 0)
+            {
+                return null;
+            }
+
+            return await base.GetObjectAsync(m => m.Id == messageId && m.Session.UserId == userId);
+        }
+
+        /// <summary>
+        /// 设置消息反馈（带会话归属校验，防止跨账号越权操作）
+        /// </summary>
+        public async Task<bool> SetMessageFeedbackAsync(int messageId, int userId, MessageFeedbackType feedback)
+        {
+            var message = await GetOwnedMessageAsync(messageId, userId);
+            if (message == null) return false;
+
+            message.SetFeedback(feedback);
+            await base.SaveObjectAsync(message);
+            return true;
+        }
+
+        /// <summary>
+        /// 按用户统计消息数量（管理端监控用，仅返回数量，不包含内容）
+        /// </summary>
+        public async Task<List<(int UserId, int Count)>> GetMessageCountByUserAsync()
+        {
+            var db = base.BaseData.BaseDB.BaseDataContext;
+            var perSession = await db.Set<AdminChatMessage>()
+                .AsNoTracking()
+                .GroupBy(m => m.SessionId)
+                .Select(g => new { SessionId = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            var sessions = await db.Set<AdminChatSession>()
+                .AsNoTracking()
+                .Select(s => new { s.Id, s.UserId })
+                .ToListAsync();
+
+            var perSessionMap = perSession.ToDictionary(x => x.SessionId, x => x.Count);
+            var result = new Dictionary<int, int>();
+            foreach (var session in sessions)
+            {
+                if (perSessionMap.TryGetValue(session.Id, out var count))
+                {
+                    result[session.UserId] = (result.TryGetValue(session.UserId, out var existing) ? existing : 0) + count;
+                }
+            }
+            return result.Select(kv => (kv.Key, kv.Value)).ToList();
         }
     }
 }

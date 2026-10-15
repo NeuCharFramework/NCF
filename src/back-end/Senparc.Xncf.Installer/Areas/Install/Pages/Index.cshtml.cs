@@ -143,7 +143,7 @@ namespace Senparc.Xncf.Instraller.Pages
                     if (!installFinished && IsSystemInitialized())
                     {
                         SiteConfig.IsInstalling = false;
-                        SiteConfig.SetInstallFinished();
+                        await SiteConfig.SetInstallFinishedAsync();
                         return new RedirectResult("/");
                     }
 
@@ -243,7 +243,7 @@ namespace Senparc.Xncf.Instraller.Pages
 
             //撤销安装状态
             SiteConfig.IsInstalling = false;
-            SiteConfig.SetInstallFinished();
+            await SiteConfig.SetInstallFinishedAsync();
             TenantMiddleware.FirstRunAndInstalling = false;
 
             return Page();

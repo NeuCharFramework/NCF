@@ -137,7 +137,7 @@
   <data name="Home.Introduction.Line1" xml:space="preserve"><value>NCF (NeuCharFramework) is an enterprise-grade, general-purpose .NET framework for building foundational projects.</value></data>
   <data name="Home.Introduction.Line2" xml:space="preserve"><value>It strictly follows DDD and includes caching, databases, models, validation, and a companion admin panel.</value></data>
   <data name="Home.Introduction.Line3" xml:space="preserve"><value>Its highly modular design makes it extensible and resilient.</value></data>
-  <data name="Home.Notice.Framework" xml:space="preserve"><value>NCF fully supports .NET 8.0.</value></data>
+  <data name="Home.Notice.Framework" xml:space="preserve"><value>NeuCharFramework fully supports .NET 10.0+.</value></data>
   <data name="Home.Notice.Databases" xml:space="preserve"><value>SQLite, SQL Server, MySQL, PostgreSQL, Oracle, and DM (Dameng) are currently supported.</value></data>
   <data name="Home.Notice.Feedback" xml:space="preserve"><value>More databases are being added. Tell us what you need!</value></data>
   <data name="Home.CurrentTenant" xml:space="preserve"><value>Current tenant:</value></data>

@@ -4,6 +4,58 @@
 
 如果你狠狠心，也可以将此模块删除，这不会影响系统的正常运行，只不过你无法再进入管理后台。当然对黑客来说也一样。
 
+## 个人微信 Claw 与 Admin 集成
+
+个人微信通道由 `Senparc.Xncf.WeixinManager` 提供，Admin 只通过
+`IWeixinClawMessageSender` 和 `IWeixinClawMessageHandler` 接入，因此通道层不依赖
+Admin Chat、NeuBell 或 Workflow。
+
+### 首次配置
+
+1. 在 `/Admin/WeixinManager/WeixinClaw` 扫码连接个人微信，并确认账号状态为运行中。
+2. 在 `Senparc.Web/appsettings.json` 或安全配置源中填写：
+
+```json
+"WeixinClawAdminIntegration": {
+  "Enabled": true,
+  "CommandPrefix": "/",
+  "RequireCommandPrefix": true,
+  "AllowPlainChat": true,
+  "EnableNeuBell": true,
+  "EnableWorkflow": true,
+  "EnableHarness": false
+}
+```
+
+绑定配置不再使用 appsettings 中的单一绑定码。请打开
+`/Admin/WeixinManager/WeixinClaw`，在对应账号的“绑定配置”中创建记录，填写
+`AdminUserId`、绑定码、WorkflowId 及功能权限。绑定码只保存 SHA-256 哈希，
+不会回显；保存后将绑定码发送给目标微信用户。用户发送 `/bind 绑定码` 完成绑定。
+未绑定会话发送 `/help` 会收到配置入口说明。
+
+### 可用能力
+
+- `/help`、`/status`：查看帮助、账号和绑定状态。
+- `/bell`：读取当前管理员可见的 NeuBell 提醒；NeuBell 发生变化时，系统也会主动推送到已绑定会话。
+- `/chat <内容>`：复用 Admin Chat 的 Simple 会话，消息和 AI 回复会保存到 Admin Chat 历史。
+- `/workflow`：列出当前管理员可用的 Workflow 及其 WorkflowId。
+- `/workflow <WorkflowId> <输入>`：只执行当前管理员已拥有且已启用的 Workflow。
+- `/harness <任务>`：显式启用 `EnableHarness=true` 后使用 Admin Chat Harness；工具审批使用 `/approve` 和 `/reject`。
+- `/unbind`：解除当前微信会话绑定。
+
+默认要求命令带 `/` 前缀，Harness 默认关闭；普通微信消息不会触发后台能力。
+所有出站文字消息均经过长度分片，并沿用当前微信消息的 `ContextToken`；系统会自动从对应入站记录恢复
+`RunId`，后台页面发送时不需要手工填写这两个值。
+
+### 分层边界
+
+- `Senparc.Xncf.WeixinManager`：iLink 协议、扫码、令牌保护、长轮询、去重和文本收发。
+- `Senparc.Areas.Admin`：微信会话绑定、Admin Chat 会话、NeuBell 快照推送、Workflow 授权执行和 Harness 审批。
+- `Senparc.Xncf.NeuCharWorkflow`：通过公共 `IWorkflowFunctionCallingProvider` 被可选接入，Admin 不直接依赖 Workflow 实现。
+
+个人微信集成对应的 Admin 数据库迁移为 `Add_WeixinClawAdminIntegration`，已同步
+SQLite、SQL Server、MySQL、Oracle、PostgreSQL 和 DM 六种数据库。
+
 ## Admin Chat：Native MAF Harness 与 Trajectory
 
 管理后台 Admin Chat 支持两种运行模式，可在输入框下方切换：

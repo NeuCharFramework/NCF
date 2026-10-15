@@ -1,4 +1,4 @@
-﻿/*----------------------------------------------------------------
+/*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
 
     文件名：Register.cs
@@ -49,6 +49,9 @@
     修改标识：Senparc - 20260916
     修改描述：v0.9.0 增强 Admin Chat 取消与推理轨迹，并扩展 NeuBell WebHook 请求能力
 
+    修改标识：Senparc - 20261005
+    修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
+
 ----------------------------------------------------------------*/
 
 /* 
@@ -76,11 +79,13 @@ using System.Net.Http;
 using Senparc.Areas.Admin.ACL;
 using Senparc.Areas.Admin.ACL.Repository;
 using Senparc.Areas.Admin.Domain;
+using Senparc.Areas.Admin.Domain.Cache;
 using Senparc.Areas.Admin.Domain.Dto;
 //using Senparc.Areas.Admin.Authorization;
 using Senparc.Areas.Admin.Domain.Models;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
 using Senparc.Areas.Admin.Domain.Services;
+using Senparc.Areas.Admin.WeixinClawIntegration;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.AreaBase.Admin.Filters;
@@ -132,7 +137,7 @@ namespace Senparc.Areas.Admin
 
         public override string Uid => ModuleUid;// "00000000-0000-0001-0001-000000000001";
 
-        public override string Version => "0.5.11";
+        public override string Version => "0.5.12";
 
         public override string MenuName => T("Admin.Register.MenuName", "NCF 系统管理员后台");
 
@@ -206,6 +211,8 @@ namespace Senparc.Areas.Admin
             //services.AddScoped(typeof(AuthenticationAsyncPageFilterAttribute));
 
             services.Configure<JwtSettings>(JwtSettings.Position_Backend, configuration.GetSection(JwtSettings.Position_Backend));// 配置管理后台jwt
+            services.Configure<WeixinClawAdminIntegrationOptions>(
+                configuration.GetSection(WeixinClawAdminIntegrationOptions.SectionName));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -246,6 +253,11 @@ namespace Senparc.Areas.Admin
             services.AddScoped<AdminChatTrajectoryService>();
             services.AddScoped<AdminChatTrajectoryEventService>();
             services.AddScoped<AdminChatAiService>();
+            services.AddScoped<IWeixinClawAdminBindingRepository, WeixinClawAdminBindingRepository>();
+            services.AddScoped<WeixinClawAdminBindingService>();
+            services.AddScoped<AdminWeixinClawMessageHandler>();
+            services.AddScoped<Senparc.Xncf.WeixinManager.WeixinClaw.IWeixinClawMessageHandler>(
+                serviceProvider => serviceProvider.GetRequiredService<AdminWeixinClawMessageHandler>());
 
             // ChatAgent / NeuCharPivot：系统表、声明式 UI、Function 安全执行和 EventBus 协调。
             services.AddScoped<INeuCharPivotConfigurationRepository, NeuCharPivotConfigurationRepository>();
@@ -262,6 +274,10 @@ namespace Senparc.Areas.Admin
             services.AddScoped<NeuCharPivotService>();
             services.AddScoped<NeuCharPivotGlobalAccessService>();
             services.AddScoped<NeuCharPivotGlobalFunctionService>();
+            // Function 全局 Provit 数据库访问策略（DB 覆盖代码属性），缓存参考 FullSystemConfigCache 范式
+            services.AddScoped<INeuCharFunctionProvitAccessRepository, NeuCharFunctionProvitAccessRepository>();
+            services.AddScoped<FullNeuCharFunctionProvitAccessCache>();
+            services.AddScoped<NeuCharFunctionProvitAccessService>();
             services.AddDataProtection();
             services.AddScoped<NeuCharParameterProtector>();
             services.AddScoped<ChatAgentNeuCharPivotComposer>();
@@ -302,6 +318,7 @@ namespace Senparc.Areas.Admin
                     serviceProvider.GetRequiredService<ILogger<NeuBellWebHookDispatcher>>(),
                     configuration["NeuBellWebHook:BaseUrl"]));
             services.AddHostedService<NeuBellWebHookMonitorService>();
+            services.AddHostedService<WeixinClawNeuBellPushHostedService>();
 
             return base.AddXncfModule(services, configuration, env);
         }
@@ -380,6 +397,7 @@ namespace Senparc.Areas.Admin
         {
             new AreaPageMenuItem(GetAreaUrl("/Admin/Menu/Index"), T("Admin.Area.MenuManagement", "菜单管理"),"fa fa-bug"),
             new AreaPageMenuItem(GetAreaUrl("/Admin/SenparcTrace/Index"), T("Admin.Area.TraceLog", "SenparcTrace 日志"),"fa fa-calendar-o"),
+            new AreaPageMenuItem(GetAreaUrl("/Admin/WeixinClaw/Index"), "个人微信集成", "fa fa-wechat"),
         };//Admin比较特殊，不需要全部输出
 
 
@@ -519,6 +537,7 @@ namespace Senparc.Areas.Admin
                 options.Conventions.AuthorizePage("/", NcfAuthorizationPolicyNames.AdminOnly);//必须登录
                 options.Conventions.AuthorizePage("/AdminChat/Chat", NcfAuthorizationPolicyNames.AdminOnly);//聊天页面必须登录
                 options.Conventions.AuthorizePage("/NeuCharPivot/Aggregate", NcfAuthorizationPolicyNames.AdminOnly);
+                options.Conventions.AuthorizePage("/NeuCharPivot/Access", NcfAuthorizationPolicyNames.AdminOnly);
                 options.Conventions.AllowAnonymousToPage("/Login");//允许匿名
 
                 //更多：https://learn.microsoft.com/en-us/aspnet/core/security/authorization/razor-pages-authorization?view=aspnetcore-8.0

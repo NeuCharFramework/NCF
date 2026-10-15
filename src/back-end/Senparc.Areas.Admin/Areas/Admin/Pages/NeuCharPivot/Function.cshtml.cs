@@ -7,6 +7,12 @@
     修改标识：Senparc - 20260829
     修改描述：v0.7.0 新增 NeuCharPivot 全局浮动调用与工作流分析管理能力
 
+    修改标识：Senparc - 20260917
+    修改描述：v0.9.1 Describe 响应补充数据库访问策略（access.policy），DB 策略覆盖代码属性
+
+    修改标识：Senparc - 20261005
+    修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
@@ -23,9 +29,11 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages.NeuCharPivot;
 [AdminAuthorize(NcfAuthorizationPolicyNames.AdminOnly)]
 public class FunctionModel(
     IServiceProvider serviceProvider,
-    NeuCharPivotGlobalFunctionService globalFunctionService) : BaseAdminPageModel(serviceProvider)
+    NeuCharPivotGlobalFunctionService globalFunctionService,
+    NeuCharFunctionProvitAccessService accessPolicyService) : BaseAdminPageModel(serviceProvider)
 {
     private readonly NeuCharPivotGlobalFunctionService _globalFunctionService = globalFunctionService;
+    private readonly NeuCharFunctionProvitAccessService _accessPolicyService = accessPolicyService;
 
     public async Task<IActionResult> OnGetDescribeAsync(
         [FromQuery] string moduleUid,
@@ -42,6 +50,25 @@ public class FunctionModel(
         }
 
         var descriptor = resolution.Descriptor;
+
+        // 数据库访问策略（存在且非继承时覆盖代码属性）
+        object policyDto = null;
+        var policy = _accessPolicyService.GetPolicy(
+            descriptor.ModuleUid,
+            descriptor.FunctionKey);
+        if (policy != null &&
+            policy.AccessMode != Senparc.Areas.Admin.Domain.Models.DatabaseModel.NeuCharFunctionProvitAccess.AccessModeInherit)
+        {
+            policyDto = new
+            {
+                policy.AccessMode,
+                roleCodes = policy.RoleCodeList,
+                permissionCodes = policy.PermissionCodeList,
+                userIds = policy.AdminUserIdList,
+                policy.Remark
+            };
+        }
+
         return Ok(new
         {
             descriptor.ModuleUid,
@@ -55,7 +82,8 @@ public class FunctionModel(
             {
                 enabled = descriptor.AllowGlobalPivot,
                 roleCodes = descriptor.GlobalPivotRoleCodes,
-                permissionCodes = descriptor.GlobalPivotPermissionCodes
+                permissionCodes = descriptor.GlobalPivotPermissionCodes,
+                policy = policyDto
             }
         });
     }

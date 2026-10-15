@@ -25,6 +25,9 @@
     修改标识：Senparc - 20260808
     修改描述：v0.4.0 适配桌面管理员换票签发所需的用户与会话信息
 
+    修改标识：Senparc - 20261005
+    修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Authentication;
@@ -375,6 +378,19 @@ namespace Senparc.Areas.Admin.Domain
             return GetFullList(z => ids.Contains(z.Id), z => z.Id, Ncf.Core.Enums.OrderingType.Ascending, includes: includes);
         }
 
+
+        /// <summary>
+        /// 统计指定租户下的管理员账号数量（跨租户统计：忽略全局租户查询过滤器，仅用于租户管理决策）
+        /// </summary>
+        public async Task<int> GetTenantUserCountAsync(int tenantId)
+        {
+            var db = BaseData.BaseDB.BaseDataContext;
+            return await db.Set<AdminUserInfo>()
+                .AsNoTracking()
+                .IgnoreQueryFilters()
+                .CountAsync(z => z.TenantId == tenantId);
+        }
+
         /// <summary>
         /// 初始化，随机生成密码
         /// </summary>
@@ -436,6 +452,26 @@ namespace Senparc.Areas.Admin.Domain
         {
             AccountLoginResultDto result = new AccountLoginResultDto();
             string token;
+
+            //多租户：与 Cookie 登录路径（Admin Login 页面）保持一致——
+            //先按登录输入的租户名称解析 TenantInfo 并设置当前 DbContext 的租户上下文，
+            //否则全局租户查询过滤器（TenantId == 当前租户Id）会拦截掉该租户的管理员账号，导致登录失败；
+            //解析出的 TenantKey 同时写入 JWT claim，保证 TenantRule.LoginInput 规则在 JWT（桌面/后端）认证场景下可以解析请求租户
+            Senparc.Xncf.Tenant.Domain.DataBaseModel.TenantInfo tenantInfo = null;
+            if (SiteConfig.SenparcCoreSetting.EnableMultiTenant && !string.IsNullOrWhiteSpace(loginDto.TenantKey))
+            {
+                var tenantInfoService = _serviceProvider.GetService<Senparc.Xncf.Tenant.Domain.Services.TenantInfoService>();
+                tenantInfo = tenantInfoService == null
+                    ? null
+                    : await tenantInfoService.GetObjectAsync(z => z.Enable && z.TenantKey.ToUpper() == loginDto.TenantKey.ToUpper());
+                if (tenantInfo == null)
+                {
+                    //不区分“租户不存在”与“账号不存在”，避免泄露租户/账号信息
+                    throw new NcfExceptionBase($"用户名不存在或密码不正确：{loginDto.UserName}！");
+                }
+                SetTenantInfo(tenantInfoService.GetRequestTenantInfo(tenantInfo));
+            }
+
             var userInfo = await GetObjectAsync(z => z.UserName == loginDto.UserName);
             if (userInfo == null)
             {
@@ -448,7 +484,9 @@ namespace Senparc.Areas.Admin.Domain
                 {
                     throw new NcfExceptionBase("用户名不存在或密码不正确！");
                 }
-                var tokenResult = await GenerateTokenAsync(adminUserInfo.Id);
+
+                string jwtTenantKey = tenantInfo?.TenantKey;
+                var tokenResult = await GenerateTokenAsync(adminUserInfo.Id, null, jwtTenantKey);
                 token = tokenResult.Token;
                 var tokenExpiresUtc = tokenResult.ExpiresUtc;
                 var roles = await _serviceProvider.GetService<SysRoleAdminUserInfoService>().GetFullListAsync(o => o.AccountId == adminUserInfo.Id);
@@ -502,10 +540,10 @@ namespace Senparc.Areas.Admin.Domain
             return GenerateToken(memberId, out expiresUtc, expiresMinutes, Array.Empty<string>());
         }
 
-        public async Task<(string Token, DateTimeOffset ExpiresUtc)> GenerateTokenAsync(int memberId, int? expiresMinutes = null)
+        public async Task<(string Token, DateTimeOffset ExpiresUtc)> GenerateTokenAsync(int memberId, int? expiresMinutes = null, string tenantKey = null)
         {
             var roleCodes = await GetRoleCodesAsync(memberId);
-            var token = GenerateToken(memberId, out var expiresUtc, expiresMinutes, roleCodes);
+            var token = GenerateToken(memberId, out var expiresUtc, expiresMinutes, roleCodes, tenantKey);
             return (token, expiresUtc);
         }
 
@@ -548,14 +586,14 @@ namespace Senparc.Areas.Admin.Domain
                 .ToList();
         }
 
-        private string GenerateToken(int memberId, out DateTimeOffset expiresUtc, int? expiresMinutes, IEnumerable<string> roleCodes)
+        private string GenerateToken(int memberId, out DateTimeOffset expiresUtc, int? expiresMinutes, IEnumerable<string> roleCodes, string tenantKey = null)
         {
             var effectiveExpireMinutes = NormalizeExpireMinutes(expiresMinutes ?? GetBackendJwtExpireMinutes(), AdminAuthConfig.DefaultBackendJwtExpireMinutes);
             expiresUtc = DateTimeOffset.UtcNow.AddMinutes(effectiveExpireMinutes);
-            return GenerateToken(memberId, expiresUtc, roleCodes);
+            return GenerateToken(memberId, expiresUtc, roleCodes, tenantKey);
         }
 
-        private string GenerateToken(int memberId, DateTimeOffset expiresUtc, IEnumerable<string> roleCodes)
+        private string GenerateToken(int memberId, DateTimeOffset expiresUtc, IEnumerable<string> roleCodes, string tenantKey = null)
         {
             var options = _serviceProvider.GetService<IOptionsSnapshot<JwtSettings>>();
             var jwtSettings = options.Get(JwtSettings.Position_Backend);
@@ -570,6 +608,11 @@ namespace Senparc.Areas.Admin.Domain
             if (!string.IsNullOrWhiteSpace(roleValue))
             {
                 claims.Add(new Claim(ClaimTypes.Role, roleValue, ClaimValueTypes.String));
+            }
+            if (!string.IsNullOrWhiteSpace(tenantKey))
+            {
+                //与 Cookie 登录路径保持一致：多租户 LoginInput 规则依赖 TenantKey claim 解析请求租户
+                claims.Add(new Claim("TenantKey", tenantKey, ClaimValueTypes.String));
             }
 
             SecurityTokenDescriptor securityToken = new SecurityTokenDescriptor()

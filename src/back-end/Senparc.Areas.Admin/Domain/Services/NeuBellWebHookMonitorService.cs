@@ -110,32 +110,37 @@ public sealed class NeuBellWebHookMonitorService : IHostedService, IDisposable
     /// </summary>
     private async Task WaitNextTriggerAsync(CancellationToken stoppingToken)
     {
-        using var delayCts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
-        var delayTask = Task.Delay(PollingInterval, delayCts.Token);
-
-        var changeTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-        var changeTask = Task.Run(async () =>
-        {
-            try
-            {
-                await foreach (var providerId in _changeNotifier.SubscribeAsync(stoppingToken).ConfigureAwait(false))
-                {
-                    changeTcs.TrySetResult(true);
-                    break;
-                }
-            }
-            catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
-            {
-                // 正常停止
-            }
-            catch (Exception ex)
-            {
-                _logger.LogDebug(ex, "NeuBell 变更事件订阅异常，回退为纯轮询模式。");
-            }
-        }, stoppingToken);
+        using var triggerCts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
+        var delayTask = Task.Delay(PollingInterval, triggerCts.Token);
+        var changeTask = WaitForChangeAsync(triggerCts.Token);
 
         await Task.WhenAny(delayTask, changeTask).ConfigureAwait(false);
-        delayCts.Cancel();
+        triggerCts.Cancel();
+        try
+        {
+            await Task.WhenAll(delayTask, changeTask).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException) when (triggerCts.IsCancellationRequested)
+        {
+        }
+    }
+
+    private async Task WaitForChangeAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await foreach (var _ in _changeNotifier.SubscribeAsync(cancellationToken).ConfigureAwait(false))
+            {
+                return;
+            }
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "NeuBell 变更事件订阅异常，回退为纯轮询模式。");
+        }
     }
 
     private async Task ObserveOnceAsync(CancellationToken cancellationToken)

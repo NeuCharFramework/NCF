@@ -1,4 +1,4 @@
-﻿/*----------------------------------------------------------------
+/*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
   
     文件名：AdminSenparcEntities.cs
@@ -30,6 +30,9 @@
 
     修改标识：Senparc - 20260916
     修改描述：v0.9.0 增强 Admin Chat 取消与推理轨迹，并扩展 NeuBell WebHook 请求能力
+
+    修改标识：Senparc - 20261005
+    修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
 
 ----------------------------------------------------------------*/
 
@@ -128,6 +131,16 @@ namespace Senparc.Areas.Admin.Domain.Models
         /// </summary>
         public DbSet<NeuBellWebHookLog> NeuBellWebHookLogs { get; set; }
 
+        /// <summary>
+        /// 个人微信 Claw 与 Admin Chat 的上层绑定。
+        /// </summary>
+        public DbSet<WeixinClawAdminBinding> WeixinClawAdminBindings { get; set; }
+
+        /// <summary>
+        /// Function 全局 Provit（全局 Pivot 浮动调用）数据库访问策略映射
+        /// </summary>
+        public DbSet<NeuCharFunctionProvitAccess> NeuCharFunctionProvitAccesses { get; set; }
+
         //DOT REMOVE OR MODIFY THIS LINE 请勿移除或修改本行 - Entities Point
 
         #endregion
@@ -172,6 +185,14 @@ namespace Senparc.Areas.Admin.Domain.Models
                 .HasDefaultValue(NeuBellWebHook.MethodPost);
             modelBuilder.Entity<NeuBellWebHookLog>()
                 .HasIndex(z => z.AddTime);
+            modelBuilder.Entity<WeixinClawAdminBinding>()
+                .HasIndex(z => new { z.AccountId, z.FromUserId, z.GroupId })
+                .IsUnique();
+            modelBuilder.Entity<WeixinClawAdminBinding>()
+                .HasIndex(z => new { z.Enabled, z.EnableNeuBell });
+            modelBuilder.Entity<NeuCharFunctionProvitAccess>()
+                .HasIndex(z => new { z.ModuleUid, z.FunctionKey })
+                .IsUnique();
 
             var providerName = Database.ProviderName ?? string.Empty;
             var largeTextType = providerName.Contains("Oracle", StringComparison.OrdinalIgnoreCase)
