@@ -28,6 +28,21 @@
     修改标识：Senparc - 20261005
     修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
 
+    修改标识：Senparc - 20261009
+    修改描述：v0.11.0 增强后台 Admin Chat 群组配置、提示词构建与上下文控制
+
+    修改标识：Senparc - 20261021
+    修改描述：v0.11.1 返回最近任务、工作区上下文和会话标题
+
+    修改标识：Senparc - 20261102
+    修改描述：提供当前用户 Memory 编辑、会话开关及租户 SystemMessage 设置
+
+    修改标识：Senparc - 20261103
+    修改描述：提供同账号跨设备会话排序接口
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 完善后台聊天会话管理与排序
+
 ----------------------------------------------------------------*/
 using Microsoft.AspNetCore.Mvc;
 using Senparc.Areas.Admin.Domain;
@@ -48,9 +63,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Senparc.Xncf.AIKernel.Domain.Services;
 using Senparc.Ncf.Shared.Abstractions.Events;
 using Senparc.Areas.Admin.OHS.Local.Events;
+using Senparc.Xncf.Workspace.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Senparc.Areas.Admin.OHS.Local.AppService
@@ -73,6 +91,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         private readonly AdminUserInfoService _adminUserInfoService;
         private readonly IStringLocalizer<AdminResource> _localizer;
         private readonly IEventBus _eventBus;
+        private readonly IWorkspaceStorage _workspaceStorage;
 
         public AdminChatAppService(
             IServiceProvider serviceProvider,
@@ -83,7 +102,8 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             AdminChatTrajectoryService trajectoryService,
             AdminChatAiService chatAiService,
             AdminUserInfoService adminUserInfoService,
-            IStringLocalizer<AdminResource> localizer) : base(serviceProvider)
+            IStringLocalizer<AdminResource> localizer,
+            IWorkspaceStorage workspaceStorage = null) : base(serviceProvider)
         {
             _sessionService = sessionService;
             _messageService = messageService;
@@ -94,6 +114,205 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
             _adminUserInfoService = adminUserInfoService;
             _localizer = localizer;
             _eventBus = serviceProvider.GetService<IEventBus>();
+            _workspaceStorage = workspaceStorage;
+        }
+
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Get)]
+        public async Task<AppResponseBase<AdminChatMemoryView>> GetMemoryAsync(int sessionId = 0)
+        {
+            return await this.GetResponseAsync<AppResponseBase<AdminChatMemoryView>, AdminChatMemoryView>(
+                async (response, logger) => await ServiceProvider.GetRequiredService<AdminChatMemoryService>()
+                    .GetAsync(GetCurrentAdminUserInfoId(), sessionId));
+        }
+
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Post)]
+        public async Task<AppResponseBase<AdminChatMemoryView>> SaveMemoryAsync([FromBody] SaveAdminChatMemoryRequest request)
+        {
+            return await this.GetResponseAsync<AppResponseBase<AdminChatMemoryView>, AdminChatMemoryView>(
+                async (response, logger) =>
+                {
+                    if (request == null) throw new NcfExceptionBase("Memory request required.");
+                    return await ServiceProvider.GetRequiredService<AdminChatMemoryService>().SaveAsync(
+                        GetCurrentAdminUserInfoId(), request.SessionId, request.Revision, request.Markdown, request.SystemMessage);
+                });
+        }
+
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Post)]
+        public async Task<AppResponseBase<AdminChatMemoryView>> SetMemoryEnabledAsync([FromBody] SetAdminChatMemoryRequest request)
+        {
+            return await this.GetResponseAsync<AppResponseBase<AdminChatMemoryView>, AdminChatMemoryView>(
+                async (response, logger) =>
+                {
+                    if (request == null) throw new NcfExceptionBase("Memory request required.");
+                    return await ServiceProvider.GetRequiredService<AdminChatMemoryService>().SetModeAsync(
+                        GetCurrentAdminUserInfoId(), request.SessionId, request.Revision,
+                        request.Mode ?? (request.Enabled ? AdminChatMemoryMode.Learn : AdminChatMemoryMode.Off));
+                });
+        }
+
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Post)]
+        public async Task<AppResponseBase<AdminChatMemoryView>> EditMemoryEntryAsync([FromBody] EditAdminChatMemoryRequest request)
+        {
+            return await this.GetResponseAsync<AppResponseBase<AdminChatMemoryView>, AdminChatMemoryView>(
+                async (response, logger) =>
+                {
+                    if (request == null) throw new NcfExceptionBase("Memory request required.");
+                    return await ServiceProvider.GetRequiredService<AdminChatMemoryService>().EditAsync(
+                        GetCurrentAdminUserInfoId(), request.SessionId, request.Revision, request.Entry);
+                });
+        }
+
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Get)]
+        public async Task<AppResponseBase<AdminChatSystemMessageView>> GetGlobalChatSystemMessageAsync()
+        {
+            return await this.GetResponseAsync<AppResponseBase<AdminChatSystemMessageView>, AdminChatSystemMessageView>(
+                async (response, logger) =>
+                {
+                    if (!IsCurrentAdminSuperAdmin()) throw new NcfExceptionBase("Super administrator required.");
+                    var profile = await ServiceProvider.GetRequiredService<AdminChatMemoryService>().GetGlobalAsync();
+                    return new AdminChatSystemMessageView(profile.Revision, profile.SystemMessage);
+                });
+        }
+
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Post)]
+        public async Task<AppResponseBase<AdminChatSystemMessageView>> SaveGlobalChatSystemMessageAsync(
+            [FromBody] AdminChatSystemMessageView request)
+        {
+            return await this.GetResponseAsync<AppResponseBase<AdminChatSystemMessageView>, AdminChatSystemMessageView>(
+                async (response, logger) =>
+                {
+                    if (!IsCurrentAdminSuperAdmin()) throw new NcfExceptionBase("Super administrator required.");
+                    if (request == null) throw new NcfExceptionBase("SystemMessage request required.");
+                    var profile = await ServiceProvider.GetRequiredService<AdminChatMemoryService>()
+                        .SaveGlobalAsync(request.Revision, request.SystemMessage);
+                    logger.Append("Updated tenant-wide AdminChat SystemMessage.");
+                    return new AdminChatSystemMessageView(profile.Revision, profile.SystemMessage);
+                });
+        }
+
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Get)]
+        public async Task<AppResponseBase<GetWorkspaceOptionsResponse>> GetWorkspaceOptionsAsync()
+        {
+            return await this.GetResponseAsync<AppResponseBase<GetWorkspaceOptionsResponse>, GetWorkspaceOptionsResponse>(async (response, logger) =>
+            {
+                if (!IsCurrentAdminSuperAdmin() || _workspaceStorage == null)
+                {
+                    throw new NcfExceptionBase("只有超级管理员可以使用 Workspace。");
+                }
+
+                return new GetWorkspaceOptionsResponse
+                {
+                    Workspaces = (await _workspaceStorage.ListWorkspacesAsync().ConfigureAwait(false))
+                        .Select(WorkspaceOptionDto.CreateFromDescriptor)
+                        .ToList()
+                };
+            });
+        }
+
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Post)]
+        public async Task<AppResponseBase<WorkspaceOptionDto>> CreateWorkspaceAsync([FromBody] CreateWorkspaceRequest request)
+        {
+            return await this.GetResponseAsync<AppResponseBase<WorkspaceOptionDto>, WorkspaceOptionDto>(async (response, logger) =>
+            {
+                if (!IsCurrentAdminSuperAdmin() || _workspaceStorage == null)
+                {
+                    throw new NcfExceptionBase("只有超级管理员可以创建 Workspace。");
+                }
+
+                if (request == null || string.IsNullOrWhiteSpace(request.Name))
+                {
+                    throw new NcfExceptionBase("Workspace 名称不能为空。");
+                }
+
+                var descriptor = await _workspaceStorage.CreateAsync(
+                    new WorkspaceCreateRequest(GetCurrentAdminUserInfoId(), request.Name.Trim())).ConfigureAwait(false);
+                return WorkspaceOptionDto.CreateFromDescriptor(descriptor);
+            });
+        }
+
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Get)]
+        public async Task<AppResponseBase<WorkspaceEntriesResponse>> GetWorkspaceEntriesAsync(
+            int sessionId,
+            string relativePath = "")
+        {
+            return await this.GetResponseAsync<AppResponseBase<WorkspaceEntriesResponse>, WorkspaceEntriesResponse>(async (response, logger) =>
+            {
+                var session = await GetWorkspaceSessionAsync(sessionId).ConfigureAwait(false);
+                var entries = await _workspaceStorage.ListAsync(
+                    session.WorkspaceId,
+                    relativePath ?? string.Empty).ConfigureAwait(false);
+                return new WorkspaceEntriesResponse
+                {
+                    CurrentPath = relativePath ?? string.Empty,
+                    Entries = entries
+                };
+            });
+        }
+
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Get)]
+        public async Task<AppResponseBase<WorkspaceFilePreviewDto>> GetWorkspaceFilePreviewAsync(
+            int sessionId,
+            string relativePath)
+        {
+            return await this.GetResponseAsync<AppResponseBase<WorkspaceFilePreviewDto>, WorkspaceFilePreviewDto>(async (response, logger) =>
+            {
+                if (string.IsNullOrWhiteSpace(relativePath))
+                {
+                    throw new NcfExceptionBase("文件路径不能为空。");
+                }
+
+                var session = await GetWorkspaceSessionAsync(sessionId).ConfigureAwait(false);
+                var file = await _workspaceStorage.ReadFileBytesAsync(
+                    session.WorkspaceId,
+                    relativePath,
+                    2 * 1024 * 1024).ConfigureAwait(false);
+                var contentType = ResolveWorkspaceContentType(relativePath);
+                var isText = IsWorkspaceTextContent(contentType, relativePath);
+                return new WorkspaceFilePreviewDto
+                {
+                    Path = relativePath,
+                    ContentType = contentType,
+                    Size = file.Content.LongLength,
+                    IsText = isText,
+                    Content = isText ? Encoding.UTF8.GetString(file.Content) : null,
+                    ContentBase64 = Convert.ToBase64String(file.Content)
+                };
+            });
+        }
+
+        private async Task<AdminChatSession> GetWorkspaceSessionAsync(int sessionId)
+        {
+            var user = ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Http.IHttpContextAccessor>().HttpContext.User;
+            return await ServiceProvider.GetRequiredService<AdminChatWorkspaceAssetService>()
+                .GetSessionAsync(sessionId, user).ConfigureAwait(false);
+        }
+
+        private static string ResolveWorkspaceContentType(string relativePath)
+        {
+            return Path.GetExtension(relativePath).ToLowerInvariant() switch
+            {
+                ".html" or ".htm" => "text/html",
+                ".css" => "text/css",
+                ".js" or ".mjs" => "text/javascript",
+                ".json" or ".map" => "application/json",
+                ".svg" => "image/svg+xml",
+                ".md" => "text/markdown",
+                ".txt" or ".log" or ".xml" => "text/plain",
+                ".png" => "image/png",
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".gif" => "image/gif",
+                ".webp" => "image/webp",
+                ".ico" => "image/x-icon",
+                ".pdf" => "application/pdf",
+                _ => "application/octet-stream"
+            };
+        }
+
+        private static bool IsWorkspaceTextContent(string contentType, string relativePath)
+        {
+            return contentType.StartsWith("text/", StringComparison.OrdinalIgnoreCase)
+                || contentType is "application/json" or "text/javascript" or "image/svg+xml"
+                || string.IsNullOrEmpty(Path.GetExtension(relativePath));
         }
 
         #region 会话管理
@@ -117,7 +336,35 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     ? _localizer["AdminChat.NewConversation"] 
                     : (titleSource.Length > 50 ? titleSource.Substring(0, 50) + "..." : titleSource);
 
-                var session = await _sessionService.CreateSessionAsync(title, userId);
+                var workspaceId = request.WorkspaceId?.Trim();
+                if (!string.IsNullOrWhiteSpace(workspaceId))
+                {
+                    if (!IsCurrentAdminSuperAdmin())
+                    {
+                        throw new NcfExceptionBase("只有超级管理员可以使用 Workspace。");
+                    }
+
+                    if (_workspaceStorage == null
+                        || await _workspaceStorage.GetAsync(workspaceId).ConfigureAwait(false) == null)
+                    {
+                        throw new NcfExceptionBase("Workspace 不存在或不可用。");
+                    }
+                }
+
+                var memory = ServiceProvider.GetRequiredService<AdminChatMemoryService>();
+                var memoryMode = request.MemoryMode ?? (request.UseMemory ? AdminChatMemoryMode.Learn : AdminChatMemoryMode.Off);
+                await memory.PrepareModeAsync(memoryMode);
+                var session = await _sessionService.CreateSessionAsync(
+                    title,
+                    userId,
+                    workspaceId,
+                    request.WorkspaceWriteEnabled,
+                    request.WorkspaceCliEnabled);
+                if (memoryMode != AdminChatMemoryMode.Off)
+                {
+                    var profile = await memory.GetAsync(userId, session.Id);
+                    await memory.SetModeAsync(userId, session.Id, profile.Revision, memoryMode);
+                }
 
                 var moduleUidSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 if (request.ModuleUids != null && request.ModuleUids.Any())
@@ -168,7 +415,10 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     SessionId = session.Id,
                     Title = session.Title,
                     InitialMessage = request.InitialMessage,
-                    Mode = request.Mode
+                    Mode = request.Mode,
+                    WorkspaceId = session.WorkspaceId,
+                    WorkspaceWriteEnabled = session.WorkspaceWriteEnabled,
+                    WorkspaceCliEnabled = session.WorkspaceCliEnabled
                 };
             });
         }
@@ -188,11 +438,80 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 }
 
                 var (sessions, totalCount) = await _sessionService.GetUserActiveSessionsAsync(userId, pageIndex, pageSize);
+                var sessionDtos = sessions.Select(AdminChatSessionDto.CreateFromEntity).ToList();
+                await AttachWorkspaceNamesAsync(sessionDtos);
 
                 return new GetSessionListResponse
                 {
-                    Sessions = sessions.Select(AdminChatSessionDto.CreateFromEntity).ToList(),
+                    Sessions = sessionDtos,
                     TotalCount = totalCount
+                };
+            });
+        }
+
+        /// <summary>
+        /// 保存当前用户分类内的会话顺序。
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Post)]
+        public async Task<AppResponseBase<List<AdminChatSessionDto>>> ReorderSessionAsync(
+            [FromBody] ReorderSessionRequest request)
+        {
+            return await this.GetResponseAsync<AppResponseBase<List<AdminChatSessionDto>>, List<AdminChatSessionDto>>(
+                async (response, logger) =>
+                {
+                    if (request == null) throw new NcfExceptionBase("Session order request required.");
+                    var userId = GetCurrentAdminUserInfoId();
+                    var sessions = await _sessionService.ReorderSessionAsync(
+                        userId, request.SessionId, request.TargetSessionId, request.InsertAfter);
+                    logger.Append($"Reordered session: SessionId={request.SessionId}, UserId={userId}");
+                    await PublishSyncEventAsync(userId, request.SessionId, "session-reordered");
+                    return sessions.Select(AdminChatSessionDto.CreateFromEntity).ToList();
+                });
+        }
+
+        /// <summary>
+        /// 异步生成首轮会话标题。标题生成只读取首条用户消息，不阻塞正常回复流。
+        /// </summary>
+        [ApiBind(ApiRequestMethod = ApiRequestMethod.Post)]
+        public async Task<AppResponseBase<GenerateSessionTitleResponse>> GenerateSessionTitleAsync(
+            [FromBody] GenerateSessionTitleRequest request)
+        {
+            return await this.GetResponseAsync<AppResponseBase<GenerateSessionTitleResponse>, GenerateSessionTitleResponse>(async (response, logger) =>
+            {
+                var userId = GetCurrentAdminUserInfoId();
+                if (userId <= 0)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.UserNotLoggedIn"]);
+                }
+
+                var session = await _sessionService.GetSessionByIdAsync(request?.SessionId ?? 0, userId);
+                if (session == null)
+                {
+                    throw new NcfExceptionBase(_localizer["AdminChat.SessionNotFoundOrForbidden"]);
+                }
+
+                var (messages, _) = await _messageService.GetSessionMessagesAsync(session.Id);
+                var firstUserMessage = messages
+                    .Where(message => message.RoleType == ChatMessageRoleType.User)
+                    .OrderBy(message => message.Sequence)
+                    .FirstOrDefault();
+                if (firstUserMessage == null)
+                {
+                    return new GenerateSessionTitleResponse { Title = session.Title };
+                }
+
+                var title = await _chatAiService.GenerateSessionTitleAsync(
+                    firstUserMessage.Content,
+                    request?.AiModelId ?? 0);
+                if (!string.IsNullOrWhiteSpace(title))
+                {
+                    await _sessionService.UpdateSessionTitleAsync(session.Id, userId, title);
+                }
+
+                logger.Append($"生成会话标题: SessionId={session.Id}, UserId={userId}");
+                return new GenerateSessionTitleResponse
+                {
+                    Title = string.IsNullOrWhiteSpace(title) ? session.Title : title
                 };
             });
         }
@@ -224,6 +543,7 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                 var workflows = await _sessionWorkflowService.GetSessionWorkflowsAsync(sessionId);
 
                 var sessionDto = AdminChatSessionDto.CreateFromEntity(session);
+                await AttachWorkspaceNamesAsync(new[] { sessionDto });
                 sessionDto.Messages = messages.Select(AdminChatMessageDto.CreateFromEntity).ToList();
                 sessionDto.Modules = modules.Select(z => MapModuleDtoWithRegisterInfo(AdminChatSessionModuleDto.CreateFromEntity(z))).ToList();
                 sessionDto.Workflows = await MapWorkflowDtosAsync(workflows, userId).ConfigureAwait(false);
@@ -320,6 +640,32 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
         #endregion
 
+        private async Task AttachWorkspaceNamesAsync(IEnumerable<AdminChatSessionDto> sessions)
+        {
+            if (_workspaceStorage == null || !IsCurrentAdminSuperAdmin())
+            {
+                return;
+            }
+
+            var items = sessions?.Where(session => !string.IsNullOrWhiteSpace(session.WorkspaceId)).ToList();
+            if (items == null || items.Count == 0)
+            {
+                return;
+            }
+
+            var workspaces = await _workspaceStorage.ListWorkspacesAsync().ConfigureAwait(false);
+            var names = workspaces
+                .Where(workspace => workspace != null && !string.IsNullOrWhiteSpace(workspace.Id))
+                .ToDictionary(workspace => workspace.Id, workspace => workspace.Name, StringComparer.OrdinalIgnoreCase);
+            foreach (var session in items)
+            {
+                if (names.TryGetValue(session.WorkspaceId, out var name))
+                {
+                    session.WorkspaceName = name;
+                }
+            }
+        }
+
         #region 消息管理
 
         /// <summary>
@@ -342,10 +688,17 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     throw new NcfExceptionBase(_localizer["AdminChat.SessionNotFoundOrForbidden"]);
                 }
 
+                if (string.IsNullOrWhiteSpace(request.Content) && request.Attachments?.Count is not > 0)
+                    throw new NcfExceptionBase(_localizer["AdminChat.StreamInputRequired"]);
+                if (request.Attachments?.Count > 0) await GetWorkspaceSessionAsync(request.SessionId);
+                var attachments = await ServiceProvider.GetRequiredService<AdminChatAttachmentService>()
+                    .ValidateAsync(session, request.Attachments);
+                var content = string.IsNullOrWhiteSpace(request.Content)
+                    ? AdminChatAttachmentService.AttachmentOnlyMessage : request.Content.Trim();
                 var userMessage = await _messageService.AddMessageAsync(
                     request.SessionId,
                     ChatMessageRoleType.User,
-                    request.Content);
+                    content, attachments: attachments);
 
                 await _sessionService.UpdateLastMessageTimeAsync(request.SessionId);
 
@@ -359,12 +712,12 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
                     (aiResponse, modelIdentifier, harness) = await _chatAiService.GenerateNativeHarnessResponseAsync(
                         request.SessionId,
                         userId,
-                        request.Content,
-                        request.AiModelId);
+                        content,
+                        request.AiModelId, attachments: attachments);
                 }
                 else
                 {
-                    (aiResponse, modelIdentifier) = await _chatAiService.GenerateResponseAsync(request.SessionId, userId, request.Content, request.AiModelId);
+                    (aiResponse, modelIdentifier) = await _chatAiService.GenerateResponseAsync(request.SessionId, userId, content, request.AiModelId, attachments: attachments);
                 }
 
                 var assistantMessage = await _messageService.AddMessageAsync(
@@ -380,6 +733,9 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
                 return new SendMessageResponse
                 {
+                    MemoryUpdateStatus = _chatAiService.MemoryUpdateStatus,
+                    MemoryUpdateResult = _chatAiService.MemoryUpdateResult,
+                    MemoryUsage = _chatAiService.MemoryUsage,
                     UserMessage = AdminChatMessageDto.CreateFromEntity(userMessage),
                     AssistantMessage = AdminChatMessageDto.CreateFromEntity(assistantMessage),
                     Mode = mode,
@@ -551,6 +907,9 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
                 return new SendTrajectoryResponse
                 {
+                    MemoryUpdateStatus = _chatAiService.MemoryUpdateStatus,
+                    MemoryUpdateResult = _chatAiService.MemoryUpdateResult,
+                    MemoryUsage = _chatAiService.MemoryUsage,
                     SessionId = trajectory.SessionId,
                     UserMessage = AdminChatMessageDto.CreateFromEntity(userMessage),
                     AssistantMessage = AdminChatMessageDto.CreateFromEntity(assistantMessage),
@@ -619,6 +978,9 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
                 return new SendTrajectoryResponse
                 {
+                    MemoryUpdateStatus = _chatAiService.MemoryUpdateStatus,
+                    MemoryUpdateResult = _chatAiService.MemoryUpdateResult,
+                    MemoryUsage = _chatAiService.MemoryUsage,
                     SessionId = branchSession.Id,
                     UserMessage = AdminChatMessageDto.CreateFromEntity(userMessage),
                     AssistantMessage = AdminChatMessageDto.CreateFromEntity(assistantMessage),
@@ -665,6 +1027,9 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
                 return new SendTrajectoryResponse
                 {
+                    MemoryUpdateStatus = "unchanged",
+                    MemoryUpdateResult = _chatAiService.MemoryUpdateResult,
+                    MemoryUsage = _chatAiService.MemoryUsage,
                     SessionId = trajectory.SessionId,
                     AssistantMessage = AdminChatMessageDto.CreateFromEntity(assistantMessage),
                     Harness = harness
@@ -1165,15 +1530,83 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
         public string Title { get; set; }
         public string InitialMessage { get; set; }
         public AdminChatMode Mode { get; set; }
+        public string WorkspaceId { get; set; }
+        public bool WorkspaceWriteEnabled { get; set; }
+        public bool WorkspaceCliEnabled { get; set; }
     }
 
     /// <summary>
     /// 获取会话列表响应
     /// </summary>
+    public class ReorderSessionRequest
+    {
+        public int SessionId { get; set; }
+        public int TargetSessionId { get; set; }
+        public bool InsertAfter { get; set; }
+    }
+
     public class GetSessionListResponse
     {
         public List<AdminChatSessionDto> Sessions { get; set; }
         public int TotalCount { get; set; }
+    }
+
+    public class GetWorkspaceOptionsResponse
+    {
+        public IReadOnlyList<WorkspaceOptionDto> Workspaces { get; set; } = Array.Empty<WorkspaceOptionDto>();
+    }
+
+    public class CreateWorkspaceRequest
+    {
+        public string Name { get; set; }
+    }
+
+    public class GenerateSessionTitleRequest
+    {
+        public int SessionId { get; set; }
+        public int AiModelId { get; set; }
+    }
+
+    public class GenerateSessionTitleResponse
+    {
+        public string Title { get; set; }
+    }
+
+    public class WorkspaceOptionDto
+    {
+        public string Id { get; set; }
+        public int OwnerId { get; set; }
+        public string Name { get; set; }
+        public DateTime CreatedUtc { get; set; }
+        public DateTime LastAccessedUtc { get; set; }
+
+        public static WorkspaceOptionDto CreateFromDescriptor(WorkspaceDescriptor descriptor)
+        {
+            return new WorkspaceOptionDto
+            {
+                Id = descriptor.Id,
+                OwnerId = descriptor.OwnerId,
+                Name = descriptor.Name,
+                CreatedUtc = descriptor.CreatedUtc,
+                LastAccessedUtc = descriptor.LastAccessedUtc
+            };
+        }
+    }
+
+    public class WorkspaceEntriesResponse
+    {
+        public string CurrentPath { get; set; } = string.Empty;
+        public IReadOnlyList<WorkspaceEntry> Entries { get; set; } = Array.Empty<WorkspaceEntry>();
+    }
+
+    public class WorkspaceFilePreviewDto
+    {
+        public string Path { get; set; } = string.Empty;
+        public string ContentType { get; set; } = "application/octet-stream";
+        public long Size { get; set; }
+        public bool IsText { get; set; }
+        public string Content { get; set; }
+        public string ContentBase64 { get; set; } = string.Empty;
     }
 
     /// <summary>
@@ -1213,6 +1646,9 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
     /// </summary>
     public class SendMessageResponse
     {
+        public string MemoryUpdateStatus { get; set; }
+        public AdminChatMemoryUpdateResult MemoryUpdateResult { get; set; }
+        public AdminChatMemoryUsage MemoryUsage { get; set; }
         public AdminChatMessageDto UserMessage { get; set; }
         public AdminChatMessageDto AssistantMessage { get; set; }
 
@@ -1304,6 +1740,9 @@ namespace Senparc.Areas.Admin.OHS.Local.AppService
 
     public class SendTrajectoryResponse
     {
+        public string MemoryUpdateStatus { get; set; }
+        public AdminChatMemoryUpdateResult MemoryUpdateResult { get; set; }
+        public AdminChatMemoryUsage MemoryUsage { get; set; }
         public int SessionId { get; set; }
         public AdminChatMessageDto UserMessage { get; set; }
         public AdminChatMessageDto AssistantMessage { get; set; }

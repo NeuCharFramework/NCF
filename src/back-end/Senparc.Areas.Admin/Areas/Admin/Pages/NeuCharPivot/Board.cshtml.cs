@@ -10,6 +10,12 @@
     修改标识：Senparc - 20260915
     修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
 
+    修改标识：Senparc - 20261101
+    修改描述：首页 Pivot 块缺失时返回可操作的状态信息
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 enhance job management and telemetry features
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +56,7 @@ public class BoardModel(
     {
         var boards = await _boardService.GetFullListAsync(
             z => true, z => z.Id, OrderingType.Ascending).ConfigureAwait(false);
-        return Ok(boards.Select(ToBoardDto));
+        return Ok(boards.Select(board => ToBoardDto(board)));
     }
 
     /// <summary>
@@ -59,7 +65,14 @@ public class BoardModel(
     public async Task<IActionResult> OnGetByPageKeyAsync([FromQuery] string pageKey)
     {
         var board = await _boardService.GetEnabledBoardByPageKeyAsync(pageKey).ConfigureAwait(false);
-        return Ok(board == null ? null : ToBoardDto(board));
+        if (board == null)
+        {
+            return Ok(null);
+        }
+
+        var blocks = NeuCharPivotBoardService.DeserializeBlocks(board.BlocksJson);
+        var availability = await _boardService.GetBlockAvailabilityAsync(blocks).ConfigureAwait(false);
+        return Ok(ToBoardDto(board, availability));
     }
 
     /// <summary>
@@ -159,7 +172,9 @@ public class BoardModel(
         return Ok(new { aiReply = aiReply ?? string.Empty, board = ToBoardDto(board) });
     }
 
-    private static object ToBoardDto(NeuCharPivotBoard board)
+    private static object ToBoardDto(
+        NeuCharPivotBoard board,
+        IReadOnlyDictionary<string, bool> blockAvailability = null)
     {
         return new
         {
@@ -173,6 +188,30 @@ public class BoardModel(
             board.AddTime,
             board.LastUpdateTime,
             blocks = NeuCharPivotBoardService.DeserializeBlocks(board.BlocksJson)
+                .Select(block =>
+                {
+                    bool? available = null;
+                    if (blockAvailability != null)
+                    {
+                        available = blockAvailability.TryGetValue(
+                            NeuCharPivotBoardService.GetBlockKey(block),
+                            out var exists) && exists;
+                    }
+
+                    return new
+                    {
+                        block.Key,
+                        block.ModuleUid,
+                        block.FunctionKey,
+                        block.FunctionName,
+                        block.Title,
+                        block.Summary,
+                        block.Accent,
+                        block.ExposedParameters,
+                        available
+                    };
+                })
+                .ToList()
         };
     }
 

@@ -13,6 +13,9 @@
     修改标识：Senparc - 20261005
     修改描述：v0.5.9 0.5.9 Merge remote-tracking branch 'origin/Developer-MAF-V3' into Developer-MAF-V3-Spark
 
+    修改标识：Senparc - 20261103
+    修改描述：v0.5.12 维护安装器域模型数据传输对象
+
 ----------------------------------------------------------------*/
 
 using Senparc.Xncf.Tenant.Domain.DataBaseModel;

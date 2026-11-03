@@ -1,0 +1,85 @@
+.ncf-doc-help-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    margin: 0 6px;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    background: transparent;
+    color: #409eff;
+    font-size: 20px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.ncf-doc-help-button:hover,
+.ncf-doc-help-button:focus-visible {
+    background: #ecf5ff;
+    border-color: #409eff;
+}
+
+.ncf-doc-help-header {
+    float: right;
+    margin-top: 15px;
+}
+
+.ncf-doc-help-standalone {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 1000;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+}
+
+.ncf-doc-help-dialog {
+    display: flex;
+    flex-direction: column;
+    max-height: 92vh;
+}
+
+.ncf-doc-help-dialog .el-dialog__body {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 12px 20px;
+}
+
+.ncf-doc-help-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 10px;
+    line-height: 1.5;
+}
+
+.ncf-doc-help-external {
+    flex-shrink: 0;
+    color: #2878c9;
+    text-decoration: underline;
+}
+
+.ncf-doc-help-error {
+    color: #b44a00;
+    padding-bottom: 8px;
+}
+
+.ncf-doc-help-frame {
+    width: 100%;
+    height: 68vh;
+    min-height: 120px;
+    border: 1px solid #dcdfe6;
+    background: #fff;
+}
+
+@media (max-width: 600px) {
+    .ncf-doc-help-dialog .el-dialog__body {
+        padding: 8px;
+    }
+}

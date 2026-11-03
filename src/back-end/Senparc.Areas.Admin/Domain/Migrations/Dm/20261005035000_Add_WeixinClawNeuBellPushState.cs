@@ -1,3 +1,17 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+
+    文件名：20261005035000_Add_WeixinClawNeuBellPushState.cs
+    文件功能描述：20261005035000_Add_WeixinClawNeuBellPushState 相关定义与实现
+
+
+    创建标识：Senparc - 20261006
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 支持 Add_WeixinClawNeuBellPushState 数据库迁移
+
+----------------------------------------------------------------*/
+
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;

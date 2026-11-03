@@ -16,6 +16,9 @@
     修改标识：Senparc - 20261005
     修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
 
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 维护集成 NeuCharPivot 与 NeuCharWorkflow 管理能力并优化后台体验
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;

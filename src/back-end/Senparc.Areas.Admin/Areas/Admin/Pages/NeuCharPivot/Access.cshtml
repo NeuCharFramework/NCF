@@ -34,6 +34,7 @@
             <el-tag size="small" type="warning">孤儿策略 {{orphanCount}} 条</el-tag>
         </div>
         <div class="access-toolbar-actions">
+            <ncf-doc-help topic="pivot.access"></ncf-doc-help>
             <el-button size="small" type="success" plain icon="el-icon-unlock" :disabled="!selection.length" @@click="batchApply('apply-open')">批量开放</el-button>
             <el-button size="small" type="warning" plain icon="el-icon-user" :disabled="!selection.length" @@click="openBatchRestrict">批量受限</el-button>
             <el-button size="small" type="danger" plain icon="el-icon-lock" :disabled="!selection.length" @@click="batchApply('apply-deny')">批量禁用</el-button>

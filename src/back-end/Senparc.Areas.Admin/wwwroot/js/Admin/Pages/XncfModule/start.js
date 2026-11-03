@@ -148,6 +148,81 @@
                 .map(item => item.trim())
                 .filter(item => item.length > 0);
         },
+        formatFileSize(value) {
+            const bytes = Number(value || 0);
+            if (bytes < 1024) return `${bytes} B`;
+            if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+            if (bytes < 1024 * 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+            return `${(bytes / 1024 / 1024 / 1024).toFixed(1)} GB`;
+        },
+        async uploadFunctionFiles(fileList, maxFiles) {
+            const files = Array.from(fileList || []);
+            if (!files.length) {
+                return [];
+            }
+            if (maxFiles && files.length > Number(maxFiles)) {
+                throw new Error(`一次最多选择 ${maxFiles} 个文件。`);
+            }
+            const form = new FormData();
+            files.forEach(file => form.append('files', file, file.name));
+            const response = await service.post(
+                '/api/Senparc.Areas.Admin/FunctionFiles/upload',
+                form,
+                { customAlert: true });
+            const uploaded = response && response.data && response.data.files;
+            if (!Array.isArray(uploaded) || uploaded.length !== files.length) {
+                throw new Error('文件上传响应无效。');
+            }
+            return uploaded;
+        },
+        async handleRunFileSelection(event, item) {
+            const entry = this.runData[item.name];
+            if (!entry) return;
+            const selectedFiles = event && event.target ? event.target.files : [];
+            if (!selectedFiles.length) return;
+            this.run.loading = true;
+            try {
+                const uploaded = await this.uploadFunctionFiles(selectedFiles, item.maxFiles);
+                const references = item.allowMultiple ? uploaded : uploaded.slice(0, 1);
+                this.$set(entry, 'files', references);
+                this.$set(entry, 'value', item.allowMultiple
+                    ? references.map(file => file.fileId)
+                    : (references[0] ? references[0].fileId : ''));
+            } catch (error) {
+                this.$notify({
+                    title: '文件上传失败',
+                    message: error && error.message ? error.message : '文件上传失败。',
+                    type: 'error'
+                });
+            } finally {
+                this.run.loading = false;
+                if (event && event.target) event.target.value = '';
+            }
+        },
+        async handlePivotFileSelection(event, fn, parameter) {
+            if (!fn || !parameter || !this.pivot.inputs[fn.id]) return;
+            const selectedFiles = event && event.target ? event.target.files : [];
+            if (!selectedFiles.length) return;
+            this.pivot.loading = true;
+            try {
+                const uploaded = await this.uploadFunctionFiles(selectedFiles, parameter.maxFiles);
+                const references = parameter.allowMultiple ? uploaded : uploaded.slice(0, 1);
+                this.$set(this.pivot.inputs[fn.id], parameter.name,
+                    parameter.allowMultiple
+                        ? references.map(file => file.fileId)
+                        : (references[0] ? references[0].fileId : ''));
+                this.$set(this.pivot.inputs[fn.id], parameter.name + '__files', references);
+            } catch (error) {
+                this.$notify({
+                    title: '文件上传失败',
+                    message: error && error.message ? error.message : '文件上传失败。',
+                    type: 'error'
+                });
+            } finally {
+                this.pivot.loading = false;
+                if (event && event.target) event.target.value = '';
+            }
+        },
         async  getList() {
             const uid = resizeUrl().uid;
             const res = await service.get(`/Admin/XncfModule/Start?handler=Detail&uid=${uid}`);
@@ -305,6 +380,8 @@
                         value = this.normalizeMultiValue(value);
                     } else if (parameter.parameterType === 4) {
                         value = value === true || value === 'true' || value === 'True';
+                    } else if (parameter.parameterType === 6) {
+                        value = parameter.allowMultiple ? [] : '';
                     } else if (value === null || typeof value === 'undefined') {
                         value = '';
                     }
@@ -543,6 +620,12 @@
                     this.runData[res.name].item = res;
                     this.runData[res.name].value = res.value === true || res.value === 'true' || res.value === 'True';
                 }
+                if (res.parameterType === 6) {
+                    this.runData[res.name] = {};
+                    this.runData[res.name].item = res;
+                    this.runData[res.name].files = [];
+                    this.runData[res.name].value = res.allowMultiple ? [] : '';
+                }
             });
             this.runData = Object.assign({}, this.runData);
             //  this.runData数组结构
@@ -628,6 +711,19 @@
                     // 布尔
                     if (this.runData[i].item.parameterType === 4) {
                         xncfFunctionParams[i] = !!this.runData[i].value;
+                    }
+                    if (this.runData[i].item.parameterType === 6) {
+                        const value = this.runData[i].value;
+                        const isEmpty = Array.isArray(value) ? value.length === 0 : !String(value || '').trim();
+                        if (this.runData[i].item.isRequired && isEmpty) {
+                            this.$notify({
+                                title: ncfT('Xncf.Prompt'),
+                                message: ncfT('Xncf.RequiredField', this.runData[i].item.title),
+                                type: 'warning'
+                            });
+                            return;
+                        }
+                        xncfFunctionParams[i] = value;
                     }
                 }
                 const data = {

@@ -1,5 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="AdminChat.Sidebar.Expand" xml:space="preserve"><value>Expandir el panel de conversaciones</value></data>
+  <data name="AdminChat.Sidebar.Collapse" xml:space="preserve"><value>Contraer el panel de conversaciones</value></data>
+  <data name="AdminChat.Sidebar.Resize" xml:space="preserve"><value>Ajustar ancho del panel (flechas izquierda/derecha)</value></data>
+  <data name="AdminChat.Sidebar.Reorder" xml:space="preserve"><value>Arrastrar dentro del grupo, o Alt + Arriba/Abajo</value></data>
+  <data name="AdminChat.Sidebar.Running" xml:space="preserve"><value>En curso</value></data>
+  <data name="AdminChat.Sidebar.Stopping" xml:space="preserve"><value>Deteniendo</value></data>
+  <data name="AdminChat.Sidebar.SortSaved" xml:space="preserve"><value>Orden guardado para esta cuenta en todos los dispositivos</value></data>
+  <data name="AdminChat.Sidebar.SortFailed" xml:space="preserve"><value>No se pudo guardar el orden. Inténtelo de nuevo.</value></data>
+  <data name="AdminChat.Sidebar.PreferencesFailed" xml:space="preserve"><value>No se pudieron leer o guardar las preferencias del panel. Este diseño solo se aplica a esta página.</value></data>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -170,6 +179,7 @@
   <data name="Tenant.KeyExists" xml:space="preserve"><value>La regla de coincidencia del inquilino {0} ya existe</value></data>
   <data name="Tenant.SaveSuccess.Edit" xml:space="preserve"><value>Inquilino actualizado correctamente</value></data>
   <data name="Tenant.SaveSuccess.Create" xml:space="preserve"><value>Inquilino creado correctamente</value></data>
+  <data name="Tenant.PlatformAdminOnly" xml:space="preserve"><value>¡En modo multiinquilino, solo el administrador de la plataforma puede gestionar la información de los inquilinos!</value></data>
   <data name="Tenant.NotFound" xml:space="preserve"><value>Inquilino no encontrado</value></data>
   <data name="Tenant.SetInfoFailed" xml:space="preserve"><value>No se pudo establecer la información del inquilino</value></data>
   <data name="Tenant.InitializeSuccess" xml:space="preserve"><value>Inicialización completada correctamente</value></data>
@@ -215,7 +225,7 @@
   <data name="Admin.Common.NoTime" xml:space="preserve"><value>Sin hora</value></data>
   <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>Copiado correctamente. Use Ctrl+V para pegar.</value></data>
   <data name="Admin.Home.Header" xml:space="preserve"><value>Panel de administración de NeuCharFramework</value></data>
-  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>Estado actual del host</value></data>
+  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>Monitor de recursos del host</value></data>
   <data name="Admin.Home.HostMetricsRealtime" xml:space="preserve"><value>En vivo · se actualiza cada 2 segundos</value></data>
   <data name="Admin.Home.HostCpu" xml:space="preserve"><value>CPU del host (total)</value></data>
   <data name="Admin.Home.HostCpuDetail" xml:space="preserve"><value>Uso total del host</value></data>
@@ -230,11 +240,27 @@
   <data name="Admin.Home.HostProcessCpu" xml:space="preserve"><value>CPU del proceso web</value></data>
   <data name="Admin.Home.HostProcessWorkingSet" xml:space="preserve"><value>Memoria del conjunto de trabajo</value></data>
   <data name="Admin.Home.HostProcessUptime" xml:space="preserve"><value>Tiempo activo</value></data>
-  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>Últimas 30 muestras (solo esta página)</value></data>
+  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>Tendencias de recursos</value></data>
   <data name="Admin.Home.HostNetworkReceive" xml:space="preserve"><value>Recepción</value></data>
   <data name="Admin.Home.HostNetworkSend" xml:space="preserve"><value>Envío</value></data>
   <data name="Admin.Home.HostMetricsInvalidResponse" xml:space="preserve"><value>La API de métricas del host devolvió datos no válidos</value></data>
   <data name="Admin.Home.HostMetricsUnavailable" xml:space="preserve"><value>Las métricas del host no están disponibles temporalmente</value></data>
+  <data name="Admin.Home.WebProcessMemory" xml:space="preserve"><value>Memoria del proceso web</value></data>
+  <data name="Admin.Home.ResourceMonitor" xml:space="preserve"><value>Monitor de recursos (últimas 24 horas)</value></data>
+  <data name="Admin.Home.ResourceMonitorRealtime" xml:space="preserve"><value>Grabado cada 10 s en segundo plano · caché de hasta 24 h</value></data>
+  <data name="Admin.Home.ResourceMonitorHint" xml:space="preserve"><value>Arrastre o use la rueda para ampliar; haga doble clic para restablecer</value></data>
+  <data name="Admin.Home.ResourceMonitorReset" xml:space="preserve"><value>Restablecer rango</value></data>
+  <data name="Admin.Home.ResourceMonitorRange" xml:space="preserve"><value>Intervalo de tiempo</value></data>
+  <data name="Admin.Home.ResourceMonitor5Minutes" xml:space="preserve"><value>5 min</value></data>
+  <data name="Admin.Home.ResourceMonitor30Minutes" xml:space="preserve"><value>30 min</value></data>
+  <data name="Admin.Home.ResourceMonitor6Hours" xml:space="preserve"><value>6 h</value></data>
+  <data name="Admin.Home.ResourceMonitor24Hours" xml:space="preserve"><value>24 h</value></data>
+  <data name="Admin.Home.ResourceMonitorReturnLive" xml:space="preserve"><value>Volver al directo</value></data>
+  <data name="Admin.Home.ResourceMonitorFollowing" xml:space="preserve"><value>Siguiendo en directo</value></data>
+  <data name="Admin.Home.ResourceMonitorPaused" xml:space="preserve"><value>Vista pausada (la grabación continúa)</value></data>
+  <data name="Admin.Home.ResourceMonitorEmpty" xml:space="preserve"><value>El grabador se está iniciando (~10 s) o no hay datos en este rango</value></data>
+  <data name="Admin.Home.ResourceMonitorUnavailable" xml:space="preserve"><value>No se pueden obtener los datos del monitor de recursos</value></data>
+  <data name="Admin.Home.ResourceMonitorNow" xml:space="preserve"><value>ahora</value></data>
   <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>Módulos instalados</value></data>
   <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>Módulos pendientes de actualización</value></data>
   <data name="Admin.Home.NewModules" xml:space="preserve"><value>Nuevos módulos encontrados</value></data>
@@ -506,6 +532,10 @@
   <data name="AdminChat.CreateSessionFailedRetry" xml:space="preserve"><value>No se pudo crear la sesión. Inténtelo de nuevo más tarde.</value></data>
   <data name="Admin.Login.Error.LoginFailed" xml:space="preserve"><value>Error de inicio de sesión</value></data>
   <data name="Admin.Login.Error.LoginRetry" xml:space="preserve"><value>Error de inicio de sesión, inténtelo de nuevo</value></data>
+  <data name="Admin.Login.CaptchaPlaceholder" xml:space="preserve"><value>Introduzca el código de verificación</value></data>
+  <data name="Admin.Login.CaptchaRequired" xml:space="preserve"><value>Introduzca el código de verificación de la imagen</value></data>
+  <data name="Admin.Login.CaptchaRefresh" xml:space="preserve"><value>Haga clic en la imagen para actualizar</value></data>
+  <data name="Admin.Login.Error.CaptchaInvalid" xml:space="preserve"><value>Código de verificación incorrecto, inténtelo de nuevo</value></data>
   <data name="Admin.Login.Support" xml:space="preserve"><value>Asistencia técnica:</value></data>
   <data name="Admin.Login.VisitWebsite" xml:space="preserve"><value>Visitar el sitio web oficial</value></data>
   <data name="Admin.Session.InvalidUser" xml:space="preserve"><value>La identidad del usuario no es válida y no se puede renovar el JWT. Inicie sesión de nuevo.</value></data>
@@ -589,4 +619,13 @@
     <value>No hay menús o páginas para ordenar</value>
   </data>
   <data name="Admin.Footer.NeuBellWebHookSettings" xml:space="preserve"><value>Configuración de WebHook</value></data>
+  <data name="DocHelp.Help" xml:space="preserve"><value>Ayuda</value></data>
+  <data name="DocHelp.Title" xml:space="preserve"><value>Documentación de la función</value></data>
+  <data name="DocHelp.OpenWindow" xml:space="preserve"><value>Abrir en una ventana nueva</value></data>
+  <data name="DocHelp.Close" xml:space="preserve"><value>Cerrar</value></data>
+  <data name="DocHelp.Loading" xml:space="preserve"><value>Cargando documentación...</value></data>
+  <data name="DocHelp.Notice" xml:space="preserve"><value>Si el documento está vacío o bloqueado, ábralo en una ventana nueva.</value></data>
+  <data name="DocHelp.LoadFailed" xml:space="preserve"><value>Error o tiempo de carga agotado. Reintente o abra una ventana nueva.</value></data>
+  <data name="DocHelp.Retry" xml:space="preserve"><value>Reintentar</value></data>
+  <data name="DocHelp.InvalidTopic" xml:space="preserve"><value>La configuración de la documentación no es válida. Contacte con su administrador.</value></data>
 </root>

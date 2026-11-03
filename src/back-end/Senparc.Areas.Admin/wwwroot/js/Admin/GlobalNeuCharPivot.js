@@ -223,7 +223,12 @@
                     this.values = this.createValues(descriptor.parameters || []);
                 } catch (error) {
                     this.visible = false;
-                    this.$message.error('当前账号无权访问该 Function，或模块已不可用。');
+                    var reason = error && error.response && error.response.status === 403
+                        ? error.response.data
+                        : null;
+                    this.$message.error(typeof reason === 'string' && reason.trim()
+                        ? reason
+                        : '当前账号无权访问该 Function，或模块已不可用。');
                 } finally {
                     this.loading = false;
                 }

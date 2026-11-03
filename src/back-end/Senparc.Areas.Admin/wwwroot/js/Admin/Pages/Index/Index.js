@@ -12,12 +12,18 @@ var app = new Vue({
       hostMetrics: {
         warnings: []
       },
-      hostMetricsHistory: [],
       hostMetricsLoading: false,
       hostMetricsError: '',
       hostMetricsTimer: null,
-      hostMetricsChart: null,
-      hostMetricsResizeHandler: null,
+      resourceMonitorError: '',
+      resourceMonitorLoading: false,
+      resourceMonitorTimer: null,
+      resourceMonitorChart: null,
+      resourceMonitorRange: 30 * 60 * 1000,
+      resourceMonitorZoomed: false,
+      resourceMonitorLive: true,
+      resourceMonitorStart: 0,
+      resourceMonitorEnd: 0,
       agentsOverview: {
         available: false
       },
@@ -39,16 +45,11 @@ var app = new Vue({
     this.fetchTodayLogData();
     this.fetchHostMetrics();
     this.startHostMetricsPolling();
+    this.fetchResourceMonitor();
+    this.startResourceMonitorPolling();
     this.fetchAgentsOverview();
     this.startAgentsOverviewPolling();
     this.loadPivotBoard();
-    this.hostMetricsResizeHandler = () => {
-      if (this.hostMetricsChart &&
-        (typeof this.hostMetricsChart.isDisposed !== 'function' || !this.hostMetricsChart.isDisposed())) {
-        this.hostMetricsChart.resize();
-      }
-    };
-    window.addEventListener('resize', this.hostMetricsResizeHandler);
     // 添加鼠标事件监听
     this.initializeHoverEffects();
   },
@@ -57,19 +58,18 @@ var app = new Vue({
       window.clearInterval(this.hostMetricsTimer);
       this.hostMetricsTimer = null;
     }
+    if (this.resourceMonitorTimer) {
+      window.clearInterval(this.resourceMonitorTimer);
+      this.resourceMonitorTimer = null;
+    }
+    if (this.resourceMonitorChart) {
+      this.resourceMonitorChart.dispose();
+      this.resourceMonitorChart = null;
+    }
     if (this.agentsOverviewTimer) {
       window.clearInterval(this.agentsOverviewTimer);
       this.agentsOverviewTimer = null;
     }
-    if (this.hostMetricsResizeHandler) {
-      window.removeEventListener('resize', this.hostMetricsResizeHandler);
-      this.hostMetricsResizeHandler = null;
-    }
-    if (this.hostMetricsChart &&
-      (typeof this.hostMetricsChart.isDisposed !== 'function' || !this.hostMetricsChart.isDisposed())) {
-      this.hostMetricsChart.dispose();
-    }
-    this.hostMetricsChart = null;
   },
   methods: {
     startAgentsOverviewPolling() {
@@ -160,7 +160,27 @@ var app = new Vue({
       const item = openingModules.find(z => z.uid === moduleUid);
       return item ? item.menuName : moduleUid;
     },
+    pivotBlockIsMissing(block) {
+      return block && block.available === false;
+    },
+    pivotBlockMissingDescription(block) {
+      return `该 Pivot Block 引用的 Function 尚未在数据库中初始化。模块 UID：${block.moduleUid || '-'}；Function Code：${block.functionKey || '-'}。请先在模块的 NeuCharPivot 设置中生成或恢复对应 Function，再回到面板设置重新选择。`;
+    },
+    pivotBlockSettingsUrl(block) {
+      const boardId = this.pivotBoard && this.pivotBoard.id ? this.pivotBoard.id : '';
+      return '/Admin/NeuCharPivot/Board?boardId=' + encodeURIComponent(boardId) +
+        '&pageKey=admin-home&moduleUid=' + encodeURIComponent(block.moduleUid || '') +
+        '&functionKey=' + encodeURIComponent(block.functionKey || '');
+    },
+    pivotBlockModuleSettingsUrl(block) {
+      return '/Admin/XncfModule/Start/?uid=' + encodeURIComponent(block.moduleUid || '') +
+        '&functionKey=' + encodeURIComponent(block.functionKey || '') +
+        '&action=settings&tab=pivot';
+    },
     openPivotBlock(block) {
+      if (this.pivotBlockIsMissing(block)) {
+        return;
+      }
       if (window.NeuCharPivotFunction && typeof window.NeuCharPivotFunction.open === 'function') {
         window.NeuCharPivotFunction.open({
           moduleUid: block.moduleUid,
@@ -181,17 +201,26 @@ var app = new Vue({
       }
 
       this.hostMetricsLoading = true;
+      let sample = null;
       try {
         const response = await service.get('/api/Senparc.Areas.Admin/StatAppService/Areas.Admin_StatAppService.GetHostMetrics');
         const metrics = response && response.data && response.data.data;
-        if (!metrics || !metrics.sampledAt) {
+        const sampledAt = metrics && Date.parse(metrics.sampledAt);
+        if (!metrics || !Number.isFinite(sampledAt)) {
           throw new Error(ncfT('Admin.Home.HostMetricsInvalidResponse'));
         }
 
         this.hostMetrics = metrics;
         this.hostMetricsError = '';
-        this.appendHostMetricsHistory(metrics);
-        this.$nextTick(() => this.updateHostMetricsChart());
+        sample = {
+          t: sampledAt,
+          cpu: this.toNullableNumber(metrics.cpuUsagePercent),
+          pcpu: this.toNullableNumber(metrics.processCpuUsagePercent),
+          mem: this.toNullableNumber(metrics.memoryUsagePercent),
+          pmem: this.computeProcessMemoryPercent(metrics),
+          rx: this.bytesPerSecondToMbps(metrics.networkReceiveBytesPerSecond),
+          tx: this.bytesPerSecondToMbps(metrics.networkSendBytesPerSecond)
+        };
       } catch (error) {
         this.hostMetricsError = error && error.message
           ? error.message
@@ -200,132 +229,101 @@ var app = new Vue({
       } finally {
         this.hostMetricsLoading = false;
       }
-    },
-    appendHostMetricsHistory(metrics) {
-      this.hostMetricsHistory.push({
-        sampledAt: metrics.sampledAt,
-        cpu: this.toNullableNumber(metrics.cpuUsagePercent),
-        processCpu: this.toNullableNumber(metrics.processCpuUsagePercent),
-        memory: this.toNullableNumber(metrics.memoryUsagePercent),
-        receiveMbps: this.bytesPerSecondToMbps(metrics.networkReceiveBytesPerSecond),
-        sendMbps: this.bytesPerSecondToMbps(metrics.networkSendBytesPerSecond)
-      });
-      if (this.hostMetricsHistory.length > 30) {
-        this.hostMetricsHistory.splice(0, this.hostMetricsHistory.length - 30);
+      if (sample) {
+        try {
+          this.ensureResourceMonitorChart().addLiveSample(sample);
+        } catch (error) {
+          this.reportResourceMonitorError(error);
+        }
       }
     },
-    updateHostMetricsChart() {
-      const chartElement = document.getElementById('hostMetricsChart');
-      if (!chartElement) {
+    // 当前 Web 进程工作集占物理内存百分比（用于折线图与对比条）
+    computeProcessMemoryPercent(metrics) {
+      const processBytes = this.toNullableNumber(metrics.processWorkingSetBytes);
+      const totalBytes = this.toNullableNumber(metrics.memoryTotalBytes);
+      if (processBytes === null || totalBytes === null || totalBytes <= 0) {
+        return null;
+      }
+      return this.normalizePercent(processBytes / totalBytes * 100);
+    },
+    startResourceMonitorPolling() {
+      if (this.resourceMonitorTimer) {
+        window.clearInterval(this.resourceMonitorTimer);
+      }
+      // 与后台采样间隔一致（10 秒）：页面可见时轮询，隐藏时自动跳过
+      this.resourceMonitorTimer = window.setInterval(() => this.fetchResourceMonitor(), 10000);
+    },
+    ensureResourceMonitorChart() {
+      if (!this.resourceMonitorChart) {
+        const chartElement = document.getElementById('resourceMonitorChart');
+        if (!chartElement || !window.ResourceMonitorChart) {
+          throw new Error(ncfT('Admin.Home.ResourceMonitorUnavailable'));
+        }
+        this.resourceMonitorChart = window.ResourceMonitorChart.create(chartElement, {
+          rangeMs: this.resourceMonitorRange,
+          i18n: {
+            empty: ncfT('Admin.Home.ResourceMonitorEmpty'),
+            cpuHost: ncfT('Admin.Home.HostCpu'),
+            cpuWeb: ncfT('Admin.Home.HostProcessCpu'),
+            memHost: ncfT('Admin.Home.HostMemory'),
+            memWeb: ncfT('Admin.Home.WebProcessMemory'),
+            rx: ncfT('Admin.Home.HostNetworkReceive'),
+            tx: ncfT('Admin.Home.HostNetworkSend')
+          },
+          onViewChange: (view) => {
+            this.resourceMonitorStart = view.start;
+            this.resourceMonitorEnd = view.end;
+            this.resourceMonitorLive = view.live;
+            this.resourceMonitorZoomed = view.zoomed;
+          }
+        });
+      }
+      return this.resourceMonitorChart;
+    },
+    reportResourceMonitorError(error) {
+      this.resourceMonitorError = (error && error.message)
+        ? error.message
+        : ncfT('Admin.Home.ResourceMonitorUnavailable');
+      console.warn('Resource monitor refresh failed:', error);
+    },
+    async fetchResourceMonitor() {
+      if (this.resourceMonitorLoading || document.hidden) {
         return;
       }
-      if (this.hostMetricsChart &&
-        typeof this.hostMetricsChart.isDisposed === 'function' &&
-        this.hostMetricsChart.isDisposed()) {
-        this.hostMetricsChart = null;
+      this.resourceMonitorLoading = true;
+      try {
+        const response = await service.get('/api/Senparc.Areas.Admin/StatAppService/Areas.Admin_StatAppService.GetResourceMonitor');
+        const data = response && response.data && response.data.data;
+        if (!data || !Number.isFinite(data.now) || !Array.isArray(data.windows) ||
+          !data.windows.every(window => window && Number.isFinite(window.resolutionSeconds) &&
+            window.resolutionSeconds > 0 && Array.isArray(window.points))) {
+          throw new Error(ncfT('Admin.Home.ResourceMonitorUnavailable'));
+        }
+        this.ensureResourceMonitorChart().update(data);
+        this.resourceMonitorError = '';
+      } catch (error) {
+        this.reportResourceMonitorError(error);
+      } finally {
+        this.resourceMonitorLoading = false;
       }
-      if (!this.hostMetricsChart) {
-        const existingChart = typeof echarts.getInstanceByDom === 'function'
-          ? echarts.getInstanceByDom(chartElement)
-          : null;
-        this.hostMetricsChart = existingChart &&
-          (typeof existingChart.isDisposed !== 'function' || !existingChart.isDisposed())
-          ? existingChart
-          : echarts.init(chartElement);
+    },
+    resetResourceMonitorZoom() {
+      if (this.resourceMonitorChart) {
+        this.resourceMonitorChart.reset();
       }
-
-      // 旧版 ECharts 在第一次 setOption() 前没有内部 model，此时调用 getOption() 会抛错。
-      // 仅在已有 model 时读取图例状态，保证首屏能完成第一次绘制。
-      const chartModel = typeof this.hostMetricsChart.getModel === 'function'
-        ? this.hostMetricsChart.getModel()
-        : true;
-      const currentOption = chartModel && typeof this.hostMetricsChart.getOption === 'function'
-        ? this.hostMetricsChart.getOption()
-        : null;
-      const selectedSeries = currentOption && currentOption.legend && currentOption.legend[0]
-        ? Object.assign({}, currentOption.legend[0].selected || {})
-        : {};
-      const labels = this.hostMetricsHistory.map(item => this.formatSampleTime(item.sampledAt));
-      this.hostMetricsChart.setOption({
-        animationDurationUpdate: 300,
-        title: {
-          text: ncfT('Admin.Home.HostMetricsChart'),
-          textStyle: { fontSize: 15, fontWeight: 500 }
-        },
-        tooltip: { trigger: 'axis' },
-        legend: {
-          top: 2,
-          right: 8,
-          selected: selectedSeries,
-          data: [
-            ncfT('Admin.Home.HostCpu'),
-            ncfT('Admin.Home.HostProcessCpu'),
-            ncfT('Admin.Home.HostMemory'),
-            ncfT('Admin.Home.HostNetworkReceive'),
-            ncfT('Admin.Home.HostNetworkSend')
-          ]
-        },
-        grid: { left: 52, right: 58, top: 52, bottom: 38 },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          data: labels
-        },
-        yAxis: [{
-          type: 'value',
-          name: '%',
-          min: 0,
-          max: 100
-        }, {
-          type: 'value',
-          name: 'Mbps',
-          min: 0,
-          splitLine: { show: false }
-        }],
-        series: [{
-          name: ncfT('Admin.Home.HostCpu'),
-          type: 'line',
-          smooth: true,
-          showSymbol: false,
-          data: this.hostMetricsHistory.map(item => item.cpu),
-          lineStyle: { color: '#8c52ff' },
-          itemStyle: { color: '#8c52ff' }
-        }, {
-          name: ncfT('Admin.Home.HostProcessCpu'),
-          type: 'line',
-          smooth: true,
-          showSymbol: false,
-          data: this.hostMetricsHistory.map(item => item.processCpu),
-          lineStyle: { color: '#00a6a6', type: 'dashed' },
-          itemStyle: { color: '#00a6a6' }
-        }, {
-          name: ncfT('Admin.Home.HostMemory'),
-          type: 'line',
-          smooth: true,
-          showSymbol: false,
-          data: this.hostMetricsHistory.map(item => item.memory),
-          lineStyle: { color: '#67c23a' },
-          itemStyle: { color: '#67c23a' }
-        }, {
-          name: ncfT('Admin.Home.HostNetworkReceive'),
-          type: 'line',
-          yAxisIndex: 1,
-          smooth: true,
-          showSymbol: false,
-          data: this.hostMetricsHistory.map(item => item.receiveMbps),
-          lineStyle: { color: '#409eff' },
-          itemStyle: { color: '#409eff' }
-        }, {
-          name: ncfT('Admin.Home.HostNetworkSend'),
-          type: 'line',
-          yAxisIndex: 1,
-          smooth: true,
-          showSymbol: false,
-          data: this.hostMetricsHistory.map(item => item.sendMbps),
-          lineStyle: { color: '#e6a23c' },
-          itemStyle: { color: '#e6a23c' }
-        }]
-      }, true);
+    },
+    selectResourceMonitorRange(range) {
+      if (this.resourceMonitorChart) {
+        this.resourceMonitorChart.setRange(range);
+      }
+    },
+    returnResourceMonitorToLive() {
+      if (this.resourceMonitorChart) {
+        this.resourceMonitorChart.returnToLive();
+      }
+    },
+    formatResourceMonitorTime(value) {
+      return value ? new Date(value).toLocaleString() : '--';
     },
     toNullableNumber(value) {
       if (value === null || value === undefined || value === '') {

@@ -125,6 +125,18 @@
                                                 <el-checkbox v-for="option in parameter.options" :key="option.value" :label="option.value">{{option.text}}</el-checkbox>
                                             </el-checkbox-group>
                                             <el-switch v-else-if="parameter.parameterType===4" v-model="inputs[fn.id][parameter.name]"></el-switch>
+                                            <div v-else-if="parameter.parameterType===6" class="function-file-input">
+                                                <input type="file"
+                                                       :multiple="parameter.allowMultiple"
+                                                       :accept="parameter.accept || ''"
+                                                       @@change="handleFileSelection($event, fn, parameter)" />
+                                                <small v-if="parameter.maxFiles">最多 {{parameter.maxFiles}} 个文件</small>
+                                                <ul v-if="fileUploads[fn.id] && fileUploads[fn.id][parameter.name]">
+                                                    <li v-for="file in fileUploads[fn.id][parameter.name]" :key="file.fileId">
+                                                        {{file.fileName}}（{{formatFileSize(file.length)}}）
+                                                    </li>
+                                                </ul>
+                                            </div>
                                             <small v-if="parameter.description">{{parameter.description}}</small>
                                         </div>
                                         <div class="neuchar-card-actions">

@@ -22,6 +22,9 @@
     修改标识：Senparc - 20261005
     修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
 
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 维护NeuBell WebHook（WebAPI）设置与请求日志实体：
+
 ----------------------------------------------------------------*/
 
 using Senparc.Areas.Admin.Domain.Services;

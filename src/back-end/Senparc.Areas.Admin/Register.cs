@@ -52,6 +52,9 @@
     修改标识：Senparc - 20261005
     修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
 
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 implement AdminChat memory storage and management system
+
 ----------------------------------------------------------------*/
 
 /* 
@@ -103,6 +106,7 @@ using Senparc.Ncf.Service;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.XncfBase;
 using Senparc.Ncf.XncfBase.Database;
+using Senparc.Ncf.XncfBase.Functions.Files;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -137,7 +141,7 @@ namespace Senparc.Areas.Admin
 
         public override string Uid => ModuleUid;// "00000000-0000-0001-0001-000000000001";
 
-        public override string Version => "0.5.12";
+        public override string Version => "0.5.14";
 
         public override string MenuName => T("Admin.Register.MenuName", "NCF 系统管理员后台");
 
@@ -211,6 +215,8 @@ namespace Senparc.Areas.Admin
             //services.AddScoped(typeof(AuthenticationAsyncPageFilterAttribute));
 
             services.Configure<JwtSettings>(JwtSettings.Position_Backend, configuration.GetSection(JwtSettings.Position_Backend));// 配置管理后台jwt
+            services.Configure<FunctionFileStoreOptions>(
+                configuration.GetSection(FunctionFileStoreOptions.SectionName));
             services.Configure<WeixinClawAdminIntegrationOptions>(
                 configuration.GetSection(WeixinClawAdminIntegrationOptions.SectionName));
 
@@ -237,6 +243,8 @@ namespace Senparc.Areas.Admin
             services.AddScoped<IAdminAuthConfigRepository, AdminAuthConfigRepository>();
             services.AddScoped<InstallerService>();
             services.AddScoped<AdminAuthConfigService>();
+            // 管理员登录图形验证码（纯 SVG 生成 + CO2NET 缓存，无第三方依赖）
+            services.AddScoped<LoginCaptchaService>();
             services.AddScoped<IDesktopAdminAuthTokenIssuer, DesktopAdminAuthTokenIssuer>();
 
             // 聊天功能相关服务注册
@@ -253,6 +261,17 @@ namespace Senparc.Areas.Admin
             services.AddScoped<AdminChatTrajectoryService>();
             services.AddScoped<AdminChatTrajectoryEventService>();
             services.AddScoped<AdminChatAiService>();
+            services.AddSingleton<AdminChatMemoryStore>();
+            services.AddScoped<IAdminChatMemoryStore>(provider => new AdminChatMemoryDatabaseStore(
+                provider.GetRequiredService<Senparc.Ncf.Core.Models.INcfDbData>().BaseDataContext,
+                provider.GetRequiredService<AdminChatMemoryStore>(),
+                provider.GetRequiredService<Microsoft.AspNetCore.DataProtection.IDataProtectionProvider>()));
+            services.AddScoped<AdminChatMemoryService>();
+            services.AddScoped<AdminChatWorkspaceAssetService>();
+            services.AddSingleton<WorkspaceAssetPreviewBuilder>();
+            services.AddSingleton<WorkspaceAssetShareStore>();
+            services.AddSingleton<WorkspaceDocumentReader>();
+            services.AddScoped<AdminChatAttachmentService>();
             services.AddScoped<IWeixinClawAdminBindingRepository, WeixinClawAdminBindingRepository>();
             services.AddScoped<WeixinClawAdminBindingService>();
             services.AddScoped<AdminWeixinClawMessageHandler>();
@@ -286,6 +305,10 @@ namespace Senparc.Areas.Admin
             // Admin 首页 Host 实时指标采样器。Singleton 仅保存计算速率所需的上一帧计数器，
             // 不保存历史记录，也不写入任何缓存。
             services.AddSingleton<HostMetricsCollector>();
+
+            // Admin 首页资源监控：后台每 10 秒采样，按 10s/1min/5min 三个时间分档写入
+            // CO2NET 对象缓存（最多保留 24 小时），UI 未打开时记录依然持续。
+            services.AddHostedService<ResourceMonitorRecorder>();
 
             // 纽铃 Footer 聚合、全局缓存与实时变更流。Provider 虽随 DLL 注册，
             // 但是否执行仍由 NeuBellProviderCatalog 按 XNCF 安装/开放状态决定。

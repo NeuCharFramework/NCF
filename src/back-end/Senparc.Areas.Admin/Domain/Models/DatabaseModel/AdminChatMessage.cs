@@ -10,11 +10,17 @@
     修改标识：Senparc - 20260915
     修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
 
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 add comprehensive unit tests for AdminChatWorkspaceAssetService functionality
+
 ----------------------------------------------------------------*/
 using Senparc.Ncf.Core.Models;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+using System.Text.Json;
+using Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto;
 
 namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
 {
@@ -42,6 +48,19 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
         /// </summary>
         [Required]
         public string Content { get; private set; }
+
+        public string AttachmentsJson { get; private set; }
+
+        public IReadOnlyList<AdminChatAttachment> GetAttachments() =>
+            string.IsNullOrEmpty(AttachmentsJson) ? Array.Empty<AdminChatAttachment>()
+                : JsonSerializer.Deserialize<List<AdminChatAttachment>>(AttachmentsJson)
+                    ?? throw new InvalidOperationException("消息附件记录无效。");
+
+        public void SetAttachments(IReadOnlyList<AdminChatAttachment> attachments)
+        {
+            if (attachments?.Count > 4) throw new ArgumentException("每条消息最多关联 4 个附件。");
+            AttachmentsJson = attachments?.Count > 0 ? JsonSerializer.Serialize(attachments) : null;
+        }
 
         /// <summary>
         /// 消息序号（用于保持对话顺序）

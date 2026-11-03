@@ -5,6 +5,7 @@ new Vue({
             loading: false,
             modules: [],
             inputs: {},
+            fileUploads: {},
             keyword: '',
             moduleStateFilter: '',
             functionStateFilter: '',
@@ -52,12 +53,14 @@ new Vue({
                 this.workflowOptions = Array.isArray(body.workflowOptions) ? body.workflowOptions : [];
                 this.summary = body.summary || {};
                 const inputs = {};
+                const fileUploads = {};
                 this.modules = modules.map(module => {
                     const layout = NeuCharPivotUi.normalizeLayout(module.layoutSchemaJson ||
                         (module.configuration && module.configuration.layoutSchemaJson));
                     module.layout = layout;
                     (module.functions || []).forEach(fn => {
                         inputs[fn.id] = NeuCharPivotUi.createParameterValues(fn);
+                        fileUploads[fn.id] = {};
                     });
                     this.$set(this.activePanels, module.configuration.moduleUid,
                         this.activePanels[module.configuration.moduleUid] ||
@@ -65,6 +68,7 @@ new Vue({
                     return module;
                 }).sort((left, right) => Number(right.moduleAvailable) - Number(left.moduleAvailable));
                 this.inputs = inputs;
+                this.fileUploads = fileUploads;
                 this.openedModules = this.modules.slice(0, 3)
                     .map(module => module.configuration.moduleUid);
             } finally {
@@ -138,6 +142,54 @@ new Vue({
         },
         getParameters(fn) {
             return NeuCharPivotUi.parseJson(fn.parameterSchemaJson, []);
+        },
+        formatFileSize(value) {
+            const bytes = Number(value || 0);
+            if (bytes < 1024) return `${bytes} B`;
+            if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+            if (bytes < 1024 * 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+            return `${(bytes / 1024 / 1024 / 1024).toFixed(1)} GB`;
+        },
+        async uploadFunctionFiles(fileList, maxFiles) {
+            const files = Array.from(fileList || []);
+            if (!files.length) return [];
+            if (maxFiles && files.length > Number(maxFiles)) {
+                throw new Error(`一次最多选择 ${maxFiles} 个文件。`);
+            }
+            const form = new FormData();
+            files.forEach(file => form.append('files', file, file.name));
+            const response = await service.post(
+                '/api/Senparc.Areas.Admin/FunctionFiles/upload',
+                form,
+                { customAlert: true });
+            const uploaded = response && response.data && response.data.files;
+            if (!Array.isArray(uploaded) || uploaded.length !== files.length) {
+                throw new Error('文件上传响应无效。');
+            }
+            return uploaded;
+        },
+        async handleFileSelection(event, fn, parameter) {
+            const selectedFiles = event && event.target ? event.target.files : [];
+            if (!selectedFiles.length || !fn || !parameter) return;
+            this.loading = true;
+            try {
+                const uploaded = await this.uploadFunctionFiles(selectedFiles, parameter.maxFiles);
+                const references = parameter.allowMultiple ? uploaded : uploaded.slice(0, 1);
+                this.$set(this.inputs[fn.id], parameter.name,
+                    parameter.allowMultiple
+                        ? references.map(file => file.fileId)
+                        : (references[0] ? references[0].fileId : ''));
+                this.$set(this.fileUploads[fn.id], parameter.name, references);
+            } catch (error) {
+                this.$notify({
+                    title: '文件上传失败',
+                    message: error && error.message ? error.message : '文件上传失败。',
+                    type: 'error'
+                });
+            } finally {
+                this.loading = false;
+                if (event && event.target) event.target.value = '';
+            }
         },
         workflowName(workflowId) {
             const item = this.workflowOptions.find(option => Number(option.id) === Number(workflowId));

@@ -4,6 +4,8 @@
     文件名：Function.cshtml.cs
     文件功能描述：全局 NeuCharPivot Function 浮动调用接口
 
+    创建标识：Senparc - 20260829
+
     修改标识：Senparc - 20260829
     修改描述：v0.7.0 新增 NeuCharPivot 全局浮动调用与工作流分析管理能力
 
@@ -12,6 +14,9 @@
 
     修改标识：Senparc - 20261005
     修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 维护全局 NeuCharPivot Function 浮动调用接口
 
 ----------------------------------------------------------------*/
 

@@ -4,6 +4,133 @@
 
 如果你狠狠心，也可以将此模块删除，这不会影响系统的正常运行，只不过你无法再进入管理后台。当然对黑客来说也一样。
 
+## 全局上下文文档帮助
+
+Vue 公共布局在顶部语言/账号区域提供问号帮助图标，默认在独立的 Element UI 弹窗中加载
+`https://doc.ncf.pub`，也可在新窗口打开当前选定的文档。弹窗按需创建、全页共享，
+关闭后移除 iframe 并恢复入口焦点，不请求后台业务 API，不影响相邻按钮的业务行为。
+
+- 文档语言读取当前页面的 `html[lang]`（来自 `CurrentUICulture`）；旧式独立入口直接传入服务端文化：`zh` 及 `zh-*`
+  使用 `/zh/`，英语、日语、法语、西班牙语、俄语及其他语言使用英文根目录，**不是 `/en/`**。
+  切换系统语言后的页面会自动使用对应文档；帮助控件自身使用现有七套 Admin 资源。
+- 固定入口覆盖全部交互式 Admin 页面。监控面板、附件、Harness、Workspace 权限、
+  召回 Top K、上传设置、微调 Worker、向量配置、MCP、配对审批等区域另设局部入口。
+  未知页面不会被默认导向不相关的通用文档。
+- iframe 等待 15 秒后显示超时提示，支持重试；新窗口入口始终可用。跨域 iframe 的
+  `load` 事件不能证明 HTTP 成功或识别所有 CSP/X-Frame-Options 阻止，因此始终保留空白/
+  被阻止时的提示，不把 `load` 当作成功验证，也不代理文档或绕过文档站安全策略。
+  新窗口打开的是选定索引的文档，不跟踪 iframe 内后续跨域导航。
+
+### 最少接入代码
+
+文档及双语章节索引集中维护在
+[`NcfDocHelpCatalog.js`](wwwroot/js/Admin/Shared/NcfDocHelpCatalog.js)。
+`topics` 中的 `path` 不含域名、语言前缀、查询参数或锚点；有章节时同时配置
+`anchors.zh` 和 `anchors.en`。组件统一编码锚点、限制目标域名，并显式报告无效索引。
+
+使用公共布局的页面，在 `pages` 添加路径到主题键的映射即可，**页面无需新增代码**。
+Razor 的目录路由和 `/Index` 路由自动归一化，只登记小写目录路径；
+查询参数不会参与匹配，也不会发送到文档站。注册的是精确页面，不是宽泛的模块前缀。
+也可以在页面的 Razor 配置块中覆盖顶部主题：
+
+```cshtml
+ViewData["DocHelp"] = "modules.manage";
+```
+
+在按钮、字段或标题旁放一个独立入口，只需：
+
+```html
+<ncf-doc-help topic="modules.publish"></ncf-doc-help>
+```
+
+非组件调用可使用 `NcfDocHelp.open("modules.publish")`。
+组件在页面脚本前全局注册，不需要修改各页 Vue data/methods，也无需复制弹窗。
+登录页及五个旧式管理员/菜单/角色表单使用独立入口，不替换其原布局：
+
+```cshtml
+@await Html.PartialAsync("_DocHelpStandalone", "admin.roles")
+```
+
+该 Partial 仅在缺少时加载 Vue、Element UI 和帮助资源，挂载独立的小型 Vue 根，
+仍复用同一目录、弹窗及本地化，不干扰已有页面 Vue 实例或表单事件。
+SenMapic 的任务页、微信公众号编辑页也使用此兼容入口；如果继承的布局已经显示顶部帮助，
+独立入口自动取消，避免重复显示。
+
+### 全局覆盖与发布顺序（2026-11-03）
+
+67 个后台路由中，63 个交互页面有精确映射；四个非操作页面在 `excludedPages`
+中说明原因：Session 协议入口、Pivot Function 跳转、DesktopBridge 授权中转、
+KnowledgeBase 空的 Edit handler 视图。安装器、独立前端及生成模板不属于 Admin 页面，
+没有通过修改外部布局或模板强制接入。
+
+缺少说明的功能已补入 NcfDocs 的双语
+`NcfPackageSources/xncf/admin-operations.md`，使用相同的显式 `help-*` 锚点。
+已有微调、AgentsManager、Workflow、Workspace、Sandbox、隔离开发等专项文档继续复用。
+通用模块 Function 卡片只链接执行流程说明，不假称所有 Function 都有独立教程。
+
+**先发布 NcfDocs，再部署新的 UI 包。** 本地索引已经配置完整，但未发布的文档不能
+通过修改 UI 在生产文档站自动出现。需发布新增的中英文 `admin-operations.html` 和 `adminchat-memory.html`，
+并同步现有专项文档及其静态资源；不要只复制新增 Markdown 或 HTML。
+发布后重新检查地址、锚点和 iframe 允许策略。此前试点发现的 404 不能用首页替代。
+补齐 Memory 后索引有 63 个主题，引用 13 篇双语文档（26 个地址）。
+首轮 57 个主题检查时，24 个地址中有 14 个仍为
+404：新增操作指南、微调、AgentsManager HIL/3D、Workflow、Workspace、隔离开发的双语版本。
+
+AdminChat 的当前会话、新建会话标题均有 Chat 帮助，嵌入 Footer 时也可访问；
+Memory 帮助覆盖侧栏、两处模式选择器、设置弹窗标题，以及条目、本轮加载、
+Markdown 编辑、SystemMessage 面板。全部复用中央索引和语言切换，不调用聊天或 Memory API。
+文档区分数据库记忆、Workspace 文件、聊天历史、加载报告和持久化回执。
+
+### 验证
+
+从仓库根目录运行：
+
+```bash
+node --test tools/NcfSimulatedSite/Tests/Senparc.Areas.Admin.Tests/Client/NcfDocHelpTests.js
+```
+
+设置 `NCF_DOCS_ROOT` 为本地 NcfDocs 仓库路径，检查每个索引文件及 VuePress 实际渲染的锚点；
+再设置 `NCF_DOCS_DIST` 为构建输出目录，校验每个最终 HTML 地址和锚点只出现一次。
+不设置这两个环境变量时，对应的跨仓库检查会明确标记 skipped。
+测试同时扫描所有运行时 Admin Razor 页面和局部组件，新增页面或错误主题键会使测试失败。
+NcfDocs 的 `npm run docs:test` 另检查双语锚点一致性、唯一性和指南内的链接。
+
+浏览器检查使用仓库真实 Vue/Element UI/帮助组件/资源文件及线上文档，以拦截的隔离页面
+替代后台业务与登录，不操作数据库，也不要求启动或重启站点：
+
+```bash
+playwright-cli -s=ncf-doc-help open
+playwright-cli -s=ncf-doc-help run-code --filename=tools/NcfSimulatedSite/Tests/Senparc.Areas.Admin.Tests/Client/NcfDocHelpBrowserChecks.js
+playwright-cli -s=ncf-doc-help close
+```
+
+发布前可在 `run-code` 前用 `playwright-cli ... eval` 设置
+`window.NCF_DOC_HELP_TEST_DIST` 为本地 VuePress 构建输出的绝对路径；
+浏览器会拦截文档域名请求，直接验证全部主题的双语页面及章节，而不依赖线上发布。
+这不会修改生产站点或应用的文档域名配置。构建缺失的静态资源会返回 404 并单独报告。
+首轮 Vite 构建的浏览器检查报告了两个缺失的预加载资源
+`assets/style-l0sNRNKZ.js`、`assets/docsearch-l0sNRNKZ.js`；全部 114 个主题/语言组合的
+正文及目标锚点仍通过。未将这些资源的 404 伪装成成功，也未在本次帮助铺设中修改构建器。
+
+检查还覆盖新窗口、相邻按钮隔离、移动端、关闭/焦点、其余四种 UI 语言、
+未知页面、独立入口按需加载、阻止加载、超时与重试。它不等同于登录后所有业务页面的整页验收。
+
+Memory 专项浏览器检查使用实际 Razor 局部标记和 Chat 数据/方法，但不运行业务初始化。
+同样先设置 `window.NCF_DOC_HELP_TEST_DIST`，然后运行
+`tools/NcfSimulatedSite/Tests/Senparc.Areas.Admin.Tests/Client/AdminChatMemoryHelpBrowserChecks.js`，
+验证双语文档、嵌套弹窗层级、关闭后的草稿/焦点，以及帮助点击不会触发请求或切换模式。
+
+## Host 资源监控
+
+管理后台首页的 Host 资源监控在一个面板中展示实时状态和历史趋势：
+
+- 实时指标每 2 秒刷新；当前页面保留最近 5 分钟的实时图表采样。
+- 后台每 10 秒记录一次，分别保留最近 30 分钟的 10 秒采样、6 小时的 1 分钟聚合和 24 小时的 5 分钟聚合。图表在时间重叠时优先使用更精细的数据。
+- 支持最近 5 分钟、30 分钟、6 小时和 24 小时的线性时间视图。拖拽或滚轮可缩放；缩放会暂停视图跟随，但后台仍继续记录。可重置所选范围或回到实时。
+- Host 和 Web 进程的 CPU、内存使用百分比使用左侧纵轴；网络上下行吞吐量使用右侧 Mbps 纵轴。点击图例可显示或隐藏曲线。
+
+历史数据保存在 CO2NET 对象缓存中，不写入数据库；具体存储取决于缓存配置。24 小时是最大保留范围，不保证已有完整 24 小时数据，缓存失效或清除后历史也可能消失。
+
 ## 个人微信 Claw 与 Admin 集成
 
 个人微信通道由 `Senparc.Xncf.WeixinManager` 提供，Admin 只通过
@@ -75,6 +202,39 @@ SQLite、SQL Server、MySQL、Oracle、PostgreSQL 和 DM 六种数据库。
 前端在 `Areas/Admin/Pages/AdminChat/Chat.cshtml` 提供模式切换、轨迹抽屉、事件回放、恢复、分叉和工具审批按钮。数据库迁移名为 `Add_AdminChatHarnessTrajectory`，覆盖 SQLite、SQL Server、MySQL、Oracle、PostgreSQL 和 DM。
 
 详细发布和真实包安装说明见 `docs/Admin-Chat-Harness-Trajectory.md` 与 Senparc.AI 仓库的 `docs/AgentKernel-Harness-Release.md`。
+
+## PromptRange 可复用提示词选择器
+
+使用 `_Layout_Vue` 的页面已全局加载选择器。为 Element UI 文本输入框添加
+`v-prompt-range`，即可在右上角显示 PromptRange 按钮，不需要修改页面 Vue 的 methods 或 data：
+
+```html
+<el-input type="textarea" v-model="message" v-prompt-range="!isSending"></el-input>
+```
+
+原生输入框使用标记容器（每个容器只放一个 textarea 或 text input）：
+
+```html
+<div v-prompt-range>
+    <textarea v-model="message"></textarea>
+</div>
+```
+
+- AdminChat 的新建会话、已有会话以及 Footer 内嵌聊天使用同一组件。
+- 支持靶场、靶道联动筛选；关键词搜索名称、正文、靶场别名和完整版本号；分页加载并按需预览完整正文。
+- 默认按平均分从高到低排序，未评分项置后，同分时较新记录优先；可切换为 PromptCode 字符串升序。
+  排序作用于全部搜索结果后再分页，切换排序回到第一页。列表和预览均显示平均分、最高分（保留一位小数），
+  未评分显示“未评分”，零分正常显示为 `0.0`。
+- 仅列出 Prompt 类型靶场中的提示词（含明确标记的草稿），不执行 Skill 或 AI 请求。
+- 点击“插入提示词”在打开弹窗时的光标位置插入，选中文字会被替换；原有其余内容保留。
+  插入触发原生 `input` 事件，兼容 Vue/Element UI 的 `v-model`，但不会发送聊天消息、展开变量或应用模型参数。
+- 传入 `false`、禁用或只读输入框均不可选择；关闭弹窗不更改输入内容。
+  输入框被移除、内容在弹窗期间发生更改或超过 `maxlength` 时，不会覆盖输入内容。
+- 后端沿用 PromptRange 管理员权限、租户和软删除过滤。模块未安装/未更新、无权限和请求失败会显示错误及重新加载入口；
+  不影响未标记输入框或普通聊天。加载页面时不请求提示词接口。
+- 其他布局需在 Vue、Element UI、后台 `service` 和本地化脚本之后引入
+  `wwwroot/js/Admin/Shared/PromptRangeSelector.js`，并引入对应的
+  `wwwroot/css/Admin/Shared/PromptRangeSelector.css`，且在创建页面 Vue 实例之前注册指令。
 
 ## NeuBell WebHook（WebAPI）通知设置
 

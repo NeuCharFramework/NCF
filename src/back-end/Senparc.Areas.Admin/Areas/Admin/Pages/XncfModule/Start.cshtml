@@ -84,6 +84,7 @@
                          :class="['box-card', {'function-card-highlight': isFocusedFunction(item)}]">
                     <div slot="header" class="clearfix">
                         <span><i class="fa fa-terminal"></i> {{item.key.name}}</span>
+                        <ncf-doc-help topic="modules.functions"></ncf-doc-help>
                             <span type="text" :class="[data.xncfModule.state===1?'box-card-action':'box-card-action2']" @@click="openRun(item,data.xncfModule.state)">@AR["Xncf.Execute"]</span>
                         <p class="box-card-des">{{item.key.description}}</p>
                     </div>
@@ -211,6 +212,18 @@
                                                         <el-checkbox v-for="option in parameter.options" :key="option.value" :label="option.value">{{option.text}}</el-checkbox>
                                                     </el-checkbox-group>
                                                     <el-switch v-else-if="parameter.parameterType===4" v-model="pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name]"></el-switch>
+                                                    <div v-else-if="parameter.parameterType===6" class="function-file-input">
+                                                        <input type="file"
+                                                               :multiple="parameter.allowMultiple"
+                                                               :accept="parameter.accept || ''"
+                                                               @@change="handlePivotFileSelection($event, getPivotFunction(layoutFunction.functionKey), parameter)" />
+                                                        <small v-if="parameter.maxFiles">最多 {{parameter.maxFiles}} 个文件</small>
+                                                        <ul v-if="pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name + '__files']">
+                                                            <li v-for="file in pivot.inputs[getPivotFunction(layoutFunction.functionKey).id][parameter.name + '__files']" :key="file.fileId">
+                                                                {{file.fileName}}（{{formatFileSize(file.length)}}）
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                     <small v-if="parameter.description">{{parameter.description}}</small>
                                                 </div>
                                                 <div class="pivot-function-actions">
@@ -281,6 +294,18 @@
                           :maxlength="item.maxLength===0 ? 20000 : item.maxLength"
                           show-word-limit></el-input>
                 <el-checkbox v-if="item.parameterType===4" v-model="runData[item.name].value"></el-checkbox>
+                <div v-else-if="item.parameterType===6" class="function-file-input">
+                    <input type="file"
+                           :multiple="item.allowMultiple"
+                           :accept="item.accept || ''"
+                           @@change="handleRunFileSelection($event, item)" />
+                    <small v-if="item.maxFiles">最多 {{item.maxFiles}} 个文件</small>
+                    <ul v-if="runData[item.name].files && runData[item.name].files.length">
+                        <li v-for="file in runData[item.name].files" :key="file.fileId">
+                            {{file.fileName}}（{{formatFileSize(file.length)}}）
+                        </li>
+                    </ul>
+                </div>
                 <el-select v-if="item.parameterType===1"
                            v-model="runData[item.name].value"
                            :filterable="item.filterable"

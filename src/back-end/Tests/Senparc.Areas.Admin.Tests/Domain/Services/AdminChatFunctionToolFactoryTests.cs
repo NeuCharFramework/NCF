@@ -64,6 +64,8 @@ public class AdminChatFunctionToolFactoryTests
             });
 
         using var schema = JsonDocument.Parse(function.JsonSchema.GetRawText());
+            Assert.IsTrue(schema.RootElement.GetProperty("properties").EnumerateObject()
+                .Any(property => string.Equals(property.Name, nameof(SelectionRequest.TemplateKey), StringComparison.OrdinalIgnoreCase)));
         var parameterSchema = FindPropertySchema(schema.RootElement, nameof(SelectionRequest.TemplateKey));
         Assert.IsNotNull(parameterSchema);
         CollectionAssert.AreEqual(
@@ -80,6 +82,43 @@ public class AdminChatFunctionToolFactoryTests
             ? resultElement.GetString()
             : result?.ToString();
         Assert.AreEqual("csharp-exec", resultText);
+    }
+
+    [TestMethod]
+    public void Create_BindsFlattenedRequestArguments()
+    {
+        var plugin = new RecordingPlugin();
+        var method = typeof(RecordingPlugin).GetMethod(nameof(RecordingPlugin.Select));
+        var function = AdminChatFunctionToolFactory.Create(
+            method,
+            plugin,
+            "Xncf_RecordingPlugin_Select",
+            "Selects a sandbox template.",
+            new[]
+            {
+                new FunctionParameterInfo
+                {
+                    Name = nameof(SelectionRequest.TemplateKey),
+                    ParameterType = ParameterType.DropDownList,
+                    SelectionList = new SelectionList(
+                        SelectionType.DropDownList,
+                        new[]
+                        {
+                            new SelectionItem("python-exec", "Python Exec"),
+                            new SelectionItem("jupyter-csharp", "JupyterLab C#")
+                        })
+                }
+            });
+
+        var result = function.InvokeAsync(new AIFunctionArguments
+        {
+            ["TemplateKey"] = "jupyter-csharp"
+        }).GetAwaiter().GetResult();
+
+        var resultText = result is JsonElement resultElement
+            ? resultElement.GetString()
+            : result?.ToString();
+        Assert.AreEqual("jupyter-csharp", resultText);
     }
 
     [TestMethod]

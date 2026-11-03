@@ -13,6 +13,15 @@
     修改标识：Senparc - 20260915
     修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
 
+    修改标识：Senparc - 20261021
+    修改描述：v0.11.1 输出会话工作区与标题
+
+    修改标识：Senparc - 20261103
+    修改描述：输出服务端会话排序
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 完善后台聊天会话管理与排序
+
 ----------------------------------------------------------------*/
 
 using Senparc.Ncf.Core.Models;
@@ -46,6 +55,16 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
         /// 最后一条消息时间
         /// </summary>
         public DateTime LastMessageTime { get; set; }
+
+        public string WorkspaceId { get; set; }
+
+        public string WorkspaceName { get; set; }
+
+        public bool WorkspaceWriteEnabled { get; set; }
+
+        public bool WorkspaceCliEnabled { get; set; }
+
+        public int? SortOrder { get; set; }
 
         /// <summary>
         /// 关联的消息列表（可选，用于嵌套查询）
@@ -89,7 +108,11 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
                 Title = entity.Title,
                 UserId = entity.UserId,
                 Status = entity.Status,
-                LastMessageTime = entity.LastMessageTime
+                LastMessageTime = entity.LastMessageTime,
+                WorkspaceId = entity.WorkspaceId,
+                WorkspaceWriteEnabled = entity.WorkspaceWriteEnabled,
+                WorkspaceCliEnabled = entity.WorkspaceCliEnabled,
+                SortOrder = entity.SortOrder
             };
         }
     }
@@ -99,6 +122,8 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
     /// </summary>
     public class CreateChatSessionInputDto
     {
+        public bool UseMemory { get; set; }
+        public Senparc.Areas.Admin.Domain.Services.AdminChatMemoryMode? MemoryMode { get; set; }
         /// <summary>
         /// 初始消息内容
         /// </summary>
@@ -128,6 +153,12 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
         /// 初始消息运行模式；页面默认发送 Harness。
         /// </summary>
         public AdminChatMode Mode { get; set; } = AdminChatMode.Simple;
+
+        public string WorkspaceId { get; set; }
+
+        public bool WorkspaceWriteEnabled { get; set; }
+
+        public bool WorkspaceCliEnabled { get; set; }
 
         public CreateChatSessionInputDto()
         {

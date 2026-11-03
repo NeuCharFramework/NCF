@@ -13,6 +13,12 @@
     修改标识：Senparc - 20260815
     修改描述：v0.5.1 优化管理端 AI 插件与知识库交互
 
+    修改标识：Senparc - 20261009
+    修改描述：v0.11.0 增强后台 Admin Chat 群组配置、提示词构建与上下文控制
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 enhance Agent Studio, group configuration, and task management interactions
+
 ----------------------------------------------------------------*/
 using Microsoft.SemanticKernel;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel;

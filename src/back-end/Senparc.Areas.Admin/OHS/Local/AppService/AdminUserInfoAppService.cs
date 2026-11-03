@@ -22,6 +22,9 @@
     修改标识：Senparc - 20260915
     修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
 
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 Remove DatabaseSample and related components from MCP extension
+
 ----------------------------------------------------------------*/
 using Microsoft.AspNetCore.Mvc;
 using Senparc.Areas.Admin.Domain;

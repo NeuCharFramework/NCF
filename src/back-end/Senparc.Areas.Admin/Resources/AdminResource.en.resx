@@ -1,5 +1,80 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="AdminChat.Memory.Subtitle" xml:space="preserve"><value>Manage lasting preferences for more personal conversations</value></data>
+  <data name="AdminChat.Memory.Private" xml:space="preserve"><value>Private memory</value></data>
+  <data name="AdminChat.Memory.SaveChanges" xml:space="preserve"><value>Save changes</value></data>
+  <data name="AdminChat.Memory.ClearDraft" xml:space="preserve"><value>Clear draft</value></data>
+  <data name="AdminChat.Memory.EntriesHint" xml:space="preserve"><value>Your global and current Workspace memories in one place</value></data>
+  <data name="AdminChat.Memory.Guide" xml:space="preserve"><value>Scopes, learning rules and storage</value></data>
+  <data name="AdminChat.Memory.FormatGuide" xml:space="preserve"><value>Markdown format and saving rules</value></data>
+  <data name="AdminChat.Memory.SaveEntry" xml:space="preserve"><value>Save entry</value></data>
+  <data name="AdminChat.Memory.EmptyEntries" xml:space="preserve"><value>No memories yet. Add your first preference to get started.</value></data>
+  <data name="AdminChat.Memory.EmptyLoaded" xml:space="preserve"><value>No loading report yet. Enable Memory and send a message to see it here.</value></data>
+  <data name="AdminChat.Sidebar.Expand" xml:space="preserve"><value>Expand chat sidebar</value></data>
+  <data name="AdminChat.Sidebar.Collapse" xml:space="preserve"><value>Collapse chat sidebar</value></data>
+  <data name="AdminChat.Sidebar.Resize" xml:space="preserve"><value>Resize sidebar (Left/Right arrow keys)</value></data>
+  <data name="AdminChat.Sidebar.Reorder" xml:space="preserve"><value>Drag within this group, or press Alt + Up/Down</value></data>
+  <data name="AdminChat.Sidebar.Running" xml:space="preserve"><value>Running</value></data>
+  <data name="AdminChat.Sidebar.Stopping" xml:space="preserve"><value>Stopping</value></data>
+  <data name="AdminChat.Sidebar.SortSaved" xml:space="preserve"><value>Order saved for this account across devices</value></data>
+  <data name="AdminChat.Sidebar.SortFailed" xml:space="preserve"><value>Could not save order. Please retry.</value></data>
+  <data name="AdminChat.Sidebar.PreferencesFailed" xml:space="preserve"><value>Could not read or save sidebar preferences. This layout applies to this page only.</value></data>
+  <data name="AdminChat.Memory.Settings" xml:space="preserve"><value>Memory / Chat settings</value></data>
+  <data name="AdminChat.Memory.UpdateSaved" xml:space="preserve"><value>Memory saved: {0} global and {1} current Workspace changes (private database storage, no file created).</value></data>
+  <data name="AdminChat.Memory.UpdateReason.mode-off" xml:space="preserve"><value>Long-term Memory was not saved: Memory is off for this chat. The assistant's acknowledgement is not proof of persistence.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.read-only" xml:space="preserve"><value>Long-term Memory was not saved: this chat is read-only. Switch to Learn or edit entries manually.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.input-not-eligible" xml:space="preserve"><value>Memory was not updated: the input did not meet learning triggers or exceeded the length limit.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.no-candidates" xml:space="preserve"><value>Memory was not updated: the extractor returned no long-term memories. Add an entry manually or check this turn's PromptCode. The assistant saying it remembers is not a save confirmation.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.pinned" xml:space="preserve"><value>Memory was not updated: the relevant entry is pinned against AI changes or deletion. Edit it manually.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.no-difference" xml:space="preserve"><value>Memory unchanged: the returned content already exists, or there was no matching entry to delete.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.revision-conflict" xml:space="preserve"><value>Memory was not saved: it changed during this turn. The newer version was preserved; review before retrying.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.timeout" xml:space="preserve"><value>Memory was not saved: extraction timed out. Retry or add the entry manually.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.invalid-change" xml:space="preserve"><value>Memory was not saved: evidence, safety, scope or field validation rejected the entire batch.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.capacity" xml:space="preserve"><value>Memory was not saved: the 80-entry limit was reached. Delete unused entries first.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.invalid-json" xml:space="preserve"><value>Memory was not saved: the extractor did not return valid JSON in the required format. Check the prompt.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.pending" xml:space="preserve"><value>No Memory save has been confirmed. Do not treat the assistant's promise as proof of persistence.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.update-failed" xml:space="preserve"><value>Memory update failed; saving was not confirmed. Check prompt, model or database configuration. Existing memories were preserved.</value></data>
+  <data name="AdminChat.Memory.StorageNotice" xml:space="preserve"><value>Memories live in your private database, not in Workspace files. A Workspace Memory.md is an ordinary file and is not created or imported automatically. Manage entries here; trust the system update result, not an assistant's textual acknowledgement.</value></data>
+  <data name="AdminChat.Memory.Use" xml:space="preserve"><value>Use my global Memory</value></data>
+  <data name="AdminChat.Memory.Notice" xml:space="preserve"><value>Off: no retrieval or learning. Read-only: retrieval only. Learn: updates on explicit preferences, remember or correction cues. Private user-global + current Workspace scopes; expired/archive entries excluded. Budget: 1000 tokens, Core up to 300; unknown models use a conservative estimate. Never store secrets or sensitive information.</value></data>
+  <data name="AdminChat.Memory.ModeOff" xml:space="preserve"><value>Off</value></data>
+  <data name="AdminChat.Memory.ModeReadOnly" xml:space="preserve"><value>Read-only</value></data>
+  <data name="AdminChat.Memory.ModeLearn" xml:space="preserve"><value>Learn</value></data>
+  <data name="AdminChat.Memory.Entries" xml:space="preserve"><value>Entries</value></data>
+  <data name="AdminChat.Memory.ScopeNotice" xml:space="preserve"><value>Only your global and current chat Workspace memories are shown. Workspace editing requires a chat bound to that Workspace. Workspace facts take priority over global facts with the same key.</value></data>
+  <data name="AdminChat.Memory.Add" xml:space="preserve"><value>Add entry</value></data>
+  <data name="AdminChat.Memory.Text" xml:space="preserve"><value>Content</value></data>
+  <data name="AdminChat.Memory.Scope" xml:space="preserve"><value>Scope</value></data>
+  <data name="AdminChat.Memory.ScopeGlobal" xml:space="preserve"><value>My global</value></data>
+  <data name="AdminChat.Memory.Tier" xml:space="preserve"><value>Loading tier</value></data>
+  <data name="AdminChat.Memory.Kind" xml:space="preserve"><value>Kind</value></data>
+  <data name="AdminChat.Memory.Topic" xml:space="preserve"><value>Topic (required for topic tier)</value></data>
+  <data name="AdminChat.Memory.Expires" xml:space="preserve"><value>Expires (optional)</value></data>
+  <data name="AdminChat.Memory.Pinned" xml:space="preserve"><value>Pin: prevent AI changes or deletion</value></data>
+  <data name="AdminChat.Memory.DeleteNotice" xml:space="preserve"><value>Delete entry and erase its history content? Original chat messages are not deleted.</value></data>
+  <data name="AdminChat.Memory.Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="AdminChat.Memory.Source" xml:space="preserve"><value>Source chat / message</value></data>
+  <data name="AdminChat.Memory.Loaded" xml:space="preserve"><value>Loaded this turn</value></data>
+  <data name="AdminChat.Memory.LoadedNotice" xml:space="preserve"><value>Memories supplied to the model for the latest turn on this page, not proof the model used them. Counts include Memory boundary text, excluding SystemMessage, history and protocol overhead. This report is not retained after refresh.</value></data>
+  <data name="AdminChat.Memory.Reason" xml:space="preserve"><value>Selection reason</value></data>
+  <data name="AdminChat.Memory.History" xml:space="preserve"><value>Change history</value></data>
+  <data name="AdminChat.Memory.Time" xml:space="preserve"><value>Time</value></data>
+  <data name="AdminChat.Memory.MarkdownScope" xml:space="preserve"><value>Memory.md edits/exports only your global memories. Use entry editing for Workspace memories; clearing Markdown does not delete them.</value></data>
+  <data name="AdminChat.Memory.UnsavedMarkdown" xml:space="preserve"><value>Save the Markdown draft before editing individual entries.</value></data>
+  <data name="AdminChat.Memory.Preview" xml:space="preserve"><value>Preview Memory.md</value></data>
+  <data name="AdminChat.Memory.Edit" xml:space="preserve"><value>Edit / Tiers</value></data>
+  <data name="AdminChat.Memory.Format" xml:space="preserve"><value>Use ## Core, ## Topic: name, and ## Archive headings with '- ' entries: up to 300 characters each, 80 entries total. Manual saves pin all entries against AI replacement. Empty the editor and save to delete all memories. Publish and score a new version in PromptRange's AdminChat.Memory range; the highest average-scoring published prompt replaces the default.</value></data>
+  <data name="AdminChat.Memory.SystemMessage" xml:space="preserve"><value>SystemMessage</value></data>
+  <data name="AdminChat.Memory.SystemNotice" xml:space="preserve"><value>Applies to all my chats from the next turn, even with Memory off. Does not grant tool permissions. Up to 2000 characters.</value></data>
+  <data name="AdminChat.Memory.GlobalSystem" xml:space="preserve"><value>Tenant-wide SystemMessage (super administrator)</value></data>
+  <data name="AdminChat.Memory.GlobalNotice" xml:space="preserve"><value>Applies to all users' chats in this tenant, or the entire site in single-tenant mode. Excludes internal generation tasks such as titles and Memory extraction.</value></data>
+  <data name="AdminChat.Memory.SaveGlobal" xml:space="preserve"><value>Save global SystemMessage</value></data>
+  <data name="AdminChat.Memory.Download" xml:space="preserve"><value>Download Memory.md</value></data>
+  <data name="AdminChat.Memory.Clear" xml:space="preserve"><value>Clear draft (save to delete)</value></data>
+  <data name="AdminChat.Memory.Save" xml:space="preserve"><value>Save my Memory / settings</value></data>
+  <data name="AdminChat.Memory.Saved" xml:space="preserve"><value>Saved.</value></data>
+  <data name="AdminChat.Memory.Failed" xml:space="preserve"><value>Memory operation failed. Reload before retrying.</value></data>
+  <data name="AdminChat.Memory.UpdateWarning" xml:space="preserve"><value>Memory was not updated this turn; existing memories were retained. Check PromptRange or reopen Memory settings.</value></data>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -217,7 +292,7 @@
   <data name="Admin.Common.NoTime" xml:space="preserve"><value>No time</value></data>
   <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>Copied successfully. Use Ctrl+V to paste.</value></data>
   <data name="Admin.Home.Header" xml:space="preserve"><value>NeuCharFramework Admin Panel</value></data>
-  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>Current host health</value></data>
+  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>Host resource monitor</value></data>
   <data name="Admin.Home.HostMetricsRealtime" xml:space="preserve"><value>Live · refreshes every 2 seconds</value></data>
   <data name="Admin.Home.HostCpu" xml:space="preserve"><value>Host CPU (overall)</value></data>
   <data name="Admin.Home.HostCpuDetail" xml:space="preserve"><value>Whole-host utilization</value></data>
@@ -232,11 +307,27 @@
   <data name="Admin.Home.HostProcessCpu" xml:space="preserve"><value>Web process CPU</value></data>
   <data name="Admin.Home.HostProcessWorkingSet" xml:space="preserve"><value>Working set memory</value></data>
   <data name="Admin.Home.HostProcessUptime" xml:space="preserve"><value>Uptime</value></data>
-  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>Last 30 samples (this page only)</value></data>
+  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>Resource trends</value></data>
   <data name="Admin.Home.HostNetworkReceive" xml:space="preserve"><value>Receive</value></data>
   <data name="Admin.Home.HostNetworkSend" xml:space="preserve"><value>Send</value></data>
   <data name="Admin.Home.HostMetricsInvalidResponse" xml:space="preserve"><value>The host metrics endpoint returned invalid data</value></data>
   <data name="Admin.Home.HostMetricsUnavailable" xml:space="preserve"><value>Host metrics are temporarily unavailable</value></data>
+  <data name="Admin.Home.WebProcessMemory" xml:space="preserve"><value>Web process memory</value></data>
+  <data name="Admin.Home.ResourceMonitor" xml:space="preserve"><value>Resource Monitor (last 24 hours)</value></data>
+  <data name="Admin.Home.ResourceMonitorRealtime" xml:space="preserve"><value>Recorded every 10 s in background · cached up to 24 h</value></data>
+  <data name="Admin.Home.ResourceMonitorHint" xml:space="preserve"><value>Drag or scroll to zoom; double-click to reset the range</value></data>
+  <data name="Admin.Home.ResourceMonitorReset" xml:space="preserve"><value>Reset range</value></data>
+  <data name="Admin.Home.ResourceMonitorRange" xml:space="preserve"><value>Time range</value></data>
+  <data name="Admin.Home.ResourceMonitor5Minutes" xml:space="preserve"><value>5 min</value></data>
+  <data name="Admin.Home.ResourceMonitor30Minutes" xml:space="preserve"><value>30 min</value></data>
+  <data name="Admin.Home.ResourceMonitor6Hours" xml:space="preserve"><value>6 h</value></data>
+  <data name="Admin.Home.ResourceMonitor24Hours" xml:space="preserve"><value>24 h</value></data>
+  <data name="Admin.Home.ResourceMonitorReturnLive" xml:space="preserve"><value>Return to live</value></data>
+  <data name="Admin.Home.ResourceMonitorFollowing" xml:space="preserve"><value>Following live</value></data>
+  <data name="Admin.Home.ResourceMonitorPaused" xml:space="preserve"><value>View paused (recording continues)</value></data>
+  <data name="Admin.Home.ResourceMonitorEmpty" xml:space="preserve"><value>Background recorder warming up (~10 s), or no data in this range</value></data>
+  <data name="Admin.Home.ResourceMonitorUnavailable" xml:space="preserve"><value>Cannot fetch resource monitor data right now</value></data>
+  <data name="Admin.Home.ResourceMonitorNow" xml:space="preserve"><value>now</value></data>
   <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>Installed modules</value></data>
   <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>Modules pending update</value></data>
   <data name="Admin.Home.NewModules" xml:space="preserve"><value>New modules found</value></data>
@@ -513,6 +604,10 @@
   <data name="AdminChat.CreateSessionFailedRetry" xml:space="preserve"><value>Failed to create the session. Please try again later.</value></data>
   <data name="Admin.Login.Error.LoginFailed" xml:space="preserve"><value>Login failed</value></data>
   <data name="Admin.Login.Error.LoginRetry" xml:space="preserve"><value>Login failed, please try again</value></data>
+  <data name="Admin.Login.CaptchaPlaceholder" xml:space="preserve"><value>Please enter the captcha</value></data>
+  <data name="Admin.Login.CaptchaRequired" xml:space="preserve"><value>Please enter the image captcha</value></data>
+  <data name="Admin.Login.CaptchaRefresh" xml:space="preserve"><value>Click the image to refresh</value></data>
+  <data name="Admin.Login.Error.CaptchaInvalid" xml:space="preserve"><value>The captcha is incorrect, please try again</value></data>
   <data name="Admin.Login.Support" xml:space="preserve"><value>Technical support:</value></data>
   <data name="Admin.Login.VisitWebsite" xml:space="preserve"><value>Visit the official website</value></data>
   <data name="Admin.Session.InvalidUser" xml:space="preserve"><value>The current user identity is invalid, so the JWT cannot be renewed. Please log in again.</value></data>
@@ -613,4 +708,38 @@
   <data name="Tenant.DeleteLastTenantNotAllowed" xml:space="preserve"><value>The system must keep at least one enabled tenant; the last tenant cannot be deleted!</value></data>
   <data name="Tenant.DeleteHasAdminUsers" xml:space="preserve"><value>Tenant {0} still has {1} admin account(s). Reassign or delete them before deleting the tenant!</value></data>
   <data name="Tenant.DeleteNotFound" xml:space="preserve"><value>Tenant not found!</value></data>
+  <data name="Tenant.PlatformAdminOnly" xml:space="preserve"><value>In multi-tenant mode, only the platform administrator can manage tenant information!</value></data>
+  <data name="PromptSelector.Title" xml:space="preserve"><value>PromptRange · Select a prompt</value></data>
+  <data name="PromptSelector.Range" xml:space="preserve"><value>All ranges</value></data>
+  <data name="PromptSelector.Tactic" xml:space="preserve"><value>All lanes</value></data>
+  <data name="PromptSelector.Keyword" xml:space="preserve"><value>Search name, content, range or version</value></data>
+  <data name="PromptSelector.Search" xml:space="preserve"><value>Search</value></data>
+  <data name="PromptSelector.Retry" xml:space="preserve"><value>Reload</value></data>
+  <data name="PromptSelector.Empty" xml:space="preserve"><value>No matching prompts. Try different filters.</value></data>
+  <data name="PromptSelector.Draft" xml:space="preserve"><value>Draft</value></data>
+  <data name="PromptSelector.Preview" xml:space="preserve"><value>Prompt preview</value></data>
+  <data name="PromptSelector.SelectHint" xml:space="preserve"><value>Select a prompt on the left to preview its full content.</value></data>
+  <data name="PromptSelector.InsertHint" xml:space="preserve"><value>Insert at the cursor (replace selected text), without sending or executing.</value></data>
+  <data name="PromptSelector.Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="PromptSelector.Insert" xml:space="preserve"><value>Insert prompt</value></data>
+  <data name="PromptSelector.LoadFailed" xml:space="preserve"><value>Unable to load prompts. Please retry.</value></data>
+  <data name="PromptSelector.AccessDenied" xml:space="preserve"><value>Your session expired or access was denied. Sign in again or contact an administrator.</value></data>
+  <data name="PromptSelector.Unavailable" xml:space="preserve"><value>PromptRange selector is unavailable. Check that the module is installed, enabled and updated.</value></data>
+  <data name="PromptSelector.TargetChanged" xml:space="preserve"><value>The input changed or is no longer editable. Close the picker and select again.</value></data>
+  <data name="PromptSelector.TooLong" xml:space="preserve"><value>The inserted content would exceed the input length limit. Shorten it first.</value></data>
+  <data name="PromptSelector.Sort" xml:space="preserve"><value>Sort by</value></data>
+  <data name="PromptSelector.SortScore" xml:space="preserve"><value>Score (average, high to low)</value></data>
+  <data name="PromptSelector.SortPromptCode" xml:space="preserve"><value>PromptCode (ascending)</value></data>
+  <data name="PromptSelector.AverageScore" xml:space="preserve"><value>Average score</value></data>
+  <data name="PromptSelector.MaxScore" xml:space="preserve"><value>Highest score</value></data>
+  <data name="PromptSelector.Unrated" xml:space="preserve"><value>Not rated</value></data>
+  <data name="DocHelp.Help" xml:space="preserve"><value>Help</value></data>
+  <data name="DocHelp.Title" xml:space="preserve"><value>Feature documentation</value></data>
+  <data name="DocHelp.OpenWindow" xml:space="preserve"><value>Open in new window</value></data>
+  <data name="DocHelp.Close" xml:space="preserve"><value>Close</value></data>
+  <data name="DocHelp.Loading" xml:space="preserve"><value>Loading documentation...</value></data>
+  <data name="DocHelp.Notice" xml:space="preserve"><value>If the document is blank or blocked, open it in a new window.</value></data>
+  <data name="DocHelp.LoadFailed" xml:space="preserve"><value>Document loading failed or timed out. Retry or open in a new window.</value></data>
+  <data name="DocHelp.Retry" xml:space="preserve"><value>Retry</value></data>
+  <data name="DocHelp.InvalidTopic" xml:space="preserve"><value>The documentation index is invalid. Please contact your administrator.</value></data>
 </root>

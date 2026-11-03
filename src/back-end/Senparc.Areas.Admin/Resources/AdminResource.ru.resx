@@ -1,5 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="AdminChat.Sidebar.Expand" xml:space="preserve"><value>Развернуть панель чатов</value></data>
+  <data name="AdminChat.Sidebar.Collapse" xml:space="preserve"><value>Свернуть панель чатов</value></data>
+  <data name="AdminChat.Sidebar.Resize" xml:space="preserve"><value>Изменить ширину панели (стрелки влево/вправо)</value></data>
+  <data name="AdminChat.Sidebar.Reorder" xml:space="preserve"><value>Перетащите внутри группы или нажмите Alt + Вверх/Вниз</value></data>
+  <data name="AdminChat.Sidebar.Running" xml:space="preserve"><value>Выполняется</value></data>
+  <data name="AdminChat.Sidebar.Stopping" xml:space="preserve"><value>Остановка</value></data>
+  <data name="AdminChat.Sidebar.SortSaved" xml:space="preserve"><value>Порядок сохранён для этой учётной записи на всех устройствах</value></data>
+  <data name="AdminChat.Sidebar.SortFailed" xml:space="preserve"><value>Не удалось сохранить порядок. Повторите попытку.</value></data>
+  <data name="AdminChat.Sidebar.PreferencesFailed" xml:space="preserve"><value>Не удалось прочитать или сохранить настройки панели. Этот вид действует только на текущей странице.</value></data>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -170,6 +179,7 @@
   <data name="Tenant.KeyExists" xml:space="preserve"><value>Правило сопоставления арендатора {0} уже существует</value></data>
   <data name="Tenant.SaveSuccess.Edit" xml:space="preserve"><value>Арендатор успешно обновлен</value></data>
   <data name="Tenant.SaveSuccess.Create" xml:space="preserve"><value>Арендатор успешно создан</value></data>
+  <data name="Tenant.PlatformAdminOnly" xml:space="preserve"><value>В режиме нескольких арендаторов управлять информацией об арендаторах может только администратор платформы!</value></data>
   <data name="Tenant.NotFound" xml:space="preserve"><value>Арендатор не найден</value></data>
   <data name="Tenant.SetInfoFailed" xml:space="preserve"><value>Не удалось установить информацию об арендаторе</value></data>
   <data name="Tenant.InitializeSuccess" xml:space="preserve"><value>Инициализация успешно завершена</value></data>
@@ -215,7 +225,7 @@
   <data name="Admin.Common.NoTime" xml:space="preserve"><value>Нет времени</value></data>
   <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>Скопировано. Используйте Ctrl+V для вставки.</value></data>
   <data name="Admin.Home.Header" xml:space="preserve"><value>Панель администратора NeuCharFramework</value></data>
-  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>Текущее состояние хоста</value></data>
+  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>Монитор ресурсов хоста</value></data>
   <data name="Admin.Home.HostMetricsRealtime" xml:space="preserve"><value>В реальном времени · каждые 2 секунды</value></data>
   <data name="Admin.Home.HostCpu" xml:space="preserve"><value>CPU хоста (общая)</value></data>
   <data name="Admin.Home.HostCpuDetail" xml:space="preserve"><value>Общая загрузка хоста</value></data>
@@ -230,11 +240,27 @@
   <data name="Admin.Home.HostProcessCpu" xml:space="preserve"><value>CPU веб-процесса</value></data>
   <data name="Admin.Home.HostProcessWorkingSet" xml:space="preserve"><value>Рабочий набор памяти</value></data>
   <data name="Admin.Home.HostProcessUptime" xml:space="preserve"><value>Время работы</value></data>
-  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>Последние 30 замеров (только эта страница)</value></data>
+  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>Динамика ресурсов</value></data>
   <data name="Admin.Home.HostNetworkReceive" xml:space="preserve"><value>Приём</value></data>
   <data name="Admin.Home.HostNetworkSend" xml:space="preserve"><value>Передача</value></data>
   <data name="Admin.Home.HostMetricsInvalidResponse" xml:space="preserve"><value>API метрик хоста вернул недопустимые данные</value></data>
   <data name="Admin.Home.HostMetricsUnavailable" xml:space="preserve"><value>Метрики хоста временно недоступны</value></data>
+  <data name="Admin.Home.WebProcessMemory" xml:space="preserve"><value>Память процесса Web</value></data>
+  <data name="Admin.Home.ResourceMonitor" xml:space="preserve"><value>Монитор ресурсов (последние 24 часа)</value></data>
+  <data name="Admin.Home.ResourceMonitorRealtime" xml:space="preserve"><value>Запись каждые 10 с в фоне · кэш до 24 ч</value></data>
+  <data name="Admin.Home.ResourceMonitorHint" xml:space="preserve"><value>Выделите область или используйте колесо для масштаба; двойной щелчок сбрасывает диапазон</value></data>
+  <data name="Admin.Home.ResourceMonitorReset" xml:space="preserve"><value>Сбросить диапазон</value></data>
+  <data name="Admin.Home.ResourceMonitorRange" xml:space="preserve"><value>Диапазон времени</value></data>
+  <data name="Admin.Home.ResourceMonitor5Minutes" xml:space="preserve"><value>5 мин</value></data>
+  <data name="Admin.Home.ResourceMonitor30Minutes" xml:space="preserve"><value>30 мин</value></data>
+  <data name="Admin.Home.ResourceMonitor6Hours" xml:space="preserve"><value>6 ч</value></data>
+  <data name="Admin.Home.ResourceMonitor24Hours" xml:space="preserve"><value>24 ч</value></data>
+  <data name="Admin.Home.ResourceMonitorReturnLive" xml:space="preserve"><value>Вернуться к текущим данным</value></data>
+  <data name="Admin.Home.ResourceMonitorFollowing" xml:space="preserve"><value>Текущие данные</value></data>
+  <data name="Admin.Home.ResourceMonitorPaused" xml:space="preserve"><value>Просмотр на паузе (запись продолжается)</value></data>
+  <data name="Admin.Home.ResourceMonitorEmpty" xml:space="preserve"><value>Фоновая запись запускается (~10 с) или в этом диапазоне пока нет данных</value></data>
+  <data name="Admin.Home.ResourceMonitorUnavailable" xml:space="preserve"><value>Сейчас нельзя получить данные монитора ресурсов</value></data>
+  <data name="Admin.Home.ResourceMonitorNow" xml:space="preserve"><value>сейчас</value></data>
   <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>Установленные модули</value></data>
   <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>Модули, ожидающие обновления</value></data>
   <data name="Admin.Home.NewModules" xml:space="preserve"><value>Найдены новые модули</value></data>
@@ -506,6 +532,10 @@
   <data name="AdminChat.CreateSessionFailedRetry" xml:space="preserve"><value>Не удалось создать сеанс. Повторите попытку позже.</value></data>
   <data name="Admin.Login.Error.LoginFailed" xml:space="preserve"><value>Ошибка входа</value></data>
   <data name="Admin.Login.Error.LoginRetry" xml:space="preserve"><value>Ошибка входа, повторите попытку</value></data>
+  <data name="Admin.Login.CaptchaPlaceholder" xml:space="preserve"><value>Введите код подтверждения</value></data>
+  <data name="Admin.Login.CaptchaRequired" xml:space="preserve"><value>Введите код с изображения</value></data>
+  <data name="Admin.Login.CaptchaRefresh" xml:space="preserve"><value>Нажмите на изображение, чтобы обновить</value></data>
+  <data name="Admin.Login.Error.CaptchaInvalid" xml:space="preserve"><value>Неверный код подтверждения, повторите попытку</value></data>
   <data name="Admin.Login.Support" xml:space="preserve"><value>Техническая поддержка:</value></data>
   <data name="Admin.Login.VisitWebsite" xml:space="preserve"><value>Открыть официальный сайт</value></data>
   <data name="Admin.Session.InvalidUser" xml:space="preserve"><value>Текущая учетная запись недействительна, JWT нельзя продлить. Войдите снова.</value></data>
@@ -589,4 +619,13 @@
     <value>Нет меню или страниц для сортировки</value>
   </data>
   <data name="Admin.Footer.NeuBellWebHookSettings" xml:space="preserve"><value>Настройки WebHook</value></data>
+  <data name="DocHelp.Help" xml:space="preserve"><value>Справка</value></data>
+  <data name="DocHelp.Title" xml:space="preserve"><value>Документация функции</value></data>
+  <data name="DocHelp.OpenWindow" xml:space="preserve"><value>Открыть в новом окне</value></data>
+  <data name="DocHelp.Close" xml:space="preserve"><value>Закрыть</value></data>
+  <data name="DocHelp.Loading" xml:space="preserve"><value>Загрузка документации...</value></data>
+  <data name="DocHelp.Notice" xml:space="preserve"><value>Если документ пуст или заблокирован, откройте его в новом окне.</value></data>
+  <data name="DocHelp.LoadFailed" xml:space="preserve"><value>Ошибка загрузки или истекло время ожидания. Повторите попытку или откройте новое окно.</value></data>
+  <data name="DocHelp.Retry" xml:space="preserve"><value>Повторить</value></data>
+  <data name="DocHelp.InvalidTopic" xml:space="preserve"><value>Неверная настройка документации. Обратитесь к администратору.</value></data>
 </root>

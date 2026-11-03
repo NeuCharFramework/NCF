@@ -34,6 +34,12 @@
     修改标识：Senparc - 20261005
     修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
 
+    修改标识：Senparc - 20261102
+    修改描述：移除合并遗留的微信 Claw 绑定重复声明和索引配置，保留原有映射
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 implement AdminChat memory storage and management system
+
 ----------------------------------------------------------------*/
 
 using Microsoft.EntityFrameworkCore;
@@ -70,6 +76,7 @@ namespace Senparc.Areas.Admin.Domain.Models
         /// 管理后台聊天会话
         /// </summary>
         public DbSet<AdminChatSession> AdminChatSessions { get; set; }
+        public DbSet<AdminChatMemoryState> AdminChatMemoryStates { get; set; }
 
         /// <summary>
         /// 管理后台聊天消息
@@ -195,6 +202,9 @@ namespace Senparc.Areas.Admin.Domain.Models
                 .IsUnique();
 
             var providerName = Database.ProviderName ?? string.Empty;
+            if (providerName.Contains("Oracle", StringComparison.OrdinalIgnoreCase)
+                || providerName.Contains("Dm", StringComparison.OrdinalIgnoreCase))
+                modelBuilder.Entity<AdminChatMemoryState>().Property(row => row.Payload).HasColumnType("BLOB");
             var largeTextType = providerName.Contains("Oracle", StringComparison.OrdinalIgnoreCase)
                 ? "NCLOB"
                 : providerName.Contains("Dm", StringComparison.OrdinalIgnoreCase)

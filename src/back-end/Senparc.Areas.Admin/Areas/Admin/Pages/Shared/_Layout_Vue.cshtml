@@ -38,6 +38,8 @@
     <!-- 引入样式 -->
     <link href="~/lib/element-ui_2.13.2/element.css" rel="stylesheet" />
     <link href="~/css/Admin/Shared/layout.css" rel="stylesheet" />
+    <link href="~/css/Admin/Shared/PromptRangeSelector.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/Admin/Shared/NcfDocHelp.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/css/Admin/GlobalNeuCharPivot.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     @RenderSection("HeaderContent", false)
@@ -108,6 +110,7 @@
                                 <option value="ru" selected="@(currentCulture.StartsWith("ru") ? "selected" : null)">Русский</option>
                             </select>
                         </div>
+                        <ncf-doc-help class="ncf-doc-help-header" page-path="@Context.Request.Path" topic="@ViewData["DocHelp"]"></ncf-doc-help>
                         <div class="header-account">
                             <el-dropdown trigger="click">
                                 <span class="el-dropdown-link">
@@ -281,6 +284,9 @@
         };
     </script>
     <script src="~/js/Admin/Shared/AdminFooter.js" asp-append-version="true"></script>
+    <script src="~/js/Admin/Shared/PromptRangeSelector.js" asp-append-version="true"></script>
+    <script src="~/js/Admin/Shared/NcfDocHelpCatalog.js" asp-append-version="true"></script>
+    <script src="~/js/Admin/Shared/NcfDocHelp.js" asp-append-version="true"></script>
     <!--页面js-->
     @*<script src="~/js/Admin/Pages/Index/Index.js"></script>*@
     @RenderSection("scripts", false)

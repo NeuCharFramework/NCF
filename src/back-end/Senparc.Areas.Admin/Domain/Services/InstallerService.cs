@@ -12,6 +12,10 @@
 
     修改标识：Senparc - 20260705
     修改描述：v0.0.4 新增登录超时配置并补齐多数据库迁移支持
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 维护InstallerService 相关功能实现
+
 ----------------------------------------------------------------*/
 
 using Microsoft.Extensions.DependencyInjection;

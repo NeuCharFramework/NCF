@@ -1,0 +1,19 @@
+@model string
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Senparc.Areas.Admin.AdminResource> HelpResources
+@inject Microsoft.AspNetCore.Mvc.ViewFeatures.IFileVersionProvider HelpFileVersions
+@{
+    var labels = HelpResources.GetAllStrings(true)
+        .Where(item => item.Name.StartsWith("DocHelp.", StringComparison.Ordinal))
+        .GroupBy(item => item.Name).ToDictionary(group => group.Key, group => group.First().Value);
+}
+<link href="~/lib/element-ui_2.13.2/element.css" rel="stylesheet" />
+<link href="~/css/Admin/Shared/NcfDocHelp.css" rel="stylesheet" asp-append-version="true" />
+<div data-ncf-doc-help-root
+     data-topic="@Model"
+     data-culture="@System.Globalization.CultureInfo.CurrentUICulture.Name"
+     data-labels="@System.Text.Json.JsonSerializer.Serialize(labels)"
+     data-vue="@Url.Content("~/lib/vue/vue.js")"
+     data-element="@Url.Content("~/lib/element-ui_2.13.2/element.js")"
+     data-catalog="@HelpFileVersions.AddFileVersionToPath(Context.Request.PathBase, Url.Content("~/js/Admin/Shared/NcfDocHelpCatalog.js"))"
+     data-help="@HelpFileVersions.AddFileVersionToPath(Context.Request.PathBase, Url.Content("~/js/Admin/Shared/NcfDocHelp.js"))"></div>
+<script src="~/js/Admin/Shared/NcfDocHelpStandalone.js" asp-append-version="true" defer></script>

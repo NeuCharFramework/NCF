@@ -10,6 +10,9 @@
     修改标识：Senparc - 20261005
     修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
 
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 租户注册表管理限制为平台管理员，封堵跨租户提权
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +45,28 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         private readonly TenantInfoService _tenantInfoService = tenantInfoService;
         private readonly AdminUserInfoService _adminUserInfoService = adminUserInfoService;
         private readonly IStringLocalizer<AdminResource> _localizer = serviceProvider.GetRequiredService<IStringLocalizer<AdminResource>>();
+        /// <summary>
+        /// 多租户模式下的控制面校验：租户注册表（TenantInfo）管理操作（列表/新增/编辑/初始化/删除）
+        /// 仅允许平台级管理员（TenantId=0，即当前请求租户上下文 Id==0）执行；
+        /// 租户管理员（TenantId>0）被拒绝，防止跨租户提权（禁用/删除/初始化其他租户）。
+        /// 单租户模式（EnableMultiTenant=false）下不限制。
+        /// </summary>
+        private bool IsPlatformAdmin()
+        {
+            if (!SiteConfig.SenparcCoreSetting.EnableMultiTenant)
+            {
+                return true;
+            }
+
+            var requestTenantInfo = _serviceProvider.GetRequiredService<RequestTenantInfo>();
+            return requestTenantInfo.MatchSuccess && requestTenantInfo.Id == 0;
+        }
+
+        private IActionResult PlatformAdminOnlyResult()
+        {
+            return Ok(false, _localizer["Tenant.PlatformAdminOnly"]);
+        }
+
         public async Task<IActionResult> OnGetAsync()
         {
             return Page();
@@ -49,6 +74,11 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
         public async Task<IActionResult> OnGetRequestTenantInfoAsync()
         {
+            if (!IsPlatformAdmin())
+            {
+                return PlatformAdminOnlyResult();
+            }
+
             var requestTenantInfo = _serviceProvider.GetRequiredService<RequestTenantInfo>();
             return Ok(new
             {
@@ -74,6 +104,11 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         //[Ncf.AreaBase.Admin.Filters.CustomerResource("admin-get-systemconfig")]
         public async Task<IActionResult> OnGetListAsync(int pageIndex, int pageSize)
         {
+            if (!IsPlatformAdmin())
+            {
+                return PlatformAdminOnlyResult();
+            }
+
             var tenantInfo = await _tenantInfoService.GetObjectListAsync(pageIndex, pageSize, z => true, z => z.Id, OrderingType.Ascending);
 
             var enableMultiTenant = SiteConfig.SenparcCoreSetting.EnableMultiTenant;
@@ -127,6 +162,11 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         [CustomerResource("admin-add", "admin-edit")]
         public async Task<IActionResult> OnPostSaveAsync([FromBody] CreateOrUpdate_TenantInfoDto dto)
         {
+            if (!IsPlatformAdmin())
+            {
+                return PlatformAdminOnlyResult();
+            }
+
             if (!ModelState.IsValid)
             {
                 return Ok(false);
@@ -163,6 +203,11 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         [CustomerResource("admin-add")]
         public async Task<IActionResult> OnPostInitializeAsync([FromBody] TenantInitializeDto dto)
         {
+            if (!IsPlatformAdmin())
+            {
+                return PlatformAdminOnlyResult();
+            }
+
             if (!ModelState.IsValid)
             {
                 return Ok(false);
@@ -228,6 +273,11 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         [CustomerResource("admin-delete")]
         public async Task<IActionResult> OnPostDeleteAsync([FromBody] List<int> ids)
         {
+            if (!IsPlatformAdmin())
+            {
+                return PlatformAdminOnlyResult();
+            }
+
             if (ids == null || ids.Count == 0)
             {
                 return Ok(false);

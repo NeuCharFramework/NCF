@@ -13,6 +13,9 @@
     修改标识：Senparc - 20260729
     修改描述：v0.4.1 加强安装状态校验并收紧安装辅助路由
 
+    修改标识：Senparc - 20261103
+    修改描述：v0.5.12 维护安装选项与模块选择服务
+
 ----------------------------------------------------------------*/
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;

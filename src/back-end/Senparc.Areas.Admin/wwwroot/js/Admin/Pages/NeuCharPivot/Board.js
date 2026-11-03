@@ -2,6 +2,9 @@
     文件名：Board.js
     文件功能描述：Pivot 面板（Provit Panel）管理页：
     面板 CRUD、Provit Block 增删与拖动排序、AI Chat 创建或修改面板
+
+    修改标识：Senparc - 20261101
+    修改描述：支持从首页缺失块跳转并预填模块与 Function Code
 ----------------------------------------------------------------*/
 new Vue({
     el: '#app',
@@ -17,7 +20,9 @@ new Vue({
             form: { id: 0, name: '', pageKey: '', description: '', columns: 2, isEnabled: true },
             pickerVisible: false,
             pickerBoardId: 0,
-            picker: { moduleUid: '', functionKey: '', title: '', summary: '', accent: 'blue' }
+            picker: { moduleUid: '', functionKey: '', title: '', summary: '', accent: 'blue' },
+            setupRequest: { boardId: 0, pageKey: '', moduleUid: '', functionKey: '' },
+            setupRequestApplied: false
         };
     },
     computed: {
@@ -47,9 +52,22 @@ new Vue({
         }
     },
     created() {
+        this.readSetupRequest();
         this.load();
     },
     methods: {
+        readSetupRequest() {
+            if (typeof window === 'undefined' || typeof URLSearchParams === 'undefined') {
+                return;
+            }
+            const params = new URLSearchParams(window.location.search || '');
+            this.setupRequest = {
+                boardId: Number(params.get('boardId') || 0),
+                pageKey: String(params.get('pageKey') || '').trim(),
+                moduleUid: String(params.get('moduleUid') || '').trim(),
+                functionKey: String(params.get('functionKey') || '').trim()
+            };
+        },
         async load() {
             this.loading = true;
             try {
@@ -65,13 +83,48 @@ new Vue({
                     aiReply: ''
                 }));
                 this.catalog = NeuCharPivotUi.unwrap(catalogResponse) || [];
+                this.applySetupRequest();
             } finally {
                 this.loading = false;
             }
         },
+        applySetupRequest() {
+            if (this.setupRequestApplied ||
+                (!this.setupRequest.boardId &&
+                    !this.setupRequest.pageKey &&
+                    !this.setupRequest.moduleUid &&
+                    !this.setupRequest.functionKey)) {
+                return;
+            }
+            this.setupRequestApplied = true;
+            const board = this.boards.find(item =>
+                (this.setupRequest.boardId && Number(item.id) === this.setupRequest.boardId) ||
+                (this.setupRequest.pageKey && item.pageKey === this.setupRequest.pageKey));
+            if (!board) {
+                this.form = {
+                    id: 0,
+                    name: '后台首页 Pivot 面板',
+                    pageKey: this.setupRequest.pageKey || 'admin-home',
+                    description: '',
+                    columns: 2,
+                    isEnabled: true
+                };
+                this.formDialogVisible = true;
+                return;
+            }
+
+            this.openBlockPicker(board);
+            this.picker.moduleUid = this.setupRequest.moduleUid;
+            this.picker.functionKey = this.setupRequest.functionKey;
+        },
         moduleLabel(moduleUid) {
             const group = this.catalog.find(z => z.moduleUid === moduleUid);
             return group ? group.moduleName : moduleUid;
+        },
+        moduleSettingsUrl(moduleUid, functionKey) {
+            return '/Admin/XncfModule/Start/?uid=' + encodeURIComponent(moduleUid || '') +
+                '&functionKey=' + encodeURIComponent(functionKey || '') +
+                '&action=settings&tab=pivot';
         },
         openCreate() {
             this.form = { id: 0, name: '', pageKey: '', description: '', columns: 2, isEnabled: true };

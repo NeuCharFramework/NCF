@@ -10,6 +10,12 @@
     修改标识：Senparc - 20260915
     修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
 
+    修改标识：Senparc - 20261101
+    修改描述：自定义 Pivot 缺失 Function 时保留引用状态并提供初始化引导
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 enhance job management and telemetry features
+
 ----------------------------------------------------------------*/
 
 using Microsoft.Extensions.DependencyInjection;
@@ -155,6 +161,42 @@ public sealed class NeuCharPivotBoardService : BaseClientService<NeuCharPivotBoa
             .ToList();
         return groups;
     }
+
+    /// <summary>
+    /// 返回面板块引用的 Function 是否仍存在于数据库目录。
+    /// 面板可能会保留模块升级或初始化前的旧引用，读取首页时不应因这类引用中断整个页面。
+    /// </summary>
+    public async Task<IReadOnlyDictionary<string, bool>> GetBlockAvailabilityAsync(
+        IEnumerable<NeuCharPivotBoardBlock> blocks)
+    {
+        var blockKeys = (blocks ?? Enumerable.Empty<NeuCharPivotBoardBlock>())
+            .Select(block => GetBlockKey(block))
+            .Where(key => key != "|")
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        if (blockKeys.Count == 0)
+        {
+            return new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+        }
+
+        var functions = await _functionService.GetFullListAsync(
+            z => true,
+            z => z.Id,
+            OrderingType.Ascending).ConfigureAwait(false);
+        var functionKeys = functions
+            .Select(function => GetBlockKey(function.ModuleUid, function.FunctionKey))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        return blockKeys.ToDictionary(
+            key => key,
+            functionKeys.Contains,
+            StringComparer.OrdinalIgnoreCase);
+    }
+
+    public static string GetBlockKey(NeuCharPivotBoardBlock block) =>
+        GetBlockKey(block?.ModuleUid, block?.FunctionKey);
+
+    public static string GetBlockKey(string moduleUid, string functionKey) =>
+        $"{moduleUid?.Trim()}|{functionKey?.Trim()}";
 
     /// <summary>
     /// 校验并保存面板的块列表（每个块必须对应真实存在的 Pivot Function）

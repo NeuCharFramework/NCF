@@ -15,6 +15,12 @@
     修改标识：Senparc - 20261005
     修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
 
+    修改标识：Senparc - 20261021
+    修改描述：v0.11.1 整理最近任务与会话标题
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 enhance AdminChat with recent tasks and session title generation
+
 ----------------------------------------------------------------*/
 
 using System;
@@ -26,6 +32,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
+using Senparc.Xncf.AIKernel.Domain.Models.Usage;
 
 namespace Senparc.Areas.Admin.Domain.Services
 {
@@ -290,6 +297,7 @@ namespace Senparc.Areas.Admin.Domain.Services
         public int TrajectoryId { get; set; }
         public string Kind { get; set; }
         public string Text { get; set; }
+        public AITokenUsageSnapshot Usage { get; set; }
         public AdminChatTrajectoryEventDto TrajectoryEvent { get; set; }
         public IReadOnlyList<AdminChatApprovalRequestDto> PendingApprovals { get; set; } = Array.Empty<AdminChatApprovalRequestDto>();
     }

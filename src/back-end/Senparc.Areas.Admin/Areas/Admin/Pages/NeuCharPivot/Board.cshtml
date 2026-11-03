@@ -130,6 +130,17 @@
 
     <el-dialog title="添加 Provit Block" :visible.sync="pickerVisible" width="620px" :close-on-click-modal="false">
         <p class="picker-tip">选择任意 XNCF 模块的 Pivot Function 作为本面板的块。</p>
+        <el-alert v-if="setupRequest.moduleUid || setupRequest.functionKey"
+                  title="已根据首页缺失块预填引用信息"
+                  type="warning"
+                  :closable="false"
+                  show-icon>
+            <div>模块 UID：<code>{{setupRequest.moduleUid || '-'}}</code></div>
+            <div>Function Code：<code>{{setupRequest.functionKey || '-'}}</code></div>
+            <a :href="moduleSettingsUrl(setupRequest.moduleUid, setupRequest.functionKey)">
+                若目录中仍没有该 Function，请先打开模块 NeuCharPivot 设置初始化
+            </a>
+        </el-alert>
         <el-select v-model="picker.moduleUid" placeholder="选择模块" style="width: 100%" @@change="onPickModule">
             <el-option v-for="group in catalog" :key="group.moduleUid"
                        :label="group.moduleName + '（' + group.moduleUid + '）'" :value="group.moduleUid"></el-option>

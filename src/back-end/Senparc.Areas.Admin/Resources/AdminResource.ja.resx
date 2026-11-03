@@ -1,5 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <data name="AdminChat.Sidebar.Expand" xml:space="preserve"><value>会話サイドバーを展開</value></data>
+  <data name="AdminChat.Sidebar.Collapse" xml:space="preserve"><value>会話サイドバーを折りたたむ</value></data>
+  <data name="AdminChat.Sidebar.Resize" xml:space="preserve"><value>サイドバーの幅を調整（左右キー）</value></data>
+  <data name="AdminChat.Sidebar.Reorder" xml:space="preserve"><value>グループ内でドラッグ、または Alt + 上下キー</value></data>
+  <data name="AdminChat.Sidebar.Running" xml:space="preserve"><value>実行中</value></data>
+  <data name="AdminChat.Sidebar.Stopping" xml:space="preserve"><value>停止中</value></data>
+  <data name="AdminChat.Sidebar.SortSaved" xml:space="preserve"><value>順序を保存しました。同じアカウントで端末間共有できます。</value></data>
+  <data name="AdminChat.Sidebar.SortFailed" xml:space="preserve"><value>順序を保存できませんでした。再試行してください。</value></data>
+  <data name="AdminChat.Sidebar.PreferencesFailed" xml:space="preserve"><value>サイドバー設定の読み込みまたは保存に失敗しました。このページでのみ有効です。</value></data>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -170,6 +179,7 @@
   <data name="Tenant.KeyExists" xml:space="preserve"><value>テナント一致ルール {0} は既に存在します</value></data>
   <data name="Tenant.SaveSuccess.Edit" xml:space="preserve"><value>テナントの更新に成功しました</value></data>
   <data name="Tenant.SaveSuccess.Create" xml:space="preserve"><value>テナントの作成に成功しました</value></data>
+  <data name="Tenant.PlatformAdminOnly" xml:space="preserve"><value>マルチテナントモードでは、プラットフォーム管理者のみがテナント情報を管理できます！</value></data>
   <data name="Tenant.NotFound" xml:space="preserve"><value>テナントが存在しません</value></data>
   <data name="Tenant.SetInfoFailed" xml:space="preserve"><value>テナント情報の設定に失敗しました</value></data>
   <data name="Tenant.InitializeSuccess" xml:space="preserve"><value>初期化に成功しました</value></data>
@@ -215,7 +225,7 @@
   <data name="Admin.Common.NoTime" xml:space="preserve"><value>時間なし</value></data>
   <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>コピーしました。Ctrl+V で貼り付けてください。</value></data>
   <data name="Admin.Home.Header" xml:space="preserve"><value>NeuCharFramework 管理画面</value></data>
-  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>現在のホスト状態</value></data>
+  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>ホストリソースモニター</value></data>
   <data name="Admin.Home.HostMetricsRealtime" xml:space="preserve"><value>ライブ · 2 秒ごとに更新</value></data>
   <data name="Admin.Home.HostCpu" xml:space="preserve"><value>ホスト CPU（全体）</value></data>
   <data name="Admin.Home.HostCpuDetail" xml:space="preserve"><value>ホスト全体の使用率</value></data>
@@ -230,11 +240,27 @@
   <data name="Admin.Home.HostProcessCpu" xml:space="preserve"><value>Web プロセス CPU</value></data>
   <data name="Admin.Home.HostProcessWorkingSet" xml:space="preserve"><value>ワーキングセット</value></data>
   <data name="Admin.Home.HostProcessUptime" xml:space="preserve"><value>稼働時間</value></data>
-  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>直近 30 サンプル（このページのみ）</value></data>
+  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>リソースの推移</value></data>
   <data name="Admin.Home.HostNetworkReceive" xml:space="preserve"><value>受信</value></data>
   <data name="Admin.Home.HostNetworkSend" xml:space="preserve"><value>送信</value></data>
   <data name="Admin.Home.HostMetricsInvalidResponse" xml:space="preserve"><value>ホスト指標 API から無効なデータが返されました</value></data>
   <data name="Admin.Home.HostMetricsUnavailable" xml:space="preserve"><value>ホスト指標を一時的に取得できません</value></data>
+  <data name="Admin.Home.WebProcessMemory" xml:space="preserve"><value>Web プロセスメモリ</value></data>
+  <data name="Admin.Home.ResourceMonitor" xml:space="preserve"><value>リソースモニター（直近 24 時間）</value></data>
+  <data name="Admin.Home.ResourceMonitorRealtime" xml:space="preserve"><value>バックグラウンドで 10 秒ごとに記録 · キャッシュは最大 24 時間</value></data>
+  <data name="Admin.Home.ResourceMonitorHint" xml:space="preserve"><value>ドラッグまたはスクロールで拡大・縮小、ダブルクリックで範囲をリセット</value></data>
+  <data name="Admin.Home.ResourceMonitorReset" xml:space="preserve"><value>範囲をリセット</value></data>
+  <data name="Admin.Home.ResourceMonitorRange" xml:space="preserve"><value>時間範囲</value></data>
+  <data name="Admin.Home.ResourceMonitor5Minutes" xml:space="preserve"><value>5 分</value></data>
+  <data name="Admin.Home.ResourceMonitor30Minutes" xml:space="preserve"><value>30 分</value></data>
+  <data name="Admin.Home.ResourceMonitor6Hours" xml:space="preserve"><value>6 時間</value></data>
+  <data name="Admin.Home.ResourceMonitor24Hours" xml:space="preserve"><value>24 時間</value></data>
+  <data name="Admin.Home.ResourceMonitorReturnLive" xml:space="preserve"><value>ライブに戻る</value></data>
+  <data name="Admin.Home.ResourceMonitorFollowing" xml:space="preserve"><value>ライブを追跡中</value></data>
+  <data name="Admin.Home.ResourceMonitorPaused" xml:space="preserve"><value>表示を一時停止中（記録は継続）</value></data>
+  <data name="Admin.Home.ResourceMonitorEmpty" xml:space="preserve"><value>バックグラウンド記録の準備中（約 10 秒）、またはこの範囲にデータはまだありません</value></data>
+  <data name="Admin.Home.ResourceMonitorUnavailable" xml:space="preserve"><value>リソースモニターデータを取得できません</value></data>
+  <data name="Admin.Home.ResourceMonitorNow" xml:space="preserve"><value>現在</value></data>
   <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>インストール済みモジュール</value></data>
   <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>更新待ちモジュール</value></data>
   <data name="Admin.Home.NewModules" xml:space="preserve"><value>新しいモジュール</value></data>
@@ -506,6 +532,10 @@
   <data name="AdminChat.CreateSessionFailedRetry" xml:space="preserve"><value>セッションの作成に失敗しました。後でもう一度お試しください。</value></data>
   <data name="Admin.Login.Error.LoginFailed" xml:space="preserve"><value>ログインに失敗しました</value></data>
   <data name="Admin.Login.Error.LoginRetry" xml:space="preserve"><value>ログインに失敗しました。もう一度お試しください</value></data>
+  <data name="Admin.Login.CaptchaPlaceholder" xml:space="preserve"><value>認証コードを入力してください</value></data>
+  <data name="Admin.Login.CaptchaRequired" xml:space="preserve"><value>画像認証コードを入力してください</value></data>
+  <data name="Admin.Login.CaptchaRefresh" xml:space="preserve"><value>画像をクリックして更新</value></data>
+  <data name="Admin.Login.Error.CaptchaInvalid" xml:space="preserve"><value>認証コードが正しくありません。もう一度お試しください</value></data>
   <data name="Admin.Login.Support" xml:space="preserve"><value>技術サポート：</value></data>
   <data name="Admin.Login.VisitWebsite" xml:space="preserve"><value>公式サイトを開く</value></data>
   <data name="Admin.Session.InvalidUser" xml:space="preserve"><value>現在のユーザー ID が無効なため、JWT を更新できません。もう一度ログインしてください。</value></data>
@@ -589,4 +619,13 @@
     <value>並べ替え可能なメニューやページがありません</value>
   </data>
   <data name="Admin.Footer.NeuBellWebHookSettings" xml:space="preserve"><value>WebHook 設定</value></data>
+  <data name="DocHelp.Help" xml:space="preserve"><value>ヘルプ</value></data>
+  <data name="DocHelp.Title" xml:space="preserve"><value>機能ドキュメント</value></data>
+  <data name="DocHelp.OpenWindow" xml:space="preserve"><value>新しいウィンドウで開く</value></data>
+  <data name="DocHelp.Close" xml:space="preserve"><value>閉じる</value></data>
+  <data name="DocHelp.Loading" xml:space="preserve"><value>ドキュメントを読み込み中...</value></data>
+  <data name="DocHelp.Notice" xml:space="preserve"><value>表示されない場合は、新しいウィンドウで開いてください。</value></data>
+  <data name="DocHelp.LoadFailed" xml:space="preserve"><value>読み込みに失敗したか、タイムアウトしました。再試行するか、新しいウィンドウで開いてください。</value></data>
+  <data name="DocHelp.Retry" xml:space="preserve"><value>再試行</value></data>
+  <data name="DocHelp.InvalidTopic" xml:space="preserve"><value>ドキュメントの設定が無効です。管理者にお問い合わせください。</value></data>
 </root>
