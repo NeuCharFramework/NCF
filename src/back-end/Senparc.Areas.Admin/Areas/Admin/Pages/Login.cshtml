@@ -25,6 +25,12 @@
     </style>
 </head>
 <body>
+    <script>
+        if (window.top !== window.self) {
+            console.debug('[NCF][AdminTabs] 登录页跳出标签框架');
+            window.top.location.replace(window.location.href);
+        }
+    </script>
     <div class="content" id="app">
         <div style="position: absolute; top: 18px; right: 18px; z-index: 10; background: rgba(255,255,255,.9); border-radius: 6px; padding: 6px 10px;">
             <label for="ncf-login-lang" style="font-size: 12px; color: #606266; margin-right: 6px;">@AR["Admin.Language.SelectLanguage"]</label>

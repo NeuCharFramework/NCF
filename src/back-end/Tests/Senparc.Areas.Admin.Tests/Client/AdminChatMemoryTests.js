@@ -11,6 +11,8 @@ const errors = [];
 const labels = {
     'AdminChat.Memory.UpdateSaved': 'Saved: global {0}, workspace {1}',
     'AdminChat.Memory.UpdateReason.no-candidates': 'No candidates; not saved',
+    'AdminChat.Memory.UpdateReason.intent-deferred': 'Waiting for content; not saved',
+    'AdminChat.Memory.UpdateReason.no-save-intent': 'No current save intent; not saved',
     'AdminChat.Memory.UpdateReason.update-failed': 'Update failed'
 };
 const sandbox = {
@@ -94,7 +96,7 @@ async function run() {
 
     const page = fs.readFileSync(path.join(admin, 'Areas/Admin/Pages/AdminChat/Chat.cshtml'), 'utf8');
     assert.ok(page.includes('v-html="formatMemoryContent(memoryMarkdown)"'), 'Preview must use the resource-blocking sanitizing renderer.');
-    assert.ok(page.includes(':disabled="memoryBusy || isSending || !memoryReady"'));
+    assert.ok(page.includes(':disabled="memoryBusy || isCurrentSessionRunning || !memoryReady"'));
     assert.ok(page.includes('handleMemoryCommand($event, true)'));
     assert.ok(!page.includes('v-model="launcherUseMemory"'), 'The oversized Memory checkbox must be removed.');
     assert.ok(page.includes('memoryModeLabel(memoryMode)'));
@@ -133,6 +135,14 @@ async function run() {
         { status: 'unchanged', reason: 'no-candidates', requested: true, globalChanges: 0, workspaceChanges: 0 });
     assert.strictEqual(app.memoryUpdateSessionId, 42);
     assert.strictEqual(app.memoryUpdateText(app.memoryUpdateResult), 'No candidates; not saved');
+    for (const reason of ['intent-deferred', 'no-save-intent']) {
+        app.reportMemoryUpdate('unchanged', null, 42,
+            { status: 'unchanged', reason, requested: true, globalChanges: 0, workspaceChanges: 0 });
+        assert.strictEqual(app.memoryUpdateText(app.memoryUpdateResult), labels['AdminChat.Memory.UpdateReason.' + reason]);
+        assert.ok(!errors.some(error => error.includes('UpdateWarning')));
+    }
+    assert.ok(page.includes("['intent-deferred', 'no-save-intent'].includes(memoryUpdateResult.reason) ? 'info'"),
+        'Non-saving intent is informational, not a failure or successful save.');
     app.reportMemoryUpdate('updated', null, 43,
         { status: 'updated', reason: 'saved', requested: true, globalChanges: 1, workspaceChanges: 0 });
     assert.strictEqual(app.memoryUpdateText(app.memoryUpdateResult), 'Saved: global 1, workspace 0');
@@ -140,6 +150,88 @@ async function run() {
         'Never render exception/model text as a save reason.');
     app.reportMemoryUpdate('disabled', null, 43);
     assert.strictEqual(app.memoryUpdateResult, null, 'A response without a report must not retain an older save confirmation.');
+    const read = async () => ({ data: { success: true, data: {
+        revision: 'r1', markdown: '# Memory\n', systemMessage: '', entries: [], history: [], workspaceId: ''
+    } } });
+    sandbox.service.get = read;
+    app.currentSessionId = 42;
+    app.isSuperAdmin = false;
+    app.memoryDialogVisible = false;
+    const candidate = () => ({
+        entry: { id: '', version: 0, text: 'Fictional character alias: Alpha', topic: 'Alpha',
+            tier: 'topic', kind: 'reference', pinned: true, workspaceId: '', expiresAt: null },
+        remove: false
+    });
+    const propose = proposals => {
+        const result = { revision: 'r1', status: 'pending-review', reason: 'pending-review',
+            requested: true, proposals };
+        app.reportMemoryUpdate('pending-review', null, 42, result);
+        return result;
+    };
+    const first = candidate();
+    const second = candidate();
+    second.entry.text = 'Fictional character alias: Beta';
+    propose([first, second]);
+    const writes = () => requests.filter(item => item.data).length;
+    const before = writes();
+    await app.reviewMemoryProposal(first);
+    assert.strictEqual(writes(), before, 'Opening review must never save.');
+    assert.strictEqual(app.memoryEntryDraft.text, first.entry.text);
+    assert.strictEqual(app.memoryEntryDraft.scope, 'global');
+    assert.strictEqual(app.memoryTab, 'entries');
+    assert.strictEqual(app.memoryProposalReview.proposal, first);
+    sandbox.service.post = async () => ({ data: { success: false, errorMessage: 'candidate conflict' } });
+    await app.saveMemoryEntry(false);
+    assert.strictEqual(app.memoryEntryDraft.text, first.entry.text, 'Failed approval preserves the draft.');
+    assert.strictEqual(app.memoryUpdateResult.proposals.length, 2);
+    sandbox.service.post = originalPost;
+    await app.saveMemoryEntry(false);
+    assert.strictEqual(writes(), before + 1);
+    assert.strictEqual(requests.at(-1).data.entry.kind, 'reference');
+    assert.strictEqual(requests.at(-1).data.revision, 'r1');
+    assert.strictEqual(requests.at(-1).data.sessionId, 42);
+    assert.strictEqual(app.memoryUpdateResult.proposals.length, 1);
+    assert.strictEqual(app.memoryUpdateResult.revision, 'r2');
+    assert.strictEqual(app.memoryProposalReview, null);
+    app.memoryDialogVisible = false;
+    await app.reviewMemoryProposal(second);
+    assert.strictEqual(app.memoryEntryDraft, null, 'A stale candidate cannot overwrite a newer revision.');
+    assert.ok(errors.includes('AdminChat.Memory.UpdateReason.revision-conflict'));
+
+    app.memoryDialogVisible = false;
+    propose([second]);
+    app.currentSessionId = 43;
+    const beforeReads = requests.length;
+    await app.reviewMemoryProposal(second);
+    assert.strictEqual(requests.length, beforeReads, 'A proposal from another session must not load or save.');
+    app.currentSessionId = 42;
+    sandbox.service.get = () => new Promise(resolve => { finish = resolve; });
+    const reviewing = app.reviewMemoryProposal(second);
+    app.currentSessionId = 43;
+    finish(await read());
+    await reviewing;
+    assert.strictEqual(app.memoryDialogVisible, false, 'Navigation while loading must not open a stale candidate.');
+    sandbox.service.get = read;
+    app.currentSessionId = 42;
+    app.memoryBusy = false;
+    propose([second]);
+    await app.reviewMemoryProposal(second);
+    app.memoryDialogVisible = false;
+    app.memoryEntryDraft = null;
+    assert.strictEqual(app.memoryUpdateResult.proposals.length, 1, 'Closing review must leave an unsaved candidate.');
+    await app.reviewMemoryProposal(second);
+    await app.saveMemoryEntry(false);
+    assert.strictEqual(app.memoryUpdateResult.status, 'reviewed');
+    assert.strictEqual(app.memoryUpdateResult.proposals.length, 0);
+
+    for (const locale of ['', '.zh-CN', '.en', '.ja', '.fr', '.es', '.ru']) {
+        const resource = fs.readFileSync(path.join(admin, 'Resources/AdminResource' + locale + '.resx'), 'utf8');
+        for (const key of ['ReviewCandidate', 'ReviewNotice', 'ReviewClose', 'CandidateEvidence',
+            'UpdateReason.pending-review', 'UpdateReason.unresolved-reference', 'UpdateReason.review-complete',
+            'UpdateReason.intent-deferred', 'UpdateReason.no-save-intent']) {
+            assert.strictEqual(resource.split('name="AdminChat.Memory.' + key + '"').length - 1, 1);
+        }
+    }
     console.log('AdminChat Memory client tests passed.');
 }
 

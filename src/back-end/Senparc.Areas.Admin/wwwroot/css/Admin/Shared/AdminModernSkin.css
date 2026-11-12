@@ -1,0 +1,564 @@
+﻿/* Shared AdminChat-inspired skin for XNCF and core admin pages. */
+:root {
+    --admin-bg: #f5f7fa;
+    --admin-surface: #ffffff;
+    --admin-border: #e4e7ed;
+    --admin-border-soft: #ebeef5;
+    --admin-text: #303133;
+    --admin-muted: #909399;
+    --admin-primary: #667eea;
+    --admin-primary-deep: #764ba2;
+    --admin-radius: 12px;
+    --admin-shadow: 0 8px 24px rgba(31, 45, 61, 0.06);
+}
+
+body {
+    color: var(--admin-text);
+    background: var(--admin-bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+}
+
+.el-aside-index {
+    background: linear-gradient(180deg, #293b56 0%, #304156 58%, #26364f 100%);
+    box-shadow: 8px 0 24px rgba(24, 35, 57, 0.08);
+}
+
+.el-aside .head-log,
+.el-aside .head-log2 {
+    display: flex;
+    align-items: center;
+    min-height: 60px;
+    box-sizing: border-box;
+}
+
+.el-aside .head-log {
+    padding: 10px 18px;
+}
+
+.el-aside .head-log2 {
+    justify-content: center;
+    padding: 10px 8px;
+}
+
+.el-aside .head-log img {
+    max-height: 40px;
+    object-fit: contain;
+}
+
+.el-menu {
+    background: transparent !important;
+}
+
+.el-menu-item,
+.el-submenu__title {
+    height: 44px;
+    margin: 3px 10px;
+    border-radius: 9px;
+    line-height: 44px;
+    transition: background-color .18s ease, color .18s ease;
+}
+
+.el-menu-item:hover,
+.el-submenu__title:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.el-menu-item.is-active {
+    background: linear-gradient(135deg, rgba(102, 126, 234, .92), rgba(118, 75, 162, .92)) !important;
+    box-shadow: 0 6px 16px rgba(31, 45, 61, .18);
+    color: #fff !important;
+}
+
+.el-menu-item.is-active i,
+.el-submenu.is-active > .el-submenu__title,
+.el-submenu.is-active > .el-submenu__title i {
+    color: #fff !important;
+}
+
+.admin-workspace > .el-header {
+    z-index: 2;
+    height: 60px !important;
+    border-bottom: 1px solid var(--admin-border-soft);
+    box-shadow: 0 4px 16px rgba(31, 45, 61, 0.05);
+}
+
+.admin-workspace > .el-header.admin-header {
+    overflow: visible;
+    border-bottom-color: transparent;
+    box-shadow: inset 0 -1px 0 var(--admin-border-soft), 0 4px 16px rgba(31, 45, 61, 0.05);
+}
+
+.header-menu i {
+    color: #606266;
+    font-size: 21px;
+    transition: color .18s ease, transform .18s ease;
+}
+
+.header-menu i:hover {
+    color: var(--admin-primary);
+    transform: translateX(1px);
+}
+
+.header-language-select,
+.admin-nav-search .el-input__inner {
+    border-radius: 8px;
+}
+
+.admin-content {
+    padding: 18px 20px 20px;
+    background: var(--admin-bg);
+}
+
+.admin-content > .ifram-wrapper {
+    min-height: 100%;
+}
+
+.footer {
+    border-top-color: var(--admin-border);
+    background: rgba(255, 255, 255, .92);
+}
+
+.el-card,
+.box-card {
+    border-color: var(--admin-border-soft);
+    border-radius: var(--admin-radius);
+    box-shadow: var(--admin-shadow);
+}
+
+.el-card__header {
+    border-bottom-color: var(--admin-border-soft);
+}
+
+.el-button {
+    border-radius: 8px;
+    transition: border-color .18s ease, background-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.el-button--primary {
+    border-color: var(--admin-primary);
+    background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-deep));
+}
+
+.el-button--primary:hover,
+.el-button--primary:focus {
+    border-color: var(--admin-primary);
+    background: linear-gradient(135deg, #748cf0, #8357ad);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, .24);
+    transform: translateY(-1px);
+}
+
+.el-input__inner,
+.el-textarea__inner,
+.el-select .el-input__inner,
+.el-input-number .el-input__inner {
+    border-radius: 8px;
+    border-color: #dcdfe6;
+}
+
+.el-input__inner:focus,
+.el-textarea__inner:focus {
+    border-color: var(--admin-primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, .12);
+}
+
+.el-dialog {
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 18px 48px rgba(24, 35, 57, .2);
+}
+
+.el-dialog__header {
+    border-bottom: 1px solid var(--admin-border-soft);
+}
+
+.el-dialog__footer {
+    border-top: 1px solid var(--admin-border-soft);
+}
+
+.el-drawer {
+    box-shadow: -12px 0 36px rgba(24, 35, 57, .14);
+}
+
+.el-alert {
+    border-radius: 10px;
+}
+
+.el-table {
+    border-radius: var(--admin-radius);
+    overflow: hidden;
+}
+
+@media (max-width: 720px) {
+    .admin-content {
+        padding: 12px;
+    }
+
+    .header-language-label {
+        display: none;
+    }
+
+    .header-language {
+        margin-right: 8px;
+    }
+}
+
+/* Shared surfaces for XNCF modules and lower-level admin pages. */
+.admin-content > .ifram-wrapper > .el-container,
+.admin-content > .ifram-wrapper > .el-main,
+.admin-content > .ifram-wrapper > .module-main {
+    min-width: 0;
+}
+
+.admin-content > .ifram-wrapper > .el-container > .el-header,
+.admin-content .module-header {
+    height: auto !important;
+    min-height: 52px;
+    padding: 14px 18px;
+    border: 1px solid var(--admin-border-soft);
+    border-radius: var(--admin-radius);
+    background: var(--admin-surface);
+    box-shadow: var(--admin-shadow);
+    line-height: 1.5;
+}
+
+.admin-content > .ifram-wrapper > .el-container > .el-main,
+.admin-content > .ifram-wrapper > .module-main {
+    padding: 18px 0 0;
+}
+
+.admin-content .filter-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    border: 1px solid var(--admin-border-soft);
+    border-radius: var(--admin-radius);
+    background: var(--admin-surface);
+    box-shadow: 0 4px 14px rgba(31, 45, 61, .04);
+}
+
+.admin-content .filter-container .filter-item {
+    margin: 0;
+}
+
+.admin-content .filter-container .el-input,
+.admin-content .filter-container .el-select {
+    max-width: 260px;
+}
+
+.admin-content > .ifram-wrapper > .el-table,
+.admin-content > .ifram-wrapper > .el-table--border,
+.admin-content .el-table {
+    border: 1px solid var(--admin-border-soft);
+    border-radius: var(--admin-radius);
+    box-shadow: 0 5px 16px rgba(31, 45, 61, .04);
+}
+
+.admin-content .el-table::before {
+    display: none;
+}
+
+.admin-content .el-table th.el-table__cell {
+    color: #606266;
+    background: #f8fafc;
+    font-weight: 600;
+}
+
+.admin-content .el-table td.el-table__cell,
+.admin-content .el-table th.el-table__cell {
+    border-bottom-color: var(--admin-border-soft);
+}
+
+.admin-content .el-table tr:hover > td.el-table__cell {
+    background: #f7f9ff;
+}
+
+.admin-content .el-table,
+.admin-content .el-table__header-wrapper,
+.admin-content .el-table__body-wrapper {
+    border-radius: var(--admin-radius) !important;
+}
+
+.admin-content .el-table__header-wrapper {
+    border-radius: var(--admin-radius) var(--admin-radius) 0 0 !important;
+}
+
+.admin-content .el-table__body-wrapper {
+    border-radius: 0 0 var(--admin-radius) var(--admin-radius) !important;
+}
+
+.admin-content .el-table__header-wrapper thead tr:first-child th:first-child {
+    border-top-left-radius: var(--admin-radius);
+}
+
+.admin-content .el-table__header-wrapper thead tr:first-child th:last-child {
+    border-top-right-radius: var(--admin-radius);
+}
+
+.admin-content .el-table__body-wrapper tbody tr:last-child td:first-child {
+    border-bottom-left-radius: var(--admin-radius);
+}
+
+.admin-content .el-table__body-wrapper tbody tr:last-child td:last-child {
+    border-bottom-right-radius: var(--admin-radius);
+}
+
+/* Native tables used by several XNCF pages. Element UI's internal tables are excluded. */
+.admin-content table:not(.el-table__header):not(.el-table__body):not(.el-table__footer) {
+    border: 1px solid var(--admin-border-soft);
+    border-collapse: separate;
+    border-radius: var(--admin-radius) !important;
+    border-spacing: 0;
+    box-shadow: 0 5px 16px rgba(31, 45, 61, .04);
+    overflow: hidden;
+}
+
+.admin-content table:not(.el-table__header):not(.el-table__body):not(.el-table__footer) th,
+.admin-content table:not(.el-table__header):not(.el-table__body):not(.el-table__footer) td {
+    border-bottom: 1px solid var(--admin-border-soft);
+}
+
+.admin-content table:not(.el-table__header):not(.el-table__body):not(.el-table__footer) thead th {
+    background: #f8fafc;
+    color: #606266;
+    font-weight: 600;
+}
+
+.admin-content table:not(.el-table__header):not(.el-table__body):not(.el-table__footer) tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.admin-content table:not(.el-table__header):not(.el-table__body):not(.el-table__footer) tbody tr:hover td {
+    background: #f7f9ff;
+}
+
+.admin-content .pagination-container {
+    margin-top: 14px;
+    border: 1px solid var(--admin-border-soft);
+    border-radius: var(--admin-radius);
+    box-shadow: 0 4px 14px rgba(31, 45, 61, .04);
+}
+
+.admin-content .el-form {
+    padding: 18px;
+    border: 1px solid var(--admin-border-soft);
+    border-radius: var(--admin-radius);
+    background: var(--admin-surface);
+    box-shadow: 0 5px 16px rgba(31, 45, 61, .04);
+}
+
+.admin-content .el-tabs__nav-wrap::after {
+    background-color: var(--admin-border-soft);
+}
+
+.admin-content .el-tabs__item.is-active,
+.admin-content .el-tabs__item:hover {
+    color: var(--admin-primary);
+}
+
+.admin-content .el-tabs__active-bar {
+    background: linear-gradient(90deg, var(--admin-primary), var(--admin-primary-deep));
+}
+
+.admin-content .el-collapse,
+.admin-content .el-collapse-item__header,
+.admin-content .el-collapse-item__wrap {
+    border-color: var(--admin-border-soft);
+}
+
+.admin-content .el-collapse {
+    overflow: hidden;
+    border-radius: var(--admin-radius);
+    background: var(--admin-surface);
+    box-shadow: 0 5px 16px rgba(31, 45, 61, .04);
+}
+
+.admin-content .el-collapse-item__header {
+    padding: 0 16px;
+    background: #fff;
+    color: var(--admin-text);
+    font-weight: 600;
+}
+
+.admin-content .el-collapse-item__content {
+    padding: 16px;
+}
+
+.admin-content .el-tag {
+    border-radius: 999px;
+}
+
+.admin-content .el-alert {
+    box-shadow: 0 4px 14px rgba(31, 45, 61, .04);
+}
+
+/* XncfModule tabs and tables. */
+.admin-content > .ifram-wrapper > .common-layout > .el-container > .el-header {
+    height: auto !important;
+    min-height: 52px;
+    padding: 14px 18px;
+    overflow: visible;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.admin-content .common-layout > .el-container > .el-header > .filter-container {
+    justify-content: flex-end;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 10px 16px;
+}
+
+.admin-content .common-layout > .el-container > .el-header > .filter-container > * {
+    flex-shrink: 0;
+}
+
+.admin-content .common-layout > .el-container > .el-main {
+    padding-top: 14px;
+}
+
+.admin-content .common-layout .el-tabs--border-card {
+    overflow: hidden;
+    border: 1px solid var(--admin-border-soft);
+    border-radius: 14px;
+    background: var(--admin-surface);
+    box-shadow: var(--admin-shadow);
+}
+
+.admin-content .common-layout .el-tabs--border-card > .el-tabs__header {
+    border-bottom: 1px solid var(--admin-border-soft);
+    background: #f8fafc;
+}
+
+.admin-content .common-layout .el-tabs--border-card > .el-tabs__header .el-tabs__item {
+    border: 0;
+    border-radius: 8px 8px 0 0;
+}
+
+.admin-content .common-layout .el-tabs--border-card > .el-tabs__content {
+    padding: 18px;
+}
+
+.admin-content .common-layout .el-table {
+    margin-bottom: 0 !important;
+}
+
+.admin-content .common-layout .el-table .el-input__inner {
+    min-height: 30px;
+}
+
+/* The four module summary tiles on the admin home page. */
+.admin-content .xncf-stat-item {
+    min-height: 0;
+    height: 125px;
+    margin-bottom: 0;
+    box-sizing: border-box;
+    padding: 14px 54px 14px 16px;
+    border: 1px solid var(--admin-border-soft);
+    border-radius: 14px;
+    background: linear-gradient(145deg, #fff 0%, #fafbff 100%);
+    box-shadow: 0 5px 16px rgba(31, 45, 61, .05);
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+.admin-content .xncf-stat-item:hover {
+    border-color: rgba(102, 126, 234, .34);
+    box-shadow: 0 12px 26px rgba(82, 103, 217, .12);
+    transform: translateY(-2px);
+}
+
+.admin-content .xncf-stat-item .icon {
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, .12), rgba(118, 75, 162, .12));
+    color: #667eea;
+    font-size: 22px;
+    line-height: 42px;
+    text-align: center;
+}
+
+.admin-content .xncf-stat-item .count {
+    color: #303133;
+    font-size: 30px;
+    line-height: 1.2;
+}
+
+.admin-content .xncf-stat-item .tit {
+    margin-top: 7px;
+    color: #909399;
+    font-size: 13px;
+}
+
+/* Keep the Workspace cards as a responsive grid without affecting other module pages. */
+.admin-content .workspace-shell .ws-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 14px;
+}
+
+.admin-content .workspace-shell .ws-item {
+    display: flex;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.admin-content .workspace-shell .ws-item-body {
+    min-width: 0;
+}
+
+@media (max-width: 900px) {
+    .admin-content .workspace-shell .ws-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+.el-popover,
+.el-dropdown-menu,
+.el-select-dropdown,
+.el-picker-panel,
+.el-message,
+.el-notification {
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(24, 35, 57, .14);
+}
+
+.el-popover {
+    border-color: var(--admin-border-soft);
+}
+
+@media (max-width: 720px) {
+    .admin-content > .ifram-wrapper > .el-container > .el-main,
+    .admin-content > .ifram-wrapper > .module-main {
+        padding-top: 12px;
+    }
+
+    .admin-content .filter-container {
+        align-items: stretch;
+    }
+
+    .admin-content .filter-container .el-input,
+    .admin-content .filter-container .el-select {
+        width: 100%;
+        max-width: none;
+    }
+
+    .admin-content .el-form {
+        padding: 14px;
+    }
+
+    .admin-content .common-layout .el-tabs--border-card > .el-tabs__content {
+        padding: 12px;
+    }
+
+    .admin-content .xncf-stat-item {
+        min-height: 0;
+        height: 104px;
+        margin-bottom: 10px;
+    }
+}

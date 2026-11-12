@@ -22,6 +22,9 @@
     修改标识：Senparc - 20261103
     修改描述：v0.12.15 enhance Sandbox functionality with language validation and request handling improvements
 
+    修改标识：Senparc - 20261111
+    修改描述：v0.12.28 完善 Admin Chat 与模块工作区交互能力兼容
+
 ----------------------------------------------------------------*/
 
 using Microsoft.Extensions.AI;
@@ -86,7 +89,8 @@ public static class AdminChatFunctionToolFactory
                 innerFunction.JsonSchema,
                 parameterInfos);
             _jsonSchema = FlattenRequestSchema(schema, method);
-            var requestParameter = method.GetParameters().SingleOrDefault();
+            var parameters = method.GetParameters();
+            var requestParameter = parameters.Length == 1 ? parameters[0] : null;
             _requestParameterName = requestParameter?.Name ?? "request";
             _requestPropertyNames = parameterInfos
                 .Where(parameter => !string.IsNullOrWhiteSpace(parameter?.Name))
@@ -128,7 +132,8 @@ public static class AdminChatFunctionToolFactory
 
         private static JsonElement FlattenRequestSchema(JsonElement schema, MethodInfo method)
         {
-            var requestParameter = method.GetParameters().SingleOrDefault();
+            var parameters = method.GetParameters();
+            var requestParameter = parameters.Length == 1 ? parameters[0] : null;
             if (requestParameter == null ||
                 schema.ValueKind != JsonValueKind.Object ||
                 JsonNode.Parse(schema.GetRawText()) is not JsonObject root ||

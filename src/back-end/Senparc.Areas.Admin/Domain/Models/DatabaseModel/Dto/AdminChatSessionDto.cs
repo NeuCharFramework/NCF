@@ -22,6 +22,9 @@
     修改标识：Senparc - 20261103
     修改描述：v0.12.15 完善后台聊天会话管理与排序
 
+    修改标识：Senparc - 20261106
+    修改描述：输出持久化的会话未读状态
+
 ----------------------------------------------------------------*/
 
 using Senparc.Ncf.Core.Models;
@@ -65,6 +68,8 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
         public bool WorkspaceCliEnabled { get; set; }
 
         public int? SortOrder { get; set; }
+
+        public bool HasUnread { get; set; }
 
         /// <summary>
         /// 关联的消息列表（可选，用于嵌套查询）
@@ -112,7 +117,8 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
                 WorkspaceId = entity.WorkspaceId,
                 WorkspaceWriteEnabled = entity.WorkspaceWriteEnabled,
                 WorkspaceCliEnabled = entity.WorkspaceCliEnabled,
-                SortOrder = entity.SortOrder
+                SortOrder = entity.SortOrder,
+                HasUnread = entity.HasUnread
             };
         }
     }

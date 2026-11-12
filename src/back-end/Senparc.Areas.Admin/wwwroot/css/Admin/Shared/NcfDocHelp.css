@@ -1,3 +1,11 @@
+.ncf-doc-help-group {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: 2px;
+    max-width: 100%;
+}
+
 .ncf-doc-help-button {
     display: inline-flex;
     align-items: center;
@@ -13,6 +21,10 @@
     font-size: 20px;
     vertical-align: middle;
     cursor: pointer;
+}
+
+.ncf-doc-help-group > .ncf-doc-help-button {
+    margin: 0;
 }
 
 .ncf-doc-help-button:hover,

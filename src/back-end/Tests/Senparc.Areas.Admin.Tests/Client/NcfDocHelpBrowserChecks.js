@@ -88,7 +88,15 @@ async page => {
         for (const [pagePath, topic] of [
             ['/Admin/Index', 'admin.home'],
             ['/Admin/XncfModule/', 'modules.manage'],
-            ['/Admin/MCP/Index', 'mcp.home']
+            ['/Admin/MCP/Index', 'mcp.home'],
+            ['/Admin/PromptRange/Index', 'prompts.dashboard'],
+            ['/Admin/PromptRange/Prompt', 'prompts.workbench'],
+            ['/Admin/Workspace/Index', 'workspace.manage'],
+            ['/Admin/Sandbox/Index', 'sandbox.manage'],
+            ['/Admin/Sandbox/Setup', 'sandbox.setup'],
+            ['/Admin/KnowledgeBase/Index', 'knowledge.manage'],
+            ['/Admin/PromptRange/Skill', 'prompts.skills'],
+            ['/Admin/AgentsManager/Index', 'agents.manage']
         ]) {
             await mount(culture, pagePath);
             const icon = page.locator('.ncf-doc-help-header');
@@ -98,6 +106,8 @@ async page => {
             const frame = page.frameLocator('.ncf-doc-help-frame');
             await frame.locator('h1').first().waitFor({ timeout: 25000 });
             check((await frame.locator('h1').first().innerText()).length > 0, 'Live documentation must render inside iframe');
+            const anchor = expected.split('#')[1];
+            await frame.locator('[id="' + anchor + '"]').waitFor({ state: 'attached', timeout: 25000 });
             const external = page.locator('.ncf-doc-help-external');
             check(await external.getAttribute('href') === expected, 'New window link must use the selected document');
             const popupPromise = page.waitForEvent('popup');
@@ -114,8 +124,8 @@ async page => {
         }
         await page.locator('form .ncf-doc-help-button').click();
         const frame = page.frameLocator('.ncf-doc-help-frame');
-        const anchor = culture === 'zh-CN' ? '切换-发布-状态' : 'switch-publish-status';
-        await frame.locator('[id="' + anchor + '"]').waitFor({ timeout: 25000 });
+        const anchor = 'help-module-publish';
+        await frame.locator('[id="' + anchor + '"]').waitFor({ state: 'attached', timeout: 25000 });
         check(await page.locator('#actions').innerText() === '0', 'Help must not execute the adjacent action or submit a form');
         check(decodeURIComponent(await page.locator('iframe').getAttribute('src')).endsWith('#' + anchor), 'Chapter anchor must match the locale');
         await page.setViewportSize({ width: 390, height: 844 });
@@ -129,7 +139,7 @@ async page => {
     for (const culture of ['ja', 'fr', 'es', 'ru']) {
         await mount(culture, '/Admin/MCP');
         await page.locator('.ncf-doc-help-header').click();
-        check(await page.locator('iframe').getAttribute('src') === 'https://doc.ncf.pub/MCP/home/index.html', culture + ' must use English documentation');
+        check(await page.locator('iframe').getAttribute('src') === 'https://doc.ncf.pub/NcfPackageSources/xncf/mcp-manager.html#help-mcp-manager', culture + ' must use English documentation');
         check(!(await page.locator('.ncf-doc-help-dialog').innerText()).includes('DocHelp.'), 'Missing help translation');
         await close();
     }

@@ -4,6 +4,218 @@
     box-sizing: border-box;
 }
 
+.ncf-prompt-reference-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 4px 0;
+}
+
+.ncf-prompt-reference-pill {
+    border: 1px solid #c6d8f0;
+    border-radius: 12px;
+    background: #edf5ff;
+    color: #1765ad;
+    padding: 3px 9px;
+    font-size: 12px;
+    cursor: pointer;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    text-align: left;
+}
+
+.ncf-prompt-reference-content {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.ncf-prompt-reference-segment {
+    display: block;
+    border-left: 3px solid #80afe8;
+    padding: 6px 10px;
+    margin: 5px 0;
+    background: #f4f8ff;
+    border-radius: 5px;
+}
+
+.ncf-prompt-reference-segment > .ncf-prompt-reference-tag {
+    display: block;
+    white-space: normal;
+    margin-bottom: 5px;
+}
+
+.ncf-prompt-score-dialog .el-dialog__body {
+    padding: 8px 20px 16px;
+    max-height: calc(88vh - 130px);
+    overflow: auto;
+}
+
+.ncf-prompt-score-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    overflow-wrap: anywhere;
+}
+
+.ncf-prompt-score-heading strong {
+    min-width: 0;
+}
+
+.ncf-prompt-score-heading strong span {
+    font-weight: 400;
+}
+
+.ncf-prompt-score-editor {
+    padding: 14px 18px;
+    border: 1px solid #c6d8f0;
+    border-radius: 8px;
+    background: #f4f8ff;
+    margin: 14px 0;
+}
+
+.ncf-prompt-score-value {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1765ad;
+    font-variant-numeric: tabular-nums;
+}
+
+.ncf-prompt-score-overview {
+    min-width: 0;
+}
+
+.ncf-prompt-score-plot {
+    display: flex;
+    min-height: 210px;
+    margin-bottom: 12px;
+}
+
+.ncf-prompt-score-axis {
+    flex: 0 0 26px;
+    height: 140px;
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #606266;
+}
+
+.ncf-prompt-score-scroll {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    padding: 28px 4px 8px;
+    background: linear-gradient(#e5e7eb, #e5e7eb) 0 28px / 100% 1px no-repeat,
+        linear-gradient(#e5e7eb, #e5e7eb) 0 98px / 100% 1px no-repeat,
+        linear-gradient(#c0c4cc, #c0c4cc) 0 168px / 100% 1px no-repeat;
+}
+
+.ncf-prompt-score-columns {
+    display: flex;
+    width: max-content;
+    min-width: 100%;
+    gap: 4px;
+}
+
+.ncf-prompt-score-column {
+    flex: 0 0 84px;
+    width: 84px;
+    padding: 0 8px 6px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: #606266;
+    cursor: pointer;
+    font: inherit;
+    font-size: 11px;
+}
+
+.ncf-prompt-score-column.is-preview {
+    outline: 2px solid #409eff;
+    outline-offset: 1px;
+    background: #ecf5ff;
+}
+
+.ncf-prompt-score-column:focus-visible {
+    outline: 2px solid #303133;
+    outline-offset: 1px;
+}
+
+.ncf-prompt-score-track {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 140px;
+}
+
+.ncf-prompt-score-bar {
+    position: relative;
+    display: block;
+    width: 34px;
+    min-height: 2px;
+    background: linear-gradient(90deg, #90b9d9, #659bc4);
+    border-right: 5px solid #4d82ab;
+    border-radius: 3px 3px 0 0;
+    box-sizing: border-box;
+}
+
+.is-target .ncf-prompt-score-bar {
+    background: linear-gradient(90deg, #67c8b3, #27a58b);
+    border-color: #1d806c;
+}
+
+.ncf-prompt-score-bar.is-unrated {
+    background: transparent;
+    border: 1px dashed #909399;
+}
+
+.ncf-prompt-score-bar-value {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding-bottom: 4px;
+    white-space: nowrap;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.ncf-prompt-score-code {
+    display: block;
+    margin-top: 8px;
+    overflow-wrap: anywhere;
+}
+
+.ncf-prompt-score-preview {
+    min-height: 90px;
+    padding: 12px;
+    border: 1px solid #dcdfe6;
+    border-radius: 6px;
+    background: #fafbfc;
+    overflow-wrap: anywhere;
+}
+
+.ncf-prompt-score-preview-code {
+    font-weight: 600;
+}
+
+.ncf-prompt-score-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+}
+
+.ncf-prompt-score-preview pre {
+    max-height: 170px;
+    overflow: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font: inherit;
+}
+
 .ncf-prompt-selector-trigger {
     position: absolute;
     top: 2px;

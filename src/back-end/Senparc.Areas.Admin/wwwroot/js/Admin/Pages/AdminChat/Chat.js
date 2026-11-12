@@ -1,4 +1,248 @@
-﻿var chatApp = new Vue({
+﻿function workspaceCodeWords(text, ignoreCase) {
+  const values = text.split(/\s+/).filter(Boolean);
+  return new Set(ignoreCase ? values.map(value => value.toLowerCase()) : values);
+}
+
+function workspaceCodeProfiles() {
+  const cLike = (keywords, ignoreCase) => ({
+    lines: ['//'], block: ['/*', '*/'], keywords: workspaceCodeWords(keywords, ignoreCase)
+  });
+  return {
+    python: {
+      lines: ['#'],
+      keywords: workspaceCodeWords('False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield')
+    },
+    javascript: cLike('async await break case catch class const continue debugger default delete do else export extends false finally for from function if import in instanceof let new null of return static super switch this throw true try typeof var void while with yield'),
+    csharp: cLike('abstract as base bool break byte case catch char checked class const continue decimal default delegate do double else enum event explicit extern false finally fixed float for foreach goto if implicit in int interface internal is lock long namespace new null object operator out override params private protected public readonly ref return sbyte sealed short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unsafe ushort using virtual void volatile while'),
+    java: cLike('abstract assert boolean break byte case catch char class const continue default do double else enum extends final finally float for goto if implements import instanceof int interface long native new null package private protected public return short static strictfp super switch synchronized this throw throws transient true false try void volatile while'),
+    go: cLike('break case chan const continue default defer else fallthrough for func go goto if import interface map package range return select struct switch type var true false nil'),
+    rust: cLike('as async await break const continue crate dyn else enum extern false fn for if impl in let loop match mod move mut pub ref return self Self static struct super trait true type unsafe use where while'),
+    ruby: { lines: ['#'], keywords: workspaceCodeWords('BEGIN END alias and begin break case class def defined do else elsif end ensure false for if in module next nil not or redo rescue retry return self super then true undef unless until when while yield') },
+    php: { lines: ['//', '#'], block: ['/*', '*/'], keywords: workspaceCodeWords('abstract and array as break callable case catch class clone const continue declare default die do echo else elseif empty enddeclare endfor endforeach endif endswitch endwhile eval exit extends false final finally fn for foreach function global goto if implements include include_once instanceof insteadof interface isset list match namespace new null or print private protected public require require_once return static switch throw trait true try unset use var while xor yield') },
+    shell: { lines: ['#'], keywords: workspaceCodeWords('if then else elif fi for while do done case esac function return exit echo local export') },
+    powershell: { lines: ['#'], block: ['<#', '#>'], keywords: workspaceCodeWords('if else elseif for foreach while do until switch function return param begin process end try catch finally throw') },
+    sql: { lines: ['--'], block: ['/*', '*/'], ignoreCase: true, keywords: workspaceCodeWords('select from where and or not insert update delete create drop table join left right inner outer on group by order having limit as null is in like between distinct values set into', true) },
+    css: { block: ['/*', '*/'], keywords: new Set() },
+    json: { keywords: workspaceCodeWords('true false null') },
+    yaml: { lines: ['#'], keywords: workspaceCodeWords('true false null yes no') },
+    toml: { lines: ['#'], keywords: new Set() },
+    markup: { block: ['<!--', '-->'], keywords: new Set() },
+    lua: { lines: ['--'], block: ['--[[', ']]'], keywords: workspaceCodeWords('and break do else elseif end false for function goto if in local nil not or repeat return then true until while') },
+    plain: { keywords: new Set() }
+  };
+}
+
+const WORKSPACE_LINE_HEIGHT = 20;
+const WORKSPACE_VIRTUAL_THRESHOLD = 600;
+const WORKSPACE_VISIBLE_LINES = 160;
+const WORKSPACE_PREVIEW_PAGE_LINES = 800;
+
+function highlightWorkspaceLine(line, language, inBlock, capture) {
+  const profiles = highlightWorkspaceSource.profiles || (highlightWorkspaceSource.profiles = workspaceCodeProfiles());
+  const profile = profiles[language] || profiles.plain;
+  const text = String(line == null ? '' : line);
+  const write = capture !== false;
+  const parts = write ? [] : null;
+  const push = (chunk, cls) => {
+    if (!write || !chunk) return;
+    const escaped = chunk.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    parts.push(cls ? `<span class="${cls}">${escaped}</span>` : escaped);
+  };
+  const isIdentStart = ch => ch === '_' || ch === '$' || (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
+  const isIdent = ch => isIdentStart(ch) || (ch >= '0' && ch <= '9');
+  const isDigit = ch => ch >= '0' && ch <= '9';
+  const done = block => ({ html: write ? parts.join('') : '', inBlock: !!block });
+  let i = 0;
+  let block = !!inBlock;
+  const blockOpen = profile.block && profile.block[0];
+  const blockClose = profile.block && profile.block[1];
+  if (block && blockClose) {
+    const end = text.indexOf(blockClose, i);
+    if (end < 0) {
+      push(text, 'tok-comment');
+      return done(true);
+    }
+    push(text.slice(0, end + blockClose.length), 'tok-comment');
+    i = end + blockClose.length;
+    block = false;
+  }
+  while (i < text.length) {
+    const markers = profile.lines || [];
+    const marker = markers.find(item => text.startsWith(item, i) && (item !== '//' || i === 0 || text[i - 1] !== ':'));
+    if (marker) {
+      push(text.slice(i), 'tok-comment');
+      return done(false);
+    }
+    if (blockOpen && text.startsWith(blockOpen, i)) {
+      const end = text.indexOf(blockClose, i + blockOpen.length);
+      if (end < 0) {
+        push(text.slice(i), 'tok-comment');
+        return done(true);
+      }
+      push(text.slice(i, end + blockClose.length), 'tok-comment');
+      i = end + blockClose.length;
+      continue;
+    }
+    const quote = text[i];
+    if (quote === '"' || quote === "'" || quote === '`') {
+      const triple = quote !== '`' && text[i + 1] === quote && text[i + 2] === quote;
+      let j = i + (triple ? 3 : 1);
+      while (j < text.length) {
+        if (text[j] === '\\') { j += 2; continue; }
+        if (triple && text[j] === quote && text[j + 1] === quote && text[j + 2] === quote) { j += 3; break; }
+        if (!triple && text[j] === quote) { j += 1; break; }
+        j += 1;
+      }
+      push(text.slice(i, j), 'tok-string');
+      i = j;
+      continue;
+    }
+    if (isDigit(text[i])) {
+      let j = i + 1;
+      const hex = text[i] === '0' && (text[j] === 'x' || text[j] === 'X');
+      if (hex) j += 1;
+      while (j < text.length) {
+        const ch = text[j];
+        if (isDigit(ch) || ch === '_' || ch === '.') { j += 1; continue; }
+        if (hex && ((ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F'))) { j += 1; continue; }
+        break;
+      }
+      push(text.slice(i, j), 'tok-number');
+      i = j;
+      continue;
+    }
+    if (isIdentStart(text[i])) {
+      let j = i + 1;
+      while (j < text.length && isIdent(text[j])) j += 1;
+      const word = text.slice(i, j);
+      const lookup = profile.ignoreCase ? word.toLowerCase() : word;
+      push(word, profile.keywords.has(lookup) ? 'tok-keyword' : '');
+      i = j;
+      continue;
+    }
+    push(text[i], '');
+    i += 1;
+  }
+  return done(block);
+}
+
+function workspacePreviewLineList(source) {
+  const normalized = String(source || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const lines = normalized.split('\n');
+  if (lines.length > 1 && lines[lines.length - 1] === '') lines.pop();
+  return lines;
+}
+
+function highlightWorkspaceLines(source, language, startLine) {
+  const lines = workspacePreviewLineList(source);
+  const origin = Math.max(1, startLine || 1);
+  let inBlock = false;
+  return lines.map((line, index) => {
+    const highlighted = highlightWorkspaceLine(line, language, inBlock, true);
+    inBlock = highlighted.inBlock;
+    return `<span class="code-line" data-ln="${origin + index}"><span class="code-text">${highlighted.html}</span></span>`;
+  }).join('');
+}
+
+function highlightWorkspaceSource(source, language) {
+  return `<pre class="code-preview"><code>${highlightWorkspaceLines(source, language, 1)}</code></pre>`;
+}
+
+function workspaceBlockStates(lines, language) {
+  const states = new Uint8Array(lines.length);
+  let inBlock = false;
+  for (let index = 0; index < lines.length; index += 1) {
+    states[index] = inBlock ? 1 : 0;
+    inBlock = highlightWorkspaceLine(lines[index], language, inBlock, false).inBlock;
+  }
+  return states;
+}
+
+let workspaceJsonNodeSeq = 1;
+
+function workspaceJsonNode(key, value) {
+  const id = 'json-' + (workspaceJsonNodeSeq++);
+  if (value && value.__workspaceInvalidJson) {
+    return { id, key: '第 ' + value.lineNumber + ' 行', type: 'invalid', text: value.raw };
+  }
+  if (value === null) return { id, key, type: 'null', text: 'null' };
+  if (Array.isArray(value)) return { id, key, type: 'array', size: value.length, value, open: false };
+  if (typeof value === 'object') {
+    return { id, key, type: 'object', size: Object.keys(value).length, keys: Object.keys(value), value, open: false };
+  }
+  if (typeof value === 'string') return { id, key, type: 'string', text: value };
+  if (typeof value === 'number') return { id, key, type: 'number', text: String(value) };
+  if (typeof value === 'boolean') return { id, key, type: 'boolean', text: String(value) };
+  return { id, key, type: 'string', text: String(value) };
+}
+
+function workspaceJsonChild(node, index) {
+  if (!node.cache) node.cache = new Array(node.size);
+  if (!node.cache[index]) {
+    if (node.type === 'array') node.cache[index] = workspaceJsonNode(String(index), node.value[index]);
+    else node.cache[index] = workspaceJsonNode(node.keys[index], node.value[node.keys[index]]);
+  }
+  return node.cache[index];
+}
+
+function workspaceJsonCollapsed(node) {
+  if (node.type === 'array') return node.size ? 'Array(' + node.size + ')' : '[]';
+  if (!node.size) return '{}';
+  const sample = node.keys.slice(0, 3).map(key => JSON.stringify(key) + ': …').join(', ');
+  return node.size > 3 ? '{' + sample + ', …}' : '{' + sample + '}';
+}
+
+function buildWorkspaceJsonRoot(content, jsonLines) {
+  let value;
+  if (jsonLines) {
+    value = [];
+    String(content || '').split('\n').forEach((line, index) => {
+      if (!line.trim()) return;
+      try {
+        value.push(JSON.parse(line));
+      } catch (error) {
+        value.push({
+          __workspaceInvalidJson: true,
+          lineNumber: index + 1,
+          raw: line.length > 180 ? line.slice(0, 180) + '…' : line
+        });
+      }
+    });
+  } else {
+    value = JSON.parse(content);
+  }
+  const root = workspaceJsonNode(null, value);
+  if (root.size != null) {
+    root.open = true;
+    root.shown = Math.min(root.size, 200);
+  }
+  return root;
+}
+
+function flattenWorkspaceJson(root) {
+  const rows = [];
+  const walk = (node, depth) => {
+    rows.push({ id: node.id, depth, node, closing: false });
+    if (node.size == null || !node.open) return;
+    const shown = Math.min(node.size, node.shown || Math.min(node.size, 200));
+    node.shown = shown;
+    for (let index = 0; index < shown; index += 1) walk(workspaceJsonChild(node, index), depth + 1);
+    if (shown < node.size) {
+      rows.push({ id: node.id + '-more', depth: depth + 1, more: true, remaining: node.size - shown, node });
+    }
+    rows.push({ id: node.id + '-end', depth, node, closing: true });
+  };
+  if (root) walk(root, 0);
+  return rows;
+}
+
+function logAdminChat(level, message, detail) {
+  if (typeof console === 'undefined' || !console) return;
+  const write = console[level] || console.error || console.log;
+  if (typeof write === 'function') write.call(console, message, detail === undefined ? '' : detail);
+}
+
+var chatApp = new Vue({
   el: '#app',
   mixins: [window.ChatLauncherMixin],
   data() {
@@ -10,6 +254,7 @@
       memoryHistory: [],
       memoryWorkspaceId: '',
       memoryEntryDraft: null,
+      memoryProposalReview: null,
       memoryUsage: null,
       memoryUsageSessionId: 0,
       memoryUpdateResult: null,
@@ -51,6 +296,28 @@
       aiKernelAvailable: false,
       loadingAiModelOptions: false,
       sessionList: [],
+      archivedSessionList: [],
+      sidebarToolsVisible: false,
+      historySearchVisible: false,
+      historySearchTab: 'chat',
+      historySearchKeyword: '',
+      historySearchHits: [],
+      historySearchLoading: false,
+      historySearchSubmitted: false,
+      historySearchTimer: null,
+      historySearchSequence: 0,
+      historySearchFlashTimer: null,
+      pendingHistorySearchMessageId: 0,
+      archivingSessionId: 0,
+      restoringSessionId: 0,
+      currentSessionStatus: 0,
+      messageRail: [],
+      messageRailOpen: false,
+      messageRailActiveId: 0,
+      messageRailMenuTop: 0,
+      messageRailMenuHover: false,
+      messageRailCloseTimer: null,
+      messageRailObserver: null,
       sidebarWidth: 250,
       sidebarCollapsed: false,
       collapsedSessionGroups: [],
@@ -61,6 +328,10 @@
       dropAfter: false,
       savingSessionOrder: false,
       runningSessionId: 0,
+      sessionRuns: {},
+      sessionDrafts: {},
+      unreadSessionIds: [],
+      unreadPersistGeneration: {},
       runningMessages: [],
       sessionUsage: {},
       sessionDetailSequence: 0,
@@ -97,6 +368,9 @@
       workspacePreviewMaxWidth: 420,
       workspacePreviewOverlay: false,
       workspacePreviewSource: false,
+      workspacePreviewEditing: false,
+      workspacePreviewDraft: '',
+      workspacePreviewSaving: false,
       pendingAttachments: [],
       workspaceUploading: false,
       workspaceUploadCapabilities: null,
@@ -113,7 +387,23 @@
       workspacePreviewFilePath: '',
       workspacePreviewData: null,
       workspacePreviewSrcdoc: '',
+      workspacePreviewJsonTree: false,
+      workspaceJsonRoot: null,
+      workspaceJsonRevision: 0,
+      workspacePreviewLines: [],
+      workspacePreviewLineOffset: 0,
+      workspacePreviewVirtual: false,
+      workspaceLineBlockStates: null,
+      workspacePreviewCodeHtml: '',
+      workspacePreviewJumpLine: 1,
+      workspacePreviewWindowLoading: false,
       workspaceEntriesLoading: false,
+      workspaceMention: {
+        open: false, field: '', start: 0, end: 0, query: '', items: [], active: 0,
+        loading: false, error: '', sequence: 0, loadedQuery: null
+      },
+      workspaceMentionTimer: null,
+      workspaceMentionApplying: false,
       workspacePreviewLoading: false,
       workspaceResizeHandler: null,
       workspaceResizeEndHandler: null
@@ -121,7 +411,12 @@
   },
   computed: {
     isCurrentSessionRunning() {
-      return this.isSending && this.runningSessionId === this.currentSessionId;
+      return !!this.sessionRuns[this.currentSessionId]
+        || (this.isSending && this.runningSessionId === this.currentSessionId);
+    },
+    hasRunningSession() {
+      return Object.keys(this.sessionRuns).length > 0
+        || (this.isSending && Number(this.runningSessionId) > 0);
     },
     canUploadWorkspaceFiles() {
       return this.isSuperAdmin && !!(this.currentSessionId ? this.currentSessionWorkspaceId : this.selectedWorkspaceId);
@@ -142,9 +437,83 @@
       return !!this.workspacePreviewData
         && ['text/html', 'text/markdown'].includes(this.workspacePreviewData.contentType);
     },
+    workspacePreviewIsCode() {
+      const data = this.workspacePreviewData;
+      if (!data || !data.isText || this.workspacePreviewIsDocument) return false;
+      return data.contentType !== 'image/svg+xml';
+    },
+    workspacePreviewIsJson() {
+      const type = this.workspacePreviewData && this.workspacePreviewData.contentType;
+      return type === 'application/json' || type === 'application/jsonl';
+    },
+    workspacePreviewShowsLines() {
+      if (this.workspacePreviewEditing || this.workspacePreviewSource || this.workspacePreviewJsonTree) return false;
+      return this.workspacePreviewIsCode;
+    },
+    workspacePreviewWindowBar() {
+      if (this.workspacePreviewEditing || !this.workspacePreviewData || !this.workspacePreviewData.isText) return false;
+      return !!this.workspacePreviewData.windowed || !!this.workspacePreviewVirtual;
+    },
+    workspacePreviewWindowEnd() {
+      const start = (this.workspacePreviewData && this.workspacePreviewData.startLine) || 1;
+      const count = (this.workspacePreviewLines || []).length;
+      return count ? start + count - 1 : start;
+    },
+    workspacePreviewWindowLabel() {
+      const data = this.workspacePreviewData || {};
+      const total = (this.workspacePreviewLines || []).length;
+      const start = data.startLine || 1;
+      const end = total ? start + total - 1 : start;
+      if (data.windowed) {
+        const truncated = data.truncated ? ' · 超长行已截断' : '';
+        return `第 ${start}–${end} 行 · ${this.formatWorkspaceFileSize(data.size)} · 大文件按片段加载${truncated}`;
+      }
+      return `共 ${total} 行 · 只渲染可见区域`;
+    },
+    workspaceLineBottomPad() {
+      const total = (this.workspacePreviewLines || []).length;
+      const consumed = (this.workspacePreviewLineOffset || 0) + WORKSPACE_VISIBLE_LINES;
+      return Math.max(0, total - consumed) * WORKSPACE_LINE_HEIGHT;
+    },
     workspacePreviewCanShowSource() {
       return !!this.workspacePreviewData && this.workspacePreviewData.isText
-        && (this.workspacePreviewIsDocument || this.workspacePreviewData.contentType === 'image/svg+xml');
+        && !this.workspacePreviewEditing
+        && (this.workspacePreviewIsDocument || this.workspacePreviewIsCode || this.workspacePreviewData.contentType === 'image/svg+xml');
+    },
+    workspacePreviewCanEdit() {
+      return !!this.workspacePreviewData && this.workspacePreviewData.isText
+        && !this.workspacePreviewData.windowed
+        && !this.workspacePreviewEditing;
+    },
+    workspacePreviewDirty() {
+      if (!this.workspacePreviewEditing || !this.workspacePreviewData) return false;
+      return this.workspacePreviewDraft !== (this.workspacePreviewData.content || '');
+    },
+    workspacePreviewFrameTitle() {
+      const type = this.workspacePreviewData && this.workspacePreviewData.contentType;
+      if (type === 'text/markdown') return 'Workspace Markdown 预览';
+      if (type === 'text/html') return 'Workspace HTML 预览';
+      if (this.workspacePreviewIsCode) return 'Workspace 代码预览';
+      return 'Workspace 预览';
+    },
+    workspaceCodeLanguage() {
+      const name = this.workspaceEntryName((this.workspacePreviewData && this.workspacePreviewData.path) || this.workspacePreviewFilePath).toLowerCase();
+      const extension = name.includes('.') ? name.slice(name.lastIndexOf('.') + 1) : name;
+      return {
+        py: 'python', pyw: 'python', pyi: 'python',
+        js: 'javascript', mjs: 'javascript', cjs: 'javascript', jsx: 'javascript',
+        ts: 'javascript', tsx: 'javascript', mts: 'javascript', cts: 'javascript', jsonc: 'javascript', json5: 'javascript',
+        cs: 'csharp', csx: 'csharp',
+        java: 'java', kt: 'java', kts: 'java', scala: 'java', gradle: 'java', dart: 'java', swift: 'java',
+        go: 'go', rs: 'rust', rb: 'ruby', php: 'php', gemfile: 'ruby', rakefile: 'ruby',
+        sh: 'shell', bash: 'shell', zsh: 'shell', bat: 'shell', cmd: 'shell', dockerfile: 'shell', makefile: 'shell', jenkinsfile: 'shell',
+        ps1: 'powershell', psm1: 'powershell',
+        sql: 'sql', css: 'css', scss: 'css', sass: 'css', less: 'css',
+        json: 'json', jsonl: 'json', ndjson: 'json', map: 'json', ipynb: 'json',
+        yml: 'yaml', yaml: 'yaml', toml: 'toml',
+        html: 'markup', htm: 'markup', xml: 'markup', vue: 'markup', cshtml: 'markup', razor: 'markup',
+        svg: 'markup', csproj: 'markup', lua: 'lua'
+      }[extension] || 'plain';
     },
     usageStatusText() {
       if (!this.latestUsage || !this.hasUsage(this.latestUsage)) {
@@ -177,6 +546,21 @@
       return groups;
     }
   },
+  watch: {
+    messageList() {
+      this.$nextTick(() => {
+        this.observeMessageRail();
+        this.refreshMessageRail();
+      });
+    },
+    historySearchVisible(visible) {
+      if (!visible) return;
+      this.$nextTick(() => {
+        const input = this.$refs.historySearchInput;
+        if (input && typeof input.focus === 'function') input.focus();
+      });
+    }
+  },
   mounted() {
     this.workspacePreviewResizeObserver = new ResizeObserver(() => this.updateWorkspacePreviewLayout());
     this.workspacePreviewResizeObserver.observe(this.$refs.workspaceContainer.$el);
@@ -198,12 +582,28 @@
     const modeParam = new URLSearchParams(window.location.search || '').get('mode');
     if (modeParam === '0') this.chatMode = 'simple';
     if (modeParam === '1') this.chatMode = 'harness';
+    if (!(Number(this.currentSessionId) > 0)) {
+      const linkedSessionId = this.sessionIdFromLocation();
+      if (linkedSessionId > 0) this.currentSessionId = linkedSessionId;
+    }
+    this.syncAdminChatLocation();
     const initialMessageKey = `ncf.admin.chat.initialMessage.${this.currentSessionId}`;
     const initialMessageParam = this.currentSessionId > 0 ? sessionStorage.getItem(initialMessageKey) : '';
     if (initialMessageParam) {
       sessionStorage.removeItem(initialMessageKey);
       this.inputMessage = initialMessageParam;
       this.pendingInitialSend = true;
+      const referenceKey = `ncf.admin.chat.initialReferences.${this.currentSessionId}`;
+      const references = sessionStorage.getItem(referenceKey);
+      sessionStorage.removeItem(referenceKey);
+      if (references) {
+        try {
+          this.pendingReferenceRestore = this.restorePromptReferences(
+            'promptMessageInput', JSON.parse(references));
+        } catch (error) {
+          this.$message.error(error.message);
+        }
+      }
     }
 
     this.currentSessionAiModelId = this.getSessionAiModelId(this.currentSessionId);
@@ -212,28 +612,83 @@
 
     this.loadAiModelOptions();
     this.loadSessionList();
+    this.loadArchivedSessionList();
+    this.bindChatSettingsDismiss();
     
-    if (this.currentSessionId > 0) {
-      this.loadSessionDetail().then(() => {
+      if (this.currentSessionId > 0) {
+      this.loadSessionDetail().then(async () => {
         this.loadTrajectoryList();
-        if (this.pendingInitialSend) {
+        await this.resumeAdminChatRun();
+        if (this.pendingReferenceRestore) await this.pendingReferenceRestore;
+        if (this.pendingInitialSend && !this.isSending) {
           this.pendingInitialSend = false;
           this.sendMessage();
+        } else {
+          this.pendingInitialSend = false;
         }
       });
     }
   },
   beforeDestroy() {
+    if (this.messageRailObserver) this.messageRailObserver.disconnect();
+    clearTimeout(this.messageRailCloseTimer);
+    clearTimeout(this.historySearchTimer);
+    clearTimeout(this.historySearchFlashTimer);
     this.workspacePreviewResizeObserver.disconnect();
+    Object.keys(this.sessionRuns).forEach((id) => {
+      const controller = this.sessionRuns[id] && this.sessionRuns[id].controller;
+      if (controller) controller.abort();
+    });
     if (this.activeRequestController) {
+      // 刷新或离开页面只断开观察，不请求 cancel，服务端任务继续执行。
       this.activeRequestController.abort();
       this.activeRequestController = null;
     }
     this.stopWorkspacePreviewResize();
     this.stopSidebarResize();
     this.clearPendingAttachments();
+    this.unbindChatSettingsDismiss();
   },
   methods: {
+    bindChatSettingsDismiss() {
+      if (this.chatSettingsPointerHandler) return;
+      this.chatSettingsPointerHandler = (event) => {
+        const openPanel = document.querySelector('details.chat-inline-settings[open]');
+        if (!openPanel) return;
+        const target = event.target;
+        // 模型下拉、Memory 菜单和说明弹层都挂在 body 上，点它们不算离开设置面板。
+        if (target && target.closest && target.closest('details.chat-inline-settings, .el-popper, .el-select-dropdown, .el-dropdown-menu, .el-dialog__wrapper, .el-message-box__wrapper, .ncf-doc-help-dialog')) {
+          return;
+        }
+        openPanel.open = false;
+        console.debug('[NCF][AdminChat] 点击页面其他区域，关闭对话设置');
+      };
+      this.chatSettingsBlurHandler = () => {
+        const openPanel = document.querySelector('details.chat-inline-settings[open]');
+        if (!openPanel) return;
+        openPanel.open = false;
+        console.debug('[NCF][AdminChat] 焦点离开对话页面，关闭对话设置');
+      };
+      document.addEventListener('pointerdown', this.chatSettingsPointerHandler);
+      window.addEventListener('blur', this.chatSettingsBlurHandler);
+    },
+    unbindChatSettingsDismiss() {
+      if (this.chatSettingsPointerHandler) {
+        document.removeEventListener('pointerdown', this.chatSettingsPointerHandler);
+        this.chatSettingsPointerHandler = null;
+      }
+      if (this.chatSettingsBlurHandler) {
+        window.removeEventListener('blur', this.chatSettingsBlurHandler);
+        this.chatSettingsBlurHandler = null;
+      }
+    },
+    closeInlineChatSettings(event) {
+      const host = event && event.currentTarget && event.currentTarget.closest
+        ? event.currentTarget.closest('details.chat-inline-settings')
+        : document.querySelector('details.chat-inline-settings[open]');
+      if (host) host.open = false;
+      console.debug('[NCF][AdminChat] 关闭对话设置');
+    },
     sidebarStorageKey() {
       return `ncf.admin.chat.sidebar.${this.currentUserId}`;
     },
@@ -318,7 +773,70 @@
       this.sidebarResizeEndHandler = null;
     },
     isSessionRunning(session) {
-      return this.isSending && this.runningSessionId === session.id;
+      return !!session && (!!this.sessionRuns[session.id]
+        || (this.isSending && this.runningSessionId === session.id));
+    },
+    isSessionUnread(session) {
+      return !!session && !this.isSessionRunning(session) && this.unreadSessionIds.includes(session.id);
+    },
+    markSessionUnread(sessionId) {
+      const id = Number(sessionId);
+      if (!id || id === this.currentSessionId || this.unreadSessionIds.includes(id)) return Promise.resolve();
+      this.unreadSessionIds.push(id);
+      console.info('AdminChat session unread:', id);
+      return this.persistSessionUnread(id, true);
+    },
+    clearSessionUnread(sessionId) {
+      const id = Number(sessionId);
+      if (!id || !this.unreadSessionIds.includes(id)) return Promise.resolve();
+      this.unreadSessionIds = this.unreadSessionIds.filter(item => item !== id);
+      return this.persistSessionUnread(id, false);
+    },
+    applyPersistedUnread(sessions) {
+      const current = Number(this.currentSessionId) || 0;
+      (sessions || []).forEach(session => {
+        const id = Number(session && session.id);
+        if (!id) return;
+        const unread = session.hasUnread === true || session.hasUnread === 1;
+        if (id === current) {
+          this.unreadSessionIds = this.unreadSessionIds.filter(item => item !== id);
+          if (unread) this.persistSessionUnread(id, false);
+          session.hasUnread = false;
+          return;
+        }
+        if (unread && !this.unreadSessionIds.includes(id)) this.unreadSessionIds.push(id);
+        if (!unread && this.unreadSessionIds.includes(id) && !(this.unreadPersistPending && this.unreadPersistPending[id])) {
+          this.unreadSessionIds = this.unreadSessionIds.filter(item => item !== id);
+        }
+      });
+    },
+    persistSessionUnread(sessionId, unread) {
+      const id = Number(sessionId);
+      if (!id || typeof service === 'undefined' || !service || typeof service.post !== 'function') return Promise.resolve();
+      const generation = (this.unreadPersistGeneration[id] || 0) + 1;
+      this.unreadPersistGeneration[id] = generation;
+      if (!this.unreadPersistPending) this.unreadPersistPending = {};
+      this.unreadPersistPending[id] = unread;
+      const session = (this.sessionList || []).find(item => item.id === id);
+      if (session) session.hasUnread = unread;
+      console.info('AdminChat persist unread:', id, unread);
+      return service.post('/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.SetSessionUnreadAsync', {
+        sessionId: id,
+        unread: unread
+      }).then(response => {
+        if (!(response && response.data && response.data.success)) {
+          console.error('AdminChat unread persist failed:', id, response && response.data);
+          return;
+        }
+        if (this.unreadPersistGeneration[id] !== generation) {
+          const latest = this.unreadSessionIds.includes(id);
+          if (latest !== unread) return this.persistSessionUnread(id, latest);
+          return;
+        }
+        if (this.unreadPersistPending) this.unreadPersistPending[id] = false;
+      }).catch(error => {
+        console.error('AdminChat unread persist failed:', id, error);
+      });
     },
     startSessionDrag(event, session) {
       if (this.savingSessionOrder) { event.preventDefault(); return; }
@@ -399,7 +917,7 @@
       }
       this.memoryUpdateResult = result;
       this.memoryUpdateSessionId = sessionId;
-      if (status && !['disabled', 'updated', 'unchanged', 'read-only', 'skipped-input'].includes(status)) {
+      if (status && !['disabled', 'updated', 'unchanged', 'read-only', 'skipped-input', 'pending-review'].includes(status)) {
         this.$message.warning(ncfT('AdminChat.Memory.UpdateWarning') + ' (' + status + ')');
       }
     },
@@ -410,7 +928,8 @@
         return ncfT('AdminChat.Memory.UpdateSaved', result.globalChanges, result.workspaceChanges);
       }
       const knownReasons = ['mode-off', 'read-only', 'input-not-eligible', 'no-candidates',
-        'pinned', 'no-difference', 'revision-conflict', 'timeout', 'invalid-change', 'capacity', 'invalid-json', 'pending'];
+        'pinned', 'no-difference', 'revision-conflict', 'timeout', 'invalid-change', 'capacity', 'invalid-json', 'pending',
+        'pending-review', 'unresolved-reference', 'review-complete', 'intent-deferred', 'no-save-intent'];
       const reason = knownReasons.includes(result.reason) ? result.reason : 'update-failed';
       return ncfT('AdminChat.Memory.UpdateReason.' + reason);
     },
@@ -459,7 +978,7 @@
     async changeMemoryMode(mode) {
       if (typeof mode === 'boolean') mode = mode ? 2 : 0;
       const sessionId = this.currentSessionId;
-      if (this.memoryBusy || this.isSending) return;
+      if (this.memoryBusy || this.isCurrentSessionRunning) return;
       this.memoryBusy = true;
       try {
         const data = await this.memoryRequest('SetMemoryEnabledAsync', {
@@ -493,6 +1012,7 @@
         this.memoryHistory = data.history || [];
         this.memoryWorkspaceId = data.workspaceId || '';
         this.memoryEntryDraft = null;
+        this.memoryProposalReview = null;
         this.globalChatLoaded = false;
         this.memoryTab = 'entries';
         this.memoryDialogVisible = true;
@@ -535,6 +1055,7 @@
         this.$message.warning(ncfT('AdminChat.Memory.UnsavedMarkdown'));
         return;
       }
+      this.memoryProposalReview = null;
       this.memoryEntryDraft = entry ? {
         id: entry.id, version: entry.version, text: entry.text, topic: entry.topic,
         tier: entry.tier, kind: entry.kind, pinned: entry.pinned,
@@ -545,12 +1066,35 @@
       };
     },
 
+    async reviewMemoryProposal(proposal) {
+      const result = this.memoryUpdateResult;
+      const sessionId = this.currentSessionId;
+      if (this.memoryBusy || this.isCurrentSessionRunning || !result || this.memoryUpdateSessionId !== sessionId
+          || !(result.proposals || []).includes(proposal)) return;
+      if (this.memoryDialogVisible) {
+        this.$message.warning(ncfT('AdminChat.Memory.ReviewClose'));
+        return;
+      }
+      await this.openMemoryDialog();
+      if (!this.memoryDialogVisible || this.currentSessionId !== sessionId
+          || this.memoryDialogSessionId !== sessionId || this.memoryUpdateResult !== result) return;
+      if (this.memoryDraftRevision !== result.revision) {
+        this.$message.warning(ncfT('AdminChat.Memory.UpdateReason.revision-conflict'));
+        return;
+      }
+      this.editMemoryEntry(proposal.entry);
+      this.memoryTab = 'entries';
+      this.memoryProposalReview = { result, proposal, draft: this.memoryEntryDraft };
+    },
+
     async saveMemoryEntry(remove = false) {
       if (!this.memoryEntryDraft || this.memoryBusy) return;
       if (this.memoryMarkdown !== this.memorySavedMarkdown) {
         this.$message.warning(ncfT('AdminChat.Memory.UnsavedMarkdown'));
         return;
       }
+      const review = this.memoryProposalReview;
+      const reviewing = review && review.draft === this.memoryEntryDraft;
       this.memoryBusy = true;
       try {
         const data = await this.memoryRequest('EditMemoryEntryAsync', {
@@ -561,9 +1105,18 @@
         this.memoryEntries = data.entries || [];
         this.memoryHistory = data.history || [];
         this.memoryEntryDraft = null;
+        this.memoryProposalReview = null;
         this.memoryMarkdown = data.markdown;
         this.memorySavedMarkdown = data.markdown;
         if (this.memoryDialogSessionId === this.currentSessionId) this.memoryRevision = data.revision;
+        if (reviewing && this.memoryUpdateResult === review.result) {
+          const proposals = review.result.proposals.filter(proposal => proposal !== review.proposal);
+          this.memoryUpdateResult = {
+            ...review.result, revision: data.revision, proposals,
+            status: proposals.length ? 'pending-review' : 'reviewed',
+            reason: proposals.length ? 'pending-review' : 'review-complete'
+          };
+        }
         this.$message.success(ncfT('AdminChat.Memory.Saved'));
       } catch (error) {
         this.$message.error(error.message);
@@ -626,6 +1179,7 @@
 
     async ensureAttachmentSession() {
       if (this.currentSessionId) return;
+      const promptReferences = this.capturePromptReferences('promptLauncherInput');
       const response = await service.post('/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.CreateSessionAsync',
         this.launcherSessionRequest((this.chatInputText || '').trim().slice(0, 60) || '附件对话'));
       if (!response.data || !response.data.success || !response.data.data || !response.data.data.sessionId) {
@@ -635,14 +1189,12 @@
       this.currentSessionAiModelId = this.normalizeAiModelId(this.launcherAiModelId);
       this.setSessionAiModelId(this.currentSessionId, this.currentSessionAiModelId);
       this.chatMode = this.launcherChatMode;
+      this.syncAdminChatLocation();
       this.inputMessage = this.chatInputText;
       this.chatInputText = '';
+      await this.restorePromptReferences('promptMessageInput', promptReferences);
       await this.loadSessionDetail();
       if (!this.currentSessionWorkspaceId) throw new Error('会话已创建，但没有读到 Workspace，请刷新后重试。');
-      const url = new URL(window.location.href);
-      url.searchParams.set('sessionId', this.currentSessionId);
-      url.searchParams.set('mode', this.chatMode === 'harness' ? '1' : '0');
-      window.history.replaceState(window.history.state, '', url.href);
       await this.loadSessionList();
     },
 
@@ -672,7 +1224,7 @@
         this.$message.warning('请先选择或创建 Workspace。');
         return;
       }
-      if (this.workspaceUploading || this.isSending) {
+      if (this.workspaceUploading || this.isCurrentSessionRunning) {
         this.$message.warning('正在上传或生成，请稍后再添加附件。');
         return;
       }
@@ -944,9 +1496,254 @@
       }
     },
 
+    async confirmDiscardWorkspaceEdit() {
+      if (!this.workspacePreviewDirty) return true;
+      if (typeof this.$confirm !== 'function') return true;
+      try {
+        await this.$confirm('当前文件有未保存的修改，确定放弃吗？', '放弃修改', {
+          type: 'warning',
+          confirmButtonText: '放弃修改',
+          cancelButtonText: '继续编辑'
+        });
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+
+    beginWorkspacePreviewEdit() {
+      if (!this.workspacePreviewData || !this.workspacePreviewData.isText || this.workspacePreviewData.windowed) return;
+      this.workspacePreviewDraft = this.workspacePreviewData.content || '';
+      this.workspacePreviewEditing = true;
+      this.workspacePreviewSource = false;
+      this.workspacePreviewJsonTree = false;
+    },
+
+    cancelWorkspacePreviewEdit() {
+      this.workspacePreviewEditing = false;
+      this.workspacePreviewDraft = this.workspacePreviewData ? (this.workspacePreviewData.content || '') : '';
+    },
+
+    async closeWorkspacePreview() {
+      if (!(await this.confirmDiscardWorkspaceEdit())) return;
+      this.workspacePreviewEditing = false;
+      this.workspacePreviewOpen = false;
+    },
+
+    workspaceFileEtag(data) {
+      if (!data) return '';
+      return data.etag || data.eTag || data.Etag || '';
+    },
+
+    async applyWorkspacePreview(data) {
+      this.workspacePreviewData = data;
+      this.workspacePreviewEditing = false;
+      this.workspacePreviewDraft = data && data.isText ? (data.content || '') : '';
+      this.workspacePreviewSrcdoc = '';
+      this.workspacePreviewJsonTree = false;
+      this.workspaceJsonRoot = null;
+      this.prepareWorkspaceLinePreview(data);
+      if (data && data.startLine) this.workspacePreviewJumpLine = data.startLine;
+      if (!data || !this.workspacePreviewIsDocument) return;
+      const isMarkdown = data.contentType === 'text/markdown';
+      const html = isMarkdown ? this.formatMessageContent(data.content || '') : (data.content || '');
+      console.debug('Workspace 预览:', data.path, data.contentType, isMarkdown ? 'markdown' : 'document');
+      this.workspacePreviewSrcdoc = await this.buildWorkspaceHtmlPreview(html, data.path, isMarkdown, '');
+    },
+
+    prepareWorkspaceLinePreview(data) {
+      this.workspacePreviewLineOffset = 0;
+      this.workspaceLineBlockStates = null;
+      this.workspacePreviewCodeHtml = '';
+      this.workspacePreviewVirtual = false;
+      if (!data || !data.isText || data.contentType === 'text/html' || data.contentType === 'text/markdown' || data.contentType === 'image/svg+xml') {
+        this.workspacePreviewLines = [];
+        return;
+      }
+      const lines = workspacePreviewLineList(data.content || '');
+      this.workspacePreviewLines = lines;
+      const virtual = lines.length > WORKSPACE_VIRTUAL_THRESHOLD;
+      this.workspacePreviewVirtual = virtual;
+      if (virtual) {
+        this.workspaceLineBlockStates = workspaceBlockStates(lines, this.workspaceCodeLanguage);
+        console.debug('Workspace 大文本预览:', data.path, lines.length, data.windowed ? 'window' : 'virtual');
+        return;
+      }
+      this.workspacePreviewCodeHtml = highlightWorkspaceLines(data.content || '', this.workspaceCodeLanguage, data.startLine || 1);
+    },
+
+    visibleWorkspaceLines() {
+      const lines = this.workspacePreviewLines || [];
+      const start = this.workspacePreviewLineOffset || 0;
+      const end = Math.min(lines.length, start + WORKSPACE_VISIBLE_LINES);
+      const language = this.workspaceCodeLanguage;
+      const origin = (this.workspacePreviewData && this.workspacePreviewData.startLine) || 1;
+      const states = this.workspaceLineBlockStates;
+      const items = [];
+      for (let index = start; index < end; index += 1) {
+        const highlighted = highlightWorkspaceLine(lines[index], language, !!(states && states[index]), true);
+        items.push({ number: origin + index, html: highlighted.html });
+      }
+      return items;
+    },
+
+    onWorkspaceLineScroll(event) {
+      const scroller = event.target;
+      const top = scroller.scrollTop;
+      const start = Math.max(0, Math.floor(top / WORKSPACE_LINE_HEIGHT) - 40);
+      if (Math.abs(start - this.workspacePreviewLineOffset) < 20) return;
+      this.workspacePreviewLineOffset = start;
+      this.$nextTick(() => {
+        if (scroller.scrollTop !== top) scroller.scrollTop = top;
+      });
+    },
+
+    toggleWorkspacePreviewSource() {
+      this.workspacePreviewSource = !this.workspacePreviewSource;
+      if (this.workspacePreviewSource) this.workspacePreviewJsonTree = false;
+    },
+
+    toggleWorkspaceJsonTree() {
+      if (!this.workspacePreviewIsJson || !this.workspacePreviewData) return;
+      if (this.workspacePreviewJsonTree) {
+        this.workspacePreviewJsonTree = false;
+        return;
+      }
+      try {
+        const jsonl = this.workspacePreviewData.contentType === 'application/jsonl';
+        this.workspaceJsonRoot = buildWorkspaceJsonRoot(this.workspacePreviewData.content || '', jsonl);
+        this.workspaceJsonRevision += 1;
+        this.workspacePreviewJsonTree = true;
+        this.workspacePreviewSource = false;
+        console.debug('Workspace JSON 树:', this.workspacePreviewFilePath, this.workspaceJsonRoot && this.workspaceJsonRoot.size);
+      } catch (error) {
+        console.error('Workspace JSON 解析失败:', error);
+        this.$message.warning('这份 JSON 无法解析，已保留文本预览。');
+      }
+    },
+
+    workspaceJsonRows() {
+      if (!this.workspaceJsonRevision || !this.workspaceJsonRoot) return [];
+      return flattenWorkspaceJson(this.workspaceJsonRoot);
+    },
+
+    toggleWorkspaceJson(node) {
+      if (!node || node.size == null) return;
+      node.open = !node.open;
+      if (node.open && node.shown == null) node.shown = Math.min(node.size, 200);
+      this.workspaceJsonRevision += 1;
+    },
+
+    showMoreWorkspaceJson(node) {
+      if (!node || node.size == null) return;
+      node.shown = Math.min(node.size, 1000, (node.shown || 0) + 200);
+      this.workspaceJsonRevision += 1;
+      if (node.shown >= 1000 && node.size > 1000) {
+        this.$message.info('树状预览一次最多展开 1000 项，其余请用文本查看。');
+      }
+    },
+
+    jsonKeyLabel(node) {
+      const key = String(node.key);
+      return /^\d+$/.test(key) ? key : JSON.stringify(key);
+    },
+
+    jsonRowText(row) {
+      const node = row.node;
+      if (row.closing) return node.type === 'array' ? ']' : '}';
+      if (node.size == null) {
+        if (node.type === 'string') {
+          const text = node.text.length > 240 ? node.text.slice(0, 240) + '…' : node.text;
+          return JSON.stringify(text);
+        }
+        return node.text;
+      }
+      if (!node.open) return workspaceJsonCollapsed(node);
+      return node.type === 'array' ? '[' : '{';
+    },
+
+    jsonValueClass(row) {
+      if (row.closing || row.node.size != null) return 'json-meta';
+      return 'json-' + row.node.type;
+    },
+
+    jsonRowTitle(row) {
+      if (!row || row.closing || !row.node || row.node.type !== 'string') return '';
+      return row.node.text || '';
+    },
+
+    async loadWorkspacePreviewWindow(startLine) {
+      if (!this.workspacePreviewFilePath || this.workspacePreviewWindowLoading) return;
+      const line = Math.max(1, Number(startLine) || 1);
+      this.workspacePreviewWindowLoading = true;
+      try {
+        const response = await service.get('/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.GetWorkspaceTextWindowAsync', {
+          params: { sessionId: this.currentSessionId, relativePath: this.workspacePreviewFilePath, startLine: line }
+        });
+        if (!response.data || !response.data.success || !response.data.data) {
+          throw new Error((response.data && response.data.msg) || '文本片段加载失败。');
+        }
+        await this.applyWorkspacePreview(response.data.data);
+        console.debug('Workspace 文本片段:', this.workspacePreviewFilePath, response.data.data.startLine, response.data.data.lineCount);
+      } catch (error) {
+        console.error('加载 Workspace 文本片段失败:', error);
+        this.$notify({ title: 'Workspace', message: error.message || '文本片段加载失败。', type: 'error', duration: 3000 });
+      } finally {
+        this.workspacePreviewWindowLoading = false;
+      }
+    },
+
+    jumpWorkspacePreviewLine() {
+      const line = Math.max(1, Number(this.workspacePreviewJumpLine) || 1);
+      if (this.workspacePreviewData && this.workspacePreviewData.windowed) {
+        return this.loadWorkspacePreviewWindow(line);
+      }
+      const index = Math.max(0, Math.min((this.workspacePreviewLines || []).length - 1, line - 1));
+      this.workspacePreviewLineOffset = Math.max(0, index - 40);
+      this.$nextTick(() => {
+        const scroller = this.$refs.workspaceLineScroller;
+        if (scroller) scroller.scrollTop = index * WORKSPACE_LINE_HEIGHT;
+      });
+    },
+
+    highlightWorkspaceCode(source, language) {
+      return highlightWorkspaceSource(source, language);
+    },
+
+    async saveWorkspacePreview() {
+      if (!this.workspacePreviewEditing || !this.workspacePreviewFilePath || this.workspacePreviewSaving) return;
+      if (!this.workspacePreviewDirty) return;
+      this.workspacePreviewSaving = true;
+      try {
+        const response = await service.post('/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.SaveWorkspaceFileAsync', {
+          sessionId: this.currentSessionId,
+          relativePath: this.workspacePreviewFilePath,
+          content: this.workspacePreviewDraft,
+          expectedEtag: this.workspaceFileEtag(this.workspacePreviewData)
+        });
+        if (!response.data || !response.data.success || !response.data.data) {
+          throw new Error((response.data && response.data.msg) || '文件保存失败。');
+        }
+        await this.applyWorkspacePreview(response.data.data);
+        const saved = response.data.data;
+        const entry = this.workspaceEntries.find(item => item.relativePath === this.workspacePreviewFilePath);
+        if (entry && saved.size != null) entry.length = saved.size;
+        this.$message.success('文件已保存。');
+        console.debug('Workspace 文本已保存:', this.workspacePreviewFilePath, saved.size);
+      } catch (error) {
+        console.error('保存 Workspace 文件失败:', error);
+        this.$notify({ title: 'Workspace', message: error.message || '文件保存失败。', type: 'error', duration: 3000 });
+      } finally {
+        this.workspacePreviewSaving = false;
+      }
+    },
+
     async handleWorkspaceEntryClick(entry) {
       if (!entry || !entry.relativePath) return;
+      if (!entry.isDirectory && entry.relativePath === this.workspacePreviewFilePath && !this.workspacePreviewEditing) return;
+      if (!(await this.confirmDiscardWorkspaceEdit())) return;
       this.workspacePreviewSource = false;
+      this.workspacePreviewEditing = false;
       if (entry.isDirectory) {
         this.workspacePreviewFilePath = '';
         this.workspacePreviewData = null;
@@ -966,16 +1763,7 @@
         if (!response.data || !response.data.success || !response.data.data) {
           throw new Error((response.data && response.data.msg) || '文件预览加载失败。');
         }
-        this.workspacePreviewData = response.data.data;
-        if (this.workspacePreviewIsDocument) {
-          const isMarkdown = this.workspacePreviewData.contentType === 'text/markdown';
-          this.workspacePreviewSrcdoc = await this.buildWorkspaceHtmlPreview(
-            isMarkdown
-              ? this.formatMessageContent(this.workspacePreviewData.content)
-              : this.workspacePreviewData.content,
-            this.workspacePreviewData.path,
-            isMarkdown);
-        }
+        await this.applyWorkspacePreview(response.data.data);
       } catch (error) {
         console.error('加载 Workspace 文件预览失败:', error);
         this.$notify({ title: 'Workspace', message: error.message || '文件预览加载失败。', type: 'error', duration: 3000 });
@@ -984,13 +1772,15 @@
       }
     },
 
-    async buildWorkspaceHtmlPreview(content, filePath, isMarkdown = false) {
+    async buildWorkspaceHtmlPreview(content, filePath, isMarkdown = false, previewKind = '') {
       const parser = new DOMParser();
       const document = parser.parseFromString(content, 'text/html');
-      document.querySelectorAll('script, iframe, object, embed, form, base, meta[http-equiv="refresh"]').forEach((element) => element.remove());
+      document.querySelectorAll('iframe, object, embed, form, base, meta[http-equiv]').forEach((element) => element.remove());
       document.querySelectorAll('*').forEach((element) => {
         Array.from(element.attributes).forEach((attribute) => {
-          if (attribute.name.toLowerCase().startsWith('on')) {
+          if (attribute.name.toLowerCase().startsWith('on')
+            || ['action', 'formaction', 'ping', 'srcset'].includes(attribute.name.toLowerCase())
+            || attribute.name.includes(':')) {
             element.removeAttribute(attribute.name);
           }
           if ((attribute.name === 'src' || attribute.name === 'href')
@@ -998,11 +1788,16 @@
             element.removeAttribute(attribute.name);
           }
         });
-        element.removeAttribute('srcset');
+        if (element.localName === 'a') {
+          const href = element.getAttribute('href');
+          if (href && !href.startsWith('#')) element.removeAttribute('href');
+          element.removeAttribute('target');
+          element.removeAttribute('download');
+        }
       });
 
       const resources = [];
-      document.querySelectorAll('img[src], video[src], audio[src], source[src], link[href]').forEach((element) => {
+      document.querySelectorAll('img[src], video[src], audio[src], source[src], link[href], script[src]').forEach((element) => {
         const attribute = element.hasAttribute('src') ? 'src' : 'href';
         const value = element.getAttribute(attribute);
         if (!value || value.startsWith('#') || /^(data:|blob:|https?:|\/\/)/i.test(value)) {
@@ -1013,9 +1808,17 @@
       });
 
       for (const resource of resources) {
+        if (resource.element.localName === 'script'
+          && !this.isWorkspaceExecutableScriptType(resource.element.getAttribute('type'))) {
+          resource.element.remove();
+          continue;
+        }
         try {
           const asset = await this.loadWorkspacePreviewAsset(resource.path);
-          if (asset && asset.contentBase64) {
+          if (asset && asset.contentBase64
+            && (resource.element.localName !== 'script'
+              || asset.contentType === 'text/javascript'
+              || asset.contentType === 'application/javascript')) {
             let contentBase64 = asset.contentBase64;
             if (asset.contentType === 'text/css' && asset.isText && asset.content) {
               const css = await this.inlineWorkspaceCss(asset.content, resource.path);
@@ -1024,13 +1827,27 @@
             resource.element.setAttribute(
               resource.attribute,
               `data:${asset.contentType};base64,${contentBase64}`);
+            if (resource.element.localName === 'script') resource.element.textContent = '';
           } else {
-            resource.element.removeAttribute(resource.attribute);
+            resource.element.remove();
           }
         } catch (error) {
-          resource.element.removeAttribute(resource.attribute);
+          resource.element.remove();
         }
       }
+
+      document.querySelectorAll('script').forEach((element) => {
+        if (!this.isWorkspaceExecutableScriptType(element.getAttribute('type'))) {
+          element.remove();
+          return;
+        }
+        if (!element.hasAttribute('src')) {
+          element.setAttribute(
+            'src',
+            `data:text/javascript;base64,${this.encodeWorkspaceText(element.textContent || '')}`);
+          element.textContent = '';
+        }
+      });
 
       const style = document.createElement('style');
       style.textContent = 'html,body{max-width:100%;overflow-x:hidden;}';
@@ -1052,12 +1869,33 @@
           a{color:#5267d9;}
         `;
       }
+      if (previewKind === 'code') {
+        style.textContent += `
+          body{margin:0;padding:16px 18px;box-sizing:border-box;background:#fbfcfe;color:#1f2937;font:12.5px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+          pre{margin:0;white-space:pre;}
+          .tok-keyword{color:#6d28d9;font-weight:600;}
+          .tok-string{color:#0f766e;}
+          .tok-comment{color:#94a3b8;font-style:italic;}
+          .tok-number{color:#b45309;}
+        `;
+      }
       document.head.appendChild(style);
       const csp = document.createElement('meta');
       csp.httpEquiv = 'Content-Security-Policy';
-      csp.content = "default-src 'none'; img-src data:; style-src 'unsafe-inline' data:; font-src data:; media-src data:;";
-      document.head.appendChild(csp);
+      csp.content = "default-src 'none'; script-src data:; img-src data:; " +
+        "style-src 'unsafe-inline' data:; font-src data:; media-src data:; " +
+        "base-uri 'none'; form-action 'none'; connect-src 'none'; frame-src 'none'; " +
+        "child-src 'none'; object-src 'none'; worker-src 'none'; navigate-to 'none';";
+      document.head.insertBefore(csp, document.head.firstChild);
       return '<!doctype html>' + document.documentElement.outerHTML;
+    },
+
+    isWorkspaceExecutableScriptType(type) {
+      const normalized = String(type || '').split(';', 1)[0].trim().toLowerCase();
+      return !normalized || [
+        'module', 'text/javascript', 'application/javascript',
+        'text/ecmascript', 'application/ecmascript'
+      ].includes(normalized);
     },
 
     async inlineWorkspaceCss(css, cssPath) {
@@ -1140,19 +1978,18 @@
     },
 
     workspaceFileIcon(path) {
-      const extension = this.workspaceEntryName(path).split('.').pop().toLowerCase();
+      const name = this.workspaceEntryName(path).toLowerCase();
+      if (['dockerfile', 'makefile', 'jenkinsfile'].includes(name)) return 'fa fa-file-code-o';
+      const extension = name.split('.').pop();
+      const code = 'fa fa-file-code-o';
+      const text = 'fa fa-file-text-o';
+      const image = 'fa fa-file-image-o';
       return {
-        html: 'fa fa-file-code-o',
-        htm: 'fa fa-file-code-o',
-        css: 'fa fa-file-code-o',
-        js: 'fa fa-file-code-o',
-        json: 'fa fa-file-text-o',
-        md: 'fa fa-file-text-o',
-        png: 'fa fa-file-image-o',
-        jpg: 'fa fa-file-image-o',
-        jpeg: 'fa fa-file-image-o',
-        gif: 'fa fa-file-image-o',
-        svg: 'fa fa-file-image-o'
+        html: code, htm: code, css: code, scss: code, js: code, jsx: code, ts: code, tsx: code,
+        py: code, pyw: code, cs: code, java: code, go: code, rs: code, php: code, rb: code,
+        sh: code, sql: code, vue: code, xml: code,
+        json: text, jsonl: text, ndjson: text, yml: text, yaml: text, md: text, txt: text, log: text, csv: text,
+        png: image, jpg: image, jpeg: image, gif: image, svg: image, webp: image
       }[extension] || 'fa fa-file-o';
     },
 
@@ -1467,12 +2304,16 @@
     },
 
     async runTrajectoryAction(action, payload) {
-      if (this.isSending) return;
       const sessionId = this.currentSessionId;
+      if (!sessionId || this.sessionRuns[sessionId] || (this.isSending && this.runningSessionId === sessionId)) return;
+      const run = this.beginSessionRun(sessionId, this.messageList);
       this.runningSessionId = sessionId;
-      this.runningMessages = this.messageList;
+      this.runningMessages = run.messages;
       this.resetLiveRun();
+      this.bindRunLiveView(run);
       this.clearRecentTasks();
+      run.recentTasks = [];
+      run.activeTaskId = '';
       this.isSending = true;
       this.isAIResponding = true;
       try {
@@ -1509,20 +2350,22 @@
         console.error('Harness 轨迹操作失败:', error);
         this.$message.error(error.message || '任务执行失败');
       } finally {
-        this.isSending = false;
-        this.runningSessionId = 0;
-        this.isAIResponding = false;
-        this.runningMessages = [];
+        this.markSessionUnread(sessionId);
+        this.releaseSessionRun(sessionId);
       }
     },
 
     async respondApproval(trajectoryId, approval, approved) {
-      if (this.isSending) return;
       const sessionId = this.currentSessionId;
+      if (!sessionId || this.sessionRuns[sessionId] || (this.isSending && this.runningSessionId === sessionId)) return;
+      const run = this.beginSessionRun(sessionId, this.messageList);
       this.runningSessionId = sessionId;
-      this.runningMessages = this.messageList;
+      this.runningMessages = run.messages;
       this.resetLiveRun();
+      this.bindRunLiveView(run);
       this.clearRecentTasks();
+      run.recentTasks = [];
+      run.activeTaskId = '';
       this.isSending = true;
       this.isAIResponding = true;
       try {
@@ -1557,14 +2400,13 @@
         console.error('处理 Harness 审批失败:', error);
         this.$message.error(error.message || '审批处理失败');
       } finally {
-        this.isSending = false;
-        this.runningSessionId = 0;
-        this.isAIResponding = false;
-        this.runningMessages = [];
+        this.markSessionUnread(sessionId);
+        this.releaseSessionRun(sessionId);
       }
     },
 
     handleChatInputKeydown(event) {
+      if (this.handleWorkspaceMentionKeydown(event, 'inputMessage')) return;
       // 保持与首页一致：Ctrl+Enter (Windows/Linux) 或 Cmd+Enter (Mac) 发送。
       if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
         event.preventDefault();
@@ -1573,28 +2415,317 @@
       // 普通 Enter 保留换行行为。
     },
 
+    handleWorkspaceMentionEdit(field, event) {
+      if (this.workspaceMentionApplying) return;
+      if (event && event.type === 'keyup' && ['ArrowUp', 'ArrowDown', 'Enter', 'Tab', 'Escape'].indexOf(event.key) >= 0) return;
+      const input = event && event.target;
+      if (!input || typeof input.selectionStart !== 'number') return;
+      this.syncWorkspaceMention(field, input.value, input.selectionStart);
+    },
+
+    syncWorkspaceMention(field, value, caret) {
+      const mention = window.NcfWorkspaceMentions && this.canUploadWorkspaceFiles && !this.isCurrentSessionRunning && !this.isCreatingSession
+        ? window.NcfWorkspaceMentions.findActive(value, caret) : null;
+      if (!mention) {
+        this.closeWorkspaceMention();
+        return;
+      }
+      const sameQuery = this.workspaceMention.open && this.workspaceMention.field === field
+        && this.workspaceMention.query === mention.query;
+      this.workspaceMention.open = true;
+      this.workspaceMention.field = field;
+      this.workspaceMention.start = mention.start;
+      this.workspaceMention.end = mention.end;
+      this.workspaceMention.query = mention.query;
+      if (!sameQuery) this.scheduleWorkspaceMentionLoad(mention.query);
+    },
+
+    scheduleWorkspaceMentionLoad(query) {
+      const sequence = ++this.workspaceMention.sequence;
+      if (this.workspaceMentionTimer) clearTimeout(this.workspaceMentionTimer);
+      if (query === this.workspaceMention.loadedQuery) {
+        this.workspaceMention.loading = false;
+        this.workspaceMention.error = '';
+        return;
+      }
+      this.workspaceMention.loading = true;
+      this.workspaceMention.error = '';
+      const delay = query ? 160 : 0;
+      this.workspaceMentionTimer = setTimeout(() => {
+        this.loadWorkspaceMentionItems(query, sequence);
+      }, delay);
+    },
+
+    async loadWorkspaceMentionItems(query, sequence) {
+      try {
+        const params = { query: query };
+        if (this.currentSessionId) params.sessionId = this.currentSessionId;
+        else params.workspaceId = this.selectedWorkspaceId;
+        const response = await service.get(
+          '/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.SuggestWorkspacePathsAsync',
+          { params: params, customAlert: true });
+        if (sequence !== this.workspaceMention.sequence || !this.workspaceMention.open) return;
+        const body = response && response.data;
+        const items = body && body.success && body.data && Array.isArray(body.data.items) ? body.data.items : null;
+        if (!items) throw new Error(body && (body.errorMessage || body.msg) || '无法读取 Workspace 路径');
+        this.workspaceMention.items = items.filter(item => item && item.relativePath);
+        this.workspaceMention.active = 0;
+        this.workspaceMention.loadedQuery = query;
+        this.workspaceMention.error = '';
+      } catch (error) {
+        if (sequence !== this.workspaceMention.sequence) return;
+        this.workspaceMention.items = [];
+        this.workspaceMention.error = error.message || '无法读取 Workspace 路径';
+      } finally {
+        if (sequence === this.workspaceMention.sequence) this.workspaceMention.loading = false;
+      }
+    },
+
+    handleWorkspaceMentionKeydown(event, field) {
+      if (!this.workspaceMention.open || this.workspaceMention.field !== field) return false;
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        const count = this.workspaceMention.items.length;
+        if (!count) return true;
+        const step = event.key === 'ArrowDown' ? 1 : -1;
+        this.workspaceMention.active = (this.workspaceMention.active + step + count) % count;
+        this.$nextTick(() => {
+          if (typeof document === 'undefined' || typeof document.querySelector !== 'function') return;
+          const active = document.querySelector('.chat-mention-anchor .chat-mention-option.is-active');
+          if (active && active.scrollIntoView) active.scrollIntoView({ block: 'nearest' });
+        });
+        return true;
+      }
+      if ((event.key === 'Enter' && !event.ctrlKey && !event.metaKey) || event.key === 'Tab') {
+        const item = this.workspaceMention.items[this.workspaceMention.active];
+        if (!item) return false;
+        event.preventDefault();
+        this.selectWorkspaceMention(item);
+        return true;
+      }
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.closeWorkspaceMention();
+        return true;
+      }
+      return false;
+    },
+
+    selectWorkspaceMention(item) {
+      const field = this.workspaceMention.field === 'chatInputText' ? 'chatInputText' : 'inputMessage';
+      const refName = field === 'chatInputText' ? 'promptLauncherInput' : 'promptMessageInput';
+      const input = this.workspaceMentionTextarea(refName);
+      const source = input && typeof input.value === 'string' ? input.value : this[field];
+      const applied = window.NcfWorkspaceMentions.apply(source, this.workspaceMention, item);
+      if (!applied) return;
+      this.workspaceMentionApplying = true;
+      this[field] = applied.value;
+      if (input) input.value = applied.value;
+      this.$nextTick(() => {
+        this.workspaceMentionApplying = false;
+        if (input) {
+          input.focus();
+          input.setSelectionRange(applied.caret, applied.caret);
+        }
+        if (item.isDirectory) this.syncWorkspaceMention(field, applied.value, applied.caret);
+        else this.closeWorkspaceMention();
+      });
+    },
+
+    workspaceMentionTextarea(refName) {
+      const component = this.$refs && this.$refs[refName];
+      return component && (component.$refs && component.$refs.textarea || component.textarea || component);
+    },
+
+    closeWorkspaceMention() {
+      if (this.workspaceMentionTimer) {
+        clearTimeout(this.workspaceMentionTimer);
+        this.workspaceMentionTimer = null;
+      }
+      this.workspaceMention.sequence += 1;
+      this.workspaceMention.open = false;
+      this.workspaceMention.items = [];
+      this.workspaceMention.active = 0;
+      this.workspaceMention.loading = false;
+      this.workspaceMention.error = '';
+      this.workspaceMention.loadedQuery = null;
+    },
+
+    waitForSessionListRetry(attempt) {
+      if (typeof setTimeout !== 'function') return Promise.resolve();
+      return new Promise(resolve => setTimeout(resolve, attempt * 200));
+    },
+
+    async readSessionPage(url) {
+      // customAlert 避免全局拦截器再弹一个没有原因的 Error。失败由这里统一重试和提示。
+      const response = await service.get(url, { customAlert: true });
+      const body = response && response.data;
+      const data = body && body.success && body.data;
+      if (!data || !Array.isArray(data.sessions) || !Number.isInteger(data.totalCount)) {
+        throw new Error((body && (body.errorMessage || body.msg || body.exception)) || 'invalid session page');
+      }
+      return data;
+    },
+
+    async collectSessionPages(urlForPage) {
+      const sessions = [];
+      let totalCount = 0;
+      let pageIndex = 1;
+      do {
+        const data = await this.readSessionPage(urlForPage(pageIndex));
+        if (data.sessions.length === 0 && sessions.length < data.totalCount) {
+          throw new Error('incomplete session page');
+        }
+        sessions.push(...data.sessions);
+        totalCount = data.totalCount;
+        pageIndex += 1;
+      } while (sessions.length < totalCount);
+      return Array.from(new Map(sessions.map(session => [session.id, session])).values());
+    },
+
+    async collectSessionPagesWithRetry(urlForPage) {
+      let lastError;
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+          return await this.collectSessionPages(urlForPage);
+        } catch (error) {
+          lastError = error;
+          logAdminChat('info', 'AdminChat session list attempt failed:', { attempt, message: error && error.message });
+          if (attempt < 3) await this.waitForSessionListRetry(attempt);
+        }
+      }
+      throw lastError;
+    },
+
     async loadSessionList() {
+      if (this._activeSessionListLoad) {
+        this._sessionListDirty = true;
+        logAdminChat('info', 'AdminChat session list load coalesced.');
+        return this._activeSessionListLoad;
+      }
+      this._activeSessionListLoad = this.performSessionListLoad();
+      try {
+        await this._activeSessionListLoad;
+      } finally {
+        this._activeSessionListLoad = null;
+        if (this._sessionListDirty) {
+          this._sessionListDirty = false;
+          await this.loadSessionList();
+        }
+      }
+    },
+
+    async performSessionListLoad() {
       this.loadingSessions = true;
       try {
-        const sessions = [];
-        let totalCount;
-        let pageIndex = 1;
-        do {
-          const response = await service.get(`/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.GetSessionListAsync?pageIndex=${pageIndex++}&pageSize=100`);
-          const data = response.data && response.data.success && response.data.data;
-          if (!data || !Array.isArray(data.sessions) || !Number.isInteger(data.totalCount)
-            || (data.sessions.length === 0 && sessions.length < data.totalCount)) {
-            throw new Error(response.data && response.data.errorMessage || ncfT('AdminChat.LoadSessionFailed'));
-          }
-          sessions.push(...data.sessions);
-          totalCount = data.totalCount;
-        } while (sessions.length < totalCount);
-        this.sessionList = Array.from(new Map(sessions.map(session => [session.id, session])).values());
+        const sessions = await this.collectSessionPagesWithRetry(
+          page => `/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.GetSessionListAsync?pageIndex=${page}&pageSize=100`);
+        this.sessionList = sessions;
+        this.applyPersistedUnread(this.sessionList);
+        logAdminChat('info', 'AdminChat session list loaded:', sessions.length);
       } catch (error) {
-        console.error('加载会话列表异常:', error);
-        this.$message.error(ncfT('AdminChat.LoadSessionFailed'));
+        logAdminChat('error', '加载会话列表异常:', error && error.message);
+        if (!this._sessionListDirty) this.$message.error(ncfT('AdminChat.LoadSessionFailed'));
       } finally {
-        this.loadingSessions = false;
+        if (!this._sessionListDirty) this.loadingSessions = false;
+      }
+    },
+
+    async loadArchivedSessionList() {
+      if (this._activeArchivedSessionListLoad) {
+        this._archivedSessionListDirty = true;
+        logAdminChat('info', 'AdminChat archived session list load coalesced.');
+        return this._activeArchivedSessionListLoad;
+      }
+      this._activeArchivedSessionListLoad = this.performArchivedSessionListLoad();
+      try {
+        await this._activeArchivedSessionListLoad;
+      } finally {
+        this._activeArchivedSessionListLoad = null;
+        if (this._archivedSessionListDirty) {
+          this._archivedSessionListDirty = false;
+          await this.loadArchivedSessionList();
+        }
+      }
+    },
+
+    async performArchivedSessionListLoad() {
+      try {
+        const sessions = await this.collectSessionPagesWithRetry(
+          page => `/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.GetArchivedSessionListAsync?pageIndex=${page}&pageSize=100`);
+        this.archivedSessionList = sessions;
+        logAdminChat('info', 'AdminChat archived session list loaded:', sessions.length);
+      } catch (error) {
+        logAdminChat('error', '加载归档会话异常:', error && error.message);
+        if (!this._archivedSessionListDirty) this.$message.error(ncfT('AdminChat.Archive.LoadFailed'));
+      }
+    },
+
+    async archiveSession(session) {
+      if (!session || this.isSessionRunning(session) || this.archivingSessionId) return;
+      this.archivingSessionId = session.id;
+      try {
+        const response = await service.post('/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.ArchiveSessionAsync', {
+          sessionId: session.id
+        });
+        if (!(response.data && response.data.success)) {
+          throw new Error(response.data && response.data.errorMessage || ncfT('AdminChat.Archive.Failed'));
+        }
+        console.info('AdminChat session archived:', session.id);
+        this.clearSessionUnread(session.id);
+        this.sessionList = this.sessionList.filter(item => item.id !== session.id);
+        if (!this.archivedSessionList.some(item => item.id === session.id)) {
+          this.archivedSessionList.unshift({ ...session, status: 1 });
+        }
+        if (this.currentSessionId === session.id) this.currentSessionStatus = 1;
+        this.$message.success(ncfT('AdminChat.Archive.Success'));
+      } catch (error) {
+        console.error('归档会话异常:', error);
+        this.$message.error(ncfT('AdminChat.Archive.Failed'));
+        await this.loadSessionList();
+        await this.loadArchivedSessionList();
+      } finally {
+        this.archivingSessionId = 0;
+      }
+    },
+
+    async openArchivedSession(session) {
+      this.sidebarToolsVisible = false;
+      if (!session) return;
+      if (this.currentSessionId !== session.id) await this.switchSession(session.id);
+      if (this.currentSessionId === session.id) this.currentSessionStatus = 1;
+    },
+
+    deleteArchivedSession(session) {
+      this.sidebarToolsVisible = false;
+      if (session) this.handleSessionCommand({ action: 'delete', id: session.id });
+    },
+
+    async restoreArchivedSession(session) {
+      if (!session || this.restoringSessionId) return;
+      this.restoringSessionId = session.id;
+      try {
+        const response = await service.post('/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.RestoreSessionAsync', {
+          sessionId: session.id
+        });
+        if (!(response.data && response.data.success)) {
+          throw new Error(response.data && response.data.errorMessage || ncfT('AdminChat.Archive.RestoreFailed'));
+        }
+        console.info('AdminChat session restored:', session.id);
+        this.archivedSessionList = this.archivedSessionList.filter(item => item.id !== session.id);
+        if (!this.sessionList.some(item => item.id === session.id)) {
+          this.sessionList.push({ ...session, status: 0 });
+        }
+        if (this.currentSessionId === session.id) this.currentSessionStatus = 0;
+        this.sidebarToolsVisible = false;
+        this.$message.success(ncfT('AdminChat.Archive.RestoreSuccess'));
+      } catch (error) {
+        console.error('还原会话异常:', error);
+        this.$message.error(ncfT('AdminChat.Archive.RestoreFailed'));
+        await this.loadSessionList();
+        await this.loadArchivedSessionList();
+      } finally {
+        this.restoringSessionId = 0;
       }
     },
 
@@ -1612,6 +2743,7 @@
         if (response.data && response.data.success && response.data.data) {
           const session = response.data.data.session;
           this.currentSessionTitle = session.title;
+          this.currentSessionStatus = this.normalizeSessionStatus(session.status);
           this.messageList = preserveRunningMessages && this.isCurrentSessionRunning
             ? this.runningMessages : runningMessages || session.messages || [];
           this.currentSessionModules = session.modules || [];
@@ -1620,20 +2752,33 @@
           this.currentSessionWorkspaceName = session.workspaceName || '';
           this.currentSessionWorkspaceWriteEnabled = !!session.workspaceWriteEnabled;
           this.currentSessionWorkspaceCliEnabled = !!session.workspaceCliEnabled;
+          if (session.hasUnread && sessionId === this.currentSessionId) {
+            this.unreadSessionIds = this.unreadSessionIds.filter(item => item !== sessionId);
+            this.persistSessionUnread(sessionId, false);
+          }
           this.currentSessionAiModelId = this.getSessionAiModelId(this.currentSessionId);
           this.clearMessageSelection();
           this.isManageMode = false;
           await this.loadMemoryMode();
           
           this.$nextTick(() => {
-            if (sessionId === this.currentSessionId && sequence === this.sessionDetailSequence) this.scrollToBottom();
+            if (sessionId !== this.currentSessionId || sequence !== this.sessionDetailSequence) return;
+            const focusId = Number(this.pendingHistorySearchMessageId) || 0;
+            if (focusId) {
+              this.pendingHistorySearchMessageId = 0;
+              this.scrollToSearchedMessage(focusId);
+              return;
+            }
+            this.scrollToBottom();
           });
         } else {
+          this.pendingHistorySearchMessageId = 0;
           console.error('加载会话详情失败:', response.data.errorMessage);
           this.$message.error(ncfT('AdminChat.LoadDetailFailed'));
         }
       } catch (error) {
         if (sessionId !== this.currentSessionId || sequence !== this.sessionDetailSequence) return;
+        this.pendingHistorySearchMessageId = 0;
         console.error('加载会话详情异常:', error);
         this.$message.error(ncfT('AdminChat.LoadDetailFailed'));
       } finally {
@@ -1650,35 +2795,163 @@
       this.liveStatusText = '';
     },
 
-    createRecentTask(content) {
+    beginSessionRun(sessionId, messages) {
+      const run = {
+        controller: null,
+        isStopping: false,
+        messages: messages || [],
+        liveAssistantText: '',
+        liveThinkingText: '',
+        liveTrajectoryEvents: [],
+        livePendingApprovals: [],
+        liveTrajectoryId: 0,
+        liveStatusText: '',
+        recentTasks: [],
+        activeTaskId: '',
+        isAIResponding: true
+      };
+      if (this.$set) this.$set(this.sessionRuns, sessionId, run);
+      else this.sessionRuns[sessionId] = run;
+      return run;
+    },
+
+    bindRunLiveView(run) {
+      run.liveAssistantText = this.liveAssistantText;
+      run.liveThinkingText = this.liveThinkingText;
+      run.liveTrajectoryEvents = this.liveTrajectoryEvents;
+      run.livePendingApprovals = this.livePendingApprovals;
+      run.liveTrajectoryId = this.liveTrajectoryId;
+      run.liveStatusText = this.liveStatusText;
+    },
+
+    releaseSessionRun(sessionId, controller) {
+      const run = this.sessionRuns[sessionId];
+      if (!run) return;
+      if (controller && run.controller && run.controller !== controller) return;
+      if (this.$delete) this.$delete(this.sessionRuns, sessionId);
+      else delete this.sessionRuns[sessionId];
+      const viewingFinished = Number(this.currentSessionId) === Number(sessionId);
+      const currentRun = this.sessionRuns[this.currentSessionId];
+      if (!viewingFinished && currentRun) return;
+      this.isSending = !!currentRun;
+      this.isStopping = currentRun ? !!currentRun.isStopping : false;
+      this.isAIResponding = currentRun ? currentRun.isAIResponding !== false : false;
+      if (!currentRun) {
+        this.runningSessionId = 0;
+        this.activeRequestController = null;
+        this.runningMessages = [];
+      }
+    },
+
+    showSessionRun(sessionId) {
+      const run = this.sessionRuns[sessionId];
+      if (!run || Number(this.currentSessionId) !== Number(sessionId)) return false;
+      this.isSending = true;
+      this.isStopping = !!run.isStopping;
+      this.isAIResponding = run.isAIResponding !== false;
+      this.runningSessionId = sessionId;
+      this.activeRequestController = run.controller;
+      this.runningMessages = run.messages;
+      this.messageList = run.messages;
+      this.liveAssistantText = run.liveAssistantText;
+      this.liveThinkingText = run.liveThinkingText;
+      this.liveTrajectoryEvents = run.liveTrajectoryEvents;
+      this.livePendingApprovals = run.livePendingApprovals;
+      this.liveTrajectoryId = run.liveTrajectoryId;
+      this.liveStatusText = run.liveStatusText;
+      this.recentTasks = run.recentTasks;
+      this.activeTaskId = run.activeTaskId;
+      return true;
+    },
+
+    hideForeignRunView() {
+      if (this.sessionRuns[this.currentSessionId] || Object.keys(this.sessionRuns).length === 0) return;
+      this.isSending = false;
+      this.isStopping = false;
+      this.isAIResponding = false;
+      this.resetLiveRun();
+      this.recentTasks = [];
+      this.activeTaskId = '';
+    },
+
+    rememberSessionDraft(sessionId = this.currentSessionId) {
+      const id = Number(sessionId) || 0;
+      if (id > 0) {
+        if (this.$set) this.$set(this.sessionDrafts, id, this.inputMessage || '');
+        else this.sessionDrafts[id] = this.inputMessage || '';
+      }
+    },
+
+    restoreSessionDraft(sessionId) {
+      const id = Number(sessionId) || 0;
+      this.inputMessage = id > 0 && Object.prototype.hasOwnProperty.call(this.sessionDrafts, id)
+        ? this.sessionDrafts[id] : '';
+    },
+
+    async openCreatedChatSession(sessionId, message, references) {
+      this.currentSessionId = sessionId;
+      this.currentSessionAiModelId = this.normalizeAiModelId(this.launcherAiModelId);
+      this.chatMode = this.launcherChatMode;
+      this.syncAdminChatLocation();
+      this.messageList = [];
+      this.inputMessage = message || '';
+      this.chatInputText = '';
+      if (this.$delete) this.$delete(this.sessionDrafts, sessionId);
+      else delete this.sessionDrafts[sessionId];
+      await this.loadSessionList();
+      if (this.currentSessionId !== sessionId) return;
+      await this.loadSessionDetail();
+      if (this.currentSessionId !== sessionId || this.sessionRuns[sessionId]) return;
+      this.inputMessage = message || '';
+      if (references && references.length) {
+        await this.restorePromptReferences('promptMessageInput', references);
+      }
+      if (this.currentSessionId !== sessionId || this.sessionRuns[sessionId]) return;
+      await this.sendMessage(references && references.length ? references : undefined);
+    },
+
+    createRecentTask(content, sessionId = this.currentSessionId) {
+      const host = this.sessionRuns[sessionId] || this;
       const taskId = `task-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-      this.recentTasks = this.recentTasks.concat({
+      host.recentTasks = (host.recentTasks || []).concat({
         id: taskId,
         title: this.compactTaskText(content, 42),
         preview: '',
         status: '执行中',
         mode: this.chatMode
       }).slice(-2);
-      this.activeTaskId = taskId;
+      host.activeTaskId = taskId;
+      if (!this.sessionRuns[sessionId] || Number(sessionId) === Number(this.currentSessionId)) {
+        this.recentTasks = host.recentTasks;
+        this.activeTaskId = host.activeTaskId;
+      }
     },
 
-    updateActiveTask(changes) {
-      if (!this.activeTaskId) return;
-      const index = this.recentTasks.findIndex((task) => task.id === this.activeTaskId);
+    updateActiveTask(changes, sessionId = this.currentSessionId) {
+      const host = this.sessionRuns[sessionId] || this;
+      if (!host.activeTaskId) return;
+      const tasks = host.recentTasks || [];
+      const index = tasks.findIndex((task) => task.id === host.activeTaskId);
       if (index < 0) return;
-      const current = this.recentTasks[index];
+      const current = tasks[index];
       const next = Object.assign({}, current, changes, {
         preview: changes.preview === undefined
           ? current.preview
           : this.compactTaskText(changes.preview, 120)
       });
-      this.$set(this.recentTasks, index, next);
+      this.$set(tasks, index, next);
+      if (!this.sessionRuns[sessionId] || Number(sessionId) === Number(this.currentSessionId)) {
+        this.recentTasks = tasks;
+        this.activeTaskId = host.activeTaskId;
+      }
     },
 
-    finishActiveTask(status) {
-      if (!this.activeTaskId) return;
-      this.updateActiveTask({ status });
-      this.activeTaskId = '';
+    finishActiveTask(status, sessionId = this.currentSessionId) {
+      const host = this.sessionRuns[sessionId] || this;
+      if (!host.activeTaskId) return;
+      this.updateActiveTask({ status }, sessionId);
+      host.activeTaskId = '';
+      if (!this.sessionRuns[sessionId] || Number(sessionId) === Number(this.currentSessionId)) this.activeTaskId = '';
     },
 
     clearRecentTasks() {
@@ -1719,21 +2992,40 @@
     },
 
     handleLiveStreamEvent(eventName, payload, tempMessageId, sessionId = this.runningSessionId) {
-      if (sessionId !== this.runningSessionId) return;
+      const run = this.sessionRuns[sessionId];
+      if (!run && sessionId !== this.runningSessionId) return;
+      const show = !run || Number(sessionId) === Number(this.currentSessionId);
+      const write = (field, value) => {
+        if (run) run[field] = value;
+        if (show) this[field] = value;
+      };
+      const read = (field) => (run ? run[field] : this[field]);
+      const messages = run ? run.messages : this.runningMessages;
+      if (eventName === 'resume') {
+        write('liveAssistantText', payload && payload.text ? payload.text : '');
+        write('liveThinkingText', payload && payload.thinking ? payload.thinking : '');
+        write('liveStatusText', payload && payload.status ? payload.status : '任务仍在执行…');
+        this.updateActiveTask({ preview: read('liveAssistantText'), status: '执行中' }, sessionId);
+        this.scrollLivePreviewToBottom(sessionId);
+        return;
+      }
+      if (eventName === 'cancelled') {
+        const cancelled = new Error(payload && payload.message ? payload.message : '本次请求已终止');
+        cancelled.name = 'AdminChatCancelled';
+        throw cancelled;
+      }
       if (eventName === 'user-message') {
-        const tempIndex = this.runningMessages.findIndex((item) => item.id === tempMessageId);
-        if (tempIndex >= 0 && payload) {
-          this.runningMessages.splice(tempIndex, 1, payload);
-        }
+        const tempIndex = messages.findIndex((item) => item.id === tempMessageId);
+        if (tempIndex >= 0 && payload) messages.splice(tempIndex, 1, payload);
         return;
       }
 
       if (eventName === 'token') {
-        this.liveAssistantText += payload && payload.text ? payload.text : '';
-        this.liveThinkingText = '';
-        this.liveStatusText = '正在生成回答…';
-        this.updateActiveTask({ preview: this.liveAssistantText, status: '生成中' });
-        this.scrollLivePreviewToBottom();
+        write('liveAssistantText', read('liveAssistantText') + (payload && payload.text ? payload.text : ''));
+        write('liveThinkingText', '');
+        write('liveStatusText', '正在生成回答…');
+        this.updateActiveTask({ preview: read('liveAssistantText'), status: '生成中' }, sessionId);
+        this.scrollLivePreviewToBottom(sessionId);
         return;
       }
 
@@ -1744,83 +3036,78 @@
       }
 
       if (eventName === 'assistant-phase') {
-        if (payload && payload.trajectoryId) {
-          this.liveTrajectoryId = payload.trajectoryId;
-        }
+        if (payload && payload.trajectoryId) write('liveTrajectoryId', payload.trajectoryId);
         if (payload && payload.trajectoryEvent) {
           const event = payload.trajectoryEvent;
-          this.upsertLiveTrajectoryEvent(event);
+          this.upsertLiveTrajectoryEvent(event, sessionId);
           if (event.eventType === 'TextReasoningContent') {
-            this.liveThinkingText = payload.text || event.content || '';
-            this.liveStatusText = '正在思考…';
+            write('liveThinkingText', payload.text || event.content || '');
+            write('liveStatusText', '正在思考…');
           } else {
-            this.liveAssistantText = payload.text || event.content || '';
-            this.liveStatusText = '正在生成回答…';
+            write('liveAssistantText', payload.text || event.content || '');
+            write('liveStatusText', '正在生成回答…');
           }
           this.updateActiveTask({
             preview: event.content || payload.text || '',
             status: '生成中'
-          });
-          this.scrollLivePreviewToBottom();
+          }, sessionId);
+          this.scrollLivePreviewToBottom(sessionId);
         }
         return;
       }
 
       if (eventName === 'trajectory-event') {
-        if (payload && payload.trajectoryId) {
-          this.liveTrajectoryId = payload.trajectoryId;
-        }
+        if (payload && payload.trajectoryId) write('liveTrajectoryId', payload.trajectoryId);
         if (payload && payload.trajectoryEvent) {
           if (payload.trajectoryEvent.eventType === 'assistant.text') {
-            this.upsertLiveTrajectoryEvent(payload.trajectoryEvent);
+            this.upsertLiveTrajectoryEvent(payload.trajectoryEvent, sessionId);
           } else {
-            this.liveTrajectoryEvents.push(payload.trajectoryEvent);
+            read('liveTrajectoryEvents').push(payload.trajectoryEvent);
           }
           const eventType = payload.trajectoryEvent.eventType || '';
           if (eventType === 'assistant.text') {
             this.updateActiveTask({
               preview: payload.trajectoryEvent.content || payload.text || '',
               status: '生成中'
-            });
+            }, sessionId);
           }
-          this.liveStatusText = {
+          write('liveStatusText', {
             'tool.call': '正在调用工具…',
             'tool.result': '正在整理工具结果…',
             'approval.request': '等待你的确认…',
             'assistant.text': '正在组织回答…'
-          }[eventType] || '正在处理任务…';
+          }[eventType] || '正在处理任务…');
         }
-        this.livePendingApprovals = payload && payload.pendingApprovals ? payload.pendingApprovals : [];
+        write('livePendingApprovals', payload && payload.pendingApprovals ? payload.pendingApprovals : []);
         return;
       }
 
       if (eventName === 'trajectory-complete') {
-        this.livePendingApprovals = payload && payload.pendingApprovals ? payload.pendingApprovals : [];
-        this.liveStatusText = this.livePendingApprovals.length > 0 ? '等待你的确认…' : '任务已完成，正在保存…';
+        write('livePendingApprovals', payload && payload.pendingApprovals ? payload.pendingApprovals : []);
+        write('liveStatusText', read('livePendingApprovals').length > 0 ? '等待你的确认…' : '任务已完成，正在保存…');
         return;
       }
 
       if (eventName === 'assistant-message') {
         if (payload) {
-          payload.trajectoryId = payload.trajectoryId || this.liveTrajectoryId;
-          payload.trajectoryEvents = this.liveTrajectoryEvents.slice();
-          payload.pendingApprovals = this.livePendingApprovals.slice();
-          this.runningMessages.push(payload);
+          payload.trajectoryId = payload.trajectoryId || read('liveTrajectoryId');
+          payload.trajectoryEvents = read('liveTrajectoryEvents').slice();
+          payload.pendingApprovals = read('livePendingApprovals').slice();
+          messages.push(payload);
         }
-        this.finishActiveTask('已完成');
+        this.finishActiveTask('已完成', sessionId);
         return;
       }
 
       if (eventName === 'error') {
-        this.finishActiveTask('失败');
+        this.finishActiveTask('失败', sessionId);
         throw new Error(payload && payload.message ? payload.message : '对话执行失败');
       }
     },
 
-    scrollLivePreviewToBottom() {
-      const sessionId = this.runningSessionId;
+    scrollLivePreviewToBottom(sessionId = this.runningSessionId) {
       this.$nextTick(() => {
-        if (sessionId !== this.currentSessionId) return;
+        if (Number(sessionId) !== Number(this.currentSessionId)) return;
         ['liveThinkingPreview', 'liveAnswerPreview'].forEach((refName) => {
           const element = this.$refs[refName];
           if (element) {
@@ -1830,30 +3117,31 @@
       });
     },
 
-    upsertLiveTrajectoryEvent(event) {
+    upsertLiveTrajectoryEvent(event, sessionId = this.runningSessionId) {
+      const run = this.sessionRuns[sessionId];
+      const events = run ? run.liveTrajectoryEvents : this.liveTrajectoryEvents;
       const key = event.correlationId || `${event.eventType || 'event'}-${event.sequence || 0}`;
-      const index = this.liveTrajectoryEvents.findIndex((item) => {
+      const index = events.findIndex((item) => {
         const itemKey = item.correlationId || `${item.eventType || 'event'}-${item.sequence || 0}`;
         return itemKey === key;
       });
-      if (index >= 0) {
-        this.liveTrajectoryEvents.splice(index, 1, event);
-      } else {
-        this.liveTrajectoryEvents.push(event);
-      }
+      if (index >= 0) events.splice(index, 1, event);
+      else events.push(event);
     },
 
-    async consumeAdminChatStream(requestData, tempMessageId, signal) {
-      const response = await fetch('/api/Senparc.Areas.Admin/AdminChatStream/send', {
-        method: 'POST',
+    async consumeAdminChatStream(requestData, tempMessageId, signal, streamUrl) {
+      const attached = !!streamUrl;
+      const response = await fetch(streamUrl || '/api/Senparc.Areas.Admin/AdminChatStream/send', {
+        method: attached ? 'GET' : 'POST',
         credentials: 'same-origin',
         headers: {
           'Content-Type': 'application/json',
           'X-Requested-With': 'XMLHttpRequest'
         },
-        body: JSON.stringify(requestData),
+        body: attached ? undefined : JSON.stringify(requestData),
         signal
       });
+      if (response.status === 204) return;
       if (!response.ok || !response.body) {
         const data = (response.headers.get('content-type') || '').includes('json') ? await response.json() : null;
         throw new Error((data && (data.errorMessage || data.message || data.title)) || `流式接口请求失败 (${response.status})`);
@@ -1898,15 +3186,98 @@
       if (!streamDone) throw new Error('流式接口未正常结束');
     },
 
-    stopCurrentRequest() {
-      if (!this.activeRequestController || !this.isCurrentSessionRunning) return;
+    async stopCurrentRequest() {
+      const sessionId = this.currentSessionId;
+      const run = this.sessionRuns[sessionId];
+      const controller = run ? run.controller : this.activeRequestController;
+      if (!controller || !this.isCurrentSessionRunning) return;
 
+      if (run) run.isStopping = true;
       this.isStopping = true;
-      this.activeRequestController.abort();
+      if (typeof fetch === 'function') {
+        try {
+          await fetch(`/api/Senparc.Areas.Admin/AdminChatStream/cancel?sessionId=${sessionId}`, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+          });
+          console.debug('AdminChat 已请求停止后台任务:', sessionId);
+        } catch (error) {
+          console.error('停止后台任务失败:', error);
+        }
+      }
+      controller.abort();
     },
 
-    async sendMessage() {
-      if (this.isSending || this.workspaceUploading || this.memoryBusy || !this.memoryReady) return;
+    async resumeAdminChatRun() {
+      const sessionId = this.currentSessionId;
+      if (!sessionId || this.sessionRuns[sessionId] || typeof fetch !== 'function') return;
+      let status;
+      try {
+        const response = await fetch(`/api/Senparc.Areas.Admin/AdminChatStream/status?sessionId=${sessionId}`, {
+          credentials: 'same-origin',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        if (!response.ok) return;
+        status = await response.json();
+      } catch (error) {
+        console.error('读取 AdminChat 任务状态失败:', error);
+        return;
+      }
+      if (!status || this.currentSessionId !== sessionId) return;
+      if (status.justFinished) {
+        console.debug('AdminChat 任务刚在后台完成，刷新消息。', sessionId);
+        await this.loadSessionDetail(false);
+      }
+      if (!status.running || this.currentSessionId !== sessionId || this.sessionRuns[sessionId]) return;
+      console.debug('AdminChat 任务仍在后台执行，重新连接。', sessionId, status.status || '');
+      const run = this.beginSessionRun(sessionId, this.messageList);
+      this.runningSessionId = sessionId;
+      this.runningMessages = run.messages;
+      this.isSending = true;
+      this.isAIResponding = true;
+      this.isStopping = false;
+      this.resetLiveRun();
+      this.liveAssistantText = status.text || '';
+      this.liveThinkingText = status.thinking || '';
+      this.liveStatusText = status.status || '任务仍在执行…';
+      this.bindRunLiveView(run);
+      this.createRecentTask(status.text || '继续执行未完成的任务', sessionId);
+      const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      run.controller = controller;
+      this.activeRequestController = controller;
+      try {
+        await this.consumeAdminChatStream(
+          { sessionId },
+          null,
+          controller ? controller.signal : undefined,
+          `/api/Senparc.Areas.Admin/AdminChatStream/attach?sessionId=${sessionId}`);
+        if (this.currentSessionId === sessionId) await this.loadSessionDetail(false);
+        this.finishActiveTask('已完成', sessionId);
+      } catch (error) {
+        const wasAborted = (error && error.name === 'AbortError')
+          || (controller && controller.signal.aborted);
+        const cancelled = error && error.name === 'AdminChatCancelled';
+        const stoppedByUser = !!(this.sessionRuns[sessionId] && this.sessionRuns[sessionId].isStopping);
+        if (cancelled || (wasAborted && stoppedByUser)) {
+          this.finishActiveTask('已终止', sessionId);
+          if (this.currentSessionId === sessionId) await this.loadSessionDetail(false);
+          this.$message.info('本次请求已终止');
+        } else if (wasAborted) {
+          console.debug('已离开正在执行的 AdminChat 任务观察。', sessionId);
+        } else {
+          this.finishActiveTask('失败', sessionId);
+          console.error('重新连接 AdminChat 任务失败:', error);
+          this.$message.error(error.message || '重新连接任务失败');
+        }
+      } finally {
+        this.releaseSessionRun(sessionId, controller);
+      }
+    },
+
+    async sendMessage(presetReferences) {
+      this.closeWorkspaceMention();
+      if (this.isCurrentSessionRunning || this.workspaceUploading || this.memoryBusy || !this.memoryReady) return;
 
       if ((!this.inputMessage || this.inputMessage.trim().length === 0) && this.pendingAttachments.length === 0) {
         this.$message.warning(ncfT('AdminChat.InputRequired'));
@@ -1918,22 +3289,33 @@
         return;
       }
 
-      const messageContent = (this.inputMessage || '').trim() || '请先查看本轮附件的目录和解析限制，并询问我希望如何处理。';
+      // 新建会话沿用启动器里已经捕获的引用；此时正文输入框可能尚未挂载。
+      const promptReferences = Array.isArray(presetReferences)
+        ? presetReferences.map(reference => ({ ...reference }))
+        : this.capturePromptReferences('promptMessageInput');
+      const messageContent = (promptReferences.length ? this.inputMessage : (this.inputMessage || '').trim())
+        || '请先查看本轮附件的目录和解析限制，并询问我希望如何处理。';
       const sendingAttachments = this.pendingAttachments.slice();
       const sendingSessionId = this.currentSessionId;
       const sendingAiModelId = this.currentSessionAiModelId;
+      const run = this.beginSessionRun(sendingSessionId, this.messageList);
       this.runningSessionId = sendingSessionId;
+      this.runningMessages = run.messages;
       this.pendingAttachments = [];
       const isFirstGeneration = !this.messageList.some((message) => message.roleType === 1);
       this.inputMessage = '';
+      if (this.$delete) this.$delete(this.sessionDrafts, sendingSessionId);
+      else delete this.sessionDrafts[sendingSessionId];
       this.isSending = true;
       this.isStopping = false;
       this.isAIResponding = true;
       this.resetLiveRun();
-      this.createRecentTask(messageContent);
+      this.bindRunLiveView(run);
+      this.createRecentTask(messageContent, sendingSessionId);
       const requestController = typeof AbortController !== 'undefined'
         ? new AbortController()
         : null;
+      run.controller = requestController;
       this.activeRequestController = requestController;
 
       // 乐观渲染：立即显示“我”的消息，避免等待接口返回期间出现空白。
@@ -1944,7 +3326,8 @@
         content: messageContent,
         addTime: new Date().toISOString(),
         userFeedback: 0,
-        attachments: sendingAttachments
+        attachments: sendingAttachments,
+        promptReferences
       };
       this.messageList.push(tempUserMessage);
       this.runningMessages = this.messageList;
@@ -1957,6 +3340,7 @@
           sessionId: this.currentSessionId,
           aiModelId: this.normalizeAiModelId(this.currentSessionAiModelId),
           content: messageContent,
+          promptReferences,
           mode: this.chatMode === 'harness' ? 1 : 0,
           attachments: sendingAttachments.map(attachment => ({
             relativePath: attachment.relativePath, eTag: attachment.eTag,
@@ -1979,41 +3363,97 @@
         });
       } catch (error) {
         if (this.currentSessionId === sendingSessionId) this.pendingAttachments = sendingAttachments;
+        const owned = this.sessionRuns[sendingSessionId];
         const wasAborted = (error && error.name === 'AbortError')
           || (requestController && requestController.signal.aborted);
-        if (wasAborted) {
-          this.finishActiveTask('已终止');
-          this.runningMessages = this.runningMessages.filter((item) => item.id !== tempMessageId);
+        const cancelled = error && error.name === 'AdminChatCancelled';
+        const stoppedByUser = !!(owned && owned.isStopping);
+        if (wasAborted && !stoppedByUser && !cancelled) {
+          console.debug('页面离开，AdminChat 任务继续在后台执行。', sendingSessionId);
+          return;
+        }
+        const kept = ((owned && owned.messages) || this.runningMessages).filter((item) => item.id !== tempMessageId);
+        if (owned) owned.messages = kept;
+        if (wasAborted || cancelled) {
+          this.finishActiveTask('已终止', sendingSessionId);
           if (this.currentSessionId === sendingSessionId) {
-            this.messageList = this.runningMessages;
+            this.runningMessages = kept;
+            this.messageList = kept;
             this.inputMessage = messageContent;
+            this.restorePromptReferences('promptMessageInput', promptReferences);
             await this.loadSessionDetail(false);
             if (this.currentSessionId === sendingSessionId) await this.loadTrajectoryList();
           }
           this.$message.info('本次请求已终止');
         } else {
-          this.finishActiveTask('失败');
+          this.finishActiveTask('失败', sendingSessionId);
           console.error('发送消息异常:', error);
           this.$message.error(error.message || ncfT('AdminChat.SendFailedRetry'));
-          this.runningMessages = this.runningMessages.filter((item) => item.id !== tempMessageId);
           if (this.currentSessionId === sendingSessionId) {
-            this.messageList = this.runningMessages;
+            this.runningMessages = kept;
+            this.messageList = kept;
             this.inputMessage = messageContent;
+            this.restorePromptReferences('promptMessageInput', promptReferences);
           }
         }
       } finally {
         sendingAttachments.filter(attachment => !this.pendingAttachments.includes(attachment)).forEach(attachment => {
           if (attachment.localPreviewUrl) URL.revokeObjectURL(attachment.localPreviewUrl);
         });
-        if (this.activeRequestController === requestController) {
-          this.activeRequestController = null;
-        }
-        this.isStopping = false;
-        this.isSending = false;
-        this.runningSessionId = 0;
-        this.isAIResponding = false;
-        this.runningMessages = [];
+        this.markSessionUnread(sendingSessionId);
+        this.releaseSessionRun(sendingSessionId, requestController);
       }
+    },
+
+    capturePromptReferences(refName) {
+      const component = this.$refs[refName];
+      const input = component && component.$el.querySelector('textarea');
+      return input && window.NcfPromptReferences ? window.NcfPromptReferences.capture(input) : [];
+    },
+
+    restorePromptReferences(refName, references) {
+      const apply = () => {
+        const component = this.$refs[refName];
+        const input = component && component.$el && component.$el.querySelector('textarea');
+        if (!input || !window.NcfPromptReferences) return false;
+        const expected = refName === 'promptMessageInput' ? this.inputMessage : this.chatInputText;
+        // Element 可能在本次渲染之后才写回原生值；先对齐模型，避免用空正文校验引用范围。
+        if (typeof expected === 'string' && input.value !== expected) input.value = expected;
+        window.NcfPromptReferences.restore(input, references);
+        return true;
+      };
+      return new Promise(resolve => {
+        const attempt = remaining => {
+          try {
+            if (apply() || remaining <= 0) {
+              resolve();
+              return;
+            }
+          } catch (error) {
+            this.$message.error(error.message);
+            resolve();
+            return;
+          }
+          this.$nextTick(() => attempt(remaining - 1));
+        };
+        this.$nextTick(() => attempt(3));
+      });
+    },
+
+    promptReferenceAiScorer(message) {
+      if (this.isCurrentSessionRunning || !Number.isInteger(message.id) || message.id <= 0) return undefined;
+      const index = this.messageList.indexOf(message);
+      const next = this.messageList[index + 1];
+      if (!next || next.roleType !== 1) return undefined;
+      return async promptItemId => {
+        const response = await service.post(
+          '/api/Senparc.Areas.Admin/AdminChatPromptReferenceAppService/Areas.Admin_AdminChatPromptReferenceAppService.ScoreWithAIAsync',
+          { messageId: message.id, promptItemId }, { customAlert: true });
+        if (!response.data || !response.data.success || !response.data.data) {
+          throw new Error(response.data && response.data.errorMessage || ncfT('PromptReference.Unavailable'));
+        }
+        return response.data.data;
+      };
     },
 
     async setFeedback(messageId, feedbackType) {
@@ -2035,39 +3475,93 @@
       }
     },
 
-    async switchSession(sessionId) {
-      if (this.workspaceUploading) { this.$message.warning('请等待附件上传完成后再切换会话。'); return; }
-      if (this.currentSessionId === sessionId) return;
+    sessionIdFromLocation() {
+      try {
+        if (typeof window === 'undefined' || !window.location || typeof URLSearchParams === 'undefined') return 0;
+        const params = new URLSearchParams(window.location.search || '');
+        const queryId = Number(params.get('sessionId'));
+        if (Number.isInteger(queryId) && queryId > 0) return queryId;
+        const hash = String(window.location.hash || '').match(/^#session[=-](\d+)$/i);
+        const hashId = hash ? Number(hash[1]) : 0;
+        return Number.isInteger(hashId) && hashId > 0 ? hashId : 0;
+      } catch (error) {
+        return 0;
+      }
+    },
 
+    syncAdminChatLocation() {
+      if (typeof window === 'undefined' || !window.location || !window.history
+        || typeof window.history.replaceState !== 'function' || typeof URL === 'undefined') return;
+      let url;
+      try { url = new URL(window.location.href); }
+      catch (error) { return; }
+      const sessionId = Number(this.currentSessionId) || 0;
+      if (sessionId > 0) {
+        url.searchParams.set('sessionId', String(sessionId));
+        url.searchParams.set('mode', this.chatMode === 'harness' ? '1' : '0');
+        url.hash = 'session-' + sessionId;
+      } else {
+        url.searchParams.delete('sessionId');
+        url.hash = '';
+      }
+      const next = url.pathname + url.search + url.hash;
+      const current = window.location.pathname + window.location.search + window.location.hash;
+      if (next !== current) window.history.replaceState(window.history.state, '', next);
+    },
+
+    async switchSession(sessionId) {
+      if (this.workspaceUploading) { this.$message.warning('请等待附件上传完成后再切换会话。'); return false; }
+      if (this.currentSessionId === sessionId) return true;
+      if (!(await this.confirmDiscardWorkspaceEdit())) return false;
+
+      this.rememberSessionDraft();
       this.resetWorkspacePreview();
+      this.closeWorkspaceMention();
       await this.deletePendingAttachments();
       this.clearPendingAttachments();
       this.currentSessionId = sessionId;
+      this.syncAdminChatLocation();
+      this.clearSessionUnread(sessionId);
+      this.currentSessionStatus = 0;
       this.resetSessionTrajectoryView();
       this.currentSessionAiModelId = this.getSessionAiModelId(sessionId);
-      this.messageList = [];
+      const attachedRun = this.showSessionRun(sessionId);
+      if (!attachedRun) {
+        this.hideForeignRunView();
+        this.messageList = [];
+      }
       this.currentSessionModules = [];
       this.currentSessionWorkflows = [];
       this.currentSessionWorkspaceId = '';
       this.currentSessionWorkspaceName = '';
       this.currentSessionWorkspaceWriteEnabled = false;
       this.currentSessionWorkspaceCliEnabled = false;
-      if (!this.isSending) this.clearRecentTasks();
+      if (!this.hasRunningSession) this.clearRecentTasks();
       this.latestUsage = this.sessionUsage[sessionId] || null;
-      this.inputMessage = '';
+      this.restoreSessionDraft(sessionId);
       this.clearMessageSelection();
       this.isManageMode = false;
       await this.loadSessionDetail();
-      if (this.currentSessionId === sessionId) await this.loadTrajectoryList();
+      if (this.currentSessionId === sessionId) {
+        await this.loadTrajectoryList();
+        await this.resumeAdminChatRun();
+      }
+      return this.currentSessionId === sessionId;
     },
 
     async createNewSession() {
       if (this.workspaceUploading) { this.$message.warning('请等待附件上传完成后再新建会话。'); return; }
+      if (!(await this.confirmDiscardWorkspaceEdit())) return;
+      this.rememberSessionDraft();
       this.resetWorkspacePreview();
+      this.closeWorkspaceMention();
       await this.deletePendingAttachments();
       this.clearPendingAttachments();
       this.launcherAiModelId = this.currentSessionAiModelId || this.launcherAiModelId || 0;
       this.currentSessionId = 0;
+      this.hideForeignRunView();
+      this.syncAdminChatLocation();
+      this.currentSessionStatus = 0;
       this.resetSessionTrajectoryView();
       this.currentSessionTitle = '';
       this.currentSessionModules = [];
@@ -2076,7 +3570,7 @@
       this.currentSessionWorkspaceName = '';
       this.currentSessionWorkspaceWriteEnabled = false;
       this.currentSessionWorkspaceCliEnabled = false;
-      if (!this.isSending) this.clearRecentTasks();
+      if (!this.hasRunningSession) this.clearRecentTasks();
       this.latestUsage = null;
       this.messageList = [];
       this.inputMessage = '';
@@ -2091,6 +3585,9 @@
     resetWorkspacePreview() {
       this.workspacePreviewOpen = false;
       this.workspacePreviewSource = false;
+      this.workspacePreviewEditing = false;
+      this.workspacePreviewDraft = '';
+      this.workspacePreviewSaving = false;
       this.workspacePreviewOverlay = false;
       this.workspaceShareDialogVisible = false;
       this.workspaceShares = [];
@@ -2100,6 +3597,15 @@
       this.workspacePreviewFilePath = '';
       this.workspacePreviewData = null;
       this.workspacePreviewSrcdoc = '';
+      this.workspacePreviewJsonTree = false;
+      this.workspaceJsonRoot = null;
+      this.workspaceJsonRevision = 0;
+      this.workspacePreviewLines = [];
+      this.workspacePreviewLineOffset = 0;
+      this.workspacePreviewVirtual = false;
+      this.workspaceLineBlockStates = null;
+      this.workspacePreviewCodeHtml = '';
+      this.workspacePreviewJumpLine = 1;
     },
 
     resetSessionTrajectoryView() {
@@ -2222,6 +3728,11 @@
     },
 
     async handleSessionCommand(command) {
+      if (command.action === 'archive') {
+        const session = this.sessionList.find(item => item.id === command.id);
+        if (session) await this.archiveSession(session);
+        return;
+      }
       if (command.action === 'delete') {
         this.$confirm(ncfT('AdminChat.DeleteConfirm'), ncfT('AdminChat.DeleteConfirmTitle'), {
           confirmButtonText: ncfT('Common.确认'),
@@ -2234,8 +3745,11 @@
             if (response.data && response.data.success) {
               this.$message.success(ncfT('AdminChat.DeleteSessionSuccess'));
               
+              this.clearSessionUnread(command.id);
               if (this.currentSessionId === command.id) {
                 this.currentSessionId = 0;
+                this.syncAdminChatLocation();
+                this.currentSessionStatus = 0;
                 this.messageList = [];
                 this.currentSessionTitle = '';
                 this.currentSessionModules = [];
@@ -2247,6 +3761,7 @@
               }
               
               await this.loadSessionList();
+              await this.loadArchivedSessionList();
             } else {
               this.$message.error(ncfT('AdminChat.DeleteFailed'));
             }
@@ -2267,6 +3782,265 @@
       if (container) {
         container.scrollTop = container.scrollHeight;
       }
+    },
+
+    normalizeSessionStatus(status) {
+      if (status === 1 || status === '1' || status === 'Archived') return 1;
+      if (status === 2 || status === '2' || status === 'Deleted') return 2;
+      return 0;
+    },
+
+    messagePreviewText(content, limit) {
+      const text = String(content || '')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/```[\s\S]*?```/g, ' ')
+        .replace(/`([^`]*)`/g, '$1')
+        .replace(/!\[[^\]]*]\([^)]*\)/g, ' ')
+        .replace(/\[([^\]]*)]\([^)]*\)/g, '$1')
+        .replace(/^#{1,6}\s+/gm, '')
+        .replace(/[*_~>/#-]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      const max = limit || 42;
+      if (!text) return ncfT('AdminChat.Rail.EmptyMessage');
+      return text.length > max ? text.slice(0, max) + '…' : text;
+    },
+
+    observeMessageRail() {
+      if (this.messageRailObserver) {
+        this.messageRailObserver.disconnect();
+        this.messageRailObserver = null;
+      }
+      const container = this.$refs.messagesContainer;
+      if (!container || typeof ResizeObserver === 'undefined') return;
+      this.messageRailObserver = new ResizeObserver(() => this.refreshMessageRail());
+      this.messageRailObserver.observe(container);
+    },
+
+    refreshMessageRail() {
+      const container = this.$refs.messagesContainer;
+      const messages = (this.messageList || []).filter(message => message && (message.roleType === 0 || message.roleType === 'User'));
+      if (!container || messages.length === 0) {
+        this.messageRail = [];
+        return;
+      }
+      const railHeight = Math.max(container.clientHeight - 24, 24);
+      const scrollHeight = Math.max(container.scrollHeight, 1);
+      const ratios = messages.map((message, index) => {
+        const selector = `[data-message-id="${window.CSS && CSS.escape ? CSS.escape(String(message.id)) : String(message.id)}"]`;
+        const element = container.querySelector(selector);
+        return element
+          ? Math.min(1, Math.max(0, element.offsetTop / scrollHeight))
+          : (messages.length === 1 ? 0 : index / (messages.length - 1));
+      });
+      const edges = ratios.map(ratio => ratio * railHeight);
+      edges.push(railHeight);
+      edges[0] = 0;
+      const minHeight = Math.min(8, railHeight / messages.length);
+      for (let index = 1; index < edges.length; index++) {
+        edges[index] = Math.max(edges[index], edges[index - 1] + minHeight);
+      }
+      if (edges[edges.length - 1] > railHeight) {
+        const scale = railHeight / edges[edges.length - 1];
+        for (let index = 1; index < edges.length; index++) edges[index] *= scale;
+      }
+      edges[edges.length - 1] = railHeight;
+      for (let index = 1; index < edges.length; index++) {
+        edges[index] = Math.max(edges[index], edges[index - 1]);
+      }
+      const markers = messages.map((message, index) => {
+        const top = Math.round(edges[index]);
+        const end = index === messages.length - 1 ? railHeight : Math.round(edges[index + 1]);
+        return {
+          id: message.id,
+          preview: this.messagePreviewText(message.content, 42),
+          full: this.messagePreviewText(message.content, 180),
+          top: top,
+          height: Math.max(2, end - top)
+        };
+      });
+      const signature = markers.map(marker => marker.id + '@' + marker.top + 'x' + marker.height).join('|');
+      if (signature !== this.messageRailSignature) {
+        this.messageRailSignature = signature;
+        console.info('AdminChat message rail:', markers.length, 'segments');
+      }
+      this.messageRail = markers;
+      this.updateActiveUserMarker();
+    },
+
+    updateActiveUserMarker() {
+      const container = this.$refs.messagesContainer;
+      if (!container || !this.messageRail.length) return;
+      const line = container.scrollTop + 48;
+      let active = this.messageRail[0].id;
+      this.messageRail.forEach(marker => {
+        const selector = `[data-message-id="${window.CSS && CSS.escape ? CSS.escape(String(marker.id)) : String(marker.id)}"]`;
+        const element = container.querySelector(selector);
+        if (element && element.offsetTop <= line) active = marker.id;
+      });
+      if (this.messageRailActiveId === active) return;
+      this.messageRailActiveId = active;
+      if (this.messageRailOpen && !this.messageRailMenuHover) this.$nextTick(() => this.scrollRailMenuToActive());
+    },
+
+    openMessageRail() {
+      clearTimeout(this.messageRailCloseTimer);
+      this.messageRailOpen = true;
+    },
+
+    scheduleCloseMessageRail() {
+      clearTimeout(this.messageRailCloseTimer);
+      this.messageRailCloseTimer = setTimeout(() => {
+        this.messageRailOpen = false;
+        this.messageRailMenuHover = false;
+      }, 180);
+    },
+
+    highlightRailMarker(id) {
+      clearTimeout(this.messageRailCloseTimer);
+      this.messageRailOpen = true;
+      this.messageRailMenuHover = true;
+      if (this.messageRailActiveId === id) return;
+      this.messageRailActiveId = id;
+      console.info('AdminChat rail highlight:', id);
+    },
+
+    focusRailMarker(id) {
+      this.messageRailMenuHover = false;
+      const container = this.$refs.messagesContainer;
+      const railHeight = container ? Math.max(container.clientHeight - 24, 24) : 240;
+      const estimated = Math.min(360, this.messageRail.length * 36 + 12);
+      const marker = this.messageRail.find(item => item.id === id);
+      const anchor = marker ? marker.top + marker.height / 2 : 0;
+      this.messageRailMenuTop = Math.max(0, Math.min(anchor - 18, Math.max(railHeight - estimated, 0)));
+      this.messageRailActiveId = id;
+      this.openMessageRail();
+      this.$nextTick(() => this.scrollRailMenuToActive());
+    },
+
+    scrollRailMenuToActive() {
+      const menu = this.$refs.messageRailMenu;
+      const active = menu && menu.querySelector('.is-active');
+      if (!menu || !active) return;
+      menu.scrollTop = Math.max(0, active.offsetTop - menu.clientHeight / 2 + active.clientHeight / 2);
+    },
+
+    scheduleHistorySearch() {
+      clearTimeout(this.historySearchTimer);
+      this.historySearchTimer = setTimeout(() => this.searchHistory(), 250);
+    },
+
+    setHistorySearchTab(tab) {
+      const next = tab === 'tool' ? 'tool' : 'chat';
+      if (this.historySearchTab === next) return;
+      this.historySearchTab = next;
+      this.historySearchHits = [];
+      this.historySearchSubmitted = false;
+      console.info('AdminChat search tab:', next);
+      if ((this.historySearchKeyword || '').trim()) return this.searchHistory();
+    },
+
+    async searchHistory() {
+      const keyword = (this.historySearchKeyword || '').trim();
+      const scope = this.historySearchTab === 'tool' ? 'tool' : 'chat';
+      const sequence = ++this.historySearchSequence;
+      if (!keyword) {
+        this.historySearchHits = [];
+        this.historySearchSubmitted = false;
+        this.historySearchLoading = false;
+        return;
+      }
+      this.historySearchLoading = true;
+      try {
+        const response = await service.get(
+          '/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.SearchHistoryAsync',
+          { params: { keyword, limit: 10, scope }, customAlert: true });
+        if (sequence !== this.historySearchSequence) return;
+        if (!(response.data && response.data.success && response.data.data)) {
+          throw new Error(response.data && response.data.errorMessage || ncfT('AdminChat.Search.Failed'));
+        }
+        const hits = response.data.data.hits || response.data.data.Hits || [];
+        this.historySearchHits = hits.map(hit => Object.assign({}, hit, { query: keyword }));
+        this.historySearchSubmitted = true;
+        console.info('AdminChat history search:', scope, keyword, 'hits', this.historySearchHits.length);
+      } catch (error) {
+        if (sequence !== this.historySearchSequence) return;
+        this.historySearchHits = [];
+        this.historySearchSubmitted = true;
+        console.error('AdminChat history search failed:', error);
+        this.$message.error(ncfT('AdminChat.Search.Failed'));
+      } finally {
+        if (sequence === this.historySearchSequence) this.historySearchLoading = false;
+      }
+    },
+
+    highlightParts(text, keyword) {
+      const source = text || '';
+      const query = (keyword == null ? this.historySearchKeyword : keyword).trim();
+      const index = query ? source.toLowerCase().indexOf(query.toLowerCase()) : -1;
+      if (index < 0) return { before: source, match: '', after: '' };
+      return {
+        before: source.slice(0, index),
+        match: source.slice(index, index + query.length),
+        after: source.slice(index + query.length)
+      };
+    },
+
+    isTitleSearchHit(hit) {
+      return !!hit && (hit.matchKind === 1 || hit.matchKind === 'Title');
+    },
+
+    isToolSearchHit(hit) {
+      return !!hit && (hit.matchKind === 2 || hit.matchKind === 'ToolCall');
+    },
+
+    async openHistorySearchHit(hit) {
+      const sessionId = Number(hit && hit.sessionId) || 0;
+      const messageId = Number(hit && hit.messageId) || 0;
+      if (!sessionId) return;
+      this.historySearchVisible = false;
+      console.info('AdminChat search navigate:', sessionId, messageId, hit && hit.matchKind);
+      if (Number(this.currentSessionId) === sessionId) {
+        if (messageId) this.scrollToSearchedMessage(messageId);
+        else this.scrollToBottom();
+        return;
+      }
+      this.pendingHistorySearchMessageId = messageId;
+      const opened = await this.switchSession(sessionId);
+      if (!opened) this.pendingHistorySearchMessageId = 0;
+    },
+
+    scrollToSearchedMessage(id, attempt = 0) {
+      if (!id) return;
+      const container = this.$refs.messagesContainer;
+      const selector = `[data-message-id="${window.CSS && CSS.escape ? CSS.escape(String(id)) : String(id)}"]`;
+      const element = container && container.querySelector(selector);
+      if (!container || !element) {
+        if (attempt < 2) {
+          this.$nextTick(() => this.scrollToSearchedMessage(id, attempt + 1));
+          return;
+        }
+        console.info('AdminChat search target missing:', id);
+        return;
+      }
+      this.scrollToUserMessage(id);
+      element.classList.remove('is-search-target');
+      void element.offsetWidth;
+      element.classList.add('is-search-target');
+      clearTimeout(this.historySearchFlashTimer);
+      this.historySearchFlashTimer = setTimeout(() => element.classList.remove('is-search-target'), 1800);
+      console.info('AdminChat search scrolled to message:', id);
+    },
+
+    scrollToUserMessage(id) {
+      const container = this.$refs.messagesContainer;
+      const selector = `[data-message-id="${window.CSS && CSS.escape ? CSS.escape(String(id)) : String(id)}"]`;
+      const element = container && container.querySelector(selector);
+      if (!container || !element) return;
+      this.autoScrollEnabled = false;
+      this.messageRailActiveId = id;
+      container.scrollTo({ top: Math.max(0, element.offsetTop - 12), behavior: 'smooth' });
+      console.info('AdminChat jumped to user message:', id);
     },
 
     getRoleTypeClass(roleType) {

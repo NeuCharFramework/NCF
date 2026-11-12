@@ -29,8 +29,10 @@ const sandbox = {
     },
     localStorage: { getItem: key => storage.get(key), setItem: (key, value) => storage.set(key, value) },
     ncfT: key => key,
-    console: { error() {} },
-    service: {}
+    console: { error() {}, info() {} },
+    service: {},
+    setTimeout() { return 0; },
+    clearTimeout() {}
 };
 vm.runInNewContext(script, sandbox);
 function createApp() {
@@ -148,6 +150,61 @@ async function run() {
     assert.strictEqual(app.sessionList.length, 2, 'A partial list failure must not discard the prior list.');
     assert.strictEqual(errors.pop(), 'AdminChat.LoadSessionFailed');
 
+    let attempts = 0;
+    const seenConfigs = [];
+    sandbox.service.get = async (url, config) => {
+        seenConfigs.push(config);
+        attempts++;
+        if (attempts < 3) return { data: { success: false, errorMessage: 'database is locked' } };
+        return { data: { success: true, data: { sessions: [{ id: 9 }], totalCount: 1 } } };
+    };
+    await app.loadSessionList();
+    assert.strictEqual(attempts, 3, 'A transient session-list failure must be retried.');
+    assert.strictEqual(app.sessionList.map(session => session.id).join(','), '9');
+    assert.strictEqual(errors.length, 0, 'A recovered session list must not show a failure toast.');
+    assert.ok(seenConfigs.every(config => config && config.customAlert === true));
+
+    let archivedAttempts = 0;
+    app.archivedSessionList = [{ id: 4 }];
+    sandbox.service.get = async () => {
+        archivedAttempts++;
+        if (archivedAttempts === 1) throw new Error('Network Error');
+        return { data: { success: true, data: { sessions: [{ id: 8 }], totalCount: 1 } } };
+    };
+    await app.loadArchivedSessionList();
+    assert.strictEqual(app.archivedSessionList[0].id, 8);
+    assert.strictEqual(errors.length, 0, 'A recovered archive list must not show a failure toast.');
+
+    let releaseList;
+    const listGate = new Promise(resolve => { releaseList = resolve; });
+    let concurrentCalls = 0;
+    sandbox.service.get = async () => {
+        concurrentCalls++;
+        await listGate;
+        return { data: { success: true, data: { sessions: [{ id: 4 }], totalCount: 1 } } };
+    };
+    const firstList = app.loadSessionList();
+    const secondList = app.loadSessionList();
+    assert.strictEqual(concurrentCalls, 1, 'Overlapping session-list loads must share one request.');
+    releaseList();
+    await firstList;
+    await secondList;
+    assert.strictEqual(app.sessionList[0].id, 4);
+    assert.strictEqual(app.loadingSessions, false);
+
+    let queuedCalls = 0;
+    sandbox.service.get = async () => {
+        queuedCalls++;
+        if (queuedCalls <= 3) return { data: { success: false, errorMessage: 'database is locked' } };
+        return { data: { success: true, data: { sessions: [{ id: 11 }], totalCount: 1 } } };
+    };
+    const failedList = app.loadSessionList();
+    const queuedList = app.loadSessionList();
+    await queuedList;
+    await failedList;
+    assert.strictEqual(app.sessionList[0].id, 11);
+    assert.strictEqual(errors.length, 0, 'A queued reload must replace the toast from the failed request.');
+
     assert.ok(page.includes('@@pointerdown="startSidebarResize"'));
     assert.ok(page.includes('@@keydown.alt.up.prevent.stop'));
     assert.ok(page.includes('v-show="!isSessionGroupCollapsed(group.key)"'));
@@ -158,7 +215,77 @@ async function run() {
         const resource = fs.readFileSync(path.join(admin, `Resources/AdminResource${locale}.resx`), 'utf8');
         for (const key of ['Expand', 'Collapse', 'Resize', 'Reorder', 'Running', 'Stopping', 'SortSaved', 'SortFailed', 'PreferencesFailed'])
             assert.ok(resource.includes(`name="AdminChat.Sidebar.${key}"`), `${locale} missing ${key}`);
+        for (const key of ['Open', 'Placeholder', 'ChatTab', 'ToolTab', 'ToolPlaceholder', 'ToolHint', 'ToolCall', 'Empty', 'Hint', 'Failed', 'TitleMatch'])
+            assert.ok(resource.includes(`name="AdminChat.Search.${key}"`), `${locale} missing search ${key}`);
     }
+
+    assert.ok(page.includes('sidebar-search-trigger'));
+    assert.ok(page.includes('openHistorySearchHit'));
+    assert.ok(page.includes("setHistorySearchTab('tool')"));
+    assert.match(css, /\.sidebar-search-trigger/);
+    assert.match(css, /\.message-item\.is-search-target/);
+    assert.ok(script.includes("this.historySearchTab === 'tool' ? 'tool' : 'chat'"));
+
+    const searchCalls = [];
+    sandbox.service.get = async (url, config) => {
+        searchCalls.push({ url, config });
+        return { data: { success: true, data: { hits: [{ sessionId: 9, messageId: 3, title: '年度预算', matchKind: 0, snippetMatch: '预算' }], moduleInvocationSearchAvailable: false } } };
+    };
+    app.historySearchKeyword = '预算';
+    await app.searchHistory();
+    assert.ok(searchCalls[0].url.includes('SearchHistoryAsync'));
+    assert.strictEqual(searchCalls[0].config.params.keyword, '预算');
+    assert.strictEqual(searchCalls[0].config.params.limit, 10);
+    assert.strictEqual(searchCalls[0].config.params.scope, 'chat');
+    assert.strictEqual(app.historySearchHits[0].query, '预算');
+    assert.strictEqual(app.highlightParts('年度预算表', '预算').match, '预算');
+    await app.setHistorySearchTab('tool');
+    assert.strictEqual(searchCalls[1].config.params.scope, 'tool');
+    assert.strictEqual(searchCalls[1].config.params.keyword, '预算');
+    app.historySearchKeyword = '   ';
+    await app.searchHistory();
+    assert.strictEqual(app.historySearchHits.length, 0);
+    assert.strictEqual(searchCalls.length, 2);
+    app.historySearchTab = 'chat';
+
+    let releaseSearch;
+    const searchGate = new Promise(resolve => { releaseSearch = resolve; });
+    let searchStarted = 0;
+    sandbox.service.get = async () => {
+        searchStarted++;
+        if (searchStarted === 1) {
+            await searchGate;
+            return { data: { success: true, data: { hits: [{ sessionId: 1, messageId: 1, title: 'old' }] } } };
+        }
+        return { data: { success: true, data: { hits: [{ sessionId: 2, messageId: 2, title: 'new' }] } } };
+    };
+    app.historySearchKeyword = 'old';
+    const firstSearch = app.searchHistory();
+    app.historySearchKeyword = 'new';
+    const secondSearch = app.searchHistory();
+    releaseSearch();
+    await firstSearch;
+    await secondSearch;
+    assert.strictEqual(app.historySearchHits[0].title, 'new', 'An older search response must not replace a newer one.');
+
+    const marked = new Set();
+    app.$refs = {
+        messagesContainer: {
+            scrollTo() {},
+            querySelector(selector) { return selector.includes('3') ? { classList: { add: name => marked.add(name), remove: name => marked.delete(name) }, offsetWidth: 1, offsetTop: 40 } : null; }
+        }
+    };
+    app.currentSessionId = 9;
+    app.historySearchVisible = true;
+    await app.openHistorySearchHit({ sessionId: 9, messageId: 3, matchKind: 0 });
+    assert.strictEqual(app.historySearchVisible, false);
+    assert.ok(marked.has('is-search-target'));
+    let navigation = null;
+    app.switchSession = async (id) => { navigation = { id, pending: app.pendingHistorySearchMessageId }; return false; };
+    await app.openHistorySearchHit({ sessionId: 8, messageId: 4 });
+    assert.strictEqual(navigation.id, 8);
+    assert.strictEqual(navigation.pending, 4);
+    assert.strictEqual(app.pendingHistorySearchMessageId, 0, 'A cancelled session switch must not keep the scroll target.');
     console.log('AdminChat sidebar tests passed.');
 }
 run().catch(error => { console.error(error); process.exitCode = 1; });

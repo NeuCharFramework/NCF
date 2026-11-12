@@ -323,6 +323,8 @@ window.ChatLauncherMixin = {
     },
 
     handleLauncherInputKeydown(event) {
+      if (typeof this.handleWorkspaceMentionKeydown === 'function'
+        && this.handleWorkspaceMentionKeydown(event, 'chatInputText')) return;
       if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
         event.preventDefault();
         this.startChatSession();
@@ -523,6 +525,7 @@ window.ChatLauncherMixin = {
     },
 
     async startChatSession() {
+      if (typeof this.closeWorkspaceMention === 'function') this.closeWorkspaceMention();
       if ((!this.chatInputText || this.chatInputText.trim().length === 0)
         && (!this.pendingAttachments || this.pendingAttachments.length === 0)) {
         this.$message.warning(ncfT('AdminChat.InputRequired'));
@@ -531,17 +534,27 @@ window.ChatLauncherMixin = {
 
       this.isCreatingSession = true;
       try {
-        const initialMessage = this.chatInputText.trim();
+        const references = typeof this.capturePromptReferences === 'function'
+          ? this.capturePromptReferences('promptLauncherInput') : [];
+        const initialMessage = references.length ? this.chatInputText : this.chatInputText.trim();
         const requestData = this.launcherSessionRequest(initialMessage);
 
         const response = await service.post('/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.CreateSessionAsync', requestData);
         if (response.data && response.data.success && response.data.data) {
           const sessionId = response.data.data.sessionId;
           this.setSessionAiModelId(sessionId, this.launcherAiModelId);
-          const pendingMessage = response.data.data.initialMessage || initialMessage;
+          const pendingMessage = references.length ? initialMessage : response.data.data.initialMessage || initialMessage;
           sessionStorage.setItem(`ncf.admin.chat.initialMessage.${sessionId}`, pendingMessage);
+          if (typeof this.openCreatedChatSession === 'function') {
+            await this.openCreatedChatSession(sessionId, pendingMessage, references);
+            return;
+          }
+          if (references.length) {
+            sessionStorage.setItem(`ncf.admin.chat.initialReferences.${sessionId}`, JSON.stringify(references));
+          }
           window.location.href = '/Admin/AdminChat/Chat?sessionId=' + sessionId
-            + '&mode=' + (this.launcherChatMode === 'harness' ? '1' : '0');
+            + '&mode=' + (this.launcherChatMode === 'harness' ? '1' : '0')
+            + '#session-' + sessionId;
           return;
         }
 

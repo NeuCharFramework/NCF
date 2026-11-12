@@ -13,12 +13,16 @@
     修改标识：Senparc - 20261103
     修改描述：v0.12.15 add comprehensive unit tests for AdminChatWorkspaceAssetService functionality
 
+    修改标识：Senparc - 20261105
+    修改描述：v0.12.26 消息传输对象同步 Prompt 引用
+
 ----------------------------------------------------------------*/
 using Senparc.Areas.Admin.Domain.Services;
 using Senparc.Ncf.Core.Models;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using Senparc.Xncf.PromptRange.Abstractions.References;
 
 namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
 {
@@ -42,6 +46,7 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
         /// </summary>
         public string Content { get; set; }
         public IReadOnlyList<AdminChatAttachment> Attachments { get; set; } = Array.Empty<AdminChatAttachment>();
+        public IReadOnlyList<PromptReference> PromptReferences { get; set; } = Array.Empty<PromptReference>();
 
         /// <summary>
         /// 消息序号
@@ -83,6 +88,7 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
                 RoleType = entity.RoleType,
                 Content = entity.Content,
                 Attachments = entity.GetAttachments(),
+                PromptReferences = entity.GetPromptReferences(),
                 Sequence = entity.Sequence,
                 UserFeedback = entity.UserFeedback,
                 ModelIdentifier = entity.ModelIdentifier,
@@ -119,5 +125,7 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto
         public AdminChatMode Mode { get; set; } = AdminChatMode.Simple;
         [MaxLength(4)]
         public List<AdminChatAttachmentInput> Attachments { get; set; } = new();
+        [MaxLength(32)]
+        public List<PromptReference> PromptReferences { get; set; } = new();
     }
 }

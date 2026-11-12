@@ -16,6 +16,9 @@
     修改标识：Senparc - 20261103
     修改描述：v0.12.15 完善后台聊天会话管理与排序
 
+    修改标识：Senparc - 20261106
+    修改描述：持久化非当前会话的未读提醒
+
 ----------------------------------------------------------------*/
 
 using Senparc.Ncf.Core.Models;
@@ -63,6 +66,11 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
         public bool WorkspaceCliEnabled { get; private set; }
 
         public int? SortOrder { get; private set; }
+
+        /// <summary>
+        /// 后台任务已在用户未打开该会话时完成，等待阅读。
+        /// </summary>
+        public bool HasUnread { get; private set; }
 
         public void SetSortOrder(int sortOrder)
         {
@@ -118,11 +126,22 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
         }
 
         /// <summary>
+        /// 记录或清除未读提醒。正在查看的会话由调用方保持为已读。
+        /// </summary>
+        public void SetUnread(bool unread)
+        {
+            if (HasUnread == unread) return;
+            HasUnread = unread;
+            base.SetUpdateTime();
+        }
+
+        /// <summary>
         /// 归档会话
         /// </summary>
         public void Archive()
         {
             Status = ChatSessionStatus.Archived;
+            HasUnread = false;
             base.SetUpdateTime();
         }
 
@@ -132,6 +151,7 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
         public void Delete()
         {
             Status = ChatSessionStatus.Deleted;
+            HasUnread = false;
             base.SetUpdateTime();
         }
 

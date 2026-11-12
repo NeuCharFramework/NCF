@@ -1,5 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AdminChat.Memory.UpdateReason.intent-deferred" xml:space="preserve"><value>等待你提供后续内容或确认保存，本轮未写入 Memory。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.no-save-intent" xml:space="preserve"><value>本轮未识别到立即更新长期记忆的意图，未写入 Memory。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.pending-review" xml:space="preserve"><value>本批候选包含助手来源的信息，尚未保存。请逐条核对并保存；助手的说法可能不准确。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.unresolved-reference" xml:space="preserve"><value>未能从近期前文确定要记住的具体内容。请在同一条消息中写明“记住：……”及完整事实；必要时检查本轮 PromptCode。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.review-complete" xml:space="preserve"><value>本批候选已由你核对并保存。</value></data>
+  <data name="AdminChat.Memory.ReviewCandidate" xml:space="preserve"><value>核对候选</value></data>
+  <data name="AdminChat.Memory.ReviewNotice" xml:space="preserve"><value>这是从前文整理的候选，尚未保存。请核对内容与作用域，再点击“保存条目”；删除候选需点击“删除”并确认。锁定的手工条目不会被 AI 自动改写。</value></data>
+  <data name="AdminChat.Memory.ReviewClose" xml:space="preserve"><value>请先处理当前编辑草稿并关闭设置，再核对候选。</value></data>
+  <data name="AdminChat.Memory.CandidateEvidence" xml:space="preserve"><value>参考原文（待核实）</value></data>
   <data name="AdminChat.Memory.Subtitle" xml:space="preserve"><value>管理长期偏好，让每一次对话更懂你</value></data>
   <data name="AdminChat.Memory.Private" xml:space="preserve"><value>私有记忆</value></data>
   <data name="AdminChat.Memory.SaveChanges" xml:space="preserve"><value>保存更改</value></data>
@@ -19,6 +68,27 @@
   <data name="AdminChat.Sidebar.SortSaved" xml:space="preserve"><value>顺序已保存，同一账号可跨设备读取</value></data>
   <data name="AdminChat.Sidebar.SortFailed" xml:space="preserve"><value>排序保存失败，请重试</value></data>
   <data name="AdminChat.Sidebar.PreferencesFailed" xml:space="preserve"><value>侧栏布局偏好无法读取或保存，当前布局仅在本页有效</value></data>
+  <data name="AdminChat.Sidebar.Archive" xml:space="preserve"><value>归档，标记为已完成</value></data>
+  <data name="AdminChat.Sidebar.ArchiveRunning" xml:space="preserve"><value>这条会话还在进行，完成后再归档</value></data>
+  <data name="AdminChat.Archive.Menu" xml:space="preserve"><value>已归档</value></data>
+  <data name="AdminChat.Archive.Empty" xml:space="preserve"><value>还没有归档会话</value></data>
+  <data name="AdminChat.Archive.Open" xml:space="preserve"><value>打开归档会话：{0}</value></data>
+  <data name="AdminChat.Archive.Delete" xml:space="preserve"><value>删除归档会话：{0}</value></data>
+  <data name="AdminChat.Archive.Action" xml:space="preserve"><value>归档</value></data>
+  <data name="AdminChat.Archive.Restore" xml:space="preserve"><value>还原</value></data>
+  <data name="AdminChat.Archive.RestoreLabel" xml:space="preserve"><value>还原归档会话：{0}</value></data>
+  <data name="AdminChat.Archive.RestoreSuccess" xml:space="preserve"><value>已还原到进行中的会话</value></data>
+  <data name="AdminChat.Archive.RestoreFailed" xml:space="preserve"><value>还原失败，请重试</value></data>
+  <data name="AdminChat.Archive.Success" xml:space="preserve"><value>已归档。可从左侧「新对话」旁的更多菜单查看、还原或删除</value></data>
+  <data name="AdminChat.Sidebar.Tools" xml:space="preserve"><value>更多</value></data>
+  <data name="AdminChat.Sidebar.Unread" xml:space="preserve"><value>未读</value></data>
+  <data name="AdminChat.Archive.Failed" xml:space="preserve"><value>归档失败，请重试</value></data>
+  <data name="AdminChat.Archive.Tag" xml:space="preserve"><value>已归档</value></data>
+  <data name="AdminChat.Archive.LoadFailed" xml:space="preserve"><value>加载归档会话失败</value></data>
+  <data name="AdminChat.ArchiveSessionSuccess" xml:space="preserve"><value>会话已归档</value></data>
+  <data name="AdminChat.Rail.Label" xml:space="preserve"><value>我的发言</value></data>
+  <data name="AdminChat.Rail.Jump" xml:space="preserve"><value>定位到这条发言</value></data>
+  <data name="AdminChat.Rail.EmptyMessage" xml:space="preserve"><value>（空发言）</value></data>
   <data name="AdminChat.Memory.Settings" xml:space="preserve"><value>Memory / 对话设置</value></data>
   <data name="AdminChat.Memory.UpdateSaved" xml:space="preserve"><value>Memory 已保存：我的全局 {0} 项，当前 Workspace {1} 项变更（数据库存储，不创建文件）。</value></data>
   <data name="AdminChat.Memory.UpdateReason.mode-off" xml:space="preserve"><value>未保存长期 Memory：当前对话已关闭 Memory。助手的口头确认不代表保存成功。</value></data>
@@ -75,50 +145,26 @@
   <data name="AdminChat.Memory.Saved" xml:space="preserve"><value>已保存。</value></data>
   <data name="AdminChat.Memory.Failed" xml:space="preserve"><value>Memory 操作失败，请重新加载后重试。</value></data>
   <data name="AdminChat.Memory.UpdateWarning" xml:space="preserve"><value>本轮 Memory 未更新，已有记忆保留。请检查 PromptRange 或重新打开 Memory 设置。</value></data>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
   <data name="Admin.Title" xml:space="preserve">
     <value>NCF 管理后台</value>
   </data>
   <data name="Admin.Nav.Home" xml:space="preserve">
     <value>首页</value>
+  </data>
+  <data name="Admin.Tabs.List" xml:space="preserve">
+    <value>已打开的页面</value>
+  </data>
+  <data name="Admin.Tabs.Close" xml:space="preserve">
+    <value>关闭标签</value>
+  </data>
+  <data name="Admin.Tabs.Untitled" xml:space="preserve">
+    <value>未命名页面</value>
+  </data>
+  <data name="Admin.Tabs.ScrollLeft" xml:space="preserve">
+    <value>向左查看标签</value>
+  </data>
+  <data name="Admin.Tabs.ScrollRight" xml:space="preserve">
+    <value>向右查看标签</value>
   </data>
   <data name="Admin.Nav.Search" xml:space="preserve">
     <value>搜索菜单</value>
@@ -385,6 +431,17 @@
   <data name="Admin.Common.Error" xml:space="preserve"><value>错误</value></data>
   <data name="AdminChat.Conversation" xml:space="preserve"><value>对话</value></data>
   <data name="AdminChat.History" xml:space="preserve"><value>对话历史</value></data>
+  <data name="AdminChat.Search.Open" xml:space="preserve"><value>搜索对话</value></data>
+  <data name="AdminChat.Search.Placeholder" xml:space="preserve"><value>搜索未归档对话</value></data>
+  <data name="AdminChat.Search.ChatTab" xml:space="preserve"><value>对话</value></data>
+  <data name="AdminChat.Search.ToolTab" xml:space="preserve"><value>方法</value></data>
+  <data name="AdminChat.Search.ToolPlaceholder" xml:space="preserve"><value>搜索方法名</value></data>
+  <data name="AdminChat.Search.ToolCall" xml:space="preserve"><value>方法调用</value></data>
+  <data name="AdminChat.Search.Empty" xml:space="preserve"><value>没有匹配的未归档对话</value></data>
+  <data name="AdminChat.Search.Hint" xml:space="preserve"><value>只搜索未归档对话，最多 10 条</value></data>
+  <data name="AdminChat.Search.ToolHint" xml:space="preserve"><value>只搜索未归档会话里，Harness 实际调用过的方法名，最多 10 条</value></data>
+  <data name="AdminChat.Search.Failed" xml:space="preserve"><value>搜索失败</value></data>
+  <data name="AdminChat.Search.TitleMatch" xml:space="preserve"><value>标题匹配</value></data>
   <data name="AdminChat.EmptyHistory" xml:space="preserve"><value>暂无对话历史</value></data>
   <data name="AdminChat.SelectModel" xml:space="preserve"><value>选择 AI 算力</value></data>
   <data name="AdminChat.Manage" xml:space="preserve"><value>管理</value></data>
@@ -399,7 +456,6 @@
   <data name="AdminChat.SendHint" xml:space="preserve"><value>Ctrl + Enter 或 Cmd + Enter 发送</value></data>
   <data name="AdminChat.Send" xml:space="preserve"><value>发送</value></data>
   <data name="AdminChat.Thinking" xml:space="preserve"><value>正在思考中...</value></data>
-
   <data name="AdminChat.ModeSimple" xml:space="preserve"><value>普通对话</value></data>
   <data name="AdminChat.ModeHarness" xml:space="preserve"><value>长任务</value></data>
   <data name="AdminChat.HarnessSteps" xml:space="preserve"><value>执行步骤</value></data>
@@ -851,4 +907,11 @@
   <data name="DocHelp.LoadFailed" xml:space="preserve"><value>文档加载失败或等待超时，请重试或在新窗口打开。</value></data>
   <data name="DocHelp.Retry" xml:space="preserve"><value>重试</value></data>
   <data name="DocHelp.InvalidTopic" xml:space="preserve"><value>帮助文档索引配置无效，请联系管理员。</value></data>
+
+  <data name="SystemMenu.AdministratorManagement" xml:space="preserve"><value>管理员管理</value></data>
+  <data name="SystemMenu.RoleManagement" xml:space="preserve"><value>角色管理</value></data>
+  <data name="SystemMenu.SystemInfo" xml:space="preserve"><value>系统信息</value></data>
+  <data name="SystemMenu.TenantInfo" xml:space="preserve"><value>多租户信息</value></data>
+  <data name="SystemMenu.ExtensionModules" xml:space="preserve"><value>扩展模块</value></data>
+  <data name="SystemMenu.ModuleManagement" xml:space="preserve"><value>模块管理</value></data>
 </root>

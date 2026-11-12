@@ -55,6 +55,12 @@
     修改标识：Senparc - 20261103
     修改描述：v0.12.15 implement AdminChat memory storage and management system
 
+    修改标识：Senparc - 20261103
+    修改描述：将嵌入式静态资源接入文件版本计算，避免帮助索引缓存与页面不一致
+
+    修改标识：Senparc - 20261111
+    修改描述：v0.12.28 后台菜单文案改为资源本地化读取
+
 ----------------------------------------------------------------*/
 
 /* 
@@ -70,6 +76,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -94,8 +101,9 @@ using Senparc.CO2NET.Trace;
 using Senparc.Ncf.AreaBase.Admin.Filters;
 using Senparc.Ncf.AreaBase.Admin;
 using Senparc.Ncf.Core.Authorization;
-using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Config;
+using Senparc.Ncf.Core.Localization;
+using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
@@ -126,14 +134,13 @@ namespace Senparc.Areas.Admin
         IXncfDatabase  //注册 XNCF 模块数据库（按需选用）
                        //IXncfRazorRuntimeCompilation  //需要使用 RazorRuntimeCompilation，在开发环境下实时更新 Razor Page
     {
+        private static readonly XncfRegisterText RegisterText =
+            XncfRegisterText.Create<AdminResource>(
+                "Admin.Register",
+                "NCF 系统管理员后台",
+                "这是管理员后台模块，用于 NCF 系统后台的自我管理，请勿删除此模块。如果你实在忍不住，请务必做好数据备份。");
+
         public const string ModuleUid = SiteConfig.SYSTEM_XNCF_MODULE_AREAS_ADMIN_UID;
-
-        private static readonly ResourceManager ResourceManager = new("Senparc.Areas.Admin.AdminResource", typeof(AdminResource).Assembly);
-
-        private static string T(string key, string fallback)
-        {
-            return ResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? fallback;
-        }
 
         #region IXncfRegister 接口
 
@@ -143,11 +150,11 @@ namespace Senparc.Areas.Admin
 
         public override string Version => "0.5.14";
 
-        public override string MenuName => T("Admin.Register.MenuName", "NCF 系统管理员后台");
+        public override string MenuName => RegisterText.MenuName;
 
         public override string Icon => "fa fa-university";
 
-        public override string Description => T("Admin.Register.Description", "这是管理员后台模块，用于 NCF 系统后台的自我管理，请勿删除此模块。如果你实在忍不住，请务必做好数据备份。");
+        public override string Description => RegisterText.Description;
 
 
         public override async Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
@@ -243,6 +250,7 @@ namespace Senparc.Areas.Admin
             services.AddScoped<IAdminAuthConfigRepository, AdminAuthConfigRepository>();
             services.AddScoped<InstallerService>();
             services.AddScoped<AdminAuthConfigService>();
+            services.AddScoped<AdminMenuLocalizationService>();
             // 管理员登录图形验证码（纯 SVG 生成 + CO2NET 缓存，无第三方依赖）
             services.AddScoped<LoginCaptchaService>();
             services.AddScoped<IDesktopAdminAuthTokenIssuer, DesktopAdminAuthTokenIssuer>();
@@ -261,6 +269,7 @@ namespace Senparc.Areas.Admin
             services.AddScoped<AdminChatTrajectoryService>();
             services.AddScoped<AdminChatTrajectoryEventService>();
             services.AddScoped<AdminChatAiService>();
+            services.AddSingleton<AdminChatRunRegistry>();
             services.AddSingleton<AdminChatMemoryStore>();
             services.AddScoped<IAdminChatMemoryStore>(provider => new AdminChatMemoryDatabaseStore(
                 provider.GetRequiredService<Senparc.Ncf.Core.Models.INcfDbData>().BaseDataContext,
@@ -402,9 +411,13 @@ namespace Senparc.Areas.Admin
         }
         public override IApplicationBuilder UseXncfModule(IApplicationBuilder app, IRegisterService registerService)
         {
+            var files = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly(), "wwwroot");
+            var environment = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
+            // Version tags must hash the same embedded assets that the middleware serves.
+            environment.WebRootFileProvider = new CompositeFileProvider(environment.WebRootFileProvider, files);
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly(), "wwwroot")
+                FileProvider = files
             });
 
             return base.UseXncfModule(app, registerService);
@@ -418,8 +431,8 @@ namespace Senparc.Areas.Admin
 
         public List<AreaPageMenuItem> AreaPageMenuItems => new List<AreaPageMenuItem>()
         {
-            new AreaPageMenuItem(GetAreaUrl("/Admin/Menu/Index"), T("Admin.Area.MenuManagement", "菜单管理"),"fa fa-bug"),
-            new AreaPageMenuItem(GetAreaUrl("/Admin/SenparcTrace/Index"), T("Admin.Area.TraceLog", "SenparcTrace 日志"),"fa fa-calendar-o"),
+            new AreaPageMenuItem(GetAreaUrl("/Admin/Menu/Index"), ResourceStringLocalizer.Get(typeof(AdminResource), "Admin.Area.MenuManagement", "菜单管理"),"fa fa-bug"),
+            new AreaPageMenuItem(GetAreaUrl("/Admin/SenparcTrace/Index"), ResourceStringLocalizer.Get(typeof(AdminResource), "Admin.Area.TraceLog", "SenparcTrace 日志"),"fa fa-calendar-o"),
             new AreaPageMenuItem(GetAreaUrl("/Admin/WeixinClaw/Index"), "个人微信集成", "fa fa-wechat"),
         };//Admin比较特殊，不需要全部输出
 

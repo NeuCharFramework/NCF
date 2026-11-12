@@ -225,6 +225,11 @@ function formatCurrency(num) {
             return;
         }
 
+        // 标签页里的页面各自有一套脚本。会话提醒只留给外壳，避免每个 iframe 都弹出一次。
+        if (window.top !== window || document.body.classList.contains('ncf-admin-embedded')) {
+            return;
+        }
+
         var waitAndStart = function () {
             if (!window.service || typeof app === 'undefined') {
                 setTimeout(waitAndStart, 800);

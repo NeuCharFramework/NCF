@@ -324,6 +324,23 @@ const sandboxDefaults = commonSandbox.window.NeuCharWorkflowUi.createParameterVa
 });
 assert.strictEqual(sandboxDefaults.TemplateKey, 'csharp',
     'Default values should still match a Function field name when an older response changed only the key casing.');
+const fineTuningDefaults = commonSandbox.window.NeuCharWorkflowUi.createParameterValues({
+    parameterSchemaJson: JSON.stringify([
+        { name: 'Epochs', parameterType: 0, systemType: 'Int32', defaultValue: 1 },
+        { name: 'ModelId', parameterType: 1, required: true, options: [{ value: 'only-model', text: 'Only', defaultSelected: true }] },
+        { name: 'WorkerAlias', parameterType: 1, required: true, options: [{ value: 'cpu', text: 'CPU' }] },
+        { name: 'DatasetId', parameterType: 1, required: true, options: [{ value: 'a', text: 'A' }, { value: 'b', text: 'B' }] }
+    ]),
+    defaultParametersJson: JSON.stringify({ Epochs: 1, ModelId: null, WorkerAlias: null, DatasetId: null })
+});
+assert.strictEqual(fineTuningDefaults.Epochs, 1,
+    'Fine-tuning numeric defaults should be kept when a workflow node is created.');
+assert.strictEqual(fineTuningDefaults.ModelId, 'only-model',
+    'A dropdown with an explicit default option should be selected automatically.');
+assert.strictEqual(fineTuningDefaults.WorkerAlias, 'cpu',
+    'A required dropdown with only one option should be selected automatically.');
+assert.strictEqual(fineTuningDefaults.DatasetId, '',
+    'A required dropdown with several options should wait for an explicit choice.');
 
 const cyclicContext = {
     form: {

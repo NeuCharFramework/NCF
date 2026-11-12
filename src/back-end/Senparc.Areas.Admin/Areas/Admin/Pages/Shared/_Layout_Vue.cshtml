@@ -4,6 +4,7 @@
 @{
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
     var isEmbedded = string.Equals(Context.Request.Query["embedded"], "1", StringComparison.Ordinal);
+    var isTabFrame = string.Equals(Context.Request.Query["ncfTab"], "1", StringComparison.Ordinal);
     var webLoginExpireMinutes = Senparc.Areas.Admin.Domain.Models.DatabaseModel.AdminAuthConfig.DefaultAdminWebLoginExpireMinutes;
     var jwtExpireMinutes = Senparc.Areas.Admin.Domain.Models.DatabaseModel.AdminAuthConfig.DefaultBackendJwtExpireMinutes;
     var currentAccountName = !string.IsNullOrWhiteSpace(User?.Identity?.Name)
@@ -28,6 +29,32 @@
 <!DOCTYPE html>
 <html lang="@currentCulture">
 <head>
+    <script>
+        (function () {
+            try {
+                var path = window.location.pathname || '';
+                var params = new URLSearchParams(window.location.search);
+                var adminPage = /^\/Admin(\/|$)/i.test(path) && !/^\/Admin\/Login(\/|$)/i.test(path);
+                if (window.top !== window.self) {
+                    if (!adminPage || params.get('embedded') === '1' || params.has('handler')) return;
+                    params.set('embedded', '1');
+                    params.set('ncfTab', '1');
+                    var embeddedTarget = path + '?' + params.toString() + window.location.hash;
+                    console.debug('[NCF][AdminTabs] iframe 补上嵌入参数', embeddedTarget);
+                    window.location.replace(embeddedTarget);
+                    return;
+                }
+                if (!adminPage || params.get('embedded') === '1' || params.get('ncfShell') === '1' || params.has('handler')) return;
+                var here = path + window.location.search + window.location.hash;
+                var indexOnly = /^\/Admin\/Index\/?$/i.test(path) && !window.location.search && !window.location.hash;
+                var target = '/Admin/Index?ncfShell=1' + (indexOnly ? '' : '&ncfOpen=' + encodeURIComponent(here));
+                console.debug('[NCF][AdminTabs] 进入标签外壳', target);
+                window.location.replace(target);
+            } catch (error) {
+                console.debug('[NCF][AdminTabs] 无法进入标签外壳', error && error.message);
+            }
+        })();
+    </script>
     <meta charset="utf-8" />
     <title>@ViewData["Title"]</title>
     <meta name="description" content="@ViewData["Title"]" />
@@ -37,15 +64,17 @@
     <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon">
     <!-- 引入样式 -->
     <link href="~/lib/element-ui_2.13.2/element.css" rel="stylesheet" />
-    <link href="~/css/Admin/Shared/layout.css" rel="stylesheet" />
+    <link href="~/css/Admin/Shared/layout.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/Admin/Shared/AdminModernSkin.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/css/Admin/Shared/PromptRangeSelector.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/css/Admin/Shared/NcfDocHelp.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/css/Admin/GlobalNeuCharPivot.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     @RenderSection("HeaderContent", false)
     @RenderSection("Style", false)
+    <script src="~/js/Admin/Shared/AdminFrameHeight.js" asp-append-version="true"></script>
 </head>
-<body class="@(isEmbedded ? "ncf-admin-embedded" : null)">
+<body class="@(isEmbedded ? "ncf-admin-embedded" : null) @(isTabFrame ? "ncf-admin-tabbed" : null)">
     <div id="app" v-cloak>
         <div class="app-wrapper">
             <el-container class="admin-shell">
@@ -57,10 +86,24 @@
                         </a>
                     </div>
                     <div v-show="!Store.state.navMenu.isCollapse" class="admin-nav-search">
+                        @* 不设置 name。固定 name（例如 name=xxx）会成为浏览器输入历史的键，拦不住自动填充。 *@
                         <el-input v-model="Store.state.navMenu.searchKeyword"
                                   size="mini"
                                   clearable
                                   prefix-icon="el-icon-search"
+                                  :readonly="Store.state.navMenu.searchInputLocked"
+                                  :autocomplete="ncfNavSearchAutocomplete"
+                                  autocorrect="off"
+                                  autocapitalize="off"
+                                  spellcheck="false"
+                                  role="searchbox"
+                                  aria-autocomplete="none"
+                                  data-lpignore="true"
+                                  data-1p-ignore="true"
+                                  data-form-type="other"
+                                  @@mousedown.native="unlockNavMenuSearch"
+                                  @@touchstart.native="unlockNavMenuSearch"
+                                  @@focus="unlockNavMenuSearch"
                                   placeholder="@AR["Admin.Nav.SearchPlaceholder"]">
                         </el-input>
                     </div>
@@ -87,52 +130,138 @@
                     </el-scrollbar>
                 </el-aside>
                 <el-container class="admin-workspace">
-                    <el-header>
+                    <el-header class="admin-header">
                         <div class="header-menu">
                             @*切换菜单栏*@
                             <i class="fa fa-indent" aria-hidden="true" @@click="toggleSideBar"></i>
                         </div>
                         @*面包屑*@
-                        <div class="header-breadcrumb">
+                        <div class="header-breadcrumb" v-show="!Store.state.adminTabs.enabled">
                             <el-breadcrumb separator="/">
                                 <el-breadcrumb-item><a href="/Admin/Index">@AR["Admin.Nav.Home"]</a></el-breadcrumb-item>
                                 @RenderSection("breadcrumbs", false)
                             </el-breadcrumb>
                         </div>
-                        <div class="header-language">
-                            <label for="ncf-lang" class="header-language-label">@AR["Admin.Language.SelectLanguage"]</label>
-                            <select id="ncf-lang" class="header-language-select" onchange="ncfSwitchLanguage(this.value)">
-                                <option value="zh-CN" selected="@(currentCulture == "zh-CN" ? "selected" : null)">简体中文</option>
-                                <option value="en" selected="@(currentCulture.StartsWith("en") ? "selected" : null)">English</option>
-                                <option value="ja" selected="@(currentCulture.StartsWith("ja") ? "selected" : null)">日本語</option>
-                                <option value="fr" selected="@(currentCulture.StartsWith("fr") ? "selected" : null)">Français</option>
-                                <option value="es" selected="@(currentCulture.StartsWith("es") ? "selected" : null)">Español</option>
-                                <option value="ru" selected="@(currentCulture.StartsWith("ru") ? "selected" : null)">Русский</option>
-                            </select>
+                        <div class="admin-page-tabs" role="tablist" aria-label="@AR["Admin.Tabs.List"]" v-if="Store.state.adminTabs.enabled">
+                            <button type="button"
+                                    class="admin-page-tabs-arrow"
+                                    v-show="Store.state.adminTabs.canScrollLeft || Store.state.adminTabs.canScrollRight"
+                                    :disabled="!Store.state.adminTabs.canScrollLeft"
+                                    :aria-label="ncfAdminTabScrollLeftLabel"
+                                    :title="ncfAdminTabScrollLeftLabel"
+                                    @@click="ncfScrollAdminTabs(-1)">
+                                <i class="el-icon-arrow-left"></i>
+                            </button>
+                            <div class="admin-page-tabs-scroller">
+                                <div v-for="tab in Store.state.adminTabs.tabs"
+                                     :key="tab.id"
+                                     class="admin-page-tab"
+                                     :class="{ 'is-active': tab.id === Store.state.adminTabs.activeId }">
+                                    <button type="button"
+                                            class="admin-page-tab-main"
+                                            role="tab"
+                                            :aria-selected="tab.id === Store.state.adminTabs.activeId ? 'true' : 'false'"
+                                            :title="tab.title"
+                                            @@click="ncfActivateAdminTab(tab.id)"
+                                            @@auxclick="ncfAuxCloseAdminTab(tab.id, $event)">
+                                        <span>{{ tab.title }}</span>
+                                    </button>
+                                    <button v-if="!tab.isShell && Store.state.adminTabs.tabs.length > 1"
+                                            type="button"
+                                            class="admin-page-tab-close"
+                                            :aria-label="ncfAdminTabCloseLabel"
+                                            :title="ncfAdminTabCloseLabel"
+                                            @@click="ncfCloseAdminTab(tab.id)">
+                                        <i class="el-icon-close"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button"
+                                    class="admin-page-tabs-arrow"
+                                    v-show="Store.state.adminTabs.canScrollLeft || Store.state.adminTabs.canScrollRight"
+                                    :disabled="!Store.state.adminTabs.canScrollRight"
+                                    :aria-label="ncfAdminTabScrollRightLabel"
+                                    :title="ncfAdminTabScrollRightLabel"
+                                    @@click="ncfScrollAdminTabs(1)">
+                                <i class="el-icon-arrow-right"></i>
+                            </button>
                         </div>
-                        <ncf-doc-help class="ncf-doc-help-header" page-path="@Context.Request.Path" topic="@ViewData["DocHelp"]"></ncf-doc-help>
-                        <div class="header-account">
-                            <el-dropdown trigger="click">
-                                <span class="el-dropdown-link">
-                                    @AR["Admin.Layout.Account"]<i class="el-icon-arrow-down el-icon--right"></i>
-                                </span>
-                                <el-dropdown-menu slot="dropdown" class="header-account-dropdown">
-                                    <el-dropdown-item disabled>@AR["Admin.Layout.CurrentAccount", currentAccountName]</el-dropdown-item>
-                                    <el-dropdown-item divided>
-                                        <a class="header-account-action" asp-page="/Login" asp-page-handler="Logout">@AR["Admin.Logout.Title"]</a>
-                                    </el-dropdown-item>
-                                </el-dropdown-menu>
-                            </el-dropdown>
+                        <div class="header-tools">
+                            <div class="header-account">
+                                <el-dropdown trigger="click">
+                                    <span class="el-dropdown-link">
+                                        @AR["Admin.Layout.Account"]<i class="el-icon-arrow-down el-icon--right"></i>
+                                    </span>
+                                    <el-dropdown-menu slot="dropdown" class="header-account-dropdown">
+                                        <el-dropdown-item disabled>@AR["Admin.Layout.CurrentAccount", currentAccountName]</el-dropdown-item>
+                                        <el-dropdown-item divided>
+                                            <a class="header-account-action" asp-page="/Login" asp-page-handler="Logout">@AR["Admin.Logout.Title"]</a>
+                                        </el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                            </div>
+                            <ncf-doc-help class="ncf-doc-help-header" page-path="@Context.Request.Path" topic="@ViewData["DocHelp"]"></ncf-doc-help>
+                            <div class="header-language">
+                                <label for="ncf-lang" class="header-language-label">@AR["Admin.Language.SelectLanguage"]</label>
+                                <select id="ncf-lang" class="header-language-select" onchange="ncfSwitchLanguage(this.value)">
+                                    <option value="zh-CN" selected="@(currentCulture == "zh-CN" ? "selected" : null)">简体中文</option>
+                                    <option value="en" selected="@(currentCulture.StartsWith("en") ? "selected" : null)">English</option>
+                                    <option value="ja" selected="@(currentCulture.StartsWith("ja") ? "selected" : null)">日本語</option>
+                                    <option value="fr" selected="@(currentCulture.StartsWith("fr") ? "selected" : null)">Français</option>
+                                    <option value="es" selected="@(currentCulture.StartsWith("es") ? "selected" : null)">Español</option>
+                                    <option value="ru" selected="@(currentCulture.StartsWith("ru") ? "selected" : null)">Русский</option>
+                                </select>
+                            </div>
                         </div>
                     </el-header>
-                    <el-main class="admin-content">
-                        <div class="ifram-wrapper">
-                            @*<iframe :src="pageSrc"></iframe>*@
+                    <el-main class="admin-content" :class="{ 'is-tab-frame': Store.state.adminTabs.enabled && Store.state.adminTabs.activeId !== Store.state.adminTabs.shellId }">
+                        <div class="admin-tab-frames" v-show="Store.state.adminTabs.enabled && Store.state.adminTabs.activeId !== Store.state.adminTabs.shellId">
+                            <iframe v-for="tab in Store.getters.adminIframeTabs"
+                                    v-if="tab.loaded"
+                                    v-show="tab.id === Store.state.adminTabs.activeId"
+                                    :key="tab.id"
+                                    class="admin-tab-frame"
+                                    :src="tab.frameUrl"
+                                    :title="tab.title"
+                                    @@load="ncfAdminTabFrameLoad(tab, $event)"></iframe>
+                        </div>
+                        <div class="ifram-wrapper" v-show="!Store.state.adminTabs.enabled || Store.state.adminTabs.activeId === Store.state.adminTabs.shellId">
                             @RenderBody()
                         </div>
                     </el-main>
                     <el-footer class="footer" height="36px">
                         <div class="admin-footer-tools">
+                            <div class="admin-voice-nav" v-if="!voiceNavEmbedded">
+                                <button type="button"
+                                        class="admin-voice-nav-button"
+                                        :class="{ 'is-listening': voiceNavListening }"
+                                        :aria-pressed="voiceNavListening ? 'true' : 'false'"
+                                        :title="voiceNavTitle"
+                                        @@click="toggleVoiceNav">
+                                    <i class="fa" :class="voiceNavListening ? 'fa-stop' : 'fa-microphone'"></i>
+                                </button>
+                                <div v-if="voiceNavPanelVisible" class="admin-voice-nav-panel" role="dialog" :aria-label="voiceNavTitle">
+                                    <button type="button"
+                                            class="admin-voice-nav-close"
+                                            :title="voiceNavCloseLabel"
+                                            :aria-label="voiceNavCloseLabel"
+                                            @@click.stop="closeVoiceNav">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button>
+                                    <p class="admin-voice-nav-text">{{ voiceNavMessage }}</p>
+                                    <input class="admin-voice-nav-input"
+                                           type="text"
+                                           v-model="voiceNavDraft"
+                                           :placeholder="voiceNavPlaceholder"
+                                           @@keydown.enter.prevent="submitVoiceNav"
+                                           @@click.stop>
+                                    <button v-for="choice in voiceNavChoices"
+                                            :key="choice.url"
+                                            type="button"
+                                            class="admin-voice-nav-choice"
+                                            @@click="chooseVoiceNav(choice)">{{ choice.label }}</button>
+                                </div>
+                            </div>
                             <button type="button" class="admin-footer-action" @@click="openFooterAi" title="AI 快捷对话">
                                 <i class="fa fa-comments-o"></i><span>AI</span>
                             </button>
@@ -164,12 +293,14 @@
             width="min(1080px, 92vw)"
             top="6vh"
             custom-class="admin-footer-ai-dialog"
-            :close-on-click-modal="false">
+            append-to-body
+            :close-on-click-modal="true"
+            :close-on-press-escape="true">
             <div class="admin-footer-ai-frame" v-if="footerAiDialogVisible">
                 <iframe :src="footerAiUrl" title="Admin Chat 快捷对话"></iframe>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @@click="footerAiDialogVisible = false">关闭</el-button>
+                <el-button class="admin-footer-ai-close" @@click="footerAiDialogVisible = false">关闭</el-button>
                 <el-button type="primary" @@click="openFullAdminChat">切换到正式页面</el-button>
             </span>
         </el-dialog>
@@ -267,11 +398,22 @@
     <script src="~/lib/vuex.js"></script>
     @await Html.PartialAsync("_LocalizationScripts")
     <!--js-->
-    <script src="~/js/Admin/store.js"></script>
+    <script>
+        window.NCF_ADMIN_TABS_TEXT = {
+            home: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Nav.Home"].Value)),
+            close: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Tabs.Close"].Value)),
+            scrollLeft: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Tabs.ScrollLeft"].Value)),
+            scrollRight: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Tabs.ScrollRight"].Value)),
+            list: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Tabs.List"].Value)),
+            untitled: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(AR["Admin.Tabs.Untitled"].Value))
+        };
+    </script>
+    <script src="~/js/Admin/store.js" asp-append-version="true"></script>
+    <script src="~/js/Admin/Shared/AdminTabs.js" asp-append-version="true"></script>
     <script src="~/js/Admin/axios.js" asp-append-version="true"></script>
     <script src="~/js/Admin/global.js"></script>
     <!--菜单栏-->
-    <script src="~/js/Admin/navMenu.js"></script>
+    <script src="~/js/Admin/navMenu.js" asp-append-version="true"></script>
     <script src="~/js/Admin/vuePermission.js"></script>
     <script src="~/js/Admin/Pages/Components/Components.js"></script>
     <script src="~/js/Admin/dompurify.min.js"></script>
@@ -283,7 +425,9 @@
             embedded: @(isEmbedded ? "true" : "false")
         };
     </script>
+    <script src="~/js/Admin/Shared/VoiceNavigation.js" asp-append-version="true"></script>
     <script src="~/js/Admin/Shared/AdminFooter.js" asp-append-version="true"></script>
+    <script src="~/js/Admin/Shared/PromptReferences.js" asp-append-version="true"></script>
     <script src="~/js/Admin/Shared/PromptRangeSelector.js" asp-append-version="true"></script>
     <script src="~/js/Admin/Shared/NcfDocHelpCatalog.js" asp-append-version="true"></script>
     <script src="~/js/Admin/Shared/NcfDocHelp.js" asp-append-version="true"></script>

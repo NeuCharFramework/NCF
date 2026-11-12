@@ -39,17 +39,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+
+  <!-- ===== Download Page ===== -->
   <data name="Language.SelectLanguage" xml:space="preserve">
     <value>Sélectionner la langue</value>
   </data>
   <data name="Language.zh-CN" xml:space="preserve">
-    <value>简体中文</value>
+    <value>Chinois simplifié</value>
   </data>
   <data name="Language.en" xml:space="preserve">
     <value>English</value>
   </data>
   <data name="Language.ja" xml:space="preserve">
-    <value>日本語</value>
+    <value>Japonais</value>
   </data>
   <data name="Language.fr" xml:space="preserve">
     <value>Français</value>
@@ -180,7 +182,12 @@
   <data name="Cookie.Summary" xml:space="preserve"><value>Nous utilisons des cookies pour améliorer votre expérience. Consultez la politique de confidentialité pour plus de détails.</value></data>
   <data name="Cookie.LearnMore" xml:space="preserve"><value>En savoir plus</value></data>
   <data name="Cookie.Accept" xml:space="preserve"><value>Accepter</value></data>
-  <!-- ===== Download Page ===== -->
+  <data name="Download.Source.Mode" xml:space="preserve"><value>Source de téléchargement</value></data>
+  <data name="Download.Source.Auto" xml:space="preserve"><value>Automatique (local d’abord)</value></data>
+  <data name="Download.Source.Local" xml:space="preserve"><value>Miroir local</value></data>
+  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Download.Status.Md5" xml:space="preserve"><value>Empreinte MD5</value></data>
+  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>Indisponible</value></data>
   <data name="Nav.Download" xml:space="preserve"><value>Télécharger</value></data>
   <data name="Download.PageTitle" xml:space="preserve"><value>Télécharger NCF</value></data>
   <data name="Download.Hero.Eyebrow" xml:space="preserve"><value>AI NATIVE · AI READY</value></data>
@@ -199,12 +206,6 @@
   <data name="Download.Status.Unavailable" xml:space="preserve"><value>Temporairement indisponible</value></data>
   <data name="Download.Status.Detected" xml:space="preserve"><value>Détecté</value></data>
   <data name="Download.Status.Estimated" xml:space="preserve"><value>estimé</value></data>
-  <data name="Download.Source.Mode" xml:space="preserve"><value>Source de téléchargement</value></data>
-  <data name="Download.Source.Auto" xml:space="preserve"><value>Automatique (local d’abord)</value></data>
-  <data name="Download.Source.Local" xml:space="preserve"><value>Miroir local</value></data>
-  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Download.Status.Md5" xml:space="preserve"><value>Empreinte MD5</value></data>
-  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>Indisponible</value></data>
   <data name="Download.Path.Eyebrow" xml:space="preserve"><value>UN FRAMEWORK · DEUX DÉPARTS</value></data>
   <data name="Download.Path.Title" xml:space="preserve"><value>Du prêt à l’emploi au sur-mesure</value></data>
   <data name="Download.Path.Description" xml:space="preserve"><value>Pour un système immédiat ou un produit destiné à évoluer, NCF offre un point de départ clair et fiable.</value></data>
@@ -232,4 +233,5 @@
   <data name="Download.Cta.Title" xml:space="preserve"><value>Faites de NCF la base fiable de votre prochain système</value></data>
   <data name="Download.Cta.Description" xml:space="preserve"><value>Exécutez-le d’abord, approfondissez ensuite. Partez d’un système fonctionnel vers votre application IA native.</value></data>
   <data name="Download.Cta.Action" xml:space="preserve"><value>Lire le démarrage rapide</value></data>
+
 </root>

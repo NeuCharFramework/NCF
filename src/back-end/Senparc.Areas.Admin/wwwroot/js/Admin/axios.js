@@ -53,7 +53,7 @@ service.interceptors.response.use(
                 }
                 if (!response.config.customAlert){
                     showErrorMessage({
-                        message: response.data.msg||response.data.exception|| 'Error',
+                        message: response.data.errorMessage || response.data.msg || response.data.exception || 'Error',
                         type: 'error',
                         duration: 5 * 1000
                     });

@@ -37,6 +37,9 @@
     修改标识：Senparc - 20260915
     修改描述：v0.39.0 新增宿主安全防护与 MySQL 数据库集成
 
+    修改标识：Senparc - 20261111
+    修改描述：v0.39.8 统一主站请求本地化与宿主注册兼容
+
 ----------------------------------------------------------------*/
 
 //以下数据库模块的命名空间根据需要添加或删除
@@ -50,6 +53,7 @@ using Senparc.CO2NET;
 using Senparc.CO2NET.HttpUtility;
 using Senparc.CO2NET.WebApi;
 using Senparc.Ncf.Database.SqlServer;
+using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
@@ -119,8 +123,8 @@ if (!string.IsNullOrWhiteSpace(xncfPreviewPathBase)
 var supportedCultures = LanguageController.SupportedCultures;
 var localizationOptions = new RequestLocalizationOptions()
     .SetDefaultCulture(supportedCultures[0])
-    .AddSupportedCultures(supportedCultures)
-    .AddSupportedUICultures(supportedCultures)
+    .AddSupportedCultures(supportedCultures.ToArray())
+    .AddSupportedUICultures(supportedCultures.ToArray())
     .AddInitialRequestCultureProvider(new CookieRequestCultureProvider());
 
 app.UseRequestLocalization(localizationOptions);

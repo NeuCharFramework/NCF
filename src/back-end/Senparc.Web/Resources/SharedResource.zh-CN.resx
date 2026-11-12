@@ -101,4 +101,5 @@
   <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
   <data name="Download.Status.Md5" xml:space="preserve"><value>MD5 指纹</value></data>
   <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>暂无指纹</value></data>
+
 </root>

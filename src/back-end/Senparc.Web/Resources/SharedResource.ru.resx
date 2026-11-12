@@ -39,17 +39,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+
+  <!-- ===== Download Page ===== -->
   <data name="Language.SelectLanguage" xml:space="preserve">
     <value>Выбор языка</value>
   </data>
   <data name="Language.zh-CN" xml:space="preserve">
-    <value>简体中文</value>
+    <value>Упрощённый китайский</value>
   </data>
   <data name="Language.en" xml:space="preserve">
     <value>English</value>
   </data>
   <data name="Language.ja" xml:space="preserve">
-    <value>日本語</value>
+    <value>Японский</value>
   </data>
   <data name="Language.fr" xml:space="preserve">
     <value>Français</value>
@@ -180,7 +182,12 @@
   <data name="Cookie.Summary" xml:space="preserve"><value>Мы используем файлы cookie для улучшения работы сайта. Подробности приведены в политике конфиденциальности.</value></data>
   <data name="Cookie.LearnMore" xml:space="preserve"><value>Подробнее</value></data>
   <data name="Cookie.Accept" xml:space="preserve"><value>Принять</value></data>
-  <!-- ===== Download Page ===== -->
+  <data name="Download.Source.Mode" xml:space="preserve"><value>Источник загрузки</value></data>
+  <data name="Download.Source.Auto" xml:space="preserve"><value>Авто (сначала локальный)</value></data>
+  <data name="Download.Source.Local" xml:space="preserve"><value>Локальное зеркало</value></data>
+  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Download.Status.Md5" xml:space="preserve"><value>Отпечаток MD5</value></data>
+  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>Недоступно</value></data>
   <data name="Nav.Download" xml:space="preserve"><value>Скачать</value></data>
   <data name="Download.PageTitle" xml:space="preserve"><value>Скачать NCF</value></data>
   <data name="Download.Hero.Eyebrow" xml:space="preserve"><value>AI NATIVE · AI READY</value></data>
@@ -199,12 +206,6 @@
   <data name="Download.Status.Unavailable" xml:space="preserve"><value>Временно недоступно</value></data>
   <data name="Download.Status.Detected" xml:space="preserve"><value>Определено</value></data>
   <data name="Download.Status.Estimated" xml:space="preserve"><value>предположительно</value></data>
-  <data name="Download.Source.Mode" xml:space="preserve"><value>Источник загрузки</value></data>
-  <data name="Download.Source.Auto" xml:space="preserve"><value>Авто (сначала локальный)</value></data>
-  <data name="Download.Source.Local" xml:space="preserve"><value>Локальное зеркало</value></data>
-  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Download.Status.Md5" xml:space="preserve"><value>Отпечаток MD5</value></data>
-  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>Недоступно</value></data>
   <data name="Download.Path.Eyebrow" xml:space="preserve"><value>ОДИН ФРЕЙМВОРК · ДВА СТАРТА</value></data>
   <data name="Download.Path.Title" xml:space="preserve"><value>От готового решения до собственного продукта</value></data>
   <data name="Download.Path.Description" xml:space="preserve"><value>Нужна система сейчас или продукт на годы — NCF даёт ясную и надёжную отправную точку.</value></data>
@@ -232,4 +233,5 @@
   <data name="Download.Cta.Title" xml:space="preserve"><value>Сделайте NCF надёжной основой вашей следующей системы</value></data>
   <data name="Download.Cta.Description" xml:space="preserve"><value>Сначала запустите, затем углубляйтесь. Превратите рабочую систему в собственное AI-native приложение.</value></data>
   <data name="Download.Cta.Action" xml:space="preserve"><value>Быстрый старт</value></data>
+
 </root>

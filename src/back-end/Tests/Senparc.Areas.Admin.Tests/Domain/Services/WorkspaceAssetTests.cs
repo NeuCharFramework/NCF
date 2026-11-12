@@ -84,10 +84,10 @@ public class WorkspaceAssetTests
     }
 
     [TestMethod]
-    public async Task Preview_EmbedsLocalCssImagesFonts_AndStripsActiveContent()
+    public async Task Preview_EmbedsLocalCssImagesFonts_AndRunsScriptsInSandbox()
     {
         Put("site/index.html", """
-            <script>window.unsafe=1</script><base href="https://outside.invalid/">
+            <script>window.previewReady=1</script><script src="js/app.js"></script><base href="https://outside.invalid/">
             <meta http-equiv="refresh" content="0;url=https://outside.invalid">
             <link rel="stylesheet" href="css/site.css">
             <img src="images/logo.png" onerror="window.unsafe=1">
@@ -99,9 +99,13 @@ public class WorkspaceAssetTests
         Put("site/css/base.css", "body{color:navy}");
         _files["site/css/font.woff2"] = [1, 2, 3];
         _files["site/images/logo.png"] = [4, 5, 6];
+        Put("site/js/app.js", "window.externalScript=1;");
         var result = await _assets.BuildPreviewAsync("ws_test", "site/index.html", default);
         var document = new HtmlParser().ParseDocument(result.Html);
-        Assert.AreEqual(0, document.QuerySelectorAll("script, base, form, [onerror], [ping]").Length);
+        Assert.AreEqual(2, document.QuerySelectorAll("script").Length);
+        Assert.IsTrue(document.QuerySelectorAll("script").All(script =>
+            script.HasAttribute("src") && script.GetAttribute("src")!.StartsWith("data:text/javascript;base64,", StringComparison.Ordinal)));
+        Assert.AreEqual(0, document.QuerySelectorAll("base, form, [onerror], [ping]").Length);
         Assert.AreEqual(1, document.QuerySelectorAll("meta[http-equiv]").Length);
         Assert.IsNull(document.QuerySelector("a")!.GetAttribute("href"));
         StringAssert.StartsWith(document.QuerySelector("img")!.GetAttribute("src")!, "data:image/png;base64,");
@@ -111,6 +115,9 @@ public class WorkspaceAssetTests
         StringAssert.Contains(css, "data:image/png;base64,");
         StringAssert.Contains(css, "data:text/css;base64,");
         Assert.IsTrue(result.Warnings.Length > 0);
+        StringAssert.Contains(result.Html, "script-src data:");
+        StringAssert.Contains(result.Html, "connect-src 'none'");
+        StringAssert.Contains(result.Html, "navigate-to 'none'");
     }
 
     [TestMethod]
@@ -278,9 +285,11 @@ public class WorkspaceAssetTests
         var result = await controller.Preview(42, "index.html", default);
         Assert.IsInstanceOfType<FileContentResult>(result);
         var headers = controller.Response.Headers;
-        StringAssert.Contains(headers["Content-Security-Policy"].ToString(), "sandbox;");
+        StringAssert.Contains(headers["Content-Security-Policy"].ToString(), "sandbox allow-scripts;");
+        StringAssert.Contains(headers["Content-Security-Policy"].ToString(), "connect-src 'none'");
+        StringAssert.Contains(headers["Content-Security-Policy"].ToString(), "navigate-to 'none'");
         Assert.IsFalse(headers["Content-Security-Policy"].ToString().Contains("allow-same-origin", StringComparison.Ordinal));
-        Assert.IsFalse(headers["Content-Security-Policy"].ToString().Contains("allow-scripts", StringComparison.Ordinal));
+        Assert.IsFalse(headers["Content-Security-Policy"].ToString().Contains("script-src 'unsafe-inline'", StringComparison.Ordinal));
         Assert.AreEqual("no-store", headers.CacheControl.ToString());
         Assert.AreEqual("no-referrer", headers["Referrer-Policy"].ToString());
         var anonymous = typeof(AdminChatWorkspaceAssetsController).GetMethods()
@@ -343,7 +352,7 @@ public class WorkspaceAssetTests
             var preview = await anonymous.GetAsync(publicUrl);
             Assert.AreEqual(HttpStatusCode.OK, preview.StatusCode);
             Assert.AreEqual("text/html", preview.Content.Headers.ContentType!.MediaType);
-            StringAssert.Contains(preview.Headers.GetValues("Content-Security-Policy").Single(), "sandbox;");
+            StringAssert.Contains(preview.Headers.GetValues("Content-Security-Policy").Single(), "sandbox allow-scripts;");
             Assert.AreEqual("no-store", preview.Headers.CacheControl!.ToString());
             Put("index.html", "<h1>Changed live file</h1>");
             StringAssert.Contains(await anonymous.GetStringAsync(publicUrl), "HTTP snapshot");

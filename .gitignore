@@ -79,3 +79,6 @@ src/back-end/Senparc.Xncf.Accounts/App_Data/Database/NewDB.DB-wal
 src/back-end/Senparc.Web/App_Data/AdminChatMemory/*
 src/back-end/Senparc.Web/App_Data/AIWorkspaces/*
 src/back-end/Senparc.Web/App_Data/WorkspaceAssetShares/*
+src/back-end/Senparc.Areas.Admin/.playwright-cli/*
+src/back-end/Senparc.Web/App_Data/DataProtection-Keys/*
+src/back-end/Senparc.Web/App_Data/Senparc.Xncf.AIKernel/*

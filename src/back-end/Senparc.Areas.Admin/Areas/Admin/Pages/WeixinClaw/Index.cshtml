@@ -10,74 +10,505 @@
     <el-breadcrumb-item>个人微信集成</el-breadcrumb-item>
 }
 
-<style>
-    .weixin-claw-integration { padding: 16px; }
-    .weixin-claw-integration .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 18px; }
-    .weixin-claw-integration .status-item { padding: 14px; border: 1px solid #ebeef5; background: #fff; }
-    .weixin-claw-integration .status-label { color: #909399; font-size: 12px; }
-    .weixin-claw-integration .status-value { margin-top: 6px; font-size: 16px; }
-    .weixin-claw-integration .guide { padding: 14px; margin-bottom: 18px; background: #f5f7fa; border-left: 3px solid #409eff; line-height: 1.8; }
-    .weixin-claw-integration code { padding: 2px 5px; background: #e4e7ed; }
-</style>
+@section Style {
+    <style>
+        .wx-page {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
 
-<div class="weixin-claw-integration">
-    <h2>个人微信集成</h2>
+        .wx-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+        }
 
-    <div class="status-grid">
-        <div class="status-item">
-            <div class="status-label">集成状态</div>
-            <div class="status-value">
-                <el-tag type="@(Model.PageData.Enabled ? "success" : "info")">
+        .wx-header h2,
+        .wx-header p {
+            margin: 0;
+        }
+
+        .wx-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: var(--admin-text, #303133);
+        }
+
+        .wx-header p {
+            max-width: 680px;
+            margin-top: 6px;
+            color: var(--admin-muted, #909399);
+            line-height: 1.7;
+        }
+
+        .wx-header .wx-caps {
+            margin-top: 12px;
+        }
+
+        .wx-header-actions {
+            display: flex;
+            flex-shrink: 0;
+            gap: 8px;
+        }
+
+        .wx-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .wx-metric {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+            padding: 16px 18px;
+            border: 1px solid var(--admin-border-soft, #ebeef5);
+            border-radius: var(--admin-radius, 12px);
+            background: var(--admin-surface, #fff);
+            box-shadow: var(--admin-shadow, 0 8px 24px rgba(31, 45, 61, .06));
+        }
+
+        .wx-metric-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            font-size: 18px;
+        }
+
+        .wx-metric-icon.is-on { background: #f0f9eb; color: #67c23a; }
+        .wx-metric-icon.is-user { background: #ecf5ff; color: #409eff; }
+        .wx-metric-icon.is-bind { background: #fdf6ec; color: #e6a23c; }
+        .wx-metric-icon.is-off { background: #f4f4f5; color: #909399; }
+
+        .wx-metric-label {
+            color: var(--admin-muted, #909399);
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .wx-metric-value {
+            margin-top: 4px;
+            color: var(--admin-text, #303133);
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .wx-metric-value small {
+            margin-left: 4px;
+            color: #606266;
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        .wx-metric-value.is-on { color: #67c23a; }
+        .wx-metric-value.is-off { color: #909399; }
+
+        .wx-caps {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .wx-split {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr);
+            gap: 12px;
+            align-items: stretch;
+        }
+
+        .wx-panel {
+            height: 100%;
+        }
+
+        .wx-panel-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--admin-text, #303133);
+            font-weight: 600;
+        }
+
+        .wx-panel-title i {
+            color: var(--admin-primary, #667eea);
+        }
+
+        .wx-steps {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .wx-step {
+            position: relative;
+            display: grid;
+            grid-template-columns: 28px minmax(0, 1fr);
+            gap: 12px;
+            padding-bottom: 18px;
+        }
+
+        .wx-step:last-child {
+            padding-bottom: 0;
+        }
+
+        .wx-step:not(:last-child)::before {
+            content: "";
+            position: absolute;
+            top: 28px;
+            bottom: 0;
+            left: 13px;
+            width: 1px;
+            background: var(--admin-border, #e4e7ed);
+        }
+
+        .wx-step-index {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #ecf5ff;
+            color: #409eff;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .wx-step h3,
+        .wx-step p {
+            margin: 0;
+        }
+
+        .wx-step h3 {
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 28px;
+        }
+
+        .wx-step p {
+            color: #606266;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .wx-step a {
+            color: var(--admin-primary, #667eea);
+        }
+
+        .wx-command {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: #f5f7fa;
+        }
+
+        .wx-command + .wx-command {
+            margin-top: 8px;
+        }
+
+        .wx-command-label {
+            display: block;
+            margin-bottom: 3px;
+            color: var(--admin-muted, #909399);
+            font-size: 12px;
+        }
+
+        .wx-page code {
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #eef1f6;
+            color: #303133;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 12px;
+            word-break: break-all;
+        }
+
+        .wx-command code {
+            background: transparent;
+            padding: 0;
+        }
+
+        .wx-command-note {
+            margin: 12px 0 0;
+            color: var(--admin-muted, #909399);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .wx-table-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .wx-table-head p {
+            margin: 4px 0 0;
+            color: var(--admin-muted, #909399);
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .wx-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .wx-toolbar .el-input {
+            width: 260px;
+        }
+
+        .wx-wf-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .wx-wf-name strong {
+            overflow: hidden;
+            font-weight: 600;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .wx-wf-desc {
+            margin-top: 4px;
+            color: #909399;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .wx-cmd-cell {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .wx-cmd-cell code {
+            flex: 1;
+            min-width: 0;
+            background: #f5f7fa;
+        }
+
+        .wx-cmd-cell .el-button {
+            flex-shrink: 0;
+        }
+
+        .wx-page .el-card .el-table {
+            box-shadow: none;
+        }
+
+        .wx-empty {
+            padding: 36px 16px;
+            color: #909399;
+            text-align: center;
+        }
+
+        @@media (max-width: 960px) {
+            .wx-header,
+            .wx-table-head,
+            .wx-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .wx-metrics,
+            .wx-split {
+                grid-template-columns: 1fr;
+            }
+
+            .wx-toolbar .el-input {
+                width: 100%;
+            }
+        }
+    </style>
+}
+
+<div class="wx-page">
+    @if (!Model.PageData.Enabled)
+    {
+        <el-alert title="个人微信集成当前已停用，手机端命令不会进入 Admin。" type="info" :closable="false" show-icon></el-alert>
+    }
+    else if (Model.PageData.BindingProfileCount == 0)
+    {
+        <el-alert title="还没有启用中的绑定配置。先到个人微信 Bot 为微信账号创建绑定，手机端才能识别管理员。" type="warning" :closable="false" show-icon></el-alert>
+    }
+
+    <header class="wx-header">
+        <div>
+            <h2>个人微信集成</h2>
+            <p>把当前管理员和微信账号绑定后，可以在手机上查询并执行 Workflow。</p>
+            <div class="wx-caps" aria-label="当前能力">
+                <el-tag size="small" type="info">命令前缀 @Model.PageData.CommandPrefix@(Model.PageData.RequireCommandPrefix ? " · 必填" : " · 可选")</el-tag>
+                <el-tag size="small" type="@(Model.PageData.EnableNeuBell ? "success" : "info")">
+                    NeuBell @(Model.PageData.EnableNeuBell ? "已开启" : "未开启")
+                </el-tag>
+                <el-tag size="small" type="@(Model.PageData.EnableWorkflow ? "success" : "info")">
+                    Workflow @(Model.PageData.EnableWorkflow ? "已开启" : "未开启")
+                </el-tag>
+                <el-tag size="small" type="@(Model.PageData.EnableHarness ? "success" : "info")">
+                    Harness @(Model.PageData.EnableHarness ? "已开启" : "未开启")
+                </el-tag>
+            </div>
+        </div>
+        <div class="wx-header-actions">
+            <el-button type="primary" icon="el-icon-setting" @@click="openBot">打开个人微信 Bot</el-button>
+        </div>
+    </header>
+
+    <section class="wx-metrics" aria-label="集成状态">
+        <div class="wx-metric">
+            <div class="wx-metric-icon @(Model.PageData.Enabled ? "is-on" : "is-off")">
+                <i class="fa @(Model.PageData.Enabled ? "fa-check-circle" : "fa-pause-circle")"></i>
+            </div>
+            <div>
+                <div class="wx-metric-label">集成状态</div>
+                <div class="wx-metric-value @(Model.PageData.Enabled ? "is-on" : "is-off")">
                     @(Model.PageData.Enabled ? "已启用" : "已停用")
-                </el-tag>
+                </div>
             </div>
         </div>
-        <div class="status-item">
-            <div class="status-label">当前 Admin 用户 Id</div>
-            <div class="status-value">@Model.PageData.CurrentAdminUserId</div>
-        </div>
-        <div class="status-item">
-            <div class="status-label">数据库绑定配置</div>
-            <div class="status-value">
-                <el-tag type="@(Model.PageData.BindingProfileCount > 0 ? "success" : "danger")">
-                    @Model.PageData.BindingProfileCount 条启用
-                </el-tag>
+        <div class="wx-metric">
+            <div class="wx-metric-icon is-user">
+                <i class="fa fa-user"></i>
+            </div>
+            <div>
+                <div class="wx-metric-label">当前 Admin 用户 Id</div>
+                <div class="wx-metric-value">@Model.PageData.CurrentAdminUserId</div>
             </div>
         </div>
-    </div>
+        <div class="wx-metric">
+            <div class="wx-metric-icon @(Model.PageData.BindingProfileCount > 0 ? "is-bind" : "is-off")">
+                <i class="fa fa-link"></i>
+            </div>
+            <div>
+                <div class="wx-metric-label">数据库绑定配置</div>
+                <div class="wx-metric-value">
+                    @Model.PageData.BindingProfileCount<small>条启用</small>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <div class="guide">
-        <div><strong>首次绑定</strong></div>
-        <div>在微信管理模块页面打开“绑定配置”，为每个微信账号创建绑定配置：</div>
-        <div>配置名称、AdminUserId、绑定码、WorkflowId 及 NeuBell/Workflow 权限。</div>
-        <div>绑定码只保存为不可逆哈希；创建或修改后，将绑定码发送给目标微信用户。</div>
-        <div>在手机端发送 <code>@(Model.PageData.CommandPrefix)bind &lt;绑定码&gt;</code>。</div>
-        <div>微信通道页面：<a href="/Admin/WeixinManager/WeixinClaw">个人微信 Bot</a></div>
-    </div>
+    <section class="wx-split">
+        <el-card class="wx-panel" shadow="never">
+            <div slot="header" class="wx-panel-title">
+                <i class="fa fa-list-ol"></i>
+                <span>首次绑定</span>
+            </div>
+            <ol class="wx-steps">
+                <li class="wx-step">
+                    <span class="wx-step-index">1</span>
+                    <div>
+                        <h3>创建绑定配置</h3>
+                        <p>
+                            打开 <a href="/Admin/WeixinManager/WeixinClaw">个人微信 Bot</a>，进入目标账号的「绑定配置」。填写配置名称、Admin 用户 Id、绑定码、WorkflowId，以及 NeuBell / Workflow 权限。
+                        </p>
+                    </div>
+                </li>
+                <li class="wx-step">
+                    <span class="wx-step-index">2</span>
+                    <div>
+                        <h3>把绑定码发给对方</h3>
+                        <p>系统只保留不可逆哈希。创建或修改成功后，立刻把本次明文绑定码发给对应的微信用户。</p>
+                    </div>
+                </li>
+                <li class="wx-step">
+                    <span class="wx-step-index">3</span>
+                    <div>
+                        <h3>在微信里完成绑定</h3>
+                        <p>让对方发送「绑定微信账号」命令。绑定完成后，发送「获取 Workflow 列表」，即可看到本页同一份列表。</p>
+                    </div>
+                </li>
+            </ol>
+        </el-card>
 
-    <h3>当前可用 Workflow</h3>
-    <p class="claw-muted">
-        当前按 AdminUserId=@Model.PageData.WorkflowUserId 查询；手机端发送
-        <code>@(Model.PageData.CommandPrefix)workflow</code> 也可以获取此列表。
-    </p>
+        <el-card class="wx-panel" shadow="never">
+            <div slot="header" class="wx-panel-title">
+                <i class="fa fa-terminal"></i>
+                <span>手机命令</span>
+            </div>
+            <div class="wx-command" v-for="item in phoneCommands" :key="item.label">
+                <div>
+                    <span class="wx-command-label">{{ item.label }}</span>
+                    <code>{{ item.text }}</code>
+                </div>
+                <el-button type="text" size="mini" icon="el-icon-document-copy" @@click="copyCommand(item.text)">复制</el-button>
+            </div>
+            <p class="wx-command-note">
+                当前命令前缀为 <code>@Model.PageData.CommandPrefix</code>。执行命令里的「输入内容」替换成要交给 Workflow 的文本。
+            </p>
+        </el-card>
+    </section>
 
-    @if (Model.PageData.Workflows.Count == 0)
-    {
-        <el-empty description="当前没有可用 Workflow"></el-empty>
-    }
-    else
-    {
-        <el-table :data="workflows" border style="width:100%">
-            <el-table-column prop="id" label="WorkflowID" width="130"></el-table-column>
-            <el-table-column prop="name" label="名称" min-width="180"></el-table-column>
-            <el-table-column prop="description" label="描述" min-width="300"></el-table-column>
-            <el-table-column label="手机命令" min-width="260">
-                <template slot-scope="scope">
-                    <code>@(Model.PageData.CommandPrefix)workflow {{scope.row.id}} 输入内容</code>
-                </template>
-            </el-table-column>
-        </el-table>
-    }
+    <el-card class="wx-panel" shadow="never">
+        <div slot="header" class="wx-table-head">
+            <div>
+                <div class="wx-panel-title">
+                    <i class="fa fa-list"></i>
+                    <span>可用 Workflow</span>
+                </div>
+                <p>按当前管理员 Id @Model.PageData.WorkflowUserId 查询。手机发送「获取 Workflow 列表」会得到同一份结果。</p>
+            </div>
+            <el-tag size="small">{{ filteredWorkflows.length }} / @Model.PageData.Workflows.Count 条</el-tag>
+        </div>
+
+        @if (!Model.PageData.EnableWorkflow)
+        {
+            <el-alert title="Workflow 能力当前未开启。列表仍可查看，手机端执行命令不会生效。" type="warning" :closable="false" show-icon style="margin-bottom: 12px;"></el-alert>
+        }
+
+        @if (Model.PageData.Workflows.Count == 0)
+        {
+            <div class="wx-empty">当前管理员没有可用 Workflow。</div>
+        }
+        else
+        {
+            <div class="wx-toolbar">
+                <el-input v-model="workflowKeyword" clearable prefix-icon="el-icon-search" placeholder="搜索编号或名称"></el-input>
+            </div>
+            <el-table :data="filteredWorkflows" border stripe size="small" style="width:100%" empty-text="没有匹配的 Workflow">
+                <el-table-column label="Workflow" min-width="280">
+                    <template slot-scope="scope">
+                        <div class="wx-wf-name">
+                            <el-tag size="mini" type="info">#{{ scope.row.id }}</el-tag>
+                            <strong>{{ scope.row.name || '未命名' }}</strong>
+                        </div>
+                        <div class="wx-wf-desc" v-if="scope.row.description">{{ scope.row.description }}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="手机命令" min-width="320">
+                    <template slot-scope="scope">
+                        <div class="wx-cmd-cell">
+                            <code>{{ workflowCommand(scope.row) }}</code>
+                            <el-button type="text" size="mini" icon="el-icon-document-copy" @@click="copyCommand(workflowCommand(scope.row))">复制</el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+        }
+    </el-card>
 </div>
 
 @section scripts {
@@ -86,10 +517,77 @@
             el: '#app',
             data() {
                 return {
+                    workflowKeyword: '',
+                    commandPrefix: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.PageData.CommandPrefix ?? "/")),
                     workflows: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
                         Model.PageData.Workflows,
                         new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web)))
                 };
+            },
+            computed: {
+                phoneCommands() {
+                    return [
+                        { label: '绑定微信账号', text: this.commandPrefix + 'bind \u003c绑定码\u003e' },
+                        { label: '获取 Workflow 列表', text: this.commandPrefix + 'workflow' },
+                        { label: '执行某个 Workflow', text: this.commandPrefix + 'workflow \u003cWorkflowID\u003e 输入内容' }
+                    ];
+                },
+                filteredWorkflows() {
+                    const keyword = (this.workflowKeyword || '').trim().toLowerCase();
+                    if (!keyword) {
+                        return this.workflows;
+                    }
+                    return this.workflows.filter(item =>
+                        String(item.id).includes(keyword)
+                        || String(item.name || '').toLowerCase().includes(keyword)
+                        || String(item.description || '').toLowerCase().includes(keyword));
+                }
+            },
+            mounted() {
+                console.info('[WeixinClaw] integration page ready', {
+                    workflowCount: this.workflows.length,
+                    commandPrefix: this.commandPrefix
+                });
+            },
+            methods: {
+                openBot() {
+                    window.location.href = '/Admin/WeixinManager/WeixinClaw';
+                },
+                workflowCommand(row) {
+                    return this.commandPrefix + 'workflow ' + row.id + ' 输入内容';
+                },
+                copyCommand(text) {
+                    const done = () => {
+                        console.info('[WeixinClaw] command copied', text);
+                        this.$message.success('已复制命令');
+                    };
+                    const fail = () => this.$message.warning('复制失败，请手动选择命令');
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).then(done).catch(() => {
+                            this.copyByTextarea(text) ? done() : fail();
+                        });
+                        return;
+                    }
+                    this.copyByTextarea(text) ? done() : fail();
+                },
+                copyByTextarea(text) {
+                    const input = document.createElement('textarea');
+                    input.value = text;
+                    input.setAttribute('readonly', 'readonly');
+                    input.style.position = 'fixed';
+                    input.style.left = '-9999px';
+                    document.body.appendChild(input);
+                    input.select();
+                    let copied = false;
+                    try {
+                        copied = document.execCommand('copy');
+                    } catch (error) {
+                        console.warn('[WeixinClaw] copy fallback failed', error);
+                        copied = false;
+                    }
+                    document.body.removeChild(input);
+                    return copied;
+                }
             }
         });
     </script>

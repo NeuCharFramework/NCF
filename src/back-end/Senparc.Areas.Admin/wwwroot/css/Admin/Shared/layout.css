@@ -64,6 +64,9 @@ li {
     gap: 16px;
     min-width: 0;
     padding: 0 12px;
+    overflow: visible;
+    position: relative;
+    z-index: 8;
     color: #5A738E;
     background: #fff;
     border-top: 1px solid #e4e7ed;
@@ -148,8 +151,53 @@ li {
     color: #c0c4cc;
 }
 
+.admin-footer-ai-dialog .el-dialog__header {
+    position: relative;
+    padding-right: 64px;
+}
+
+.admin-footer-ai-dialog .el-dialog__headerbtn {
+    top: 14px;
+    right: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+    color: #606266;
+    background: #f4f6fb;
+    border-radius: 50%;
+    transition: color .18s ease, background-color .18s ease, transform .18s ease;
+}
+
+.admin-footer-ai-dialog .el-dialog__headerbtn:hover,
+.admin-footer-ai-dialog .el-dialog__headerbtn:focus {
+    color: #fff;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    transform: rotate(90deg);
+}
+
 .admin-footer-ai-dialog .el-dialog__body {
     padding: 0 14px;
+}
+
+.admin-footer-ai-dialog .el-dialog__footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.admin-footer-ai-close {
+    color: #606266;
+    background: #f4f6fb;
+    border-color: transparent;
+}
+
+.admin-footer-ai-close:hover,
+.admin-footer-ai-close:focus {
+    color: #667eea;
+    background: #eef1ff;
+    border-color: transparent;
 }
 
 .admin-footer-ai-frame {
@@ -447,13 +495,460 @@ li {
 }
 
 .ncf-admin-embedded .el-aside-index,
-.ncf-admin-embedded .el-header,
-.ncf-admin-embedded .footer {
+.ncf-admin-embedded .admin-workspace > .el-header,
+.ncf-admin-embedded .admin-workspace > .footer,
+.ncf-admin-embedded .admin-voice-nav {
     display: none !important;
+}
+
+.admin-voice-nav {
+    position: relative;
+    z-index: 9;
+    display: inline-flex;
+    align-items: center;
+    height: 26px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+
+.admin-voice-nav-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    color: #5a738e;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.admin-voice-nav-button:hover,
+.admin-voice-nav-button:focus {
+    color: #409eff;
+    border-color: #c6e2ff;
+    outline: none;
+}
+
+.admin-voice-nav-button.is-listening {
+    color: #fff;
+    background: #f56c6c;
+    border-color: #f56c6c;
+    animation: ncf-voice-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes ncf-voice-pulse {
+    50% {
+        box-shadow: 0 0 0 4px rgba(245, 108, 108, 0.28);
+    }
+}
+
+.admin-voice-nav-panel {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 6px);
+    z-index: 9;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: min(360px, calc(100vw - 48px));
+    max-height: 240px;
+    overflow: auto;
+    padding: 8px 30px 8px 8px;
+    background: #fff;
+    border: 1px solid #e4e7ed;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 21, 41, 0.12);
+}
+
+.admin-voice-nav-close {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    color: #909399;
+    background: transparent;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.admin-voice-nav-close:hover,
+.admin-voice-nav-close:focus {
+    color: #409eff;
+    background: #f2f6fc;
+    outline: none;
+}
+
+.admin-voice-nav-input {
+    width: 100%;
+    height: 28px;
+    padding: 0 8px;
+    color: #303133;
+    font-size: 12px;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.admin-voice-nav-input:focus {
+    border-color: #409eff;
+    outline: none;
+}
+
+.admin-voice-nav-text {
+    margin: 0;
+    color: #606266;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.admin-voice-nav-choice {
+    padding: 4px 6px;
+    color: #303133;
+    font-size: 12px;
+    text-align: left;
+    background: #f5f7fa;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.admin-voice-nav-choice:hover,
+.admin-voice-nav-choice:focus {
+    color: #409eff;
+    background: #ecf5ff;
+    outline: none;
 }
 
 .ncf-admin-embedded .admin-content {
     padding: 0;
+    background: #fff;
+}
+
+.ncf-admin-tabbed {
+    --ncf-tab-chrome: 96px; /* 隐藏的顶栏 60px + 底栏 36px */
+}
+
+.ncf-admin-tabbed.ncf-admin-embedded .admin-workspace,
+.ncf-admin-tabbed.ncf-admin-embedded .admin-content,
+.ncf-admin-tabbed.ncf-admin-embedded .admin-content > .ifram-wrapper {
+    height: 100%;
+    min-height: 0;
+}
+
+.ncf-admin-tabbed.ncf-admin-embedded .admin-content {
+    display: flex;
+    flex-direction: column;
+    padding: 18px 20px 20px;
+    overflow: hidden;
+    background: #f5f7fa;
+    box-sizing: border-box;
+}
+
+.ncf-admin-tabbed.ncf-admin-embedded .admin-content > .ifram-wrapper {
+    flex: 1 1 auto;
+    overflow: auto;
+}
+
+.ncf-admin-tabbed.ncf-admin-embedded .admin-content > .ifram-wrapper > :first-of-type:not(.el-dialog__wrapper):not(.el-drawer__wrapper) {
+    box-sizing: border-box;
+    min-height: 100%;
+}
+
+.ncf-admin-tabbed.ncf-admin-embedded .admin-content > .ifram-wrapper > .el-tabs {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
+.ncf-admin-tabbed.ncf-admin-embedded .admin-content > .ifram-wrapper > .el-tabs > .el-tabs__content {
+    flex: 1 1 0;
+    height: 0;
+    min-height: 0;
+    overflow: auto;
+}
+
+.ncf-admin-tabbed.ncf-admin-embedded .admin-content > .ifram-wrapper > .el-tabs > .el-tabs__content > .el-tab-pane {
+    height: 100%;
+}
+
+.ncf-admin-tabbed.ncf-admin-embedded .tabPane-container {
+    align-items: stretch;
+    height: 100%;
+    min-height: 0;
+}
+
+.ncf-admin-tabbed.ncf-admin-embedded .tabPane-container > .sidebar-container,
+.ncf-admin-tabbed.ncf-admin-embedded .tabPane-container > .main-container {
+    height: 100%;
+    min-height: 0;
+}
+
+.ncf-admin-tabbed.ncf-admin-embedded .sidebar-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.ncf-admin-tabbed.ncf-admin-embedded .sidebar-head-container {
+    flex: 0 0 auto;
+}
+
+.ncf-admin-tabbed.ncf-admin-embedded .sidebar-main-container {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+}
+
+/* 标签里的 AdminChat 必须占满框架剩余高度，消息在对话区内部滚动。 */
+.ncf-admin-tabbed.ncf-admin-embedded .admin-content:has(.admin-chat-container) {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+    background: #f6f7f9;
+}
+
+.ncf-admin-tabbed.ncf-admin-embedded .admin-content:has(.admin-chat-container) > .ifram-wrapper {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.ncf-admin-tabbed.ncf-admin-embedded .admin-chat-container {
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+.ncf-admin-tabbed.ncf-admin-embedded .admin-chat-container .chat-main-container,
+.ncf-admin-tabbed.ncf-admin-embedded .admin-chat-container .chat-content,
+.ncf-admin-tabbed.ncf-admin-embedded .admin-chat-container .chat-sidebar,
+.ncf-admin-tabbed.ncf-admin-embedded .admin-chat-container .messages-stage,
+.ncf-admin-tabbed.ncf-admin-embedded .admin-chat-container .messages-container,
+.ncf-admin-tabbed.ncf-admin-embedded .admin-chat-container .session-list {
+    min-height: 0;
+}
+
+.admin-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
+}
+
+.admin-header .header-menu,
+.admin-header .header-breadcrumb,
+.admin-header .header-account,
+.admin-header .header-language,
+.admin-header .ncf-doc-help-header {
+    float: none;
+}
+
+.admin-header .header-menu {
+    flex: 0 0 auto;
+    height: auto;
+    margin-right: 0;
+}
+
+.admin-header .header-breadcrumb {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: auto;
+}
+
+.admin-header .el-breadcrumb {
+    line-height: 1.4;
+}
+
+.admin-header .header-tools {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.admin-header .header-account,
+.admin-header .header-language {
+    height: auto;
+    margin-right: 0;
+    line-height: 1;
+}
+
+.admin-header .header-account .el-dropdown-link {
+    height: auto;
+}
+
+.admin-header .ncf-doc-help-header {
+    margin-top: 0;
+}
+
+.admin-page-tabs {
+    display: flex;
+    flex: 1 1 auto;
+    align-self: stretch;
+    align-items: flex-end;
+    gap: 4px;
+    min-width: 0;
+    height: auto;
+    overflow: hidden;
+}
+
+.admin-page-tabs-scroller {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: flex-end;
+    gap: 6px;
+    height: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.admin-page-tabs-scroller::-webkit-scrollbar {
+    display: none;
+    height: 0;
+}
+
+.admin-page-tabs-arrow {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    margin-bottom: 6px;
+    padding: 0;
+    color: #606266;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.admin-page-tabs-arrow:hover,
+.admin-page-tabs-arrow:focus {
+    color: #667eea;
+    border-color: #c5cef8;
+    outline: none;
+}
+
+.admin-page-tabs-arrow:disabled {
+    color: #c0c4cc;
+    background: #f5f7fa;
+    cursor: default;
+}
+
+.admin-page-tab {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    max-width: 180px;
+    height: 34px;
+    color: #606266;
+    background: #f5f7fa;
+    border: 1px solid #e4e7ed;
+    border-bottom-color: #e4e7ed;
+    border-radius: 8px 8px 0 0;
+    box-sizing: border-box;
+}
+
+.admin-page-tab.is-active {
+    position: relative;
+    z-index: 1;
+    color: #303133;
+    background: #fff;
+    border-bottom-color: #fff;
+    box-shadow: inset 0 2px 0 #667eea;
+}
+
+.admin-page-tab-main,
+.admin-page-tab-close {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+
+.admin-page-tab-main {
+    min-width: 0;
+    height: 32px;
+    padding: 0 4px 0 12px;
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 32px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 首页没有关闭按钮，左右留白要一样，文字才在标签中间。 */
+.admin-page-tab-main:only-child {
+    padding-right: 12px;
+}
+
+.admin-page-tab-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-right: 4px;
+    border-radius: 50%;
+}
+
+.admin-page-tab-close:hover,
+.admin-page-tab-close:focus,
+.admin-page-tab-main:hover,
+.admin-page-tab-main:focus {
+    color: #667eea;
+    outline: none;
+}
+
+.admin-page-tab-close:hover,
+.admin-page-tab-close:focus {
+    background: rgba(102, 126, 234, .12);
+}
+
+.admin-content.is-tab-frame {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #f5f7fa;
+}
+
+.admin-tab-frames {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.admin-tab-frame {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
     background: #fff;
 }
 
@@ -519,6 +1014,12 @@ li {
     position: relative;
     background: #fff;
     box-shadow: 0 1px 4px rgba(0,21,41,0.08);
+}
+
+.admin-workspace > .el-header.admin-header {
+    overflow: visible;
+    border-bottom-color: transparent;
+    box-shadow: inset 0 -1px 0 #e4e7ed, 0 4px 16px rgba(31, 45, 61, 0.05);
 }
 
 .header-breadcrumb {
@@ -667,6 +1168,23 @@ li {
 .admin-nav-search .el-input__icon {
     color: rgba(191, 203, 217, 0.65);
     line-height: 30px;
+}
+
+@keyframes ncf-nav-search-autofill-start {
+    from { }
+    to { }
+}
+
+/* 浏览器仍可能给输入框套上自动填充底色；这里抹掉，并触发动画以便脚本清掉被写入的值。 */
+.admin-nav-search .el-input__inner:-webkit-autofill,
+.admin-nav-search .el-input__inner:-webkit-autofill:hover,
+.admin-nav-search .el-input__inner:-webkit-autofill:focus {
+    -webkit-text-fill-color: #bfcbd9;
+    caret-color: #bfcbd9;
+    box-shadow: 0 0 0 1000px #3b4b61 inset;
+    transition: background-color 99999s ease-out 0s;
+    animation-name: ncf-nav-search-autofill-start;
+    animation-duration: 1ms;
 }
 
 .admin-nav-search-empty {

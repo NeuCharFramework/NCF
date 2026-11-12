@@ -41,6 +41,17 @@
   </resheader>
 
   <!-- ===== Language Selector ===== -->
+
+
+  <!-- ===== Common Buttons ===== -->
+
+
+  <!-- ===== Common Messages ===== -->
+
+
+  <!-- ===== Footer ===== -->
+
+  <!-- ===== Download Page ===== -->
   <data name="Language.SelectLanguage" xml:space="preserve">
     <value>选择语言</value>
   </data>
@@ -62,8 +73,6 @@
   <data name="Language.ru" xml:space="preserve">
     <value>Русский</value>
   </data>
-
-  <!-- ===== Common Buttons ===== -->
   <data name="Button.Confirm" xml:space="preserve">
     <value>确认</value>
   </data>
@@ -97,8 +106,6 @@
   <data name="Button.Add" xml:space="preserve">
     <value>添加</value>
   </data>
-
-  <!-- ===== Common Messages ===== -->
   <data name="Message.Success" xml:space="preserve">
     <value>操作成功</value>
   </data>
@@ -117,15 +124,12 @@
   <data name="Message.ConfirmDelete" xml:space="preserve">
     <value>确认要删除吗？</value>
   </data>
-
-  <!-- ===== Footer ===== -->
   <data name="Footer.PoweredBy" xml:space="preserve">
     <value>技术支持：</value>
   </data>
   <data name="Footer.Copyright" xml:space="preserve">
     <value>苏州盛派网络科技有限公司 版权所有</value>
   </data>
-
   <data name="Site.MetaDescription" xml:space="preserve"><value>用于构造基础项目的 .NET 框架，使用 DDD 和高度模块化设计</value></data>
   <data name="Nav.Brand" xml:space="preserve"><value>NeuCharFramework 示例</value></data>
   <data name="Nav.ToggleNavigation" xml:space="preserve"><value>切换导航</value></data>
@@ -189,7 +193,12 @@
   <data name="Cookie.Summary" xml:space="preserve"><value>我们使用 Cookie 改善网站体验。详情请查看隐私政策。</value></data>
   <data name="Cookie.LearnMore" xml:space="preserve"><value>了解更多</value></data>
   <data name="Cookie.Accept" xml:space="preserve"><value>接受</value></data>
-  <!-- ===== Download Page ===== -->
+  <data name="Download.Source.Mode" xml:space="preserve"><value>下载源</value></data>
+  <data name="Download.Source.Auto" xml:space="preserve"><value>自动（本地优先）</value></data>
+  <data name="Download.Source.Local" xml:space="preserve"><value>本机镜像</value></data>
+  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Download.Status.Md5" xml:space="preserve"><value>MD5 指纹</value></data>
+  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>暂无指纹</value></data>
   <data name="Nav.Download" xml:space="preserve"><value>下载</value></data>
   <data name="Download.PageTitle" xml:space="preserve"><value>下载 NCF</value></data>
   <data name="Download.Hero.Eyebrow" xml:space="preserve"><value>AI NATIVE · AI READY</value></data>
@@ -208,12 +217,6 @@
   <data name="Download.Status.Unavailable" xml:space="preserve"><value>暂时无法获取</value></data>
   <data name="Download.Status.Detected" xml:space="preserve"><value>已识别</value></data>
   <data name="Download.Status.Estimated" xml:space="preserve"><value>推测</value></data>
-  <data name="Download.Source.Mode" xml:space="preserve"><value>下载源</value></data>
-  <data name="Download.Source.Auto" xml:space="preserve"><value>自动（本地优先）</value></data>
-  <data name="Download.Source.Local" xml:space="preserve"><value>本机镜像</value></data>
-  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Download.Status.Md5" xml:space="preserve"><value>MD5 指纹</value></data>
-  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>暂无指纹</value></data>
   <data name="Download.Path.Eyebrow" xml:space="preserve"><value>一种框架 · 两种起点</value></data>
   <data name="Download.Path.Title" xml:space="preserve"><value>从开箱即用，到自由构建</value></data>
   <data name="Download.Path.Description" xml:space="preserve"><value>无论你想立刻运行一套系统，还是打造长期演进的产品，NCF 都给你清晰、可靠的起点。</value></data>
@@ -241,4 +244,5 @@
   <data name="Download.Cta.Title" xml:space="preserve"><value>让 NCF 成为你下一个系统的可靠底座</value></data>
   <data name="Download.Cta.Description" xml:space="preserve"><value>先运行，再深入；从一个可用的系统开始，逐步构建属于你的 AI 原生应用。</value></data>
   <data name="Download.Cta.Action" xml:space="preserve"><value>阅读快速开始</value></data>
+
 </root>

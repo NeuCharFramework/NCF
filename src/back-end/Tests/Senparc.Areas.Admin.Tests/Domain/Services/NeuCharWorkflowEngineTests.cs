@@ -6,6 +6,8 @@
 ----------------------------------------------------------------*/
 
 using Senparc.Ncf.Core.AppServices;
+using Senparc.Ncf.XncfBase;
+using Senparc.Ncf.XncfBase.Functions;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Xncf.NeuCharWorkflow.Abstractions.Workflow;
 using Senparc.Xncf.NeuCharWorkflow.Domain.Services;
@@ -1163,6 +1165,124 @@ public class NeuCharWorkflowEngineTests
         Assert.AreEqual(1, parameter.ParameterType);
         Assert.AreEqual("Python Exec", parameter.Options.Single().Text);
     }
+
+    [TestMethod]
+    public void BuildDefaults_RequiredDropdown_SelectsOnlyAnExplicitOrSingleOption()
+    {
+        var several = WorkflowFunctionSchemaBuilder.BuildDefaults(new[]
+        {
+            Dropdown("DatasetId", true, ("a", false), ("b", false))
+        });
+        Assert.IsNull(several["DatasetId"]);
+
+        var single = WorkflowFunctionSchemaBuilder.BuildDefaults(new[]
+        {
+            Dropdown("ModelId", true, ("only-model", false))
+        });
+        Assert.AreEqual("only-model", single["ModelId"]);
+
+        var marked = WorkflowFunctionSchemaBuilder.BuildDefaults(new[]
+        {
+            Dropdown("Backend", true, ("cpu", true), ("cuda", false))
+        });
+        Assert.AreEqual("cpu", marked["Backend"]);
+    }
+
+    [TestMethod]
+    public void MergeMissingDefaults_FillsTrainingDefaultsWithoutReplacingBindings()
+    {
+        var merged = WorkflowFunctionSchemaBuilder.MergeMissingDefaults(
+            """
+            {
+              "DatasetId": { "$source": { "nodeId": "previous", "path": "$.id" } },
+              "Epochs": "",
+              "LearningRate": 0.001
+            }
+            """,
+            new FunctionParameterInfo[]
+            {
+                new()
+                {
+                    Name = "DatasetId",
+                    IsRequired = true,
+                    ParameterType = ParameterType.DropDownList,
+                    SelectionList = new SelectionList(SelectionType.DropDownList, new[]
+                    {
+                        new SelectionItem("training-set", "训练集", "", true)
+                    })
+                },
+                new()
+                {
+                    Name = "Epochs",
+                    SystemType = "Int32",
+                    Value = 1
+                },
+                new()
+                {
+                    Name = "LearningRate",
+                    SystemType = "Double",
+                    Value = 0.0002d
+                },
+                new()
+                {
+                    Name = "Backend",
+                    IsRequired = true,
+                    ParameterType = ParameterType.DropDownList,
+                    Value = "cpu",
+                    SelectionList = new SelectionList(SelectionType.DropDownList, new[]
+                    {
+                        new SelectionItem("cpu", "CPU", "", true)
+                    })
+                }
+            });
+
+        var json = JsonNode.Parse(merged)!.AsObject();
+        Assert.IsTrue(json["DatasetId"] is JsonObject);
+        Assert.AreEqual(1, json["Epochs"]!.GetValue<int>());
+        Assert.AreEqual(0.001d, json["LearningRate"]!.GetValue<double>());
+        Assert.AreEqual("cpu", json["Backend"]!.GetValue<string>());
+    }
+
+    [TestMethod]
+    public void MergeMissingDefaults_PreservesExplicitEmptyCheckboxListAndFillsMissingOne()
+    {
+        var merged = WorkflowFunctionSchemaBuilder.MergeMissingDefaults(
+            """{ "Individuation": [] }""",
+            new FunctionParameterInfo[]
+            {
+                new()
+                {
+                    Name = "Individuation",
+                    ParameterType = ParameterType.CheckBoxList,
+                    SelectionList = new SelectionList(SelectionType.CheckBoxList, new[]
+                    {
+                        new SelectionItem("1", "启用", "", true)
+                    })
+                },
+                new()
+                {
+                    Name = "OtherOptions",
+                    ParameterType = ParameterType.CheckBoxList,
+                    SelectionList = new SelectionList(SelectionType.CheckBoxList, new[]
+                    {
+                        new SelectionItem("2", "默认选项", "", true)
+                    })
+                }
+            });
+
+        var json = JsonNode.Parse(merged)!.AsObject();
+        Assert.AreEqual(0, json["Individuation"]!.AsArray().Count);
+        Assert.AreEqual("2", json["OtherOptions"]![0]!.GetValue<string>());
+    }
+
+    private static WorkflowFunctionParameterSchema Dropdown(string name, bool required, params (string value, bool selected)[] options) =>
+        new()
+        {
+            Name = name,
+            Required = required,
+            ParameterType = (int)ParameterType.DropDownList,
+            Options = options.Select(option => new WorkflowFunctionParameterOption(option.value, option.value, "", option.selected)).ToList()
+        };
 
     [TestMethod]
     public void ValidateRequiredParameters_UnnamedMetadata_ShouldRejectExecution()

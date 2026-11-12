@@ -9,6 +9,7 @@ const adminPath = path.resolve(__dirname, '../../../Senparc.Areas.Admin');
 const page = fs.readFileSync(path.join(adminPath, 'Areas/Admin/Pages/AdminChat/Chat.cshtml'), 'utf8');
 const selector = fs.readFileSync(path.join(adminPath, 'Areas/Admin/Pages/Shared/_ChatModuleSelectorDialog.cshtml'), 'utf8');
 const scriptPath = path.join(adminPath, 'wwwroot/js/Admin/Pages/AdminChat/Chat.js');
+const chatScript = fs.readFileSync(scriptPath, 'utf8');
 const styles = fs.readFileSync(path.join(adminPath, 'wwwroot/css/Admin/Pages/AdminChat/Chat.css'), 'utf8');
 const template = page.slice(page.indexOf('<div class="admin-chat-container">'), page.indexOf('@section scripts'))
     .replace(/@await Html\.PartialAsync\("[^"]+_ChatModuleSelectorDialog\.cshtml"\)/g, selector)
@@ -55,6 +56,12 @@ assert.ok(headerActions.lastIndexOf('toggleWorkspacePreview') > headerActions.la
     'Assets must be the rightmost Chat header action.');
 assert.ok(template.includes('v-html="formatMessageContent(liveThinkingText)"'),
     'Live reasoning must render Markdown consistently with the final answer.');
+assert.ok(template.includes('sandbox="allow-scripts"'),
+    'Workspace HTML preview must allow scripts only inside the iframe sandbox.');
+assert.ok(!template.includes('sandbox="allow-same-origin"'),
+    'Workspace HTML preview must not grant same-origin access to sandboxed scripts.');
+assert.ok(chatScript.includes('document.head.insertBefore(csp, document.head.firstChild);'),
+    'Workspace preview CSP must be parsed before any user-provided head script.');
 for (const selector of ['live-answer-preview', 'live-thinking-content', 'harness-step-body']) {
     const rule = styles.match(new RegExp(`\\.${selector}\\s*\\{([^}]+)\\}`));
     assert.match(rule[1], /white-space:\s*normal/,
@@ -62,6 +69,23 @@ for (const selector of ['live-answer-preview', 'live-thinking-content', 'harness
 }
 
 let options;
+function workspacePreviewFixture(relativePath) {
+    const path = String(relativePath || '');
+    if (path.endsWith('.md')) {
+        return { path, isText: true, contentType: 'text/markdown', content: '# Workspace guide', etag: 'etag-md' };
+    }
+    if (path.endsWith('.py')) {
+        return {
+            path, isText: true, contentType: 'text/x-python', etag: 'etag-py',
+            content: 'def greet():\n    return "hi"  # ok\n'
+        };
+    }
+    if (path.endsWith('.png')) {
+        return { path, isText: false, contentType: 'image/png', content: null, etag: 'etag-png' };
+    }
+    return { path, isText: true, contentType: 'text/plain', content: 'Workspace text', etag: 'etag-txt' };
+}
+
 const requests = [];
 const listeners = new Map();
 const classes = new Set();
@@ -87,18 +111,14 @@ const sandbox = {
             requests.push({ url, params: config.params });
             return { data: { success: true, data: url.includes('GetWorkspaceEntriesAsync')
                 ? { entries: [{ relativePath: 'output/readme.txt', isDirectory: false, length: 12 }] }
-                : {
-                    path: config.params.relativePath, isText: true,
-                    contentType: config.params.relativePath.endsWith('.md') ? 'text/markdown' : 'text/plain',
-                    content: config.params.relativePath.endsWith('.md') ? '# Workspace guide' : 'Workspace text'
-                } } };
+                : workspacePreviewFixture(config.params.relativePath) } };
         }
     },
     console
 };
 sandbox.marked = require(path.join(adminPath, 'wwwroot/js/Admin/lib/marked.min.js'));
 sandbox.DOMPurify = { sanitize: html => html };
-vm.runInNewContext(fs.readFileSync(scriptPath, 'utf8'), sandbox, { filename: scriptPath });
+vm.runInNewContext(chatScript, sandbox, { filename: scriptPath });
 const app = options.data();
 Object.entries(options.methods).forEach(([name, method]) => { app[name] = method.bind(app); });
 Object.entries(options.computed).forEach(([name, getter]) => {
@@ -174,6 +194,69 @@ async function run() {
     assert.strictEqual(renderedMarkdown.isMarkdown, true, 'Markdown must use the isolated HTML preview pipeline.');
     assert.strictEqual(app.workspacePreviewData.content, '# Workspace guide', 'Source must remain unchanged.');
     assert.strictEqual(app.workspacePreviewSrcdoc, '<!doctype html><h1>Workspace guide</h1>');
+    const highlighted = app.highlightWorkspaceCode('def greet():\n    return "hi"  # ok\nprint("<script>")\n', 'python');
+    assert.ok(highlighted.includes('class="tok-keyword">def'), 'Python preview must highlight keywords.');
+    assert.ok(highlighted.includes('class="tok-string">"hi"'), 'Python preview must highlight strings.');
+    assert.ok(highlighted.includes('class="tok-comment"># ok'), 'Python preview must highlight comments.');
+    assert.ok(!highlighted.includes('<script>'), 'Code preview must escape markup.');
+    assert.ok(highlighted.includes('&lt;script&gt;'));
+    assert.ok(highlighted.includes('data-ln="1"'), 'Line numbers stay in an attribute, not the copied text.');
+    assert.ok(highlighted.includes('class="code-line"'));
+    assert.ok(!highlighted.includes('>1<'), 'Line number text must not be part of the code.');
+    assert.match(styles, /content:\s*attr\(data-ln\)/);
+    assert.match(styles, /user-select:\s*none/);
+    const block = sandbox.highlightWorkspaceLine(' still', 'javascript', true, true);
+    assert.strictEqual(block.inBlock, true);
+    assert.ok(block.html.includes('tok-comment'));
+    await app.handleWorkspaceEntryClick({ relativePath: 'tools/main.py', isDirectory: false });
+    assert.strictEqual(app.workspacePreviewIsCode, true);
+    assert.strictEqual(app.workspacePreviewCanShowSource, true);
+    assert.strictEqual(app.workspacePreviewCanEdit, true);
+    assert.strictEqual(app.workspacePreviewSource, false, 'Opening a script must default to highlighted preview.');
+    assert.strictEqual(app.workspacePreviewSrcdoc, '', 'Code preview stays in the page so line numbers are not a second document.');
+    assert.ok(app.workspacePreviewCodeHtml.includes('tok-keyword'));
+    assert.ok(app.workspacePreviewCodeHtml.includes('data-ln="1"'));
+    const jsonRoot = sandbox.buildWorkspaceJsonRoot('{"name":"ncf","ok":true,"items":[1,null]}', false);
+    assert.strictEqual(jsonRoot.open, true);
+    const jsonRows = sandbox.flattenWorkspaceJson(jsonRoot);
+    assert.ok(jsonRows.some(row => row.node && row.node.key === 'name' && row.node.type === 'string'));
+    const jsonlRoot = sandbox.buildWorkspaceJsonRoot('{"a":1}\n{bad\n{"b":2}\n', true);
+    assert.strictEqual(jsonlRoot.type, 'array');
+    assert.strictEqual(jsonlRoot.size, 3);
+    assert.strictEqual(sandbox.workspaceJsonChild(jsonlRoot, 1).type, 'invalid');
+    assert.ok(template.includes('toggleWorkspaceJsonTree'));
+    assert.ok(template.includes('chat-workspace-json-tree'));
+    assert.ok(template.includes('chat-workspace-window-bar'));
+    app.beginWorkspacePreviewEdit();
+    assert.strictEqual(app.workspacePreviewEditing, true);
+    app.workspacePreviewDraft += 'print(1)\n';
+    assert.strictEqual(app.workspacePreviewDirty, true);
+    let saved;
+    sandbox.service.post = async (url, body) => {
+        saved = { url, body };
+        return { data: { success: true, data: { ...workspacePreviewFixture('tools/main.py'), content: body.content, etag: 'etag-py-2', size: 24 } } };
+    };
+    await app.saveWorkspacePreview();
+    assert.ok(saved.url.includes('SaveWorkspaceFileAsync'));
+    assert.strictEqual(saved.body.relativePath, 'tools/main.py');
+    assert.strictEqual(saved.body.expectedEtag, 'etag-py');
+    assert.ok(saved.body.content.includes('print(1)'));
+    assert.strictEqual(app.workspacePreviewEditing, false);
+    assert.strictEqual(app.workspacePreviewSaving, false);
+    await app.handleWorkspaceEntryClick({ relativePath: 'image.png', isDirectory: false });
+    assert.strictEqual(app.workspacePreviewCanEdit, false);
+    assert.strictEqual(app.workspacePreviewIsCode, false);
+    app.workspacePreviewData = {
+        path: 'events.jsonl', isText: true, contentType: 'application/jsonl', content: '{"a":1}\n{bad\n{"b":2}\n', etag: 'etag-jsonl'
+    };
+    assert.strictEqual(app.workspaceCodeLanguage, 'json');
+    assert.strictEqual(app.workspacePreviewIsJson, true);
+    assert.strictEqual(app.workspacePreviewIsCode, true);
+    app.workspacePreviewData = { path: 'notes.txt', isText: true, contentType: 'text/plain', content: 'a\nb', windowed: true };
+    assert.strictEqual(app.workspacePreviewCanEdit, false, 'A partial text window must not be saved over the whole file.');
+    assert.ok(template.includes('beginWorkspacePreviewEdit'));
+    assert.ok(template.includes('chat-workspace-text-editor'));
+    assert.ok(styles.includes('.chat-workspace-text-editor'));
     app.workspacePreviewSource = true;
     app.resetWorkspacePreview();
     assert.strictEqual(app.workspaceEntries.length, 0);
@@ -248,7 +331,8 @@ async function run() {
     ];
     app.validatePendingVision(app.pendingAttachments[2]);
     assert.strictEqual(app.pendingAttachments[2].useVision, false, 'Vision must be an explicit opt-in with a two-image limit.');
-    app.removePendingAttachment(app.pendingAttachments[0]);
+    sandbox.service.post = async () => ({ data: { deleted: true } });
+    await app.removePendingAttachment(app.pendingAttachments[0]);
     assert.strictEqual(app.pendingAttachments.length, 2);
     assert.deepStrictEqual(removedUrls, ['blob:first']);
     app.clearPendingAttachments();
@@ -258,6 +342,45 @@ async function run() {
         'Both composer surfaces must support file paste.');
     assert.ok(template.includes('@@drop="handleWorkspaceDrop"'),
         'Composer must support dropping files without affecting unrelated drag operations.');
+    const fetches = [];
+    let attachReads = 0;
+    sandbox.TextDecoder = TextDecoder;
+    sandbox.Uint8Array = Uint8Array;
+    app.loadMemoryMode = async () => {};
+    sandbox.fetch = async (url) => {
+        fetches.push(String(url));
+        if (String(url).includes('/status')) {
+            return { ok: true, status: 200, json: async () => ({ running: true, justFinished: false, text: 'partial', thinking: '', status: '正在生成回答…' }) };
+        }
+        const encoder = new TextEncoder();
+        return {
+            ok: true,
+            status: 200,
+            body: { getReader: () => ({ async read() {
+                attachReads += 1;
+                if (attachReads > 1) return { done: true, value: undefined };
+                return { done: false, value: encoder.encode('event: resume\ndata: {"text":"partial"}\n\nevent: done\ndata: {}\n\n') };
+            } }) }
+        };
+    };
+    app.currentSessionId = 42;
+    app.isSending = false;
+    app.messageList = [{ id: 1, content: 'hi' }];
+    app.reloaded = false;
+    app.loadSessionDetail = async () => { app.reloaded = true; };
+    app.createRecentTask = () => { app.taskCreated = true; };
+    app.finishActiveTask = () => {};
+    app.resetLiveRun = () => { app.liveAssistantText = ''; app.liveThinkingText = ''; app.liveStatusText = ''; };
+    app.scrollLivePreviewToBottom = () => {};
+    app.updateActiveTask = () => {};
+    await app.resumeAdminChatRun();
+    assert.ok(fetches.some(url => url.includes('/status')), 'Refresh must ask whether the task is still running.');
+    assert.ok(fetches.some(url => url.includes('/attach')), 'A running task must be observed again instead of restarted.');
+    assert.ok(!fetches.some(url => url.includes('/send')), 'Reconnecting must not send the prompt again.');
+    assert.strictEqual(app.reloaded, true);
+    assert.strictEqual(app.isSending, false);
+    assert.strictEqual(app.liveAssistantText, 'partial');
+
     console.log('AdminChat Workspace preview tests passed.');
 }
 

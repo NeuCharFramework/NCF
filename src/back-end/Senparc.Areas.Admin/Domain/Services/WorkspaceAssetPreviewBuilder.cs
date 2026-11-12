@@ -33,9 +33,11 @@ public sealed class WorkspaceAssetPreviewBuilder
     public const int MaxFileBytes = 2 * 1024 * 1024;
     public const int MaxHtmlBytes = 8 * 1024 * 1024;
     public const string ContentSecurityPolicy =
-        "sandbox; default-src 'none'; script-src 'none'; img-src data:; " +
+        "sandbox allow-scripts; default-src 'none'; script-src data:; img-src data:; " +
         "style-src 'unsafe-inline' data:; font-src data:; media-src data:; " +
-        "base-uri 'none'; form-action 'none'; frame-ancestors 'none';";
+        "base-uri 'none'; form-action 'none'; connect-src 'none'; frame-src 'none'; " +
+        "child-src 'none'; object-src 'none'; worker-src 'none'; navigate-to 'none'; " +
+        "frame-ancestors 'none';";
 
     private static readonly Regex CssUrl = new(
         @"url\(\s*(['""]?)([^'""\)]+)\1\s*\)", RegexOptions.IgnoreCase,
@@ -50,7 +52,8 @@ public sealed class WorkspaceAssetPreviewBuilder
             [".jpeg"] = "image/jpeg", [".gif"] = "image/gif", [".webp"] = "image/webp",
             [".svg"] = "image/svg+xml", [".ico"] = "image/x-icon", [".avif"] = "image/avif",
             [".woff"] = "font/woff", [".woff2"] = "font/woff2", [".ttf"] = "font/ttf",
-            [".otf"] = "font/otf"
+            [".otf"] = "font/otf", [".js"] = "text/javascript", [".mjs"] = "text/javascript",
+            [".cjs"] = "text/javascript"
         };
 
     public async Task<WorkspaceHtmlPreview> BuildAsync(
@@ -127,8 +130,8 @@ public sealed class WorkspaceAssetPreviewBuilder
             return css;
         }
 
-        // Fail closed: a snapshot must not silently omit a referenced file or include a wider directory.
-        foreach (var element in document.QuerySelectorAll("script, iframe, object, embed, form, base, meta[http-equiv], animate, set, foreignObject"))
+        // Keep executable JavaScript inside the sandbox, but remove elements that can create a second document or submit data.
+        foreach (var element in document.QuerySelectorAll("iframe, object, embed, form, base, meta[http-equiv], animate, set, foreignObject"))
             element.Remove();
         foreach (var element in document.All.ToArray())
         {
@@ -139,6 +142,34 @@ public sealed class WorkspaceAssetPreviewBuilder
                     || attribute.Name is "srcset" or "srcdoc" or "action" or "formaction" or "ping"
                     || attribute.Name.Contains(':'))
                     element.RemoveAttribute(attribute.Name);
+            }
+            if (element.LocalName == "script")
+            {
+                if (!IsExecutableScriptType(element.GetAttribute("type")))
+                {
+                    element.Remove();
+                    continue;
+                }
+
+                if (element.HasAttribute("src"))
+                {
+                    var script = await AssetAsync(element.GetAttribute("src") ?? "", filePath);
+                    if (string.IsNullOrEmpty(script))
+                    {
+                        element.Remove();
+                        continue;
+                    }
+
+                    element.SetAttribute("src", script);
+                    element.TextContent = string.Empty;
+                }
+                else
+                {
+                    element.SetAttribute("src", ToDataUri("text/javascript", element.TextContent));
+                    element.TextContent = string.Empty;
+                }
+
+                continue;
             }
             if (element.LocalName == "a")
             {
@@ -168,15 +199,29 @@ public sealed class WorkspaceAssetPreviewBuilder
         var meta = document.CreateElement("meta");
         meta.SetAttribute("http-equiv", "Content-Security-Policy");
         meta.SetAttribute("content", ContentSecurityPolicy
-            .Replace("sandbox; ", "", StringComparison.Ordinal)
+            .Replace("sandbox allow-scripts; ", "", StringComparison.Ordinal)
             .Replace("frame-ancestors 'none';", "", StringComparison.Ordinal));
         document.Head.InsertBefore(meta, document.Head.FirstChild);
         var html = "<!doctype html>" + document.DocumentElement.OuterHtml;
         if (Encoding.UTF8.GetByteCount(html) > MaxHtmlBytes)
             throw new InvalidOperationException("生成的 HTML 快照超过 8 MB。");
-        warnings.Add("只读预览：脚本、表单、外部网络资源及页面跳转已禁用。");
+        warnings.Add("隔离预览：脚本仅在无同源权限的沙箱中运行，表单、网络请求、外部资源及页面跳转已禁用。");
         return new WorkspaceHtmlPreview(html, warnings.ToArray());
     }
+
+    private static bool IsExecutableScriptType(string type)
+    {
+        var normalized = (type ?? string.Empty).Split(';', 2)[0].Trim();
+        return normalized.Length == 0
+            || normalized.Equals("module", StringComparison.OrdinalIgnoreCase)
+            || normalized.Equals("text/javascript", StringComparison.OrdinalIgnoreCase)
+            || normalized.Equals("application/javascript", StringComparison.OrdinalIgnoreCase)
+            || normalized.Equals("text/ecmascript", StringComparison.OrdinalIgnoreCase)
+            || normalized.Equals("application/ecmascript", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string ToDataUri(string type, string content) =>
+        $"data:{type};base64,{Convert.ToBase64String(Encoding.UTF8.GetBytes(content ?? string.Empty))}";
 
     public static string NormalizePath(string path, bool allowRoot = false)
     {

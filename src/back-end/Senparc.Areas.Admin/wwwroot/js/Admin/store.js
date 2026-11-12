@@ -50,9 +50,19 @@ var Store = new Vuex.Store({
     state: {
         pageSrc: '1',
         resourceCodes: [],
+        adminTabs: {
+            enabled: false,
+            shellId: '',
+            activeId: '',
+            tabs: [],
+            canScrollLeft: false,
+            canScrollRight: false
+        },
         navMenu: { //侧边栏数据
             navMenuList: [],
             searchKeyword: '',
+            // 初始只读，避免浏览器在页面加载时把历史输入写进搜索框；获得焦点后再放开。
+            searchInputLocked: true,
             isCollapse:JSON.parse( window.sessionStorage.getItem('isCollapse'))|| false,
             openedMenus: getStoredNavMenuOpenedMenus(),
             variables: {
@@ -88,6 +98,14 @@ var Store = new Vuex.Store({
         },
         // 菜单渲染键：普通模式保持稳定（展开/收起不重建菜单）；
         // 搜索模式下随“应展开集合”变化而重建，保证新出现的命中分支自动展开。
+        adminIframeTabs: function (state) {
+            if (!state.adminTabs || !state.adminTabs.enabled) {
+                return [];
+            }
+            return state.adminTabs.tabs.filter(function (tab) {
+                return !tab.isShell;
+            });
+        },
         navMenuRenderKey: function (state) {
             var keyword = String(state.navMenu.searchKeyword || '').trim();
             if (!keyword) {
@@ -119,6 +137,10 @@ var Store = new Vuex.Store({
         // 设置菜单搜索关键字
         setNavMenuSearchKeyword(state, data) {
             state.navMenu.searchKeyword = data || '';
+        },
+        // 用户准备输入菜单搜索时，取消初始只读
+        unlockNavMenuSearch(state) {
+            state.navMenu.searchInputLocked = false;
         }
     }
 });

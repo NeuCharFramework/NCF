@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Senparc.Areas.Admin.Domain.Models;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
+using Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto;
 using Senparc.Areas.Admin.Domain.Services;
 using Senparc.Areas.Admin.OHS.Local.AppService;
 using Senparc.Ncf.UnitTestExtension;
@@ -98,6 +99,83 @@ namespace Senparc.Areas.Admin.Tests.Domain.Services
             var messageCounts = await _messageService.GetMessageCountByUserAsync();
             Assert.AreEqual(2, messageCounts.Single(z => z.UserId == userA.Id).Count);
             Assert.AreEqual(1, messageCounts.Single(z => z.UserId == userB.Id).Count);
+        }
+
+        [TestMethod]
+        public async Task ArchiveSession_ShouldLeaveActiveList_AndStayDeletable()
+        {
+            var user = await GetSeedUserAsync(80);
+            var active = await _sessionService.CreateSessionAsync("仍在进行", user.Id);
+            var done = await _sessionService.CreateSessionAsync("已经完成", user.Id);
+
+            Assert.IsTrue(await _sessionService.ArchiveSessionAsync(done.Id, user.Id));
+            Assert.IsTrue(await _sessionService.ArchiveSessionAsync(done.Id, user.Id));
+            Assert.IsFalse(await _sessionService.ArchiveSessionAsync(done.Id, user.Id + 1));
+
+            var (activeSessions, _) = await _sessionService.GetUserActiveSessionsAsync(user.Id, 1, 50);
+            var (archivedSessions, archivedCount) = await _sessionService.GetUserArchivedSessionsAsync(user.Id, 1, 50);
+            Assert.IsTrue(activeSessions.Any(session => session.Id == active.Id));
+            Assert.IsFalse(activeSessions.Any(session => session.Id == done.Id));
+            Assert.AreEqual(1, archivedCount);
+            Assert.AreEqual(ChatSessionStatus.Archived, archivedSessions.Single().Status);
+            Assert.AreEqual(done.Id, archivedSessions.Single().Id);
+
+            Assert.IsTrue(await _sessionService.DeleteSessionAsync(done.Id, user.Id));
+            var (_, afterCount) = await _sessionService.GetUserArchivedSessionsAsync(user.Id, 1, 50);
+            Assert.AreEqual(0, afterCount);
+            Assert.IsFalse(await _sessionService.ArchiveSessionAsync(done.Id, user.Id));
+        }
+
+        [TestMethod]
+        public async Task UnreadFlag_ShouldPersistForTheOwner_AndClearWhenRead()
+        {
+            var owner = await GetSeedUserAsync(81);
+            var other = await GetSeedUserAsync(82);
+            var background = await _sessionService.CreateSessionAsync("后台完成", owner.Id);
+            var current = await _sessionService.CreateSessionAsync("当前查看", owner.Id);
+
+            Assert.IsFalse(background.HasUnread);
+            Assert.IsTrue(await _sessionService.SetSessionUnreadAsync(background.Id, owner.Id, true));
+            Assert.IsTrue(await _sessionService.SetSessionUnreadAsync(background.Id, owner.Id, true));
+            Assert.IsFalse(await _sessionService.SetSessionUnreadAsync(background.Id, other.Id, true));
+            Assert.IsFalse(await _sessionService.SetSessionUnreadAsync(0, owner.Id, true));
+
+            var (sessions, _) = await _sessionService.GetUserActiveSessionsAsync(owner.Id, 1, 50);
+            var stored = sessions.Single(session => session.Id == background.Id);
+            Assert.IsTrue(stored.HasUnread);
+            Assert.IsFalse(sessions.Single(session => session.Id == current.Id).HasUnread);
+            Assert.IsTrue(AdminChatSessionDto.CreateFromEntity(stored).HasUnread);
+
+            Assert.IsTrue(await _sessionService.SetSessionUnreadAsync(background.Id, owner.Id, false));
+            var reread = await _sessionService.GetSessionByIdAsync(background.Id, owner.Id);
+            Assert.IsFalse(reread.HasUnread);
+
+            Assert.IsTrue(await _sessionService.SetSessionUnreadAsync(background.Id, owner.Id, true));
+            Assert.IsTrue(await _sessionService.ArchiveSessionAsync(background.Id, owner.Id));
+            var archived = (await _sessionService.GetUserArchivedSessionsAsync(owner.Id, 1, 50)).sessions
+                .Single(session => session.Id == background.Id);
+            Assert.IsFalse(archived.HasUnread);
+        }
+
+        [TestMethod]
+        public async Task RestoreArchivedSession_ShouldReturnToActiveList()
+        {
+            var owner = await GetSeedUserAsync(83);
+            var other = await GetSeedUserAsync(84);
+            var session = await _sessionService.CreateSessionAsync("待还原", owner.Id);
+
+            Assert.IsTrue(await _sessionService.ArchiveSessionAsync(session.Id, owner.Id));
+            Assert.IsFalse(await _sessionService.RestoreSessionAsync(session.Id, other.Id));
+            Assert.IsTrue(await _sessionService.RestoreSessionAsync(session.Id, owner.Id));
+            Assert.IsTrue(await _sessionService.RestoreSessionAsync(session.Id, owner.Id));
+
+            var (activeSessions, _) = await _sessionService.GetUserActiveSessionsAsync(owner.Id, 1, 50);
+            Assert.AreEqual(ChatSessionStatus.Active, activeSessions.Single(item => item.Id == session.Id).Status);
+            var (_, archivedCount) = await _sessionService.GetUserArchivedSessionsAsync(owner.Id, 1, 50);
+            Assert.AreEqual(0, archivedCount);
+
+            Assert.IsTrue(await _sessionService.DeleteSessionAsync(session.Id, owner.Id));
+            Assert.IsFalse(await _sessionService.RestoreSessionAsync(session.Id, owner.Id));
         }
 
         [TestMethod]

@@ -39,17 +39,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+
+  <!-- ===== Download Page ===== -->
   <data name="Language.SelectLanguage" xml:space="preserve">
     <value>Select Language</value>
   </data>
   <data name="Language.zh-CN" xml:space="preserve">
-    <value>简体中文</value>
+    <value>Simplified Chinese</value>
   </data>
   <data name="Language.en" xml:space="preserve">
     <value>English</value>
   </data>
   <data name="Language.ja" xml:space="preserve">
-    <value>日本語</value>
+    <value>Japanese</value>
   </data>
   <data name="Language.fr" xml:space="preserve">
     <value>Français</value>
@@ -180,7 +182,12 @@
   <data name="Cookie.Summary" xml:space="preserve"><value>We use cookies to improve the website experience. See the privacy policy for details.</value></data>
   <data name="Cookie.LearnMore" xml:space="preserve"><value>Learn more</value></data>
   <data name="Cookie.Accept" xml:space="preserve"><value>Accept</value></data>
-  <!-- ===== Download Page ===== -->
+  <data name="Download.Source.Mode" xml:space="preserve"><value>Download source</value></data>
+  <data name="Download.Source.Auto" xml:space="preserve"><value>Auto (local first)</value></data>
+  <data name="Download.Source.Local" xml:space="preserve"><value>Local mirror</value></data>
+  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Download.Status.Md5" xml:space="preserve"><value>MD5 fingerprint</value></data>
+  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>Not available</value></data>
   <data name="Nav.Download" xml:space="preserve"><value>Download</value></data>
   <data name="Download.PageTitle" xml:space="preserve"><value>Download NCF</value></data>
   <data name="Download.Hero.Eyebrow" xml:space="preserve"><value>AI NATIVE · AI READY</value></data>
@@ -199,12 +206,6 @@
   <data name="Download.Status.Unavailable" xml:space="preserve"><value>Temporarily unavailable</value></data>
   <data name="Download.Status.Detected" xml:space="preserve"><value>Detected</value></data>
   <data name="Download.Status.Estimated" xml:space="preserve"><value>estimated</value></data>
-  <data name="Download.Source.Mode" xml:space="preserve"><value>Download source</value></data>
-  <data name="Download.Source.Auto" xml:space="preserve"><value>Auto (local first)</value></data>
-  <data name="Download.Source.Local" xml:space="preserve"><value>Local mirror</value></data>
-  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
-  <data name="Download.Status.Md5" xml:space="preserve"><value>MD5 fingerprint</value></data>
-  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>Not available</value></data>
   <data name="Download.Path.Eyebrow" xml:space="preserve"><value>ONE FRAMEWORK · TWO STARTING POINTS</value></data>
   <data name="Download.Path.Title" xml:space="preserve"><value>From ready-made to fully yours</value></data>
   <data name="Download.Path.Description" xml:space="preserve"><value>Whether you need a system now or a product that will evolve for years, NCF gives you a clear and dependable starting point.</value></data>
@@ -232,4 +233,5 @@
   <data name="Download.Cta.Title" xml:space="preserve"><value>Make NCF the dependable foundation for your next system</value></data>
   <data name="Download.Cta.Description" xml:space="preserve"><value>Run it first, then go deeper. Start with a working system and grow it into your own AI-native application.</value></data>
   <data name="Download.Cta.Action" xml:space="preserve"><value>Read the quick start</value></data>
+
 </root>

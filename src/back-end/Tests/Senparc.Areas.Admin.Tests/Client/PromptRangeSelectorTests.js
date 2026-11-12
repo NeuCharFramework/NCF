@@ -46,7 +46,7 @@ function element() {
 }
 const sandbox = {
     Vue, Event: class { constructor(type, options) { this.type = type; this.bubbles = options.bubbles; } },
-    window: { ncfT: key => key },
+    window: { ncfT: key => key, addEventListener() {} },
     document: { createElement: element, body: element() },
     service: { async get(url, config) {
         const method = url.split('.').pop();
@@ -219,13 +219,12 @@ function deferred() {
     const layout = fs.readFileSync(path.join(admin, 'Areas/Admin/Pages/Shared/_Layout_Vue.cshtml'), 'utf8');
     assert.ok(layout.indexOf('PromptRangeSelector.js') < layout.indexOf('@RenderSection("scripts"'));
     const chat = fs.readFileSync(path.join(admin, 'Areas/Admin/Pages/AdminChat/Chat.cshtml'), 'utf8');
-    assert.ok(chat.includes('v-model="inputMessage"\n                    v-prompt-range="!isSending"'));
-    assert.ok(chat.includes('v-model="chatInputText"\n                                    v-prompt-range="!isCreatingSession"'));
+    assert.match(chat, /v-model="inputMessage"\s+ref="promptMessageInput"\s+v-prompt-range="!isSending"/);
+    assert.match(chat, /v-model="chatInputText"\s+ref="promptLauncherInput"\s+v-prompt-range="!isCreatingSession"/);
     assert.ok(!source.includes('v-html'), 'Prompt content must be rendered as literal text.');
     assert.match(source, /v-model="sortBy"[\s\S]*?@change="search\(1\)"/);
     for (const record of ['item', 'selected']) {
-        assert.ok(source.includes(`formatScore(${record}.evalAvgScore)`));
-        assert.ok(source.includes(`formatScore(${record}.evalMaxScore)`));
+        assert.ok(source.includes(`formatScore(${record}.currentScore)`));
     }
     for (const language of ['', '.en']) {
         const resources = fs.readFileSync(path.join(admin, 'Resources/AdminResource' + language + '.resx'), 'utf8');

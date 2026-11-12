@@ -13,6 +13,9 @@
     修改标识：Senparc - 20261103
     修改描述：v0.12.15 add comprehensive unit tests for AdminChatWorkspaceAssetService functionality
 
+    修改标识：Senparc - 20261105
+    修改描述：v0.12.26 消息实体保存 Prompt 引用
+
 ----------------------------------------------------------------*/
 using Senparc.Ncf.Core.Models;
 using System;
@@ -21,6 +24,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using System.Text.Json;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto;
+using Senparc.Xncf.PromptRange.Abstractions.References;
 
 namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
 {
@@ -50,6 +54,18 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
         public string Content { get; private set; }
 
         public string AttachmentsJson { get; private set; }
+        public string PromptReferencesJson { get; private set; }
+
+        public IReadOnlyList<PromptReference> GetPromptReferences() =>
+            string.IsNullOrEmpty(PromptReferencesJson) ? Array.Empty<PromptReference>()
+                : JsonSerializer.Deserialize<List<PromptReference>>(PromptReferencesJson)
+                    ?? throw new InvalidOperationException("Invalid prompt references.");
+
+        public void SetPromptReferences(IReadOnlyList<PromptReference> references)
+        {
+            PromptReference.ValidateRanges(Content, references);
+            PromptReferencesJson = references?.Count > 0 ? JsonSerializer.Serialize(references) : null;
+        }
 
         public IReadOnlyList<AdminChatAttachment> GetAttachments() =>
             string.IsNullOrEmpty(AttachmentsJson) ? Array.Empty<AdminChatAttachment>()
@@ -143,6 +159,7 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
         {
             if (newContent != null)
             {
+                if (Content != newContent) PromptReferencesJson = null;
                 Content = newContent;
                 base.SetUpdateTime();
             }

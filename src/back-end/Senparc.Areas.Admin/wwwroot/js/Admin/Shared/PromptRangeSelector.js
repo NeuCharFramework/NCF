@@ -7,6 +7,7 @@
     let target;
     let searchVersion = 0;
     let detailVersion = 0;
+    let previewVersion = 0;
     const t = key => window.ncfT('PromptSelector.' + key);
     const inputOf = element => element.querySelector('textarea, input[type="text"], input:not([type])');
     const editable = input => input && input.isConnected && !input.disabled && !input.readOnly;
@@ -35,7 +36,7 @@
             el: host,
             data: function () {
                 return {
-                    visible: false, loading: false, detailLoading: false, error: '',
+                    visible: false, loading: false, detailLoading: false, error: '', canInsert: true,
                     options: [], rangeId: '', tactic: '', keyword: '', sortBy: 'score',
                     items: [], total: 0, page: 1, pageSize: 10, selected: null
                 };
@@ -117,7 +118,7 @@
                     }
                 },
                 insert: function () {
-                    if (!this.selected || !this.selected.content || this.loading || this.detailLoading) return;
+                    if (!this.canInsert || !this.selected || !this.selected.content || this.loading || this.detailLoading) return;
                     const input = target && target.input;
                     // A session switch or an external edit must not redirect/overwrite an open picker's target.
                     if (!editable(input) || input.value !== target.value || !target.enabled()) {
@@ -126,11 +127,19 @@
                     }
                     const content = this.selected.content;
                     const value = input.value.slice(0, target.start) + content + input.value.slice(target.end);
+                    if (window.NcfPromptReferences && window.NcfPromptReferences.updateRanges(
+                        input.value, value, window.NcfPromptReferences.capture(input),
+                        { start: target.start, end: target.end }).length >= 32) {
+                        this.error = window.ncfT('PromptReference.TooMany'); return;
+                    }
                     if (input.maxLength >= 0 && value.length > input.maxLength) {
                         this.error = t('TooLong');
                         return;
                     }
                     input.value = value;
+                    if (window.NcfPromptReferences) {
+                        window.NcfPromptReferences.inserted(input, target.value, target.start, target.end, this.selected);
+                    }
                     input.dispatchEvent(new Event('input', { bubbles: true }));
                     const caret = target.start + content.length;
                     this.visible = false;
@@ -142,6 +151,7 @@
                     });
                 },
                 close: function () {
+                    ++previewVersion;
                     ++searchVersion;
                     ++detailVersion;
                     const input = target && target.input;
@@ -196,8 +206,7 @@
                                 <span>{{ item.rangeAlias || item.rangeName }} · {{ item.fullVersion }}</span>
                                 <span v-if="item.isDraft">{{ t('Draft') }}</span>
                                 <span class="ncf-prompt-selector-scores">
-                                    {{ t('AverageScore') }}: {{ formatScore(item.evalAvgScore) }}
-                                    · {{ t('MaxScore') }}: {{ formatScore(item.evalMaxScore) }}
+                                    {{ t('CurrentScore') }}: {{ formatScore(item.currentScore) }}
                                 </span>
                                 <small data-i18n-skip>{{ item.content }}</small>
                             </button>
@@ -207,8 +216,7 @@
                             <template v-if="selected">
                                 <strong>{{ selected.nickName || selected.fullVersion }}</strong>
                                 <p class="ncf-prompt-selector-scores">
-                                    {{ t('AverageScore') }}: {{ formatScore(selected.evalAvgScore) }}
-                                    · {{ t('MaxScore') }}: {{ formatScore(selected.evalMaxScore) }}
+                                    {{ t('CurrentScore') }}: {{ formatScore(selected.currentScore) }}
                                 </p>
                                 <pre data-i18n-skip>{{ selected.content }}</pre>
                             </template>
@@ -219,9 +227,9 @@
                         :current-page="page" :page-size="pageSize" :total="total" :disabled="loading"
                         @current-change="search"></el-pagination>
                     <div slot="footer">
-                        <span class="ncf-prompt-selector-hint">{{ t('InsertHint') }}</span>
+                        <span v-if="canInsert" class="ncf-prompt-selector-hint">{{ t('InsertHint') }}</span>
                         <el-button @click="visible = false">{{ t('Cancel') }}</el-button>
-                        <el-button type="primary" :disabled="!selected || !selected.content || loading || detailLoading"
+                        <el-button v-if="canInsert" type="primary" :disabled="!selected || !selected.content || loading || detailLoading"
                             @click="insert">{{ t('Insert') }}</el-button>
                     </div>
                 </el-dialog>`
@@ -248,12 +256,14 @@
                 const input = inputOf(element);
                 if (!state.enabled || !editable(input)) return;
                 const picker = getDialog();
+                ++previewVersion;
                 target = {
                     input: input, value: input.value,
                     start: input.selectionStart, end: input.selectionEnd,
                     enabled: () => state.enabled
                 };
                 picker.rangeId = '';
+                picker.canInsert = true;
                 picker.tactic = '';
                 picker.keyword = '';
                 picker.sortBy = 'score';
@@ -263,6 +273,7 @@
             });
             element.classList.add('ncf-prompt-selector-input');
             element.appendChild(button);
+            if (window.NcfPromptReferences) window.NcfPromptReferences.attach(inputOf(element), element);
         },
         componentUpdated: function (element, binding) {
             const state = bindings.get(element);
@@ -272,6 +283,7 @@
             Vue.nextTick(function () {
                 if (bindings.get(element) === state) {
                     state.button.disabled = !state.enabled || !editable(inputOf(element));
+                    if (window.NcfPromptReferences) window.NcfPromptReferences.sync(inputOf(element));
                 }
             });
         },
@@ -283,8 +295,35 @@
                 dialog.close();
             }
             state.button.remove();
+            if (window.NcfPromptReferences) window.NcfPromptReferences.detach(inputOf(element));
             element.classList.remove('ncf-prompt-selector-input');
             bindings.delete(element);
         }
+    });
+    window.NcfPromptRange = {
+        async openPrompt(id) {
+            const preview = ++previewVersion;
+            const picker = getDialog();
+            target = null;
+            picker.canInsert = false;
+            picker.visible = true;
+            picker.selected = null;
+            picker.error = '';
+            const version = ++searchVersion;
+            try {
+                const item = await request('GetSelectorPromptAsync', { id });
+                if (!picker.visible || version !== searchVersion) return;
+                picker.rangeId = item.rangeId;
+                picker.tactic = item.tactic;
+                picker.keyword = item.fullVersion;
+                await picker.reload();
+                if (picker.visible && !picker.canInsert && preview === previewVersion) picker.selected = item;
+            } catch (error) {
+                if (picker.visible && preview === previewVersion) picker.error = errorMessage(error);
+            }
+        }
+    };
+    window.addEventListener('ncf-prompt-score-changed', function () {
+        if (dialog && dialog.visible) dialog.search(1);
     });
 })(window);

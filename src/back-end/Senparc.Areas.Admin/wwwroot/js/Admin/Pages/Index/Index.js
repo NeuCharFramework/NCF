@@ -1,3 +1,11 @@
+function openAdminPage(url) {
+  console.debug('[NCF][AdminTabs] 首页打开', url);
+  if (window.ncfOpenAdminPage && window.ncfOpenAdminPage(url)) {
+    return;
+  }
+  window.location.href = url;
+}
+
 var app = new Vue({
   el: '#app',
   data() {
@@ -132,7 +140,7 @@ var app = new Vue({
       return this.agentsOverviewUpdatedAt.toLocaleTimeString();
     },
     navigateToAgentsManager() {
-      window.location.href = '/Admin/XncfModule/Start/?uid=D858D7FA-775A-4690-9023-CFB0B3B84994';
+      openAdminPage('/Admin/XncfModule/Start/?uid=D858D7FA-775A-4690-9023-CFB0B3B84994');
     },
     // 加载绑定到后台首页（admin-home）的启用 Pivot 面板。
     // 使用原始 axios（与 AgentsManager 概览一致），非超管账号 403 时静默隐藏，不触发全局错误提示。
@@ -476,7 +484,7 @@ var app = new Vue({
       chartInstance1.on('click', params => {
         if (params.componentType === 'series') {
           let date = params.name;
-          window.location.href = `/Admin/SenparcTrace/DateLog?date=${date}`;
+          openAdminPage(`/Admin/SenparcTrace/DateLog?date=${date}`);
         }
       });
 
@@ -521,7 +529,7 @@ var app = new Vue({
       // 添加点击事件监听器    
       chartInstance2.on('click', params => {
         if (params.componentType === 'series') {
-          window.location.href = `/Admin/SenparcTrace/DateLog?date=${this.todayDate}`;
+          openAdminPage(`/Admin/SenparcTrace/DateLog?date=${this.todayDate}`);
         }
       });
 
@@ -539,13 +547,13 @@ var app = new Vue({
     },
     //点击打开模块
     navigateTo(uid) {
-      window.location.href = '/Admin/XncfModule/Start/?uid=' + uid;
+      openAdminPage('/Admin/XncfModule/Start/?uid=' + uid);
     },
     getOpenDetail(rowIndex, menus) {
       console.log(`rowIndex --- ${JSON.stringify(rowIndex)}`)
       console.log(`menus --- ${JSON.stringify(menus)}`)
       var menuInfo = menus[rowIndex]
-      window.location.href = menuInfo.url
+      openAdminPage(menuInfo.url)
     },
     // 添加新方法处理悬停效果
     initializeHoverEffects() {
