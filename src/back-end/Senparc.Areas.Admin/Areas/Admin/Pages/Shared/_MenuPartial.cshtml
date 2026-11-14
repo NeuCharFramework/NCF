@@ -1,12 +1,15 @@
 @model Senparc.Ncf.AreaBase.Admin.IAdminPageModelBase
 @using Senparc.Ncf.XncfBase;
 @using Senparc.Ncf.Core.Areas;
+@using Senparc.Ncf.Core.WorkContext.Provider;
 @using Microsoft.AspNetCore.Http;
 @inject Senparc.Areas.Admin.Domain.Services.SysMenuService _sysMenuService
+@inject IAdminWorkContextProvider _adminWorkContextProvider
 @inject IHttpContextAccessor _httpContextAccessor
 @addTagHelper *, Senparc.Areas.Admin
 @{
-    var sysMenuDtos = await _sysMenuService.GetAllMenusTreeAsync(false);
+    var sysMenuDtos = await _sysMenuService.GetVisibleMenusTreeAsync(
+        _adminWorkContextProvider.GetAdminWorkContext().AdminUserId);
 
     string BuiltInMenuId(string menuId)
     {

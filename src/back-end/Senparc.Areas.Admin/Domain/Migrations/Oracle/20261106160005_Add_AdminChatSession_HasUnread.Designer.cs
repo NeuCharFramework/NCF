@@ -206,7 +206,7 @@ namespace Senparc.Areas.Admin.Domain.Migrations.Oracle
                         .HasColumnType("NVARCHAR2(300)");
 
                     b.Property<string>("AttachmentsJson")
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasColumnType("NCLOB");
 
                     b.Property<string>("Content")
                         .IsRequired()

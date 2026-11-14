@@ -1,5 +1,5 @@
 # 此阶段用于在生产中使用，或在常规模式下从 VS 运行时使用
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 WORKDIR /app
 EXPOSE 5000
 EXPOSE 5001
@@ -12,29 +12,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # 此阶段用于生成服务项目
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-# 将项目文件单独复制，便于缓存
-COPY ["tools/NcfSimulatedSite/Senparc.Web/Senparc.Web.csproj", "tools/NcfSimulatedSite/Senparc.Web/"]
-COPY ["tools/NcfSimulatedSite/Senparc.Areas.Admin/Senparc.Areas.Admin.csproj", "tools/NcfSimulatedSite/Senparc.Areas.Admin/"]
-COPY ["tools/NcfSimulatedSite/Senparc.Xncf.Accounts/Senparc.Xncf.Accounts.csproj", "tools/NcfSimulatedSite/Senparc.Xncf.Accounts/"]
-COPY ["tools/NcfSimulatedSite/Senparc.Xncf.Installer/Senparc.Xncf.Installer.csproj", "tools/NcfSimulatedSite/Senparc.Xncf.Installer/"]
-COPY ["tools/NcfSimulatedSite/Senparc.Xncf.Installer.Interface/Senparc.Xncf.Installer.Interface.csproj", "tools/NcfSimulatedSite/Senparc.Xncf.Installer.Interface/"]
-COPY ["tools/NcfSimulatedSite/Senparc.Aspire.AppHost/Senparc.Aspire.AppHost.csproj", "tools/NcfSimulatedSite/Senparc.Aspire.AppHost/"]
-COPY ["tools/NcfSimulatedSite/Senparc.Aspire.ServiceDefaults/Senparc.Aspire.ServiceDefaults.csproj", "tools/NcfSimulatedSite/Senparc.Aspire.ServiceDefaults/"]
-
-# 复制所有 src 目录下的项目文件（用于依赖恢复）
-# .dockerignore 文件已配置忽略 bin、obj 等不必要的文件
-COPY ["src/", "src/"]
+COPY . .
 
 # 恢复依赖项
-RUN dotnet restore "tools/NcfSimulatedSite/Senparc.Web/Senparc.Web.csproj"
+RUN dotnet restore "Senparc.Web/Senparc.Web.csproj"
 
-# 复制其余文件并构建
-# .dockerignore 文件确保不会复制 bin、obj 等编译生成的文件
-COPY . .
-WORKDIR "/src/tools/NcfSimulatedSite/Senparc.Web"
+# 构建项目
+WORKDIR "/src/Senparc.Web"
 RUN dotnet build "Senparc.Web.csproj" -c Release -o /app/build
 
 # 此阶段用于发布要复制到最终阶段的服务项目

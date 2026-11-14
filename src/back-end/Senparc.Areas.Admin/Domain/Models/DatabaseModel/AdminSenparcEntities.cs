@@ -205,6 +205,8 @@ namespace Senparc.Areas.Admin.Domain.Models
             if (providerName.Contains("Oracle", StringComparison.OrdinalIgnoreCase)
                 || providerName.Contains("Dm", StringComparison.OrdinalIgnoreCase))
                 modelBuilder.Entity<AdminChatMemoryState>().Property(row => row.Payload).HasColumnType("BLOB");
+            if (providerName.Contains("Oracle", StringComparison.OrdinalIgnoreCase))
+                modelBuilder.Entity<AdminChatMessage>().Property(message => message.AttachmentsJson).HasColumnType("NCLOB");
             var largeTextType = providerName.Contains("Oracle", StringComparison.OrdinalIgnoreCase)
                 ? "NCLOB"
                 : providerName.Contains("Dm", StringComparison.OrdinalIgnoreCase)

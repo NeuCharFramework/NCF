@@ -12,6 +12,6 @@ define(function (require) {
     );
 
     echarts.registerProcessor(
-        'filter', zrUtil.curry(require('../processor/dataFilter'), 'pie')
+        'filter', zrUtil.curry(require('../processor/dataFilter'), 'chord')
     );
 });

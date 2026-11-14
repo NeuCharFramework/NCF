@@ -78,7 +78,9 @@ namespace Senparc.Areas.Admin.ACL.Repository
             var sysRoleAdminUserInfos = BaseDB.BaseDataContext.Set<SysRoleAdminUserInfo>()
                 .Where(sysRoleAdminUserInfo => sysRoleAdminUserInfo.AccountId == accountId); // 获取用户的角色信息
             var sysRoles = BaseDB.BaseDataContext.Set<SysRole>().Where(role => role.Enabled); // 获取有效的角色信息
-            IQueryable<string> roleIdQuery = sysRoleAdminUserInfos.Select(_ => _.RoleId); // 获取用户的角色Id
+            IQueryable<string> roleIdQuery = sysRoleAdminUserInfos
+                .Where(userRole => sysRoles.Any(role => role.Id == userRole.RoleId))
+                .Select(userRole => userRole.RoleId); // 获取用户有效角色的Id
             var permissions = BaseDB.BaseDataContext.Set<SysRolePermission>().Where(rolePermission => roleIdQuery.Contains(rolePermission.RoleId));
             IQueryable<string> menuIds = permissions.Select(o => o.PermissionId);
             var menus = BaseDB.BaseDataContext.Set<SysMenu>()

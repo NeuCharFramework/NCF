@@ -27,7 +27,7 @@ namespace Senparc.Areas.Admin.Domain.Migrations.Oracle
             migrationBuilder.AddColumn<string>(
                 name: "AttachmentsJson",
                 table: "ADMIN_AdminChatMessage",
-                type: "NVARCHAR2(2000)",
+                type: "NCLOB",
                 nullable: true);
         }
 

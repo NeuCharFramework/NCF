@@ -84,9 +84,20 @@ namespace Senparc.Areas.Admin.Domain.Services
             var items = BuildTreeItems(iteration, allMenus);
             return items;
         }
-
-        /// <summary>
-        /// 获取完整菜单信息
+
+        public async Task<IEnumerable<SysMenuTreeItemDto>> GetVisibleMenusTreeAsync(int accountId)
+        {
+            var visibleMenus = (await _repo.GetVisibleMenuDtosAsync(accountId))
+                .Select(_menuLocalization.ResolveInPlace)
+                .ToList();
+            var iteration = visibleMenus.Where(z => z.ParentId.IsNullOrEmpty())
+                                        .OrderByDescending(o => o.Sort)
+                                        .ToList();
+            return BuildTreeItems(iteration, visibleMenus);
+        }
+
+        /// <summary>
+        /// 获取完整菜单信息
         /// </summary>
         /// <param name="hasButton">是否包含按钮信息</param>
         /// <returns></returns>
