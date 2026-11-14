@@ -1,5 +1,45 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+
+  <data name="AdminChat.Memory.UpdateReason.intent-deferred" xml:space="preserve"><value>Esperando más contenido o confirmación para guardar. No se guardaron cambios en Memory en este turno.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.no-save-intent" xml:space="preserve"><value>No se identificó intención de actualizar ahora la memoria a largo plazo. No se guardó nada en este turno.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.pending-review" xml:space="preserve"><value>Este lote incluye información del asistente y no está guardado. Revise y guarde cada entrada; sus afirmaciones pueden ser inexactas.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.unresolved-reference" xml:space="preserve"><value>El contexto reciente no identifica qué recordar. Envíe «Remember: …» con el hecho completo en un solo mensaje; compruebe el PromptCode si es necesario.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.review-complete" xml:space="preserve"><value>Ha revisado y guardado este grupo de propuestas.</value></data>
+  <data name="AdminChat.Memory.ReviewCandidate" xml:space="preserve"><value>Revisar propuesta</value></data>
+  <data name="AdminChat.Memory.ReviewNotice" xml:space="preserve"><value>Esta propuesta del contexto aún no está guardada. Revise contenido y ámbito y guarde la entrada. Las eliminaciones requieren confirmación. La IA no modifica entradas manuales fijadas.</value></data>
+  <data name="AdminChat.Memory.ReviewClose" xml:space="preserve"><value>Termine el borrador y cierre los ajustes antes de revisar una propuesta.</value></data>
+  <data name="AdminChat.Memory.CandidateEvidence" xml:space="preserve"><value>Texto original (sin verificar)</value></data>
+  <data name="AdminChat.Sidebar.Expand" xml:space="preserve"><value>Expandir el panel de conversaciones</value></data>
+  <data name="AdminChat.Sidebar.Collapse" xml:space="preserve"><value>Contraer el panel de conversaciones</value></data>
+  <data name="AdminChat.Sidebar.Resize" xml:space="preserve"><value>Ajustar ancho del panel (flechas izquierda/derecha)</value></data>
+  <data name="AdminChat.Sidebar.Reorder" xml:space="preserve"><value>Arrastrar dentro del grupo, o Alt + Arriba/Abajo</value></data>
+  <data name="AdminChat.Sidebar.Running" xml:space="preserve"><value>En curso</value></data>
+  <data name="AdminChat.Sidebar.Stopping" xml:space="preserve"><value>Deteniendo</value></data>
+  <data name="AdminChat.Sidebar.SortSaved" xml:space="preserve"><value>Orden guardado para esta cuenta en todos los dispositivos</value></data>
+  <data name="AdminChat.Sidebar.SortFailed" xml:space="preserve"><value>No se pudo guardar el orden. Inténtelo de nuevo.</value></data>
+  <data name="AdminChat.Sidebar.PreferencesFailed" xml:space="preserve"><value>No se pudieron leer o guardar las preferencias del panel. Este diseño solo se aplica a esta página.</value></data>
+  <data name="AdminChat.Sidebar.Archive" xml:space="preserve"><value>Archivar y marcar como terminada</value></data>
+  <data name="AdminChat.Sidebar.ArchiveRunning" xml:space="preserve"><value>Esta conversación sigue en curso. Archívela al terminar.</value></data>
+  <data name="AdminChat.Archive.Menu" xml:space="preserve"><value>Archivadas</value></data>
+  <data name="AdminChat.Archive.Empty" xml:space="preserve"><value>No hay conversaciones archivadas</value></data>
+  <data name="AdminChat.Archive.Open" xml:space="preserve"><value>Abrir conversación archivada: {0}</value></data>
+  <data name="AdminChat.Archive.Delete" xml:space="preserve"><value>Eliminar conversación archivada: {0}</value></data>
+  <data name="AdminChat.Archive.Action" xml:space="preserve"><value>Archivar</value></data>
+  <data name="AdminChat.Archive.Restore" xml:space="preserve"><value>Restaurar</value></data>
+  <data name="AdminChat.Archive.RestoreLabel" xml:space="preserve"><value>Restaurar conversación archivada: {0}</value></data>
+  <data name="AdminChat.Archive.RestoreSuccess" xml:space="preserve"><value>Restaurada en la lista activa</value></data>
+  <data name="AdminChat.Archive.RestoreFailed" xml:space="preserve"><value>No se pudo restaurar la conversación. Inténtelo de nuevo.</value></data>
+  <data name="AdminChat.Archive.Success" xml:space="preserve"><value>Archivada. Revísela, restáurela o elimínela desde el menú Más, junto a Nueva conversación.</value></data>
+  <data name="AdminChat.Sidebar.Tools" xml:space="preserve"><value>Más</value></data>
+  <data name="AdminChat.Sidebar.Unread" xml:space="preserve"><value>No leído</value></data>
+  <data name="AdminChat.Archive.Failed" xml:space="preserve"><value>No se pudo archivar la conversación. Inténtelo de nuevo.</value></data>
+  <data name="AdminChat.Archive.Tag" xml:space="preserve"><value>Archivada</value></data>
+  <data name="AdminChat.Archive.LoadFailed" xml:space="preserve"><value>No se pudieron cargar las conversaciones archivadas</value></data>
+  <data name="AdminChat.ArchiveSessionSuccess" xml:space="preserve"><value>Conversación archivada</value></data>
+  <data name="AdminChat.Rail.Label" xml:space="preserve"><value>Mis mensajes</value></data>
+  <data name="AdminChat.Rail.Jump" xml:space="preserve"><value>Ir a este mensaje</value></data>
+  <data name="AdminChat.Rail.EmptyMessage" xml:space="preserve"><value>(Mensaje vacío)</value></data>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -39,11 +79,113 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AdminChat.Memory.Subtitle" xml:space="preserve"><value>Gestione preferencias duraderas para conversaciones más personales</value></data>
+  <data name="AdminChat.Memory.Private" xml:space="preserve"><value>Memoria privada</value></data>
+  <data name="AdminChat.Memory.SaveChanges" xml:space="preserve"><value>Guardar cambios</value></data>
+  <data name="AdminChat.Memory.ClearDraft" xml:space="preserve"><value>Vaciar el borrador</value></data>
+  <data name="AdminChat.Memory.EntriesHint" xml:space="preserve"><value>Sus memorias globales y del Workspace actual en un solo lugar</value></data>
+  <data name="AdminChat.Memory.Guide" xml:space="preserve"><value>Ámbitos, reglas de aprendizaje y almacenamiento</value></data>
+  <data name="AdminChat.Memory.FormatGuide" xml:space="preserve"><value>Formato Markdown y reglas de guardado</value></data>
+  <data name="AdminChat.Memory.SaveEntry" xml:space="preserve"><value>Guardar entrada</value></data>
+  <data name="AdminChat.Memory.EmptyEntries" xml:space="preserve"><value>Aún no hay entradas de Memory. Añada su primera preferencia para empezar.</value></data>
+  <data name="AdminChat.Memory.EmptyLoaded" xml:space="preserve"><value>Aún no hay informe de carga. Active Memory y envíe un mensaje para verlo aquí.</value></data>
+  <data name="AdminChat.Memory.Settings" xml:space="preserve"><value>Ajustes de Memory / Chat</value></data>
+  <data name="AdminChat.Memory.UpdateSaved" xml:space="preserve"><value>Memory guardada: {0} cambios globales y {1} del Workspace actual (almacenamiento privado en base de datos, no se creó ningún archivo).</value></data>
+  <data name="AdminChat.Memory.UpdateReason.mode-off" xml:space="preserve"><value>La Memory a largo plazo no se guardó: Memory está desactivada para este chat. La confirmación del asistente no es prueba de persistencia.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.read-only" xml:space="preserve"><value>La Memory a largo plazo no se guardó: este chat es de solo lectura. Cambie a Learn o edite las entradas manualmente.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.input-not-eligible" xml:space="preserve"><value>Memory no se actualizó: la entrada no cumplió los disparadores de aprendizaje o superó el límite de longitud.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.no-candidates" xml:space="preserve"><value>Memory no se actualizó: el extractor no devolvió memorias a largo plazo. Añada una entrada manualmente o revise el PromptCode de este turno. Que el asistente diga que lo recuerda no confirma el guardado.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.pinned" xml:space="preserve"><value>Memory no se actualizó: la entrada correspondiente está fijada para impedir cambios o eliminación por la IA. Edítela manualmente.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.no-difference" xml:space="preserve"><value>Memory sin cambios: el contenido devuelto ya existe, o no había una entrada coincidente para eliminar.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.revision-conflict" xml:space="preserve"><value>Memory no se guardó: cambió durante este turno. Se conservó la versión más reciente; revísela antes de reintentar.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.timeout" xml:space="preserve"><value>Memory no se guardó: la extracción agotó el tiempo. Reintente o añada la entrada manualmente.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.invalid-change" xml:space="preserve"><value>Memory no se guardó: la validación de evidencia, seguridad, ámbito o campos rechazó todo el lote.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.capacity" xml:space="preserve"><value>Memory no se guardó: se alcanzó el límite de 80 entradas. Elimine primero las entradas que no use.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.invalid-json" xml:space="preserve"><value>Memory no se guardó: el extractor no devolvió un JSON válido en el formato requerido. Revise el prompt.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.pending" xml:space="preserve"><value>No se ha confirmado ningún guardado de Memory. No tome la promesa del asistente como prueba de persistencia.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.update-failed" xml:space="preserve"><value>Error al actualizar Memory; el guardado no se confirmó. Revise la configuración del prompt, el modelo o la base de datos. Las memorias existentes se conservaron.</value></data>
+  <data name="AdminChat.Memory.StorageNotice" xml:space="preserve"><value>Las memorias viven en su base de datos privada, no en archivos de Workspace. Un Memory.md de Workspace es un archivo ordinario y no se crea ni se importa automáticamente. Gestione las entradas aquí; confíe en el resultado de actualización del sistema, no en la confirmación textual de un asistente.</value></data>
+  <data name="AdminChat.Memory.Use" xml:space="preserve"><value>Usar mi Memory global</value></data>
+  <data name="AdminChat.Memory.Notice" xml:space="preserve"><value>Off: sin recuperación ni aprendizaje. Read-only: solo recuperación. Learn: se actualiza ante preferencias explícitas o señales de recordar o corregir. Ámbitos privados de usuario global y del Workspace actual; se excluyen las entradas expiradas o de archivo. Presupuesto: 1000 tokens, Core hasta 300; los modelos desconocidos usan una estimación conservadora. Nunca guarde secretos ni información sensible.</value></data>
+  <data name="AdminChat.Memory.ModeOff" xml:space="preserve"><value>Cerrar</value></data>
+  <data name="AdminChat.Memory.ModeReadOnly" xml:space="preserve"><value>Solo lectura</value></data>
+  <data name="AdminChat.Memory.ModeLearn" xml:space="preserve"><value>Aprender</value></data>
+  <data name="AdminChat.Memory.Entries" xml:space="preserve"><value>Entradas</value></data>
+  <data name="AdminChat.Memory.ScopeNotice" xml:space="preserve"><value>Solo se muestran sus memorias globales y las del Workspace del chat actual. Editar el Workspace requiere un chat vinculado a ese Workspace. Los hechos del Workspace tienen prioridad sobre los hechos globales con la misma clave.</value></data>
+  <data name="AdminChat.Memory.Add" xml:space="preserve"><value>Agregar entrada</value></data>
+  <data name="AdminChat.Memory.Text" xml:space="preserve"><value>Contenido</value></data>
+  <data name="AdminChat.Memory.Scope" xml:space="preserve"><value>Ámbito</value></data>
+  <data name="AdminChat.Memory.ScopeGlobal" xml:space="preserve"><value>Mi global</value></data>
+  <data name="AdminChat.Memory.Tier" xml:space="preserve"><value>Nivel de carga</value></data>
+  <data name="AdminChat.Memory.Kind" xml:space="preserve"><value>Tipo</value></data>
+  <data name="AdminChat.Memory.Topic" xml:space="preserve"><value>Tema (obligatorio para el nivel de tema)</value></data>
+  <data name="AdminChat.Memory.Expires" xml:space="preserve"><value>Caduca (opcional)</value></data>
+  <data name="AdminChat.Memory.Pinned" xml:space="preserve"><value>Fijar: impedir cambios o eliminación por la IA</value></data>
+  <data name="AdminChat.Memory.DeleteNotice" xml:space="preserve"><value>¿Eliminar la entrada y borrar su contenido histórico? Los mensajes de chat originales no se eliminan.</value></data>
+  <data name="AdminChat.Memory.Delete" xml:space="preserve"><value>Eliminar</value></data>
+  <data name="AdminChat.Memory.Source" xml:space="preserve"><value>chat de origen / mensaje</value></data>
+  <data name="AdminChat.Memory.Loaded" xml:space="preserve"><value>Cargado en este turno</value></data>
+  <data name="AdminChat.Memory.LoadedNotice" xml:space="preserve"><value>Memorias suministradas al modelo en el último turno de esta página; no prueban que el modelo las usara. Los recuentos incluyen el texto de límite de Memory y excluyen SystemMessage, el historial y la sobrecarga del protocolo. Este informe no se conserva después de actualizar.</value></data>
+  <data name="AdminChat.Memory.Reason" xml:space="preserve"><value>Motivo de la selección</value></data>
+  <data name="AdminChat.Memory.History" xml:space="preserve"><value>Historial de cambios</value></data>
+  <data name="AdminChat.Memory.Time" xml:space="preserve"><value>Hora</value></data>
+  <data name="AdminChat.Memory.MarkdownScope" xml:space="preserve"><value>Memory.md solo edita o exporta sus memorias globales. Use la edición de entradas para las memorias de Workspace; vaciar Markdown no las elimina.</value></data>
+  <data name="AdminChat.Memory.UnsavedMarkdown" xml:space="preserve"><value>Guarde el borrador Markdown antes de editar entradas individuales.</value></data>
+  <data name="AdminChat.Memory.Preview" xml:space="preserve"><value>Vista previa de Memory.md</value></data>
+  <data name="AdminChat.Memory.Edit" xml:space="preserve"><value>Editar / Niveles</value></data>
+  <data name="AdminChat.Memory.Format" xml:space="preserve"><value>Use los encabezados ## Core, ## Topic: name y ## Archive con entradas '- ': hasta 300 caracteres cada una, 80 entradas en total. Los guardados manuales fijan todas las entradas contra el reemplazo por la IA. Vacíe el editor y guarde para eliminar todas las memorias. Publique y puntúe una nueva versión en el rango AdminChat.Memory de PromptRange; el prompt publicado con la media más alta sustituye al predeterminado.</value></data>
+  <data name="AdminChat.Memory.SystemMessage" xml:space="preserve"><value>SystemMessage</value></data>
+  <data name="AdminChat.Memory.SystemNotice" xml:space="preserve"><value>Se aplica a todos mis chats desde el siguiente turno, incluso con Memory desactivada. No concede permisos de herramientas. Hasta 2000 caracteres.</value></data>
+  <data name="AdminChat.Memory.GlobalSystem" xml:space="preserve"><value>SystemMessage de todo el inquilino (superadministrador)</value></data>
+  <data name="AdminChat.Memory.GlobalNotice" xml:space="preserve"><value>Se aplica a los chats de todos los usuarios de este inquilino o a todo el sitio en modo de un solo inquilino. Excluye tareas internas de generación, como títulos y la extracción de Memory.</value></data>
+  <data name="AdminChat.Memory.SaveGlobal" xml:space="preserve"><value>Guardar SystemMessage global</value></data>
+  <data name="AdminChat.Memory.Download" xml:space="preserve"><value>Descargar Memory.md</value></data>
+  <data name="AdminChat.Memory.Clear" xml:space="preserve"><value>Borrar borrador (guardar para eliminar)</value></data>
+  <data name="AdminChat.Memory.Save" xml:space="preserve"><value>Guardar mi Memory / ajustes</value></data>
+  <data name="AdminChat.Memory.Saved" xml:space="preserve"><value>Guardado.</value></data>
+  <data name="AdminChat.Memory.Failed" xml:space="preserve"><value>La operación de Memory falló. Recargue antes de reintentar.</value></data>
+  <data name="AdminChat.Memory.UpdateWarning" xml:space="preserve"><value>Memory no se actualizó en este turno; las memorias existentes se conservaron. Revise PromptRange o vuelva a abrir los ajustes de Memory.</value></data>
   <data name="Admin.Title" xml:space="preserve">
     <value>Panel de administración NCF</value>
   </data>
   <data name="Admin.Nav.Home" xml:space="preserve">
     <value>Inicio</value>
+  </data>
+  <data name="Admin.Tabs.List" xml:space="preserve">
+    <value>Páginas abiertas</value>
+  </data>
+  <data name="Admin.Tabs.Close" xml:space="preserve">
+    <value>Cerrar pestaña</value>
+  </data>
+  <data name="Admin.Tabs.Untitled" xml:space="preserve">
+    <value>Página sin título</value>
+  </data>
+  <data name="Admin.Tabs.ScrollLeft" xml:space="preserve">
+    <value>Desplazar pestañas a la izquierda</value>
+  </data>
+  <data name="Admin.Tabs.ScrollRight" xml:space="preserve">
+    <value>Desplazar pestañas a la derecha</value>
+  </data>
+  <data name="Admin.Nav.Search" xml:space="preserve">
+    <value>Buscar menú</value>
+  </data>
+  <data name="Admin.Nav.SearchPlaceholder" xml:space="preserve">
+    <value>Escriba un término para filtrar el menú</value>
+  </data>
+  <data name="Admin.Nav.SearchEmpty" xml:space="preserve">
+    <value>No se encontró ningún menú</value>
+  </data>
+  <data name="Admin.Nav.ConfigTitle" xml:space="preserve">
+    <value>Configuración de menú</value>
+  </data>
+  <data name="Admin.Nav.ConfigHint" xml:space="preserve">
+    <value>Arrastre los menús de primer nivel para reordenar; guardar actualiza los valores de orden</value>
+  </data>
+  <data name="Admin.Nav.ConfigSave" xml:space="preserve">
+    <value>Guardar orden</value>
+  </data>
+  <data name="Admin.Nav.ConfigSaved" xml:space="preserve">
+    <value>Orden del menú guardado</value>
   </data>
   <data name="Admin.Layout.Welcome" xml:space="preserve">
     <value>Bienvenido,</value>
@@ -149,6 +291,7 @@
   <data name="Tenant.KeyExists" xml:space="preserve"><value>La regla de coincidencia del inquilino {0} ya existe</value></data>
   <data name="Tenant.SaveSuccess.Edit" xml:space="preserve"><value>Inquilino actualizado correctamente</value></data>
   <data name="Tenant.SaveSuccess.Create" xml:space="preserve"><value>Inquilino creado correctamente</value></data>
+  <data name="Tenant.PlatformAdminOnly" xml:space="preserve"><value>¡En modo multiinquilino, solo el administrador de la plataforma puede gestionar la información de los inquilinos!</value></data>
   <data name="Tenant.NotFound" xml:space="preserve"><value>Inquilino no encontrado</value></data>
   <data name="Tenant.SetInfoFailed" xml:space="preserve"><value>No se pudo establecer la información del inquilino</value></data>
   <data name="Tenant.InitializeSuccess" xml:space="preserve"><value>Inicialización completada correctamente</value></data>
@@ -194,7 +337,7 @@
   <data name="Admin.Common.NoTime" xml:space="preserve"><value>Sin hora</value></data>
   <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>Copiado correctamente. Use Ctrl+V para pegar.</value></data>
   <data name="Admin.Home.Header" xml:space="preserve"><value>Panel de administración de NeuCharFramework</value></data>
-  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>Estado actual del host</value></data>
+  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>Monitor de recursos del host</value></data>
   <data name="Admin.Home.HostMetricsRealtime" xml:space="preserve"><value>En vivo · se actualiza cada 2 segundos</value></data>
   <data name="Admin.Home.HostCpu" xml:space="preserve"><value>CPU del host (total)</value></data>
   <data name="Admin.Home.HostCpuDetail" xml:space="preserve"><value>Uso total del host</value></data>
@@ -209,11 +352,27 @@
   <data name="Admin.Home.HostProcessCpu" xml:space="preserve"><value>CPU del proceso web</value></data>
   <data name="Admin.Home.HostProcessWorkingSet" xml:space="preserve"><value>Memoria del conjunto de trabajo</value></data>
   <data name="Admin.Home.HostProcessUptime" xml:space="preserve"><value>Tiempo activo</value></data>
-  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>Últimas 30 muestras (solo esta página)</value></data>
+  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>Tendencias de recursos</value></data>
   <data name="Admin.Home.HostNetworkReceive" xml:space="preserve"><value>Recepción</value></data>
   <data name="Admin.Home.HostNetworkSend" xml:space="preserve"><value>Envío</value></data>
   <data name="Admin.Home.HostMetricsInvalidResponse" xml:space="preserve"><value>La API de métricas del host devolvió datos no válidos</value></data>
   <data name="Admin.Home.HostMetricsUnavailable" xml:space="preserve"><value>Las métricas del host no están disponibles temporalmente</value></data>
+  <data name="Admin.Home.WebProcessMemory" xml:space="preserve"><value>Memoria del proceso web</value></data>
+  <data name="Admin.Home.ResourceMonitor" xml:space="preserve"><value>Monitor de recursos (últimas 24 horas)</value></data>
+  <data name="Admin.Home.ResourceMonitorRealtime" xml:space="preserve"><value>Grabado cada 10 s en segundo plano · caché de hasta 24 h</value></data>
+  <data name="Admin.Home.ResourceMonitorHint" xml:space="preserve"><value>Arrastre o use la rueda para ampliar; haga doble clic para restablecer</value></data>
+  <data name="Admin.Home.ResourceMonitorReset" xml:space="preserve"><value>Restablecer rango</value></data>
+  <data name="Admin.Home.ResourceMonitorRange" xml:space="preserve"><value>Intervalo de tiempo</value></data>
+  <data name="Admin.Home.ResourceMonitor5Minutes" xml:space="preserve"><value>5 min</value></data>
+  <data name="Admin.Home.ResourceMonitor30Minutes" xml:space="preserve"><value>30 min</value></data>
+  <data name="Admin.Home.ResourceMonitor6Hours" xml:space="preserve"><value>6 h</value></data>
+  <data name="Admin.Home.ResourceMonitor24Hours" xml:space="preserve"><value>24 h</value></data>
+  <data name="Admin.Home.ResourceMonitorReturnLive" xml:space="preserve"><value>Volver al directo</value></data>
+  <data name="Admin.Home.ResourceMonitorFollowing" xml:space="preserve"><value>Siguiendo en directo</value></data>
+  <data name="Admin.Home.ResourceMonitorPaused" xml:space="preserve"><value>Vista pausada (la grabación continúa)</value></data>
+  <data name="Admin.Home.ResourceMonitorEmpty" xml:space="preserve"><value>El grabador se está iniciando (~10 s) o no hay datos en este rango</value></data>
+  <data name="Admin.Home.ResourceMonitorUnavailable" xml:space="preserve"><value>No se pueden obtener los datos del monitor de recursos</value></data>
+  <data name="Admin.Home.ResourceMonitorNow" xml:space="preserve"><value>ahora</value></data>
   <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>Módulos instalados</value></data>
   <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>Módulos pendientes de actualización</value></data>
   <data name="Admin.Home.NewModules" xml:space="preserve"><value>Nuevos módulos encontrados</value></data>
@@ -272,6 +431,17 @@
   <data name="Admin.Common.Error" xml:space="preserve"><value>Error</value></data>
   <data name="AdminChat.Conversation" xml:space="preserve"><value>Conversación</value></data>
   <data name="AdminChat.History" xml:space="preserve"><value>Historial de conversaciones</value></data>
+  <data name="AdminChat.Search.Open" xml:space="preserve"><value>Buscar conversaciones</value></data>
+  <data name="AdminChat.Search.Placeholder" xml:space="preserve"><value>Buscar conversaciones no archivadas</value></data>
+  <data name="AdminChat.Search.ChatTab" xml:space="preserve"><value>Conversaciones</value></data>
+  <data name="AdminChat.Search.ToolTab" xml:space="preserve"><value>Llamadas</value></data>
+  <data name="AdminChat.Search.ToolPlaceholder" xml:space="preserve"><value>Buscar nombre de método</value></data>
+  <data name="AdminChat.Search.ToolCall" xml:space="preserve"><value>Llamada de método</value></data>
+  <data name="AdminChat.Search.Empty" xml:space="preserve"><value>No hay conversaciones no archivadas coincidentes</value></data>
+  <data name="AdminChat.Search.Hint" xml:space="preserve"><value>Solo busca conversaciones no archivadas, hasta 10 resultados</value></data>
+  <data name="AdminChat.Search.ToolHint" xml:space="preserve"><value>Busca nombres de métodos realmente invocados por Harness en conversaciones no archivadas, hasta 10 resultados</value></data>
+  <data name="AdminChat.Search.Failed" xml:space="preserve"><value>Error de búsqueda</value></data>
+  <data name="AdminChat.Search.TitleMatch" xml:space="preserve"><value>Coincidencia de título</value></data>
   <data name="AdminChat.EmptyHistory" xml:space="preserve"><value>No hay historial de conversaciones</value></data>
   <data name="AdminChat.SelectModel" xml:space="preserve"><value>Seleccionar modelo de IA</value></data>
   <data name="AdminChat.Manage" xml:space="preserve"><value>Gestionar</value></data>
@@ -286,6 +456,10 @@
   <data name="AdminChat.SendHint" xml:space="preserve"><value>Pulse Ctrl + Enter o Cmd + Enter para enviar</value></data>
   <data name="AdminChat.Send" xml:space="preserve"><value>Enviar</value></data>
   <data name="AdminChat.Thinking" xml:space="preserve"><value>Pensando...</value></data>
+  <data name="AdminChat.ModeSimple" xml:space="preserve"><value>Chat</value></data>
+  <data name="AdminChat.ModeHarness" xml:space="preserve"><value>Arnés</value></data>
+  <data name="AdminChat.HarnessSteps" xml:space="preserve"><value>Pasos del arnés</value></data>
+  <data name="AdminChat.TrajectoryNotFound" xml:space="preserve"><value>No se encontró la trayectoria.</value></data>
   <data name="AdminChat.NewSessionDescription" xml:space="preserve"><value>Introduzca una pregunta y seleccione módulos de referencia para iniciar una conversación</value></data>
   <data name="AdminChat.ComputePower" xml:space="preserve"><value>Modelo de IA</value></data>
   <data name="AdminChat.DeleteConfirm" xml:space="preserve"><value>¿Eliminar esta conversación?</value></data>
@@ -485,6 +659,10 @@
   <data name="AdminChat.CreateSessionFailedRetry" xml:space="preserve"><value>No se pudo crear la sesión. Inténtelo de nuevo más tarde.</value></data>
   <data name="Admin.Login.Error.LoginFailed" xml:space="preserve"><value>Error de inicio de sesión</value></data>
   <data name="Admin.Login.Error.LoginRetry" xml:space="preserve"><value>Error de inicio de sesión, inténtelo de nuevo</value></data>
+  <data name="Admin.Login.CaptchaPlaceholder" xml:space="preserve"><value>Introduzca el código de verificación</value></data>
+  <data name="Admin.Login.CaptchaRequired" xml:space="preserve"><value>Introduzca el código de verificación de la imagen</value></data>
+  <data name="Admin.Login.CaptchaRefresh" xml:space="preserve"><value>Haga clic en la imagen para actualizar</value></data>
+  <data name="Admin.Login.Error.CaptchaInvalid" xml:space="preserve"><value>Código de verificación incorrecto, inténtelo de nuevo</value></data>
   <data name="Admin.Login.Support" xml:space="preserve"><value>Asistencia técnica:</value></data>
   <data name="Admin.Login.VisitWebsite" xml:space="preserve"><value>Visitar el sitio web oficial</value></data>
   <data name="Admin.Session.InvalidUser" xml:space="preserve"><value>La identidad del usuario no es válida y no se puede renovar el JWT. Inicie sesión de nuevo.</value></data>
@@ -532,6 +710,114 @@
   <data name="AdminChat.NoMenuOrFunctions" xml:space="preserve"><value>Este módulo no tiene menús ni funciones disponibles.</value></data>
   <data name="AdminChat.NoMatchingModules" xml:space="preserve"><value>No hay módulos coincidentes</value></data>
   <data name="AdminChat.ConfirmAdd" xml:space="preserve"><value>Confirmar adición</value></data>
+  <data name="Frontend.001" xml:space="preserve"><value>Módulos de extensión||Módulos de extensión</value></data>
+  <data name="Frontend.002" xml:space="preserve"><value>Inicio||Inicio</value></data>
+  <data name="Frontend.003" xml:space="preserve"><value>Ejemplo de base de datos||Ejemplo de base de datos</value></data>
+  <data name="Frontend.004" xml:space="preserve"><value>Agregar||Agregar</value></data>
+  <data name="Frontend.005" xml:space="preserve"><value>Agregar||Agregar</value></data>
+  <data name="Frontend.006" xml:space="preserve"><value>Editar||Editar</value></data>
+  <data name="Frontend.007" xml:space="preserve"><value>Eliminar||Eliminar</value></data>
+  <data name="Frontend.008" xml:space="preserve"><value>Cancelar||Cancelar</value></data>
+  <data name="Frontend.009" xml:space="preserve"><value>Confirmar||Confirmar</value></data>
+  <data name="Frontend.010" xml:space="preserve"><value>Confirmar||Confirmar</value></data>
+  <data name="Frontend.011" xml:space="preserve"><value>Guardar||Guardar</value></data>
+  <data name="Frontend.012" xml:space="preserve"><value>Cerrar||Cerrar</value></data>
+  <data name="Frontend.013" xml:space="preserve"><value>Volver||Volver</value></data>
+  <data name="Frontend.014" xml:space="preserve"><value>Buscar||Buscar</value></data>
+  <data name="Frontend.015" xml:space="preserve"><value>Buscar||Buscar</value></data>
+  <data name="Frontend.016" xml:space="preserve"><value>Restablecer||Restablecer</value></data>
+  <data name="Frontend.017" xml:space="preserve"><value>Actualizar||Actualizar</value></data>
+  <data name="Frontend.018" xml:space="preserve"><value>Acciones||Acciones</value></data>
+  <data name="Frontend.019" xml:space="preserve"><value>Nombre||Nombre</value></data>
+  <data name="Frontend.020" xml:space="preserve"><value>Tipo||Tipo</value></data>
+  <data name="Frontend.021" xml:space="preserve"><value>Estado||Estado</value></data>
+  <data name="Frontend.022" xml:space="preserve"><value>Notas||Notas</value></data>
+  <data name="Frontend.023" xml:space="preserve"><value>Descripción||Descripción</value></data>
+  <data name="Frontend.024" xml:space="preserve"><value>Detalles||Detalles</value></data>
+  <data name="Frontend.025" xml:space="preserve"><value>Configurar||Configurar</value></data>
+  <data name="Frontend.026" xml:space="preserve"><value>Gestionar||Gestionar</value></data>
+  <data name="Frontend.027" xml:space="preserve"><value>Lista||Lista</value></data>
+  <data name="Frontend.028" xml:space="preserve"><value>Subir||Subir</value></data>
+  <data name="Frontend.029" xml:space="preserve"><value>Descargar||Descargar</value></data>
+  <data name="Frontend.030" xml:space="preserve"><value>Importar||Importar</value></data>
+  <data name="Frontend.031" xml:space="preserve"><value>Exportar||Exportar</value></data>
+  <data name="Frontend.032" xml:space="preserve"><value>Habilitado||Habilitado</value></data>
+  <data name="Frontend.033" xml:space="preserve"><value>Deshabilitados||Deshabilitados</value></data>
+  <data name="Frontend.034" xml:space="preserve"><value>Todo||Todo</value></data>
+  <data name="Frontend.035" xml:space="preserve"><value>Sin datos||Sin datos</value></data>
+  <data name="Frontend.036" xml:space="preserve"><value>Sin contenido||Sin contenido</value></data>
+  <data name="Frontend.037" xml:space="preserve"><value>Seleccione||Seleccione</value></data>
+  <data name="Frontend.038" xml:space="preserve"><value>Complete el campo||Complete el campo</value></data>
+  <data name="Frontend.039" xml:space="preserve"><value>Introduzca||Introduzca</value></data>
+  <data name="Frontend.040" xml:space="preserve"><value>Fecha de alta||Fecha de alta</value></data>
+  <data name="Frontend.041" xml:space="preserve"><value>Hora de inicio||Hora de inicio</value></data>
+  <data name="Frontend.042" xml:space="preserve"><value>Hora de finalización||Hora de finalización</value></data>
+  <data name="Frontend.043" xml:space="preserve"><value>Creado||Creado</value></data>
+  <data name="Frontend.044" xml:space="preserve"><value>Fecha de actualización||Fecha de actualización</value></data>
+  <data name="Frontend.045" xml:space="preserve"><value>Nombre de archivo||Nombre de archivo</value></data>
+  <data name="Frontend.046" xml:space="preserve"><value>Tamaño del archivo||Tamaño del archivo</value></data>
+  <data name="Frontend.047" xml:space="preserve"><value>Hora de subida||Hora de subida</value></data>
+  <data name="Frontend.048" xml:space="preserve"><value>Eliminar seleccionados||Eliminar seleccionados</value></data>
+  <data name="Frontend.049" xml:space="preserve"><value>Agregar archivo||Agregar archivo</value></data>
+  <data name="Frontend.050" xml:space="preserve"><value>Seleccionar archivo||Seleccionar archivo</value></data>
+  <data name="Frontend.051" xml:space="preserve"><value>Anterior||Anterior</value></data>
+  <data name="Frontend.052" xml:space="preserve"><value>Siguiente||Siguiente</value></data>
+  <data name="Frontend.053" xml:space="preserve"><value>Correcto||Correcto</value></data>
+  <data name="Frontend.054" xml:space="preserve"><value>Fallido||Fallido</value></data>
+  <data name="Frontend.055" xml:space="preserve"><value>Éxito||Éxito</value></data>
+  <data name="Frontend.056" xml:space="preserve"><value>Error||Error</value></data>
+  <data name="Frontend.057" xml:space="preserve"><value>Error al cargar||Error al cargar</value></data>
+  <data name="Frontend.058" xml:space="preserve"><value>Módulos agregados correctamente||Módulos agregados correctamente</value></data>
+  <data name="Frontend.059" xml:space="preserve"><value>Error al agregar||Error al agregar</value></data>
+  <data name="Frontend.060" xml:space="preserve"><value>Actualizado correctamente||Actualizado correctamente</value></data>
+  <data name="Frontend.061" xml:space="preserve"><value>Error al editar||Error al editar</value></data>
+  <data name="Frontend.062" xml:space="preserve"><value>Eliminado correctamente||Eliminado correctamente</value></data>
+  <data name="Frontend.063" xml:space="preserve"><value>Error al eliminar||Error al eliminar</value></data>
+  <data name="Frontend.064" xml:space="preserve"><value>Subido correctamente||Subido correctamente</value></data>
+  <data name="Frontend.065" xml:space="preserve"><value>Error al subir||Error al subir</value></data>
+  <data name="Frontend.066" xml:space="preserve"><value>Copiado correctamente||Copiado correctamente</value></data>
+  <data name="Frontend.067" xml:space="preserve"><value>Error al copiar||Error al copiar</value></data>
+  <data name="Frontend.068" xml:space="preserve"><value>Aviso||Aviso</value></data>
+  <data name="Frontend.069" xml:space="preserve"><value>Advertencia||Advertencia</value></data>
+  <data name="Frontend.070" xml:space="preserve"><value>Error||Error</value></data>
+  <data name="Frontend.071" xml:space="preserve"><value>Sí||Sí</value></data>
+  <data name="Frontend.072" xml:space="preserve"><value>No||No</value></data>
+  <data name="Frontend.073" xml:space="preserve"><value>Habilitado||Habilitado</value></data>
+  <data name="Frontend.074" xml:space="preserve"><value>Desconocido||Desconocido</value></data>
+  <data name="Frontend.075" xml:space="preserve"><value>No establecido||No establecido</value></data>
+  <data name="Frontend.076" xml:space="preserve"><value>Sin registros||Sin registros</value></data>
+  <data name="Frontend.077" xml:space="preserve"><value>Introduce una palabra clave||Introduce una palabra clave</value></data>
+  <data name="Frontend.078" xml:space="preserve"><value>Selecciona un tipo||Selecciona un tipo</value></data>
+  <data name="Frontend.079" xml:space="preserve"><value>Seleccionar estado||Seleccionar estado</value></data>
+  <data name="Frontend.080" xml:space="preserve"><value>Crear||Crear</value></data>
+  <data name="Frontend.081" xml:space="preserve"><value>Enviar||Enviar</value></data>
+  <data name="Frontend.082" xml:space="preserve"><value>Ver||Ver</value></data>
+  <data name="Frontend.083" xml:space="preserve"><value>Establecer como predeterminado||Establecer como predeterminado</value></data>
+  <data name="Frontend.084" xml:space="preserve"><value>Prueba||Prueba</value></data>
+  <data name="Frontend.085" xml:space="preserve"><value>Conectado correctamente||Conectado correctamente</value></data>
+  <data name="Frontend.086" xml:space="preserve"><value>Error de conexión||Error de conexión</value></data>
+  <data name="Frontend.087" xml:space="preserve"><value>La contraseña es obligatoria!||La contraseña es obligatoria!</value></data>
+  <data name="Frontend.088" xml:space="preserve"><value>{0} está duplicado.||{0} está duplicado.</value></data>
+  <data name="Frontend.089" xml:space="preserve"><value>Los administradores no pueden eliminarse a sí mismos!||Los administradores no pueden eliminarse a sí mismos!</value></data>
+  <data name="Frontend.090" xml:space="preserve"><value>El administrador no existe!||El administrador no existe!</value></data>
+  <data name="Frontend.091" xml:space="preserve"><value>¡Eliminado correctamente!||¡Eliminado correctamente!</value></data>
+  <data name="Frontend.092" xml:space="preserve"><value>El archivo de registro de WeChat no existe:||El archivo de registro de WeChat no existe:</value></data>
+  <data name="Frontend.093" xml:space="preserve"><value>¡{0} debe tener más de 16 caracteres!||¡{0} debe tener más de 16 caracteres!</value></data>
+  <data name="Frontend.094" xml:space="preserve"><value>La sesión actual no está asociada a ningún Módulo XNCF.||La sesión actual no está asociada a ningún Módulo XNCF.</value></data>
+  <data name="Frontend.095" xml:space="preserve"><value>No se encontró un Módulo coincidente: "{0}". Llame primero a GetSessionModuleList para confirmar los módulos de la sesión actual.||No se encontró un Módulo coincidente: "{0}". Llame primero a GetSessionModuleList para confirmar los módulos de la sesión actual.</value></data>
+  <data name="Frontend.096" xml:space="preserve"><value>Módulo no encontrado: "{0}". Llame primero a GetSessionModuleList para confirmar los módulos disponibles.||Módulo no encontrado: "{0}". Llame primero a GetSessionModuleList para confirmar los módulos disponibles.</value></data>
+  <data name="Frontend.097" xml:space="preserve"><value>No se encontró el registro en tiempo de ejecución del Módulo {0}, por lo que no se puede leer la información de la base de datos.||No se encontró el registro en tiempo de ejecución del Módulo {0}, por lo que no se puede leer la información de la base de datos.</value></data>
+  <data name="Frontend.098" xml:space="preserve"><value>No hay ningún módulo registrado en el sistema.||No hay ningún módulo registrado en el sistema.</value></data>
+  <data name="Frontend.099" xml:space="preserve"><value>No se leyó SenparcAiSetting. Compruebe la configuración de appsettings.json.||No se leyó SenparcAiSetting. Compruebe la configuración de appsettings.json.</value></data>
+  <data name="Frontend.100" xml:space="preserve"><value>SenparcAiSetting.AiPlatform sigue siendo UnSet. Defina primero una plataforma disponible en appsettings.json.||SenparcAiSetting.AiPlatform sigue siendo UnSet. Defina primero una plataforma disponible en appsettings.json.</value></data>
+  <data name="Frontend.101" xml:space="preserve"><value>El Módulo AIKernel no está instalado o no está habilitado, así que el sistema no puede cambiar al modelo de IA indicado.||El Módulo AIKernel no está instalado o no está habilitado, así que el sistema no puede cambiar al modelo de IA indicado.</value></data>
+  <data name="Frontend.102" xml:space="preserve"><value>No se pudo resolver AIModelService, por lo que no se puede cargar el modelo de IA especificado.||No se pudo resolver AIModelService, por lo que no se puede cargar el modelo de IA especificado.</value></data>
+  <data name="Frontend.103" xml:space="preserve"><value>El modelo de IA seleccionado no existe: {0}||El modelo de IA seleccionado no existe: {0}</value></data>
+  <data name="Frontend.104" xml:space="preserve"><value>El modelo de IA seleccionado no es de tipo Chat: {0}||El modelo de IA seleccionado no es de tipo Chat: {0}</value></data>
+  <data name="Frontend.105" xml:space="preserve"><value>El usuario actual no ha iniciado sesión, por lo que no se puede renovar.||El usuario actual no ha iniciado sesión, por lo que no se puede renovar.</value></data>
+  <data name="Frontend.106" xml:space="preserve"><value>La información del usuario no existe!||La información del usuario no existe!</value></data>
+  <data name="Frontend.107" xml:space="preserve"><value>¡El nombre de usuario no existe o la contraseña es incorrecta: {0}!||¡El nombre de usuario no existe o la contraseña es incorrecta: {0}!</value></data>
+  <data name="Frontend.108" xml:space="preserve"><value>¡El nombre de usuario no existe o la contraseña es incorrecta!||¡El nombre de usuario no existe o la contraseña es incorrecta!</value></data>
   <data name="Admin.Home.AgentsOverview" xml:space="preserve"><value>Resumen operativo de Agents</value></data>
   <data name="Admin.Home.AgentsOverviewLive" xml:space="preserve"><value>En tiempo real</value></data>
   <data name="Admin.Home.AgentsManage" xml:space="preserve"><value>Administrar Agents</value></data>
@@ -549,4 +835,39 @@
   <data name="Admin.Home.AgentsWaitingOrPaused" xml:space="preserve"><value>En espera / pausadas</value></data>
   <data name="Admin.Home.AiQuickDescription" xml:space="preserve"><value>Use el chat rápido de IA del Footer para abrir la conversación completa y seleccionar el contexto cuando lo necesite.</value></data>
   <data name="Admin.Home.AiQuickDialog" xml:space="preserve"><value>Abrir chat rápido</value></data>
+  <data name="Menu.ConfigMode" xml:space="preserve">
+    <value>Modo de configuración</value>
+  </data>
+  <data name="Menu.ConfigModeExit" xml:space="preserve">
+    <value>Salir del modo de configuración</value>
+  </data>
+  <data name="Menu.ConfigModeTip" xml:space="preserve">
+    <value>Todos los menús/páginas aparecen abajo por jerarquía (los botones no se ordenan). Arrastre elementos del mismo nivel para reordenarlos, o escriba un número en la casilla Orden y pulse Enter para saltar a esa posición. Al guardar se actualizan de verdad los valores Sort y se refresca el menú izquierdo.</value>
+  </data>
+  <data name="Menu.ConfigSave" xml:space="preserve">
+    <value>Guardar orden</value>
+  </data>
+  <data name="Menu.ConfigSaveSuccess" xml:space="preserve">
+    <value>El orden de los menús se ha guardado</value>
+  </data>
+  <data name="Menu.ConfigEmpty" xml:space="preserve">
+    <value>No hay menús o páginas para ordenar</value>
+  </data>
+  <data name="Admin.Footer.NeuBellWebHookSettings" xml:space="preserve"><value>Configuración de WebHook</value></data>
+  <data name="DocHelp.Help" xml:space="preserve"><value>Ayuda</value></data>
+  <data name="DocHelp.Title" xml:space="preserve"><value>Documentación de la función</value></data>
+  <data name="DocHelp.OpenWindow" xml:space="preserve"><value>Abrir en una ventana nueva</value></data>
+  <data name="DocHelp.Close" xml:space="preserve"><value>Cerrar</value></data>
+  <data name="DocHelp.Loading" xml:space="preserve"><value>Cargando documentación...</value></data>
+  <data name="DocHelp.Notice" xml:space="preserve"><value>Si el documento está vacío o bloqueado, ábralo en una ventana nueva.</value></data>
+  <data name="DocHelp.LoadFailed" xml:space="preserve"><value>Error o tiempo de carga agotado. Reintente o abra una ventana nueva.</value></data>
+  <data name="DocHelp.Retry" xml:space="preserve"><value>Reintentar</value></data>
+  <data name="DocHelp.InvalidTopic" xml:space="preserve"><value>La configuración de la documentación no es válida. Contacte con su administrador.</value></data>
+
+  <data name="SystemMenu.AdministratorManagement" xml:space="preserve"><value>Administrator management</value></data>
+  <data name="SystemMenu.RoleManagement" xml:space="preserve"><value>Role management</value></data>
+  <data name="SystemMenu.SystemInfo" xml:space="preserve"><value>System information</value></data>
+  <data name="SystemMenu.TenantInfo" xml:space="preserve"><value>Tenant information</value></data>
+  <data name="SystemMenu.ExtensionModules" xml:space="preserve"><value>Extension modules</value></data>
+  <data name="SystemMenu.ModuleManagement" xml:space="preserve"><value>Module management</value></data>
 </root>

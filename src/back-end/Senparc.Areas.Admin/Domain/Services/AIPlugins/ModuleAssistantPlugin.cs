@@ -13,6 +13,12 @@
     修改标识：Senparc - 20260815
     修改描述：v0.5.1 优化管理端 AI 插件与知识库交互
 
+    修改标识：Senparc - 20261009
+    修改描述：v0.11.0 增强后台 Admin Chat 群组配置、提示词构建与上下文控制
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 enhance Agent Studio, group configuration, and task management interactions
+
 ----------------------------------------------------------------*/
 using Microsoft.SemanticKernel;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
@@ -33,6 +39,8 @@ namespace Senparc.Areas.Admin.Domain.Services.AIPlugins
     /// </summary>
     public class ModuleAssistantPlugin
     {
+        private const int MaxToolResultCharacters = 8000;
+
         private readonly List<AdminChatSessionModule> _sessionModules;
 
         /// <summary>
@@ -67,7 +75,7 @@ namespace Senparc.Areas.Admin.Domain.Services.AIPlugins
                     sb.AppendLine($"  菜单名: {register.MenuName}");
                 }
             }
-            return sb.ToString();
+            return LimitToolResult(sb.ToString());
         }
 
         /// <summary>
@@ -120,7 +128,7 @@ namespace Senparc.Areas.Admin.Domain.Services.AIPlugins
             {
                 sb.AppendLine("（该模块已关联会话，但运行时 XncfRegisterManager 中未找到其注册，可能已卸载。）");
             }
-            return sb.ToString();
+            return LimitToolResult(sb.ToString());
         }
 
         /// <summary>
@@ -187,7 +195,7 @@ namespace Senparc.Areas.Admin.Domain.Services.AIPlugins
                 sb.AppendLine("此模块没有独立数据库（未实现 IXncfDatabase 接口）。");
                 sb.AppendLine("该模块可能使用公共数据库，或不涉及持久化存储。");
             }
-            return sb.ToString();
+            return LimitToolResult(sb.ToString());
         }
 
         /// <summary>
@@ -213,7 +221,18 @@ namespace Senparc.Areas.Admin.Domain.Services.AIPlugins
                 if (!string.IsNullOrWhiteSpace(r.Description))
                     sb.AppendLine($"  {r.Description}");
             }
-            return sb.ToString();
+            return LimitToolResult(sb.ToString());
+        }
+
+        private static string LimitToolResult(string value)
+        {
+            if (value.Length <= MaxToolResultCharacters)
+            {
+                return value;
+            }
+
+            const string truncated = "\n[结果过长，已截断]";
+            return value.Substring(0, MaxToolResultCharacters - truncated.Length) + truncated;
         }
 
         /// <summary>

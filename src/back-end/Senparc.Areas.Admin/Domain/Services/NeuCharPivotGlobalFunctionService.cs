@@ -1,0 +1,277 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+
+    文件名：NeuCharPivotGlobalFunctionService.cs
+    文件功能描述：全局 NeuCharPivot Function 映射、访问控制与执行入口
+
+    创建标识：Senparc - 20260829
+
+    修改标识：Senparc - 20260829
+    修改描述：v0.7.0 新增 NeuCharPivot 全局浮动调用与工作流分析管理能力
+
+    修改标识：Senparc - 20260917
+    修改描述：v0.9.1 新增 Function 全局 Provit 数据库访问策略（DB 覆盖代码属性），
+    支持按用户/角色/权限码绑定，策略缓存在 FullNeuCharFunctionProvitAccessCache
+
+    修改标识：Senparc - 20261005
+    修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 维护全局 NeuCharPivot Function 映射、访问控制与执行入口
+
+----------------------------------------------------------------*/
+
+using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
+using Senparc.Ncf.Core.Authorization;
+using Senparc.Ncf.Core.WorkContext;
+using Senparc.Ncf.Core.WorkContext.Provider;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Senparc.Areas.Admin.Domain.Services;
+
+public sealed record NeuCharGlobalFunctionResolution(
+    NeuCharFunctionDescriptor Descriptor,
+    string ErrorMessage)
+{
+    public bool Success => Descriptor != null && string.IsNullOrWhiteSpace(ErrorMessage);
+}
+
+public sealed class NeuCharPivotGlobalAccessService
+{
+    private readonly IAdminWorkContextProvider _workContextProvider;
+    private readonly ICheckPermission _checkPermission;
+
+    public NeuCharPivotGlobalAccessService(
+        IAdminWorkContextProvider workContextProvider,
+        ICheckPermission checkPermission)
+    {
+        _workContextProvider = workContextProvider;
+        _checkPermission = checkPermission;
+    }
+
+    /// <summary>
+    /// 判断当前管理员访问指定 Function 全局 Provit 是否被拒绝。
+    /// <para>
+    /// 当提供数据库策略 <paramref name="policy"/> 且其 AccessMode 非“继承代码”时，
+    /// 数据库策略覆盖 FunctionRenderAttribute 的代码级约束（Open/Restricted/Deny）；
+    /// 否则回退到代码属性基线（GlobalPivotRoleCodes / GlobalPivotPermissionCodes）。
+    /// </para>
+    /// </summary>
+    /// <returns>拒绝原因；null 表示放行</returns>
+    public async Task<string> GetDenialReasonAsync(
+        NeuCharFunctionDescriptor descriptor,
+        NeuCharFunctionProvitAccess policy = null)
+    {
+        var context = _workContextProvider.GetAdminWorkContext();
+        if (context == null || context.AdminUserId <= 0)
+        {
+            return "请先登录后台管理员账号。";
+        }
+
+        if (policy is { AccessMode: not NeuCharFunctionProvitAccess.AccessModeInherit })
+        {
+            return policy.AccessMode switch
+            {
+                NeuCharFunctionProvitAccess.AccessModeOpen => null,
+                NeuCharFunctionProvitAccess.AccessModeDeny => "该 Function 的全局访问已被管理员策略禁用。",
+                NeuCharFunctionProvitAccess.AccessModeRestricted =>
+                    await GetRestrictedDenialReasonAsync(policy, context).ConfigureAwait(false),
+                _ => null
+            };
+        }
+
+        var requiredRoles = descriptor.GlobalPivotRoleCodes ?? Array.Empty<string>();
+        var requiredPermissions = descriptor.GlobalPivotPermissionCodes ?? Array.Empty<string>();
+        if (requiredRoles.Count == 0 && requiredPermissions.Count == 0)
+        {
+            return null;
+        }
+
+        if (RoleMatches(context, requiredRoles))
+        {
+            return null;
+        }
+
+        if (requiredPermissions.Count > 0 &&
+            await _checkPermission.HasPermissionAsync(
+                requiredPermissions.ToArray(),
+                context.AdminUserId).ConfigureAwait(false))
+        {
+            return null;
+        }
+
+        return "当前账号没有访问该全局 Function 的角色或权限。";
+    }
+
+    /// <summary>
+    /// 受限策略：用户 / 角色 / 权限码任一命中即放行
+    /// </summary>
+    private async Task<string> GetRestrictedDenialReasonAsync(
+        NeuCharFunctionProvitAccess policy,
+        AdminWorkContext context)
+    {
+        if (policy.MatchesAdminUser(context.AdminUserId))
+        {
+            return null;
+        }
+
+        var requiredRoles = policy.RoleCodeList;
+        if (requiredRoles.Count > 0 && RoleMatches(context, requiredRoles))
+        {
+            return null;
+        }
+
+        var requiredPermissions = policy.PermissionCodeList;
+        if (requiredPermissions.Count > 0 &&
+            await _checkPermission.HasPermissionAsync(
+                requiredPermissions.ToArray(),
+                context.AdminUserId).ConfigureAwait(false))
+        {
+            return null;
+        }
+
+        return "当前账号未包含在该 Function 全局访问策略绑定的用户、角色或权限中。";
+    }
+
+    /// <summary>
+    /// 解析“是否允许出现在全局 Provit”：数据库策略优先覆盖代码 AllowGlobalPivot。
+    /// </summary>
+    public static bool ResolveExposureAllowed(
+        bool codeAllowGlobalPivot,
+        NeuCharFunctionProvitAccess policy)
+    {
+        if (policy == null || policy.AccessMode == NeuCharFunctionProvitAccess.AccessModeInherit)
+        {
+            return codeAllowGlobalPivot;
+        }
+        return policy.AccessMode switch
+        {
+            NeuCharFunctionProvitAccess.AccessModeOpen => true,
+            NeuCharFunctionProvitAccess.AccessModeRestricted => true,
+            NeuCharFunctionProvitAccess.AccessModeDeny => false,
+            _ => codeAllowGlobalPivot
+        };
+    }
+
+    public static bool RoleMatches(
+        AdminWorkContext context,
+        IEnumerable<string> requiredRoles)
+    {
+        var required = requiredRoles?
+            .Where(role => !string.IsNullOrWhiteSpace(role))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase)
+            ?? new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        if (required.Count == 0)
+        {
+            return false;
+        }
+
+        return (context?.RoleCodes ?? Array.Empty<string>())
+            .Any(role => required.Contains(role));
+    }
+}
+
+/// <summary>
+/// 全局浮动 Function 的唯一服务端入口。
+/// Function 必须显式声明 AllowGlobalPivot；访问规则为空时仅要求当前后台管理员已登录。
+/// </summary>
+public sealed class NeuCharPivotGlobalFunctionService
+{
+    private readonly NeuCharFunctionService _functionService;
+    private readonly NeuCharPivotGlobalAccessService _accessService;
+    private readonly NeuCharFunctionProvitAccessService _accessPolicyService;
+
+    public NeuCharPivotGlobalFunctionService(
+        NeuCharFunctionService functionService,
+        NeuCharPivotGlobalAccessService accessService,
+        NeuCharFunctionProvitAccessService accessPolicyService)
+    {
+        _functionService = functionService;
+        _accessService = accessService;
+        _accessPolicyService = accessPolicyService;
+    }
+
+    public async Task<NeuCharGlobalFunctionResolution> ResolveAsync(
+        string moduleUid,
+        string functionKey,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(moduleUid) || string.IsNullOrWhiteSpace(functionKey))
+        {
+            return Denied("模块 UID 和 Function Key 不能为空。");
+        }
+
+        var descriptor = (await _functionService.GetCatalogAsync(
+                moduleUid,
+                true,
+                cancellationToken)
+            .ConfigureAwait(false))
+            .FirstOrDefault(item => MatchesFunctionKey(item, functionKey));
+
+        if (descriptor == null)
+        {
+            return Denied("Function 不存在、未加载或已在模块更新后移除。");
+        }
+
+        // 数据库策略（FullNeuCharFunctionProvitAccessCache 缓存）优先覆盖代码属性
+        var policy = _accessPolicyService.GetPolicy(
+            descriptor.ModuleUid,
+            descriptor.FunctionKey);
+        if (!NeuCharPivotGlobalAccessService.ResolveExposureAllowed(
+                descriptor.AllowGlobalPivot,
+                policy))
+        {
+            return Denied(policy is { AccessMode: NeuCharFunctionProvitAccess.AccessModeDeny }
+                ? "该 Function 的全局访问已被管理员策略禁用。"
+                : "该 Function 未声明为全局 NeuCharPivot 映射。");
+        }
+
+        var accessError = await _accessService.GetDenialReasonAsync(descriptor, policy).ConfigureAwait(false);
+        return accessError == null
+            ? new NeuCharGlobalFunctionResolution(descriptor, null)
+            : Denied(accessError);
+    }
+
+    public async Task<NeuCharFunctionExecutionResult> ExecuteAsync(
+        string moduleUid,
+        string functionKey,
+        string parametersJson,
+        CancellationToken cancellationToken = default)
+    {
+        var resolution = await ResolveAsync(moduleUid, functionKey, cancellationToken)
+            .ConfigureAwait(false);
+        if (!resolution.Success)
+        {
+            return new NeuCharFunctionExecutionResult(
+                false,
+                null,
+                resolution.ErrorMessage,
+                null);
+        }
+
+        return await _functionService.ExecuteAsync(
+                resolution.Descriptor.ModuleUid,
+                resolution.Descriptor.FunctionKey,
+                parametersJson,
+                cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    private static NeuCharGlobalFunctionResolution Denied(string message) =>
+        new(null, message);
+
+    public static bool MatchesFunctionKey(
+        NeuCharFunctionDescriptor descriptor,
+        string functionKey)
+    {
+        return descriptor != null &&
+            !string.IsNullOrWhiteSpace(functionKey) &&
+            (string.Equals(descriptor.FunctionKey, functionKey, StringComparison.OrdinalIgnoreCase) ||
+             string.Equals(descriptor.MethodName, functionKey, StringComparison.OrdinalIgnoreCase) ||
+             string.Equals(descriptor.Name, functionKey, StringComparison.OrdinalIgnoreCase));
+    }
+}

@@ -176,6 +176,70 @@
     background: rgba(255, 255, 255, .13);
 }
 
+.download-source-picker {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    align-items: center;
+    gap: 10px;
+}
+
+.source-picker-label {
+    color: rgba(230, 233, 255, .62);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.source-picker-options {
+    display: inline-flex;
+    max-width: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .18);
+    border-radius: 10px;
+    background: rgba(5, 10, 27, .28);
+}
+
+.source-option {
+    position: relative;
+    display: block;
+    margin: 0;
+    cursor: pointer;
+}
+
+.source-option + .source-option {
+    border-left: 1px solid rgba(255, 255, 255, .12);
+}
+
+.source-option input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.source-option span {
+    display: block;
+    padding: 8px 11px;
+    color: rgba(255, 255, 255, .7);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition: color .2s ease, background-color .2s ease;
+}
+
+.source-option input:checked + span {
+    color: #17203b;
+    background: #fff;
+}
+
+.source-option input:focus-visible + span {
+    outline: 2px solid var(--ncf-cyan);
+    outline-offset: -2px;
+}
+
 .download-status {
     display: inline-flex;
     max-width: 100%;
@@ -660,6 +724,14 @@
     color: #929caf;
 }
 
+.platform-info .package-fingerprint {
+    overflow-wrap: anywhere;
+    color: #69768d;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 9px;
+    line-height: 1.45;
+}
+
 .platform-card > a {
     display: flex;
     width: 35px;
@@ -856,6 +928,10 @@
     .download-lead { font-size: 15px; }
     .download-actions { flex-direction: column; }
     .download-button { width: 100%; }
+    .download-source-picker { align-items: flex-start; flex-direction: column; }
+    .source-picker-options { width: 100%; }
+    .source-option { flex: 1 1 0; text-align: center; }
+    .source-option span { padding-right: 7px; padding-left: 7px; }
     .download-status { display: grid; width: 100%; grid-template-columns: 1fr 1fr; }
     .download-status .status-pill:last-child { grid-column: 1 / -1; }
     .status-divider { display: none; }

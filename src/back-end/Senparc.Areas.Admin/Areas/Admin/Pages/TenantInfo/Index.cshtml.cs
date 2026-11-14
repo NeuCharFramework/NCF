@@ -1,3 +1,20 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+
+    文件名：Index.cshtml.cs
+    文件功能描述：Index.cshtml.cs implementation and project behavior.
+
+
+    创建标识：Senparc - 20241028
+
+    修改标识：Senparc - 20261005
+    修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 租户注册表管理限制为平台管理员，封堵跨租户提权
+
+----------------------------------------------------------------*/
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Pipelines.Sockets.Unofficial.Buffers;
@@ -12,6 +29,7 @@ using Senparc.Ncf.Core.MultiTenant;
 using Senparc.Xncf.Tenant.Domain.DataBaseModel;
 using Senparc.Xncf.Tenant.Domain.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
@@ -27,6 +45,28 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         private readonly TenantInfoService _tenantInfoService = tenantInfoService;
         private readonly AdminUserInfoService _adminUserInfoService = adminUserInfoService;
         private readonly IStringLocalizer<AdminResource> _localizer = serviceProvider.GetRequiredService<IStringLocalizer<AdminResource>>();
+        /// <summary>
+        /// 多租户模式下的控制面校验：租户注册表（TenantInfo）管理操作（列表/新增/编辑/初始化/删除）
+        /// 仅允许平台级管理员（TenantId=0，即当前请求租户上下文 Id==0）执行；
+        /// 租户管理员（TenantId>0）被拒绝，防止跨租户提权（禁用/删除/初始化其他租户）。
+        /// 单租户模式（EnableMultiTenant=false）下不限制。
+        /// </summary>
+        private bool IsPlatformAdmin()
+        {
+            if (!SiteConfig.SenparcCoreSetting.EnableMultiTenant)
+            {
+                return true;
+            }
+
+            var requestTenantInfo = _serviceProvider.GetRequiredService<RequestTenantInfo>();
+            return requestTenantInfo.MatchSuccess && requestTenantInfo.Id == 0;
+        }
+
+        private IActionResult PlatformAdminOnlyResult()
+        {
+            return Ok(false, _localizer["Tenant.PlatformAdminOnly"]);
+        }
+
         public async Task<IActionResult> OnGetAsync()
         {
             return Page();
@@ -34,6 +74,11 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
 
         public async Task<IActionResult> OnGetRequestTenantInfoAsync()
         {
+            if (!IsPlatformAdmin())
+            {
+                return PlatformAdminOnlyResult();
+            }
+
             var requestTenantInfo = _serviceProvider.GetRequiredService<RequestTenantInfo>();
             return Ok(new
             {
@@ -59,11 +104,52 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         //[Ncf.AreaBase.Admin.Filters.CustomerResource("admin-get-systemconfig")]
         public async Task<IActionResult> OnGetListAsync(int pageIndex, int pageSize)
         {
+            if (!IsPlatformAdmin())
+            {
+                return PlatformAdminOnlyResult();
+            }
+
             var tenantInfo = await _tenantInfoService.GetObjectListAsync(pageIndex, pageSize, z => true, z => z.Id, OrderingType.Ascending);
-            return Ok(new { 
-                List = tenantInfo.AsEnumerable(),
+
+            var enableMultiTenant = SiteConfig.SenparcCoreSetting.EnableMultiTenant;
+            List<Dictionary<string, object>> rows = null;
+            if (enableMultiTenant)
+            {
+                //多租户启用时，附带每个租户的管理员账号数量，便于删除/停用决策
+                rows = tenantInfo.AsEnumerable().Select(z => new Dictionary<string, object>
+                {
+                    ["id"] = z.Id,
+                    ["name"] = z.Name,
+                    ["tenantKey"] = z.TenantKey,
+                    ["adminRemark"] = z.AdminRemark,
+                    ["enable"] = z.Enable,
+                    ["addTime"] = z.AddTime,
+                    ["lastUpdateTime"] = z.LastUpdateTime,
+                    ["adminUserCount"] = 0
+                }).ToList();
+
+                foreach (var row in rows)
+                {
+                    row["adminUserCount"] = await _adminUserInfoService.GetTenantUserCountAsync((int)row["id"]);
+                }
+            }
+
+            return Ok(new
+            {
+                List = rows ?? tenantInfo.AsEnumerable().Select(z => new Dictionary<string, object>
+                {
+                    ["id"] = z.Id,
+                    ["name"] = z.Name,
+                    ["tenantKey"] = z.TenantKey,
+                    ["adminRemark"] = z.AdminRemark,
+                    ["enable"] = z.Enable,
+                    ["addTime"] = z.AddTime,
+                    ["lastUpdateTime"] = z.LastUpdateTime,
+                    ["adminUserCount"] = 0
+                }),
                 TotalCount = tenantInfo.TotalCount,
-                PageIndex = tenantInfo.PageIndex
+                PageIndex = tenantInfo.PageIndex,
+                enableMultiTenant
             });
         }
 
@@ -76,6 +162,11 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         [CustomerResource("admin-add", "admin-edit")]
         public async Task<IActionResult> OnPostSaveAsync([FromBody] CreateOrUpdate_TenantInfoDto dto)
         {
+            if (!IsPlatformAdmin())
+            {
+                return PlatformAdminOnlyResult();
+            }
+
             if (!ModelState.IsValid)
             {
                 return Ok(false);
@@ -112,6 +203,11 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         [CustomerResource("admin-add")]
         public async Task<IActionResult> OnPostInitializeAsync([FromBody] TenantInitializeDto dto)
         {
+            if (!IsPlatformAdmin())
+            {
+                return PlatformAdminOnlyResult();
+            }
+
             if (!ModelState.IsValid)
             {
                 return Ok(false);
@@ -161,6 +257,74 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                         password = adminUserInfoResult.Password
                     }
                 }, true, _localizer["Tenant.InitializeSuccess"]);
+            }
+            catch (Exception ex)
+            {
+                return Ok(false, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 删除租户（安全校验）：
+        /// 1、不能删除当前正在使用的租户；
+        /// 2、系统必须至少保留一个启用的租户；
+        /// 3、租户下仍存在管理员账号时不允许删除（避免账号数据成为孤儿）。
+        /// </summary>
+        [CustomerResource("admin-delete")]
+        public async Task<IActionResult> OnPostDeleteAsync([FromBody] List<int> ids)
+        {
+            if (!IsPlatformAdmin())
+            {
+                return PlatformAdminOnlyResult();
+            }
+
+            if (ids == null || ids.Count == 0)
+            {
+                return Ok(false);
+            }
+
+            try
+            {
+                var enableMultiTenant = SiteConfig.SenparcCoreSetting.EnableMultiTenant;
+                var requestTenantInfo = _serviceProvider.GetRequiredService<RequestTenantInfo>();
+                var currentTenantId = enableMultiTenant && requestTenantInfo.MatchSuccess ? requestTenantInfo.Id : 0;
+
+                var allTenants = (await _tenantInfoService.GetFullListAsync(z => true)).ToList();
+                var enabledCount = allTenants.Count(z => z.Enable);
+
+                foreach (var id in ids)
+                {
+                    var tenantInfo = allTenants.FirstOrDefault(z => z.Id == id);
+                    if (tenantInfo == null)
+                    {
+                        return Ok(false, _localizer["Tenant.DeleteNotFound", id]);
+                    }
+
+                    if (enableMultiTenant && currentTenantId > 0 && id == currentTenantId)
+                    {
+                        return Ok(false, _localizer["Tenant.DeleteCurrentTenantNotAllowed"]);
+                    }
+
+                    if (tenantInfo.Enable && enabledCount <= 1)
+                    {
+                        return Ok(false, _localizer["Tenant.DeleteLastTenantNotAllowed"]);
+                    }
+
+                    var adminUserCount = await _adminUserInfoService.GetTenantUserCountAsync(id);
+                    if (adminUserCount > 0)
+                    {
+                        return Ok(false, _localizer["Tenant.DeleteHasAdminUsers", tenantInfo.Name, adminUserCount]);
+                    }
+
+                    await _tenantInfoService.DeleteObjectAsync(tenantInfo);
+                    if (tenantInfo.Enable)
+                    {
+                        enabledCount--;
+                    }
+                    await tenantInfo.ClearCache(_serviceProvider);
+                }
+
+                return Ok(true, _localizer["Tenant.DeleteSuccess"]);
             }
             catch (Exception ex)
             {

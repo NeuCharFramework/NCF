@@ -1,5 +1,45 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+
+  <data name="AdminChat.Memory.UpdateReason.intent-deferred" xml:space="preserve"><value>続きの内容または保存の確認を待っています。このターンでは Memory を更新していません。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.no-save-intent" xml:space="preserve"><value>長期 Memory を今更新する意図が確認できなかったため、このターンでは保存していません。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.pending-review" xml:space="preserve"><value>この候補にはアシスタント由来の情報が含まれ、まだ保存されていません。発言は正確とは限らないため、各項目を確認して保存してください。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.unresolved-reference" xml:space="preserve"><value>直近の文脈では記憶対象を特定できません。「記住：…」または「Remember: …」と完全な事実を同じメッセージで指定してください。必要に応じて PromptCode を確認してください。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.review-complete" xml:space="preserve"><value>この候補一覧は確認・保存されました。</value></data>
+  <data name="AdminChat.Memory.ReviewCandidate" xml:space="preserve"><value>候補を確認</value></data>
+  <data name="AdminChat.Memory.ReviewNotice" xml:space="preserve"><value>前文からの未保存の候補です。内容と範囲を確認して項目を保存してください。削除候補は削除と確認が必要です。固定された手動項目は AI が変更できません。</value></data>
+  <data name="AdminChat.Memory.ReviewClose" xml:space="preserve"><value>編集中の下書きを処理し、設定を閉じてから候補を確認してください。</value></data>
+  <data name="AdminChat.Memory.CandidateEvidence" xml:space="preserve"><value>原文抜粋（未確認）</value></data>
+  <data name="AdminChat.Sidebar.Expand" xml:space="preserve"><value>会話サイドバーを展開</value></data>
+  <data name="AdminChat.Sidebar.Collapse" xml:space="preserve"><value>会話サイドバーを折りたたむ</value></data>
+  <data name="AdminChat.Sidebar.Resize" xml:space="preserve"><value>サイドバーの幅を調整（左右キー）</value></data>
+  <data name="AdminChat.Sidebar.Reorder" xml:space="preserve"><value>グループ内でドラッグ、または Alt + 上下キー</value></data>
+  <data name="AdminChat.Sidebar.Running" xml:space="preserve"><value>実行中</value></data>
+  <data name="AdminChat.Sidebar.Stopping" xml:space="preserve"><value>停止中</value></data>
+  <data name="AdminChat.Sidebar.SortSaved" xml:space="preserve"><value>順序を保存しました。同じアカウントで端末間共有できます。</value></data>
+  <data name="AdminChat.Sidebar.SortFailed" xml:space="preserve"><value>順序を保存できませんでした。再試行してください。</value></data>
+  <data name="AdminChat.Sidebar.PreferencesFailed" xml:space="preserve"><value>サイドバー設定の読み込みまたは保存に失敗しました。このページでのみ有効です。</value></data>
+  <data name="AdminChat.Sidebar.Archive" xml:space="preserve"><value>アーカイブして完了にする</value></data>
+  <data name="AdminChat.Sidebar.ArchiveRunning" xml:space="preserve"><value>この会話は実行中です。終了後にアーカイブしてください。</value></data>
+  <data name="AdminChat.Archive.Menu" xml:space="preserve"><value>アーカイブ</value></data>
+  <data name="AdminChat.Archive.Empty" xml:space="preserve"><value>アーカイブした会話はありません</value></data>
+  <data name="AdminChat.Archive.Open" xml:space="preserve"><value>アーカイブした会話を開く：{0}</value></data>
+  <data name="AdminChat.Archive.Delete" xml:space="preserve"><value>アーカイブした会話を削除：{0}</value></data>
+  <data name="AdminChat.Archive.Action" xml:space="preserve"><value>アーカイブ</value></data>
+  <data name="AdminChat.Archive.Restore" xml:space="preserve"><value>復元</value></data>
+  <data name="AdminChat.Archive.RestoreLabel" xml:space="preserve"><value>アーカイブした会話を復元：{0}</value></data>
+  <data name="AdminChat.Archive.RestoreSuccess" xml:space="preserve"><value>進行中の会話に戻しました</value></data>
+  <data name="AdminChat.Archive.RestoreFailed" xml:space="preserve"><value>復元できませんでした。再試行してください。</value></data>
+  <data name="AdminChat.Archive.Success" xml:space="preserve"><value>アーカイブしました。左の「新しい会話」横のその他メニューから確認、復元、または削除できます。</value></data>
+  <data name="AdminChat.Sidebar.Tools" xml:space="preserve"><value>その他</value></data>
+  <data name="AdminChat.Sidebar.Unread" xml:space="preserve"><value>未読</value></data>
+  <data name="AdminChat.Archive.Failed" xml:space="preserve"><value>アーカイブできませんでした。再試行してください。</value></data>
+  <data name="AdminChat.Archive.Tag" xml:space="preserve"><value>アーカイブ済み</value></data>
+  <data name="AdminChat.Archive.LoadFailed" xml:space="preserve"><value>アーカイブした会話を読み込めませんでした</value></data>
+  <data name="AdminChat.ArchiveSessionSuccess" xml:space="preserve"><value>会話をアーカイブしました</value></data>
+  <data name="AdminChat.Rail.Label" xml:space="preserve"><value>自分の発言</value></data>
+  <data name="AdminChat.Rail.Jump" xml:space="preserve"><value>この発言へ移動</value></data>
+  <data name="AdminChat.Rail.EmptyMessage" xml:space="preserve"><value>（空の発言）</value></data>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -39,11 +79,113 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AdminChat.Memory.Subtitle" xml:space="preserve"><value>長く続く好みを管理し、より自分に合った会話にする</value></data>
+  <data name="AdminChat.Memory.Private" xml:space="preserve"><value>プライベートメモリ</value></data>
+  <data name="AdminChat.Memory.SaveChanges" xml:space="preserve"><value>変更を保存</value></data>
+  <data name="AdminChat.Memory.ClearDraft" xml:space="preserve"><value>下書きをクリア</value></data>
+  <data name="AdminChat.Memory.EntriesHint" xml:space="preserve"><value>自分のグローバル記憶と現在の Workspace の記憶を一箇所で</value></data>
+  <data name="AdminChat.Memory.Guide" xml:space="preserve"><value>スコープ、学習ルール、ストレージ</value></data>
+  <data name="AdminChat.Memory.FormatGuide" xml:space="preserve"><value>Markdown 形式と保存ルール</value></data>
+  <data name="AdminChat.Memory.SaveEntry" xml:space="preserve"><value>エントリを保存</value></data>
+  <data name="AdminChat.Memory.EmptyEntries" xml:space="preserve"><value>まだ Memory はありません。最初の好みを追加して開始してください。</value></data>
+  <data name="AdminChat.Memory.EmptyLoaded" xml:space="preserve"><value>まだ読み込みレポートはありません。Memory を有効にしてメッセージを送信すると、ここに表示されます。</value></data>
+  <data name="AdminChat.Memory.Settings" xml:space="preserve"><value>Memory / Chat の設定</value></data>
+  <data name="AdminChat.Memory.UpdateSaved" xml:space="preserve"><value>Memory を保存しました。グローバル {0} 件、現在の Workspace {1} 件の変更（非公開のデータベース保存、ファイルは作成しません）。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.mode-off" xml:space="preserve"><value>長期 Memory は保存されませんでした。このチャットでは Memory がオフです。アシスタントの返答は永続化の証拠ではありません。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.read-only" xml:space="preserve"><value>長期 Memory は保存されませんでした。このチャットは読み取り専用です。Learn に切り替えるか、エントリを手動で編集してください。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.input-not-eligible" xml:space="preserve"><value>Memory は更新されませんでした。この入力は学習のトリガーを満たさないか、長さの上限を超えています。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.no-candidates" xml:space="preserve"><value>Memory は更新されませんでした。抽出側が長期記憶を返しませんでした。エントリを手動で追加するか、このターンの PromptCode を確認してください。アシスタントが覚えたと言っても、保存の確認にはなりません。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.pinned" xml:space="preserve"><value>Memory は更新されませんでした。該当エントリは AI による変更や削除ができないようピン留めされています。手動で編集してください。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.no-difference" xml:space="preserve"><value>Memory は変更されていません。返された内容は既に存在するか、削除対象のエントリがありませんでした。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.revision-conflict" xml:space="preserve"><value>Memory は保存されませんでした。このターン中に変更されています。新しい版が保持されています。再試行前に確認してください。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.timeout" xml:space="preserve"><value>Memory は保存されませんでした。抽出がタイムアウトしました。再試行するか、エントリを手動で追加してください。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.invalid-change" xml:space="preserve"><value>Memory は保存されませんでした。証拠、安全性、スコープ、またはフィールドの検証によりバッチ全体が拒否されました。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.capacity" xml:space="preserve"><value>Memory は保存されませんでした。80 件の上限に達しています。先に不要なエントリを削除してください。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.invalid-json" xml:space="preserve"><value>Memory は保存されませんでした。抽出側が所定の形式の有効な JSON を返しませんでした。プロンプトを確認してください。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.pending" xml:space="preserve"><value>Memory の保存はまだ確認されていません。アシスタントの約束を永続化の証拠にしないでください。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.update-failed" xml:space="preserve"><value>Memory の更新に失敗し、保存は確認されませんでした。プロンプト、モデル、またはデータベースの設定を確認してください。既存の記憶は保持されています。</value></data>
+  <data name="AdminChat.Memory.StorageNotice" xml:space="preserve"><value>記憶は自分の非公開データベースにあり、Workspace のファイルにはありません。Workspace の Memory.md は通常のファイルで、自動では作成も取り込みもされません。エントリはここで管理し、アシスタントの文面ではなく、システムの更新結果を信頼してください。</value></data>
+  <data name="AdminChat.Memory.Use" xml:space="preserve"><value>自分のグローバル Memory を使う</value></data>
+  <data name="AdminChat.Memory.Notice" xml:space="preserve"><value>Off：取得も学習もしません。Read-only：取得のみ。Learn：明確な好み、覚えて、訂正などの合図で更新します。非公開のユーザーグローバルと現在の Workspace の範囲を読み込み、期限切れとアーカイブは除外します。予算は 1000 tokens、Core は最大 300。未知のモデルは控えめな見積もりを使います。秘密や機密情報は保存しないでください。</value></data>
+  <data name="AdminChat.Memory.ModeOff" xml:space="preserve"><value>閉じる</value></data>
+  <data name="AdminChat.Memory.ModeReadOnly" xml:space="preserve"><value>読み取り専用</value></data>
+  <data name="AdminChat.Memory.ModeLearn" xml:space="preserve"><value>学習</value></data>
+  <data name="AdminChat.Memory.Entries" xml:space="preserve"><value>エントリ</value></data>
+  <data name="AdminChat.Memory.ScopeNotice" xml:space="preserve"><value>自分のグローバル記憶と、現在のチャットの Workspace の記憶だけが表示されます。Workspace の編集には、その Workspace に結び付いたチャットが必要です。同じキーでは、Workspace の事実がグローバルの事実より優先されます。</value></data>
+  <data name="AdminChat.Memory.Add" xml:space="preserve"><value>エントリを追加</value></data>
+  <data name="AdminChat.Memory.Text" xml:space="preserve"><value>コンテンツ</value></data>
+  <data name="AdminChat.Memory.Scope" xml:space="preserve"><value>スコープ</value></data>
+  <data name="AdminChat.Memory.ScopeGlobal" xml:space="preserve"><value>マイグローバル</value></data>
+  <data name="AdminChat.Memory.Tier" xml:space="preserve"><value>読み込みティア</value></data>
+  <data name="AdminChat.Memory.Kind" xml:space="preserve"><value>種類</value></data>
+  <data name="AdminChat.Memory.Topic" xml:space="preserve"><value>トピック（トピック階層では必須）</value></data>
+  <data name="AdminChat.Memory.Expires" xml:space="preserve"><value>有効期限（任意）</value></data>
+  <data name="AdminChat.Memory.Pinned" xml:space="preserve"><value>ピン留め：AI による変更や削除を防ぐ</value></data>
+  <data name="AdminChat.Memory.DeleteNotice" xml:space="preserve"><value>エントリを削除し、その履歴内容を消去しますか？元のチャットメッセージは削除されません。</value></data>
+  <data name="AdminChat.Memory.Delete" xml:space="preserve"><value>削除</value></data>
+  <data name="AdminChat.Memory.Source" xml:space="preserve"><value>元のチャット / メッセージ</value></data>
+  <data name="AdminChat.Memory.Loaded" xml:space="preserve"><value>このターンで読み込み済み</value></data>
+  <data name="AdminChat.Memory.LoadedNotice" xml:space="preserve"><value>このページの最新ターンでモデルに渡した記憶であり、モデルがそれを使った証明ではありません。件数には Memory の境界テキストを含み、SystemMessage、履歴、プロトコルのオーバーヘッドは含みません。このレポートは更新後には残りません。</value></data>
+  <data name="AdminChat.Memory.Reason" xml:space="preserve"><value>選択理由</value></data>
+  <data name="AdminChat.Memory.History" xml:space="preserve"><value>変更履歴</value></data>
+  <data name="AdminChat.Memory.Time" xml:space="preserve"><value>時間</value></data>
+  <data name="AdminChat.Memory.MarkdownScope" xml:space="preserve"><value>Memory.md は自分のグローバル記憶だけを編集またはエクスポートします。Workspace の記憶はエントリ編集を使ってください。Markdown を空にしても、それらは削除されません。</value></data>
+  <data name="AdminChat.Memory.UnsavedMarkdown" xml:space="preserve"><value>個別のエントリを編集する前に、Markdown の下書きを保存してください。</value></data>
+  <data name="AdminChat.Memory.Preview" xml:space="preserve"><value>Memory.md をプレビュー</value></data>
+  <data name="AdminChat.Memory.Edit" xml:space="preserve"><value>編集 / ティア</value></data>
+  <data name="AdminChat.Memory.Format" xml:space="preserve"><value>見出し ## Core、## Topic: name、## Archive を使い、各記憶は '- ' で始めます。1 件あたり最大 300 文字、合計 80 件です。手動保存するとすべてのエントリが固定され、AI は置き換えません。編集欄を空にして保存すると、すべての記憶を削除できます。PromptRange の AdminChat.Memory レンジで新しい版を公開して採点すると、公開済みで平均点が最も高いプロンプトが既定を置き換えます。</value></data>
+  <data name="AdminChat.Memory.SystemMessage" xml:space="preserve"><value>SystemMessage</value></data>
+  <data name="AdminChat.Memory.SystemNotice" xml:space="preserve"><value>次のターンから自分のすべてのチャットに適用されます。Memory がオフでも同様です。ツール権限は付与しません。最大 2000 文字です。</value></data>
+  <data name="AdminChat.Memory.GlobalSystem" xml:space="preserve"><value>テナント全体の SystemMessage（スーパー管理者）</value></data>
+  <data name="AdminChat.Memory.GlobalNotice" xml:space="preserve"><value>このテナントの全ユーザーのチャットに適用されます。単一テナントモードではサイト全体のチャットに適用されます。タイトルや Memory 抽出などの内部生成タスクには使いません。</value></data>
+  <data name="AdminChat.Memory.SaveGlobal" xml:space="preserve"><value>グローバル SystemMessage を保存</value></data>
+  <data name="AdminChat.Memory.Download" xml:space="preserve"><value>Memory.md をダウンロード</value></data>
+  <data name="AdminChat.Memory.Clear" xml:space="preserve"><value>下書きをクリア（保存すると削除）</value></data>
+  <data name="AdminChat.Memory.Save" xml:space="preserve"><value>自分の Memory / 設定を保存</value></data>
+  <data name="AdminChat.Memory.Saved" xml:space="preserve"><value>保存しました。</value></data>
+  <data name="AdminChat.Memory.Failed" xml:space="preserve"><value>Memory の操作に失敗しました。再試行する前に再読み込みしてください。</value></data>
+  <data name="AdminChat.Memory.UpdateWarning" xml:space="preserve"><value>このターンでは Memory は更新されず、既存の記憶は保持されています。PromptRange を確認するか、Memory の設定を開き直してください。</value></data>
   <data name="Admin.Title" xml:space="preserve">
     <value>NCF 管理パネル</value>
   </data>
   <data name="Admin.Nav.Home" xml:space="preserve">
     <value>ホーム</value>
+  </data>
+  <data name="Admin.Tabs.List" xml:space="preserve">
+    <value>開いているページ</value>
+  </data>
+  <data name="Admin.Tabs.Close" xml:space="preserve">
+    <value>タブを閉じる</value>
+  </data>
+  <data name="Admin.Tabs.Untitled" xml:space="preserve">
+    <value>無題のページ</value>
+  </data>
+  <data name="Admin.Tabs.ScrollLeft" xml:space="preserve">
+    <value>タブを左へ</value>
+  </data>
+  <data name="Admin.Tabs.ScrollRight" xml:space="preserve">
+    <value>タブを右へ</value>
+  </data>
+  <data name="Admin.Nav.Search" xml:space="preserve">
+    <value>メニューを検索</value>
+  </data>
+  <data name="Admin.Nav.SearchPlaceholder" xml:space="preserve">
+    <value>キーワードでメニューを絞り込み</value>
+  </data>
+  <data name="Admin.Nav.SearchEmpty" xml:space="preserve">
+    <value>一致するメニューがありません</value>
+  </data>
+  <data name="Admin.Nav.ConfigTitle" xml:space="preserve">
+    <value>メニュー設定</value>
+  </data>
+  <data name="Admin.Nav.ConfigHint" xml:space="preserve">
+    <value>1次メニューをドラッグして順序を変更。保存すると並び順値が更新されます</value>
+  </data>
+  <data name="Admin.Nav.ConfigSave" xml:space="preserve">
+    <value>順序を保存</value>
+  </data>
+  <data name="Admin.Nav.ConfigSaved" xml:space="preserve">
+    <value>メニューの順序を保存しました</value>
   </data>
   <data name="Admin.Layout.Welcome" xml:space="preserve">
     <value>ようこそ、</value>
@@ -103,7 +245,7 @@
   <data name="Common.备注" xml:space="preserve"><value>備考</value></data>
   <data name="Common.说明" xml:space="preserve"><value>説明</value></data>
   <data name="Common.添加时间" xml:space="preserve"><value>作成日時</value></data>
-  <data name="Common.操作" xml:space="preserve"><value>操作</value></data>
+  <data name="Common.操作" xml:space="preserve"><value>アクション</value></data>
   <data name="Common.编辑" xml:space="preserve"><value>編集</value></data>
   <data name="Common.删除" xml:space="preserve"><value>削除</value></data>
   <data name="Common.取消" xml:space="preserve"><value>キャンセル</value></data>
@@ -111,7 +253,7 @@
   <data name="Common.请输入说明" xml:space="preserve"><value>説明を入力してください</value></data>
   <data name="Common.请输入备注" xml:space="preserve"><value>備考を入力してください</value></data>
   <data name="Common.返回" xml:space="preserve"><value>戻る</value></data>
-  <data name="Common.保存" xml:space="preserve"><value>保存</value></data>
+  <data name="Common.保存" xml:space="preserve"><value>保存する</value></data>
   <data name="Menu.管理" xml:space="preserve"><value>メニュー管理</value></data>
   <data name="Menu.列表" xml:space="preserve"><value>メニュー一覧</value></data>
   <data name="Menu.增加菜单" xml:space="preserve"><value>メニューを追加</value></data>
@@ -149,6 +291,7 @@
   <data name="Tenant.KeyExists" xml:space="preserve"><value>テナント一致ルール {0} は既に存在します</value></data>
   <data name="Tenant.SaveSuccess.Edit" xml:space="preserve"><value>テナントの更新に成功しました</value></data>
   <data name="Tenant.SaveSuccess.Create" xml:space="preserve"><value>テナントの作成に成功しました</value></data>
+  <data name="Tenant.PlatformAdminOnly" xml:space="preserve"><value>マルチテナントモードでは、プラットフォーム管理者のみがテナント情報を管理できます！</value></data>
   <data name="Tenant.NotFound" xml:space="preserve"><value>テナントが存在しません</value></data>
   <data name="Tenant.SetInfoFailed" xml:space="preserve"><value>テナント情報の設定に失敗しました</value></data>
   <data name="Tenant.InitializeSuccess" xml:space="preserve"><value>初期化に成功しました</value></data>
@@ -194,7 +337,7 @@
   <data name="Admin.Common.NoTime" xml:space="preserve"><value>時間なし</value></data>
   <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>コピーしました。Ctrl+V で貼り付けてください。</value></data>
   <data name="Admin.Home.Header" xml:space="preserve"><value>NeuCharFramework 管理画面</value></data>
-  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>現在のホスト状態</value></data>
+  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>ホストリソースモニター</value></data>
   <data name="Admin.Home.HostMetricsRealtime" xml:space="preserve"><value>ライブ · 2 秒ごとに更新</value></data>
   <data name="Admin.Home.HostCpu" xml:space="preserve"><value>ホスト CPU（全体）</value></data>
   <data name="Admin.Home.HostCpuDetail" xml:space="preserve"><value>ホスト全体の使用率</value></data>
@@ -209,11 +352,27 @@
   <data name="Admin.Home.HostProcessCpu" xml:space="preserve"><value>Web プロセス CPU</value></data>
   <data name="Admin.Home.HostProcessWorkingSet" xml:space="preserve"><value>ワーキングセット</value></data>
   <data name="Admin.Home.HostProcessUptime" xml:space="preserve"><value>稼働時間</value></data>
-  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>直近 30 サンプル（このページのみ）</value></data>
+  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>リソースの推移</value></data>
   <data name="Admin.Home.HostNetworkReceive" xml:space="preserve"><value>受信</value></data>
   <data name="Admin.Home.HostNetworkSend" xml:space="preserve"><value>送信</value></data>
   <data name="Admin.Home.HostMetricsInvalidResponse" xml:space="preserve"><value>ホスト指標 API から無効なデータが返されました</value></data>
   <data name="Admin.Home.HostMetricsUnavailable" xml:space="preserve"><value>ホスト指標を一時的に取得できません</value></data>
+  <data name="Admin.Home.WebProcessMemory" xml:space="preserve"><value>Web プロセスメモリ</value></data>
+  <data name="Admin.Home.ResourceMonitor" xml:space="preserve"><value>リソースモニター（直近 24 時間）</value></data>
+  <data name="Admin.Home.ResourceMonitorRealtime" xml:space="preserve"><value>バックグラウンドで 10 秒ごとに記録 · キャッシュは最大 24 時間</value></data>
+  <data name="Admin.Home.ResourceMonitorHint" xml:space="preserve"><value>ドラッグまたはスクロールで拡大・縮小、ダブルクリックで範囲をリセット</value></data>
+  <data name="Admin.Home.ResourceMonitorReset" xml:space="preserve"><value>範囲をリセット</value></data>
+  <data name="Admin.Home.ResourceMonitorRange" xml:space="preserve"><value>時間範囲</value></data>
+  <data name="Admin.Home.ResourceMonitor5Minutes" xml:space="preserve"><value>5 分</value></data>
+  <data name="Admin.Home.ResourceMonitor30Minutes" xml:space="preserve"><value>30 分</value></data>
+  <data name="Admin.Home.ResourceMonitor6Hours" xml:space="preserve"><value>6 時間</value></data>
+  <data name="Admin.Home.ResourceMonitor24Hours" xml:space="preserve"><value>24 時間</value></data>
+  <data name="Admin.Home.ResourceMonitorReturnLive" xml:space="preserve"><value>ライブに戻る</value></data>
+  <data name="Admin.Home.ResourceMonitorFollowing" xml:space="preserve"><value>ライブを追跡中</value></data>
+  <data name="Admin.Home.ResourceMonitorPaused" xml:space="preserve"><value>表示を一時停止中（記録は継続）</value></data>
+  <data name="Admin.Home.ResourceMonitorEmpty" xml:space="preserve"><value>バックグラウンド記録の準備中（約 10 秒）、またはこの範囲にデータはまだありません</value></data>
+  <data name="Admin.Home.ResourceMonitorUnavailable" xml:space="preserve"><value>リソースモニターデータを取得できません</value></data>
+  <data name="Admin.Home.ResourceMonitorNow" xml:space="preserve"><value>現在</value></data>
   <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>インストール済みモジュール</value></data>
   <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>更新待ちモジュール</value></data>
   <data name="Admin.Home.NewModules" xml:space="preserve"><value>新しいモジュール</value></data>
@@ -250,14 +409,14 @@
   <data name="AdminUserInfo.Username" xml:space="preserve"><value>ユーザー名</value></data>
   <data name="AdminUserInfo.Note" xml:space="preserve"><value>備考</value></data>
   <data name="AdminUserInfo.AddTime" xml:space="preserve"><value>追加日時</value></data>
-  <data name="AdminUserInfo.Actions" xml:space="preserve"><value>操作</value></data>
+  <data name="AdminUserInfo.Actions" xml:space="preserve"><value>アクション</value></data>
   <data name="AdminUserInfo.SetRole" xml:space="preserve"><value>ロールを設定</value></data>
   <data name="AdminUserInfo.DeleteConfirm" xml:space="preserve"><value>この管理者を削除しますか？</value></data>
   <data name="AdminUserInfo.ConfirmPassword" xml:space="preserve"><value>パスワード確認</value></data>
   <data name="AdminUserInfo.RealName" xml:space="preserve"><value>氏名</value></data>
   <data name="AdminUserInfo.Phone" xml:space="preserve"><value>電話番号</value></data>
   <data name="AdminUserInfo.NotePlaceholder" xml:space="preserve"><value>備考を入力してください</value></data>
-  <data name="AdminUserInfo.Success" xml:space="preserve"><value>成功</value></data>
+  <data name="AdminUserInfo.Success" xml:space="preserve"><value>成功しました</value></data>
   <data name="AdminUserInfo.PasswordRequired" xml:space="preserve"><value>パスワードを入力してください</value></data>
   <data name="AdminUserInfo.PasswordConfirmRequired" xml:space="preserve"><value>パスワードを再入力してください</value></data>
   <data name="AdminUserInfo.PasswordMismatch" xml:space="preserve"><value>同じパスワードを入力してください</value></data>
@@ -272,9 +431,20 @@
   <data name="Admin.Common.Error" xml:space="preserve"><value>エラー</value></data>
   <data name="AdminChat.Conversation" xml:space="preserve"><value>会話</value></data>
   <data name="AdminChat.History" xml:space="preserve"><value>会話履歴</value></data>
+  <data name="AdminChat.Search.Open" xml:space="preserve"><value>会話を検索</value></data>
+  <data name="AdminChat.Search.Placeholder" xml:space="preserve"><value>未アーカイブの会話を検索</value></data>
+  <data name="AdminChat.Search.ChatTab" xml:space="preserve"><value>会話</value></data>
+  <data name="AdminChat.Search.ToolTab" xml:space="preserve"><value>メソッド</value></data>
+  <data name="AdminChat.Search.ToolPlaceholder" xml:space="preserve"><value>メソッド名を検索</value></data>
+  <data name="AdminChat.Search.ToolCall" xml:space="preserve"><value>メソッド呼び出し</value></data>
+  <data name="AdminChat.Search.Empty" xml:space="preserve"><value>一致する未アーカイブの会話はありません</value></data>
+  <data name="AdminChat.Search.Hint" xml:space="preserve"><value>未アーカイブの会話だけを検索し、最大 10 件表示します</value></data>
+  <data name="AdminChat.Search.ToolHint" xml:space="preserve"><value>未アーカイブの会話で Harness が実際に呼び出したメソッド名だけを検索し、最大 10 件表示します</value></data>
+  <data name="AdminChat.Search.Failed" xml:space="preserve"><value>検索に失敗しました</value></data>
+  <data name="AdminChat.Search.TitleMatch" xml:space="preserve"><value>タイトル一致</value></data>
   <data name="AdminChat.EmptyHistory" xml:space="preserve"><value>会話履歴はありません</value></data>
   <data name="AdminChat.SelectModel" xml:space="preserve"><value>AI モデルを選択</value></data>
-  <data name="AdminChat.Manage" xml:space="preserve"><value>管理</value></data>
+  <data name="AdminChat.Manage" xml:space="preserve"><value>管理する</value></data>
   <data name="AdminChat.Done" xml:space="preserve"><value>完了</value></data>
   <data name="AdminChat.MenuHierarchy" xml:space="preserve"><value>メニュー階層</value></data>
   <data name="AdminChat.NoPreview" xml:space="preserve"><value>プレビューできる詳細はありません</value></data>
@@ -286,6 +456,10 @@
   <data name="AdminChat.SendHint" xml:space="preserve"><value>Ctrl + Enter または Cmd + Enter で送信</value></data>
   <data name="AdminChat.Send" xml:space="preserve"><value>送信</value></data>
   <data name="AdminChat.Thinking" xml:space="preserve"><value>考えています...</value></data>
+  <data name="AdminChat.ModeSimple" xml:space="preserve"><value>Chat</value></data>
+  <data name="AdminChat.ModeHarness" xml:space="preserve"><value>ハーネス</value></data>
+  <data name="AdminChat.HarnessSteps" xml:space="preserve"><value>ハーネスのステップ</value></data>
+  <data name="AdminChat.TrajectoryNotFound" xml:space="preserve"><value>軌跡が見つかりませんでした。</value></data>
   <data name="AdminChat.NewSessionDescription" xml:space="preserve"><value>質問を入力し、参照モジュールを選択して会話を開始</value></data>
   <data name="AdminChat.ComputePower" xml:space="preserve"><value>AI モデル</value></data>
   <data name="AdminChat.DeleteConfirm" xml:space="preserve"><value>この会話を削除しますか？</value></data>
@@ -342,7 +516,7 @@
   <data name="Tenant.Rule" xml:space="preserve"><value>照合ルール</value></data>
   <data name="Tenant.AdminNote" xml:space="preserve"><value>管理者メモ</value></data>
   <data name="Tenant.Enabled" xml:space="preserve"><value>有効</value></data>
-  <data name="Tenant.Actions" xml:space="preserve"><value>操作</value></data>
+  <data name="Tenant.Actions" xml:space="preserve"><value>アクション</value></data>
   <data name="Tenant.Edit" xml:space="preserve"><value>編集</value></data>
   <data name="Tenant.Initialize" xml:space="preserve"><value>初期化</value></data>
   <data name="Tenant.DeleteConfirm" xml:space="preserve"><value>このテナントを削除しますか？削除後、すべてのテナント情報が孤立します。慎重に操作してください。</value></data>
@@ -389,7 +563,7 @@
   <data name="Xncf.BatchUpdate.EnableStatus" xml:space="preserve"><value>有効化</value></data>
   <data name="Xncf.BatchUpdate.FinalState" xml:space="preserve"><value>最終状態</value></data>
   <data name="Xncf.BatchUpdate.Details" xml:space="preserve"><value>詳細</value></data>
-  <data name="Xncf.BatchUpdate.Success" xml:space="preserve"><value>成功</value></data>
+  <data name="Xncf.BatchUpdate.Success" xml:space="preserve"><value>成功しました</value></data>
   <data name="Xncf.BatchUpdate.Failed" xml:space="preserve"><value>失敗</value></data>
   <data name="Xncf.BatchUpdate.NoResult" xml:space="preserve"><value>一括操作の結果を取得できませんでした。</value></data>
   <data name="Xncf.BatchUpdate.RefreshFailed" xml:space="preserve"><value>操作は完了しましたが、状態を更新できませんでした。ページを手動で更新してください。</value></data>
@@ -411,7 +585,7 @@
   <data name="Xncf.Search" xml:space="preserve"><value>キーワードを入力して検索</value></data>
   <data name="Xncf.Install" xml:space="preserve"><value>インストール</value></data>
   <data name="Xncf.Status" xml:space="preserve"><value>状態</value></data>
-  <data name="Xncf.Actions" xml:space="preserve"><value>操作</value></data>
+  <data name="Xncf.Actions" xml:space="preserve"><value>アクション</value></data>
   <data name="Xncf.Home" xml:space="preserve"><value>ホーム</value></data>
   <data name="Xncf.Missing" xml:space="preserve"><value>このモジュールはデプロイされていないか、アセンブリファイルがありません</value></data>
   <data name="Xncf.Module" xml:space="preserve"><value>モジュール</value></data>
@@ -476,7 +650,7 @@
   <data name="Xncf.TypeDate" xml:space="preserve"><value>日付</value></data>
   <data name="Xncf.TypeOption" xml:space="preserve"><value>選択肢</value></data>
   <data name="Xncf.TypeBoolean" xml:space="preserve"><value>ブール値</value></data>
-  <data name="Admin.Common.Success" xml:space="preserve"><value>成功</value></data>
+  <data name="Admin.Common.Success" xml:space="preserve"><value>成功しました</value></data>
   <data name="AdminChat.StreamInputRequired" xml:space="preserve"><value>有効なセッションとメッセージを入力してください。</value></data>
   <data name="AdminChat.StreamSessionForbidden" xml:space="preserve"><value>セッションが存在しないか、アクセス権がありません。</value></data>
   <data name="AdminChat.AgentReplyFailed" xml:space="preserve"><value>Agent の応答に失敗しました。</value></data>
@@ -485,6 +659,10 @@
   <data name="AdminChat.CreateSessionFailedRetry" xml:space="preserve"><value>セッションの作成に失敗しました。後でもう一度お試しください。</value></data>
   <data name="Admin.Login.Error.LoginFailed" xml:space="preserve"><value>ログインに失敗しました</value></data>
   <data name="Admin.Login.Error.LoginRetry" xml:space="preserve"><value>ログインに失敗しました。もう一度お試しください</value></data>
+  <data name="Admin.Login.CaptchaPlaceholder" xml:space="preserve"><value>認証コードを入力してください</value></data>
+  <data name="Admin.Login.CaptchaRequired" xml:space="preserve"><value>画像認証コードを入力してください</value></data>
+  <data name="Admin.Login.CaptchaRefresh" xml:space="preserve"><value>画像をクリックして更新</value></data>
+  <data name="Admin.Login.Error.CaptchaInvalid" xml:space="preserve"><value>認証コードが正しくありません。もう一度お試しください</value></data>
   <data name="Admin.Login.Support" xml:space="preserve"><value>技術サポート：</value></data>
   <data name="Admin.Login.VisitWebsite" xml:space="preserve"><value>公式サイトを開く</value></data>
   <data name="Admin.Session.InvalidUser" xml:space="preserve"><value>現在のユーザー ID が無効なため、JWT を更新できません。もう一度ログインしてください。</value></data>
@@ -520,7 +698,7 @@
   <data name="Trace.Type" xml:space="preserve"><value>種類</value></data>
   <data name="Trace.IsException" xml:space="preserve"><value>例外</value></data>
   <data name="Trace.Title" xml:space="preserve"><value>タイトル</value></data>
-  <data name="Trace.Content" xml:space="preserve"><value>内容</value></data>
+  <data name="Trace.Content" xml:space="preserve"><value>コンテンツ</value></data>
   <data name="Trace.ReturnResult" xml:space="preserve"><value>戻り値</value></data>
   <data name="Trace.PostData" xml:space="preserve"><value>POST データ</value></data>
   <data name="AdminChat.AddReferenceModule" xml:space="preserve"><value>参照モジュールを追加</value></data>
@@ -532,6 +710,114 @@
   <data name="AdminChat.NoMenuOrFunctions" xml:space="preserve"><value>このモジュールには利用可能なメニューまたは機能がありません。</value></data>
   <data name="AdminChat.NoMatchingModules" xml:space="preserve"><value>一致するモジュールはありません</value></data>
   <data name="AdminChat.ConfirmAdd" xml:space="preserve"><value>追加を確定</value></data>
+  <data name="Frontend.001" xml:space="preserve"><value>拡張モジュール||拡張モジュール</value></data>
+  <data name="Frontend.002" xml:space="preserve"><value>ホーム||ホーム</value></data>
+  <data name="Frontend.003" xml:space="preserve"><value>データベース操作例||データベース操作例</value></data>
+  <data name="Frontend.004" xml:space="preserve"><value>追加||追加</value></data>
+  <data name="Frontend.005" xml:space="preserve"><value>追加||追加</value></data>
+  <data name="Frontend.006" xml:space="preserve"><value>編集||編集</value></data>
+  <data name="Frontend.007" xml:space="preserve"><value>削除||削除</value></data>
+  <data name="Frontend.008" xml:space="preserve"><value>キャンセル||キャンセル</value></data>
+  <data name="Frontend.009" xml:space="preserve"><value>確認||確認</value></data>
+  <data name="Frontend.010" xml:space="preserve"><value>確認||確認</value></data>
+  <data name="Frontend.011" xml:space="preserve"><value>保存する||保存する</value></data>
+  <data name="Frontend.012" xml:space="preserve"><value>閉じる||閉じる</value></data>
+  <data name="Frontend.013" xml:space="preserve"><value>戻る||戻る</value></data>
+  <data name="Frontend.014" xml:space="preserve"><value>検索||検索</value></data>
+  <data name="Frontend.015" xml:space="preserve"><value>検索||検索</value></data>
+  <data name="Frontend.016" xml:space="preserve"><value>リセット||リセット</value></data>
+  <data name="Frontend.017" xml:space="preserve"><value>更新||更新</value></data>
+  <data name="Frontend.018" xml:space="preserve"><value>アクション||アクション</value></data>
+  <data name="Frontend.019" xml:space="preserve"><value>名前||名前</value></data>
+  <data name="Frontend.020" xml:space="preserve"><value>種類||種類</value></data>
+  <data name="Frontend.021" xml:space="preserve"><value>ステータス||ステータス</value></data>
+  <data name="Frontend.022" xml:space="preserve"><value>メモ||メモ</value></data>
+  <data name="Frontend.023" xml:space="preserve"><value>説明||説明</value></data>
+  <data name="Frontend.024" xml:space="preserve"><value>詳細||詳細</value></data>
+  <data name="Frontend.025" xml:space="preserve"><value>構成||構成</value></data>
+  <data name="Frontend.026" xml:space="preserve"><value>管理する||管理する</value></data>
+  <data name="Frontend.027" xml:space="preserve"><value>リスト||リスト</value></data>
+  <data name="Frontend.028" xml:space="preserve"><value>アップロード||アップロード</value></data>
+  <data name="Frontend.029" xml:space="preserve"><value>ダウンロード||ダウンロード</value></data>
+  <data name="Frontend.030" xml:space="preserve"><value>インポート||インポート</value></data>
+  <data name="Frontend.031" xml:space="preserve"><value>エクスポート||エクスポート</value></data>
+  <data name="Frontend.032" xml:space="preserve"><value>有効||有効</value></data>
+  <data name="Frontend.033" xml:space="preserve"><value>無効||無効</value></data>
+  <data name="Frontend.034" xml:space="preserve"><value>すべて||すべて</value></data>
+  <data name="Frontend.035" xml:space="preserve"><value>データなし||データなし</value></data>
+  <data name="Frontend.036" xml:space="preserve"><value>コンテンツなし||コンテンツなし</value></data>
+  <data name="Frontend.037" xml:space="preserve"><value>選択してください||選択してください</value></data>
+  <data name="Frontend.038" xml:space="preserve"><value>記入してください||記入してください</value></data>
+  <data name="Frontend.039" xml:space="preserve"><value>入力してください||入力してください</value></data>
+  <data name="Frontend.040" xml:space="preserve"><value>追加日時||追加日時</value></data>
+  <data name="Frontend.041" xml:space="preserve"><value>開始時刻||開始時刻</value></data>
+  <data name="Frontend.042" xml:space="preserve"><value>終了時刻||終了時刻</value></data>
+  <data name="Frontend.043" xml:space="preserve"><value>作成||作成</value></data>
+  <data name="Frontend.044" xml:space="preserve"><value>更新日時||更新日時</value></data>
+  <data name="Frontend.045" xml:space="preserve"><value>ファイル名||ファイル名</value></data>
+  <data name="Frontend.046" xml:space="preserve"><value>ファイルサイズ||ファイルサイズ</value></data>
+  <data name="Frontend.047" xml:space="preserve"><value>アップロード日時||アップロード日時</value></data>
+  <data name="Frontend.048" xml:space="preserve"><value>選択を削除||選択を削除</value></data>
+  <data name="Frontend.049" xml:space="preserve"><value>ファイルを追加||ファイルを追加</value></data>
+  <data name="Frontend.050" xml:space="preserve"><value>ファイルを選択||ファイルを選択</value></data>
+  <data name="Frontend.051" xml:space="preserve"><value>前へ||前へ</value></data>
+  <data name="Frontend.052" xml:space="preserve"><value>次へ||次へ</value></data>
+  <data name="Frontend.053" xml:space="preserve"><value>成功しました||成功しました</value></data>
+  <data name="Frontend.054" xml:space="preserve"><value>失敗||失敗</value></data>
+  <data name="Frontend.055" xml:space="preserve"><value>成功||成功</value></data>
+  <data name="Frontend.056" xml:space="preserve"><value>エラー||エラー</value></data>
+  <data name="Frontend.057" xml:space="preserve"><value>読み込み失敗||読み込み失敗</value></data>
+  <data name="Frontend.058" xml:space="preserve"><value>追加に成功しました||追加に成功しました</value></data>
+  <data name="Frontend.059" xml:space="preserve"><value>追加に失敗しました||追加に失敗しました</value></data>
+  <data name="Frontend.060" xml:space="preserve"><value>更新成功||更新成功</value></data>
+  <data name="Frontend.061" xml:space="preserve"><value>編集に失敗しました||編集に失敗しました</value></data>
+  <data name="Frontend.062" xml:space="preserve"><value>削除しました||削除しました</value></data>
+  <data name="Frontend.063" xml:space="preserve"><value>削除に失敗しました||削除に失敗しました</value></data>
+  <data name="Frontend.064" xml:space="preserve"><value>アップロード完了||アップロード完了</value></data>
+  <data name="Frontend.065" xml:space="preserve"><value>アップロード失敗||アップロード失敗</value></data>
+  <data name="Frontend.066" xml:space="preserve"><value>コピーしました||コピーしました</value></data>
+  <data name="Frontend.067" xml:space="preserve"><value>コピー失敗||コピー失敗</value></data>
+  <data name="Frontend.068" xml:space="preserve"><value>通知||通知</value></data>
+  <data name="Frontend.069" xml:space="preserve"><value>警告||警告</value></data>
+  <data name="Frontend.070" xml:space="preserve"><value>エラー||エラー</value></data>
+  <data name="Frontend.071" xml:space="preserve"><value>はい||はい</value></data>
+  <data name="Frontend.072" xml:space="preserve"><value>いいえ||いいえ</value></data>
+  <data name="Frontend.073" xml:space="preserve"><value>有効||有効</value></data>
+  <data name="Frontend.074" xml:space="preserve"><value>不明||不明</value></data>
+  <data name="Frontend.075" xml:space="preserve"><value>未設定||未設定</value></data>
+  <data name="Frontend.076" xml:space="preserve"><value>記録なし||記録なし</value></data>
+  <data name="Frontend.077" xml:space="preserve"><value>キーワードを入力してください||キーワードを入力してください</value></data>
+  <data name="Frontend.078" xml:space="preserve"><value>種類を選択||種類を選択</value></data>
+  <data name="Frontend.079" xml:space="preserve"><value>ステータスを選択||ステータスを選択</value></data>
+  <data name="Frontend.080" xml:space="preserve"><value>作成||作成</value></data>
+  <data name="Frontend.081" xml:space="preserve"><value>送信||送信</value></data>
+  <data name="Frontend.082" xml:space="preserve"><value>表示||表示</value></data>
+  <data name="Frontend.083" xml:space="preserve"><value>デフォルトに設定||デフォルトに設定</value></data>
+  <data name="Frontend.084" xml:space="preserve"><value>テスト||テスト</value></data>
+  <data name="Frontend.085" xml:space="preserve"><value>接続しました||接続しました</value></data>
+  <data name="Frontend.086" xml:space="preserve"><value>接続失敗||接続失敗</value></data>
+  <data name="Frontend.087" xml:space="preserve"><value>パスワードは必須です！||パスワードは必須です！</value></data>
+  <data name="Frontend.088" xml:space="preserve"><value>{0} は重複しています。||{0} は重複しています。</value></data>
+  <data name="Frontend.089" xml:space="preserve"><value>管理者は自分自身を削除できません！||管理者は自分自身を削除できません！</value></data>
+  <data name="Frontend.090" xml:space="preserve"><value>管理者が存在しません！||管理者が存在しません！</value></data>
+  <data name="Frontend.091" xml:space="preserve"><value>削除しました！||削除しました！</value></data>
+  <data name="Frontend.092" xml:space="preserve"><value>WeChatログファイルが存在しません：||WeChatログファイルが存在しません：</value></data>
+  <data name="Frontend.093" xml:space="preserve"><value>{0} は 16 文字より長くする必要があります！||{0} は 16 文字より長くする必要があります！</value></data>
+  <data name="Frontend.094" xml:space="preserve"><value>現在のセッションには、XNCF モジュールが関連付けられていません。||現在のセッションには、XNCF モジュールが関連付けられていません。</value></data>
+  <data name="Frontend.095" xml:space="preserve"><value>一致するモジュールが見つかりません：「{0}」。先に GetSessionModuleList を呼び出し、現在のセッションのモジュール一覧を確認してください。||一致するモジュールが見つかりません：「{0}」。先に GetSessionModuleList を呼び出し、現在のセッションのモジュール一覧を確認してください。</value></data>
+  <data name="Frontend.096" xml:space="preserve"><value>モジュールが見つかりません：「{0}」。先に GetSessionModuleList を呼び出し、利用できるモジュールを確認してください。||モジュールが見つかりません：「{0}」。先に GetSessionModuleList を呼び出し、利用できるモジュールを確認してください。</value></data>
+  <data name="Frontend.097" xml:space="preserve"><value>モジュール {0} の実行時登録が見つからないため、データベース情報を読み取れません。||モジュール {0} の実行時登録が見つからないため、データベース情報を読み取れません。</value></data>
+  <data name="Frontend.098" xml:space="preserve"><value>システムに登録済みのモジュールはありません。||システムに登録済みのモジュールはありません。</value></data>
+  <data name="Frontend.099" xml:space="preserve"><value>SenparcAiSetting を読み取れませんでした。appsettings.json の設定を確認してください。||SenparcAiSetting を読み取れませんでした。appsettings.json の設定を確認してください。</value></data>
+  <data name="Frontend.100" xml:space="preserve"><value>SenparcAiSetting.AiPlatform はまだ UnSet です。先に appsettings.json で利用できるプラットフォームを設定してください。||SenparcAiSetting.AiPlatform はまだ UnSet です。先に appsettings.json で利用できるプラットフォームを設定してください。</value></data>
+  <data name="Frontend.101" xml:space="preserve"><value>このシステムでは AIKernel モジュールが未インストール、または無効のため、指定した AI モデルへ切り替えられません。||このシステムでは AIKernel モジュールが未インストール、または無効のため、指定した AI モデルへ切り替えられません。</value></data>
+  <data name="Frontend.102" xml:space="preserve"><value>AIModelService を解決できなかったため、指定した AI モデルを読み込めません。||AIModelService を解決できなかったため、指定した AI モデルを読み込めません。</value></data>
+  <data name="Frontend.103" xml:space="preserve"><value>選択した AI モデルは存在しません: {0}||選択した AI モデルは存在しません: {0}</value></data>
+  <data name="Frontend.104" xml:space="preserve"><value>選択中の AI モデルは Chat タイプではありません：{0}||選択中の AI モデルは Chat タイプではありません：{0}</value></data>
+  <data name="Frontend.105" xml:space="preserve"><value>現在のユーザーはログインしていないため、更新できません。||現在のユーザーはログインしていないため、更新できません。</value></data>
+  <data name="Frontend.106" xml:space="preserve"><value>ユーザー情報が存在しません！||ユーザー情報が存在しません！</value></data>
+  <data name="Frontend.107" xml:space="preserve"><value>ユーザー名が存在しないか、パスワードが正しくありません：{0}！||ユーザー名が存在しないか、パスワードが正しくありません：{0}！</value></data>
+  <data name="Frontend.108" xml:space="preserve"><value>ユーザー名が存在しないか、パスワードが正しくありません！||ユーザー名が存在しないか、パスワードが正しくありません！</value></data>
   <data name="Admin.Home.AgentsOverview" xml:space="preserve"><value>Agents 運用概要</value></data>
   <data name="Admin.Home.AgentsOverviewLive" xml:space="preserve"><value>リアルタイム</value></data>
   <data name="Admin.Home.AgentsManage" xml:space="preserve"><value>Agents を管理</value></data>
@@ -549,4 +835,39 @@
   <data name="Admin.Home.AgentsWaitingOrPaused" xml:space="preserve"><value>待機 / 一時停止</value></data>
   <data name="Admin.Home.AiQuickDescription" xml:space="preserve"><value>Footer の AI クイックチャットから、必要なときに完全な会話とコンテキスト選択を開けます。</value></data>
   <data name="Admin.Home.AiQuickDialog" xml:space="preserve"><value>クイックチャットを開く</value></data>
+  <data name="Menu.ConfigMode" xml:space="preserve">
+    <value>設定モード</value>
+  </data>
+  <data name="Menu.ConfigModeExit" xml:space="preserve">
+    <value>設定モードを終了</value>
+  </data>
+  <data name="Menu.ConfigModeTip" xml:space="preserve">
+    <value>下にすべてのメニュー/ページを階層で表示します（ボタンは並べ替え対象外）。同じ階層内はドラッグで並べ替え、または右の並べ替え欄に数値を入力して Enter でその位置へ移動できます。保存すると Sort 値が実際に更新され、左メニューが更新されます。</value>
+  </data>
+  <data name="Menu.ConfigSave" xml:space="preserve">
+    <value>順序を保存</value>
+  </data>
+  <data name="Menu.ConfigSaveSuccess" xml:space="preserve">
+    <value>メニューの順序を保存しました</value>
+  </data>
+  <data name="Menu.ConfigEmpty" xml:space="preserve">
+    <value>並べ替え可能なメニューやページがありません</value>
+  </data>
+  <data name="Admin.Footer.NeuBellWebHookSettings" xml:space="preserve"><value>WebHook 設定</value></data>
+  <data name="DocHelp.Help" xml:space="preserve"><value>ヘルプ</value></data>
+  <data name="DocHelp.Title" xml:space="preserve"><value>機能ドキュメント</value></data>
+  <data name="DocHelp.OpenWindow" xml:space="preserve"><value>新しいウィンドウで開く</value></data>
+  <data name="DocHelp.Close" xml:space="preserve"><value>閉じる</value></data>
+  <data name="DocHelp.Loading" xml:space="preserve"><value>ドキュメントを読み込み中...</value></data>
+  <data name="DocHelp.Notice" xml:space="preserve"><value>表示されない場合は、新しいウィンドウで開いてください。</value></data>
+  <data name="DocHelp.LoadFailed" xml:space="preserve"><value>読み込みに失敗したか、タイムアウトしました。再試行するか、新しいウィンドウで開いてください。</value></data>
+  <data name="DocHelp.Retry" xml:space="preserve"><value>再試行</value></data>
+  <data name="DocHelp.InvalidTopic" xml:space="preserve"><value>ドキュメントの設定が無効です。管理者にお問い合わせください。</value></data>
+
+  <data name="SystemMenu.AdministratorManagement" xml:space="preserve"><value>Administrator management</value></data>
+  <data name="SystemMenu.RoleManagement" xml:space="preserve"><value>Role management</value></data>
+  <data name="SystemMenu.SystemInfo" xml:space="preserve"><value>System information</value></data>
+  <data name="SystemMenu.TenantInfo" xml:space="preserve"><value>Tenant information</value></data>
+  <data name="SystemMenu.ExtensionModules" xml:space="preserve"><value>Extension modules</value></data>
+  <data name="SystemMenu.ModuleManagement" xml:space="preserve"><value>Module management</value></data>
 </root>

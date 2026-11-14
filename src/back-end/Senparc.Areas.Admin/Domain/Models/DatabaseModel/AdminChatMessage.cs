@@ -1,7 +1,30 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+
+    文件名：AdminChatMessage.cs
+    文件功能描述：AdminChatMessage 相关功能实现
+
+
+    创建标识：Senparc - 20260325
+
+    修改标识：Senparc - 20260915
+    修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 add comprehensive unit tests for AdminChatWorkspaceAssetService functionality
+
+    修改标识：Senparc - 20261105
+    修改描述：v0.12.26 消息实体保存 Prompt 引用
+
+----------------------------------------------------------------*/
 using Senparc.Ncf.Core.Models;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+using System.Text.Json;
+using Senparc.Areas.Admin.Domain.Models.DatabaseModel.Dto;
+using Senparc.Xncf.PromptRange.Abstractions.References;
 
 namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
 {
@@ -30,6 +53,31 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
         [Required]
         public string Content { get; private set; }
 
+        public string AttachmentsJson { get; private set; }
+        public string PromptReferencesJson { get; private set; }
+
+        public IReadOnlyList<PromptReference> GetPromptReferences() =>
+            string.IsNullOrEmpty(PromptReferencesJson) ? Array.Empty<PromptReference>()
+                : JsonSerializer.Deserialize<List<PromptReference>>(PromptReferencesJson)
+                    ?? throw new InvalidOperationException("Invalid prompt references.");
+
+        public void SetPromptReferences(IReadOnlyList<PromptReference> references)
+        {
+            PromptReference.ValidateRanges(Content, references);
+            PromptReferencesJson = references?.Count > 0 ? JsonSerializer.Serialize(references) : null;
+        }
+
+        public IReadOnlyList<AdminChatAttachment> GetAttachments() =>
+            string.IsNullOrEmpty(AttachmentsJson) ? Array.Empty<AdminChatAttachment>()
+                : JsonSerializer.Deserialize<List<AdminChatAttachment>>(AttachmentsJson)
+                    ?? throw new InvalidOperationException("消息附件记录无效。");
+
+        public void SetAttachments(IReadOnlyList<AdminChatAttachment> attachments)
+        {
+            if (attachments?.Count > 4) throw new ArgumentException("每条消息最多关联 4 个附件。");
+            AttachmentsJson = attachments?.Count > 0 ? JsonSerializer.Serialize(attachments) : null;
+        }
+
         /// <summary>
         /// 消息序号（用于保持对话顺序）
         /// </summary>
@@ -46,6 +94,16 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
         /// </summary>
         [MaxLength(100)]
         public string ModelIdentifier { get; private set; }
+
+        /// <summary>
+        /// Native Harness Trajectory associated with this assistant message.
+        /// </summary>
+        public int? TrajectoryId { get; private set; }
+
+        /// <summary>
+        /// The last Trajectory event represented by this assistant message.
+        /// </summary>
+        public int? TrajectorySequence { get; private set; }
 
         /// <summary>
         /// 导航属性：关联的会话
@@ -66,7 +124,14 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
         /// <param name="content">消息内容</param>
         /// <param name="sequence">消息序号</param>
         /// <param name="modelIdentifier">模型标识符（可选）</param>
-        public AdminChatMessage(int sessionId, ChatMessageRoleType roleType, string content, int sequence, string modelIdentifier = null)
+        public AdminChatMessage(
+            int sessionId,
+            ChatMessageRoleType roleType,
+            string content,
+            int sequence,
+            string modelIdentifier = null,
+            int? trajectoryId = null,
+            int? trajectorySequence = null)
         {
             SessionId = sessionId;
             RoleType = roleType;
@@ -74,6 +139,8 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
             Sequence = sequence;
             UserFeedback = MessageFeedbackType.None;
             ModelIdentifier = modelIdentifier;
+            TrajectoryId = trajectoryId;
+            TrajectorySequence = trajectorySequence;
         }
 
         /// <summary>
@@ -92,9 +159,17 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
         {
             if (newContent != null)
             {
+                if (Content != newContent) PromptReferencesJson = null;
                 Content = newContent;
                 base.SetUpdateTime();
             }
+        }
+
+        public void SetTrajectory(int? trajectoryId, int? trajectorySequence)
+        {
+            TrajectoryId = trajectoryId;
+            TrajectorySequence = trajectorySequence;
+            base.SetUpdateTime();
         }
     }
 

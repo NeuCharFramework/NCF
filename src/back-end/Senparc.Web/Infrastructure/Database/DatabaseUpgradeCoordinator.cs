@@ -9,6 +9,9 @@
     修改标识：Senparc - 20260804
     修改描述：v0.35.0 新增数据库升级维护流程与多平台下载入口
 
+    修改标识：Senparc - 20261103
+    修改描述：v0.39.5 维护不依赖业务页面的数据库检查与升级协调器
+
 ----------------------------------------------------------------*/
 
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +31,7 @@ public sealed class DatabaseUpgradeCoordinator
 {
     private const string XncfModuleManagerName = "Senparc.Xncf.XncfModuleManager";
     private const string SystemManagerName = "Senparc.Xncf.SystemManager";
+    private const string WorkspaceName = "Senparc.Xncf.Workspace";
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly DatabaseRuntimeStateStore _stateStore;
 
@@ -276,7 +280,8 @@ public sealed class DatabaseUpgradeCoordinator
 
     private static bool IsCriticalModule(string moduleName) =>
         string.Equals(moduleName, XncfModuleManagerName, StringComparison.Ordinal)
-        || string.Equals(moduleName, SystemManagerName, StringComparison.Ordinal);
+        || string.Equals(moduleName, SystemManagerName, StringComparison.Ordinal)
+        || string.Equals(moduleName, WorkspaceName, StringComparison.Ordinal);
 
     private static IEnumerable<DatabaseModuleMigration> OrderModules(
         IEnumerable<DatabaseModuleMigration> modules)

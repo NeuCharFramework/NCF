@@ -10,6 +10,9 @@
     修改标识：Senparc - 20260729
     修改描述：v0.4.1 加强安装状态校验并收紧安装辅助路由
 
+    修改标识：Senparc - 20261103
+    修改描述：v0.5.12 维护InstallerService.cs 相关实现
+
 ----------------------------------------------------------------*/
 
 using Microsoft.EntityFrameworkCore;
@@ -90,7 +93,7 @@ namespace Senparc.Xncf.Installer.Domain.Services
                 {
                     SysMenuService _sysMenuService = serviceProvider.GetService<SysMenuService>();
 
-                    _sysMenuService.Init(null, adminUserInfoId);
+                    await _sysMenuService.InitAsync(null, adminUserInfoId);
                 }
                 catch (Exception ex)
                 {

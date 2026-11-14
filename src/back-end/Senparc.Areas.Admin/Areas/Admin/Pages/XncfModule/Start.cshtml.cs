@@ -13,6 +13,9 @@
     修改标识：Senparc - 20260813
     修改描述：v0.5.0 集成 NeuCharPivot 与 NeuCharWorkflow 管理能力并优化后台体验
 
+    修改标识：Senparc - 20260829
+    修改描述：v0.7.0 新增 NeuCharPivot 全局浮动调用与工作流分析管理能力
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +49,7 @@ using Senparc.Areas.Admin.Domain.Services;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
 using Senparc.Ncf.Core.WorkContext.Provider;
 using Senparc.Ncf.Shared.Abstractions.ChatAgent;
+using Senparc.Xncf.NeuCharWorkflow.Abstractions.Workflow;
 
 namespace Senparc.Areas.Admin.Areas.Admin.Pages
 {
@@ -60,7 +64,8 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         NeuCharExecutionLogService neuCharExecutionLogService,
         NeuCharParameterProtector neuCharParameterProtector,
         IEventBusRequestClient eventBusRequestClient,
-        IAdminWorkContextProvider adminWorkContextProvider) : BaseAdminPageModel(serviceProvider)
+        IAdminWorkContextProvider adminWorkContextProvider,
+        IEnumerable<IWorkflowFunctionCallingProvider> workflowProviders) : BaseAdminPageModel(serviceProvider)
     {
         private readonly Senparc.Ncf.Service.SysMenuService _sysMenuService = sysMenuService;
         public Senparc.Ncf.Core.Models.DataBaseModel.XncfModule XncfModule { get; set; }
@@ -77,6 +82,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         private readonly NeuCharParameterProtector _neuCharParameterProtector = neuCharParameterProtector;
         private readonly IEventBusRequestClient _eventBusRequestClient = eventBusRequestClient;
         private readonly IAdminWorkContextProvider _adminWorkContextProvider = adminWorkContextProvider;
+        private readonly IWorkflowFunctionCallingProvider _workflowProvider = workflowProviders?.FirstOrDefault();
 
         public List<string> XncfModuleUpdateLog { get; set; }
 
@@ -198,7 +204,16 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         {
             var snapshot = await _neuCharPivotService.GetSnapshotAsync(uid, HttpContext.RequestAborted)
                 .ConfigureAwait(false);
-            return Ok(snapshot == null ? null : ToPivotResponse(snapshot));
+            if (snapshot == null)
+            {
+                return Ok(null);
+            }
+
+            var workflowOptions = await GetWorkflowOptionsAsync(HttpContext.RequestAborted)
+                .ConfigureAwait(false);
+            var runningTaskIds = await GetRunningLoopTaskIdsAsync(snapshot)
+                .ConfigureAwait(false);
+            return Ok(ToPivotResponse(snapshot, workflowOptions, runningTaskIds));
         }
 
         public async Task<IActionResult> OnPostGenerateNeuCharPivotAsync(
@@ -249,7 +264,11 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             var snapshot = await _neuCharPivotService.GetSnapshotAsync(
                 request.XncfUid,
                 HttpContext.RequestAborted).ConfigureAwait(false);
-            return Ok(ToPivotResponse(snapshot));
+            var workflowOptions = await GetWorkflowOptionsAsync(HttpContext.RequestAborted)
+                .ConfigureAwait(false);
+            var runningTaskIds = await GetRunningLoopTaskIdsAsync(snapshot)
+                .ConfigureAwait(false);
+            return Ok(ToPivotResponse(snapshot, workflowOptions, runningTaskIds));
         }
 
         public async Task<IActionResult> OnPostSaveLoopTaskAsync([FromBody] SaveLoopTaskRequest request)
@@ -309,10 +328,26 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 return BadRequest(validationError);
             }
 
+            var workflowId = request.WorkflowId > 0 ? request.WorkflowId : null;
+            if (workflowId.HasValue)
+            {
+                var workflows = await GetWorkflowOptionsAsync(HttpContext.RequestAborted)
+                    .ConfigureAwait(false);
+                if (!workflows.Any(workflow => workflow.Id == workflowId.Value))
+                {
+                    return BadRequest("关联的 Workflow 不存在、未启用，或当前管理员无权访问。");
+                }
+            }
+
             task ??= new NeuCharPivotLoopTask(
                 function.Id,
                 _adminWorkContextProvider.GetAdminWorkContext().AdminUserId);
-            task.Configure(request.IntervalSeconds, protectedParameters, request.Enabled, request.UseNeuBell);
+            task.Configure(
+                request.IntervalSeconds,
+                protectedParameters,
+                request.Enabled,
+                request.UseNeuBell,
+                workflowId);
             await _neuCharPivotLoopTaskService.SaveObjectAsync(task).ConfigureAwait(false);
             return Ok(new
             {
@@ -321,6 +356,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
                 task.IntervalSeconds,
                 task.Enabled,
                 task.UseNeuBell,
+                task.WorkflowId,
                 task.NextRunAt,
                 task.LastRunAt,
                 task.LastSucceeded,
@@ -359,49 +395,120 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
             return Ok(result);
         }
 
-        private object ToPivotResponse(NeuCharPivotSnapshot snapshot) => new
+        private object ToPivotResponse(
+            NeuCharPivotSnapshot snapshot,
+            IReadOnlyList<NeuCharPivotWorkflowOption> workflowOptions,
+            IReadOnlySet<int> runningTaskIds)
         {
-            configuration = new
+            var visibleFunctions = snapshot.Functions.Where(function => function.Visible).ToList();
+            var loopTasks = visibleFunctions
+                .Select(function => snapshot.LoopTasks.TryGetValue(function.Id, out var task) ? task : null)
+                .Where(task => task != null)
+                .ToList();
+
+            return new
             {
-                snapshot.Configuration.Id,
-                snapshot.Configuration.ModuleUid,
-                snapshot.Configuration.Name,
-                snapshot.Configuration.UserRequirement,
-                snapshot.Configuration.LayoutSchemaJson,
-                snapshot.Configuration.AiModelId,
-                snapshot.Configuration.ChatSessionId,
-                snapshot.Configuration.Revision,
-                snapshot.Configuration.LastGeneratedAt,
-                snapshot.Configuration.LastError
-            },
-            functions = snapshot.Functions.Select(function => new
-            {
-                function.Id,
-                function.ModuleUid,
-                function.FunctionKey,
-                function.FunctionName,
-                function.Description,
-                function.UiSchemaJson,
-                function.DefaultParametersJson,
-                function.ModuleVersion,
-                function.Sort,
-                function.Visible,
-                available = snapshot.FunctionAvailability.TryGetValue(function.Id, out var available) && available,
-                loopTask = snapshot.LoopTasks.TryGetValue(function.Id, out var task) ? new
+                configuration = new
                 {
-                    task.Id,
-                    task.IntervalSeconds,
-                    task.Enabled,
-                    task.UseNeuBell,
-                    task.NextRunAt,
-                    task.LastRunAt,
-                    task.LastSucceeded,
-                    task.LastError
-                } : null
-            }),
-            snapshot.ModuleAvailable,
-            snapshot.ModuleState
-        };
+                    snapshot.Configuration.Id,
+                    snapshot.Configuration.ModuleUid,
+                    snapshot.Configuration.Name,
+                    snapshot.Configuration.UserRequirement,
+                    snapshot.Configuration.LayoutSchemaJson,
+                    snapshot.Configuration.AiModelId,
+                    snapshot.Configuration.ChatSessionId,
+                    snapshot.Configuration.Revision,
+                    snapshot.Configuration.LastGeneratedAt,
+                    snapshot.Configuration.LastError
+                },
+                functions = snapshot.Functions.Select(function => new
+                {
+                    function.Id,
+                    function.ModuleUid,
+                    function.FunctionKey,
+                    function.FunctionName,
+                    function.Description,
+                    parameterSchemaJson = _neuCharPivotService.GetCurrentParameterSchemaJson(
+                        function,
+                        snapshot.FunctionCatalog),
+                    function.UiSchemaJson,
+                    function.DefaultParametersJson,
+                    function.ModuleVersion,
+                    function.Sort,
+                    function.Visible,
+                    available = snapshot.FunctionAvailability.TryGetValue(function.Id, out var available) && available,
+                    loopTask = snapshot.LoopTasks.TryGetValue(function.Id, out var task) ? new
+                    {
+                        task.Id,
+                        task.IntervalSeconds,
+                        task.Enabled,
+                        task.UseNeuBell,
+                        task.WorkflowId,
+                        isRunning = runningTaskIds.Contains(task.Id),
+                        task.NextRunAt,
+                        task.LastRunAt,
+                        task.LastSucceeded,
+                        task.LastError
+                    } : null
+                }),
+                snapshot.ModuleAvailable,
+                snapshot.ModuleState,
+                workflowOptions,
+                summary = new
+                {
+                    moduleCount = 1,
+                    availableModuleCount = snapshot.ModuleAvailable ? 1 : 0,
+                    functionCount = visibleFunctions.Count,
+                    availableFunctionCount = visibleFunctions.Count(function =>
+                        snapshot.FunctionAvailability.TryGetValue(function.Id, out var available) && available),
+                    loopTaskCount = loopTasks.Count,
+                    enabledLoopTaskCount = loopTasks.Count(task => task.Enabled),
+                    runningLoopTaskCount = loopTasks.Count(task => runningTaskIds.Contains(task.Id)),
+                    waitingLoopTaskCount = loopTasks.Count(task =>
+                        task.Enabled && !runningTaskIds.Contains(task.Id) && task.NextRunAt.HasValue),
+                    failedLoopTaskCount = loopTasks.Count(task => task.LastSucceeded == false),
+                    workflowLoopTaskCount = loopTasks.Count(task => task.WorkflowId.HasValue),
+                    workflowCount = workflowOptions.Count
+                }
+            };
+        }
+
+        private async Task<IReadOnlyList<NeuCharPivotWorkflowOption>> GetWorkflowOptionsAsync(
+            CancellationToken cancellationToken)
+        {
+            if (_workflowProvider == null)
+            {
+                return Array.Empty<NeuCharPivotWorkflowOption>();
+            }
+
+            var adminUserId = _adminWorkContextProvider.GetAdminWorkContext().AdminUserId;
+            var workflows = await _workflowProvider.GetAvailableAsync(adminUserId, cancellationToken)
+                .ConfigureAwait(false);
+            return workflows
+                .Select(workflow => new NeuCharPivotWorkflowOption(
+                    workflow.Id,
+                    workflow.Name,
+                    workflow.Description ?? string.Empty,
+                    workflow.Parameters?.Select(parameter => parameter.Name).ToList()
+                        ?? new List<string>()))
+                .ToList();
+        }
+
+        private async Task<IReadOnlySet<int>> GetRunningLoopTaskIdsAsync(
+            NeuCharPivotSnapshot snapshot)
+        {
+            var functionIds = snapshot.Functions.Select(function => function.Id).ToHashSet();
+            if (functionIds.Count == 0)
+            {
+                return new HashSet<int>();
+            }
+
+            var logs = await _neuCharExecutionLogService.GetFullListAsync(
+                log => log.SourceType == "loop-task" &&
+                       log.FinishedAt == null &&
+                       functionIds.Contains(log.SourceId)).ConfigureAwait(false);
+            return logs.Select(log => log.SourceId).ToHashSet();
+        }
 
         /// <summary>
         /// 获取日志
@@ -645,6 +752,7 @@ namespace Senparc.Areas.Admin.Areas.Admin.Pages
         public string ParametersJson { get; set; } = "{}";
         public bool Enabled { get; set; }
         public bool UseNeuBell { get; set; }
+        public int? WorkflowId { get; set; }
     }
 
     public sealed class RunPivotFunctionRequest

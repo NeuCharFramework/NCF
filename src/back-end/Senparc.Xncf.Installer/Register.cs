@@ -10,6 +10,9 @@
     修改标识：Senparc - 20260724
     修改描述：v0.4.0 增加默认模块选择与安装确认并完善多语言界面
 
+    修改标识：Senparc - 20261111
+    修改描述：v0.5.14 统一 XNCF Register 显示元数据与多语言资源键
+
 ----------------------------------------------------------------*/
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -36,12 +39,11 @@ namespace Senparc.Xncf.Installer
     [XncfRegister]
     public partial class Register : XncfRegisterBase, IXncfRegister, IAreaRegister/*, IXncfDatabase*/
     {
-        private static readonly ResourceManager ResourceManager = new("Senparc.Xncf.Installer.InstallerResource", typeof(InstallerResource).Assembly);
-
-        private static string T(string key, string fallback)
-        {
-            return ResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? fallback;
-        }
+        private static readonly XncfRegisterText RegisterText =
+            XncfRegisterText.Create<InstallerResource>(
+                "Installer.Register",
+                "NCF 安装程序",
+                "NCF 初始化安装模块，安装完成后可卸载或移除");
 
         #region IXncfRegister 接口
 
@@ -51,11 +53,11 @@ namespace Senparc.Xncf.Installer
 
         public override string Version => "0.3";//必须填写版本号
 
-        public override string MenuName => T("Installer.Register.MenuName", "NCF 安装程序");
+        public override string MenuName => RegisterText.MenuName;
 
         public override string Icon => "fa fa-download";
 
-        public override string Description => T("Installer.Register.Description", "NCF 初始化安装模块，安装完成后可卸载或移除");
+        public override string Description => RegisterText.Description;
 
         public string DatabaseUniquePrefix => throw new NotImplementedException();
 

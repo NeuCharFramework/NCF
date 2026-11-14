@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
-  
+
     文件名：Register.cs
     文件功能描述：模块注册与初始化逻辑
 
@@ -40,6 +40,27 @@
     修改标识：Senparc - 20260822
     修改描述：v0.6.0 新增管理端 Chat 会话工作流能力
 
+    修改标识：Senparc - 20260829
+    修改描述：v0.7.0 新增 NeuCharPivot 全局浮动调用与工作流分析管理能力
+
+    修改标识：Senparc - 20260915
+    修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
+
+    修改标识：Senparc - 20260916
+    修改描述：v0.9.0 增强 Admin Chat 取消与推理轨迹，并扩展 NeuBell WebHook 请求能力
+
+    修改标识：Senparc - 20261005
+    修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 implement AdminChat memory storage and management system
+
+    修改标识：Senparc - 20261103
+    修改描述：将嵌入式静态资源接入文件版本计算，避免帮助索引缓存与页面不一致
+
+    修改标识：Senparc - 20261111
+    修改描述：v0.12.28 后台菜单文案改为资源本地化读取
+
 ----------------------------------------------------------------*/
 
 /* 
@@ -55,27 +76,34 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Http;
+using Microsoft.Extensions.Logging;
+using System.Net.Http;
 using Senparc.Areas.Admin.ACL;
 using Senparc.Areas.Admin.ACL.Repository;
 using Senparc.Areas.Admin.Domain;
+using Senparc.Areas.Admin.Domain.Cache;
 using Senparc.Areas.Admin.Domain.Dto;
 //using Senparc.Areas.Admin.Authorization;
 using Senparc.Areas.Admin.Domain.Models;
 using Senparc.Areas.Admin.Domain.Models.DatabaseModel;
 using Senparc.Areas.Admin.Domain.Services;
+using Senparc.Areas.Admin.WeixinClawIntegration;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.CO2NET.Trace;
 using Senparc.Ncf.AreaBase.Admin.Filters;
 using Senparc.Ncf.AreaBase.Admin;
 using Senparc.Ncf.Core.Authorization;
-using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Config;
+using Senparc.Ncf.Core.Localization;
+using Senparc.Ncf.Core.Areas;
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.Core.Exceptions;
 using Senparc.Ncf.Core.Models;
@@ -86,6 +114,7 @@ using Senparc.Ncf.Service;
 using Senparc.Ncf.Database;
 using Senparc.Ncf.XncfBase;
 using Senparc.Ncf.XncfBase.Database;
+using Senparc.Ncf.XncfBase.Functions.Files;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -105,14 +134,13 @@ namespace Senparc.Areas.Admin
         IXncfDatabase  //注册 XNCF 模块数据库（按需选用）
                        //IXncfRazorRuntimeCompilation  //需要使用 RazorRuntimeCompilation，在开发环境下实时更新 Razor Page
     {
+        private static readonly XncfRegisterText RegisterText =
+            XncfRegisterText.Create<AdminResource>(
+                "Admin.Register",
+                "NCF 系统管理员后台",
+                "这是管理员后台模块，用于 NCF 系统后台的自我管理，请勿删除此模块。如果你实在忍不住，请务必做好数据备份。");
+
         public const string ModuleUid = SiteConfig.SYSTEM_XNCF_MODULE_AREAS_ADMIN_UID;
-
-        private static readonly ResourceManager ResourceManager = new("Senparc.Areas.Admin.AdminResource", typeof(AdminResource).Assembly);
-
-        private static string T(string key, string fallback)
-        {
-            return ResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? fallback;
-        }
 
         #region IXncfRegister 接口
 
@@ -120,13 +148,13 @@ namespace Senparc.Areas.Admin
 
         public override string Uid => ModuleUid;// "00000000-0000-0001-0001-000000000001";
 
-        public override string Version => "0.5.10-beta5";
+        public override string Version => "0.5.14";
 
-        public override string MenuName => T("Admin.Register.MenuName", "NCF 系统管理员后台");
+        public override string MenuName => RegisterText.MenuName;
 
         public override string Icon => "fa fa-university";
 
-        public override string Description => T("Admin.Register.Description", "这是管理员后台模块，用于 NCF 系统后台的自我管理，请勿删除此模块。如果你实在忍不住，请务必做好数据备份。");
+        public override string Description => RegisterText.Description;
 
 
         public override async Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
@@ -194,6 +222,10 @@ namespace Senparc.Areas.Admin
             //services.AddScoped(typeof(AuthenticationAsyncPageFilterAttribute));
 
             services.Configure<JwtSettings>(JwtSettings.Position_Backend, configuration.GetSection(JwtSettings.Position_Backend));// 配置管理后台jwt
+            services.Configure<FunctionFileStoreOptions>(
+                configuration.GetSection(FunctionFileStoreOptions.SectionName));
+            services.Configure<WeixinClawAdminIntegrationOptions>(
+                configuration.GetSection(WeixinClawAdminIntegrationOptions.SectionName));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -218,6 +250,9 @@ namespace Senparc.Areas.Admin
             services.AddScoped<IAdminAuthConfigRepository, AdminAuthConfigRepository>();
             services.AddScoped<InstallerService>();
             services.AddScoped<AdminAuthConfigService>();
+            services.AddScoped<AdminMenuLocalizationService>();
+            // 管理员登录图形验证码（纯 SVG 生成 + CO2NET 缓存，无第三方依赖）
+            services.AddScoped<LoginCaptchaService>();
             services.AddScoped<IDesktopAdminAuthTokenIssuer, DesktopAdminAuthTokenIssuer>();
 
             // 聊天功能相关服务注册
@@ -225,23 +260,52 @@ namespace Senparc.Areas.Admin
             services.AddScoped<IAdminChatMessageRepository, AdminChatMessageRepository>();
             services.AddScoped<IAdminChatSessionModuleRepository, AdminChatSessionModuleRepository>();
             services.AddScoped<IAdminChatSessionWorkflowRepository, AdminChatSessionWorkflowRepository>();
+            services.AddScoped<IAdminChatTrajectoryRepository, AdminChatTrajectoryRepository>();
+            services.AddScoped<IAdminChatTrajectoryEventRepository, AdminChatTrajectoryEventRepository>();
             services.AddScoped<AdminChatSessionService>();
             services.AddScoped<AdminChatMessageService>();
             services.AddScoped<AdminChatSessionModuleService>();
             services.AddScoped<AdminChatSessionWorkflowService>();
+            services.AddScoped<AdminChatTrajectoryService>();
+            services.AddScoped<AdminChatTrajectoryEventService>();
             services.AddScoped<AdminChatAiService>();
+            services.AddSingleton<AdminChatRunRegistry>();
+            services.AddSingleton<AdminChatMemoryStore>();
+            services.AddScoped<IAdminChatMemoryStore>(provider => new AdminChatMemoryDatabaseStore(
+                provider.GetRequiredService<Senparc.Ncf.Core.Models.INcfDbData>().BaseDataContext,
+                provider.GetRequiredService<AdminChatMemoryStore>(),
+                provider.GetRequiredService<Microsoft.AspNetCore.DataProtection.IDataProtectionProvider>()));
+            services.AddScoped<AdminChatMemoryService>();
+            services.AddScoped<AdminChatWorkspaceAssetService>();
+            services.AddSingleton<WorkspaceAssetPreviewBuilder>();
+            services.AddSingleton<WorkspaceAssetShareStore>();
+            services.AddSingleton<WorkspaceDocumentReader>();
+            services.AddScoped<AdminChatAttachmentService>();
+            services.AddScoped<IWeixinClawAdminBindingRepository, WeixinClawAdminBindingRepository>();
+            services.AddScoped<WeixinClawAdminBindingService>();
+            services.AddScoped<AdminWeixinClawMessageHandler>();
+            services.AddScoped<Senparc.Xncf.WeixinManager.WeixinClaw.IWeixinClawMessageHandler>(
+                serviceProvider => serviceProvider.GetRequiredService<AdminWeixinClawMessageHandler>());
 
             // ChatAgent / NeuCharPivot：系统表、声明式 UI、Function 安全执行和 EventBus 协调。
             services.AddScoped<INeuCharPivotConfigurationRepository, NeuCharPivotConfigurationRepository>();
             services.AddScoped<INeuCharPivotFunctionRepository, NeuCharPivotFunctionRepository>();
             services.AddScoped<INeuCharPivotLoopTaskRepository, NeuCharPivotLoopTaskRepository>();
             services.AddScoped<INeuCharExecutionLogRepository, NeuCharExecutionLogRepository>();
+            services.AddScoped<INeuCharPivotBoardRepository, NeuCharPivotBoardRepository>();
             services.AddScoped<NeuCharPivotConfigurationService>();
             services.AddScoped<NeuCharPivotFunctionService>();
             services.AddScoped<NeuCharPivotLoopTaskService>();
             services.AddScoped<NeuCharExecutionLogService>();
+            services.AddScoped<NeuCharPivotBoardService>();
             services.AddScoped<NeuCharFunctionService>();
             services.AddScoped<NeuCharPivotService>();
+            services.AddScoped<NeuCharPivotGlobalAccessService>();
+            services.AddScoped<NeuCharPivotGlobalFunctionService>();
+            // Function 全局 Provit 数据库访问策略（DB 覆盖代码属性），缓存参考 FullSystemConfigCache 范式
+            services.AddScoped<INeuCharFunctionProvitAccessRepository, NeuCharFunctionProvitAccessRepository>();
+            services.AddScoped<FullNeuCharFunctionProvitAccessCache>();
+            services.AddScoped<NeuCharFunctionProvitAccessService>();
             services.AddDataProtection();
             services.AddScoped<NeuCharParameterProtector>();
             services.AddScoped<ChatAgentNeuCharPivotComposer>();
@@ -250,6 +314,10 @@ namespace Senparc.Areas.Admin
             // Admin 首页 Host 实时指标采样器。Singleton 仅保存计算速率所需的上一帧计数器，
             // 不保存历史记录，也不写入任何缓存。
             services.AddSingleton<HostMetricsCollector>();
+
+            // Admin 首页资源监控：后台每 10 秒采样，按 10s/1min/5min 三个时间分档写入
+            // CO2NET 对象缓存（最多保留 24 小时），UI 未打开时记录依然持续。
+            services.AddHostedService<ResourceMonitorRecorder>();
 
             // 纽铃 Footer 聚合、全局缓存与实时变更流。Provider 虽随 DLL 注册，
             // 但是否执行仍由 NeuBellProviderCatalog 按 XNCF 安装/开放状态决定。
@@ -265,6 +333,24 @@ namespace Senparc.Areas.Admin
             services.AddSingleton<NeuCharPivotNeuBellProvider>();
             services.AddSingleton<Senparc.Ncf.Shared.Abstractions.NeuBell.INeuBellProvider>(
                 serviceProvider => serviceProvider.GetRequiredService<NeuCharPivotNeuBellProvider>());
+
+            // 纽铃 WebHook：用户可配置 WebAPI 地址，纽铃条目新增/移除时异步通知。
+            services.AddScoped<INeuBellWebHookRepository, NeuBellWebHookRepository>();
+            services.AddScoped<INeuBellWebHookService, NeuBellWebHookService>();
+            services.AddScoped<NeuBellWebHookService>();
+            services.AddScoped<INeuBellWebHookLogRepository, NeuBellWebHookLogRepository>();
+            services.AddScoped<INeuBellWebHookLogService, NeuBellWebHookLogService>();
+            services.AddScoped<NeuBellWebHookLogService>();
+            services.AddHttpClient(NeuBellWebHookDispatcher.HttpClientName, client =>
+                client.Timeout = TimeSpan.FromSeconds(15));
+            services.AddSingleton<NeuBellWebHookDispatcher>(serviceProvider =>
+                new NeuBellWebHookDispatcher(
+                    serviceProvider,
+                    serviceProvider.GetRequiredService<IHttpClientFactory>(),
+                    serviceProvider.GetRequiredService<ILogger<NeuBellWebHookDispatcher>>(),
+                    configuration["NeuBellWebHook:BaseUrl"]));
+            services.AddHostedService<NeuBellWebHookMonitorService>();
+            services.AddHostedService<WeixinClawNeuBellPushHostedService>();
 
             return base.AddXncfModule(services, configuration, env);
         }
@@ -325,9 +411,13 @@ namespace Senparc.Areas.Admin
         }
         public override IApplicationBuilder UseXncfModule(IApplicationBuilder app, IRegisterService registerService)
         {
+            var files = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly(), "wwwroot");
+            var environment = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
+            // Version tags must hash the same embedded assets that the middleware serves.
+            environment.WebRootFileProvider = new CompositeFileProvider(environment.WebRootFileProvider, files);
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new ManifestEmbeddedFileProvider(Assembly.GetExecutingAssembly(), "wwwroot")
+                FileProvider = files
             });
 
             return base.UseXncfModule(app, registerService);
@@ -341,8 +431,9 @@ namespace Senparc.Areas.Admin
 
         public List<AreaPageMenuItem> AreaPageMenuItems => new List<AreaPageMenuItem>()
         {
-            new AreaPageMenuItem(GetAreaUrl("/Admin/Menu/Index"), T("Admin.Area.MenuManagement", "菜单管理"),"fa fa-bug"),
-            new AreaPageMenuItem(GetAreaUrl("/Admin/SenparcTrace/Index"), T("Admin.Area.TraceLog", "SenparcTrace 日志"),"fa fa-calendar-o"),
+            new AreaPageMenuItem(GetAreaUrl("/Admin/Menu/Index"), ResourceStringLocalizer.Get(typeof(AdminResource), "Admin.Area.MenuManagement", "菜单管理"),"fa fa-bug"),
+            new AreaPageMenuItem(GetAreaUrl("/Admin/SenparcTrace/Index"), ResourceStringLocalizer.Get(typeof(AdminResource), "Admin.Area.TraceLog", "SenparcTrace 日志"),"fa fa-calendar-o"),
+            new AreaPageMenuItem(GetAreaUrl("/Admin/WeixinClaw/Index"), "个人微信集成", "fa fa-wechat"),
         };//Admin比较特殊，不需要全部输出
 
 
@@ -482,6 +573,7 @@ namespace Senparc.Areas.Admin
                 options.Conventions.AuthorizePage("/", NcfAuthorizationPolicyNames.AdminOnly);//必须登录
                 options.Conventions.AuthorizePage("/AdminChat/Chat", NcfAuthorizationPolicyNames.AdminOnly);//聊天页面必须登录
                 options.Conventions.AuthorizePage("/NeuCharPivot/Aggregate", NcfAuthorizationPolicyNames.AdminOnly);
+                options.Conventions.AuthorizePage("/NeuCharPivot/Access", NcfAuthorizationPolicyNames.AdminOnly);
                 options.Conventions.AllowAnonymousToPage("/Login");//允许匿名
 
                 //更多：https://learn.microsoft.com/en-us/aspnet/core/security/authorization/razor-pages-authorization?view=aspnetcore-8.0

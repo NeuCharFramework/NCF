@@ -104,6 +104,8 @@ assert.strictEqual(securityCall.config.ALLOWED_URI_REGEXP.test('https://example.
 assert.strictEqual(viewModel.decodeFunctionResult('line1\\r\\nline2\\nline3'), 'line1\nline2\nline3');
 assert.ok(page.includes('v-html="safeFunctionResultHtml(runResult.msg)"'));
 assert.ok(!page.includes('v-html="safeHtml(runResult.msg)"'));
+assert.ok(script.includes('functionKeyMatches'),
+    'XNCF Function deep links must accept the short method-name alias.');
 assert.ok(page.includes('target="_blank" rel="noopener noreferrer"'));
 assert.ok(page.indexOf('dompurify.min.js') < page.indexOf('Pages/XncfModule/Start.js'));
 

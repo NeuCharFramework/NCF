@@ -38,8 +38,11 @@
     },
     methods: {
         link(item) {
-            // 显示在首页ifram
             if (!item.url) return;
+            console.debug('[NCF][AdminTabs] 菜单打开', item.menuName, item.url);
+            if (window.ncfOpenAdminPage && window.ncfOpenAdminPage(item.url, item.menuName, item.id)) {
+                return;
+            }
             window.location.href = item.url;
         }
     }

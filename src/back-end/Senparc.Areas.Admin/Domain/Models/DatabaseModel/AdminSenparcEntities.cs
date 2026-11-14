@@ -22,6 +22,24 @@
     修改标识：Senparc - 20260822
     修改描述：v0.6.0 新增管理端 Chat 会话工作流能力
 
+    修改标识：Senparc - 20260829
+    修改描述：v0.7.0 新增 NeuCharPivot 全局浮动调用与工作流分析管理能力
+
+    修改标识：Senparc - 20260915
+    修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
+
+    修改标识：Senparc - 20260916
+    修改描述：v0.9.0 增强 Admin Chat 取消与推理轨迹，并扩展 NeuBell WebHook 请求能力
+
+    修改标识：Senparc - 20261005
+    修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
+
+    修改标识：Senparc - 20261102
+    修改描述：移除合并遗留的微信 Claw 绑定重复声明和索引配置，保留原有映射
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 implement AdminChat memory storage and management system
+
 ----------------------------------------------------------------*/
 
 using Microsoft.EntityFrameworkCore;
@@ -58,6 +76,7 @@ namespace Senparc.Areas.Admin.Domain.Models
         /// 管理后台聊天会话
         /// </summary>
         public DbSet<AdminChatSession> AdminChatSessions { get; set; }
+        public DbSet<AdminChatMemoryState> AdminChatMemoryStates { get; set; }
 
         /// <summary>
         /// 管理后台聊天消息
@@ -73,6 +92,16 @@ namespace Senparc.Areas.Admin.Domain.Models
         /// 管理后台聊天会话-Workflow 关联
         /// </summary>
         public DbSet<AdminChatSessionWorkflow> AdminChatSessionWorkflows { get; set; }
+
+        /// <summary>
+        /// Admin Chat Harness trajectories.
+        /// </summary>
+        public DbSet<AdminChatTrajectory> AdminChatTrajectories { get; set; }
+
+        /// <summary>
+        /// Append-only Admin Chat Harness trajectory events.
+        /// </summary>
+        public DbSet<AdminChatTrajectoryEvent> AdminChatTrajectoryEvents { get; set; }
 
         /// <summary>
         /// 系统级 NeuCharPivot 配置
@@ -93,6 +122,31 @@ namespace Senparc.Areas.Admin.Domain.Models
         /// Pivot 与 Loop Task 的统一执行记录
         /// </summary>
         public DbSet<NeuCharExecutionLog> NeuCharExecutionLogs { get; set; }
+
+        /// <summary>
+        /// Pivot 面板（Provit Panel）：为特定页面聚合各模块 Pivot 的 Function 块
+        /// </summary>
+        public DbSet<NeuCharPivotBoard> NeuCharPivotBoards { get; set; }
+
+        /// <summary>
+        /// 纽铃 WebHook（WebAPI）通知设置
+        /// </summary>
+        public DbSet<NeuBellWebHook> NeuBellWebHooks { get; set; }
+
+        /// <summary>
+        /// 纽铃 WebHook 请求日志（每次请求的数据与结果）
+        /// </summary>
+        public DbSet<NeuBellWebHookLog> NeuBellWebHookLogs { get; set; }
+
+        /// <summary>
+        /// 个人微信 Claw 与 Admin Chat 的上层绑定。
+        /// </summary>
+        public DbSet<WeixinClawAdminBinding> WeixinClawAdminBindings { get; set; }
+
+        /// <summary>
+        /// Function 全局 Provit（全局 Pivot 浮动调用）数据库访问策略映射
+        /// </summary>
+        public DbSet<NeuCharFunctionProvitAccess> NeuCharFunctionProvitAccesses { get; set; }
 
         //DOT REMOVE OR MODIFY THIS LINE 请勿移除或修改本行 - Entities Point
 
@@ -115,6 +169,8 @@ namespace Senparc.Areas.Admin.Domain.Models
                 .IsUnique();
             modelBuilder.Entity<NeuCharPivotLoopTask>()
                 .HasIndex(z => new { z.Enabled, z.NextRunAt });
+            modelBuilder.Entity<NeuCharPivotLoopTask>()
+                .HasIndex(z => z.WorkflowId);
             modelBuilder.Entity<NeuCharExecutionLog>()
                 .HasIndex(z => z.CorrelationId);
             modelBuilder.Entity<NeuCharExecutionLog>()
@@ -122,8 +178,33 @@ namespace Senparc.Areas.Admin.Domain.Models
             modelBuilder.Entity<AdminChatSessionWorkflow>()
                 .HasIndex(z => new { z.SessionId, z.WorkflowId })
                 .IsUnique();
+            modelBuilder.Entity<AdminChatTrajectory>()
+                .HasIndex(z => new { z.SessionId, z.UserId, z.AddTime });
+            modelBuilder.Entity<AdminChatTrajectoryEvent>()
+                .HasIndex(z => new { z.TrajectoryId, z.Sequence })
+                .IsUnique();
+            modelBuilder.Entity<NeuCharPivotBoard>()
+                .HasIndex(z => z.PageKey);
+            modelBuilder.Entity<NeuBellWebHook>()
+                .HasIndex(z => z.ProviderFilter);
+            modelBuilder.Entity<NeuBellWebHook>()
+                .Property(z => z.HttpMethod)
+                .HasDefaultValue(NeuBellWebHook.MethodPost);
+            modelBuilder.Entity<NeuBellWebHookLog>()
+                .HasIndex(z => z.AddTime);
+            modelBuilder.Entity<WeixinClawAdminBinding>()
+                .HasIndex(z => new { z.AccountId, z.FromUserId, z.GroupId })
+                .IsUnique();
+            modelBuilder.Entity<WeixinClawAdminBinding>()
+                .HasIndex(z => new { z.Enabled, z.EnableNeuBell });
+            modelBuilder.Entity<NeuCharFunctionProvitAccess>()
+                .HasIndex(z => new { z.ModuleUid, z.FunctionKey })
+                .IsUnique();
 
             var providerName = Database.ProviderName ?? string.Empty;
+            if (providerName.Contains("Oracle", StringComparison.OrdinalIgnoreCase)
+                || providerName.Contains("Dm", StringComparison.OrdinalIgnoreCase))
+                modelBuilder.Entity<AdminChatMemoryState>().Property(row => row.Payload).HasColumnType("BLOB");
             var largeTextType = providerName.Contains("Oracle", StringComparison.OrdinalIgnoreCase)
                 ? "NCLOB"
                 : providerName.Contains("Dm", StringComparison.OrdinalIgnoreCase)
@@ -148,6 +229,19 @@ namespace Senparc.Areas.Admin.Domain.Models
             SetLargeText<NeuCharExecutionLog>(modelBuilder, largeTextType,
                 nameof(NeuCharExecutionLog.ResultSummary),
                 nameof(NeuCharExecutionLog.Error));
+            SetLargeText<NeuCharPivotBoard>(modelBuilder, largeTextType,
+                nameof(NeuCharPivotBoard.Description),
+                nameof(NeuCharPivotBoard.BlocksJson));
+            SetLargeText<AdminChatTrajectory>(modelBuilder, largeTextType,
+                nameof(AdminChatTrajectory.SessionStateJson),
+                nameof(AdminChatTrajectory.LastError));
+            SetLargeText<AdminChatTrajectoryEvent>(modelBuilder, largeTextType,
+                nameof(AdminChatTrajectoryEvent.Content),
+                nameof(AdminChatTrajectoryEvent.PayloadJson));
+            SetLargeText<NeuBellWebHook>(modelBuilder, largeTextType,
+                nameof(NeuBellWebHook.BodyTemplate));
+            SetLargeText<NeuBellWebHookLog>(modelBuilder, largeTextType,
+                nameof(NeuBellWebHookLog.Payload));
         }
 
         private static void SetLargeText<TEntity>(

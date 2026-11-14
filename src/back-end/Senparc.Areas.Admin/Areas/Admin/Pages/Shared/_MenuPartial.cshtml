@@ -2,11 +2,24 @@
 @using Senparc.Ncf.XncfBase;
 @using Senparc.Ncf.Core.Areas;
 @using Microsoft.AspNetCore.Http;
-@inject Senparc.Ncf.Service.SysMenuService _sysMenuService
+@inject Senparc.Areas.Admin.Domain.Services.SysMenuService _sysMenuService
 @inject IHttpContextAccessor _httpContextAccessor
 @addTagHelper *, Senparc.Areas.Admin
 @{
-    var sysMenuDtos = await _sysMenuService.GetMenuTreeDtoByCacheAsync();
+    var sysMenuDtos = await _sysMenuService.GetAllMenusTreeAsync(false);
+
+    string BuiltInMenuId(string menuId)
+    {
+        if (string.IsNullOrWhiteSpace(menuId))
+        {
+            return menuId;
+        }
+
+        var separator = menuId.LastIndexOf('-');
+        return separator >= 0 && separator < menuId.Length - 1
+            ? menuId[(separator + 1)..]
+            : menuId;
+    }
 
     /// <summary>
     /// 判断当前页面是否为 XNCF 模块入口
@@ -82,7 +95,7 @@
                     @foreach (var item in sysMenuDtos)
                     {
                         //判断是否隐藏模块管理单元
-                        var hideXncfModuleManager = item.MenuName == "扩展模块" && Model.FullSystemConfig.HideModuleManager == true;
+                        var hideXncfModuleManager = BuiltInMenuId(item.Id) == "2" && Model.FullSystemConfig.HideModuleManager == true;
 
                         @if (!hideXncfModuleManager)
                         {
@@ -108,7 +121,7 @@
                             }
                             @foreach (var childrenItem in item.Children.Where(_ => _.IsMenu))
                             {
-                                if (hideXncfModuleManager && childrenItem.MenuName=="模块管理")
+                                if (hideXncfModuleManager && BuiltInMenuId(childrenItem.Id) == "2.1")
                                 {
                                     continue;//隐藏“模块管理”菜单
                                 }

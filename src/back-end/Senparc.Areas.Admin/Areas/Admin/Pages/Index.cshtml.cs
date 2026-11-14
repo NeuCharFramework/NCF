@@ -10,10 +10,23 @@
     修改标识：Senparc - 20260813
     修改描述：v0.5.0 集成 NeuCharPivot 与 NeuCharWorkflow 管理能力并优化后台体验
 
+    修改标识：Senparc - 20260915
+    修改描述：v0.8.0 增强 Admin Chat Harness、轨迹回放与 NeuBell 管理能力
+
+    修改标识：Senparc - 20261005
+    修改描述：v0.10.1 0.10.1 Enhanced Senparc.Areas.Admin functionality and compatibility
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 维护集成 NeuCharPivot 与 NeuCharWorkflow 管理能力并优化后台体验
+
+    修改标识：Senparc - 20261111
+    修改描述：v0.12.28 按稳定模块标识解析内置菜单多语言显示，保留用户自定义菜单原文
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Mvc;
 using Senparc.Areas.Admin.Domain;
+using AdminMenuLocalizationService = Senparc.Areas.Admin.Domain.Services.AdminMenuLocalizationService;
 using Senparc.Ncf.Core.Models.DataBaseModel;
 using Senparc.Ncf.Core.WorkContext.Provider;
 using Senparc.Ncf.Service;
@@ -30,11 +43,13 @@ namespace Senparc.Areas.Admin.Pages
     public class IndexModel(
         IServiceProvider serviceProvider,
         XncfModuleServiceExtension xncfModuleServiceEx,
-        IAdminWorkContextProvider adminWorkContextProvider)
+        IAdminWorkContextProvider adminWorkContextProvider,
+        AdminMenuLocalizationService menuLocalization)
         : BaseAdminPageModel(serviceProvider)
     {
         private readonly IServiceProvider _serviceProvider = serviceProvider;
         private readonly IAdminWorkContextProvider _adminWorkContextProvider = adminWorkContextProvider;
+        private readonly AdminMenuLocalizationService _menuLocalization = menuLocalization;
 
         //TODO:从其他模块获得
         private readonly XncfModuleServiceExtension _xncfModuleServiceEx = xncfModuleServiceEx;
@@ -106,6 +121,12 @@ namespace Senparc.Areas.Admin.Pages
 
                 //获取模块的菜单信息
                 IXncfRegister xncfRegister = XncfRegisterManager.RegisterList.FirstOrDefault(z => z.Uid == data.Uid);
+                if (xncfRegister != null)
+                {
+                    // 内置模块显示名称跟随当前请求文化；数据库中的 MenuName 仅作为
+                    // 未加载注册信息时的兼容回退。
+                    data.ApplyLocalizedMetadata(xncfRegister.MenuName, xncfRegister.Description);
+                }
                 // if (xncfRegister == null)
                 // {
                 //     throw new Exception($"模块丢失或未加载（{XncfRegisterManager.RegisterList.Count}）！");
@@ -163,7 +184,9 @@ namespace Senparc.Areas.Admin.Pages
         /// <returns></returns>
         public async Task<IActionResult> OnGetMenuTreeAsync([FromServices] SysRolePermissionService sysPermissionService)
         {
-            IEnumerable<SysMenuDto> sysMenus = await sysPermissionService.GetCurrentUserMenuDtoAsync();
+            IEnumerable<SysMenuDto> sysMenus = (await sysPermissionService.GetCurrentUserMenuDtoAsync())
+                .Select(_menuLocalization.ResolveInPlace)
+                .ToList();
             var results = await GetSysMenuTreesMainRecursiveAsync(sysMenus);
             return Ok(results);
         }
@@ -175,7 +198,9 @@ namespace Senparc.Areas.Admin.Pages
         /// <returns></returns>
         public async Task<IActionResult> OnGetMenuResourceAsync([FromServices] SysRolePermissionService sysPermissionService)
         {
-            IEnumerable<SysMenuDto> sysMenus = await sysPermissionService.GetCurrentUserMenuDtoAsync();
+            IEnumerable<SysMenuDto> sysMenus = (await sysPermissionService.GetCurrentUserMenuDtoAsync())
+                .Select(_menuLocalization.ResolveInPlace)
+                .ToList();
             var results = await GetSysMenuTreesMainRecursiveAsync(sysMenus);
             var resourceCodes = await sysPermissionService.GetCurrentUserResourcesDtoAsync();
             return Ok(new { menuList = results, resourceCodes });
@@ -329,6 +354,29 @@ namespace Senparc.Areas.Admin.Pages
                     MenuName = "聚合",
                     Url = "/Admin/NeuCharPivot/Aggregate",
                     Icon = "fa fa-cubes",
+                    Id = (index++).ToString(),
+                    ParentId = pivotMenu.Id
+                });
+            }
+
+            if (!dest.Any(z => string.Equals(z.Url, "/Admin/NeuCharPivot/Board", StringComparison.OrdinalIgnoreCase)))
+            {
+                dest.Add(new SysMenuDto
+                {
+                    MenuName = "面板",
+                    Url = "/Admin/NeuCharPivot/Board",
+                    Icon = "fa fa-th-large",
+                    Id = (index++).ToString(),
+                    ParentId = pivotMenu.Id
+                });
+            }
+            if (!dest.Any(z => string.Equals(z.Url, "/Admin/NeuCharPivot/Access", StringComparison.OrdinalIgnoreCase)))
+            {
+                dest.Add(new SysMenuDto
+                {
+                    MenuName = "访问控制",
+                    Url = "/Admin/NeuCharPivot/Access",
+                    Icon = "fa fa-user-shield",
                     Id = (index++).ToString(),
                     ParentId = pivotMenu.Id
                 });

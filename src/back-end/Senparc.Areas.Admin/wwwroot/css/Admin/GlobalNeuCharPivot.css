@@ -1,0 +1,72 @@
+#ncf-global-function-host {
+    position: relative;
+    z-index: 4000;
+}
+
+.ncf-global-function-dialog .el-dialog__body,
+.ncf-global-function-result-dialog .el-dialog__body {
+    max-height: 68vh;
+    overflow-y: auto;
+}
+
+.ncf-global-function-description {
+    margin: 0 0 16px;
+    color: #606266;
+    line-height: 1.6;
+}
+
+.ncf-global-function-dialog .el-form-item {
+    margin-bottom: 16px;
+}
+
+.ncf-global-function-dialog .el-select {
+    width: 100%;
+}
+
+.ncf-global-function-help {
+    display: block;
+    margin-top: 5px;
+    color: #909399;
+    line-height: 1.5;
+}
+
+.ncf-global-function-result-text,
+.ncf-global-function-result-html {
+    max-height: 55vh;
+    margin: 0;
+    padding: 14px;
+    overflow: auto;
+    overflow-wrap: anywhere;
+    background: #f5f7fa;
+    border-radius: 6px;
+}
+
+.ncf-global-function-result-text {
+    white-space: pre-wrap;
+}
+
+.ncf-global-function-result-html {
+    color: #303133;
+    line-height: 1.65;
+}
+
+.ncf-global-function-result-html table {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+.ncf-global-function-result-html th,
+.ncf-global-function-result-html td {
+    padding: 7px 9px;
+    text-align: left;
+    border: 1px solid #dfe5ec;
+}
+
+@media (max-width: 720px) {
+    .ncf-global-function-dialog .el-dialog,
+    .ncf-global-function-result-dialog .el-dialog {
+        width: 94vw !important;
+    }
+}

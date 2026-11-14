@@ -26,7 +26,27 @@ const agentServicePath = path.resolve(
 const stylePath = path.resolve(
     __dirname,
     '../../../../../src/Extensions/Senparc.Xncf.AgentsManager/wwwroot/css/AgentsManager/index.css');
-const script = fs.readFileSync(scriptPath, 'utf8');
+const scriptDir = path.dirname(scriptPath);
+// index.js 已按功能拆分：按 three-loader.js 的加载顺序拼接后再执行
+const scriptFiles = [
+    'studio-state.js',
+    'agents-app-utils.js',
+    'agents-app-data.js',
+    'agents-app-computed.js',
+    'agents-app-methods-core.js',
+    'agents-app-methods-remote-agent.js',
+    'agents-app-methods-agent-group.js',
+    'agents-app-methods-task.js',
+    'agents-app-methods-groupstart-editor.js',
+    'agents-app-methods-manage.js',
+    'agents-app-methods-plugin-mcp.js',
+    'agents-app-components.js',
+    'studio.js',
+    'index.js',
+];
+const script = scriptFiles
+    .map(name => fs.readFileSync(path.join(scriptDir, name), 'utf8'))
+    .join('\n;\n');
 const page = fs.readFileSync(pagePath, 'utf8');
 const remoteServiceSource = fs.readFileSync(remoteServicePath, 'utf8');
 const remoteResponseSource = fs.readFileSync(remoteResponsePath, 'utf8');
@@ -75,7 +95,6 @@ const context = vm.createContext({
     Vue,
     serviceAM,
     console: { log() { }, warn() { }, error() { } },
-    window: {},
     document: {},
     setTimeout() { },
     clearTimeout() { },
@@ -92,6 +111,7 @@ const context = vm.createContext({
     URLSearchParams,
     formatDate(value) { return `formatted:${value}`; }
 });
+context.window = context;
 
 function createViewModel() {
     const viewModel = Object.assign({

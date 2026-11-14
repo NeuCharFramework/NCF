@@ -10,6 +10,9 @@
     修改标识：Senparc - 20260724
     修改描述：v0.3.0 完善账户模块本地化资源与功能文案
 
+    修改标识：Senparc - 20261111
+    修改描述：v0.3.12 统一 XNCF Register 显示元数据与多语言资源键
+
 ----------------------------------------------------------------*/
 using Senparc.Ncf.Core.Enums;
 using Senparc.Ncf.XncfBase;
@@ -34,12 +37,11 @@ namespace Senparc.Xncf.Accounts
     [XncfRegister]
     public partial class Register : XncfRegisterBase, IXncfRegister
     {
-        private static readonly ResourceManager ResourceManager = new("Senparc.Xncf.Accounts.AccountsResource", typeof(AccountsResource).Assembly);
-
-        private static string T(string key, string fallback)
-        {
-            return ResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? fallback;
-        }
+        private static readonly XncfRegisterText RegisterText =
+            XncfRegisterText.Create<AccountsResource>(
+                "Accounts.Register",
+                "用户管理",
+                "注册用户管理");
 
         #region IXncfRegister 接口
 
@@ -49,11 +51,11 @@ namespace Senparc.Xncf.Accounts
 
         public override string Version => "0.1";//必须填写版本号
 
-        public override string MenuName => T("Accounts.Register.MenuName", "用户管理");
+        public override string MenuName => RegisterText.MenuName;
 
         public override string Icon => "fa fa-users";
 
-        public override string Description => T("Accounts.Register.Description", "注册用户管理");
+        public override string Description => RegisterText.Description;
 
         public override async Task InstallOrUpdateAsync(IServiceProvider serviceProvider, InstallOrUpdate installOrUpdate)
         {

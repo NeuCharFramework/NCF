@@ -8,6 +8,9 @@ Vue.prototype.toggleSideBar = function () {
 
 // 点击菜单，高亮
 Vue.prototype.menuSelect = function (key, keypath) {
+    if (document.body.classList.contains('ncf-admin-embedded')) {
+        return;
+    }
     window.sessionStorage.setItem('activeMenu', key);
     // 页面跳转前同步保存当前菜单的所有父级，确保新页面仍然展开到当前位置。
     saveOpenedMenus((keypath || []).slice(0, -1), true);
@@ -85,8 +88,11 @@ function getNavMenu() {
             myfunctionMain(temp);
             // 数据存起来
             Store.commit('savenavMenuList', temp);
-            // 菜单异步渲染并恢复展开状态后，再还原它自己的滚动位置。
+            // 菜单异步渲染并恢复展开状态后，再还原滚动位置，并让标签页高亮对应菜单。
             Vue.nextTick(function () {
+                if (typeof window.ncfSyncAdminTabsWithMenu === 'function') {
+                    window.ncfSyncAdminTabsWithMenu(temp);
+                }
                 if (window.requestAnimationFrame) {
                     window.requestAnimationFrame(restoreNavMenuScroll);
                 } else {
@@ -101,6 +107,140 @@ function getNavMenu() {
 
 getNavMenu();
 
+// 菜单搜索框不参与浏览器自动填充。
+// autocomplete="off" 会被 Chrome 忽略；固定 name（例如之前的 name=xxx）还会变成输入历史的键。
+// 每次打开页面使用一个新的 autocomplete 标记，并在用户真正输入前丢掉浏览器写入的值。
+var ncfNavSearchAutocompleteToken = 'ncf-nav-search-' + Math.random().toString(36).slice(2);
+Vue.prototype.ncfNavSearchAutocomplete = ncfNavSearchAutocompleteToken;
+
+Vue.prototype.unlockNavMenuSearch = function (event) {
+    var target = event && event.target;
+    var root = target && target.closest ? target.closest('.admin-nav-search') : document.querySelector('.admin-nav-search');
+    var input = root ? root.querySelector('.el-input__inner') : null;
+    if (input) {
+        input.readOnly = false;
+        input.removeAttribute('name');
+    }
+    if (Store.state.navMenu.searchInputLocked) {
+        Store.commit('unlockNavMenuSearch');
+    }
+};
+
+function isNavMenuSearchInput(target) {
+    return !!(target && target.closest && target.classList && target.classList.contains('el-input__inner') && target.closest('.admin-nav-search'));
+}
+
+function markNavMenuSearchUserEdited(input) {
+    input._ncfUserEdited = true;
+}
+
+function logNavMenuSearchAutofill(input, message) {
+    if (!input || input._ncfAutofillLogged || !window.console || !console.debug) {
+        return;
+    }
+    input._ncfAutofillLogged = true;
+    console.debug(message);
+}
+
+function clearNavMenuSearchAutofill(input) {
+    if (!input || input._ncfUserEdited) {
+        return;
+    }
+    input.removeAttribute('name');
+    if (!String(Store.state.navMenu.searchKeyword || '') && input.value) {
+        input.value = '';
+        logNavMenuSearchAutofill(input, '[NCF] 已忽略菜单搜索框的浏览器自动填充');
+    }
+}
+
+// 在 Vue 绑定 v-model 之前挂上，捕获阶段才能拦住浏览器自动填充触发的 input。
+document.addEventListener('keydown', function (event) {
+    if (isNavMenuSearchInput(event.target)) {
+        markNavMenuSearchUserEdited(event.target);
+    }
+}, true);
+document.addEventListener('paste', function (event) {
+    if (isNavMenuSearchInput(event.target)) {
+        markNavMenuSearchUserEdited(event.target);
+    }
+}, true);
+document.addEventListener('drop', function (event) {
+    if (isNavMenuSearchInput(event.target)) {
+        markNavMenuSearchUserEdited(event.target);
+    }
+}, true);
+document.addEventListener('input', function (event) {
+    var input = event.target;
+    if (!isNavMenuSearchInput(input) || input._ncfUserEdited) {
+        return;
+    }
+    event.stopImmediatePropagation();
+    input.value = '';
+    logNavMenuSearchAutofill(input, '[NCF] 已拦截菜单搜索框的浏览器自动填充');
+}, true);
+document.addEventListener('animationstart', function (event) {
+    if (event.animationName === 'ncf-nav-search-autofill-start') {
+        clearNavMenuSearchAutofill(event.target);
+    }
+}, true);
+
+function bindNavMenuSearchInput(input) {
+    if (!input || input._ncfNavSearchGuardBound) {
+        return;
+    }
+    input._ncfNavSearchGuardBound = true;
+    input.removeAttribute('name');
+    input.setAttribute('autocomplete', ncfNavSearchAutocompleteToken);
+}
+
+function watchNavMenuSearchAutofill() {
+    var ticks = 0;
+    var observed = false;
+
+    var scan = function () {
+        var inputs = document.querySelectorAll('.admin-nav-search .el-input__inner');
+        for (var i = 0; i < inputs.length; i++) {
+            bindNavMenuSearchInput(inputs[i]);
+            clearNavMenuSearchAutofill(inputs[i]);
+        }
+        if (!observed && inputs.length && window.MutationObserver) {
+            var box = document.querySelector('.admin-nav-search');
+            if (box) {
+                observed = true;
+                var observer = new MutationObserver(function () {
+                    scan();
+                });
+                observer.observe(box, {
+                    subtree: true,
+                    childList: true,
+                    attributes: true,
+                    attributeFilter: ['name', 'value']
+                });
+            }
+        }
+    };
+
+    var start = function () {
+        scan();
+        // 浏览器自动填充经常在输入框出现后几百毫秒才写入，且不一定触发事件。
+        var timer = window.setInterval(function () {
+            scan();
+            ticks++;
+            if (ticks >= 40) {
+                window.clearInterval(timer);
+            }
+        }, 250);
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+    } else {
+        start();
+    }
+}
+
+watchNavMenuSearchAutofill();
+
 // 菜单栏数据递归
 function myfunctionMain(list) {
     if (!list || list.length === 0) {
@@ -112,7 +252,7 @@ function myfunctionMain(list) {
     for (var i in list) {
         let setNavMenuActive = window.sessionStorage.getItem('setNavMenuActive');
         // 如果有需要单独设置的导航 （例如安装、卸载后激活特定的导航）
-        if (setNavMenuActive && setNavMenuActive !== "null" && list[i].menuName === setNavMenuActive) {
+        if (!document.body.classList.contains('ncf-admin-embedded') && setNavMenuActive && setNavMenuActive !== "null" && list[i].menuName === setNavMenuActive) {
             window.sessionStorage.setItem('setNavMenuActive', null);
             if (list[i].children.length > 0) {
                 window.sessionStorage.setItem('activeMenu', list[i].children[0].id);
