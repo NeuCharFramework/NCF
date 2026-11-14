@@ -24,6 +24,8 @@
 		<PackageReference Include="AngleSharp" Version="1.9.1" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.14" />
 		<PackageReference Include="PdfPig" Version="0.1.16" />
+		<PackageReference Include="Senparc.Xncf.Connectors" Version="0.1.0" />
+		<PackageReference Include="Senparc.Xncf.WorkspaceAgent" Version="0.2.4" />
 	</ItemGroup>
 
 	<ItemGroup>
