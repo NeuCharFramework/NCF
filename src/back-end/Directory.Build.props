@@ -1,5 +1,8 @@
 <Project>
 	<PropertyGroup>
+		<!-- SDK 11.0.100+: Web SDK 项目互相 ProjectReference 时，Debug 合并 StaticWebAssets 会因 BlazorWeb.HotReload JS 模块缺少 endpoint 而失败。
+		     见 https://github.com/dotnet/sdk/issues/56656 ；待 SDK 修复后可移除。 -->
+		<EnableHotReloadInRuntimeConfigDevFile>false</EnableHotReloadInRuntimeConfigDevFile>
 		<!-- Keep simulated-site solution build output clean without altering runtime behavior -->
 		<NoWarn>$(NoWarn);NU1510;NU1603;EF1001;ASPDEPR006;SYSLIB0014;SYSLIB0021;AD0001;CS0105;CS0108;CS0114;CS0162;CS0168;CS0169;CS0219;CS0414;CS0618;CS0628;CS0649;CS0809;CS1572;CS1573;CS1574;CS1587;CS1591;CS8321;CS8602;CS8604;CS8618;CS8619;CS8632;CS8669;CS9113;CA2022;CA2024;CA2200</NoWarn>
 		<MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);MSB5021</MSBuildWarningsAsMessages>

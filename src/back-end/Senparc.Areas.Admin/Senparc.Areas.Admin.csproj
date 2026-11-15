@@ -51,8 +51,8 @@
 		<PackageReference Include="Senparc.Xncf.Tenant" Version="0.15.16" />
 		<PackageReference Include="Senparc.Xncf.FileManager" Version="0.8.4" />
 		<PackageReference Include="Senparc.Xncf.PromptRange" Version="0.20.15" />
-		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.24.17" />
-		<PackageReference Include="Senparc.Xncf.Workspace" Version="0.2.8" />
+		<PackageReference Include="Senparc.Xncf.WeixinManager" Version="0.25.0" />
+		<PackageReference Include="Senparc.Xncf.Workspace" Version="0.2.9" />
 		<PackageReference Include="Senparc.Xncf.NeuCharWorkflow.Abstractions" Version="0.3.1" />
 	</ItemGroup>
 
