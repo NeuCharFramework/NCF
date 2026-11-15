@@ -7,7 +7,6 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using Senparc.Ncf.Core.Models;
 using Senparc.Xncf.NeuCharWorkflow.ACL;
 using Senparc.Xncf.NeuCharWorkflow.Domain.Models.DatabaseModel;
@@ -72,24 +71,30 @@ public class NeuCharWorkflowTests
             await editorContext.SaveChangesAsync();
         }
 
+        runtimeWorkflow.Update("Stale runtime definition", null, "{\"version\":\"stale\"}", false, "manual", "{}", null, 3);
         runtimeWorkflow.MarkStarted(null);
         Assert.IsNotNull(runtimeWorkflow.LastRunAt);
-        var repository = new Mock<INeuCharWorkflowRepository>();
-        repository.SetupGet(item => item.BaseDB).Returns(new TestDbData(runtimeContext)
+        EntitySetKeys.TryLoadSetInfo(typeof(NeuCharWorkflowSenparcEntities_Sqlite));
+        var repository = new NeuCharWorkflowRepository(new TestDbData(runtimeContext)
         {
             ManualDetectChangeObject = true
         });
         var service = new NeuCharWorkflowService(
-            repository.Object,
+            repository,
             new ServiceCollection().BuildServiceProvider());
 
         await service.SaveRuntimeStartedAsync(runtimeWorkflow);
+        runtimeWorkflow.MarkCompleted(false, "runtime-error");
+        await service.SaveRuntimeCompletedAsync(runtimeWorkflow);
 
         await using var verifyContext = CreateContext(databaseName);
         var savedWorkflow = await verifyContext.Set<WorkflowEntity>().SingleAsync();
         Assert.AreEqual(2, savedWorkflow.Revision);
+        Assert.AreEqual("Workflow", savedWorkflow.Name);
         Assert.AreEqual("{\"version\":2}", savedWorkflow.GraphJson);
         Assert.IsNotNull(savedWorkflow.LastRunAt);
+        Assert.AreEqual(false, savedWorkflow.LastSucceeded);
+        Assert.AreEqual("runtime-error", savedWorkflow.LastError);
     }
 
     private static NeuCharWorkflowSenparcEntities_Sqlite CreateContext(string databaseName)

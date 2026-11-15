@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -39,11 +40,152 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AdminChat.Memory.UpdateReason.intent-deferred" xml:space="preserve"><value>等待你提供后续内容或确认保存，本轮未写入 Memory。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.no-save-intent" xml:space="preserve"><value>本轮未识别到立即更新长期记忆的意图，未写入 Memory。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.pending-review" xml:space="preserve"><value>本批候选包含助手来源的信息，尚未保存。请逐条核对并保存；助手的说法可能不准确。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.unresolved-reference" xml:space="preserve"><value>未能从近期前文确定要记住的具体内容。请在同一条消息中写明“记住：……”及完整事实；必要时检查本轮 PromptCode。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.review-complete" xml:space="preserve"><value>本批候选已由你核对并保存。</value></data>
+  <data name="AdminChat.Memory.ReviewCandidate" xml:space="preserve"><value>核对候选</value></data>
+  <data name="AdminChat.Memory.ReviewNotice" xml:space="preserve"><value>这是从前文整理的候选，尚未保存。请核对内容与作用域，再点击“保存条目”；删除候选需点击“删除”并确认。锁定的手工条目不会被 AI 自动改写。</value></data>
+  <data name="AdminChat.Memory.ReviewClose" xml:space="preserve"><value>请先处理当前编辑草稿并关闭设置，再核对候选。</value></data>
+  <data name="AdminChat.Memory.CandidateEvidence" xml:space="preserve"><value>参考原文（待核实）</value></data>
+  <data name="AdminChat.Memory.Subtitle" xml:space="preserve"><value>管理长期偏好，让每一次对话更懂你</value></data>
+  <data name="AdminChat.Memory.Private" xml:space="preserve"><value>私有记忆</value></data>
+  <data name="AdminChat.Memory.SaveChanges" xml:space="preserve"><value>保存更改</value></data>
+  <data name="AdminChat.Memory.ClearDraft" xml:space="preserve"><value>清空草稿</value></data>
+  <data name="AdminChat.Memory.EntriesHint" xml:space="preserve"><value>集中管理我的全局与当前 Workspace 记忆</value></data>
+  <data name="AdminChat.Memory.Guide" xml:space="preserve"><value>作用域、学习规则与存储说明</value></data>
+  <data name="AdminChat.Memory.FormatGuide" xml:space="preserve"><value>Markdown 格式与保存规则</value></data>
+  <data name="AdminChat.Memory.SaveEntry" xml:space="preserve"><value>保存条目</value></data>
+  <data name="AdminChat.Memory.EmptyEntries" xml:space="preserve"><value>暂无记忆，添加第一条偏好开始使用</value></data>
+  <data name="AdminChat.Memory.EmptyLoaded" xml:space="preserve"><value>暂无本轮加载报告。启用 Memory 并发送消息后可在此查看。</value></data>
+  <data name="AdminChat.Sidebar.Expand" xml:space="preserve"><value>展开会话侧栏</value></data>
+  <data name="AdminChat.Sidebar.Collapse" xml:space="preserve"><value>收起会话侧栏</value></data>
+  <data name="AdminChat.Sidebar.Resize" xml:space="preserve"><value>调整侧栏宽度（左右方向键）</value></data>
+  <data name="AdminChat.Sidebar.Reorder" xml:space="preserve"><value>分类内拖动排序，或按 Alt + 上/下方向键</value></data>
+  <data name="AdminChat.Sidebar.Running" xml:space="preserve"><value>进行中</value></data>
+  <data name="AdminChat.Sidebar.Stopping" xml:space="preserve"><value>正在停止</value></data>
+  <data name="AdminChat.Sidebar.SortSaved" xml:space="preserve"><value>顺序已保存，同一账号可跨设备读取</value></data>
+  <data name="AdminChat.Sidebar.SortFailed" xml:space="preserve"><value>排序保存失败，请重试</value></data>
+  <data name="AdminChat.Sidebar.PreferencesFailed" xml:space="preserve"><value>侧栏布局偏好无法读取或保存，当前布局仅在本页有效</value></data>
+  <data name="AdminChat.Sidebar.Archive" xml:space="preserve"><value>归档，标记为已完成</value></data>
+  <data name="AdminChat.Sidebar.ArchiveRunning" xml:space="preserve"><value>这条会话还在进行，完成后再归档</value></data>
+  <data name="AdminChat.Archive.Menu" xml:space="preserve"><value>已归档</value></data>
+  <data name="AdminChat.Archive.Empty" xml:space="preserve"><value>还没有归档会话</value></data>
+  <data name="AdminChat.Archive.Open" xml:space="preserve"><value>打开归档会话：{0}</value></data>
+  <data name="AdminChat.Archive.Delete" xml:space="preserve"><value>删除归档会话：{0}</value></data>
+  <data name="AdminChat.Archive.Action" xml:space="preserve"><value>归档</value></data>
+  <data name="AdminChat.Archive.Restore" xml:space="preserve"><value>还原</value></data>
+  <data name="AdminChat.Archive.RestoreLabel" xml:space="preserve"><value>还原归档会话：{0}</value></data>
+  <data name="AdminChat.Archive.RestoreSuccess" xml:space="preserve"><value>已还原到进行中的会话</value></data>
+  <data name="AdminChat.Archive.RestoreFailed" xml:space="preserve"><value>还原失败，请重试</value></data>
+  <data name="AdminChat.Archive.Success" xml:space="preserve"><value>已归档。可从左侧「新对话」旁的更多菜单查看、还原或删除</value></data>
+  <data name="AdminChat.Sidebar.Tools" xml:space="preserve"><value>更多</value></data>
+  <data name="AdminChat.Sidebar.Unread" xml:space="preserve"><value>未读</value></data>
+  <data name="AdminChat.Archive.Failed" xml:space="preserve"><value>归档失败，请重试</value></data>
+  <data name="AdminChat.Archive.Tag" xml:space="preserve"><value>已归档</value></data>
+  <data name="AdminChat.Archive.LoadFailed" xml:space="preserve"><value>加载归档会话失败</value></data>
+  <data name="AdminChat.ArchiveSessionSuccess" xml:space="preserve"><value>会话已归档</value></data>
+  <data name="AdminChat.Rail.Label" xml:space="preserve"><value>我的发言</value></data>
+  <data name="AdminChat.Rail.Jump" xml:space="preserve"><value>定位到这条发言</value></data>
+  <data name="AdminChat.Rail.EmptyMessage" xml:space="preserve"><value>（空发言）</value></data>
+  <data name="AdminChat.Memory.Settings" xml:space="preserve"><value>Memory / 对话设置</value></data>
+  <data name="AdminChat.Memory.UpdateSaved" xml:space="preserve"><value>Memory 已保存：我的全局 {0} 项，当前 Workspace {1} 项变更（数据库存储，不创建文件）。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.mode-off" xml:space="preserve"><value>未保存长期 Memory：当前对话已关闭 Memory。助手的口头确认不代表保存成功。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.read-only" xml:space="preserve"><value>未保存长期 Memory：当前为只读模式，请切换到学习或手工编辑。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.input-not-eligible" xml:space="preserve"><value>未更新 Memory：本轮输入未满足学习触发条件，或超过长度限制。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.no-candidates" xml:space="preserve"><value>未更新 Memory：提取模型没有返回可保存的长期记忆。可手工添加，或检查本轮使用的 PromptCode；助手口头说“记住”不代表已保存。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.pinned" xml:space="preserve"><value>未更新 Memory：相关条目已锁定，AI 不得修改或删除，请手工编辑。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.no-difference" xml:space="preserve"><value>Memory 无变更：返回的内容已存在，或没有匹配到要删除的条目。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.revision-conflict" xml:space="preserve"><value>未保存 Memory：记忆在本轮执行期间被修改，较新版本已保留，请重新检查。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.timeout" xml:space="preserve"><value>未保存 Memory：记忆提取超时，请重试或手工添加。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.invalid-change" xml:space="preserve"><value>未保存 Memory：提取结果未通过证据、安全、作用域或字段校验，整批拒绝。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.capacity" xml:space="preserve"><value>未保存 Memory：记忆已达到 80 条上限，请先删除不需要的条目。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.invalid-json" xml:space="preserve"><value>未保存 Memory：提取模型未返回有效的规定格式 JSON，请检查提示词。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.pending" xml:space="preserve"><value>Memory 尚无保存确认，请勿以助手的口头承诺作为持久化凭证。</value></data>
+  <data name="AdminChat.Memory.UpdateReason.update-failed" xml:space="preserve"><value>Memory 更新失败，未确认保存。请检查提示词、模型或数据库配置，原有记忆保留。</value></data>
+  <data name="AdminChat.Memory.StorageNotice" xml:space="preserve"><value>记忆保存在当前用户的私有数据库中，不会自动创建或读取 Workspace 内的 Memory.md。请在此管理条目；工作区同名文件仅是普通文件。助手的文字回复不代表保存成功，以系统更新结果为准。</value></data>
+  <data name="AdminChat.Memory.Use" xml:space="preserve"><value>使用我的全局 Memory</value></data>
+  <data name="AdminChat.Memory.Notice" xml:space="preserve"><value>关闭：不读取或学习；只读：仅加载；学习：遇到明确偏好、记住或纠正等表达时更新。用户全局 + 当前 Workspace 隔离加载，过期和归档不加载。参考预算 1000 tokens（Core 最多 300），未知模型使用保守估计。请勿保存秘密或敏感信息。</value></data>
+  <data name="AdminChat.Memory.ModeOff" xml:space="preserve"><value>关闭</value></data>
+  <data name="AdminChat.Memory.ModeReadOnly" xml:space="preserve"><value>只读</value></data>
+  <data name="AdminChat.Memory.ModeLearn" xml:space="preserve"><value>学习</value></data>
+  <data name="AdminChat.Memory.Entries" xml:space="preserve"><value>记忆条目</value></data>
+  <data name="AdminChat.Memory.ScopeNotice" xml:space="preserve"><value>只展示自己的全局记忆及当前对话 Workspace 的记忆。创建对话并绑定 Workspace 后可编辑其记忆；同一事实优先使用 Workspace 版本。</value></data>
+  <data name="AdminChat.Memory.Add" xml:space="preserve"><value>添加条目</value></data>
+  <data name="AdminChat.Memory.Text" xml:space="preserve"><value>内容</value></data>
+  <data name="AdminChat.Memory.Scope" xml:space="preserve"><value>作用域</value></data>
+  <data name="AdminChat.Memory.ScopeGlobal" xml:space="preserve"><value>我的全局</value></data>
+  <data name="AdminChat.Memory.Tier" xml:space="preserve"><value>加载层级</value></data>
+  <data name="AdminChat.Memory.Kind" xml:space="preserve"><value>类型</value></data>
+  <data name="AdminChat.Memory.Topic" xml:space="preserve"><value>主题（Topic 必填）</value></data>
+  <data name="AdminChat.Memory.Expires" xml:space="preserve"><value>过期时间（可选）</value></data>
+  <data name="AdminChat.Memory.Pinned" xml:space="preserve"><value>锁定：禁止 AI 修改或删除</value></data>
+  <data name="AdminChat.Memory.DeleteNotice" xml:space="preserve"><value>删除条目并清除其历史内容？原始聊天消息不会删除。</value></data>
+  <data name="AdminChat.Memory.Delete" xml:space="preserve"><value>删除</value></data>
+  <data name="AdminChat.Memory.Source" xml:space="preserve"><value>来源对话 / 消息</value></data>
+  <data name="AdminChat.Memory.Loaded" xml:space="preserve"><value>本轮加载</value></data>
+  <data name="AdminChat.Memory.LoadedNotice" xml:space="preserve"><value>显示本页面最近一轮提供给模型的记忆及选择原因，并不代表模型一定采用。计数含记忆边界提示，不含 SystemMessage、历史消息和模型协议开销；刷新后不保留此报告。</value></data>
+  <data name="AdminChat.Memory.Reason" xml:space="preserve"><value>选择原因</value></data>
+  <data name="AdminChat.Memory.History" xml:space="preserve"><value>变更历史</value></data>
+  <data name="AdminChat.Memory.Time" xml:space="preserve"><value>时间</value></data>
+  <data name="AdminChat.Memory.MarkdownScope" xml:space="preserve"><value>Memory.md 仅编辑/导出我的全局记忆；Workspace 记忆请使用条目编辑。清空不会删除 Workspace 记忆。</value></data>
+  <data name="AdminChat.Memory.UnsavedMarkdown" xml:space="preserve"><value>请先保存 Markdown 草稿，再编辑单个条目。</value></data>
+  <data name="AdminChat.Memory.Preview" xml:space="preserve"><value>预览 Memory.md</value></data>
+  <data name="AdminChat.Memory.Edit" xml:space="preserve"><value>编辑 / 分层</value></data>
+  <data name="AdminChat.Memory.Format" xml:space="preserve"><value>使用 ## Core、## Topic: 主题、## Archive 标题；每条记忆以“- ”开头，最多 300 字符，共 80 条。保存手工编辑后所有条目固定，AI 不会覆盖。清空编辑框再保存可删除全部记忆。PromptRange 的 AdminChat.Memory 中可发布并评分新版本，平均分最高的已发布版本将替换默认提示词。</value></data>
+  <data name="AdminChat.Memory.SystemMessage" xml:space="preserve"><value>SystemMessage</value></data>
+  <data name="AdminChat.Memory.SystemNotice" xml:space="preserve"><value>影响我的所有 Chat，从下一轮生效，与 Memory 开关无关；不改变工具权限。最多 2000 字符。</value></data>
+  <data name="AdminChat.Memory.GlobalSystem" xml:space="preserve"><value>当前租户的全局 SystemMessage（超级管理员）</value></data>
+  <data name="AdminChat.Memory.GlobalNotice" xml:space="preserve"><value>影响当前租户所有用户的 Chat；单租户模式影响本站所有 Chat。不会用于标题或 Memory 等内部生成任务。</value></data>
+  <data name="AdminChat.Memory.SaveGlobal" xml:space="preserve"><value>保存全局 SystemMessage</value></data>
+  <data name="AdminChat.Memory.Download" xml:space="preserve"><value>下载 Memory.md</value></data>
+  <data name="AdminChat.Memory.Clear" xml:space="preserve"><value>清空草稿（保存后删除）</value></data>
+  <data name="AdminChat.Memory.Save" xml:space="preserve"><value>保存我的 Memory / 设置</value></data>
+  <data name="AdminChat.Memory.Saved" xml:space="preserve"><value>已保存。</value></data>
+  <data name="AdminChat.Memory.Failed" xml:space="preserve"><value>Memory 操作失败，请重新加载后重试。</value></data>
+  <data name="AdminChat.Memory.UpdateWarning" xml:space="preserve"><value>本轮 Memory 未更新，已有记忆保留。请检查 PromptRange 或重新打开 Memory 设置。</value></data>
   <data name="Admin.Title" xml:space="preserve">
     <value>NCF 管理后台</value>
   </data>
   <data name="Admin.Nav.Home" xml:space="preserve">
     <value>首页</value>
+  </data>
+  <data name="Admin.Tabs.List" xml:space="preserve">
+    <value>已打开的页面</value>
+  </data>
+  <data name="Admin.Tabs.Close" xml:space="preserve">
+    <value>关闭标签</value>
+  </data>
+  <data name="Admin.Tabs.Untitled" xml:space="preserve">
+    <value>未命名页面</value>
+  </data>
+  <data name="Admin.Tabs.ScrollLeft" xml:space="preserve">
+    <value>向左查看标签</value>
+  </data>
+  <data name="Admin.Tabs.ScrollRight" xml:space="preserve">
+    <value>向右查看标签</value>
+  </data>
+  <data name="Admin.Nav.Search" xml:space="preserve">
+    <value>搜索菜单</value>
+  </data>
+  <data name="Admin.Nav.SearchPlaceholder" xml:space="preserve">
+    <value>输入关键字筛选左侧菜单</value>
+  </data>
+  <data name="Admin.Nav.SearchEmpty" xml:space="preserve">
+    <value>未找到匹配的菜单</value>
+  </data>
+  <data name="Admin.Nav.ConfigTitle" xml:space="preserve">
+    <value>菜单配置</value>
+  </data>
+  <data name="Admin.Nav.ConfigHint" xml:space="preserve">
+    <value>拖拽一级菜单调整顺序，保存后将更新菜单排序值</value>
+  </data>
+  <data name="Admin.Nav.ConfigSave" xml:space="preserve">
+    <value>保存顺序</value>
+  </data>
+  <data name="Admin.Nav.ConfigSaved" xml:space="preserve">
+    <value>菜单顺序已保存</value>
   </data>
   <data name="Admin.Layout.Welcome" xml:space="preserve">
     <value>欢迎，</value>
@@ -93,11 +235,11 @@
   <data name="Admin.Login.Error.PasswordRequired" xml:space="preserve">
     <value>请输入密码</value>
   </data>
-  <data name="Admin.Login.Error.InvalidCredentials" xml:space="preserve">
-    <value>账号或密码错误！</value>
-  </data>
   <data name="Admin.Language.SelectLanguage" xml:space="preserve">
     <value>选择语言</value>
+  </data>
+  <data name="Admin.Login.Error.InvalidCredentials" xml:space="preserve">
+    <value>账号或密码错误！</value>
   </data>
   <data name="Common.系统管理" xml:space="preserve"><value>系统管理</value></data>
   <data name="Common.增加" xml:space="preserve"><value>增加</value></data>
@@ -151,6 +293,7 @@
   <data name="Tenant.KeyExists" xml:space="preserve"><value>{0} 租户匹配规则已存在</value></data>
   <data name="Tenant.SaveSuccess.Edit" xml:space="preserve"><value>编辑租户成功</value></data>
   <data name="Tenant.SaveSuccess.Create" xml:space="preserve"><value>新增租户成功</value></data>
+  <data name="Tenant.PlatformAdminOnly" xml:space="preserve"><value>多租户模式下，仅平台管理员（系统级账号）可以管理租户信息！</value></data>
   <data name="Tenant.NotFound" xml:space="preserve"><value>租户不存在</value></data>
   <data name="Tenant.SetInfoFailed" xml:space="preserve"><value>租户信息设置失败</value></data>
   <data name="Tenant.InitializeSuccess" xml:space="preserve"><value>初始化成功</value></data>
@@ -196,7 +339,7 @@
   <data name="Admin.Common.NoTime" xml:space="preserve"><value>暂无时间</value></data>
   <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>复制成功！请使用 Ctrl+V 组合键进行粘贴操作。</value></data>
   <data name="Admin.Home.Header" xml:space="preserve"><value>NeuCharFramework 管理员后台</value></data>
-  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>当前 Host 实时状态</value></data>
+  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>Host 资源监控</value></data>
   <data name="Admin.Home.HostMetricsRealtime" xml:space="preserve"><value>实时 · 每 2 秒刷新</value></data>
   <data name="Admin.Home.HostCpu" xml:space="preserve"><value>Host CPU（整体）</value></data>
   <data name="Admin.Home.HostCpuDetail" xml:space="preserve"><value>Host 整体使用率</value></data>
@@ -211,11 +354,27 @@
   <data name="Admin.Home.HostProcessCpu" xml:space="preserve"><value>Web 进程 CPU</value></data>
   <data name="Admin.Home.HostProcessWorkingSet" xml:space="preserve"><value>工作集内存</value></data>
   <data name="Admin.Home.HostProcessUptime" xml:space="preserve"><value>运行时长</value></data>
-  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>最近 30 次采样趋势（仅当前页面）</value></data>
+  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>资源趋势</value></data>
   <data name="Admin.Home.HostNetworkReceive" xml:space="preserve"><value>下行</value></data>
   <data name="Admin.Home.HostNetworkSend" xml:space="preserve"><value>上行</value></data>
   <data name="Admin.Home.HostMetricsInvalidResponse" xml:space="preserve"><value>Host 指标接口返回了无效数据</value></data>
   <data name="Admin.Home.HostMetricsUnavailable" xml:space="preserve"><value>暂时无法获取 Host 实时指标</value></data>
+  <data name="Admin.Home.WebProcessMemory" xml:space="preserve"><value>Web 进程内存</value></data>
+  <data name="Admin.Home.ResourceMonitor" xml:space="preserve"><value>资源监控（最近 24 小时）</value></data>
+  <data name="Admin.Home.ResourceMonitorRealtime" xml:space="preserve"><value>后台每 10 秒记录 · CO2NET 缓存最多保留 24 小时</value></data>
+  <data name="Admin.Home.ResourceMonitorHint" xml:space="preserve"><value>拖拽选择范围或滚轮缩放；双击重置范围</value></data>
+  <data name="Admin.Home.ResourceMonitorReset" xml:space="preserve"><value>重置范围</value></data>
+  <data name="Admin.Home.ResourceMonitorRange" xml:space="preserve"><value>时间范围</value></data>
+  <data name="Admin.Home.ResourceMonitor5Minutes" xml:space="preserve"><value>5 分钟</value></data>
+  <data name="Admin.Home.ResourceMonitor30Minutes" xml:space="preserve"><value>30 分钟</value></data>
+  <data name="Admin.Home.ResourceMonitor6Hours" xml:space="preserve"><value>6 小时</value></data>
+  <data name="Admin.Home.ResourceMonitor24Hours" xml:space="preserve"><value>24 小时</value></data>
+  <data name="Admin.Home.ResourceMonitorReturnLive" xml:space="preserve"><value>回到实时</value></data>
+  <data name="Admin.Home.ResourceMonitorFollowing" xml:space="preserve"><value>跟随实时</value></data>
+  <data name="Admin.Home.ResourceMonitorPaused" xml:space="preserve"><value>视图已暂停（仍在记录）</value></data>
+  <data name="Admin.Home.ResourceMonitorEmpty" xml:space="preserve"><value>后台记录启动中（约 10 秒），或该时间范围暂无数据</value></data>
+  <data name="Admin.Home.ResourceMonitorUnavailable" xml:space="preserve"><value>暂时无法获取资源监控数据</value></data>
+  <data name="Admin.Home.ResourceMonitorNow" xml:space="preserve"><value>现在</value></data>
   <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>已安装模块</value></data>
   <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>待更新模块</value></data>
   <data name="Admin.Home.NewModules" xml:space="preserve"><value>发现新模块</value></data>
@@ -274,6 +433,17 @@
   <data name="Admin.Common.Error" xml:space="preserve"><value>错误</value></data>
   <data name="AdminChat.Conversation" xml:space="preserve"><value>对话</value></data>
   <data name="AdminChat.History" xml:space="preserve"><value>对话历史</value></data>
+  <data name="AdminChat.Search.Open" xml:space="preserve"><value>搜索对话</value></data>
+  <data name="AdminChat.Search.Placeholder" xml:space="preserve"><value>搜索未归档对话</value></data>
+  <data name="AdminChat.Search.ChatTab" xml:space="preserve"><value>对话</value></data>
+  <data name="AdminChat.Search.ToolTab" xml:space="preserve"><value>方法</value></data>
+  <data name="AdminChat.Search.ToolPlaceholder" xml:space="preserve"><value>搜索方法名</value></data>
+  <data name="AdminChat.Search.ToolCall" xml:space="preserve"><value>方法调用</value></data>
+  <data name="AdminChat.Search.Empty" xml:space="preserve"><value>没有匹配的未归档对话</value></data>
+  <data name="AdminChat.Search.Hint" xml:space="preserve"><value>只搜索未归档对话，最多 10 条</value></data>
+  <data name="AdminChat.Search.ToolHint" xml:space="preserve"><value>只搜索未归档会话里，Harness 实际调用过的方法名，最多 10 条</value></data>
+  <data name="AdminChat.Search.Failed" xml:space="preserve"><value>搜索失败</value></data>
+  <data name="AdminChat.Search.TitleMatch" xml:space="preserve"><value>标题匹配</value></data>
   <data name="AdminChat.EmptyHistory" xml:space="preserve"><value>暂无对话历史</value></data>
   <data name="AdminChat.SelectModel" xml:space="preserve"><value>选择 AI 算力</value></data>
   <data name="AdminChat.Manage" xml:space="preserve"><value>管理</value></data>
@@ -288,6 +458,10 @@
   <data name="AdminChat.SendHint" xml:space="preserve"><value>Ctrl + Enter 或 Cmd + Enter 发送</value></data>
   <data name="AdminChat.Send" xml:space="preserve"><value>发送</value></data>
   <data name="AdminChat.Thinking" xml:space="preserve"><value>正在思考中...</value></data>
+  <data name="AdminChat.ModeSimple" xml:space="preserve"><value>普通对话</value></data>
+  <data name="AdminChat.ModeHarness" xml:space="preserve"><value>长任务</value></data>
+  <data name="AdminChat.HarnessSteps" xml:space="preserve"><value>执行步骤</value></data>
+  <data name="AdminChat.TrajectoryNotFound" xml:space="preserve"><value>未找到任务轨迹。</value></data>
   <data name="AdminChat.NewSessionDescription" xml:space="preserve"><value>输入问题并选择引用模块，开始新的对话会话</value></data>
   <data name="AdminChat.ComputePower" xml:space="preserve"><value>AI 算力</value></data>
   <data name="AdminChat.DeleteConfirm" xml:space="preserve"><value>确定要删除这个会话吗？</value></data>
@@ -487,6 +661,10 @@
   <data name="AdminChat.CreateSessionFailedRetry" xml:space="preserve"><value>创建会话失败，请稍后重试</value></data>
   <data name="Admin.Login.Error.LoginFailed" xml:space="preserve"><value>登录失败</value></data>
   <data name="Admin.Login.Error.LoginRetry" xml:space="preserve"><value>登录失败，请重试</value></data>
+  <data name="Admin.Login.CaptchaPlaceholder" xml:space="preserve"><value>请输入验证码</value></data>
+  <data name="Admin.Login.CaptchaRequired" xml:space="preserve"><value>请输入图形验证码</value></data>
+  <data name="Admin.Login.CaptchaRefresh" xml:space="preserve"><value>看不清？点击图片刷新</value></data>
+  <data name="Admin.Login.Error.CaptchaInvalid" xml:space="preserve"><value>验证码错误，请重试</value></data>
   <data name="Admin.Login.Support" xml:space="preserve"><value>技术支持：</value></data>
   <data name="Admin.Login.VisitWebsite" xml:space="preserve"><value>点击进入官网</value></data>
   <data name="Admin.Session.InvalidUser" xml:space="preserve"><value>当前用户身份无效，无法续期 JWT。请重新登录。</value></data>
@@ -703,4 +881,106 @@
   <data name="Admin.Home.AgentsWaitingOrPaused" xml:space="preserve"><value>等待 / 暂停</value></data>
   <data name="Admin.Home.AiQuickDescription" xml:space="preserve"><value>使用页脚 AI 快捷对话，随时展开完整会话与上下文选择。</value></data>
   <data name="Admin.Home.AiQuickDialog" xml:space="preserve"><value>打开快捷对话</value></data>
+  <data name="Menu.ConfigMode" xml:space="preserve">
+    <value>配置模式</value>
+  </data>
+  <data name="Menu.ConfigModeExit" xml:space="preserve">
+    <value>退出配置模式</value>
+  </data>
+  <data name="Menu.ConfigModeTip" xml:space="preserve">
+    <value>下方按层级列出所有“菜单/页面”（按钮不参与排序）。同级之间可直接拖拽调整顺序，也可在右侧“排序”框输入数字后回车跳转到对应位置；保存后将真实更新 Sort 数值并刷新左侧菜单</value>
+  </data>
+  <data name="Menu.ConfigSave" xml:space="preserve">
+    <value>保存排序</value>
+  </data>
+  <data name="Menu.ConfigSaveSuccess" xml:space="preserve">
+    <value>菜单排序已保存</value>
+  </data>
+  <data name="Menu.ConfigEmpty" xml:space="preserve">
+    <value>暂无可排序的菜单或页面</value>
+  </data>
+  <data name="Admin.Footer.NeuBellWebHookSettings" xml:space="preserve"><value>WebHook 设置</value></data>
+  <data name="DocHelp.Help" xml:space="preserve"><value>帮助</value></data>
+  <data name="DocHelp.Title" xml:space="preserve"><value>功能文档</value></data>
+  <data name="DocHelp.OpenWindow" xml:space="preserve"><value>在新窗口打开</value></data>
+  <data name="DocHelp.Close" xml:space="preserve"><value>关闭</value></data>
+  <data name="DocHelp.Loading" xml:space="preserve"><value>正在加载文档…</value></data>
+  <data name="DocHelp.Notice" xml:space="preserve"><value>若文档空白或被浏览器阻止，请在新窗口打开。</value></data>
+  <data name="DocHelp.LoadFailed" xml:space="preserve"><value>文档加载失败或等待超时，请重试或在新窗口打开。</value></data>
+  <data name="DocHelp.Retry" xml:space="preserve"><value>重试</value></data>
+  <data name="DocHelp.InvalidTopic" xml:space="preserve"><value>帮助文档索引配置无效，请联系管理员。</value></data>
+  <data name="AdminChat.UserStats" xml:space="preserve"><value>用量统计</value></data>
+  <data name="AdminChat.UserStatsTitle" xml:space="preserve"><value>用户用量统计（AdminChat）</value></data>
+  <data name="AdminChat.UserStatsTip" xml:space="preserve"><value>仅统计各账号的会话与消息数量，不展示任何会话或消息内容。</value></data>
+  <data name="AdminChat.UserStatsCol.User" xml:space="preserve"><value>账号</value></data>
+  <data name="AdminChat.UserStatsCol.Total" xml:space="preserve"><value>会话总数</value></data>
+  <data name="AdminChat.UserStatsCol.Active" xml:space="preserve"><value>活跃</value></data>
+  <data name="AdminChat.UserStatsCol.Archived" xml:space="preserve"><value>已归档</value></data>
+  <data name="AdminChat.UserStatsCol.Deleted" xml:space="preserve"><value>已删除</value></data>
+  <data name="AdminChat.UserStatsCol.Messages" xml:space="preserve"><value>消息数</value></data>
+  <data name="AdminChat.UserStatsCol.LastActive" xml:space="preserve"><value>最后活跃</value></data>
+  <data name="AdminChat.UserStatsLoadFailed" xml:space="preserve"><value>加载用户用量统计失败</value></data>
+  <data name="AdminChat.SuperAdminOnly" xml:space="preserve"><value>仅超级管理员可以查看各账号的用量统计</value></data>
+  <data name="Tenant.AdminUserCount" xml:space="preserve"><value>管理员数</value></data>
+  <data name="Tenant.DeleteCurrentTenantNotAllowed" xml:space="preserve"><value>不能删除当前正在使用的租户！</value></data>
+  <data name="Tenant.DeleteLastTenantNotAllowed" xml:space="preserve"><value>系统必须至少保留一个启用的租户，不能删除最后一个租户！</value></data>
+  <data name="Tenant.DeleteHasAdminUsers" xml:space="preserve"><value>租户 {0} 下仍有 {1} 个管理员账号，请先转移或删除相关账号后再删除租户！</value></data>
+  <data name="Tenant.DeleteNotFound" xml:space="preserve"><value>租户不存在！</value></data>
+  <data name="PromptSelector.Title" xml:space="preserve"><value>PromptRange · 选择提示词</value></data>
+  <data name="PromptSelector.Range" xml:space="preserve"><value>全部靶场</value></data>
+  <data name="PromptSelector.Tactic" xml:space="preserve"><value>全部靶道</value></data>
+  <data name="PromptSelector.Keyword" xml:space="preserve"><value>搜索名称、正文、靶场或版本号</value></data>
+  <data name="PromptSelector.Search" xml:space="preserve"><value>搜索</value></data>
+  <data name="PromptSelector.Retry" xml:space="preserve"><value>重新加载</value></data>
+  <data name="PromptSelector.Empty" xml:space="preserve"><value>没有匹配的提示词，请调整筛选条件。</value></data>
+  <data name="PromptSelector.Draft" xml:space="preserve"><value>草稿</value></data>
+  <data name="PromptSelector.Preview" xml:space="preserve"><value>提示词正文预览</value></data>
+  <data name="PromptSelector.SelectHint" xml:space="preserve"><value>选择左侧提示词，预览完整正文。</value></data>
+  <data name="PromptSelector.InsertHint" xml:space="preserve"><value>插入到光标处（替换选中文字），不会自动发送或执行。</value></data>
+  <data name="PromptSelector.Cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="PromptSelector.Insert" xml:space="preserve"><value>插入提示词</value></data>
+  <data name="PromptSelector.LoadFailed" xml:space="preserve"><value>提示词加载失败，请重试。</value></data>
+  <data name="PromptSelector.AccessDenied" xml:space="preserve"><value>登录已失效或没有访问提示词的权限，请重新登录或联系管理员。</value></data>
+  <data name="PromptSelector.Unavailable" xml:space="preserve"><value>PromptRange 选择器不可用，请确认模块已安装、启用并更新。</value></data>
+  <data name="PromptSelector.TargetChanged" xml:space="preserve"><value>输入框已更改或不可编辑，请关闭后重新选择提示词。</value></data>
+  <data name="PromptSelector.TooLong" xml:space="preserve"><value>插入后的内容超过输入框长度限制，请先缩短内容。</value></data>
+  <data name="PromptSelector.Sort" xml:space="preserve"><value>排序</value></data>
+  <data name="PromptSelector.SortScore" xml:space="preserve"><value>评分（当前分数从高到低）</value></data>
+  <data name="PromptSelector.SortPromptCode" xml:space="preserve"><value>PromptCode（升序）</value></data>
+  <data name="PromptSelector.AverageScore" xml:space="preserve"><value>平均分</value></data>
+  <data name="PromptSelector.MaxScore" xml:space="preserve"><value>最高分</value></data>
+  <data name="PromptSelector.Unrated" xml:space="preserve"><value>未评分</value></data>
+  <data name="PromptSelector.CurrentScore" xml:space="preserve"><value>当前评分</value></data>
+  <data name="PromptReference.Score" xml:space="preserve"><value>打分（0~10）</value></data>
+  <data name="PromptReference.View" xml:space="preserve"><value>快速查看提示词</value></data>
+  <data name="PromptReference.Locate" xml:space="preserve"><value>定位引用文本</value></data>
+  <data name="PromptReference.Remove" xml:space="preserve"><value>取消引用标注（保留正文）</value></data>
+  <data name="PromptReference.Unrated" xml:space="preserve"><value>未评分</value></data>
+  <data name="PromptReference.Unavailable" xml:space="preserve"><value>PromptRange 不可用或请求失败，请重试。</value></data>
+  <data name="PromptReference.InvalidReference" xml:space="preserve"><value>提示词引用已失效，请重新插入。</value></data>
+  <data name="PromptReference.InvalidScore" xml:space="preserve"><value>请输入 0~10 的分数，最多一位小数。</value></data>
+  <data name="PromptReference.LastScoreWins" xml:space="preserve"><value>最后一次成功评分生效。手动评分与 AI 评分均可覆盖当前分数，所有引用处共享。</value></data>
+  <data name="PromptReference.AIConfirm" xml:space="preserve"><value>根据此轮输入、回复及该 PromptCode 的 benchmark 调用 AI 打分，可能产生模型费用；成功后将覆盖当前评分。继续？</value></data>
+  <data name="PromptReference.AIScore" xml:space="preserve"><value>AI 自动打分</value></data>
+  <data name="PromptReference.AIUnavailable" xml:space="preserve"><value>AI 打分需要已配置 benchmark 且存在对应的完整回复。</value></data>
+  <data name="PromptReference.Cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="PromptReference.Save" xml:space="preserve"><value>保存手动评分</value></data>
+  <data name="PromptReference.TooMany" xml:space="preserve"><value>每条消息最多标注 32 段提示词，请先移除不需要的引用。</value></data>
+  <data name="PromptReference.RangeScores" xml:space="preserve"><value>Range 评分总览</value></data>
+  <data name="PromptReference.ScoringTarget" xml:space="preserve"><value>本次评分对象</value></data>
+  <data name="PromptReference.LocateTarget" xml:space="preserve"><value>定位评分对象</value></data>
+  <data name="PromptReference.DraftHint" xml:space="preserve"><value>拖动仅预览分数和绿色柱子的高度；点击“保存手动评分”后才生效。</value></data>
+  <data name="PromptReference.ChartHint" xml:space="preserve"><value>绿色柱为本次评分对象，蓝框为正在查看的版本。点击柱子只查看，不改变评分对象；可横向滚动浏览全部版本。</value></data>
+  <data name="PromptReference.PreviewOnly" xml:space="preserve"><value>只读查看 · 不影响本次打分</value></data>
+  <data name="PromptReference.CurrentScore" xml:space="preserve"><value>当前已保存分数</value></data>
+  <data name="PromptReference.HumanScore" xml:space="preserve"><value>手动评分</value></data>
+  <data name="PromptReference.RobotScore" xml:space="preserve"><value>AI 评分</value></data>
+  <data name="PromptReference.Retry" xml:space="preserve"><value>重试</value></data>
+
+  <data name="SystemMenu.AdministratorManagement" xml:space="preserve"><value>管理员管理</value></data>
+  <data name="SystemMenu.RoleManagement" xml:space="preserve"><value>角色管理</value></data>
+  <data name="SystemMenu.SystemInfo" xml:space="preserve"><value>系统信息</value></data>
+  <data name="SystemMenu.TenantInfo" xml:space="preserve"><value>多租户信息</value></data>
+  <data name="SystemMenu.ExtensionModules" xml:space="preserve"><value>扩展模块</value></data>
+  <data name="SystemMenu.ModuleManagement" xml:space="preserve"><value>模块管理</value></data>
 </root>

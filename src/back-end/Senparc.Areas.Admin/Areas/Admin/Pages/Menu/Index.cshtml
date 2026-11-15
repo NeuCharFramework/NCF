@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model Senparc.Areas.Admin.Areas.Admin.Pages.MenuIndexModel
 @{
     ViewData["Title"] = AR["Menu.管理"]; Layout = "_Layout_Vue";
@@ -14,6 +14,45 @@
     <div class="admin-role">
         <div class="filter-container">
             <el-button class="filter-item" type="primary" icon="el-icon-plus" @@click="handleEdit('','','add')">@AR["Menu.增加菜单"]</el-button>
+            <el-button class="filter-item" :type="configMode ? 'warning' : 'default'" icon="el-icon-rank" @@click="toggleConfigMode">
+                {{ configMode ? ncfT('Menu.ConfigModeExit') : ncfT('Menu.ConfigMode') }}
+            </el-button>
+        </div>
+        <div v-if="configMode" class="menu-config-mode">
+            <div class="menu-config-mode-header">
+                <span class="menu-config-mode-title"><i class="el-icon-rank"></i> {{ ncfT('Menu.ConfigModeTip') }}</span>
+                <span>
+                    <el-button size="mini" plain @@click="toggleConfigMode">{{ ncfT('Common.取消') }}</el-button>
+                    <el-button size="mini" type="primary" :loading="configSaving" @@click="saveConfigOrder">{{ ncfT('Menu.ConfigSave') }}</el-button>
+                </span>
+            </div>
+            <div class="menu-config-body" v-if="configMenus.length">
+                <ul class="menu-config-list">
+                    <li v-for="menu in configMenus"
+                        :key="menu.id"
+                        class="menu-config-item"
+                        :class="{ 'is-dragging': dragId === menu.id, 'is-drag-over': dragOverId === menu.id }"
+                        :style="{ paddingLeft: (10 + menu.level * 26) + 'px' }"
+                        draggable="true"
+                        @@dragstart="onConfigDragStart(menu.id, $event)"
+                        @@dragover.prevent="onConfigDragOver(menu.id)"
+                        @@drop.prevent="onConfigDrop(menu.id)"
+                        @@dragend="onConfigDragEnd">
+                        <i class="el-icon-rank menu-config-drag-handle"></i>
+                        <i v-if="menu.icon" :class="menu.icon" class="menu-config-icon"></i>
+                        <span class="menu-config-name" :title="menu.url || menu.menuName">{{ menu.menuName }}</span>
+                        <input type="number" class="menu-config-sort-input" v-model.number="menu.sort"
+                               :title="ncfT('Common.排序')"
+                               @@change="applyNumber(menu.id)"
+                               @@keyup.enter="$event.target.blur()" />
+                        <span class="menu-config-actions">
+                            <el-button type="text" size="mini" icon="el-icon-top" :disabled="!canMoveUp(menu)" @@click="moveConfigItem(menu, -1)"></el-button>
+                            <el-button type="text" size="mini" icon="el-icon-bottom" :disabled="!canMoveDown(menu)" @@click="moveConfigItem(menu, 1)"></el-button>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div v-else class="menu-config-empty">{{ ncfT('Menu.ConfigEmpty') }}</div>
         </div>
         <el-table :data="tableData"
                   style="width: 100%;margin-bottom: 20px;"

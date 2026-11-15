@@ -39,17 +39,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+
+  <!-- ===== Download Page ===== -->
   <data name="Language.SelectLanguage" xml:space="preserve">
     <value>Seleccionar idioma</value>
   </data>
   <data name="Language.zh-CN" xml:space="preserve">
-    <value>简体中文</value>
+    <value>Chino simplificado</value>
   </data>
   <data name="Language.en" xml:space="preserve">
     <value>English</value>
   </data>
   <data name="Language.ja" xml:space="preserve">
-    <value>日本語</value>
+    <value>Japonés</value>
   </data>
   <data name="Language.fr" xml:space="preserve">
     <value>Français</value>
@@ -137,7 +139,7 @@
   <data name="Home.Introduction.Line1" xml:space="preserve"><value>NCF (NeuCharFramework) es un framework .NET empresarial de propósito general para crear proyectos base.</value></data>
   <data name="Home.Introduction.Line2" xml:space="preserve"><value>Sigue rigurosamente DDD e incluye caché, bases de datos, modelos, validación y un panel de administración.</value></data>
   <data name="Home.Introduction.Line3" xml:space="preserve"><value>Su diseño altamente modular ofrece gran capacidad de ampliación y solidez.</value></data>
-  <data name="Home.Notice.Framework" xml:space="preserve"><value>NCF es totalmente compatible con .NET 8.0.</value></data>
+  <data name="Home.Notice.Framework" xml:space="preserve"><value>NeuCharFramework es totalmente compatible con .NET 10.0+.</value></data>
   <data name="Home.Notice.Databases" xml:space="preserve"><value>Actualmente admite SQLite, SQL Server, MySQL, PostgreSQL, Oracle y DM (Dameng).</value></data>
   <data name="Home.Notice.Feedback" xml:space="preserve"><value>Seguimos incorporando bases de datos. ¡Cuéntenos qué necesita!</value></data>
   <data name="Home.CurrentTenant" xml:space="preserve"><value>Inquilino actual:</value></data>
@@ -180,7 +182,12 @@
   <data name="Cookie.Summary" xml:space="preserve"><value>Usamos cookies para mejorar la experiencia del sitio. Consulta la política de privacidad para obtener más información.</value></data>
   <data name="Cookie.LearnMore" xml:space="preserve"><value>Más información</value></data>
   <data name="Cookie.Accept" xml:space="preserve"><value>Aceptar</value></data>
-  <!-- ===== Download Page ===== -->
+  <data name="Download.Source.Mode" xml:space="preserve"><value>Fuente de descarga</value></data>
+  <data name="Download.Source.Auto" xml:space="preserve"><value>Automática (local primero)</value></data>
+  <data name="Download.Source.Local" xml:space="preserve"><value>Espejo local</value></data>
+  <data name="Download.Source.GitHub" xml:space="preserve"><value>GitHub</value></data>
+  <data name="Download.Status.Md5" xml:space="preserve"><value>Huella MD5</value></data>
+  <data name="Download.Status.Md5Unavailable" xml:space="preserve"><value>No disponible</value></data>
   <data name="Nav.Download" xml:space="preserve"><value>Descargar</value></data>
   <data name="Download.PageTitle" xml:space="preserve"><value>Descargar NCF</value></data>
   <data name="Download.Hero.Eyebrow" xml:space="preserve"><value>AI NATIVE · AI READY</value></data>
@@ -226,4 +233,5 @@
   <data name="Download.Cta.Title" xml:space="preserve"><value>Haz de NCF la base fiable de tu próximo sistema</value></data>
   <data name="Download.Cta.Description" xml:space="preserve"><value>Ejecútalo primero y profundiza después. Parte de un sistema funcional y crea tu aplicación de IA nativa.</value></data>
   <data name="Download.Cta.Action" xml:space="preserve"><value>Leer inicio rápido</value></data>
+
 </root>

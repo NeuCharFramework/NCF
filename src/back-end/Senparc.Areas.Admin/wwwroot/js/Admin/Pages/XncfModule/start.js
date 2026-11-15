@@ -58,10 +58,18 @@
                 aiModels: [],
                 configuration: null,
                 functions: [],
-                layout: { title: 'NeuCharPivot', description: '', columns: 2, sections: [] },
+                layout: { title: 'NeuCharPivot', description: '', columns: 2, panels: [] },
                 inputs: {},
                 moduleAvailable: false,
-                moduleState: 'missing'
+                moduleState: 'missing',
+                activePanel: 'shortcuts',
+                functionStateFilter: '',
+                loopStatusFilter: '',
+                workflowFilter: '',
+                workflowOptions: [],
+                summary: {},
+                now: new Date(),
+                clockTimer: null
             },
             chat: {
                 visible: false,
@@ -73,13 +81,24 @@
                 function: null,
                 enabled: false,
                 intervalSeconds: 300,
-                useNeuBell: false
+                useNeuBell: false,
+                workflowId: null
             }
         };
     },
     created() {
         this.readFunctionNavigation();
         this.getList();
+        if (window && window.setInterval) {
+            this.pivot.clockTimer = window.setInterval(() => {
+                this.pivot.now = new Date();
+            }, 1000);
+        }
+    },
+    beforeDestroy() {
+        if (this.pivot.clockTimer && window && window.clearInterval) {
+            window.clearInterval(this.pivot.clockTimer);
+        }
     },
     methods: {
         safeHtml(value) {
@@ -129,6 +148,81 @@
                 .map(item => item.trim())
                 .filter(item => item.length > 0);
         },
+        formatFileSize(value) {
+            const bytes = Number(value || 0);
+            if (bytes < 1024) return `${bytes} B`;
+            if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+            if (bytes < 1024 * 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+            return `${(bytes / 1024 / 1024 / 1024).toFixed(1)} GB`;
+        },
+        async uploadFunctionFiles(fileList, maxFiles) {
+            const files = Array.from(fileList || []);
+            if (!files.length) {
+                return [];
+            }
+            if (maxFiles && files.length > Number(maxFiles)) {
+                throw new Error(`一次最多选择 ${maxFiles} 个文件。`);
+            }
+            const form = new FormData();
+            files.forEach(file => form.append('files', file, file.name));
+            const response = await service.post(
+                '/api/Senparc.Areas.Admin/FunctionFiles/upload',
+                form,
+                { customAlert: true });
+            const uploaded = response && response.data && response.data.files;
+            if (!Array.isArray(uploaded) || uploaded.length !== files.length) {
+                throw new Error('文件上传响应无效。');
+            }
+            return uploaded;
+        },
+        async handleRunFileSelection(event, item) {
+            const entry = this.runData[item.name];
+            if (!entry) return;
+            const selectedFiles = event && event.target ? event.target.files : [];
+            if (!selectedFiles.length) return;
+            this.run.loading = true;
+            try {
+                const uploaded = await this.uploadFunctionFiles(selectedFiles, item.maxFiles);
+                const references = item.allowMultiple ? uploaded : uploaded.slice(0, 1);
+                this.$set(entry, 'files', references);
+                this.$set(entry, 'value', item.allowMultiple
+                    ? references.map(file => file.fileId)
+                    : (references[0] ? references[0].fileId : ''));
+            } catch (error) {
+                this.$notify({
+                    title: '文件上传失败',
+                    message: error && error.message ? error.message : '文件上传失败。',
+                    type: 'error'
+                });
+            } finally {
+                this.run.loading = false;
+                if (event && event.target) event.target.value = '';
+            }
+        },
+        async handlePivotFileSelection(event, fn, parameter) {
+            if (!fn || !parameter || !this.pivot.inputs[fn.id]) return;
+            const selectedFiles = event && event.target ? event.target.files : [];
+            if (!selectedFiles.length) return;
+            this.pivot.loading = true;
+            try {
+                const uploaded = await this.uploadFunctionFiles(selectedFiles, parameter.maxFiles);
+                const references = parameter.allowMultiple ? uploaded : uploaded.slice(0, 1);
+                this.$set(this.pivot.inputs[fn.id], parameter.name,
+                    parameter.allowMultiple
+                        ? references.map(file => file.fileId)
+                        : (references[0] ? references[0].fileId : ''));
+                this.$set(this.pivot.inputs[fn.id], parameter.name + '__files', references);
+            } catch (error) {
+                this.$notify({
+                    title: '文件上传失败',
+                    message: error && error.message ? error.message : '文件上传失败。',
+                    type: 'error'
+                });
+            } finally {
+                this.pivot.loading = false;
+                if (event && event.target) event.target.value = '';
+            }
+        },
         async  getList() {
             const uid = resizeUrl().uid;
             const res = await service.get(`/Admin/XncfModule/Start?handler=Detail&uid=${uid}`);
@@ -150,6 +244,21 @@
         functionKey(item) {
             return String(item && item.key && (item.key.functionKey || item.key.name) || '').trim();
         },
+        functionKeyMatches(item, requestedKey) {
+            const key = this.functionKey(item);
+            const requested = String(requestedKey || '').trim();
+            if (!key || !requested) {
+                return false;
+            }
+
+            if (key.toLowerCase() === requested.toLowerCase()) {
+                return true;
+            }
+
+            const separatorIndex = key.lastIndexOf('-');
+            return separatorIndex >= 0 &&
+                key.slice(separatorIndex + 1).toLowerCase() === requested.toLowerCase();
+        },
         functionAnchorId(item) {
             const key = this.functionKey(item);
             return key ? `function-${encodeURIComponent(key)}` : '';
@@ -165,7 +274,7 @@
             this.functionNavigationApplied = true;
             const items = (this.data && this.data.functionParameterInfoCollection) || [];
             const item = items.find(candidate =>
-                this.functionKey(candidate).toLowerCase() === this.requestedFunctionKey.toLowerCase());
+                this.functionKeyMatches(candidate, this.requestedFunctionKey));
             if (!item) {
                 if (this.$notify) {
                     this.$notify({
@@ -239,6 +348,8 @@
                 this.pivot.configuration = null;
                 this.pivot.functions = [];
                 this.pivot.inputs = {};
+                this.pivot.workflowOptions = [];
+                this.pivot.summary = {};
                 this.pivot.moduleAvailable = this.data.xncfModule && Number(this.data.xncfModule.state) === 1;
                 return;
             }
@@ -246,9 +357,14 @@
             this.pivot.functions = snapshot.functions || [];
             this.pivot.moduleAvailable = !!snapshot.moduleAvailable;
             this.pivot.moduleState = snapshot.moduleState || 'missing';
-            this.pivot.layout = this.parseJson(
+            this.pivot.workflowOptions = snapshot.workflowOptions || [];
+            this.pivot.summary = snapshot.summary || {};
+            this.pivot.layout = NeuCharPivotUi.normalizeLayout(this.parseJson(
                 snapshot.configuration && snapshot.configuration.layoutSchemaJson,
-                { title: 'NeuCharPivot', description: '', columns: 2, sections: [] });
+                { title: 'NeuCharPivot', description: '', columns: 2, panels: [] }));
+            if (!this.pivot.layout.panels.some(panel => panel.key === this.pivot.activePanel)) {
+                this.pivot.activePanel = this.pivot.layout.panels[0] && this.pivot.layout.panels[0].key || 'shortcuts';
+            }
             this.pivot.requirement = (snapshot.configuration && snapshot.configuration.userRequirement) || this.pivot.requirement;
             this.pivot.aiModelId = Number((snapshot.configuration && snapshot.configuration.aiModelId) || this.pivot.aiModelId || 0);
             const nextInputs = {};
@@ -264,6 +380,8 @@
                         value = this.normalizeMultiValue(value);
                     } else if (parameter.parameterType === 4) {
                         value = value === true || value === 'true' || value === 'True';
+                    } else if (parameter.parameterType === 6) {
+                        value = parameter.allowMultiple ? [] : '';
                     } else if (value === null || typeof value === 'undefined') {
                         value = '';
                     }
@@ -271,6 +389,38 @@
                 });
             });
             this.pivot.inputs = nextInputs;
+        },
+        resetPivotFilters() {
+            this.pivot.functionStateFilter = '';
+            this.pivot.loopStatusFilter = '';
+            this.pivot.workflowFilter = '';
+        },
+        matchesPivotFunction(fn) {
+            if (!fn) return false;
+            if (this.pivot.functionStateFilter === 'available' && !fn.available) return false;
+            if (this.pivot.functionStateFilter === 'unavailable' && fn.available) return false;
+            const status = NeuCharPivotUi.loopStatus(fn.loopTask);
+            if (this.pivot.loopStatusFilter && status !== this.pivot.loopStatusFilter) return false;
+            if (this.pivot.workflowFilter === 'linked' && !(fn.loopTask && fn.loopTask.workflowId)) return false;
+            if (this.pivot.workflowFilter === 'unlinked' && fn.loopTask && fn.loopTask.workflowId) return false;
+            if (this.pivot.workflowFilter && this.pivot.workflowFilter !== 'linked' && this.pivot.workflowFilter !== 'unlinked' &&
+                String(fn.loopTask && fn.loopTask.workflowId || '') !== this.pivot.workflowFilter) return false;
+            return true;
+        },
+        visiblePivotFunctions(section) {
+            return (section.functions || [])
+                .map(item => this.getPivotFunction(item.functionKey))
+                .filter(fn => this.matchesPivotFunction(fn));
+        },
+        pivotLoopStatusText(fn) {
+            return NeuCharPivotUi.loopStatusText(NeuCharPivotUi.loopStatus(fn && fn.loopTask));
+        },
+        pivotLoopCountdown(fn) {
+            return NeuCharPivotUi.formatCountdown(fn && fn.loopTask && fn.loopTask.nextRunAt, this.pivot.now);
+        },
+        workflowName(workflowId) {
+            const workflow = this.pivot.workflowOptions.find(option => Number(option.id) === Number(workflowId));
+            return workflow ? workflow.name : `Workflow #${workflowId}`;
         },
         getPivotFunction(functionKey) {
             return this.pivot.functions.find(fn => String(fn.functionKey).toLowerCase() === String(functionKey).toLowerCase());
@@ -372,6 +522,7 @@
             this.loop.enabled = !!task.enabled;
             this.loop.intervalSeconds = Number(task.intervalSeconds || 300);
             this.loop.useNeuBell = !!task.useNeuBell;
+            this.loop.workflowId = task.workflowId || null;
             this.loop.visible = true;
         },
         async saveLoopTask() {
@@ -386,7 +537,8 @@
                     parametersJson: this.getPivotParameterJson(fn),
                     enabled: !!this.loop.enabled,
                     intervalSeconds: Number(this.loop.intervalSeconds || 300),
-                    useNeuBell: !!this.loop.useNeuBell
+                    useNeuBell: !!this.loop.useNeuBell,
+                    workflowId: this.loop.workflowId || null
                 }, { customAlert: true });
                 fn.loopTask = this.unwrapResponse(response);
                 this.loop.visible = false;
@@ -457,7 +609,7 @@
                     }
                 }
                 // 输入框
-                if (res.parameterType === 0 || res.parameterType === 3) {
+                if (res.parameterType === 0 || res.parameterType === 3 || res.parameterType === 5) {
                     this.runData[res.name] = {};
                     this.runData[res.name].item = res;
                     this.runData[res.name].value = res.value === null || typeof res.value === 'undefined' ? '' : res.value;
@@ -467,6 +619,12 @@
                     this.runData[res.name] = {};
                     this.runData[res.name].item = res;
                     this.runData[res.name].value = res.value === true || res.value === 'true' || res.value === 'True';
+                }
+                if (res.parameterType === 6) {
+                    this.runData[res.name] = {};
+                    this.runData[res.name].item = res;
+                    this.runData[res.name].files = [];
+                    this.runData[res.name].value = res.allowMultiple ? [] : '';
                 }
             });
             this.runData = Object.assign({}, this.runData);
@@ -536,7 +694,9 @@
                         }
                     }
                     // 输入框
-                    if (this.runData[i].item.parameterType === 0 || this.runData[i].item.parameterType === 3) {
+                    if (this.runData[i].item.parameterType === 0 ||
+                        this.runData[i].item.parameterType === 3 ||
+                        this.runData[i].item.parameterType === 5) {
                         if (this.runData[i].item.isRequired && this.runData[i].value.length === 0) {
                             this.$notify({
                                 title: ncfT('Xncf.Prompt'),
@@ -551,6 +711,19 @@
                     // 布尔
                     if (this.runData[i].item.parameterType === 4) {
                         xncfFunctionParams[i] = !!this.runData[i].value;
+                    }
+                    if (this.runData[i].item.parameterType === 6) {
+                        const value = this.runData[i].value;
+                        const isEmpty = Array.isArray(value) ? value.length === 0 : !String(value || '').trim();
+                        if (this.runData[i].item.isRequired && isEmpty) {
+                            this.$notify({
+                                title: ncfT('Xncf.Prompt'),
+                                message: ncfT('Xncf.RequiredField', this.runData[i].item.title),
+                                type: 'warning'
+                            });
+                            return;
+                        }
+                        xncfFunctionParams[i] = value;
                     }
                 }
                 const data = {

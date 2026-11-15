@@ -338,7 +338,13 @@
                 footerDisposed: false,
                 footerPageHideHandler: null,
                 footerPageShowHandler: null,
-                footerVisibilityHandler: null
+                footerVisibilityHandler: null,
+                voiceNavEmbedded: !!initialState.embedded,
+                voiceNavListening: false,
+                voiceNavPanelVisible: false,
+                voiceNavMessage: '',
+                voiceNavChoices: [],
+                voiceNavDraft: ''
             };
         },
         computed: {
@@ -366,6 +372,18 @@
             },
             neuBellToastOverflowCount() {
                 return Math.max(0, (this.neuBellToastEntries || []).length - maximumVisibleNeuBellToasts);
+            },
+            voiceNavTitle() {
+                if (!window.NcfVoiceNavigation) {
+                    return '';
+                }
+                return window.NcfVoiceNavigation.text(this.voiceNavListening ? 'stop' : 'title');
+            },
+            voiceNavPlaceholder() {
+                return window.NcfVoiceNavigation ? window.NcfVoiceNavigation.text('placeholder') : '';
+            },
+            voiceNavCloseLabel() {
+                return window.NcfVoiceNavigation ? window.NcfVoiceNavigation.text('close') : '关闭';
             }
         },
         mounted() {
@@ -385,6 +403,7 @@
                 return;
             }
 
+            this.bindVoiceNavDismiss();
             this.startFooterClock();
             // pagehide/pageshow 需要兼容 bfcache：隐藏时暂停，恢复时重用同一 Vue 实例。
             this.footerPageHideHandler = () => this.pauseFooter();
@@ -412,8 +431,47 @@
                 this.footerAiUrl = '/Admin/AdminChat/Chat?embedded=1&footer=' + Date.now();
                 this.footerAiDialogVisible = true;
             },
+            embeddedAdminChatValue(search, name) {
+                const source = String(search || '').replace(/^\?/, '');
+                for (const part of source.split('&')) {
+                    if (!part) continue;
+                    const separator = part.indexOf('=');
+                    const key = decodeURIComponent(separator >= 0 ? part.slice(0, separator) : part);
+                    if (key !== name) continue;
+                    return decodeURIComponent(separator >= 0 ? part.slice(separator + 1) : '');
+                }
+                return '';
+            },
             openFullAdminChat() {
-                window.location.href = '/Admin/AdminChat/Chat';
+                let sessionId = 0;
+                let mode = '';
+                const iframe = document.querySelector('.admin-footer-ai-dialog iframe');
+                try {
+                    const location = iframe && iframe.contentWindow && iframe.contentWindow.location;
+                    if (location) {
+                        sessionId = Number(this.embeddedAdminChatValue(location.search, 'sessionId'));
+                        mode = this.embeddedAdminChatValue(location.search, 'mode');
+                        if (!Number.isInteger(sessionId) || sessionId <= 0) {
+                            const hash = String(location.hash || '').match(/session[=-](\d+)/i);
+                            sessionId = hash ? Number(hash[1]) : 0;
+                        }
+                    }
+                } catch (error) {
+                    sessionId = 0;
+                    mode = '';
+                }
+                const params = [];
+                if (Number.isInteger(sessionId) && sessionId > 0) params.push('sessionId=' + sessionId);
+                if (mode === '0' || mode === '1') params.push('mode=' + mode);
+                const chatUrl = '/Admin/AdminChat/Chat'
+                    + (params.length ? '?' + params.join('&') : '')
+                    + (Number.isInteger(sessionId) && sessionId > 0 ? '#session-' + sessionId : '');
+                console.debug('[NCF][AdminTabs] 从快捷对话打开', chatUrl);
+                if (window.ncfOpenAdminPage && window.ncfOpenAdminPage(chatUrl, 'Admin Chat')) {
+                    this.footerAiDialogVisible = false;
+                    return;
+                }
+                window.location.href = chatUrl;
             },
             handleFooterTimeClick() {
                 const now = Date.now();
@@ -724,8 +782,80 @@
                     this.footerClockTimer = window.setInterval(() => { this.footerClockTick += 1; }, 1000);
                 }
             },
+            toggleVoiceNav() {
+                // 麦克风只依赖当前页面，不跟纽铃通讯的 Owner 绑定。
+                // 否则布局根实例没抢到 Owner 时，按钮可见但点击没有任何反应。
+                if (this.voiceNavEmbedded || !window.NcfVoiceNavigation) {
+                    return;
+                }
+                window.NcfVoiceNavigation.toggle(this);
+            },
+            submitVoiceNav() {
+                if (this.voiceNavEmbedded || !window.NcfVoiceNavigation) {
+                    return;
+                }
+                window.NcfVoiceNavigation.submitText(this, this.voiceNavDraft);
+            },
+            chooseVoiceNav(choice) {
+                if (!window.NcfVoiceNavigation) {
+                    return;
+                }
+                window.NcfVoiceNavigation.choose(this, choice);
+            },
+            closeVoiceNav() {
+                if (!this.voiceNavPanelVisible && !this.voiceNavListening) {
+                    return;
+                }
+                if (window.NcfVoiceNavigation && typeof window.NcfVoiceNavigation.dismiss === 'function') {
+                    window.NcfVoiceNavigation.dismiss(this);
+                    return;
+                }
+                if (window.NcfVoiceNavigation) {
+                    window.NcfVoiceNavigation.stop(this);
+                }
+                this.voiceNavPanelVisible = false;
+                this.voiceNavChoices = [];
+                this.voiceNavDraft = '';
+            },
+            bindVoiceNavDismiss() {
+                if (this.voiceNavOutsideHandler) {
+                    return;
+                }
+                this.voiceNavOutsideHandler = (event) => {
+                    if (!this.voiceNavPanelVisible) {
+                        return;
+                    }
+                    const target = event.target;
+                    const host = this.$el && this.$el.querySelector ? this.$el.querySelector('.admin-voice-nav') : null;
+                    if (host && target && host.contains(target)) {
+                        return;
+                    }
+                    console.debug('[ncf-voice] outside');
+                    this.closeVoiceNav();
+                };
+                this.voiceNavEscapeHandler = (event) => {
+                    if (!this.voiceNavPanelVisible || event.key !== 'Escape') {
+                        return;
+                    }
+                    event.preventDefault();
+                    this.closeVoiceNav();
+                };
+                document.addEventListener('pointerdown', this.voiceNavOutsideHandler, true);
+                document.addEventListener('keydown', this.voiceNavEscapeHandler);
+            },
+            unbindVoiceNavDismiss() {
+                if (this.voiceNavOutsideHandler) {
+                    document.removeEventListener('pointerdown', this.voiceNavOutsideHandler, true);
+                    this.voiceNavOutsideHandler = null;
+                }
+                if (this.voiceNavEscapeHandler) {
+                    document.removeEventListener('keydown', this.voiceNavEscapeHandler);
+                    this.voiceNavEscapeHandler = null;
+                }
+            },
             pauseFooter() {
-                // 后台页签不应保留 SSE、轮询或挂起的 HTTP 请求。
+                // 后台页签不应保留 SSE、轮询、挂起的 HTTP 请求，或仍在监听的麦克风。
+                this.closeVoiceNav();
                 this.footerPaused = true;
                 stopFooterFireworks();
                 if (this.footerClockTimer) {
@@ -775,6 +905,7 @@
                 if (this.footerVisibilityHandler) {
                     document.removeEventListener('visibilitychange', this.footerVisibilityHandler);
                 }
+                this.unbindVoiceNavDismiss();
                 this.footerCommunicationOwner = false;
                 releaseFooterOwnership(this);
             }

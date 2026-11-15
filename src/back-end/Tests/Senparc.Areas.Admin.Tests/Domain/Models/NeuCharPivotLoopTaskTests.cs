@@ -25,9 +25,10 @@ public class NeuCharPivotLoopTaskTests
         Assert.IsTrue(task.UseNeuBell);
         Assert.IsNotNull(task.NextRunAt);
 
-        task.Configure(120, "{}", false, false);
+        task.Configure(120, "{}", false, false, 42);
 
         Assert.IsFalse(task.Enabled);
+        Assert.AreEqual(42, task.WorkflowId);
         Assert.IsNull(task.NextRunAt);
         Assert.AreEqual(0, task.ConsecutiveFailures);
     }

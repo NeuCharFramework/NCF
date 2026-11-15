@@ -1,4 +1,4 @@
-@page
+﻿@page
 @model Senparc.Areas.Admin.Pages.AdminChat.ChatModel
 @{
     ViewData["Title"] = AR["Admin.Home.AiTitle"];
@@ -7,7 +7,7 @@
 
 @section Style {
     <link rel="stylesheet" href="~/css/Admin/Pages/AdminChat/ChatLauncher.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/Admin/Pages/AdminChat/Chat.css" />
+    <link rel="stylesheet" href="~/css/Admin/Pages/AdminChat/Chat.css" asp-append-version="true" />
 }
 
 @section breadcrumbs {
@@ -16,42 +16,211 @@
 }
 
 <div class="admin-chat-container">
-    <el-container class="chat-main-container">
+    <input ref="workspaceFileInput" type="file" hidden multiple
+        accept=".txt,.md,.csv,.tsv,.json,.docx,.xlsx,.pptx,.pdf,.doc,.xls,.ppt,.png,.jpg,.jpeg,.webp"
+        @@change="handleWorkspaceFilesSelected" />
+    <el-container
+        ref="workspaceContainer"
+        class="chat-main-container"
+        :style="{ '--chat-sidebar-width': sidebarWidth + 'px' }"
+        :class="{ 'is-workspace-preview-open': currentSessionWorkspaceId && workspacePreviewOpen, 'is-workspace-preview-overlay': workspacePreviewOverlay }">
         <!-- 左侧会话历史 -->
-        <el-aside width="280px" class="chat-sidebar">
+        <el-aside class="chat-sidebar" :class="{ 'is-collapsed': sidebarCollapsed }">
+            <div class="sidebar-heading">
+                <span v-show="!sidebarCollapsed">@AR["AdminChat.History"]</span>
+                <div class="sidebar-heading-actions">
+                    <el-popover v-model="historySearchVisible" placement="bottom-end" trigger="click" width="340"
+                                popper-class="chat-history-search-popover" :visible-arrow="false">
+                        <div class="chat-history-search" @@click.stop>
+                            <div class="chat-history-search-tabs" role="tablist">
+                                <button type="button" role="tab" class="chat-history-search-tab"
+                                        :class="{ 'is-active': historySearchTab === 'chat' }"
+                                        :aria-selected="String(historySearchTab === 'chat')"
+                                        @@click="setHistorySearchTab('chat')">
+                                    {{ ncfT('AdminChat.Search.ChatTab') }}
+                                </button>
+                                <button type="button" role="tab" class="chat-history-search-tab"
+                                        :class="{ 'is-active': historySearchTab === 'tool' }"
+                                        :aria-selected="String(historySearchTab === 'tool')"
+                                        @@click="setHistorySearchTab('tool')">
+                                    {{ ncfT('AdminChat.Search.ToolTab') }}
+                                </button>
+                            </div>
+                            <div role="tabpanel">
+                                <input ref="historySearchInput" v-model="historySearchKeyword" type="search"
+                                       class="chat-history-search-input"
+                                       :placeholder="ncfT(historySearchTab === 'tool' ? 'AdminChat.Search.ToolPlaceholder' : 'AdminChat.Search.Placeholder')"
+                                       :aria-label="ncfT(historySearchTab === 'tool' ? 'AdminChat.Search.ToolPlaceholder' : 'AdminChat.Search.Placeholder')"
+                                       @@input="scheduleHistorySearch" />
+                                <p class="chat-history-search-hint">{{ ncfT(historySearchTab === 'tool' ? 'AdminChat.Search.ToolHint' : 'AdminChat.Search.Hint') }}</p>
+                                <div class="chat-history-search-results" v-loading="historySearchLoading">
+                                    <p v-if="historySearchSubmitted && !historySearchLoading && historySearchHits.length === 0"
+                                       class="chat-history-search-empty">{{ ncfT('AdminChat.Search.Empty') }}</p>
+                                    <button v-for="hit in historySearchHits"
+                                            :key="hit.sessionId + '-' + (hit.trajectoryId || 0) + '-' + (hit.eventSequence || 0) + '-' + hit.messageId + '-' + hit.matchKind"
+                                            type="button" class="chat-history-search-hit"
+                                            :class="{ 'is-tool': isToolSearchHit(hit) }"
+                                            @@click="openHistorySearchHit(hit)">
+                                        <span class="chat-history-search-title">
+                                            <template v-if="highlightParts(hit.title, hit.query).match">{{ highlightParts(hit.title, hit.query).before }}<mark>{{ highlightParts(hit.title, hit.query).match }}</mark>{{ highlightParts(hit.title, hit.query).after }}</template>
+                                            <template v-else>{{ hit.title }}</template>
+                                        </span>
+                                        <span v-if="isTitleSearchHit(hit)" class="chat-history-search-kind">{{ ncfT('AdminChat.Search.TitleMatch') }}</span>
+                                        <span v-else class="chat-history-search-snippet">{{ hit.snippetBefore }}<mark>{{ hit.snippetMatch }}</mark>{{ hit.snippetAfter }}</span>
+                                        <small v-if="isToolSearchHit(hit)">{{ ncfT('AdminChat.Search.ToolCall') }} · {{ formatTime(hit.occurredAt) }}</small>
+                                        <small v-else-if="!isTitleSearchHit(hit)">{{ getRoleTypeName(hit.roleType) }} · {{ formatTime(hit.occurredAt) }}</small>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button slot="reference" type="button" class="sidebar-toggle sidebar-search-trigger"
+                                :aria-expanded="String(historySearchVisible)"
+                                :aria-label="ncfT('AdminChat.Search.Open')"
+                                :title="ncfT('AdminChat.Search.Open')">
+                            <i class="el-icon-search" aria-hidden="true"></i>
+                        </button>
+                    </el-popover>
+                    <button type="button" class="sidebar-toggle"
+                            :title="ncfT(sidebarCollapsed ? 'AdminChat.Sidebar.Expand' : 'AdminChat.Sidebar.Collapse')"
+                            :aria-label="ncfT(sidebarCollapsed ? 'AdminChat.Sidebar.Expand' : 'AdminChat.Sidebar.Collapse')"
+                            :aria-expanded="String(!sidebarCollapsed)" aria-controls="chat-sidebar-body"
+                            @@click="toggleSidebar">
+                        <i :class="sidebarCollapsed ? 'el-icon-s-unfold' : 'el-icon-s-fold'" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <span v-if="sidebarCollapsed && hasRunningSession" class="sidebar-running-dot"
+                      role="status" :aria-label="ncfT('AdminChat.Sidebar.Running')"></span>
+                <span v-else-if="sidebarCollapsed && unreadSessionIds.length" class="sidebar-unread-dot"
+                      role="status" :aria-label="ncfT('AdminChat.Sidebar.Unread')"></span>
+            </div>
+            <div id="chat-sidebar-body" class="sidebar-body" v-show="!sidebarCollapsed">
             <div class="sidebar-header">
-                <h3 class="sidebar-title">
-                    <i class="fa fa-comments"></i> @AR["AdminChat.History"]
-                </h3>
-                <el-button 
-                    type="primary" 
-                    size="small" 
-                    icon="el-icon-plus" 
-                    @@click="createNewSession">
-                    @AR["AdminChat.NewConversation"]
-                </el-button>
+                <div class="sidebar-actions">
+                    <el-button
+                        type="primary"
+                        size="small"
+                        icon="el-icon-plus"
+                        @@click="createNewSession">
+                        @AR["AdminChat.NewConversation"]
+                    </el-button>
+                    <el-popover v-model="sidebarToolsVisible" placement="bottom-end" trigger="click"
+                                popper-class="chat-sidebar-tools-popover" :visible-arrow="false">
+                        <div class="sidebar-tools-panel">
+                            <button type="button" class="sidebar-tools-action" :disabled="memoryBusy"
+                                    @@click="sidebarToolsVisible = false; openMemoryDialog()">
+                                <i class="el-icon-notebook-2" aria-hidden="true"></i>
+                                <span>Memory</span>
+                            </button>
+                            <button v-if="isSuperAdmin" type="button" class="sidebar-tools-action"
+                                    @@click="sidebarToolsVisible = false; openUserStatsDrawer()">
+                                <i class="el-icon-data-line" aria-hidden="true"></i>
+                                <span>@AR["AdminChat.UserStats"]</span>
+                            </button>
+                            <div class="chat-archive-panel" role="menu" :aria-label="ncfT('AdminChat.Archive.Menu')">
+                                <div class="chat-archive-panel-title">
+                                    {{ ncfT('AdminChat.Archive.Menu') }}
+                                    <em v-if="archivedSessionList.length">{{ archivedSessionList.length }}</em>
+                                </div>
+                                <div v-if="archivedSessionList.length === 0" class="chat-archive-empty">{{ ncfT('AdminChat.Archive.Empty') }}</div>
+                                <div v-else class="chat-archive-list">
+                                    <div v-for="session in archivedSessionList" :key="session.id"
+                                         :class="['chat-archive-item', { 'is-current': currentSessionId === session.id }]">
+                                        <button type="button" class="chat-archive-open" :title="session.title"
+                                                :aria-label="ncfT('AdminChat.Archive.Open', session.title)"
+                                                @@click="openArchivedSession(session)">
+                                            <i class="el-icon-check" aria-hidden="true"></i>
+                                            <span>{{ session.title }}</span>
+                                            <small>{{ formatTime(session.lastMessageTime) }}</small>
+                                        </button>
+                                        <button type="button" class="chat-archive-restore"
+                                                :disabled="restoringSessionId === session.id"
+                                                :title="ncfT('AdminChat.Archive.Restore')"
+                                                :aria-label="ncfT('AdminChat.Archive.RestoreLabel', session.title)"
+                                                @@click="restoreArchivedSession(session)">
+                                            <i class="fa fa-undo" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="chat-archive-delete" :title="ncfT('Common.删除')"
+                                                :aria-label="ncfT('AdminChat.Archive.Delete', session.title)"
+                                                @@click="deleteArchivedSession(session)">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button slot="reference" type="button" class="sidebar-tools-trigger"
+                                :aria-expanded="String(sidebarToolsVisible)"
+                                :aria-label="ncfT('AdminChat.Sidebar.Tools')"
+                                :title="ncfT('AdminChat.Sidebar.Tools')">
+                            <i class="el-icon-more" aria-hidden="true"></i>
+                            <em v-if="archivedSessionList.length">{{ archivedSessionList.length }}</em>
+                        </button>
+                    </el-popover>
+                </div>
             </div>
             
             <div class="session-list" v-loading="loadingSessions">
-                <div 
-                    v-for="session in sessionList" 
-                    :key="session.id"
-                    :class="['session-item', { 'active': currentSessionId === session.id }]"
-                    @@click="switchSession(session.id)">
-                    <div class="session-info">
-                        <div class="session-title">{{ session.title }}</div>
-                        <div class="session-time">{{ formatTime(session.lastMessageTime) }}</div>
+                <div v-for="group in groupedSessionList" :key="group.key" class="session-group">
+                    <button type="button" class="session-group-title"
+                            :aria-expanded="String(!isSessionGroupCollapsed(group.key))"
+                            :aria-controls="'session-group-' + group.key"
+                            @@click="toggleSessionGroup(group.key)">
+                        <i :class="isSessionGroupCollapsed(group.key) ? 'el-icon-arrow-right' : 'el-icon-arrow-down'" aria-hidden="true"></i>
+                        <i :class="group.key === '__no_workspace__' ? 'fa fa-comments-o' : 'fa fa-folder-open'" aria-hidden="true"></i>
+                        <span>{{ group.name }}</span>
+                        <span v-if="group.sessions.some(isSessionRunning)" class="sidebar-running-dot"
+                              role="status" :aria-label="ncfT('AdminChat.Sidebar.Running')"></span>
+                        <span v-else-if="group.sessions.some(isSessionUnread)" class="sidebar-unread-dot"
+                              role="status" :aria-label="ncfT('AdminChat.Sidebar.Unread')"></span>
+                        <span class="session-group-count">{{ group.sessions.length }}</span>
+                    </button>
+                    <div :id="'session-group-' + group.key" v-show="!isSessionGroupCollapsed(group.key)">
+                    <div
+                        v-for="session in group.sessions"
+                        :key="session.id"
+                        :class="['session-item', { 'active': currentSessionId === session.id, 'is-running': isSessionRunning(session),
+                            'is-unread': isSessionUnread(session),
+                            'is-dragging': draggingSessionId === session.id,
+                            'is-drop-before': dropSessionId === session.id && !dropAfter,
+                            'is-drop-after': dropSessionId === session.id && dropAfter }]"
+                        @@dragover="handleSessionDragOver($event, session)"
+                        @@drop="handleSessionDrop($event, session)"
+                        @@click="switchSession(session.id)">
+                        <button type="button" class="session-drag-handle" :draggable="!savingSessionOrder"
+                                :disabled="savingSessionOrder" :title="ncfT('AdminChat.Sidebar.Reorder')"
+                                :aria-label="ncfT('AdminChat.Sidebar.Reorder')"
+                                @@click.stop @@dragstart.stop="startSessionDrag($event, session)"
+                                @@dragend="endSessionDrag"
+                                @@keydown.alt.up.prevent.stop="moveSessionByKeyboard(session, -1)"
+                                @@keydown.alt.down.prevent.stop="moveSessionByKeyboard(session, 1)">
+                            <i class="el-icon-rank" aria-hidden="true"></i>
+                        </button>
+                        <div class="session-info">
+                            <div class="session-title">{{ session.title }}</div>
+                            <div v-if="isSessionRunning(session)" class="session-run-status" role="status">
+                                <span class="session-run-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+                                {{ ncfT(isStopping ? 'AdminChat.Sidebar.Stopping' : 'AdminChat.Sidebar.Running') }}
+                            </div>
+                            <div v-else-if="isSessionUnread(session)" class="session-unread-status" role="status">{{ ncfT('AdminChat.Sidebar.Unread') }}</div>
+                            <div v-else class="session-time">{{ formatTime(session.lastMessageTime) }}</div>
+                        </div>
+                        <el-dropdown trigger="click" @@command="handleSessionCommand">
+                            <span class="session-actions" @@click.stop>
+                                <i class="el-icon-more"></i>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item :command="{action: 'archive', id: session.id}"
+                                                  :disabled="isSessionRunning(session) || !!archivingSessionId"
+                                                  :title="ncfT(isSessionRunning(session) ? 'AdminChat.Sidebar.ArchiveRunning' : 'AdminChat.Sidebar.Archive')">
+                                    <i class="el-icon-check"></i> {{ ncfT('AdminChat.Archive.Action') }}
+                                </el-dropdown-item>
+                                <el-dropdown-item :command="{action: 'delete', id: session.id}">
+                                    <i class="fa fa-trash"></i> @AR["Common.删除"]
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
                     </div>
-                    <el-dropdown trigger="click" @@command="handleSessionCommand">
-                        <span class="session-actions" @@click.stop>
-                            <i class="el-icon-more"></i>
-                        </span>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item :command="{action: 'delete', id: session.id}">
-                                <i class="fa fa-trash"></i> @AR["Common.删除"]
-                            </el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
+                    </div>
                 </div>
                 
                 <div v-if="sessionList.length === 0 && !loadingSessions" class="empty-sessions">
@@ -59,6 +228,13 @@
                     <p>@AR["AdminChat.EmptyHistory"]</p>
                 </div>
             </div>
+            </div>
+            <div v-show="!sidebarCollapsed" class="chat-sidebar-resizer" role="separator" tabindex="0"
+                 aria-orientation="vertical" :aria-label="ncfT('AdminChat.Sidebar.Resize')"
+                 :aria-valuenow="sidebarWidth" :aria-valuemin="215" :aria-valuemax="420"
+                 @@pointerdown="startSidebarResize"
+                 @@keydown.left.prevent="resizeSidebarByKeyboard(-20)"
+                 @@keydown.right.prevent="resizeSidebarByKeyboard(20)"></div>
         </el-aside>
 
         <!-- 右侧对话窗口 -->
@@ -67,38 +243,48 @@
                 <div class="chat-header-info">
                     <div class="chat-header-top">
                         <h3 class="chat-title">
-                            <i class="fa fa-magic"></i> {{ currentSessionTitle || ncfT('Admin.Home.AiTitle') }}
+                            <i class="fa fa-magic"></i>
+                            <span>{{ currentSessionTitle || ncfT('Admin.Home.AiTitle') }}</span>
+                            <el-tag v-if="currentSessionStatus === 1" size="mini" type="success" class="chat-archived-tag">{{ ncfT('AdminChat.Archive.Tag') }}</el-tag>
                         </h3>
                         <div class="chat-header-actions">
-                            <el-select
-                                v-model="currentSessionAiModelId"
-                                size="mini"
-                                class="chat-ai-model-select"
-                                :loading="loadingAiModelOptions"
-                                @@change="handleCurrentSessionAiModelChange"
-                                placeholder="@AR["AdminChat.SelectModel"]">
-                                <el-option
-                                    v-for="item in aiModelOptions"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id">
-                                    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;">
-                                        <span>{{ item.name }}</span>
-                                        <span style="color:#999;font-size:12px;">{{ item.description }}</span>
-                                    </div>
-                                </el-option>
-                            </el-select>
+                            <ncf-doc-help topic="admin.chat"></ncf-doc-help>
                             <el-button
                                 size="mini"
                                 :type="isManageMode ? 'default' : 'primary'"
                                 @@click="toggleManageMode">
                                 {{ isManageMode ? ncfT('AdminChat.Done') : ncfT('AdminChat.Manage') }}
                             </el-button>
+                            <el-button
+                                size="mini"
+                                type="text"
+                                title="任务轨迹"
+                                @@click="openTrajectoryDialog">
+                                <i class="fa fa-road"></i>
+                            </el-button>
+                            <el-button
+                                v-if="currentSessionWorkspaceId"
+                                size="mini"
+                                :type="workspacePreviewOpen ? 'primary' : 'default'"
+                                title="Workspace 资产"
+                                @@click="toggleWorkspacePreview">
+                                <i class="fa fa-folder-open-o"></i>
+                                <span class="chat-workspace-preview-button-label">资产</span>
+                            </el-button>
+                        </div>
+                    </div>
+                    <div v-if="currentSessionWorkspaceId" class="chat-context-bar">
+                        <div class="chat-workspace-context">
+                            <i class="fa fa-folder-open"></i>
+                            <span :title="currentSessionWorkspaceId">Workspace：{{ currentSessionWorkspaceName || currentSessionWorkspaceId }}</span>
+                            <el-tag size="mini" type="info">当前会话</el-tag>
+                            <el-tag v-if="currentSessionWorkspaceWriteEnabled" size="mini" type="warning">可写入</el-tag>
+                            <el-tag v-if="currentSessionWorkspaceCliEnabled" size="mini" type="danger">可执行 CLI</el-tag>
                         </div>
                     </div>
                     <div class="chat-modules" v-if="currentSessionModules.length > 0">
                         <el-popover
-                            v-for="module in currentSessionModules"
+                            v-for="module in currentSessionModules.slice(0, 3)"
                             :key="module.id"
                             placement="bottom-start"
                             width="420"
@@ -156,10 +342,28 @@
                                 <span v-if="module.moduleVersion"> v{{ module.moduleVersion }}</span>
                             </el-tag>
                         </el-popover>
+                        <el-popover
+                            v-if="currentSessionModules.length > 3"
+                            placement="bottom-start"
+                            width="300"
+                            trigger="click">
+                            <div class="chat-context-popover-list">
+                                <div
+                                    v-for="module in currentSessionModules.slice(3)"
+                                    :key="`extra-module-${module.id}`"
+                                    class="chat-context-popover-item">
+                                    <i class="fa fa-cube"></i>
+                                    <span>{{ module.displayName || module.menuName || module.moduleName || module.xncfModuleUid }}</span>
+                                </div>
+                            </div>
+                            <el-button slot="reference" size="mini" plain class="chat-context-more">
+                                +{{ currentSessionModules.length - 3 }}
+                            </el-button>
+                        </el-popover>
                     </div>
                     <div class="chat-modules" v-if="currentSessionWorkflows.length > 0">
                         <el-popover
-                            v-for="workflow in currentSessionWorkflows"
+                            v-for="workflow in currentSessionWorkflows.slice(0, 2)"
                             :key="workflow.id"
                             placement="bottom-start"
                             width="360"
@@ -193,11 +397,30 @@
                                 {{ workflow.workflowName }}
                             </el-tag>
                         </el-popover>
+                        <el-popover
+                            v-if="currentSessionWorkflows.length > 2"
+                            placement="bottom-start"
+                            width="300"
+                            trigger="click">
+                            <div class="chat-context-popover-list">
+                                <div
+                                    v-for="workflow in currentSessionWorkflows.slice(2)"
+                                    :key="`extra-workflow-${workflow.id}`"
+                                    class="chat-context-popover-item">
+                                    <i class="fa fa-random"></i>
+                                    <span>{{ workflow.workflowName }}</span>
+                                </div>
+                            </div>
+                            <el-button slot="reference" size="mini" plain class="chat-context-more">
+                                +{{ currentSessionWorkflows.length - 2 }}
+                            </el-button>
+                        </el-popover>
                     </div>
                 </div>
             </div>
 
-            <div class="messages-container" ref="messagesContainer" v-loading="loadingMessages" v-if="currentSessionId">
+            <div class="messages-stage" v-if="currentSessionId">
+            <div class="messages-container" ref="messagesContainer" v-loading="loadingMessages" @@scroll="updateActiveUserMarker">
                 <div class="message-manage-toolbar" v-if="isManageMode">
                     <el-checkbox
                         :value="messageList.length > 0 && selectedMessageIds.length === messageList.length"
@@ -214,6 +437,7 @@
                 <div 
                     v-for="message in messageList" 
                     :key="message.id"
+                    :data-message-id="message.id"
                     :class="['message-item', `message-${getRoleTypeClass(message.roleType)}`, { 'is-selected': isManageMode && isMessageSelected(message.id) }]">
                     <div class="message-select" v-if="isManageMode">
                         <el-checkbox
@@ -230,7 +454,54 @@
                             <span class="message-role">{{ getRoleTypeName(message.roleType) }}</span>
                             <span class="message-time">{{ formatTime(message.addTime) }}</span>
                         </div>
-                        <div class="message-text" v-html="formatMessageContent(message.content)"></div>
+                        <prompt-reference-content v-if="message.promptReferences && message.promptReferences.length"
+                            class="message-text" :content="message.content" :references="message.promptReferences"
+                            :ai-score="promptReferenceAiScorer(message)"></prompt-reference-content>
+                        <div v-else class="message-text" v-html="formatMessageContent(message.content)"></div>
+                        <div v-if="message.attachments && message.attachments.length" class="chat-message-attachments">
+                            <button v-for="attachment in message.attachments" :key="attachment.relativePath"
+                                type="button" :title="'下载原文件：' + attachment.name"
+                                @@click="downloadWorkspaceEntry(attachment.relativePath)">
+                                <i :class="workspaceFileIcon(attachment.relativePath)"></i>
+                                <span>{{ attachment.name }}</span>
+                                <small v-if="attachment.useVision">视觉</small>
+                            </button>
+                        </div>
+                        <div class="message-harness-steps" v-if="message.roleType === 1 && !isManageMode && message.harnessSteps && message.harnessSteps.length > 0">
+                            <el-collapse class="harness-collapse">
+                                <el-collapse-item :title="harnessStepsTitle(message.harnessSteps)">
+                                    <div class="harness-step" v-for="(step, idx) in message.harnessSteps" :key="idx">
+                                        <div class="harness-step-head">
+                                            <span class="harness-step-index">
+                                                <i :class="step.isFinal ? 'fa fa-flag-checkered' : (step.timedOut ? 'fa fa-exclamation-triangle' : 'fa fa-arrow-circle-right')"></i>
+                                                {{ step.index }}
+                                            </span>
+                                            <i v-if="step.isFinal" class="fa fa-flag-checkered harness-step-done"></i>
+                                            <i v-else-if="step.timedOut" class="fa fa-exclamation-triangle harness-step-timeout"></i>
+                                        </div>
+                                        <div class="harness-step-body" v-html="formatMessageContent(step.output)"></div>
+                                    </div>
+                                </el-collapse-item>
+                            </el-collapse>
+                        </div>
+                        <div class="message-trajectory-actions" v-if="message.roleType === 1 && !isManageMode && message.trajectoryId">
+                            <el-button type="text" size="mini" @@click="openTrajectory(message.trajectoryId)">
+                                <i class="fa fa-road"></i> 轨迹
+                            </el-button>
+                            <el-button v-if="canResumeMessage(message)" type="text" size="mini" @@click="resumeTrajectory(message.trajectoryId)">
+                                <i class="fa fa-play"></i> 恢复
+                            </el-button>
+                            <el-button type="text" size="mini" @@click="forkTrajectory(message.trajectoryId, message.trajectorySequence)">
+                                <i class="fa fa-code-fork"></i> 分叉
+                            </el-button>
+                        </div>
+                        <div class="message-trajectory-approvals" v-if="message.roleType === 1 && !isManageMode && message.pendingApprovals && message.pendingApprovals.length > 0">
+                            <div v-for="approval in message.pendingApprovals" :key="approval.requestId" class="trajectory-approval-item">
+                                <span><i class="fa fa-shield"></i> {{ approval.toolName }}</span>
+                                <el-button type="success" size="mini" @@click="respondApproval(message.trajectoryId, approval, true)">允许</el-button>
+                                <el-button type="danger" plain size="mini" @@click="respondApproval(message.trajectoryId, approval, false)">拒绝</el-button>
+                            </div>
+                        </div>
                         <div class="message-actions" v-if="message.roleType === 1 && !isManageMode">
                             <el-button 
                                 type="text" 
@@ -250,51 +521,259 @@
                     </div>
                 </div>
 
+                <el-alert v-if="memoryUpdateResult && memoryUpdateSessionId === currentSessionId && (memoryUpdateResult.requested || memoryUpdateResult.status === 'updated')"
+                          class="chat-memory-update-result"
+                          :title="memoryUpdateText(memoryUpdateResult)"
+                          :type="['updated', 'reviewed'].includes(memoryUpdateResult.status) ? 'success' : ['intent-deferred', 'no-save-intent'].includes(memoryUpdateResult.reason) ? 'info' : 'warning'"
+                          :closable="false" show-icon>
+                    <el-button type="text" size="mini" :disabled="memoryBusy" @@click="openMemoryDialog">
+                        @AR["AdminChat.Memory.Settings"]
+                    </el-button>
+                    <div v-for="(proposal, index) in (memoryUpdateResult.proposals || [])" :key="index" class="chat-memory-proposal">
+                        <span>{{ proposal.remove ? ncfT('AdminChat.Memory.Delete') : ncfT('AdminChat.Memory.ReviewCandidate') }}：
+                            {{ proposal.entry.text }}</span>
+                        <small>{{ proposal.entry.workspaceId ? 'Workspace' : ncfT('AdminChat.Memory.ScopeGlobal') }}</small>
+                        <el-button type="text" size="mini" :disabled="memoryBusy || isCurrentSessionRunning" @@click="reviewMemoryProposal(proposal)">
+                            @AR["AdminChat.Memory.ReviewCandidate"]
+                        </el-button>
+                    </div>
+                </el-alert>
+
                 <div v-if="messageList.length === 0 && !loadingMessages" class="empty-messages">
                     <i class="fa fa-comment-o"></i>
                     <p>@AR["AdminChat.StartPrompt"]</p>
                 </div>
 
-                <div v-if="isAIResponding" class="message-item message-assistant ai-thinking">
+                <div v-if="isAIResponding && isCurrentSessionRunning" :class="['message-item', 'message-assistant', 'ai-thinking', 'live-run-panel', { 'is-generating': !!liveAssistantText }]">
                     <div class="message-avatar">
-                        <i class="fa fa-robot"></i>
+                        <i class="fa fa-android"></i>
                     </div>
                     <div class="message-content">
                         <div class="message-meta">
                             <span class="message-role">@AR["AdminChat.RoleAssistant"]</span>
+                            <span class="live-run-status">{{ liveStatusText || (chatMode === 'harness' ? '正在规划任务…' : '正在生成回答…') }}</span>
                         </div>
-                        <div class="message-text">
+                        <div class="message-text live-generation-text" v-if="liveThinkingText || liveAssistantText">
+                            <div v-if="liveThinkingText" class="live-thinking-preview">
+                                <div class="live-thinking-label">
+                                    <i class="fa fa-lightbulb-o"></i> 正在思考
+                                </div>
+                                <div ref="liveThinkingPreview" class="live-thinking-content" v-html="formatMessageContent(liveThinkingText)"></div>
+                            </div>
+                            <div v-if="liveAssistantText" ref="liveAnswerPreview" class="live-answer-preview" v-html="formatMessageContent(liveAssistantText)"></div>
+                        </div>
+                        <div class="message-text" v-else>
                             <span class="typing-indicator">
                                 <span></span><span></span><span></span>
                             </span>
                             @AR["AdminChat.Thinking"]
                         </div>
+                        <div v-if="recentTasks.length > 0" class="live-task-list" aria-live="polite">
+                            <div
+                                v-for="task in recentTasks.slice().reverse()"
+                                :key="task.id"
+                                class="live-task-item"
+                                :title="task.preview ? task.title + '：' + task.preview : task.title">
+                                <i :class="task.status === '执行中' || task.status === '生成中' ? 'fa fa-spinner fa-spin' : 'fa fa-check-circle'"></i>
+                                <strong>{{ task.title }}</strong>
+                                <span v-if="task.preview">：{{ task.preview }}</span>
+                                <em>{{ task.status }}</em>
+                            </div>
+                        </div>
+                        <el-collapse v-if="liveTrajectoryEvents.length > 0" class="live-trajectory-collapse">
+                            <el-collapse-item name="live-trajectory">
+                                <template slot="title">
+                                    <span>查看实时执行过程</span>
+                                    <i class="fa fa-angle-down live-trajectory-toggle"></i>
+                                </template>
+                                <div v-for="event in liveTrajectoryEvents" :key="`live-${event.correlationId || event.id || event.sequence}`" class="live-trajectory-event">
+                                    <div class="live-trajectory-event-title">
+                                        <span>{{ trajectoryEventLabel(event.eventType) }}</span>
+                                        <strong v-if="event.name">{{ event.name }}</strong>
+                                    </div>
+                                    <div v-if="event.content" class="live-trajectory-event-content">{{ event.content }}</div>
+                                </div>
+                            </el-collapse-item>
+                        </el-collapse>
+                        <div v-if="livePendingApprovals.length > 0" class="live-approval-hint">
+                            <i class="fa fa-shield"></i> 等待工具确认
+                        </div>
                     </div>
                 </div>
             </div>
+            <nav v-if="messageRail.length" class="chat-message-rail" :aria-label="ncfT('AdminChat.Rail.Label')"
+                 @@mouseleave="scheduleCloseMessageRail">
+                <div v-show="messageRailOpen" ref="messageRailMenu" class="chat-message-rail-menu" role="menu"
+                     :style="{ top: messageRailMenuTop + 'px' }"
+                     @@mouseenter="messageRailMenuHover = true; openMessageRail()">
+                    <button v-for="marker in messageRail" :key="'rail-item-' + marker.id" type="button"
+                            :class="{ 'is-active': marker.id === messageRailActiveId }"
+                            :title="marker.full" :aria-label="ncfT('AdminChat.Rail.Jump')"
+                            @@mouseenter="highlightRailMarker(marker.id)"
+                            @@click="scrollToUserMessage(marker.id)">
+                        <i class="chat-message-rail-menu-dot" aria-hidden="true"></i>
+                        <span>{{ marker.preview }}</span>
+                    </button>
+                </div>
+                <div class="chat-message-rail-track">
+                    <button v-for="marker in messageRail" :key="'rail-dot-' + marker.id" type="button"
+                            class="chat-message-rail-dot"
+                            :class="{ 'is-active': marker.id === messageRailActiveId }"
+                            :style="{ top: marker.top + 'px', height: marker.height + 'px' }"
+                            :title="marker.preview" :aria-label="marker.preview"
+                            @@mouseenter="focusRailMarker(marker.id)"
+                            @@focus="focusRailMarker(marker.id)"
+                            @@click="scrollToUserMessage(marker.id)"></button>
+                </div>
+            </nav>
+            </div>
 
-            <div class="input-container" v-if="currentSessionId">
-                <el-input
-                    type="textarea"
-                    v-model="inputMessage"
-                    placeholder="@AR["AdminChat.InputPlaceholder"]"
-                    :rows="3"
-                    :disabled="!currentSessionId || isSending"
-                    @@keydown.native="handleChatInputKeydown"
-                    class="message-input">
-                </el-input>
+            <div class="input-container" v-if="currentSessionId"
+                @@dragover="handleWorkspaceDragOver" @@drop="handleWorkspaceDrop">
+                <div v-if="pendingAttachments.length" class="chat-pending-attachments">
+                    <div v-for="attachment in pendingAttachments" :key="attachment.relativePath" class="chat-attachment-card">
+                        <img v-if="attachment.localPreviewUrl" :src="attachment.localPreviewUrl" alt="" />
+                        <i v-else :class="workspaceFileIcon(attachment.relativePath)"></i>
+                        <div class="chat-attachment-info" :title="attachment.notice">
+                            <strong>{{ attachment.name }}</strong>
+                            <small>{{ attachment.localStatus }}<span v-if="attachment.sectionCount"> · {{ attachment.sectionCount }} 段/页/表</span></small>
+                        </div>
+                        <el-checkbox v-if="attachment.contentType.indexOf('image/') === 0"
+                            v-model="attachment.useVision" :disabled="!attachment.canUseVision || isCurrentSessionRunning"
+                            title="仅本轮授权发送压缩图片给视觉模型，可能产生额外 Token。"
+                            @@change="validatePendingVision(attachment)">视觉</el-checkbox>
+                        <button type="button" :disabled="isCurrentSessionRunning || workspaceUploading" title="从本轮移除并删除 Workspace 文件"
+                            @@click="removePendingAttachment(attachment)"><i class="el-icon-close"></i></button>
+                    </div>
+                </div>
+                <div class="chat-mention-anchor">
+                    <div v-if="workspaceMention.open && workspaceMention.field === 'inputMessage'"
+                         class="chat-mention-popover" role="listbox" aria-label="Workspace 文件和路径">
+                        <p class="chat-mention-status" v-if="workspaceMention.loading && !workspaceMention.items.length">正在查找 Workspace…</p>
+                        <p class="chat-mention-status" v-else-if="workspaceMention.error">{{ workspaceMention.error }}</p>
+                        <p class="chat-mention-status" v-else-if="!workspaceMention.items.length">没有匹配的文件或路径</p>
+                        <button v-for="(item, index) in workspaceMention.items" :key="item.relativePath + (item.isDirectory ? '/' : '')"
+                                type="button" class="chat-mention-option" role="option"
+                                :class="{ 'is-active': index === workspaceMention.active }"
+                                :aria-selected="index === workspaceMention.active"
+                                @@mousedown.prevent="selectWorkspaceMention(item)">
+                            <i :class="item.isDirectory ? 'el-icon-folder' : workspaceFileIcon(item.relativePath)"></i>
+                            <strong>{{ item.name }}</strong>
+                            <small>{{ item.relativePath }}{{ item.isDirectory ? '/' : '' }}</small>
+                        </button>
+                    </div>
+                    <el-input
+                        type="textarea"
+                        v-model="inputMessage"
+                        ref="promptMessageInput"
+                        v-prompt-range="!isCurrentSessionRunning"
+                        placeholder="@AR["AdminChat.InputPlaceholder"]"
+                        :rows="3"
+                        :disabled="!currentSessionId || isCurrentSessionRunning"
+                        @@keydown.native="handleChatInputKeydown"
+                        @@input.native="handleWorkspaceMentionEdit('inputMessage', $event)"
+                        @@click.native="handleWorkspaceMentionEdit('inputMessage', $event)"
+                        @@keyup.native="handleWorkspaceMentionEdit('inputMessage', $event)"
+                        @@blur.native="closeWorkspaceMention"
+                        @@paste.native="handleWorkspacePaste"
+                        class="message-input">
+                    </el-input>
+                </div>
                 <div class="input-actions">
-                    <span class="input-tip">
-                        <i class="fa fa-info-circle"></i> @AR["AdminChat.SendHint"]
+                    <span class="ncf-doc-help-group">
+                        <el-button type="text" size="mini" aria-label="上传资料" :title="attachmentUploadHint"
+                            :loading="workspaceUploading" :disabled="!canUploadWorkspaceFiles || isCurrentSessionRunning"
+                            @@click="chooseWorkspaceFiles"><i class="fa fa-paperclip"></i></el-button>
+                        <ncf-doc-help topic="admin.attachments"></ncf-doc-help>
                     </span>
-                    <el-button 
-                        type="primary" 
-                        icon="el-icon-s-promotion"
-                        :loading="isSending"
-                        :disabled="!currentSessionId || !inputMessage || inputMessage.trim().length === 0"
-                        @@click="sendMessage">
-                        @AR["AdminChat.Send"]
-                    </el-button>
+                        <span class="input-tip">
+                            <i class="fa fa-info-circle"></i> @AR["AdminChat.SendHint"]
+                            <span v-if="canUploadWorkspaceFiles">，输入 @@ 引用文件或路径</span>
+                        </span>
+                    <details class="chat-inline-settings">
+                        <summary>
+                            <i class="fa fa-sliders"></i>
+                            <span>对话设置</span>
+                            <i class="fa fa-angle-down chat-inline-settings-arrow"></i>
+                        </summary>
+                        <div class="chat-inline-settings-panel">
+                            <el-select
+                                v-model="currentSessionAiModelId"
+                                size="mini"
+                                class="chat-ai-model-select input-ai-model-select"
+                                :loading="loadingAiModelOptions"
+                                :disabled="isCurrentSessionRunning"
+                                filterable
+                                default-first-option
+                                filter-placeholder="搜索模型"
+                                @@change="handleCurrentSessionAiModelChange"
+                                placeholder="@AR["AdminChat.SelectModel"]">
+                                <el-option
+                                    v-for="item in aiModelOptions"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                                    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;">
+                                        <span>{{ item.name }}</span>
+                                        <span style="color:#999;font-size:12px;">{{ item.description }}</span>
+                                    </div>
+                                </el-option>
+                            </el-select>
+                            <span class="ncf-doc-help-group">
+                                <el-radio-group v-model="chatMode" size="mini" class="chat-mode-toggle" :disabled="isCurrentSessionRunning">
+                                    <el-radio-button label="simple">
+                                        <i class="fa fa-comment"></i> @AR["AdminChat.ModeSimple"]
+                                    </el-radio-button>
+                                    <el-radio-button label="harness">
+                                        <i class="fa fa-rocket"></i> @AR["AdminChat.ModeHarness"]
+                                    </el-radio-button>
+                                </el-radio-group>
+                                <ncf-doc-help topic="admin.harness"></ncf-doc-help>
+                            </span>
+                            <span class="ncf-doc-help-group">
+                                <el-dropdown trigger="click" @@command="handleMemoryCommand($event)">
+                                    <el-button size="mini" class="chat-memory-trigger"
+                                               :disabled="memoryBusy || isCurrentSessionRunning || !memoryReady">
+                                        Memory · {{ memoryModeLabel(memoryMode) }} <i class="el-icon-arrow-down"></i>
+                                    </el-button>
+                                    <el-dropdown-menu slot="dropdown">
+                                        <el-dropdown-item v-for="mode in [0,1,2]" :key="mode" :command="mode"
+                                                          :icon="memoryMode === mode ? 'el-icon-check' : ''">
+                                            {{ memoryModeLabel(mode) }}
+                                        </el-dropdown-item>
+                                        <el-dropdown-item command="settings" divided>@AR["AdminChat.Memory.Settings"]</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                                <ncf-doc-help topic="admin.memory.modes"></ncf-doc-help>
+                            </span>
+                            <button type="button" class="chat-inline-settings-close" aria-label="关闭对话设置" title="关闭" @@click.stop="closeInlineChatSettings">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </details>
+                    <div class="input-send-actions">
+                        <el-button
+                            v-if="isCurrentSessionRunning"
+                            type="danger"
+                            icon="el-icon-close"
+                            :loading="isStopping"
+                            :disabled="isStopping"
+                            @@click="stopCurrentRequest">
+                            终止
+                        </el-button>
+                        <el-button
+                            v-else
+                            type="primary"
+                            icon="el-icon-s-promotion"
+                            :disabled="!currentSessionId || isCurrentSessionRunning || workspaceUploading || ((!inputMessage || inputMessage.trim().length === 0) && pendingAttachments.length === 0)"
+                            @@click="sendMessage">
+                            @AR["AdminChat.Send"]
+                        </el-button>
+                    </div>
+                </div>
+                <div class="chat-usage-status" :title="'以最近一次模型返回的 Usage 为准'">
+                    <i class="fa fa-bar-chart"></i>
+                    <span>{{ usageStatusText }}</span>
                 </div>
             </div>
 
@@ -308,91 +787,229 @@
                             <div class="chat-entrance-content">
                                 <h3 class="chat-entrance-title">
                                     <i class="fa fa-magic"></i> @AR["Admin.Home.AiTitle"]
+                                    <ncf-doc-help topic="admin.chat"></ncf-doc-help>
                                 </h3>
                                 <p class="chat-entrance-subtitle">@AR["AdminChat.NewSessionDescription"]</p>
                             </div>
                         </div>
 
-                        <div class="chat-entrance-input-wrapper">
-                            <div class="chat-module-picker" style="margin-bottom:16px;">
-                                <div class="chat-module-picker-header">
-                                    <span class="chat-module-picker-title">@AR["AdminChat.ComputePower"]</span>
+                        <div class="chat-entrance-input-wrapper" @@dragover="handleWorkspaceDragOver" @@drop="handleWorkspaceDrop">
+                            <div class="chat-entrance-composer">
+                                <div class="chat-mention-anchor">
+                                    <div v-if="workspaceMention.open && workspaceMention.field === 'chatInputText'"
+                                         class="chat-mention-popover" role="listbox" aria-label="Workspace 文件和路径">
+                                        <p class="chat-mention-status" v-if="workspaceMention.loading && !workspaceMention.items.length">正在查找 Workspace…</p>
+                                        <p class="chat-mention-status" v-else-if="workspaceMention.error">{{ workspaceMention.error }}</p>
+                                        <p class="chat-mention-status" v-else-if="!workspaceMention.items.length">没有匹配的文件或路径</p>
+                                        <button v-for="(item, index) in workspaceMention.items" :key="'launcher-' + item.relativePath + (item.isDirectory ? '/' : '')"
+                                                type="button" class="chat-mention-option" role="option"
+                                                :class="{ 'is-active': index === workspaceMention.active }"
+                                                :aria-selected="index === workspaceMention.active"
+                                                @@mousedown.prevent="selectWorkspaceMention(item)">
+                                            <i :class="item.isDirectory ? 'el-icon-folder' : workspaceFileIcon(item.relativePath)"></i>
+                                            <strong>{{ item.name }}</strong>
+                                            <small>{{ item.relativePath }}{{ item.isDirectory ? '/' : '' }}</small>
+                                        </button>
+                                    </div>
+                                    <el-input
+                                        type="textarea"
+                                        v-model="chatInputText"
+                                        ref="promptLauncherInput"
+                                        v-prompt-range="!isCreatingSession"
+                                        placeholder="@AR["Admin.Home.AiPlaceholder"]"
+                                        :rows="4"
+                                        :autosize="{ minRows: 4, maxRows: 8 }"
+                                        @@keydown.native="handleLauncherInputKeydown"
+                                        @@input.native="handleWorkspaceMentionEdit('chatInputText', $event)"
+                                        @@click.native="handleWorkspaceMentionEdit('chatInputText', $event)"
+                                        @@keyup.native="handleWorkspaceMentionEdit('chatInputText', $event)"
+                                        @@blur.native="closeWorkspaceMention"
+                                        @@paste.native="handleWorkspacePaste"
+                                        class="chat-entrance-input"
+                                        resize="none">
+                                    </el-input>
                                 </div>
-                                <el-select
-                                    v-model="launcherAiModelId"
-                                    class="chat-ai-model-select"
-                                    :loading="loadingAiModelOptions"
-                                    placeholder="@AR["AdminChat.SelectModel"]"
-                                    style="width:100%;">
-                                    <el-option
-                                        v-for="item in aiModelOptions"
-                                        :key="`launcher-${item.id}`"
-                                        :label="item.name"
-                                        :value="item.id">
-                                        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;">
-                                            <span>{{ item.name }}</span>
-                                            <span style="color:#999;font-size:12px;">{{ item.description }}</span>
+                                <div class="chat-entrance-composer-footer">
+                                    <span class="ncf-doc-help-group">
+                                        <el-button type="text" size="mini" aria-label="上传资料" :title="attachmentUploadHint"
+                                            :loading="workspaceUploading" :disabled="!canUploadWorkspaceFiles || isCreatingSession"
+                                            @@click="chooseWorkspaceFiles"><i class="fa fa-paperclip"></i></el-button>
+                                        <ncf-doc-help topic="admin.attachments"></ncf-doc-help>
+                                    </span>
+                                    <span class="chat-entrance-input-tip">
+                                        <i class="fa fa-keyboard-o"></i>
+                                        按 Ctrl + Enter 或 Cmd + Enter 开始
+                                        <span v-if="canUploadWorkspaceFiles">，@@ 引用文件或路径</span>
+                                    </span>
+                                    <el-button
+                                        type="primary"
+                                        size="medium"
+                                        icon="el-icon-s-promotion"
+                                        @@click="startChatSession"
+                                        :disabled="!chatInputText || chatInputText.trim().length === 0"
+                                        :loading="isCreatingSession"
+                                        class="chat-send-button">
+                                        @AR["Admin.Home.StartConversation"]
+                                    </el-button>
+                                </div>
+                            </div>
+
+                            <div class="chat-launcher-toolbar">
+                                <div class="launcher-toolbar-control launcher-toolbar-model">
+                                    <span class="launcher-toolbar-label">
+                                        <i class="fa fa-bolt"></i>
+                                        <span>@AR["AdminChat.ComputePower"]</span>
+                                    </span>
+                                    <el-select
+                                        v-model="launcherAiModelId"
+                                        size="mini"
+                                        class="chat-ai-model-select"
+                                        :loading="loadingAiModelOptions"
+                                        filterable
+                                        default-first-option
+                                        filter-placeholder="搜索模型"
+                                        placeholder="@AR["AdminChat.SelectModel"]">
+                                        <el-option
+                                            v-for="item in aiModelOptions"
+                                            :key="`launcher-${item.id}`"
+                                            :label="item.name"
+                                            :value="item.id">
+                                            <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;">
+                                                <span>{{ item.name }}</span>
+                                                <span style="color:#999;font-size:12px;">{{ item.description }}</span>
+                                            </div>
+                                        </el-option>
+                                    </el-select>
+                                </div>
+
+                                <div class="launcher-toolbar-control launcher-toolbar-mode">
+                                    <span class="launcher-toolbar-label">
+                                        <i class="fa fa-sliders"></i>
+                                        <span>执行模式</span>
+                                    </span>
+                                    <el-radio-group v-model="launcherChatMode" size="mini" class="launcher-mode-toggle">
+                                        <el-radio-button label="simple">
+                                            <i class="fa fa-comment"></i> @AR["AdminChat.ModeSimple"]
+                                        </el-radio-button>
+                                        <el-radio-button label="harness">
+                                            <i class="fa fa-rocket"></i> @AR["AdminChat.ModeHarness"]
+                                        </el-radio-button>
+                                    </el-radio-group>
+                                    <ncf-doc-help topic="admin.harness"></ncf-doc-help>
+                                </div>
+
+                                <span class="ncf-doc-help-group">
+                                    <el-dropdown trigger="click" @@command="handleMemoryCommand($event, true)">
+                                        <el-button size="mini" class="chat-memory-trigger" :disabled="memoryBusy || isCreatingSession">
+                                            Memory · {{ memoryModeLabel(launcherMemoryMode) }} <i class="el-icon-arrow-down"></i>
+                                        </el-button>
+                                        <el-dropdown-menu slot="dropdown">
+                                            <el-dropdown-item v-for="mode in [0,1,2]" :key="mode" :command="mode"
+                                                              :icon="launcherMemoryMode === mode ? 'el-icon-check' : ''">
+                                                {{ memoryModeLabel(mode) }}
+                                            </el-dropdown-item>
+                                            <el-dropdown-item command="settings" divided>@AR["AdminChat.Memory.Settings"]</el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </el-dropdown>
+                                    <ncf-doc-help topic="admin.memory.modes"></ncf-doc-help>
+                                </span>
+
+                                <el-popover
+                                    placement="top-start"
+                                    width="350"
+                                    trigger="click"
+                                    :disabled="!isSuperAdmin"
+                                    popper-class="chat-launcher-popover">
+                                    <div class="launcher-popover-content">
+                                        <div class="launcher-popover-heading">
+                                            <div>
+                                                <strong>Workspace</strong>
+                                                <span>为当前对话选择工作区</span>
+                                            </div>
+                                            <el-button size="mini" type="text" @@click="createWorkspace" :disabled="!isSuperAdmin">
+                                                <i class="el-icon-plus"></i> 新建
+                                            </el-button>
                                         </div>
-                                    </el-option>
-                                </el-select>
-                            </div>
+                                        <el-select
+                                            v-model="selectedWorkspaceId"
+                                            filterable
+                                            clearable
+                                            :loading="loadingWorkspaceOptions"
+                                            :disabled="!isSuperAdmin"
+                                            placeholder="不使用 Workspace"
+                                            class="launcher-workspace-select">
+                                            <el-option
+                                                v-for="item in availableWorkspaces"
+                                                :key="item.id"
+                                                :label="item.name + ' (' + item.id + ')'"
+                                                :value="item.id"></el-option>
+                                        </el-select>
+                                        <div class="launcher-popover-options">
+                                            <el-checkbox v-model="workspaceWriteEnabled" :disabled="!isSuperAdmin || !selectedWorkspaceId">允许 AI 写入文件</el-checkbox>
+                                            <el-checkbox v-model="workspaceCliEnabled" :disabled="!isSuperAdmin || !selectedWorkspaceId || !workspaceWriteEnabled">允许 AI 执行 Python</el-checkbox>
+                                            <ncf-doc-help topic="workspace.permissions"></ncf-doc-help>
+                                        </div>
+                                        <div class="launcher-workspace-help">
+                                            Python 仅能执行 Workspace 内的 .py 文件，并优先使用 Workspace 内的 .venv。
+                                        </div>
+                                    </div>
+                                    <button slot="reference" type="button" class="launcher-toolbar-button" :disabled="!isSuperAdmin">
+                                        <i class="fa fa-folder-open"></i>
+                                        <span>{{ selectedWorkspaceLabel }}</span>
+                                        <i class="fa fa-angle-down"></i>
+                                    </button>
+                                </el-popover>
 
-                            <el-input
-                                type="textarea"
-                                v-model="chatInputText"
-                                placeholder="@AR["Admin.Home.AiPlaceholder"]"
-                                :rows="4"
-                                :autosize="{ minRows: 4, maxRows: 8 }"
-                                @@keydown.native="handleLauncherInputKeydown"
-                                class="chat-entrance-input"
-                                resize="none">
-                            </el-input>
-                            <el-button
-                                type="primary"
-                                size="medium"
-                                icon="el-icon-s-promotion"
-                                @@click="startChatSession"
-                                :disabled="!chatInputText || chatInputText.trim().length === 0"
-                                :loading="isCreatingSession"
-                                class="chat-send-button">
-                                @AR["Admin.Home.StartConversation"]
-                            </el-button>
-                        </div>
-
-                        <div class="chat-module-picker">
-                            <div class="chat-module-picker-header">
-                                <span class="chat-module-picker-title">@AR["Admin.Home.ReferenceModules"]</span>
-                                <div class="chat-module-picker-actions">
-                                    <el-button size="mini" type="primary" icon="el-icon-plus" @@click="openModuleSelector">@AR["Admin.Home.AddReferenceModule"]</el-button>
-                                    <el-button size="mini" @@click="clearSelectedModules" v-if="selectedModules.length > 0">@AR["Admin.Home.Clear"]</el-button>
-                                </div>
+                                <el-popover
+                                    placement="top-start"
+                                    width="380"
+                                    trigger="click"
+                                    popper-class="chat-launcher-popover">
+                                    <div class="launcher-popover-content launcher-reference-popover">
+                                        <div class="launcher-popover-heading">
+                                            <div>
+                                                <strong>@AR["Admin.Home.ReferenceModules"]</strong>
+                                                <span>为当前对话添加可调用模块或 Workflow</span>
+                                            </div>
+                                            <el-button size="mini" type="primary" plain @@click="openModuleSelector">
+                                                <i class="el-icon-edit"></i> 管理
+                                            </el-button>
+                                        </div>
+                                        <div v-if="referenceSelectionCount > 0" class="launcher-reference-summary">
+                                            <el-tag
+                                                v-for="module in selectedModules"
+                                                :key="module.uid"
+                                                closable
+                                                @@close="removeModule(module.uid)"
+                                                type="info"
+                                                class="module-tag">
+                                                <i :class="module.icon" aria-hidden="true"></i>
+                                                <span class="module-tag-name">{{ module.name }}</span>
+                                            </el-tag>
+                                            <el-tag
+                                                v-for="workflow in selectedWorkflows"
+                                                :key="`selected-workflow-${workflow.id}`"
+                                                closable
+                                                @@close="removeWorkflow(workflow.id)"
+                                                type="success"
+                                                class="module-tag">
+                                                <i class="fa fa-random" aria-hidden="true"></i>
+                                                <span class="module-tag-name">{{ workflow.name }}</span>
+                                            </el-tag>
+                                        </div>
+                                        <div v-else class="chat-module-selected-empty">
+                                            <i class="fa fa-lightbulb-o"></i>
+                                            <span>不引用模块也可以直接开始</span>
+                                        </div>
+                                    </div>
+                                    <button slot="reference" type="button" class="launcher-toolbar-button">
+                                        <i class="fa fa-cubes"></i>
+                                        <span>引用模块</span>
+                                        <span v-if="referenceSelectionCount > 0" class="launcher-toolbar-count">{{ referenceSelectionCount }}</span>
+                                        <i class="fa fa-angle-down"></i>
+                                    </button>
+                                </el-popover>
                             </div>
-
-                            <div v-if="selectedModules.length > 0" class="chat-module-selected-list">
-                                <el-tag
-                                    v-for="module in selectedModules"
-                                    :key="module.uid"
-                                    closable
-                                    @@close="removeModule(module.uid)"
-                                    type="info"
-                                    class="module-tag">
-                                    <i :class="module.icon" aria-hidden="true"></i>
-                                    <span class="module-tag-name">{{module.name}}</span>
-                                </el-tag>
-                            </div>
-                            <div v-if="selectedWorkflows.length > 0" class="chat-module-selected-list">
-                                <el-tag
-                                    v-for="workflow in selectedWorkflows"
-                                    :key="`selected-workflow-${workflow.id}`"
-                                    closable
-                                    @@close="removeWorkflow(workflow.id)"
-                                    type="success"
-                                    class="module-tag">
-                                    <i class="fa fa-random" aria-hidden="true"></i>
-                                    <span class="module-tag-name">{{workflow.name}}</span>
-                                </el-tag>
-                            </div>
-                            <div v-if="selectedModules.length === 0 && selectedWorkflows.length === 0" class="chat-module-selected-empty">@AR["Admin.Home.EmptyReference"]</div>
                         </div>
 
                         @await Html.PartialAsync("~/Areas/Admin/Pages/Shared/_ChatModuleSelectorDialog.cshtml")
@@ -400,11 +1017,621 @@
                 </el-card>
             </div>
         </el-main>
+
+        <aside
+            v-if="currentSessionWorkspaceId && workspacePreviewOpen"
+            class="chat-workspace-preview"
+            aria-label="Workspace 资产"
+            :style="{ width: workspacePreviewWidth + 'px' }">
+            <div class="chat-workspace-preview-resizer" @@mousedown="startWorkspacePreviewResize"></div>
+            <div class="chat-workspace-preview-header">
+                <div>
+                    <div class="chat-workspace-preview-title">
+                        <i class="fa fa-folder-open"></i>
+                        <span>Workspace 资产</span>
+                    </div>
+                    <div class="chat-workspace-preview-subtitle">
+                        {{ currentSessionWorkspaceName || currentSessionWorkspaceId }}
+                    </div>
+                </div>
+                <div class="chat-workspace-preview-actions">
+                    <el-button
+                        type="text"
+                        size="mini"
+                        title="展开至最大可用宽度"
+                        :disabled="workspacePreviewWidth >= workspacePreviewMaxWidth"
+                        @@click="expandWorkspacePreview">
+                        <i class="el-icon-full-screen"></i>
+                    </el-button>
+                    <el-button type="text" size="mini" title="关闭资产面板" @@click="closeWorkspacePreview">
+                        <i class="el-icon-close"></i>
+                    </el-button>
+                </div>
+            </div>
+            <div class="chat-workspace-preview-toolbar">
+                <el-button
+                    size="mini"
+                    type="text"
+                    :disabled="!workspacePreviewPath"
+                    @@click="loadWorkspaceEntries(workspaceParentPath(workspacePreviewPath))">
+                    <i class="el-icon-back"></i>
+                </el-button>
+                <span class="chat-workspace-preview-path" :title="workspacePreviewPath || '/'">
+                    /{{ workspacePreviewPath || '' }}
+                </span>
+                <el-button size="mini" type="text" title="下载当前目录 (.zip)"
+                    :loading="workspaceDownloading"
+                    @@click="downloadWorkspaceEntry(workspacePreviewPath)">
+                    <i class="el-icon-download"></i>
+                </el-button>
+                <el-button size="mini" type="text" title="刷新" @@click="loadWorkspaceEntries(workspacePreviewPath)">
+                    <i class="el-icon-refresh"></i>
+                </el-button>
+            </div>
+            <div class="chat-workspace-preview-body">
+                <div class="chat-workspace-file-list" v-loading="workspaceEntriesLoading">
+                    <button
+                        v-for="entry in workspaceEntries"
+                        :key="entry.relativePath"
+                        type="button"
+                        :class="['chat-workspace-file-item', { 'is-selected': workspacePreviewFilePath === entry.relativePath }]"
+                        @@click="handleWorkspaceEntryClick(entry)">
+                        <i :class="entry.isDirectory ? 'fa fa-folder-o' : workspaceFileIcon(entry.relativePath)"></i>
+                        <span class="chat-workspace-file-name" :title="workspaceEntryName(entry.relativePath)">{{ workspaceEntryName(entry.relativePath) }}</span>
+                        <span v-if="!entry.isDirectory" class="chat-workspace-file-size">{{ formatWorkspaceFileSize(entry.length) }}</span>
+                    </button>
+                    <div v-if="!workspaceEntriesLoading && workspaceEntries.length === 0" class="chat-workspace-empty">
+                        <i class="fa fa-folder-open-o"></i>
+                        <span>当前目录为空</span>
+                    </div>
+                </div>
+                <div v-if="workspacePreviewFilePath" class="chat-workspace-file-preview">
+                    <div class="chat-workspace-file-preview-header">
+                        <span :title="workspacePreviewFilePath">{{ workspaceEntryName(workspacePreviewFilePath) }}</span>
+                        <a v-if="workspacePreviewData && workspacePreviewData.contentType === 'text/html'"
+                            :href="workspaceExternalPreviewUrl"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="chat-workspace-preview-action"
+                            title="在外部浏览器打开（只读）"
+                            aria-label="在外部浏览器打开（只读）">
+                            <i class="el-icon-top-right"></i>
+                        </a>
+                        <el-button
+                            v-if="workspacePreviewData && workspacePreviewData.contentType === 'text/html'"
+                            type="text" size="mini" title="管理匿名分享"
+                            @@click="openWorkspaceShareDialog">
+                            <i class="el-icon-share"></i>
+                        </el-button>
+                        <el-button type="text" size="mini" title="下载 / 另存为"
+                            :loading="workspaceDownloading"
+                            @@click="downloadWorkspaceEntry(workspacePreviewFilePath)">
+                            <i class="el-icon-download"></i>
+                        </el-button>
+                        <el-button
+                            v-if="workspacePreviewCanEdit"
+                            type="text"
+                            size="mini"
+                            title="编辑"
+                            aria-label="编辑文件"
+                            @@click="beginWorkspacePreviewEdit">
+                            <i class="el-icon-edit"></i>
+                        </el-button>
+                        <el-button
+                            v-if="workspacePreviewEditing"
+                            type="text"
+                            size="mini"
+                            title="保存"
+                            aria-label="保存文件"
+                            :loading="workspacePreviewSaving"
+                            :disabled="!workspacePreviewDirty"
+                            @@click="saveWorkspacePreview">
+                            <i class="el-icon-check"></i>
+                        </el-button>
+                        <el-button
+                            v-if="workspacePreviewEditing"
+                            type="text"
+                            size="mini"
+                            title="取消编辑"
+                            aria-label="取消编辑"
+                            @@click="cancelWorkspacePreviewEdit">
+                            <i class="el-icon-refresh-left"></i>
+                        </el-button>
+                        <el-tag v-if="workspacePreviewDirty" size="mini" type="warning">未保存</el-tag>
+                        <el-button
+                            v-if="workspacePreviewIsJson && !workspacePreviewEditing"
+                            type="text"
+                            size="mini"
+                            :title="workspacePreviewJsonTree ? '返回文本' : '树状展开'"
+                            :aria-label="workspacePreviewJsonTree ? '返回文本' : '树状展开'"
+                            :aria-pressed="workspacePreviewJsonTree ? 'true' : 'false'"
+                            @@click="toggleWorkspaceJsonTree">
+                            <i class="fa fa-sitemap"></i>
+                        </el-button>
+                        <el-button
+                            v-if="workspacePreviewCanShowSource"
+                            type="text"
+                            size="mini"
+                            :title="workspacePreviewSource ? '查看预览' : '查看源码'"
+                            :aria-label="workspacePreviewSource ? '查看预览' : '查看源码'"
+                            :aria-pressed="workspacePreviewSource ? 'true' : 'false'"
+                            @@click="toggleWorkspacePreviewSource">
+                            <i :class="workspacePreviewSource ? 'fa fa-eye' : 'fa fa-code'"></i>
+                        </el-button>
+                        <el-tag v-if="workspacePreviewData" size="mini" type="info">{{ workspacePreviewData.contentType }}</el-tag>
+                    </div>
+                    <div v-if="workspacePreviewWindowBar" class="chat-workspace-window-bar">
+                        <span>{{ workspacePreviewWindowLabel }}</span>
+                        <div class="chat-workspace-window-actions">
+                            <el-button
+                                v-if="workspacePreviewData.windowed"
+                                size="mini"
+                                :disabled="(workspacePreviewData.startLine || 1) <= 1 || workspacePreviewWindowLoading"
+                                @@click="loadWorkspacePreviewWindow((workspacePreviewData.startLine || 1) - 800)">上一段</el-button>
+                            <el-button
+                                v-if="workspacePreviewData.windowed"
+                                size="mini"
+                                :disabled="!workspacePreviewData.hasMore || workspacePreviewWindowLoading"
+                                @@click="loadWorkspacePreviewWindow(workspacePreviewWindowEnd + 1)">下一段</el-button>
+                            <input
+                                class="chat-workspace-line-jump"
+                                type="number"
+                                min="1"
+                                v-model.number="workspacePreviewJumpLine"
+                                aria-label="跳转到行"
+                                @@keydown.enter.prevent="jumpWorkspacePreviewLine" />
+                            <el-button size="mini" :loading="workspacePreviewWindowLoading" @@click="jumpWorkspacePreviewLine">跳转</el-button>
+                        </div>
+                    </div>
+                    <div v-if="workspacePreviewLoading" class="chat-workspace-preview-loading">
+                        <i class="el-icon-loading"></i> 正在加载预览…
+                    </div>
+                    <textarea
+                        v-else-if="workspacePreviewEditing"
+                        v-model="workspacePreviewDraft"
+                        class="chat-workspace-text-editor"
+                        spellcheck="false"
+                        :aria-label="'编辑 ' + workspaceEntryName(workspacePreviewFilePath)"
+                        @@keydown.ctrl.s.prevent="saveWorkspacePreview"
+                        @@keydown.meta.s.prevent="saveWorkspacePreview"></textarea>
+                    <pre v-else-if="workspacePreviewData && workspacePreviewSource && workspacePreviewData.isText" class="chat-workspace-text-preview">{{ workspacePreviewData.content }}</pre>
+                    <div v-else-if="workspacePreviewJsonTree && workspaceJsonRoot" class="chat-workspace-json-tree" role="tree">
+                        <div
+                            v-for="row in workspaceJsonRows()"
+                            :key="row.id"
+                            class="json-row"
+                            :style="{ paddingLeft: (row.depth * 16) + 'px' }"
+                            role="treeitem">
+                            <button v-if="row.more" type="button" class="json-more" @@click="showMoreWorkspaceJson(row.node)">还有 {{ row.remaining }} 项</button>
+                            <template v-else>
+                                <button
+                                    v-if="row.node.size != null && !row.closing"
+                                    type="button"
+                                    class="json-toggle"
+                                    :aria-expanded="row.node.open ? 'true' : 'false'"
+                                    @@click="toggleWorkspaceJson(row.node)">{{ row.node.open ? '▾' : '▸' }}</button>
+                                <span v-else class="json-toggle-spacer"></span>
+                                <span v-if="row.node.key != null && !row.closing" class="json-key">{{ jsonKeyLabel(row.node) }}</span>
+                                <span v-if="row.node.key != null && !row.closing" class="json-colon">:</span>
+                                <span :class="jsonValueClass(row)" :title="jsonRowTitle(row)">{{ jsonRowText(row) }}</span>
+                            </template>
+                        </div>
+                    </div>
+                    <pre v-else-if="workspacePreviewShowsLines && !workspacePreviewVirtual" class="chat-workspace-code-block"><code v-html="workspacePreviewCodeHtml"></code></pre>
+                    <div
+                        v-else-if="workspacePreviewShowsLines && workspacePreviewVirtual"
+                        ref="workspaceLineScroller"
+                        class="chat-workspace-lines"
+                        @@scroll="onWorkspaceLineScroll">
+                        <div :style="{ height: (workspacePreviewLineOffset * 20) + 'px' }"></div>
+                        <div
+                            v-for="line in visibleWorkspaceLines()"
+                            :key="line.number"
+                            class="chat-workspace-line"
+                            :data-ln="line.number"><span class="chat-workspace-line-text" v-html="line.html"></span></div>
+                        <div :style="{ height: workspaceLineBottomPad + 'px' }"></div>
+                    </div>
+                    <iframe
+                        v-else-if="workspacePreviewIsDocument"
+                        class="chat-workspace-html-frame"
+                        sandbox="allow-scripts"
+                        :srcdoc="workspacePreviewSrcdoc"
+                        :title="workspacePreviewFrameTitle"></iframe>
+                    <div v-else-if="workspacePreviewData && workspacePreviewData.contentType.indexOf('image/') === 0" class="chat-workspace-image-preview">
+                        <img :src="workspacePreviewDataUrl()" :alt="workspacePreviewFilePath" />
+                    </div>
+                    <iframe
+                        v-else-if="workspacePreviewData && workspacePreviewData.contentType === 'application/pdf'"
+                        class="chat-workspace-html-frame"
+                        :src="workspacePreviewDataUrl()"
+                        title="Workspace PDF 预览"></iframe>
+                    <pre v-else-if="workspacePreviewData && workspacePreviewData.isText" class="chat-workspace-text-preview">{{ workspacePreviewData.content }}</pre>
+                    <div v-else-if="workspacePreviewData" class="chat-workspace-binary-preview">
+                        <i class="fa fa-file-o"></i>
+                        <span>此文件类型暂不支持文本预览</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
     </el-container>
+    <el-dialog title="HTML 匿名快照分享" :visible.sync="workspaceShareDialogVisible"
+        width="560px" append-to-body custom-class="workspace-share-dialog">
+        <el-alert type="warning" :closable="false"
+            title="任何持有链接的人都能查看此快照。"
+            description="只发布选中的 HTML 及其所在目录内引用的静态资源，不公开 Workspace 目录。脚本仅在无同源权限的隔离沙箱中运行，表单、网络请求、外部资源和页面跳转已禁用。后续修改不会同步；撤销无法收回已经保存的副本。">
+        </el-alert>
+        <div class="workspace-share-heading">{{ workspaceSharePath }}</div>
+        <div class="workspace-share-create">
+            <el-select v-model="workspaceShareHours" size="small" aria-label="分享有效期">
+                <el-option :value="1" label="1 小时"></el-option>
+                <el-option :value="24" label="24 小时"></el-option>
+                <el-option :value="168" label="7 天"></el-option>
+            </el-select>
+            <el-button type="primary" size="small" :loading="workspaceShareCreating"
+                @@click="createWorkspaceShare">创建只读快照链接</el-button>
+        </div>
+        <div v-loading="workspaceSharesLoading" class="workspace-share-list">
+            <div v-for="share in workspaceShares" :key="share.id" class="workspace-share-item">
+                <div class="workspace-share-details">
+                    <div>到期：{{ new Date(share.expiresAt).toLocaleString() }}</div>
+                    <el-input :value="workspaceShareAbsoluteUrl(share.url)" readonly size="mini"
+                        label="匿名快照链接"
+                        @@focus="$event.target.select()"></el-input>
+                </div>
+                <el-button type="text" size="mini" @@click="copyWorkspaceShareLink(share)">复制</el-button>
+                <el-button type="text" size="mini" :loading="workspaceShareRevoking === share.id"
+                    @@click="revokeWorkspaceShare(share)">撤销</el-button>
+            </div>
+            <div v-if="!workspaceSharesLoading && workspaceShares.length === 0" class="chat-workspace-empty">
+                暂无有效分享
+            </div>
+        </div>
+        <span slot="footer">
+            <el-button @@click="workspaceShareDialogVisible = false">关闭</el-button>
+        </span>
+    </el-dialog>
+    <el-dialog
+        title="新建 Workspace"
+        :visible.sync="createWorkspaceDialogVisible"
+        width="460px"
+        append-to-body>
+        <el-form label-position="top" @@submit.native.prevent="submitCreateWorkspace">
+            <el-form-item label="Workspace 名称">
+                <el-input
+                    v-model="createWorkspaceName"
+                    maxlength="100"
+                    show-word-limit
+                    autofocus
+                    placeholder="例如：Yield C# 示例项目"
+                    @@keyup.enter.native="submitCreateWorkspace">
+                </el-input>
+            </el-form-item>
+        </el-form>
+        <span slot="footer">
+            <el-button @@click="createWorkspaceDialogVisible = false">取消</el-button>
+            <el-button type="primary" :loading="creatingWorkspace" @@click="submitCreateWorkspace">创建</el-button>
+        </span>
+    </el-dialog>
+    <el-dialog
+        title="Harness 任务轨迹"
+        :visible.sync="trajectoryDialogVisible"
+        width="760px"
+        custom-class="trajectory-dialog">
+        <div class="trajectory-toolbar">
+            <el-input
+                v-model="trajectorySearchText"
+                clearable
+                size="small"
+                placeholder="检索轨迹、工具或结果"
+                @@keyup.enter.native="searchTrajectories">
+                <el-button slot="append" icon="el-icon-search" @@click="searchTrajectories"></el-button>
+            </el-input>
+        </div>
+        <div class="trajectory-list" v-loading="trajectoryLoading">
+            <div
+                v-for="trajectory in trajectoryList"
+                :key="trajectory.id"
+                :class="['trajectory-list-item', { active: selectedTrajectory && selectedTrajectory.id === trajectory.id }]"
+                @@click="openTrajectory(trajectory.id)">
+                <div>
+                    <strong>{{ trajectory.title }}</strong>
+                    <span class="trajectory-status">{{ trajectoryStatusLabel(trajectory.status) }}</span>
+                </div>
+                <small>#{{ trajectory.id }} · {{ trajectory.lastSequence }} events · {{ formatTime(trajectory.startedAt) }}</small>
+            </div>
+            <div v-if="trajectoryList.length === 0 && !trajectoryLoading" class="trajectory-empty">暂无 Harness 轨迹</div>
+        </div>
+        <div class="trajectory-detail" v-if="selectedTrajectory" v-loading="trajectoryDetailLoading">
+            <div class="trajectory-detail-head">
+                <div>
+                    <strong>{{ selectedTrajectory.title }}</strong>
+                    <span class="trajectory-status">{{ trajectoryStatusLabel(selectedTrajectory.status) }}</span>
+                </div>
+                <div class="trajectory-detail-actions">
+                    <el-button size="mini" @@click="toggleTrajectoryReplay">
+                        <i :class="replayPlaying ? 'fa fa-pause' : 'fa fa-play-circle'"></i>
+                        {{ replayPlaying ? '暂停回放' : '回放' }}
+                    </el-button>
+                    <el-button size="mini" type="primary" @@click="resumeSelectedTrajectory">
+                        <i class="fa fa-play"></i> 恢复
+                    </el-button>
+                    <el-button size="mini" @@click="forkSelectedTrajectory">
+                        <i class="fa fa-code-fork"></i> 分叉
+                    </el-button>
+                </div>
+            </div>
+            <div class="trajectory-replay-banner" v-if="replayEvent">
+                <span>回放事件 #{{ replayEvent.sequence }} · {{ replayEvent.eventType }}</span>
+                <strong v-if="replayEvent.name">{{ replayEvent.name }}</strong>
+                <div v-if="replayEvent.content">{{ replayEvent.content }}</div>
+            </div>
+            <div ref="trajectoryTimeline" class="trajectory-timeline">
+                <el-timeline>
+                    <el-timeline-item
+                        v-for="event in selectedTrajectoryEvents"
+                        :key="event.id || event.sequence"
+                        :timestamp="formatTime(event.occurredAt)"
+                        placement="top">
+                        <div
+                            :id="trajectoryEventDomId(event.sequence)"
+                            :class="['trajectory-event', { 'is-replay-current': replayEvent && replayEvent.sequence === event.sequence }]"
+                            @@click="selectReplayEvent(selectedTrajectoryEvents.indexOf(event))">
+                            <div class="trajectory-event-title">
+                                <span>#{{ event.sequence }} {{ trajectoryEventLabel(event.eventType) }}</span>
+                                <strong v-if="event.name">{{ event.name }}</strong>
+                            </div>
+                            <div class="trajectory-event-content" v-if="event.content">{{ event.content }}</div>
+                            <pre class="trajectory-event-payload" v-if="event.payloadJson">{{ formatTrajectoryPayload(event.payloadJson) }}</pre>
+                        </div>
+                    </el-timeline-item>
+                </el-timeline>
+            </div>
+        </div>
+    </el-dialog>
+
+    <el-dialog :title="ncfT('AdminChat.Memory.Settings')" :visible.sync="memoryDialogVisible"
+               width="960px" top="6vh" custom-class="chat-memory-dialog" :close-on-click-modal="false" append-to-body>
+        <div slot="title" class="chat-memory-heading">
+            <span class="chat-memory-heading-icon"><i class="el-icon-collection" aria-hidden="true"></i></span>
+            <div>
+                <h2>@AR["AdminChat.Memory.Settings"]<ncf-doc-help topic="admin.memory"></ncf-doc-help></h2>
+                <p>@AR["AdminChat.Memory.Subtitle"]</p>
+            </div>
+            <span class="chat-memory-private"><i class="el-icon-lock" aria-hidden="true"></i> @AR["AdminChat.Memory.Private"]</span>
+        </div>
+        <el-tabs v-model="memoryTab">
+            <el-tab-pane :label="ncfT('AdminChat.Memory.Entries')" name="entries">
+                <div class="chat-memory-panel-heading">
+                    <div>
+                        <h3>@AR["AdminChat.Memory.Entries"] <span class="chat-memory-count">{{ memoryEntries.length }}</span><ncf-doc-help topic="admin.memory.entries"></ncf-doc-help></h3>
+                        <p>@AR["AdminChat.Memory.EntriesHint"]</p>
+                    </div>
+                    <el-button type="primary" size="small" icon="el-icon-plus" :disabled="memoryBusy" @@click="editMemoryEntry(null)">
+                        @AR["AdminChat.Memory.Add"]
+                    </el-button>
+                </div>
+                <details class="chat-memory-help">
+                    <summary><i class="el-icon-info" aria-hidden="true"></i> @AR["AdminChat.Memory.Guide"]</summary>
+                    <p>@AR["AdminChat.Memory.ScopeNotice"]</p>
+                    <p>@AR["AdminChat.Memory.Notice"]</p>
+                    <p>@AR["AdminChat.Memory.StorageNotice"]</p>
+                </details>
+                <div v-if="memoryEntryDraft" class="chat-memory-entry-editor">
+                    <p v-if="memoryProposalReview && memoryProposalReview.draft === memoryEntryDraft" class="chat-memory-caption">
+                        @AR["AdminChat.Memory.ReviewNotice"]
+                    </p>
+                    <details v-if="memoryProposalReview && memoryProposalReview.draft === memoryEntryDraft" class="chat-memory-help">
+                        <summary>@AR["AdminChat.Memory.CandidateEvidence"]</summary>
+                        <p>{{ memoryProposalReview.proposal.entry.evidence }}</p>
+                    </details>
+                    <el-form label-position="top" size="mini">
+                        <el-form-item :label="ncfT('AdminChat.Memory.Text')">
+                            <el-input type="textarea" :rows="3" :maxlength="300" v-model="memoryEntryDraft.text"></el-input>
+                        </el-form-item>
+                        <div class="chat-memory-entry-options">
+                            <el-form-item :label="ncfT('AdminChat.Memory.Scope')">
+                                <el-select v-model="memoryEntryDraft.scope">
+                                    <el-option :label="ncfT('AdminChat.Memory.ScopeGlobal')" value="global"></el-option>
+                                    <el-option label="Workspace" value="workspace" :disabled="!memoryWorkspaceId"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item :label="ncfT('AdminChat.Memory.Tier')">
+                                <el-select v-model="memoryEntryDraft.tier">
+                                    <el-option v-for="tier in ['core','topic','archive']" :key="tier" :label="tier" :value="tier"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item :label="ncfT('AdminChat.Memory.Kind')">
+                                <el-select v-model="memoryEntryDraft.kind">
+                                    <el-option v-for="kind in ['preference','project','decision','reference']" :key="kind" :label="kind" :value="kind"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item :label="ncfT('AdminChat.Memory.Topic')">
+                                <el-input :maxlength="40" v-model="memoryEntryDraft.topic"></el-input>
+                            </el-form-item>
+                            <el-form-item :label="ncfT('AdminChat.Memory.Expires')">
+                                <el-date-picker v-model="memoryEntryDraft.expiresAt" type="datetime" clearable></el-date-picker>
+                            </el-form-item>
+                        </div>
+                        <el-checkbox v-model="memoryEntryDraft.pinned">@AR["AdminChat.Memory.Pinned"]</el-checkbox>
+                    </el-form>
+                    <div class="chat-memory-editor-actions">
+                    <el-popconfirm v-if="memoryEntryDraft.id" :title="ncfT('AdminChat.Memory.DeleteNotice')" @@on-confirm="saveMemoryEntry(true)">
+                        <el-button slot="reference" type="danger" plain size="small" :disabled="memoryBusy">@AR["AdminChat.Memory.Delete"]</el-button>
+                    </el-popconfirm>
+                    <span class="chat-memory-action-spacer"></span>
+                    <el-button size="small" :disabled="memoryBusy" @@click="memoryEntryDraft = null">@AR["Common.取消"]</el-button>
+                    <el-button v-if="!memoryProposalReview || memoryProposalReview.draft !== memoryEntryDraft || !memoryProposalReview.proposal.remove"
+                               type="primary" size="small" :loading="memoryBusy" @@click="saveMemoryEntry(false)">@AR["AdminChat.Memory.SaveEntry"]</el-button>
+                    </div>
+                </div>
+                <el-table :data="memoryEntries" size="small" :empty-text="ncfT('AdminChat.Memory.EmptyEntries')">
+                    <el-table-column type="expand">
+                        <template slot-scope="props">
+                            <p>{{ props.row.kind }} · {{ props.row.tier }} · v{{ props.row.version }} · {{ props.row.source }}</p>
+                            <p v-if="props.row.sourceMessageId">@AR["AdminChat.Memory.Source"]: #{{ props.row.sourceSessionId }} / #{{ props.row.sourceMessageId }}</p>
+                            <blockquote>{{ props.row.evidence }}</blockquote>
+                            <p v-if="props.row.expiresAt">@AR["AdminChat.Memory.Expires"]: {{ props.row.expiresAt }}</p>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="text" :label="ncfT('AdminChat.Memory.Text')"></el-table-column>
+                    <el-table-column :label="ncfT('AdminChat.Memory.Scope')" width="110">
+                        <template slot-scope="props">
+                            <span class="chat-memory-scope" :class="{ 'is-workspace': props.row.workspaceId }">{{ props.row.workspaceId ? 'Workspace' : ncfT('AdminChat.Memory.ScopeGlobal') }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column width="60">
+                        <template slot-scope="props">
+                            <el-button class="chat-memory-edit-button" type="text" icon="el-icon-edit" :disabled="memoryBusy" :title="ncfT('AdminChat.Memory.Edit')" :aria-label="ncfT('AdminChat.Memory.Edit')" @@click="editMemoryEntry(props.row)"></el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-tab-pane>
+            <el-tab-pane :label="ncfT('AdminChat.Memory.Loaded')" name="loaded">
+                <div class="chat-memory-panel-heading"><h3>@AR["AdminChat.Memory.Loaded"]<ncf-doc-help topic="admin.memory.loaded"></ncf-doc-help></h3></div>
+                <details class="chat-memory-help">
+                    <summary><i class="el-icon-info" aria-hidden="true"></i> @AR["AdminChat.Memory.Guide"]</summary>
+                    <p>@AR["AdminChat.Memory.LoadedNotice"]</p>
+                </details>
+                <el-alert v-if="memoryUpdateResult && memoryUpdateSessionId === memoryDialogSessionId"
+                          :title="memoryUpdateText(memoryUpdateResult)"
+                          :type="memoryUpdateResult.status === 'updated' ? 'success' : 'info'" :closable="false"></el-alert>
+                <p v-if="memoryUpdateResult && memoryUpdateSessionId === memoryDialogSessionId && memoryUpdateResult.promptCode">
+                    PromptCode: {{ memoryUpdateResult.promptCode }}
+                </p>
+                <template v-if="memoryUsage && memoryUsageSessionId === memoryDialogSessionId">
+                    <div class="chat-memory-token-meter"><strong>{{ memoryUsage.tokens }} <small>/ {{ memoryUsage.budget }} tokens</small></strong><span>{{ memoryUsage.counter }}</span></div>
+                    <el-table :data="memoryUsage.entries" size="mini">
+                        <el-table-column prop="text" :label="ncfT('AdminChat.Memory.Text')"></el-table-column>
+                        <el-table-column prop="scope" :label="ncfT('AdminChat.Memory.Scope')" width="100"></el-table-column>
+                        <el-table-column prop="reason" :label="ncfT('AdminChat.Memory.Reason')" width="130"></el-table-column>
+                    </el-table>
+                </template>
+                <div v-else class="chat-memory-empty"><i class="el-icon-data-analysis" aria-hidden="true"></i><p>@AR["AdminChat.Memory.EmptyLoaded"]</p></div>
+            </el-tab-pane>
+            <el-tab-pane :label="ncfT('AdminChat.Memory.History')" name="history">
+                <div class="chat-memory-panel-heading"><h3>@AR["AdminChat.Memory.History"]</h3></div>
+                <el-table :data="memoryHistory" size="small">
+                    <el-table-column prop="at" :label="ncfT('AdminChat.Memory.Time')" width="180"></el-table-column>
+                    <el-table-column :label="ncfT('AdminChat.Memory.Text')">
+                        <template slot-scope="props">
+                            <div>{{ props.row.action }} · v{{ props.row.version }} · {{ props.row.source }}</div>
+                            <del v-if="props.row.before">{{ props.row.before.text }}</del>
+                            <div v-if="props.row.after">{{ props.row.after.text }}</div>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-tab-pane>
+            <el-tab-pane :label="ncfT('AdminChat.Memory.Preview')" name="preview">
+                <div class="chat-memory-panel-heading"><h3>@AR["AdminChat.Memory.Preview"]</h3></div>
+                <p class="chat-memory-caption">@AR["AdminChat.Memory.MarkdownScope"]</p>
+                <div class="markdown-body chat-memory-preview"
+                     v-html="formatMemoryContent(memoryMarkdown)"></div>
+            </el-tab-pane>
+            <el-tab-pane :label="ncfT('AdminChat.Memory.Edit')" name="edit">
+                <div class="chat-memory-panel-heading"><h3>@AR["AdminChat.Memory.Edit"]<ncf-doc-help topic="admin.memory.markdown"></ncf-doc-help></h3></div>
+                <p class="chat-memory-caption">@AR["AdminChat.Memory.MarkdownScope"]</p>
+                <details class="chat-memory-help">
+                    <summary><i class="el-icon-info" aria-hidden="true"></i> @AR["AdminChat.Memory.FormatGuide"]</summary>
+                    <p>@AR["AdminChat.Memory.Format"]</p>
+                </details>
+                <el-input type="textarea" :rows="14" v-model="memoryMarkdown" :maxlength="32000"
+                          :disabled="memoryBusy"></el-input>
+            </el-tab-pane>
+            <el-tab-pane :label="ncfT('AdminChat.Memory.SystemMessage')" name="system">
+                <div class="chat-memory-panel-heading"><h3>@AR["AdminChat.Memory.SystemMessage"]<ncf-doc-help topic="admin.memory.system"></ncf-doc-help></h3></div>
+                <p class="chat-memory-caption">@AR["AdminChat.Memory.SystemNotice"]</p>
+                <el-input type="textarea" :rows="6" v-model="memorySystemMessage" :maxlength="2000"
+                          :disabled="memoryBusy"></el-input>
+                <template v-if="isSuperAdmin && globalChatLoaded">
+                    <div class="chat-memory-system-divider"></div>
+                    <h4>@AR["AdminChat.Memory.GlobalSystem"]</h4>
+                    <p class="chat-memory-caption">@AR["AdminChat.Memory.GlobalNotice"]</p>
+                    <el-input type="textarea" :rows="6" v-model="globalChatSystemMessage" :maxlength="2000"
+                              :disabled="memoryBusy"></el-input>
+                    <el-button class="chat-memory-tenant-save" size="small" @@click="saveGlobalChatSystemMessage" :disabled="memoryBusy">
+                        @AR["AdminChat.Memory.SaveGlobal"]
+                    </el-button>
+                </template>
+            </el-tab-pane>
+        </el-tabs>
+        <div slot="footer" class="chat-memory-footer">
+            <el-button type="text" size="small" icon="el-icon-download" @@click="downloadMemory">@AR["AdminChat.Memory.Download"]</el-button>
+            <span class="chat-memory-action-spacer"></span>
+            <el-button v-if="memoryTab === 'edit'" type="danger" plain size="small" :title="ncfT('AdminChat.Memory.Clear')" :disabled="memoryBusy" @@click="memoryMarkdown = '# Memory\n\n## Core\n\n## Archive\n'; memoryTab = 'edit'">
+                @AR["AdminChat.Memory.ClearDraft"]
+            </el-button>
+            <el-button size="small" :disabled="memoryBusy" @@click="memoryDialogVisible = false">@AR["Xncf.CloseDialog"]</el-button>
+            <el-button v-if="memoryTab === 'edit' || memoryTab === 'system'" type="primary" size="small" :loading="memoryBusy" @@click="saveMemory">@AR["AdminChat.Memory.SaveChanges"]</el-button>
+        </div>
+    </el-dialog>
+
+    <!-- 超级管理员：用户用量统计（仅数量，不含内容） -->
+    <el-drawer
+        :visible.sync="userStatsDrawerVisible"
+        :with-close-button="true"
+        direction="rtl"
+        size="640px"
+        custom-class="user-stats-drawer"
+        :wrapper-closable="true">
+        <div slot="title" class="user-stats-drawer-title">
+            <i class="fa fa-data-line"></i> @AR["AdminChat.UserStatsTitle"]
+        </div>
+        <div class="user-stats-body" v-loading="userStatsLoading">
+            <div class="user-stats-tip">
+                <i class="el-icon-info"></i>
+                <span>@AR["AdminChat.UserStatsTip"]</span>
+            </div>
+            <el-table
+                :data="userStatsList"
+                border
+                stripe
+                size="small"
+                style="width: 100%">
+                <el-table-column align="center"
+                                 label="@AR["AdminChat.UserStatsCol.User"]"
+                                 min-width="150">
+                    <template slot-scope="scope">
+                        <div class="user-stats-user-cell">
+                            <div class="user-stats-user-name">{{ scope.row.userName || ('User #' + scope.row.userId) }}</div>
+                            <div class="user-stats-user-real" v-if="scope.row.realName">{{ scope.row.realName }}</div>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center"
+                                 label="@AR["AdminChat.UserStatsCol.Total"]"
+                                 width="80"
+                                 prop="totalSessionCount"></el-table-column>
+                <el-table-column align="center"
+                                 label="@AR["AdminChat.UserStatsCol.Active"]"
+                                 width="80"
+                                 prop="activeSessionCount"></el-table-column>
+                <el-table-column align="center"
+                                 label="@AR["AdminChat.UserStatsCol.Archived"]"
+                                 width="90"
+                                 prop="archivedSessionCount"></el-table-column>
+                <el-table-column align="center"
+                                 label="@AR["AdminChat.UserStatsCol.Deleted"]"
+                                 width="80"
+                                 prop="deletedSessionCount"></el-table-column>
+                <el-table-column align="center"
+                                 label="@AR["AdminChat.UserStatsCol.Messages"]"
+                                 width="90"
+                                 prop="messageCount"></el-table-column>
+                <el-table-column align="center"
+                                 label="@AR["AdminChat.UserStatsCol.LastActive"]"
+                                 width="150">
+                    <template slot-scope="scope">
+                        {{ formatTime(scope.row.lastActiveTime) }}
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+    </el-drawer>
 </div>
 
 @section scripts {
-    <script src="~/js/Admin/Pages/AdminChat/ChatLauncherMixin.js"></script>
+    <script src="~/js/Admin/Pages/AdminChat/ChatLauncherMixin.js" asp-append-version="true"></script>
+    <script src="~/js/Admin/Pages/AdminChat/WorkspaceMentions.js" asp-append-version="true"></script>
     <script src="~/js/Admin/lib/marked.min.js"></script>
     <script src="~/js/Admin/dompurify.min.js"></script>
     <script>
@@ -412,8 +1639,9 @@
             sessionId: @Model.SessionId,
             initialMessage: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.InitialMessage ?? string.Empty)),
             currentUserId: @Model.CurrentUserId,
+            isSuperAdmin: @(Model.IsSuperAdmin ? "true" : "false"),
             moduleUids: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ModuleUids ?? string.Empty))
         };
     </script>
-    <script src="~/js/Admin/Pages/AdminChat/Chat.js"></script>
+    <script src="~/js/Admin/Pages/AdminChat/Chat.js" asp-append-version="true"></script>
 }

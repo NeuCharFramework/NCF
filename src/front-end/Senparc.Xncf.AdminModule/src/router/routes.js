@@ -11,5 +11,10 @@ export default [
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/Home.vue')
   },
-
+  {
+    path: '/appstore',
+    name: 'b-appstore',
+    component: () =>
+      import('../views/XncfStore/shopping/Index.vue')
+  }
 ]

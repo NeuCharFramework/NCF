@@ -1,9 +1,8 @@
 /*----------------------------------------------------------------
     Copyright (C) 2026 Senparc
-  
+
     文件名：Register.cs
     文件功能描述：模块注册与初始化逻辑
-
 
     创建标识：Senparc - 20241028
 
@@ -22,6 +21,12 @@
     修改标识：Senparc - 20260822
     修改描述：v0.37.0 集成管理端 Chat 工作流与最新桌面发布信息
 
+    修改标识：Senparc - 20261110
+    修改描述：缩短主站关闭等待，避免 Ctrl+C 空等默认 30 秒
+
+    修改标识：Senparc - 20261111
+    修改描述：v0.39.8 统一主站请求本地化与宿主注册兼容
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.DataProtection;
@@ -33,6 +38,7 @@ using Senparc.Areas.Admin.Domain.Services;
 using Senparc.CO2NET;
 using Senparc.CO2NET.AspNet;
 using Senparc.Ncf.Core.Models;
+using Senparc.Ncf.Core.Localization;
 using Senparc.Ncf.XncfBase;
 using Senparc.Xncf.AreasBase;
 using Senparc.Ncf.Core.EventBus;
@@ -52,9 +58,16 @@ namespace Senparc.Web
         {
             StartTime = SystemTime.Now.DateTime;
 
+            // 通用主机关闭超时默认 30 秒，Ctrl+C 会一直停在 Application is shutting down。
+            // 后台服务自己的 StopAsync 只做有限收尾，这里把整次退出限制在 2 秒。
+            builder.Services.Configure<HostOptions>(options =>
+            {
+                options.ShutdownTimeout = TimeSpan.FromSeconds(2);
+            });
+
             // Localization baseline for all modules (Web/Admin/Installer/XNCF).
             // Use type-based lookup without ResourcesPath override to match embedded resource names.
-            builder.Services.AddLocalization();
+            builder.Services.AddNcfLocalization();
             builder.Services.AddSingleton<DatabaseRuntimeStateStore>();
             builder.Services.AddSingleton<DatabaseUpgradeCoordinator>();
 
@@ -98,13 +111,13 @@ namespace Senparc.Web
                            name.Contains(".Xncf.", StringComparison.Ordinal);
                 })
                 .ToArray();
-            
+
             Console.WriteLine($"EventBus 扫描程序集:");
             foreach (var asm in assembliesToScan)
             {
                 Console.WriteLine($"  - {asm.GetName().Name}");
             }
-            
+
             builder.Services.AddSenparcEventBus(
                 options =>
                 {
@@ -116,7 +129,7 @@ namespace Senparc.Web
                     options.EnableCircularReferenceDetection = true;
                 },
                 assembliesToScan);
-            
+
             Console.WriteLine($"EventBus 已注册，共扫描了 {assembliesToScan.Length} 个程序集");
 
             #region 仅在完全删除 Senparc.Xncf.Swagger 时启用以下代码！
@@ -186,7 +199,7 @@ namespace Senparc.Web
                .UseNcfDatabase<TDatabaseConfiguration>();
 
             /*  UseNcfDatabase<TDatabaseConfiguration>() 泛型类型说明
-             *                
+             *
              *                  方法                            |         说明
              * -------------------------------------------------|-------------------------
              *  UseNcf<BySettingDatabaseConfiguration>()        |  由 appsettings.json 决定配置
@@ -198,7 +211,7 @@ namespace Senparc.Web
              *  UseNcf<OracleDatabaseConfigurationForV11>()     |  使用 Oracle 数据库（V11+）
              *  UseNcf<DmDatabaseConfiguration>()               |  使用 达梦 数据库
              *  更多数据库可扩展，依次类推……
-             *  
+             *
              */
         }
 
@@ -218,13 +231,13 @@ namespace Senparc.Web
 
                 //以下会立即将全局缓存设置为 Redis
                 Senparc.CO2NET.Cache.CsRedis.Register.UseKeyValueRedisNow(); //键值对缓存策略（推荐）
-                /*Senparc.CO2NET.Cache.CsRedis.Register.UseHashRedisNow();*/ //HashSet储存格式的缓存策略 
+                /*Senparc.CO2NET.Cache.CsRedis.Register.UseHashRedisNow();*/ //HashSet储存格式的缓存策略
 
                 //也可以通过以下方式自定义当前需要启用的缓存策略
                 //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisObjectCacheStrategy.Instance);//键值对
                 //CacheStrategyFactory.RegisterObjectCacheStrategy(() => RedisHashSetObjectCacheStrategy.Instance);//HashSet
             }
-            //如果这里不进行Redis缓存启用，则目前还是默认使用内存缓存 
+            //如果这里不进行Redis缓存启用，则目前还是默认使用内存缓存
         }
 
         /// <summary>

@@ -1,5 +1,45 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+
+  <data name="AdminChat.Memory.UpdateReason.intent-deferred" xml:space="preserve"><value>Ожидается дальнейшее содержимое или подтверждение сохранения. В этом ходе Memory не изменена.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.no-save-intent" xml:space="preserve"><value>Намерение обновить долговременную память сейчас не обнаружено. В этом ходе ничего не сохранено.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.pending-review" xml:space="preserve"><value>Эта группа содержит сведения от ассистента и ещё не сохранена. Проверьте и сохраните каждую запись: утверждения ассистента могут быть неточными.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.unresolved-reference" xml:space="preserve"><value>Недавний контекст не позволяет определить, что запомнить. Отправьте «Remember: …» с полным фактом в одном сообщении; при необходимости проверьте PromptCode.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.review-complete" xml:space="preserve"><value>Вы проверили и сохранили эти предложения.</value></data>
+  <data name="AdminChat.Memory.ReviewCandidate" xml:space="preserve"><value>Проверить предложение</value></data>
+  <data name="AdminChat.Memory.ReviewNotice" xml:space="preserve"><value>Предложение из контекста ещё не сохранено. Проверьте текст и область, затем сохраните запись. Удаление требует подтверждения. ИИ не изменяет закреплённые ручные записи.</value></data>
+  <data name="AdminChat.Memory.ReviewClose" xml:space="preserve"><value>Завершите черновик и закройте настройки перед проверкой предложения.</value></data>
+  <data name="AdminChat.Memory.CandidateEvidence" xml:space="preserve"><value>Исходный текст (не проверен)</value></data>
+  <data name="AdminChat.Sidebar.Expand" xml:space="preserve"><value>Развернуть панель чатов</value></data>
+  <data name="AdminChat.Sidebar.Collapse" xml:space="preserve"><value>Свернуть панель чатов</value></data>
+  <data name="AdminChat.Sidebar.Resize" xml:space="preserve"><value>Изменить ширину панели (стрелки влево/вправо)</value></data>
+  <data name="AdminChat.Sidebar.Reorder" xml:space="preserve"><value>Перетащите внутри группы или нажмите Alt + Вверх/Вниз</value></data>
+  <data name="AdminChat.Sidebar.Running" xml:space="preserve"><value>Выполняется</value></data>
+  <data name="AdminChat.Sidebar.Stopping" xml:space="preserve"><value>Остановка</value></data>
+  <data name="AdminChat.Sidebar.SortSaved" xml:space="preserve"><value>Порядок сохранён для этой учётной записи на всех устройствах</value></data>
+  <data name="AdminChat.Sidebar.SortFailed" xml:space="preserve"><value>Не удалось сохранить порядок. Повторите попытку.</value></data>
+  <data name="AdminChat.Sidebar.PreferencesFailed" xml:space="preserve"><value>Не удалось прочитать или сохранить настройки панели. Этот вид действует только на текущей странице.</value></data>
+  <data name="AdminChat.Sidebar.Archive" xml:space="preserve"><value>Архивировать и отметить как завершённый</value></data>
+  <data name="AdminChat.Sidebar.ArchiveRunning" xml:space="preserve"><value>Этот чат ещё выполняется. Архивируйте его после завершения.</value></data>
+  <data name="AdminChat.Archive.Menu" xml:space="preserve"><value>Архив</value></data>
+  <data name="AdminChat.Archive.Empty" xml:space="preserve"><value>Нет архивных чатов</value></data>
+  <data name="AdminChat.Archive.Open" xml:space="preserve"><value>Открыть архивный чат: {0}</value></data>
+  <data name="AdminChat.Archive.Delete" xml:space="preserve"><value>Удалить архивный чат: {0}</value></data>
+  <data name="AdminChat.Archive.Action" xml:space="preserve"><value>В архив</value></data>
+  <data name="AdminChat.Archive.Restore" xml:space="preserve"><value>Восстановить</value></data>
+  <data name="AdminChat.Archive.RestoreLabel" xml:space="preserve"><value>Восстановить архивный чат: {0}</value></data>
+  <data name="AdminChat.Archive.RestoreSuccess" xml:space="preserve"><value>Чат снова в списке активных</value></data>
+  <data name="AdminChat.Archive.RestoreFailed" xml:space="preserve"><value>Не удалось восстановить чат. Повторите попытку.</value></data>
+  <data name="AdminChat.Archive.Success" xml:space="preserve"><value>Чат архивирован. Откройте меню «Ещё» рядом с «Новый чат», чтобы просмотреть, восстановить или удалить его.</value></data>
+  <data name="AdminChat.Sidebar.Tools" xml:space="preserve"><value>Ещё</value></data>
+  <data name="AdminChat.Sidebar.Unread" xml:space="preserve"><value>Не прочитано</value></data>
+  <data name="AdminChat.Archive.Failed" xml:space="preserve"><value>Не удалось архивировать чат. Повторите попытку.</value></data>
+  <data name="AdminChat.Archive.Tag" xml:space="preserve"><value>В архиве</value></data>
+  <data name="AdminChat.Archive.LoadFailed" xml:space="preserve"><value>Не удалось загрузить архивные чаты</value></data>
+  <data name="AdminChat.ArchiveSessionSuccess" xml:space="preserve"><value>Чат архивирован</value></data>
+  <data name="AdminChat.Rail.Label" xml:space="preserve"><value>Мои сообщения</value></data>
+  <data name="AdminChat.Rail.Jump" xml:space="preserve"><value>Перейти к этому сообщению</value></data>
+  <data name="AdminChat.Rail.EmptyMessage" xml:space="preserve"><value>(Пустое сообщение)</value></data>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -39,11 +79,113 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AdminChat.Memory.Subtitle" xml:space="preserve"><value>Управляйте устойчивыми предпочтениями для более личных разговоров</value></data>
+  <data name="AdminChat.Memory.Private" xml:space="preserve"><value>Закрытая память</value></data>
+  <data name="AdminChat.Memory.SaveChanges" xml:space="preserve"><value>Сохранить изменения</value></data>
+  <data name="AdminChat.Memory.ClearDraft" xml:space="preserve"><value>Очистить черновик</value></data>
+  <data name="AdminChat.Memory.EntriesHint" xml:space="preserve"><value>Ваши глобальные записи и записи текущего Workspace в одном месте</value></data>
+  <data name="AdminChat.Memory.Guide" xml:space="preserve"><value>Области, правила обучения и хранение</value></data>
+  <data name="AdminChat.Memory.FormatGuide" xml:space="preserve"><value>Формат Markdown и правила сохранения</value></data>
+  <data name="AdminChat.Memory.SaveEntry" xml:space="preserve"><value>Сохранить запись</value></data>
+  <data name="AdminChat.Memory.EmptyEntries" xml:space="preserve"><value>Записей Memory пока нет. Добавьте первое предпочтение, чтобы начать.</value></data>
+  <data name="AdminChat.Memory.EmptyLoaded" xml:space="preserve"><value>Отчёта о загрузке пока нет. Включите Memory и отправьте сообщение, чтобы увидеть его здесь.</value></data>
+  <data name="AdminChat.Memory.Settings" xml:space="preserve"><value>Настройки Memory / Chat</value></data>
+  <data name="AdminChat.Memory.UpdateSaved" xml:space="preserve"><value>Memory сохранена: {0} глобальных изменений и {1} изменений текущего Workspace (частное хранение в базе данных, файл не создан).</value></data>
+  <data name="AdminChat.Memory.UpdateReason.mode-off" xml:space="preserve"><value>Долгосрочная Memory не сохранена: для этого чата Memory выключена. Подтверждение ассистента не доказывает сохранение.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.read-only" xml:space="preserve"><value>Долгосрочная Memory не сохранена: этот чат только для чтения. Переключитесь на Learn или отредактируйте записи вручную.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.input-not-eligible" xml:space="preserve"><value>Memory не обновлена: ввод не соответствовал условиям обучения или превысил ограничение длины.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.no-candidates" xml:space="preserve"><value>Memory не обновлена: экстрактор не вернул долгосрочных записей. Добавьте запись вручную или проверьте PromptCode этого хода. Слова ассистента, что он запомнил, не подтверждают сохранение.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.pinned" xml:space="preserve"><value>Memory не обновлена: соответствующая запись закреплена от изменений или удаления ИИ. Отредактируйте её вручную.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.no-difference" xml:space="preserve"><value>Memory без изменений: возвращённое содержимое уже существует, либо не было подходящей записи для удаления.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.revision-conflict" xml:space="preserve"><value>Memory не сохранена: она изменилась в этом ходе. Более новая версия сохранена; проверьте её перед повтором.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.timeout" xml:space="preserve"><value>Memory не сохранена: истекло время извлечения. Повторите попытку или добавьте запись вручную.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.invalid-change" xml:space="preserve"><value>Memory не сохранена: проверка доказательств, безопасности, области или полей отклонила всю пачку.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.capacity" xml:space="preserve"><value>Memory не сохранена: достигнут предел в 80 записей. Сначала удалите ненужные записи.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.invalid-json" xml:space="preserve"><value>Memory не сохранена: экстрактор не вернул допустимый JSON в требуемом формате. Проверьте промпт.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.pending" xml:space="preserve"><value>Сохранение Memory не подтверждено. Не считайте обещание ассистента доказательством сохранения.</value></data>
+  <data name="AdminChat.Memory.UpdateReason.update-failed" xml:space="preserve"><value>Обновление Memory не удалось; сохранение не подтверждено. Проверьте конфигурацию промпта, модели или базы данных. Существующие записи сохранены.</value></data>
+  <data name="AdminChat.Memory.StorageNotice" xml:space="preserve"><value>Записи хранятся в вашей частной базе данных, а не в файлах Workspace. Memory.md в Workspace — обычный файл, он не создаётся и не импортируется автоматически. Управляйте записями здесь; доверяйте результату обновления системы, а не текстовому подтверждению ассистента.</value></data>
+  <data name="AdminChat.Memory.Use" xml:space="preserve"><value>Использовать мою глобальную Memory</value></data>
+  <data name="AdminChat.Memory.Notice" xml:space="preserve"><value>Off: без извлечения и обучения. Read-only: только извлечение. Learn: обновление при явных предпочтениях или сигналах запоминания и исправления. Частные области глобального пользователя и текущего Workspace; истёкшие и архивные записи исключены. Бюджет: 1000 tokens, Core до 300; неизвестные модели используют осторожную оценку. Никогда не храните секреты или конфиденциальные сведения.</value></data>
+  <data name="AdminChat.Memory.ModeOff" xml:space="preserve"><value>Закрыть</value></data>
+  <data name="AdminChat.Memory.ModeReadOnly" xml:space="preserve"><value>Только чтение</value></data>
+  <data name="AdminChat.Memory.ModeLearn" xml:space="preserve"><value>Обучение</value></data>
+  <data name="AdminChat.Memory.Entries" xml:space="preserve"><value>Записи</value></data>
+  <data name="AdminChat.Memory.ScopeNotice" xml:space="preserve"><value>Показаны только ваши глобальные записи и записи Workspace текущего чата. Редактирование Workspace требует чат, привязанный к этому Workspace. Факты Workspace имеют приоритет над глобальными фактами с тем же ключом.</value></data>
+  <data name="AdminChat.Memory.Add" xml:space="preserve"><value>Добавить запись</value></data>
+  <data name="AdminChat.Memory.Text" xml:space="preserve"><value>Содержимое</value></data>
+  <data name="AdminChat.Memory.Scope" xml:space="preserve"><value>Область</value></data>
+  <data name="AdminChat.Memory.ScopeGlobal" xml:space="preserve"><value>Мой глобальный</value></data>
+  <data name="AdminChat.Memory.Tier" xml:space="preserve"><value>Уровень загрузки</value></data>
+  <data name="AdminChat.Memory.Kind" xml:space="preserve"><value>Тип</value></data>
+  <data name="AdminChat.Memory.Topic" xml:space="preserve"><value>Тема (обязательно для уровня темы)</value></data>
+  <data name="AdminChat.Memory.Expires" xml:space="preserve"><value>Истекает (необязательно)</value></data>
+  <data name="AdminChat.Memory.Pinned" xml:space="preserve"><value>Закрепить: запретить изменения или удаление ИИ</value></data>
+  <data name="AdminChat.Memory.DeleteNotice" xml:space="preserve"><value>Удалить запись и стереть её историческое содержимое? Исходные сообщения чата не удаляются.</value></data>
+  <data name="AdminChat.Memory.Delete" xml:space="preserve"><value>Удалить</value></data>
+  <data name="AdminChat.Memory.Source" xml:space="preserve"><value>исходный чат / сообщение</value></data>
+  <data name="AdminChat.Memory.Loaded" xml:space="preserve"><value>Загружено в этом ходе</value></data>
+  <data name="AdminChat.Memory.LoadedNotice" xml:space="preserve"><value>Записи, переданные модели для последнего хода на этой странице; это не доказательство, что модель их использовала. Подсчёт включает текст границы Memory и исключает SystemMessage, историю и накладные расходы протокола. Этот отчёт не сохраняется после обновления.</value></data>
+  <data name="AdminChat.Memory.Reason" xml:space="preserve"><value>Причина выбора</value></data>
+  <data name="AdminChat.Memory.History" xml:space="preserve"><value>История изменений</value></data>
+  <data name="AdminChat.Memory.Time" xml:space="preserve"><value>Время</value></data>
+  <data name="AdminChat.Memory.MarkdownScope" xml:space="preserve"><value>Memory.md редактирует и экспортирует только ваши глобальные записи. Для записей Workspace используйте редактирование записей; очистка Markdown их не удаляет.</value></data>
+  <data name="AdminChat.Memory.UnsavedMarkdown" xml:space="preserve"><value>Сохраните черновик Markdown перед редактированием отдельных записей.</value></data>
+  <data name="AdminChat.Memory.Preview" xml:space="preserve"><value>Предпросмотр Memory.md</value></data>
+  <data name="AdminChat.Memory.Edit" xml:space="preserve"><value>Изменить / Уровни</value></data>
+  <data name="AdminChat.Memory.Format" xml:space="preserve"><value>Используйте заголовки ## Core, ## Topic: name и ## Archive с записями '- ': до 300 символов каждая, всего 80 записей. Ручное сохранение закрепляет все записи от замены ИИ. Очистите редактор и сохраните, чтобы удалить все записи. Опубликуйте и оцените новую версию в диапазоне AdminChat.Memory PromptRange; опубликованный промпт с наивысшим средним баллом заменяет промпт по умолчанию.</value></data>
+  <data name="AdminChat.Memory.SystemMessage" xml:space="preserve"><value>SystemMessage</value></data>
+  <data name="AdminChat.Memory.SystemNotice" xml:space="preserve"><value>Применяется ко всем моим чатам со следующего хода, даже если Memory выключена. Не выдаёт права на инструменты. До 2000 символов.</value></data>
+  <data name="AdminChat.Memory.GlobalSystem" xml:space="preserve"><value>SystemMessage для всего арендатора (суперадминистратор)</value></data>
+  <data name="AdminChat.Memory.GlobalNotice" xml:space="preserve"><value>Применяется к чатам всех пользователей этого арендатора или ко всему сайту в одноарендном режиме. Исключает внутренние задачи генерации, такие как заголовки и извлечение Memory.</value></data>
+  <data name="AdminChat.Memory.SaveGlobal" xml:space="preserve"><value>Сохранить глобальный SystemMessage</value></data>
+  <data name="AdminChat.Memory.Download" xml:space="preserve"><value>Скачать Memory.md</value></data>
+  <data name="AdminChat.Memory.Clear" xml:space="preserve"><value>Очистить черновик (сохранить, чтобы удалить)</value></data>
+  <data name="AdminChat.Memory.Save" xml:space="preserve"><value>Сохранить мою Memory / настройки</value></data>
+  <data name="AdminChat.Memory.Saved" xml:space="preserve"><value>Сохранено.</value></data>
+  <data name="AdminChat.Memory.Failed" xml:space="preserve"><value>Операция Memory не удалась. Перезагрузите перед повтором.</value></data>
+  <data name="AdminChat.Memory.UpdateWarning" xml:space="preserve"><value>В этом ходе Memory не обновлена; существующие записи сохранены. Проверьте PromptRange или снова откройте настройки Memory.</value></data>
   <data name="Admin.Title" xml:space="preserve">
     <value>Панель администратора NCF</value>
   </data>
   <data name="Admin.Nav.Home" xml:space="preserve">
     <value>Главная</value>
+  </data>
+  <data name="Admin.Tabs.List" xml:space="preserve">
+    <value>Открытые страницы</value>
+  </data>
+  <data name="Admin.Tabs.Close" xml:space="preserve">
+    <value>Закрыть вкладку</value>
+  </data>
+  <data name="Admin.Tabs.Untitled" xml:space="preserve">
+    <value>Страница без названия</value>
+  </data>
+  <data name="Admin.Tabs.ScrollLeft" xml:space="preserve">
+    <value>Прокрутить вкладки влево</value>
+  </data>
+  <data name="Admin.Tabs.ScrollRight" xml:space="preserve">
+    <value>Прокрутить вкладки вправо</value>
+  </data>
+  <data name="Admin.Nav.Search" xml:space="preserve">
+    <value>Поиск меню</value>
+  </data>
+  <data name="Admin.Nav.SearchPlaceholder" xml:space="preserve">
+    <value>Введите ключевое слово для фильтрации меню</value>
+  </data>
+  <data name="Admin.Nav.SearchEmpty" xml:space="preserve">
+    <value>Совпадающее меню не найдено</value>
+  </data>
+  <data name="Admin.Nav.ConfigTitle" xml:space="preserve">
+    <value>Настройка меню</value>
+  </data>
+  <data name="Admin.Nav.ConfigHint" xml:space="preserve">
+    <value>Перетащите верхнеуровневые меню для изменения порядка; сохранение обновит значения сортировки</value>
+  </data>
+  <data name="Admin.Nav.ConfigSave" xml:space="preserve">
+    <value>Сохранить порядок</value>
+  </data>
+  <data name="Admin.Nav.ConfigSaved" xml:space="preserve">
+    <value>Порядок меню сохранён</value>
   </data>
   <data name="Admin.Layout.Welcome" xml:space="preserve">
     <value>Добро пожаловать,</value>
@@ -149,6 +291,7 @@
   <data name="Tenant.KeyExists" xml:space="preserve"><value>Правило сопоставления арендатора {0} уже существует</value></data>
   <data name="Tenant.SaveSuccess.Edit" xml:space="preserve"><value>Арендатор успешно обновлен</value></data>
   <data name="Tenant.SaveSuccess.Create" xml:space="preserve"><value>Арендатор успешно создан</value></data>
+  <data name="Tenant.PlatformAdminOnly" xml:space="preserve"><value>В режиме нескольких арендаторов управлять информацией об арендаторах может только администратор платформы!</value></data>
   <data name="Tenant.NotFound" xml:space="preserve"><value>Арендатор не найден</value></data>
   <data name="Tenant.SetInfoFailed" xml:space="preserve"><value>Не удалось установить информацию об арендаторе</value></data>
   <data name="Tenant.InitializeSuccess" xml:space="preserve"><value>Инициализация успешно завершена</value></data>
@@ -194,7 +337,7 @@
   <data name="Admin.Common.NoTime" xml:space="preserve"><value>Нет времени</value></data>
   <data name="Admin.Common.CopySuccess" xml:space="preserve"><value>Скопировано. Используйте Ctrl+V для вставки.</value></data>
   <data name="Admin.Home.Header" xml:space="preserve"><value>Панель администратора NeuCharFramework</value></data>
-  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>Текущее состояние хоста</value></data>
+  <data name="Admin.Home.HostMetrics" xml:space="preserve"><value>Монитор ресурсов хоста</value></data>
   <data name="Admin.Home.HostMetricsRealtime" xml:space="preserve"><value>В реальном времени · каждые 2 секунды</value></data>
   <data name="Admin.Home.HostCpu" xml:space="preserve"><value>CPU хоста (общая)</value></data>
   <data name="Admin.Home.HostCpuDetail" xml:space="preserve"><value>Общая загрузка хоста</value></data>
@@ -209,11 +352,27 @@
   <data name="Admin.Home.HostProcessCpu" xml:space="preserve"><value>CPU веб-процесса</value></data>
   <data name="Admin.Home.HostProcessWorkingSet" xml:space="preserve"><value>Рабочий набор памяти</value></data>
   <data name="Admin.Home.HostProcessUptime" xml:space="preserve"><value>Время работы</value></data>
-  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>Последние 30 замеров (только эта страница)</value></data>
+  <data name="Admin.Home.HostMetricsChart" xml:space="preserve"><value>Динамика ресурсов</value></data>
   <data name="Admin.Home.HostNetworkReceive" xml:space="preserve"><value>Приём</value></data>
   <data name="Admin.Home.HostNetworkSend" xml:space="preserve"><value>Передача</value></data>
   <data name="Admin.Home.HostMetricsInvalidResponse" xml:space="preserve"><value>API метрик хоста вернул недопустимые данные</value></data>
   <data name="Admin.Home.HostMetricsUnavailable" xml:space="preserve"><value>Метрики хоста временно недоступны</value></data>
+  <data name="Admin.Home.WebProcessMemory" xml:space="preserve"><value>Память процесса Web</value></data>
+  <data name="Admin.Home.ResourceMonitor" xml:space="preserve"><value>Монитор ресурсов (последние 24 часа)</value></data>
+  <data name="Admin.Home.ResourceMonitorRealtime" xml:space="preserve"><value>Запись каждые 10 с в фоне · кэш до 24 ч</value></data>
+  <data name="Admin.Home.ResourceMonitorHint" xml:space="preserve"><value>Выделите область или используйте колесо для масштаба; двойной щелчок сбрасывает диапазон</value></data>
+  <data name="Admin.Home.ResourceMonitorReset" xml:space="preserve"><value>Сбросить диапазон</value></data>
+  <data name="Admin.Home.ResourceMonitorRange" xml:space="preserve"><value>Диапазон времени</value></data>
+  <data name="Admin.Home.ResourceMonitor5Minutes" xml:space="preserve"><value>5 мин</value></data>
+  <data name="Admin.Home.ResourceMonitor30Minutes" xml:space="preserve"><value>30 мин</value></data>
+  <data name="Admin.Home.ResourceMonitor6Hours" xml:space="preserve"><value>6 ч</value></data>
+  <data name="Admin.Home.ResourceMonitor24Hours" xml:space="preserve"><value>24 ч</value></data>
+  <data name="Admin.Home.ResourceMonitorReturnLive" xml:space="preserve"><value>Вернуться к текущим данным</value></data>
+  <data name="Admin.Home.ResourceMonitorFollowing" xml:space="preserve"><value>Текущие данные</value></data>
+  <data name="Admin.Home.ResourceMonitorPaused" xml:space="preserve"><value>Просмотр на паузе (запись продолжается)</value></data>
+  <data name="Admin.Home.ResourceMonitorEmpty" xml:space="preserve"><value>Фоновая запись запускается (~10 с) или в этом диапазоне пока нет данных</value></data>
+  <data name="Admin.Home.ResourceMonitorUnavailable" xml:space="preserve"><value>Сейчас нельзя получить данные монитора ресурсов</value></data>
+  <data name="Admin.Home.ResourceMonitorNow" xml:space="preserve"><value>сейчас</value></data>
   <data name="Admin.Home.InstalledModules" xml:space="preserve"><value>Установленные модули</value></data>
   <data name="Admin.Home.PendingUpdates" xml:space="preserve"><value>Модули, ожидающие обновления</value></data>
   <data name="Admin.Home.NewModules" xml:space="preserve"><value>Найдены новые модули</value></data>
@@ -272,6 +431,17 @@
   <data name="Admin.Common.Error" xml:space="preserve"><value>Ошибка</value></data>
   <data name="AdminChat.Conversation" xml:space="preserve"><value>Диалог</value></data>
   <data name="AdminChat.History" xml:space="preserve"><value>История диалогов</value></data>
+  <data name="AdminChat.Search.Open" xml:space="preserve"><value>Поиск диалогов</value></data>
+  <data name="AdminChat.Search.Placeholder" xml:space="preserve"><value>Поиск среди неархивных диалогов</value></data>
+  <data name="AdminChat.Search.ChatTab" xml:space="preserve"><value>Диалоги</value></data>
+  <data name="AdminChat.Search.ToolTab" xml:space="preserve"><value>Вызовы</value></data>
+  <data name="AdminChat.Search.ToolPlaceholder" xml:space="preserve"><value>Поиск имени метода</value></data>
+  <data name="AdminChat.Search.ToolCall" xml:space="preserve"><value>Вызов метода</value></data>
+  <data name="AdminChat.Search.Empty" xml:space="preserve"><value>Нет подходящих неархивных диалогов</value></data>
+  <data name="AdminChat.Search.Hint" xml:space="preserve"><value>Ищет только неархивные диалоги, не более 10 результатов</value></data>
+  <data name="AdminChat.Search.ToolHint" xml:space="preserve"><value>Ищет имена методов, которые Harness реально вызывал в неархивных диалогах, не более 10 результатов</value></data>
+  <data name="AdminChat.Search.Failed" xml:space="preserve"><value>Не удалось выполнить поиск</value></data>
+  <data name="AdminChat.Search.TitleMatch" xml:space="preserve"><value>Совпадение заголовка</value></data>
   <data name="AdminChat.EmptyHistory" xml:space="preserve"><value>История диалогов отсутствует</value></data>
   <data name="AdminChat.SelectModel" xml:space="preserve"><value>Выберите модель ИИ</value></data>
   <data name="AdminChat.Manage" xml:space="preserve"><value>Управление</value></data>
@@ -286,6 +456,10 @@
   <data name="AdminChat.SendHint" xml:space="preserve"><value>Нажмите Ctrl + Enter или Cmd + Enter для отправки</value></data>
   <data name="AdminChat.Send" xml:space="preserve"><value>Отправить</value></data>
   <data name="AdminChat.Thinking" xml:space="preserve"><value>Обдумываю...</value></data>
+  <data name="AdminChat.ModeSimple" xml:space="preserve"><value>Chat</value></data>
+  <data name="AdminChat.ModeHarness" xml:space="preserve"><value>Харнесс</value></data>
+  <data name="AdminChat.HarnessSteps" xml:space="preserve"><value>Шаги харнесса</value></data>
+  <data name="AdminChat.TrajectoryNotFound" xml:space="preserve"><value>Траектория не найдена.</value></data>
   <data name="AdminChat.NewSessionDescription" xml:space="preserve"><value>Введите вопрос и выберите ссылочные модули для начала диалога</value></data>
   <data name="AdminChat.ComputePower" xml:space="preserve"><value>Модель ИИ</value></data>
   <data name="AdminChat.DeleteConfirm" xml:space="preserve"><value>Удалить этот диалог?</value></data>
@@ -485,6 +659,10 @@
   <data name="AdminChat.CreateSessionFailedRetry" xml:space="preserve"><value>Не удалось создать сеанс. Повторите попытку позже.</value></data>
   <data name="Admin.Login.Error.LoginFailed" xml:space="preserve"><value>Ошибка входа</value></data>
   <data name="Admin.Login.Error.LoginRetry" xml:space="preserve"><value>Ошибка входа, повторите попытку</value></data>
+  <data name="Admin.Login.CaptchaPlaceholder" xml:space="preserve"><value>Введите код подтверждения</value></data>
+  <data name="Admin.Login.CaptchaRequired" xml:space="preserve"><value>Введите код с изображения</value></data>
+  <data name="Admin.Login.CaptchaRefresh" xml:space="preserve"><value>Нажмите на изображение, чтобы обновить</value></data>
+  <data name="Admin.Login.Error.CaptchaInvalid" xml:space="preserve"><value>Неверный код подтверждения, повторите попытку</value></data>
   <data name="Admin.Login.Support" xml:space="preserve"><value>Техническая поддержка:</value></data>
   <data name="Admin.Login.VisitWebsite" xml:space="preserve"><value>Открыть официальный сайт</value></data>
   <data name="Admin.Session.InvalidUser" xml:space="preserve"><value>Текущая учетная запись недействительна, JWT нельзя продлить. Войдите снова.</value></data>
@@ -532,6 +710,114 @@
   <data name="AdminChat.NoMenuOrFunctions" xml:space="preserve"><value>В этом модуле нет доступных меню или функций.</value></data>
   <data name="AdminChat.NoMatchingModules" xml:space="preserve"><value>Совпадающие модули не найдены</value></data>
   <data name="AdminChat.ConfirmAdd" xml:space="preserve"><value>Подтвердить добавление</value></data>
+  <data name="Frontend.001" xml:space="preserve"><value>Модули расширения||Модули расширения</value></data>
+  <data name="Frontend.002" xml:space="preserve"><value>Главная||Главная</value></data>
+  <data name="Frontend.003" xml:space="preserve"><value>Пример работы с базой данных||Пример работы с базой данных</value></data>
+  <data name="Frontend.004" xml:space="preserve"><value>Добавить||Добавить</value></data>
+  <data name="Frontend.005" xml:space="preserve"><value>Добавить||Добавить</value></data>
+  <data name="Frontend.006" xml:space="preserve"><value>Изменить||Изменить</value></data>
+  <data name="Frontend.007" xml:space="preserve"><value>Удалить||Удалить</value></data>
+  <data name="Frontend.008" xml:space="preserve"><value>Отмена||Отмена</value></data>
+  <data name="Frontend.009" xml:space="preserve"><value>Подтвердить||Подтвердить</value></data>
+  <data name="Frontend.010" xml:space="preserve"><value>Подтвердить||Подтвердить</value></data>
+  <data name="Frontend.011" xml:space="preserve"><value>Сохранить||Сохранить</value></data>
+  <data name="Frontend.012" xml:space="preserve"><value>Закрыть||Закрыть</value></data>
+  <data name="Frontend.013" xml:space="preserve"><value>Назад||Назад</value></data>
+  <data name="Frontend.014" xml:space="preserve"><value>Поиск||Поиск</value></data>
+  <data name="Frontend.015" xml:space="preserve"><value>Поиск||Поиск</value></data>
+  <data name="Frontend.016" xml:space="preserve"><value>Сбросить||Сбросить</value></data>
+  <data name="Frontend.017" xml:space="preserve"><value>Обновить||Обновить</value></data>
+  <data name="Frontend.018" xml:space="preserve"><value>Действия||Действия</value></data>
+  <data name="Frontend.019" xml:space="preserve"><value>Имя||Имя</value></data>
+  <data name="Frontend.020" xml:space="preserve"><value>Тип||Тип</value></data>
+  <data name="Frontend.021" xml:space="preserve"><value>Состояние||Состояние</value></data>
+  <data name="Frontend.022" xml:space="preserve"><value>Примечания||Примечания</value></data>
+  <data name="Frontend.023" xml:space="preserve"><value>Описание||Описание</value></data>
+  <data name="Frontend.024" xml:space="preserve"><value>Сведения||Сведения</value></data>
+  <data name="Frontend.025" xml:space="preserve"><value>Настроить||Настроить</value></data>
+  <data name="Frontend.026" xml:space="preserve"><value>Управление||Управление</value></data>
+  <data name="Frontend.027" xml:space="preserve"><value>Список||Список</value></data>
+  <data name="Frontend.028" xml:space="preserve"><value>Загрузить||Загрузить</value></data>
+  <data name="Frontend.029" xml:space="preserve"><value>Скачать||Скачать</value></data>
+  <data name="Frontend.030" xml:space="preserve"><value>Импорт||Импорт</value></data>
+  <data name="Frontend.031" xml:space="preserve"><value>Экспорт||Экспорт</value></data>
+  <data name="Frontend.032" xml:space="preserve"><value>Включено||Включено</value></data>
+  <data name="Frontend.033" xml:space="preserve"><value>Отключено||Отключено</value></data>
+  <data name="Frontend.034" xml:space="preserve"><value>Все||Все</value></data>
+  <data name="Frontend.035" xml:space="preserve"><value>Нет данных||Нет данных</value></data>
+  <data name="Frontend.036" xml:space="preserve"><value>Нет содержимого||Нет содержимого</value></data>
+  <data name="Frontend.037" xml:space="preserve"><value>Выберите||Выберите</value></data>
+  <data name="Frontend.038" xml:space="preserve"><value>Заполните||Заполните</value></data>
+  <data name="Frontend.039" xml:space="preserve"><value>Введите||Введите</value></data>
+  <data name="Frontend.040" xml:space="preserve"><value>Время добавления||Время добавления</value></data>
+  <data name="Frontend.041" xml:space="preserve"><value>Время начала||Время начала</value></data>
+  <data name="Frontend.042" xml:space="preserve"><value>Время завершения||Время завершения</value></data>
+  <data name="Frontend.043" xml:space="preserve"><value>Создано||Создано</value></data>
+  <data name="Frontend.044" xml:space="preserve"><value>Время обновления||Время обновления</value></data>
+  <data name="Frontend.045" xml:space="preserve"><value>Имя файла||Имя файла</value></data>
+  <data name="Frontend.046" xml:space="preserve"><value>Размер файла||Размер файла</value></data>
+  <data name="Frontend.047" xml:space="preserve"><value>Время загрузки||Время загрузки</value></data>
+  <data name="Frontend.048" xml:space="preserve"><value>Удалить выбранные||Удалить выбранные</value></data>
+  <data name="Frontend.049" xml:space="preserve"><value>Добавить файл||Добавить файл</value></data>
+  <data name="Frontend.050" xml:space="preserve"><value>Выбрать файл||Выбрать файл</value></data>
+  <data name="Frontend.051" xml:space="preserve"><value>Назад||Назад</value></data>
+  <data name="Frontend.052" xml:space="preserve"><value>Вперед||Вперед</value></data>
+  <data name="Frontend.053" xml:space="preserve"><value>Успешно||Успешно</value></data>
+  <data name="Frontend.054" xml:space="preserve"><value>Ошибка||Ошибка</value></data>
+  <data name="Frontend.055" xml:space="preserve"><value>Успешно||Успешно</value></data>
+  <data name="Frontend.056" xml:space="preserve"><value>Ошибка||Ошибка</value></data>
+  <data name="Frontend.057" xml:space="preserve"><value>Ошибка загрузки||Ошибка загрузки</value></data>
+  <data name="Frontend.058" xml:space="preserve"><value>Модули успешно добавлены||Модули успешно добавлены</value></data>
+  <data name="Frontend.059" xml:space="preserve"><value>Ошибка добавления||Ошибка добавления</value></data>
+  <data name="Frontend.060" xml:space="preserve"><value>Успешно обновлено||Успешно обновлено</value></data>
+  <data name="Frontend.061" xml:space="preserve"><value>Ошибка изменения||Ошибка изменения</value></data>
+  <data name="Frontend.062" xml:space="preserve"><value>Удалено успешно||Удалено успешно</value></data>
+  <data name="Frontend.063" xml:space="preserve"><value>Ошибка удаления||Ошибка удаления</value></data>
+  <data name="Frontend.064" xml:space="preserve"><value>Загружено||Загружено</value></data>
+  <data name="Frontend.065" xml:space="preserve"><value>Ошибка загрузки||Ошибка загрузки</value></data>
+  <data name="Frontend.066" xml:space="preserve"><value>Скопировано||Скопировано</value></data>
+  <data name="Frontend.067" xml:space="preserve"><value>Ошибка копирования||Ошибка копирования</value></data>
+  <data name="Frontend.068" xml:space="preserve"><value>Уведомление||Уведомление</value></data>
+  <data name="Frontend.069" xml:space="preserve"><value>Предупреждение||Предупреждение</value></data>
+  <data name="Frontend.070" xml:space="preserve"><value>Ошибка||Ошибка</value></data>
+  <data name="Frontend.071" xml:space="preserve"><value>Да||Да</value></data>
+  <data name="Frontend.072" xml:space="preserve"><value>Нет||Нет</value></data>
+  <data name="Frontend.073" xml:space="preserve"><value>Включено||Включено</value></data>
+  <data name="Frontend.074" xml:space="preserve"><value>Неизвестно||Неизвестно</value></data>
+  <data name="Frontend.075" xml:space="preserve"><value>Не задано||Не задано</value></data>
+  <data name="Frontend.076" xml:space="preserve"><value>Нет записей||Нет записей</value></data>
+  <data name="Frontend.077" xml:space="preserve"><value>Введите ключевое слово||Введите ключевое слово</value></data>
+  <data name="Frontend.078" xml:space="preserve"><value>Выберите тип||Выберите тип</value></data>
+  <data name="Frontend.079" xml:space="preserve"><value>Выбрать статус||Выбрать статус</value></data>
+  <data name="Frontend.080" xml:space="preserve"><value>Создать||Создать</value></data>
+  <data name="Frontend.081" xml:space="preserve"><value>Отправить||Отправить</value></data>
+  <data name="Frontend.082" xml:space="preserve"><value>Просмотр||Просмотр</value></data>
+  <data name="Frontend.083" xml:space="preserve"><value>Сделать по умолчанию||Сделать по умолчанию</value></data>
+  <data name="Frontend.084" xml:space="preserve"><value>Тест||Тест</value></data>
+  <data name="Frontend.085" xml:space="preserve"><value>Подключение выполнено||Подключение выполнено</value></data>
+  <data name="Frontend.086" xml:space="preserve"><value>Ошибка подключения||Ошибка подключения</value></data>
+  <data name="Frontend.087" xml:space="preserve"><value>Пароль обязателен!||Пароль обязателен!</value></data>
+  <data name="Frontend.088" xml:space="preserve"><value>{0} повторяется.||{0} повторяется.</value></data>
+  <data name="Frontend.089" xml:space="preserve"><value>Администратор не может удалить себя!||Администратор не может удалить себя!</value></data>
+  <data name="Frontend.090" xml:space="preserve"><value>Администратор не существует!||Администратор не существует!</value></data>
+  <data name="Frontend.091" xml:space="preserve"><value>Успешно удалено!||Успешно удалено!</value></data>
+  <data name="Frontend.092" xml:space="preserve"><value>Файл журнала WeChat не существует:||Файл журнала WeChat не существует:</value></data>
+  <data name="Frontend.093" xml:space="preserve"><value>{0} должен быть длиннее 16 символов!||{0} должен быть длиннее 16 символов!</value></data>
+  <data name="Frontend.094" xml:space="preserve"><value>Текущий сеанс не связан ни с одним Модулем XNCF.||Текущий сеанс не связан ни с одним Модулем XNCF.</value></data>
+  <data name="Frontend.095" xml:space="preserve"><value>Подходящий Модуль не найден: «{0}». Сначала вызовите GetSessionModuleList, чтобы подтвердить модули текущего сеанса.||Подходящий Модуль не найден: «{0}». Сначала вызовите GetSessionModuleList, чтобы подтвердить модули текущего сеанса.</value></data>
+  <data name="Frontend.096" xml:space="preserve"><value>Модуль не найден: «{0}». Сначала вызовите GetSessionModuleList, чтобы подтвердить доступные модули.||Модуль не найден: «{0}». Сначала вызовите GetSessionModuleList, чтобы подтвердить доступные модули.</value></data>
+  <data name="Frontend.097" xml:space="preserve"><value>Регистрация времени выполнения Модуля {0} не найдена, поэтому нельзя прочитать сведения базы данных.||Регистрация времени выполнения Модуля {0} не найдена, поэтому нельзя прочитать сведения базы данных.</value></data>
+  <data name="Frontend.098" xml:space="preserve"><value>В системе нет зарегистрированных модулей.||В системе нет зарегистрированных модулей.</value></data>
+  <data name="Frontend.099" xml:space="preserve"><value>SenparcAiSetting не прочитан. Проверьте конфигурацию appsettings.json.||SenparcAiSetting не прочитан. Проверьте конфигурацию appsettings.json.</value></data>
+  <data name="Frontend.100" xml:space="preserve"><value>SenparcAiSetting.AiPlatform всё ещё UnSet. Сначала задайте доступную платформу в appsettings.json.||SenparcAiSetting.AiPlatform всё ещё UnSet. Сначала задайте доступную платформу в appsettings.json.</value></data>
+  <data name="Frontend.101" xml:space="preserve"><value>Модуль AIKernel не установлен или не включён, поэтому нельзя переключиться на указанную модель ИИ.||Модуль AIKernel не установлен или не включён, поэтому нельзя переключиться на указанную модель ИИ.</value></data>
+  <data name="Frontend.102" xml:space="preserve"><value>Не удалось разрешить AIModelService, поэтому указанную модель ИИ загрузить нельзя.||Не удалось разрешить AIModelService, поэтому указанную модель ИИ загрузить нельзя.</value></data>
+  <data name="Frontend.103" xml:space="preserve"><value>Выбранная модель ИИ не существует: {0}||Выбранная модель ИИ не существует: {0}</value></data>
+  <data name="Frontend.104" xml:space="preserve"><value>Выбранная модель ИИ не относится к типу Chat: {0}||Выбранная модель ИИ не относится к типу Chat: {0}</value></data>
+  <data name="Frontend.105" xml:space="preserve"><value>Текущий пользователь не вошёл в систему, продление невозможно.||Текущий пользователь не вошёл в систему, продление невозможно.</value></data>
+  <data name="Frontend.106" xml:space="preserve"><value>Сведения о пользователе не существуют!||Сведения о пользователе не существуют!</value></data>
+  <data name="Frontend.107" xml:space="preserve"><value>Имя пользователя не существует или пароль неверен: {0}!||Имя пользователя не существует или пароль неверен: {0}!</value></data>
+  <data name="Frontend.108" xml:space="preserve"><value>Имя пользователя не существует или пароль неверен!||Имя пользователя не существует или пароль неверен!</value></data>
   <data name="Admin.Home.AgentsOverview" xml:space="preserve"><value>Обзор работы Agents</value></data>
   <data name="Admin.Home.AgentsOverviewLive" xml:space="preserve"><value>В реальном времени</value></data>
   <data name="Admin.Home.AgentsManage" xml:space="preserve"><value>Управление Agents</value></data>
@@ -549,4 +835,39 @@
   <data name="Admin.Home.AgentsWaitingOrPaused" xml:space="preserve"><value>Ожидание / пауза</value></data>
   <data name="Admin.Home.AiQuickDescription" xml:space="preserve"><value>Используйте быстрый AI-чат в Footer, чтобы при необходимости открыть полный диалог и выбрать контекст.</value></data>
   <data name="Admin.Home.AiQuickDialog" xml:space="preserve"><value>Открыть быстрый чат</value></data>
+  <data name="Menu.ConfigMode" xml:space="preserve">
+    <value>Режим настройки</value>
+  </data>
+  <data name="Menu.ConfigModeExit" xml:space="preserve">
+    <value>Выйти из режима настройки</value>
+  </data>
+  <data name="Menu.ConfigModeTip" xml:space="preserve">
+    <value>Ниже перечислены все меню/страницы по иерархии (кнопки не сортируются). Перетаскивайте элементы одного уровня, чтобы изменить порядок, или введите число в поле «Сортировка» и нажмите Enter, чтобы переместить на эту позицию. После сохранения реально обновляются значения Sort и обновляется левое меню.</value>
+  </data>
+  <data name="Menu.ConfigSave" xml:space="preserve">
+    <value>Сохранить порядок</value>
+  </data>
+  <data name="Menu.ConfigSaveSuccess" xml:space="preserve">
+    <value>Порядок меню сохранён</value>
+  </data>
+  <data name="Menu.ConfigEmpty" xml:space="preserve">
+    <value>Нет меню или страниц для сортировки</value>
+  </data>
+  <data name="Admin.Footer.NeuBellWebHookSettings" xml:space="preserve"><value>Настройки WebHook</value></data>
+  <data name="DocHelp.Help" xml:space="preserve"><value>Справка</value></data>
+  <data name="DocHelp.Title" xml:space="preserve"><value>Документация функции</value></data>
+  <data name="DocHelp.OpenWindow" xml:space="preserve"><value>Открыть в новом окне</value></data>
+  <data name="DocHelp.Close" xml:space="preserve"><value>Закрыть</value></data>
+  <data name="DocHelp.Loading" xml:space="preserve"><value>Загрузка документации...</value></data>
+  <data name="DocHelp.Notice" xml:space="preserve"><value>Если документ пуст или заблокирован, откройте его в новом окне.</value></data>
+  <data name="DocHelp.LoadFailed" xml:space="preserve"><value>Ошибка загрузки или истекло время ожидания. Повторите попытку или откройте новое окно.</value></data>
+  <data name="DocHelp.Retry" xml:space="preserve"><value>Повторить</value></data>
+  <data name="DocHelp.InvalidTopic" xml:space="preserve"><value>Неверная настройка документации. Обратитесь к администратору.</value></data>
+
+  <data name="SystemMenu.AdministratorManagement" xml:space="preserve"><value>Administrator management</value></data>
+  <data name="SystemMenu.RoleManagement" xml:space="preserve"><value>Role management</value></data>
+  <data name="SystemMenu.SystemInfo" xml:space="preserve"><value>System information</value></data>
+  <data name="SystemMenu.TenantInfo" xml:space="preserve"><value>Tenant information</value></data>
+  <data name="SystemMenu.ExtensionModules" xml:space="preserve"><value>Extension modules</value></data>
+  <data name="SystemMenu.ModuleManagement" xml:space="preserve"><value>Module management</value></data>
 </root>

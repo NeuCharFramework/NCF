@@ -21,18 +21,20 @@ namespace Senparc.Areas.Admin.Domain.Models
             {
                 if (_rootDirectoryPath == null)
                 {
-                    var projectPath = Path.GetFullPath($"..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}", AppContext.BaseDirectory);//项目根目录
-
-                    var webPath = Path.GetFullPath($"..{Path.DirectorySeparatorChar}Senparc.Web",/*找到 Web目录，以获取统一的数据库连接字符串配置*/
-                                                   projectPath);
-                    if (Directory.Exists(webPath))
+                    for (var directory = new DirectoryInfo(AppContext.BaseDirectory); directory != null; directory = directory.Parent)
                     {
-                        _rootDirectoryPath = webPath;//优先使用Web统一配置
+                        foreach (var webPath in new[]
+                        {
+                            Path.Combine(directory.FullName, "Senparc.Web"),
+                            Path.Combine(directory.FullName, "tools", "NcfSimulatedSite", "Senparc.Web")
+                        })
+                        {
+                            if (!File.Exists(Path.Combine(webPath, "appsettings.json"))) continue;
+                            _rootDirectoryPath = webPath;
+                            return _rootDirectoryPath;
+                        }
                     }
-                    else
-                    {
-                        _rootDirectoryPath = projectPath;
-                    }
+                    throw new InvalidOperationException("设计时未找到 Senparc.Web 配置目录；拒绝回退到 DatabasePlant 示例数据库。");
                 }
                 return _rootDirectoryPath;
             }

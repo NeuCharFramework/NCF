@@ -50,6 +50,7 @@ App_Data/SenparcTraceLog
 /src/back-end/Senparc.Web/App_Data/*.Dat
 /src/back-end/Senparc.Web/App_Data/WeChat_OfficialAccount
 /src/back-end/Senparc.Web/App_Data/OpenAiImageTemp
+/src/back-end/Senparc.Web/App_Data/WeixinClawMedia
 
 /src/back-end/Senparc.Web.DatabasePlant/App_Data/SenparcTraceLog
 **/App_Data/SenparcTraceLog/*
@@ -74,3 +75,11 @@ src/back-end/Senparc.Web/App_Data/install-finished.txt
 /src/back-end/Senparc.Web/wwwroot/NcfPackages/*
 appsettings.Development.json
 src/back-end/Senparc.Web/App_Data/PromptRange/
+src/back-end/Senparc.Xncf.Accounts/App_Data/Database/NewDB.DB-shm
+src/back-end/Senparc.Xncf.Accounts/App_Data/Database/NewDB.DB-wal
+src/back-end/Senparc.Web/App_Data/AdminChatMemory/*
+src/back-end/Senparc.Web/App_Data/AIWorkspaces/*
+src/back-end/Senparc.Web/App_Data/WorkspaceAssetShares/*
+src/back-end/Senparc.Areas.Admin/.playwright-cli/*
+src/back-end/Senparc.Web/App_Data/DataProtection-Keys/*
+src/back-end/Senparc.Web/App_Data/Senparc.Xncf.AIKernel/*

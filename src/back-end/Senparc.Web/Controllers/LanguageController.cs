@@ -10,9 +10,13 @@
     修改标识：Senparc - 20260724
     修改描述：v0.34.0 完善站点本地化及内嵌 WebView 导航兼容性
 
+    修改标识：Senparc - 20261111
+    修改描述：v0.39.8 统一主站请求本地化与宿主注册兼容
+
 ----------------------------------------------------------------*/
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Senparc.Ncf.Utility.Helpers;
 
 namespace Senparc.Web.Controllers
 {
@@ -29,11 +33,11 @@ namespace Senparc.Web.Controllers
     {
         /// <summary>
         /// All cultures supported by the application.
-        /// When adding a new language, also add the culture code here and create the
-        /// corresponding *.resx files in Resources/ for each module.
+        /// The canonical list is owned by NcfLocalizationOptions. Add the culture
+        /// there and create the corresponding *.resx files for each module.
         /// </summary>
-        public static readonly string[] SupportedCultures =
-            new[] { "zh-CN", "en", "ja", "fr", "es", "ru" };
+        public static IReadOnlyList<string> SupportedCultures =>
+            NcfLocalizationOptions.SupportedCultures;
 
         /// <summary>
         /// Sets the language preference cookie and redirects to the return URL.
@@ -44,10 +48,11 @@ namespace Senparc.Web.Controllers
         public IActionResult Set(string culture, string returnUrl = "/")
         {
             // Validate culture to prevent injection; fall back to default if unknown
-            if (string.IsNullOrWhiteSpace(culture) || !Array.Exists(SupportedCultures, c => c == culture))
+            if (!NcfLocalizationOptions.TryNormalizeCulture(culture, out var normalizedCulture))
             {
-                culture = SupportedCultures[0]; // zh-CN
+                normalizedCulture = NcfLocalizationOptions.DefaultCulture;
             }
+            culture = normalizedCulture;
 
             // Set the culture cookie (name matches CookieRequestCultureProvider.DefaultCookieName)
             Response.Cookies.Append(

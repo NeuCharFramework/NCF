@@ -16,6 +16,9 @@
     修改标识：Senparc - 20260804
     修改描述：v0.5.0 适配数据库升级维护流程
 
+    修改标识：Senparc - 20261103
+    修改描述：v0.5.12 维护Index.cshtml 相关实现
+
 ----------------------------------------------------------------*/
 
 using Microsoft.AspNetCore.Http;
@@ -143,7 +146,7 @@ namespace Senparc.Xncf.Instraller.Pages
                     if (!installFinished && IsSystemInitialized())
                     {
                         SiteConfig.IsInstalling = false;
-                        SiteConfig.SetInstallFinished();
+                        await SiteConfig.SetInstallFinishedAsync();
                         return new RedirectResult("/");
                     }
 
@@ -243,7 +246,7 @@ namespace Senparc.Xncf.Instraller.Pages
 
             //撤销安装状态
             SiteConfig.IsInstalling = false;
-            SiteConfig.SetInstallFinished();
+            await SiteConfig.SetInstallFinishedAsync();
             TenantMiddleware.FirstRunAndInstalling = false;
 
             return Page();

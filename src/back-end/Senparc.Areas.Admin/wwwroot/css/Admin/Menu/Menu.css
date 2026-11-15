@@ -1,4 +1,4 @@
-﻿.menu-icons-grid{
+.menu-icons-grid{
     position:relative;
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
@@ -75,4 +75,175 @@
     line-height: 24px;
     text-align: center;
     margin-right: 8px;
+}
+/* ===== 菜单配置模式（一级菜单拖拽排序） ===== */
+.menu-config-mode {
+    background: #f5f7fa;
+    border: 1px solid #e4e7ed;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.menu-config-mode-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.menu-config-mode-title {
+    color: #606266;
+    font-size: 14px;
+}
+
+.menu-config-mode-title i {
+    color: #e6a23c;
+    margin-right: 6px;
+}
+
+.menu-config-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 720px;
+}
+
+.menu-config-item {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #e4e7ed;
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    cursor: move;
+    user-select: none;
+    transition: border-color .2s, box-shadow .2s, opacity .2s;
+}
+
+.menu-config-item:hover {
+    border-color: #c0c4cc;
+}
+
+.menu-config-item.is-dragging {
+    opacity: .45;
+}
+
+.menu-config-item.is-drag-over {
+    border-color: #409eff;
+    box-shadow: 0 0 0 2px rgba(64, 158, 255, .2);
+}
+
+.menu-config-drag-handle {
+    color: #909399;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.menu-config-icon {
+    margin-right: 10px;
+    color: #409eff;
+    font-size: 14px;
+    width: 16px;
+    text-align: center;
+}
+
+.menu-config-name {
+    flex: 1;
+    color: #303133;
+    font-size: 14px;
+}
+
+.menu-config-sort {
+    color: #909399;
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+.menu-config-actions .el-button + .el-button {
+    margin-left: 0;
+}
+
+.menu-config-empty {
+    color: #909399;
+    font-size: 13px;
+    padding: 20px 0;
+    text-align: center;
+}
+
+/* ===== 全层级“菜单/页面”排序（配置模式扩展） ===== */
+.menu-config-mode {
+    max-width: 860px;
+}
+
+.menu-config-body {
+    max-height: 62vh;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.menu-config-list {
+    max-width: 100%;
+}
+
+.menu-config-item {
+    cursor: grab;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.menu-config-item:active {
+    cursor: grabbing;
+}
+
+.menu-config-item.is-dragging {
+    opacity: .5;
+    border-style: dashed;
+    border-color: #409eff;
+}
+
+.menu-config-item.is-drag-over {
+    border-color: #409eff;
+    background-color: #ecf5ff;
+    box-shadow: 0 0 0 2px rgba(64, 158, 255, .2);
+}
+
+.menu-config-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 排序数字输入框 */
+.menu-config-sort-input {
+    width: 70px;
+    height: 24px;
+    line-height: 24px;
+    margin: 0 8px 0 auto;
+    padding: 0 4px;
+    text-align: center;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    outline: none;
+    font-size: 13px;
+    color: #606266;
+    background: #fff;
+    flex-shrink: 0;
+}
+
+.menu-config-sort-input:focus {
+    border-color: #409eff;
+}
+
+/* 上移/下移按钮列，右侧对齐且不换行 */
+.menu-config-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.menu-config-actions .el-button {
+    padding: 6px 3px;
 }

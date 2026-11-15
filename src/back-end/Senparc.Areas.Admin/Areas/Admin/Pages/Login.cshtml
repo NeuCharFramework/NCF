@@ -25,6 +25,12 @@
     </style>
 </head>
 <body>
+    <script>
+        if (window.top !== window.self) {
+            console.debug('[NCF][AdminTabs] 登录页跳出标签框架');
+            window.top.location.replace(window.location.href);
+        }
+    </script>
     <div class="content" id="app">
         <div style="position: absolute; top: 18px; right: 18px; z-index: 10; background: rgba(255,255,255,.9); border-radius: 6px; padding: 6px 10px;">
             <label for="ncf-login-lang" style="font-size: 12px; color: #606266; margin-right: 6px;">@AR["Admin.Language.SelectLanguage"]</label>
@@ -47,13 +53,19 @@
                     <div class="loginbox-textbox">
                         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" class="demo-ruleForm">
                             <el-form-item prop="user">
-                                <el-input v-model.number="ruleForm.user" placeholder="@AR["Admin.Login.UsernamePlaceholder"]"></el-input>
+                                <el-input v-model.number="ruleForm.user" placeholder="@AR["Admin.Login.UsernamePlaceholder"]" @@change="checkCaptchaRequired()"></el-input>
                             </el-form-item>
                             <el-form-item prop="tenant" v-if="enableMultiTenant">
                                 <el-input v-model="ruleForm.tenant" placeholder="@AR["Admin.Login.TenantPlaceholder"]"></el-input>
                             </el-form-item>
                             <el-form-item prop="pass">
                                 <el-input type="password" v-model="ruleForm.pass" placeholder="@AR["Admin.Login.PasswordPlaceholder"]" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="captcha" v-if="captchaRequired">
+                                <div style="display: flex; align-items: center;">
+                                    <el-input v-model="ruleForm.captcha" placeholder="@AR["Admin.Login.CaptchaPlaceholder"]" maxlength="6" style="flex: 1;"></el-input>
+                                    <img v-if="captchaImage" :src="captchaImage" title="@AR["Admin.Login.CaptchaRefresh"]" @@click="refreshCaptcha()" style="width: 120px; height: 40px; margin-left: 10px; cursor: pointer; border-radius: 3px;" />
+                                </div>
                             </el-form-item>
                             <el-button :loading="loading" style="width: 100%;" type="primary" @@click="submitForm('ruleForm')">@AR["Admin.Login.Submit"]</el-button>
                         </el-form>
@@ -66,6 +78,7 @@
             </div>
         </div>
     </div>
+    @await Html.PartialAsync("_DocHelpStandalone", "admin.login")
     <!--lib-->
     <script src="~/lib/vue/vue.js"></script>
     <script src="~/lib/element-ui_2.13.2/element.js"></script>
@@ -74,6 +87,9 @@
         window.ncfLoginI18n = {
             usernameRequired: '@AR["Admin.Login.Error.UsernameRequired"]',
             passwordRequired: '@AR["Admin.Login.Error.PasswordRequired"]',
+            captchaPlaceholder: '@AR["Admin.Login.CaptchaPlaceholder"]',
+            captchaRequired: '@AR["Admin.Login.CaptchaRequired"]',
+            captchaRefresh: '@AR["Admin.Login.CaptchaRefresh"]',
             loginFailed: '@AR["Admin.Login.Error.LoginFailed"]',
             loginRetry: '@AR["Admin.Login.Error.LoginRetry"]'
         };

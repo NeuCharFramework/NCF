@@ -1,3 +1,26 @@
+/*----------------------------------------------------------------
+    Copyright (C) 2026 Senparc
+  
+    文件名：AdminChatSession.cs
+    文件功能描述：后台对话会话
+    
+    
+    创建标识：Senparc - 20260325
+    
+    修改标识：Senparc - 20261021
+    修改描述：v0.11.1 会话关联工作区
+
+    修改标识：Senparc - 20261103
+    修改描述：保存分类内会话排序
+
+    修改标识：Senparc - 20261103
+    修改描述：v0.12.15 完善后台聊天会话管理与排序
+
+    修改标识：Senparc - 20261106
+    修改描述：持久化非当前会话的未读提醒
+
+----------------------------------------------------------------*/
+
 using Senparc.Ncf.Core.Models;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -35,6 +58,26 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
         /// </summary>
         public DateTime LastMessageTime { get; private set; }
 
+        [MaxLength(64)]
+        public string WorkspaceId { get; private set; }
+
+        public bool WorkspaceWriteEnabled { get; private set; }
+
+        public bool WorkspaceCliEnabled { get; private set; }
+
+        public int? SortOrder { get; private set; }
+
+        /// <summary>
+        /// 后台任务已在用户未打开该会话时完成，等待阅读。
+        /// </summary>
+        public bool HasUnread { get; private set; }
+
+        public void SetSortOrder(int sortOrder)
+        {
+            if (sortOrder < 0) throw new ArgumentOutOfRangeException(nameof(sortOrder));
+            SortOrder = sortOrder;
+        }
+
         /// <summary>
         /// 私有构造函数（供 EF Core 使用）
         /// </summary>
@@ -45,12 +88,20 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
         /// </summary>
         /// <param name="title">会话标题</param>
         /// <param name="userId">用户ID</param>
-        public AdminChatSession(string title, int userId)
+        public AdminChatSession(
+            string title,
+            int userId,
+            string workspaceId = null,
+            bool workspaceWriteEnabled = false,
+            bool workspaceCliEnabled = false)
         {
             Title = title?.Length > 150 ? title.Substring(0, 150) : title ?? "新对话";
             UserId = userId;
             Status = ChatSessionStatus.Active;
             LastMessageTime = DateTime.Now;
+            WorkspaceId = string.IsNullOrWhiteSpace(workspaceId) ? null : workspaceId.Trim();
+            WorkspaceWriteEnabled = WorkspaceId != null && workspaceWriteEnabled;
+            WorkspaceCliEnabled = WorkspaceId != null && workspaceCliEnabled;
         }
 
         /// <summary>
@@ -75,11 +126,22 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
         }
 
         /// <summary>
+        /// 记录或清除未读提醒。正在查看的会话由调用方保持为已读。
+        /// </summary>
+        public void SetUnread(bool unread)
+        {
+            if (HasUnread == unread) return;
+            HasUnread = unread;
+            base.SetUpdateTime();
+        }
+
+        /// <summary>
         /// 归档会话
         /// </summary>
         public void Archive()
         {
             Status = ChatSessionStatus.Archived;
+            HasUnread = false;
             base.SetUpdateTime();
         }
 
@@ -89,6 +151,7 @@ namespace Senparc.Areas.Admin.Domain.Models.DatabaseModel
         public void Delete()
         {
             Status = ChatSessionStatus.Deleted;
+            HasUnread = false;
             base.SetUpdateTime();
         }
 

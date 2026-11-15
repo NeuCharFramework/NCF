@@ -284,11 +284,11 @@
 }
 
 .module-main {
-    padding: 12px 20px 24px;
+    padding: 16px 24px 32px;
 }
 
 .module-mode-tabs > .el-tabs__header {
-    margin-bottom: 12px;
+    margin-bottom: 18px;
 }
 
 .pivot-empty {
@@ -327,12 +327,87 @@
     min-height: 360px;
 }
 
+.pivot-stat-grid {
+    display: grid;
+    gap: 10px;
+}
+
+.pivot-stat-item {
+    min-height: 76px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid #ebeef5;
+    border-radius: 6px;
+}
+
+.pivot-stat-item span,
+.pivot-stat-item small {
+    display: block;
+    color: #909399;
+    font-size: 12px;
+}
+
+.pivot-stat-item strong {
+    display: block;
+    margin: 6px 0 2px;
+    color: #303133;
+    font-size: 20px;
+    line-height: 1.1;
+}
+
+.pivot-stat-item strong.is-danger {
+    color: #f56c6c;
+}
+
+.pivot-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin: 12px 0 16px;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #ebeef5;
+}
+
+.pivot-filter-bar .el-select {
+    width: 170px;
+}
+
+.pivot-stat-grid-module {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    margin: 14px 0;
+}
+
+.pivot-panel-tabs {
+    margin-top: 20px;
+}
+
+.pivot-panel-tabs > .el-tabs__header {
+    margin-bottom: 0;
+}
+
+.pivot-panel-tabs > .el-tabs__header .el-tabs__item {
+    height: 58px;
+    padding: 0 22px;
+    line-height: 58px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.pivot-panel-description {
+    margin: 22px 0 0;
+    color: #909399;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
 .pivot-toolbar {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 16px;
-    margin: 12px 0;
+    margin: 20px 0;
 }
 
 .pivot-toolbar h3,
@@ -342,8 +417,15 @@
     margin: 0;
 }
 
+.pivot-toolbar h3 {
+    color: #303133;
+    font-size: 20px;
+    line-height: 1.4;
+}
+
 .pivot-toolbar p {
-    margin-top: 6px;
+    margin-top: 8px;
+    line-height: 1.6;
 }
 
 .pivot-toolbar-actions {
@@ -355,29 +437,30 @@
 .pivot-grid {
     display: grid;
     grid-template-columns: repeat(var(--pivot-columns, 2), minmax(0, 1fr));
-    gap: 16px;
+    gap: 20px;
+    margin-top: 20px;
 }
 
 .pivot-section {
     min-width: 0;
-    padding: 16px;
+    padding: 20px;
     background: #fff;
     border: 1px solid #ebeef5;
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
 .pivot-section h4 {
-    padding-bottom: 10px;
+    padding-bottom: 12px;
     color: #303133;
     border-bottom: 1px solid #f0f2f5;
 }
 
 .pivot-function-card {
-    margin-top: 12px;
-    padding: 14px;
+    margin-top: 16px;
+    padding: 16px;
     border: 1px solid #ebeef5;
     border-left: 4px solid #409eff;
-    border-radius: 7px;
+    border-radius: 6px;
     background: #fff;
 }
 
@@ -396,7 +479,7 @@
 }
 
 .pivot-parameter {
-    margin-top: 12px;
+    margin-top: 16px;
 }
 
 .pivot-parameter label,
@@ -427,9 +510,22 @@
 
 .pivot-function-actions {
     display: flex;
-    justify-content: flex-end;
+    align-items: flex-end;
+    justify-content: space-between;
     gap: 8px;
-    margin-top: 14px;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid #f0f2f5;
+}
+
+.pivot-function-actions small,
+.pivot-workflow-link {
+    display: block;
+    color: #909399;
+}
+
+.pivot-workflow-link {
+    color: #409eff;
 }
 
 .chat-agent-body {
@@ -452,6 +548,10 @@
     .pivot-grid {
         grid-template-columns: 1fr;
     }
+
+    .pivot-stat-grid-module {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 720px) {
@@ -468,6 +568,10 @@
         line-height: normal;
     }
 
+    .module-main {
+        padding: 12px 12px 24px;
+    }
+
     .module-summary-bar {
         grid-template-columns: 1fr;
     }
@@ -475,6 +579,18 @@
     .module-summary-actions {
         grid-row: auto;
         grid-column: auto;
+    }
+
+    .pivot-stat-grid-module {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .pivot-section {
+        padding: 16px;
+    }
+
+    .pivot-panel-tabs > .el-tabs__header .el-tabs__item {
+        padding: 0 16px;
     }
 }
 

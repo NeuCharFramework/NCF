@@ -7,6 +7,8 @@
 
 using Senparc.Areas.Admin.Domain.Services;
 using Senparc.Ncf.XncfBase;
+using Senparc.Ncf.XncfBase.Functions;
+using System.Text.Json;
 
 namespace Senparc.Areas.Admin.Tests.Domain.Services;
 
@@ -69,8 +71,174 @@ public class NeuCharPivotServiceTests
         var layout = CreateService().NormalizeLayout("not-json", CreateCatalog());
 
         Assert.AreEqual(1, layout.Sections.Count);
+        Assert.AreEqual(1, layout.Panels.Count);
+        Assert.AreEqual("shortcuts", layout.Panels[0].Key);
         Assert.AreEqual("快捷操作", layout.Sections[0].Title);
         Assert.AreEqual(2, layout.Sections[0].Functions.Count);
+    }
+
+    [TestMethod]
+    public void NormalizeLayout_PanelsAndRequiredOnlySelection_ShouldKeepMultiplePanelsAndUsableParameters()
+    {
+        const string candidate =
+            """
+            {
+              "title": "Operations",
+              "panels": [
+                {
+                  "key": "shortcuts",
+                  "title": "快捷操作",
+                  "type": "shortcuts",
+                  "sections": [
+                    {
+                      "title": "发送",
+                      "functions": [
+                        {
+                          "functionKey": "send-message",
+                          "exposedParameters": ["requiredText"]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "key": "health",
+                  "title": "健康状态",
+                  "type": "summary",
+                  "sections": [
+                    {
+                      "title": "检查",
+                      "functions": [
+                        { "functionKey": "health-check" }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+            """;
+
+        var layout = CreateService().NormalizeLayout(candidate, CreateCatalog());
+
+        Assert.AreEqual(2, layout.Panels.Count);
+        Assert.AreEqual("summary", layout.Panels[1].Type);
+        var send = layout.Panels[0].Sections.SelectMany(section => section.Functions)
+            .Single(function => function.FunctionKey == "send-message");
+        CollectionAssert.Contains(send.ExposedParameters, "optional");
+        Assert.AreEqual(2, layout.Panels.SelectMany(panel => panel.Sections)
+            .SelectMany(section => section.Functions)
+            .Select(function => function.FunctionKey)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Count());
+    }
+
+    [TestMethod]
+    public void GetCurrentParameterSchemaJson_ShouldRefreshLiveSelectionOptions()
+    {
+        var service = CreateService();
+        var function = new Senparc.Areas.Admin.Domain.Models.DatabaseModel.NeuCharPivotFunction(
+            1,
+            "sandbox",
+            "create",
+            "创建沙箱",
+            "按模板创建沙箱");
+        function.Update(
+            "创建沙箱",
+            "按模板创建沙箱",
+            """
+            [
+              {
+                "name": "TemplateKey",
+                "title": "模板",
+                "required": true,
+                "parameterType": 1,
+                "options": [
+                  { "value": "python", "text": "Python Exec" }
+                ]
+              }
+            ]
+            """,
+            "{\"TemplateKey\":\"python\"}",
+            "1.0.0",
+            0,
+            true);
+
+        var descriptor = new NeuCharFunctionDescriptor(
+            "sandbox",
+            "Sandbox",
+            "1.0.0",
+            true,
+            "create",
+            "创建沙箱",
+            "按模板创建沙箱",
+            new[]
+            {
+                new FunctionParameterInfo
+                {
+                    Name = "Number1",
+                    Title = "数字 1",
+                    IsRequired = true,
+                    ParameterType = ParameterType.Text,
+                    SystemType = "Int32"
+                },
+                new FunctionParameterInfo
+                {
+                    Name = "Number2",
+                    Title = "数字 2",
+                    IsRequired = true,
+                    ParameterType = ParameterType.Text,
+                    SystemType = "Int32"
+                },
+                new FunctionParameterInfo
+                {
+                    Name = "TemplateKey",
+                    Title = "模板",
+                    IsRequired = true,
+                    ParameterType = ParameterType.DropDownList,
+                    SystemType = "String",
+                    SelectionList = new SelectionList(
+                        SelectionType.DropDownList,
+                        new[]
+                        {
+                            new SelectionItem("python", "Python Exec"),
+                            new SelectionItem("csharp", "C# Exec"),
+                            new SelectionItem("jupyter-python", "JupyterLab Python"),
+                            new SelectionItem("jupyter-csharp", "JupyterLab C#")
+                        })
+                },
+                new FunctionParameterInfo
+                {
+                    Name = "Operator",
+                    Title = "操作符",
+                    IsRequired = true,
+                    ParameterType = ParameterType.DropDownList,
+                    SystemType = "String",
+                    SelectionList = new SelectionList(
+                        SelectionType.DropDownList,
+                        new[]
+                        {
+                            new SelectionItem("+", "加"),
+                            new SelectionItem("-", "减")
+                        })
+                }
+            });
+
+        var schemaJson = service.GetCurrentParameterSchemaJson(
+            function,
+            new Dictionary<string, NeuCharFunctionDescriptor>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["create"] = descriptor
+            });
+        using var document = JsonDocument.Parse(schemaJson);
+        var template = document.RootElement
+            .EnumerateArray()
+            .Single(parameter => parameter.GetProperty("name").GetString() == "TemplateKey");
+        var options = template.GetProperty("options");
+
+        Assert.AreEqual(4, options.GetArrayLength());
+        Assert.AreEqual("jupyter-csharp", options[3].GetProperty("value").GetString());
+        Assert.IsTrue(schemaJson.Contains("\"name\":\"Number1\"", StringComparison.Ordinal));
+        Assert.IsTrue(schemaJson.Contains("\"name\":\"Operator\"", StringComparison.Ordinal));
     }
 
     private static NeuCharPivotService CreateService() => new(null!, null!, null!, null!);

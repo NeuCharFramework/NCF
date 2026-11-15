@@ -6,6 +6,9 @@ window.ChatLauncherMixin = {
       aiModelStorageKey: 'ncf.admin.chat.sessionAiModelMap',
       chatInputText: '',
       launcherAiModelId: 0,
+      launcherChatMode: 'harness',
+      launcherUseMemory: false,
+      launcherMemoryMode: 0,
       sessionAiModelMap: {},
       selectedModules: [],
       moduleSelectorVisible: false,
@@ -17,6 +20,14 @@ window.ChatLauncherMixin = {
       availableModules: [],
       selectedModuleUids: [],
       availableWorkflows: [],
+      availableWorkspaces: [],
+      selectedWorkspaceId: '',
+      workspaceWriteEnabled: false,
+      workspaceCliEnabled: false,
+      loadingWorkspaceOptions: false,
+      createWorkspaceDialogVisible: false,
+      createWorkspaceName: '',
+      creatingWorkspace: false,
       selectedWorkflowIds: [],
       selectedWorkflows: [],
       loadingModuleOptions: false,
@@ -120,6 +131,17 @@ window.ChatLauncherMixin = {
         .filter((item) => this.selectedWorkflowIds.includes(item.id))
         .length;
       return selectedCount > 0 && selectedCount < this.filteredAvailableWorkflows.length;
+    },
+    referenceSelectionCount() {
+      return (this.selectedModules || []).length + (this.selectedWorkflows || []).length;
+    },
+    selectedWorkspaceLabel() {
+      if (!this.selectedWorkspaceId) {
+        return '添加 Workspace';
+      }
+
+      const workspace = (this.availableWorkspaces || []).find(item => String(item.id) === String(this.selectedWorkspaceId));
+      return workspace ? workspace.name : '已选择 Workspace';
     }
   },
   mounted() {
@@ -301,6 +323,8 @@ window.ChatLauncherMixin = {
     },
 
     handleLauncherInputKeydown(event) {
+      if (typeof this.handleWorkspaceMentionKeydown === 'function'
+        && this.handleWorkspaceMentionKeydown(event, 'chatInputText')) return;
       if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
         event.preventDefault();
         this.startChatSession();
@@ -356,6 +380,59 @@ window.ChatLauncherMixin = {
       } finally {
         this.loadingModuleOptions = false;
         this.loadingWorkflowOptions = false;
+      }
+    },
+
+    async ensureWorkspaceOptionsLoaded() {
+      if (!this.isSuperAdmin || this.availableWorkspaces.length > 0) {
+        return;
+      }
+
+      this.loadingWorkspaceOptions = true;
+      try {
+        const response = await service.get('/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.GetWorkspaceOptionsAsync');
+        this.availableWorkspaces = response.data && response.data.success && response.data.data
+          ? response.data.data.workspaces || []
+          : [];
+      } catch (error) {
+        console.error('加载 Workspace 列表失败:', error);
+        this.$message.error('加载 Workspace 列表失败。');
+      } finally {
+        this.loadingWorkspaceOptions = false;
+      }
+    },
+
+    async createWorkspace() {
+      if (!this.isSuperAdmin) {
+        return;
+      }
+
+      this.createWorkspaceName = '';
+      this.createWorkspaceDialogVisible = true;
+    },
+
+    async submitCreateWorkspace() {
+      if (!this.isSuperAdmin || !this.createWorkspaceName || !this.createWorkspaceName.trim()) {
+        this.$message.warning('请输入 Workspace 名称。');
+        return;
+      }
+
+      this.creatingWorkspace = true;
+      try {
+        const response = await service.post('/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.CreateWorkspaceAsync', { name: this.createWorkspaceName.trim() });
+        if (response.data && response.data.success && response.data.data) {
+          this.availableWorkspaces.unshift(response.data.data);
+          this.selectedWorkspaceId = response.data.data.id;
+          this.createWorkspaceDialogVisible = false;
+          this.$message.success('Workspace 创建成功。');
+        } else {
+          this.$message.error((response.data && response.data.errorMessage) || '创建 Workspace 失败。');
+        }
+      } catch (error) {
+        console.error('创建 Workspace 失败:', error);
+        this.$message.error('创建 Workspace 失败。');
+      } finally {
+        this.creatingWorkspace = false;
       }
     },
 
@@ -432,26 +509,52 @@ window.ChatLauncherMixin = {
       this.selectedWorkflows = [];
     },
 
+    launcherSessionRequest(title) {
+      return {
+        initialMessage: '', title,
+        aiModelId: this.normalizeAiModelId(this.launcherAiModelId),
+        moduleUids: this.selectedModules.map(item => item.uid),
+        workflowIds: this.selectedWorkflows.map(item => item.id),
+        mode: this.launcherChatMode === 'harness' ? 1 : 0,
+        useMemory: !!this.launcherUseMemory,
+        memoryMode: this.launcherMemoryMode,
+        workspaceId: this.isSuperAdmin ? this.selectedWorkspaceId || null : null,
+        workspaceWriteEnabled: this.isSuperAdmin && !!this.selectedWorkspaceId && this.workspaceWriteEnabled,
+        workspaceCliEnabled: this.isSuperAdmin && !!this.selectedWorkspaceId && this.workspaceCliEnabled
+      };
+    },
+
     async startChatSession() {
-      if (!this.chatInputText || this.chatInputText.trim().length === 0) {
+      if (typeof this.closeWorkspaceMention === 'function') this.closeWorkspaceMention();
+      if ((!this.chatInputText || this.chatInputText.trim().length === 0)
+        && (!this.pendingAttachments || this.pendingAttachments.length === 0)) {
         this.$message.warning(ncfT('AdminChat.InputRequired'));
         return;
       }
 
       this.isCreatingSession = true;
       try {
-        const requestData = {
-          initialMessage: this.chatInputText.trim(),
-          aiModelId: this.normalizeAiModelId(this.launcherAiModelId),
-          moduleUids: this.selectedModules.map((item) => item.uid),
-          workflowIds: this.selectedWorkflows.map((item) => item.id)
-        };
+        const references = typeof this.capturePromptReferences === 'function'
+          ? this.capturePromptReferences('promptLauncherInput') : [];
+        const initialMessage = references.length ? this.chatInputText : this.chatInputText.trim();
+        const requestData = this.launcherSessionRequest(initialMessage);
 
         const response = await service.post('/api/Senparc.Areas.Admin/AdminChatAppService/Areas.Admin_AdminChatAppService.CreateSessionAsync', requestData);
         if (response.data && response.data.success && response.data.data) {
           const sessionId = response.data.data.sessionId;
           this.setSessionAiModelId(sessionId, this.launcherAiModelId);
-          window.location.href = '/Admin/AdminChat/Chat?sessionId=' + sessionId;
+          const pendingMessage = references.length ? initialMessage : response.data.data.initialMessage || initialMessage;
+          sessionStorage.setItem(`ncf.admin.chat.initialMessage.${sessionId}`, pendingMessage);
+          if (typeof this.openCreatedChatSession === 'function') {
+            await this.openCreatedChatSession(sessionId, pendingMessage, references);
+            return;
+          }
+          if (references.length) {
+            sessionStorage.setItem(`ncf.admin.chat.initialReferences.${sessionId}`, JSON.stringify(references));
+          }
+          window.location.href = '/Admin/AdminChat/Chat?sessionId=' + sessionId
+            + '&mode=' + (this.launcherChatMode === 'harness' ? '1' : '0')
+            + '#session-' + sessionId;
           return;
         }
 

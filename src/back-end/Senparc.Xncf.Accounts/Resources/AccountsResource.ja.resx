@@ -14,4 +14,5 @@
   <data name="Accounts.Title" xml:space="preserve"><value>Accounts ホーム</value></data>
   <data name="Accounts.Register.MenuName" xml:space="preserve"><value>ユーザー管理</value></data>
   <data name="Accounts.Register.Description" xml:space="preserve"><value>登録ユーザー管理</value></data>
+
 </root>

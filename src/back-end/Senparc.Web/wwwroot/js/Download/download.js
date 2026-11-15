@@ -189,45 +189,117 @@
         return safeRemoteUrl(asset.browser_download_url, root.dataset.releasesUrl);
     }
 
-    async function initialize() {
-        var root = document.getElementById("ncf-download-page");
-        if (!root) {
+    function normalizeSourceMode(value) {
+        return value === "local" || value === "github" ? value : "auto";
+    }
+
+    function readSourceMode(root) {
+        var fallback = normalizeSourceMode(root.dataset.sourceMode);
+        if (typeof localStorage === "undefined") {
+            return fallback;
+        }
+        try {
+            return normalizeSourceMode(localStorage.getItem("ncf-download-source") || fallback);
+        } catch (_) {
+            return fallback;
+        }
+    }
+
+    function saveSourceMode(mode) {
+        if (typeof localStorage === "undefined") {
             return;
         }
+        try {
+            localStorage.setItem("ncf-download-source", normalizeSourceMode(mode));
+        } catch (_) {
+            // Private browsing can disable localStorage; the current choice still works.
+        }
+    }
 
-        var device = await detectDevice();
+    function selectRelease(localRelease, githubRelease, sourceMode) {
+        var mode = normalizeSourceMode(sourceMode);
+        if (mode === "local") {
+            return { release: localRelease, source: localRelease ? "local" : null };
+        }
+        if (mode === "github") {
+            return { release: githubRelease, source: githubRelease ? "github" : null };
+        }
+        if (localRelease && (!githubRelease || localRelease.tag_name === githubRelease.tag_name)) {
+            return { release: localRelease, source: "local" };
+        }
+        return {
+            release: githubRelease || localRelease,
+            source: githubRelease ? "github" : localRelease ? "local" : null
+        };
+    }
+
+    function isMd5(value) {
+        return typeof value === "string" && /^[a-f0-9]{32}$/i.test(value);
+    }
+
+    function findAssetByName(release, assetName) {
+        if (!isRelease(release) || !assetName) {
+            return null;
+        }
+        return release.assets.find(function (asset) {
+            return asset && asset.name === assetName;
+        }) || null;
+    }
+
+    function getAssetMd5(asset, localRelease) {
+        if (asset && isMd5(asset.md5)) {
+            return asset.md5.toLowerCase();
+        }
+        var localAsset = findAssetByName(localRelease, asset && asset.name);
+        return localAsset && isMd5(localAsset.md5) ? localAsset.md5.toLowerCase() : null;
+    }
+
+    function textWithLabel(root, labelKey, value, fallback) {
+        return text(root, labelKey, fallback) + ": " + (value || text(root, "md5Unavailable", "Unavailable"));
+    }
+
+    function updateLink(link, url, isAvailable, root) {
+        link.href = url || root.dataset.releasesUrl;
+        if (!isAvailable) {
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            return;
+        }
+        link.removeAttribute("target");
+        link.removeAttribute("rel");
+    }
+
+    function renderSelection(root, state) {
         var detectedDevice = document.getElementById("detected-device");
         var latestVersion = document.getElementById("latest-version");
         var downloadSource = document.getElementById("download-source");
+        var latestMd5 = document.getElementById("latest-md5");
         var recommendedLink = document.getElementById("recommended-download");
         var recommendedText = document.getElementById("recommended-download-text");
-
-        detectedDevice.textContent = platformName(root, device.platform) + " · " +
-            (device.architecture === "arm64" ? text(root, "arm64", "ARM64") : text(root, "x64", "x64")) +
-            (device.isEstimated ? " · " + text(root, "estimated", "estimated") : "");
-
-        var results = await Promise.allSettled([
-            fetchJson(root.dataset.localReleaseUrl),
-            fetchJson(root.dataset.githubReleaseUrl)
-        ]);
-        var localRelease = results[0].status === "fulfilled" && isRelease(results[0].value) ? results[0].value : null;
-        var githubRelease = results[1].status === "fulfilled" && isRelease(results[1].value) ? results[1].value : null;
-        var useLocal = !!(localRelease && (!githubRelease || localRelease.tag_name === githubRelease.tag_name));
-        var release = githubRelease || localRelease;
+        var selection = selectRelease(state.localRelease, state.githubRelease, state.sourceMode);
+        var release = selection.release;
 
         if (!release) {
-            detectedDevice.textContent = text(root, "detected", "Detected") + ": " + detectedDevice.textContent;
+            latestVersion.textContent = "—";
             downloadSource.textContent = text(root, "sourceUnavailable", "Unavailable");
+            latestMd5.textContent = textWithLabel(root, "md5Label", null, "MD5");
             recommendedText.textContent = text(root, "unavailable", "View all releases");
-            recommendedLink.href = root.dataset.releasesUrl;
-            recommendedLink.target = "_blank";
-            recommendedLink.rel = "noopener noreferrer";
+            updateLink(recommendedLink, root.dataset.releasesUrl, false, root);
             recommendedLink.classList.remove("is-loading");
+            packageKeys.forEach(function (key) {
+                var card = root.querySelector('[data-package-key="' + key + '"]');
+                if (!card) {
+                    return;
+                }
+                updateLink(card.querySelector("[data-package-link]"), root.dataset.releasesUrl, false, root);
+                card.querySelector("[data-package-size]").textContent = text(root, "unavailable", "View releases");
+                card.querySelector("[data-package-md5]").textContent = textWithLabel(root, "md5Label", null, "MD5");
+            });
             return;
         }
 
         latestVersion.textContent = release.tag_name;
-        downloadSource.textContent = useLocal
+        downloadSource.textContent = selection.source === "local"
             ? text(root, "sourceLocal", "Local mirror")
             : text(root, "sourceGithub", "GitHub Releases");
 
@@ -239,24 +311,71 @@
             var asset = findAsset(release, key);
             var link = card.querySelector("[data-package-link]");
             var size = card.querySelector("[data-package-size]");
-            link.href = assetUrl(asset, useLocal, root, release);
+            var fingerprint = card.querySelector("[data-package-md5]");
+            var md5 = getAssetMd5(asset, state.localRelease);
+            updateLink(link, assetUrl(asset, selection.source === "local", root, release), !!asset, root);
             size.textContent = asset ? formatBytes(asset.size) : text(root, "unavailable", "View releases");
-            if (key === device.key) {
-                card.classList.add("is-recommended");
-            }
+            fingerprint.textContent = textWithLabel(root, "md5Label", md5, "MD5");
+            fingerprint.title = md5 || text(root, "md5Unavailable", "Unavailable");
+            card.classList.toggle("is-recommended", key === state.device.key);
         });
 
-        var recommendedAsset = findAsset(release, device.key);
-        recommendedLink.href = assetUrl(recommendedAsset, useLocal, root, release);
+        var recommendedAsset = findAsset(release, state.device.key);
+        var recommendedAssetMd5 = getAssetMd5(recommendedAsset, state.localRelease);
+        latestMd5.textContent = textWithLabel(root, "md5Label", recommendedAssetMd5, "MD5");
+        latestMd5.title = recommendedAssetMd5 || text(root, "md5Unavailable", "Unavailable");
+        updateLink(
+            recommendedLink,
+            assetUrl(recommendedAsset, selection.source === "local", root, release),
+            !!recommendedAsset,
+            root);
         recommendedText.textContent = recommendedAsset
-            ? text(root, "download", "Download") + " " + platformName(root, device.platform) + " " +
-                (device.architecture === "arm64" ? text(root, "arm64", "ARM64") : text(root, "x64", "x64"))
+            ? text(root, "download", "Download") + " " + platformName(root, state.device.platform) + " " +
+                (state.device.architecture === "arm64" ? text(root, "arm64", "ARM64") : text(root, "x64", "x64"))
             : text(root, "unavailable", "View all releases");
-        if (!recommendedAsset) {
-            recommendedLink.target = "_blank";
-            recommendedLink.rel = "noopener noreferrer";
-        }
         recommendedLink.classList.remove("is-loading");
+    }
+
+    async function initialize() {
+        var root = document.getElementById("ncf-download-page");
+        if (!root) {
+            return;
+        }
+
+        var device = await detectDevice();
+        var detectedDevice = document.getElementById("detected-device");
+        var detectedText = platformName(root, device.platform) + " · " +
+            (device.architecture === "arm64" ? text(root, "arm64", "ARM64") : text(root, "x64", "x64")) +
+            (device.isEstimated ? " · " + text(root, "estimated", "estimated") : "");
+        detectedDevice.textContent = detectedText;
+
+        var state = {
+            device: device,
+            sourceMode: readSourceMode(root),
+            localRelease: null,
+            githubRelease: null
+        };
+        var sourceInputs = root.querySelectorAll('input[name="download-source"]');
+        sourceInputs.forEach(function (input) {
+            input.checked = input.value === state.sourceMode;
+            input.addEventListener("change", function () {
+                state.sourceMode = normalizeSourceMode(input.value);
+                saveSourceMode(state.sourceMode);
+                renderSelection(root, state);
+            });
+        });
+
+        var results = await Promise.allSettled([
+            fetchJson(root.dataset.localReleaseUrl),
+            fetchJson(root.dataset.githubReleaseUrl)
+        ]);
+        state.localRelease = results[0].status === "fulfilled" && isRelease(results[0].value)
+            ? results[0].value
+            : null;
+        state.githubRelease = results[1].status === "fulfilled" && isRelease(results[1].value)
+            ? results[1].value
+            : null;
+        renderSelection(root, state);
     }
 
     return {
@@ -267,6 +386,9 @@
         isRelease: isRelease,
         findAsset: findAsset,
         formatBytes: formatBytes,
-        localAssetUrl: localAssetUrl
+        localAssetUrl: localAssetUrl,
+        normalizeSourceMode: normalizeSourceMode,
+        selectRelease: selectRelease,
+        getAssetMd5: getAssetMd5
     };
 });

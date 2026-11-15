@@ -1,6 +1,6 @@
 .neuchar-page {
     min-height: calc(100vh - 150px);
-    padding: 18px;
+    padding: 24px 24px 32px;
     background: #f5f7fa;
 }
 
@@ -9,7 +9,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .neuchar-page-header h2,
@@ -18,8 +18,9 @@
 }
 
 .neuchar-page-header p {
-    margin-top: 6px;
+    margin-top: 8px;
     color: #909399;
+    line-height: 1.6;
 }
 
 .neuchar-empty {
@@ -56,7 +57,7 @@
 }
 
 .neuchar-parameter {
-    margin-top: 12px;
+    margin-top: 16px;
 }
 
 .neuchar-parameter label,
